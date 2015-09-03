@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad9bd40_74ed29b7",
+        "filename": "Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-03T04:55:06Z",
+      "side": 1,
+      "message": "remove the blank space",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 1
+      },
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_942b8dea",
+        "filename": "Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-03T04:55:06Z",
+      "side": 1,
+      "message": "remove the blank space",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_544905cf",
+        "filename": "conf/app.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-03T04:55:06Z",
+      "side": 1,
+      "message": "Make this path standard like /usr/share/skyring/conf/url.conf",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_744449b7",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-03T04:55:06Z",
+      "side": 1,
+      "message": "Same as earlier",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_343ac134",
+        "filename": "conf/url.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-03T04:55:06Z",
+      "side": 1,
+      "message": "How about introducing members namely baseURL \u003d \"skyring\" and apiVersion \u003d \"1.0\".\nUsing this the final URL could be like \n\nhttps://\u003chost\u003e:\u003cport\u003e/skyring/1.0/hello/{name}",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_9412adb2",
+        "filename": "conf/url.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-03T04:55:06Z",
+      "side": 1,
+      "message": "there should be a way for the users to figure out the input and output structure for an api.\nSomething like swagger provides...",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_b42ed1f8",
+        "filename": "conf/url.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-03T04:55:06Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we have plugin/provider name as well here? How we decide to call this method from which provider?",
+      "range": {
+        "startLine": 21,
+        "startChar": 11,
+        "endLine": 21,
+        "endChar": 17
+      },
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad9bd40_d4351547",
+        "filename": "main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-03T04:55:06Z",
+      "side": 1,
+      "message": "Should the port also be configurable?",
+      "range": {
+        "startLine": 64,
+        "startChar": 33,
+        "endLine": 64,
+        "endChar": 37
+      },
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
