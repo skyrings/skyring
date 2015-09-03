@@ -133,6 +133,29 @@
     },
     {
       "key": {
+        "uuid": "9ad9bd40_d40c3597",
+        "filename": "main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1004373
+      },
+      "writtenOn": "2015-09-03T05:28:15Z",
+      "side": 1,
+      "message": "I see tab char everywhere. Do we need to change tab to space?",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 2
+      },
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_d4351547",
         "filename": "main.go",
         "patchSetId": 2
