@@ -59,6 +59,23 @@
     },
     {
       "key": {
+        "uuid": "3ae8d1ca_50179ca3",
+        "filename": "conf/conf.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-04T08:42:48Z",
+      "side": 1,
+      "message": "The structs dont seem to be inline with the sample conf files in this patch. Can you please verify if the apps are actually getting loaded.",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_744449b7",
         "filename": "conf/skyring.conf",
         "patchSetId": 2
