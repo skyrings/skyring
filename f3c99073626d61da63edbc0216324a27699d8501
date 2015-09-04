@@ -42,6 +42,40 @@
     },
     {
       "key": {
+        "uuid": "3ae8d1ca_107ef4ae",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-04T09:34:53Z",
+      "side": 1,
+      "message": "Does this mean core talks to provides using jsonrpc?",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae8d1ca_f080a88d",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-04T09:34:53Z",
+      "side": 1,
+      "message": "I think its not good idea to broadcast the request.  There is a change that a request might get processed by two provides.",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_544905cf",
         "filename": "conf/app.conf",
         "patchSetId": 2
@@ -53,6 +87,41 @@
       "writtenOn": "2015-09-03T04:55:06Z",
       "side": 1,
       "message": "Make this path standard like /usr/share/skyring/conf/url.conf",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae8d1ca_70449874",
+        "filename": "conf/app.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-04T09:34:53Z",
+      "side": 1,
+      "message": "If the config file is not dynamically created, please use /etc/skyring",
+      "parentUuid": "9ad9bd40_544905cf",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae8d1ca_b05d404b",
+        "filename": "conf/app.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-04T09:34:53Z",
+      "side": 1,
+      "message": "Please have newline on every end of file",
       "revId": "f3c99073626d61da63edbc0216324a27699d8501",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -88,6 +157,23 @@
       "side": 1,
       "message": "Got it. was trying wrong",
       "parentUuid": "3ae8d1ca_50179ca3",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae8d1ca_3031300c",
+        "filename": "conf/conf.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-04T09:34:53Z",
+      "side": 1,
+      "message": "you could use go-logging \"github.com/op/go-logging\" like\n\nlog.Debug(\"got json string: \\n%s\\n\", PrettyPrintJson(_result_string))",
       "revId": "f3c99073626d61da63edbc0216324a27699d8501",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -191,6 +277,24 @@
     },
     {
       "key": {
+        "uuid": "3ae8d1ca_5036bc04",
+        "filename": "main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-04T09:34:53Z",
+      "side": 1,
+      "message": "no. its golang style",
+      "parentUuid": "9ad9bd40_d40c3597",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_d4351547",
         "filename": "main.go",
         "patchSetId": 2
@@ -208,6 +312,24 @@
         "endLine": 64,
         "endChar": 37
       },
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ae8d1ca_703bb8eb",
+        "filename": "main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-04T09:34:53Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "9ad9bd40_d4351547",
       "revId": "f3c99073626d61da63edbc0216324a27699d8501",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
