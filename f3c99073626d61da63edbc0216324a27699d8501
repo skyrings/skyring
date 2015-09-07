@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_84b64789",
+        "filename": "Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad9bd40_74ed29b7",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 1
+      },
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_942b8dea",
         "filename": "Makefile",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2015-09-03T04:55:06Z",
       "side": 1,
       "message": "remove the blank space",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a4bb4371",
+        "filename": "Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad9bd40_942b8dea",
       "revId": "f3c99073626d61da63edbc0216324a27699d8501",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_e4ac6b38",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "3ae8d1ca_107ef4ae",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ae8d1ca_f080a88d",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 2
@@ -70,6 +130,24 @@
       "writtenOn": "2015-09-04T09:34:53Z",
       "side": 1,
       "message": "I think its not good idea to broadcast the request.  There is a change that a request might get processed by two provides.",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_04aa3719",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "As we discussed today, we will remove the broadcasting part and need to do bit of re-factoring in the next iteration",
+      "parentUuid": "3ae8d1ca_f080a88d",
       "revId": "f3c99073626d61da63edbc0216324a27699d8501",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -111,6 +189,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_24a73351",
+        "filename": "conf/app.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "Yes, changed the default path to /etc/skyring",
+      "parentUuid": "3ae8d1ca_70449874",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ae8d1ca_b05d404b",
         "filename": "conf/app.conf",
         "patchSetId": 2
@@ -122,6 +218,24 @@
       "writtenOn": "2015-09-04T09:34:53Z",
       "side": 1,
       "message": "Please have newline on every end of file",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_44635f1a",
+        "filename": "conf/app.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ae8d1ca_b05d404b",
       "revId": "f3c99073626d61da63edbc0216324a27699d8501",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -180,6 +294,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_0481578f",
+        "filename": "conf/conf.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ae8d1ca_3031300c",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_744449b7",
         "filename": "conf/skyring.conf",
         "patchSetId": 2
@@ -191,6 +323,24 @@
       "writtenOn": "2015-09-03T04:55:06Z",
       "side": 1,
       "message": "Same as earlier",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_64685bf6",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad9bd40_744449b7",
       "revId": "f3c99073626d61da63edbc0216324a27699d8501",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -214,6 +364,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_846d6707",
+        "filename": "conf/url.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "Will take it up later as discussed",
+      "parentUuid": "9ad9bd40_343ac134",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_9412adb2",
         "filename": "conf/url.conf",
         "patchSetId": 2
@@ -231,6 +399,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_a47263e3",
+        "filename": "conf/url.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "Will take it up later as discussed",
+      "parentUuid": "9ad9bd40_9412adb2",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_b42ed1f8",
         "filename": "conf/url.go",
         "patchSetId": 2
@@ -242,6 +428,30 @@
       "writtenOn": "2015-09-03T04:55:06Z",
       "side": 1,
       "message": "Shouldn\u0027t we have plugin/provider name as well here? How we decide to call this method from which provider?",
+      "range": {
+        "startLine": 21,
+        "startChar": 11,
+        "endLine": 21,
+        "endChar": 17
+      },
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c4768fd8",
+        "filename": "conf/url.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "Not required, it will decided based on the URL path and the body of the request",
+      "parentUuid": "9ad9bd40_b42ed1f8",
       "range": {
         "startLine": 21,
         "startChar": 11,
@@ -330,6 +540,24 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "9ad9bd40_d4351547",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e4738be5",
+        "filename": "main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-07T10:10:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ae8d1ca_703bb8eb",
       "revId": "f3c99073626d61da63edbc0216324a27699d8501",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
