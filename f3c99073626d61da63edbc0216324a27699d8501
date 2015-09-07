@@ -505,6 +505,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_84448775",
+        "filename": "main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-07T10:15:34Z",
+      "side": 1,
+      "message": "We can set the \"translate_tabs_to_spaces\": true in sublime editor to get rid of tabs if we are using sublime only for coding :-)",
+      "parentUuid": "3ae8d1ca_5036bc04",
+      "revId": "f3c99073626d61da63edbc0216324a27699d8501",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad9bd40_d4351547",
         "filename": "main.go",
         "patchSetId": 2
