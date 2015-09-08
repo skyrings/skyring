@@ -31,10 +31,18 @@ test:
 	@echo "Doing $@"
 	@go test -v ./...
 
-build: getdeps verifiers test
+pybuild:
+	@echo "Doing $@"
+	@cd python; python setup.py build
+
+build: getdeps verifiers pybuild test
 	@echo "Doing $@"
 	@go build
 
-install: build
+pyinstall:
+	@echo "Doing $@"
+	@cd python; python setup.py install
+
+install: build pyinstall
 	@echo "Doing $@"
 	@go install

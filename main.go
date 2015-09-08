@@ -35,6 +35,7 @@ const (
 )
 
 var configDir string
+var eventSocket string
 var logDir string
 var logToStderr bool
 var logLevel int
@@ -53,6 +54,11 @@ func main() {
 			Value:  "/etc/skyring",
 			Usage:  "Override default configuration directory",
 			EnvVar: "SKYRING_CONFIGDIR",
+		},
+		cli.StringFlag{
+			Name:  "event-socket",
+			Value: "/tmp/.skyring-event",
+			Usage: "Override default event unix socket",
 		},
 		cli.BoolFlag{
 			Name:  "log-to-stderr",
@@ -74,6 +80,7 @@ func main() {
 	app.Before = func(c *cli.Context) error {
 		// Set global configuration values
 		configDir = c.String("config-dir")
+		eventSocket = c.String("event-socket")
 		logToStderr = c.Bool("log-to-stderr")
 		logDir = c.String("log-dir")
 		logLevel = c.Int("log-level")
@@ -119,6 +126,9 @@ func start() {
 		glog.Errorf("Unable to create http server endpoints")
 		os.Exit(1)
 	}
+
+	glog.Info("Starting event server")
+	go util.StartEventServer(eventSocket)
 
 	glog.Info("start listening on localhost:", strconv.Itoa(appCollection.Config.HttpPort))
 
