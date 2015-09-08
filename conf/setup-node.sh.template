@@ -1,0 +1,45 @@
+#!/bin/bash
+
+CONSOLE_OUT_FILE=$(mktemp setup-node.out.XXXXXXXX)
+
+function quiet_abort()
+{
+    ec=$1
+    shift
+    msg=$1
+    shift
+    "$@" >$CONSOLE_OUT_FILE 2>&1
+    rc=$(echo $?)
+    if [ "$rc" -ne 0 ]; then
+        cat - $CONSOLE_OUT_FILE >&2 <<EOF
+command: $@
+rc: $rc
+console output:
+EOF
+        echo $msg
+        rm -f $CONSOLE_OUT_FILE
+        exit $ec
+    else
+        rm -f $CONSOLE_OUT_FILE
+        return $rc
+    fi
+}
+
+[ -f /etc/salt/minion ] && quiet_abort 1 'failed to take backup /etc/salt/minion' mv -fv /etc/salt/minion /etc/salt/minion.skyring-add-node
+if ! echo "master: {{ skyring_master }}" >/etc/salt/minion; then
+    echo 'failed to create minion configuration /etc/salt/minion'
+    exit 1
+fi
+quiet_abort 1 'failed to remove /etc/salt/pki/minion/minion_master.pub' rm -fv /etc/salt/pki/minion/minion_master.pub
+
+if which systemctl >/dev/null 2>&1; then
+    quiet_abort 2 'failed to enable salt-minion' systemctl enable salt-minion
+    quiet_abort 2 'failed to restart salt-minion' systemctl restart salt-minion
+    sleep 3 ## lets wait the minion to start
+    quiet_abort 2 'failed to start salt-minion' systemctl status salt-minion
+else
+    quiet_abort 2 'failed to enable salt-minion' chkconfig salt-minion on
+    quiet_abort 2 'failed to restart salt-minion' service salt-minion restart
+    sleep 3 ## lets wait the minion to start
+    quiet_abort 2 'failed to start salt-minion' service salt-minion status
+fi
