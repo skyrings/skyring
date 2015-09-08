@@ -40,6 +40,7 @@ var (
 	logToStderr  bool
 	logLevel     int
 	providersDir string
+	eventSocket  string
 )
 
 func main() {
@@ -63,6 +64,11 @@ func main() {
 			Usage:  "Override default bin directory",
 			EnvVar: "SKYRING_PROVIDERSDIR",
 		},
+		cli.StringFlag{
+			Name:  "event-socket",
+			Value: "/tmp/.skyring-event",
+			Usage: "Override default event unix socket",
+		},
 		cli.BoolFlag{
 			Name:  "log-to-stderr",
 			Usage: "log to console's standard error",
@@ -83,6 +89,7 @@ func main() {
 	app.Before = func(c *cli.Context) error {
 		// Set global configuration values
 		configDir = c.String("config-dir")
+		eventSocket = c.String("event-socket")
 		logToStderr = c.Bool("log-to-stderr")
 		logDir = c.String("log-dir")
 		logLevel = c.Int("log-level")
@@ -131,6 +138,9 @@ func start() {
 		glog.Errorf("Unable to create http server endpoints")
 		os.Exit(1)
 	}
+
+	glog.Info("Starting event listener")
+	go util.StartEventListener(eventSocket)
 
 	//Check if Port is provided, otherwise use dafault 8080
 	//If host is not provided, it binds on all IPs
