@@ -31,10 +31,27 @@ test:
 	@echo "Doing $@"
 	@go test -v ./...
 
-build: getdeps verifiers test
+pybuild:
+	@echo "Doing $@"
+	@cd python; python setup.py build
+
+build: getdeps verifiers pybuild test
 	@echo "Doing $@"
 	@go build
 
-install: build
+pyinstall:
+	@echo "Doing $@"
+	@cd python; python setup.py --quiet install --user
+	@echo "INFO: You should set PYTHONPATH make it into effect"
+	@echo "INFO: or run skyring by \`PYTHONPATH=~/.local/lib/python2.7/site-packages skyring\`"
+
+saltinstall:
+	@echo "Doing $@"
+	@if ! cp -f salt/* /srv/salt/ 2>/dev/null; then \
+		echo "ERROR: unable to install salt files. Install them manually by"; \
+		echo "sudo cp -f salt/* /srv/salt/"; \
+	fi
+
+install: build pyinstall saltinstall
 	@echo "Doing $@"
 	@go install
