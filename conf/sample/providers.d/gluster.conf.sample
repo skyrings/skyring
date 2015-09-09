@@ -1,0 +1,14 @@
+{
+    "provider": {
+        "name": "gluster",
+        "binary": "gluster_provider"
+    },
+    "routes": [
+        {
+            "name": "GlusterHello",
+            "method": "GET",
+            "pattern": "api/v1/gluster/hello/{name}",
+            "pluginFunc": "SayHi"
+        }
+    ]
+}

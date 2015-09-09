@@ -34,10 +34,13 @@ const (
 	ConfigFile = "skyring.conf"
 )
 
-var configDir string
-var logDir string
-var logToStderr bool
-var logLevel int
+var (
+	configDir   string
+	logDir      string
+	logToStderr bool
+	logLevel    int
+	binDir      string
+)
 
 func main() {
 	app := cli.NewApp()
@@ -53,6 +56,12 @@ func main() {
 			Value:  "/etc/skyring",
 			Usage:  "Override default configuration directory",
 			EnvVar: "SKYRING_CONFIGDIR",
+		},
+		cli.StringFlag{
+			Name:   "bin-dir, b",
+			Value:  "/var/lib/skyring",
+			Usage:  "Override default bin directory",
+			EnvVar: "SKYRING_BINDIR",
 		},
 		cli.BoolFlag{
 			Name:  "log-to-stderr",
@@ -77,6 +86,7 @@ func main() {
 		logToStderr = c.Bool("log-to-stderr")
 		logDir = c.String("log-dir")
 		logLevel = c.Int("log-level")
+		binDir = c.String("bin-dir")
 		return nil
 	}
 
@@ -95,8 +105,10 @@ func main() {
 func start() {
 	defer glog.Flush()
 
-	var application app.Application
-	var err error
+	var (
+		application app.Application
+		err         error
+	)
 
 	appCollection := conf.LoadAppConfiguration(path.Join(configDir, ConfigFile))
 	appCollection.Logging.Logtostderr = logToStderr
@@ -105,7 +117,7 @@ func start() {
 
 	util.InitLogs(appCollection.Logging)
 
-	application = skyring.NewApp(appCollection.Config.ConfigFilePath)
+	application = skyring.NewApp(configDir, binDir)
 
 	if application == nil {
 		glog.Errorf("Unable to start application")
@@ -122,5 +134,11 @@ func start() {
 
 	glog.Info("start listening on localhost:", strconv.Itoa(appCollection.Config.HttpPort))
 
-	glog.Fatalf("Error: %s", http.ListenAndServe(":"+strconv.Itoa(appCollection.Config.HttpPort), router))
+	//Check if IP is provided, otherwise bind on all interfaces
+	if appCollection.Config.Host == "" {
+		appCollection.Config.Host = "0.0.0.0"
+	}
+	glog.V(3).Infof("start listening on %s : %s", appCollection.Config.Host, strconv.Itoa(appCollection.Config.HttpPort))
+
+	glog.Fatalf("Error: %s", http.ListenAndServe(appCollection.Config.Host+":"+strconv.Itoa(appCollection.Config.HttpPort), router))
 }
