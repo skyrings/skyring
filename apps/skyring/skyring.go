@@ -22,8 +22,8 @@ import (
 	"net/rpc"
 	"net/rpc/jsonrpc"
 	"os"
+	"skyring/auth"
 	"skyring/conf"
-	"sync"
 )
 
 type Provider struct {
@@ -61,17 +61,26 @@ func NewApp(configfile string) *App {
 	}
 
 	//Load URLs
+	//Load all the files present in the URL config path
 	app.urls = make(map[string]conf.Route)
-	urls := conf.LoadUrls(pluginCollection.UrlConfigPath)
-	for _, element := range urls.Routes {
-		app.urls[element.Name] = element
+	files, _ := ioutil.ReadDir(pluginCollection.UrlConfigPath)
+	for _, f := range files {
+		glog.Infof("File Name:", f.Name())
+		urls := conf.LoadUrls(pluginCollection.UrlConfigPath + "/" + f.Name())
+		for _, element := range urls.Routes {
+			app.urls[element.Name] = element
+		}
 	}
+
 	glog.Infof("Loaded URLs:", app.urls)
+
+	//Init the Auth
+	auth.InitAuthorizer()
 	return app
 }
 
 func (a *App) SetRoutes(container *mux.Router) error {
-	container.HandleFunc("/", a.ProviderHandler)
+	//container.HandleFunc("/", a.ProviderHandler)
 	for _, route := range a.urls {
 		container.
 			Methods(route.Method).
@@ -79,9 +88,30 @@ func (a *App) SetRoutes(container *mux.Router) error {
 			Name(route.Name).
 			Handler(http.HandlerFunc(a.ProviderHandler))
 	}
+	//Add the Skyring Core specific routes
+	auth.SetAuthRoutes(container)
 	return nil
 }
 
+/*
+This is the handler where all the requests to providers will land in.
+Here the parameters are extracted and paaed to the providers along with
+the requestbody if any using RPC.Result will be parsed to see if a specific
+status code needs to be set for http response.
+Arguments to Provider function -
+1. type Args struct {
+	Vars    map[string]string
+	Request []byte
+}
+Each provider should expect this structure as the first argument. Vars is a map
+of parameters passed in request URL. Request is the payload(body) of the http request.
+
+2.Result - *[]byte
+Pointer to a byte array. In response, the byte array should contain
+{ response payload, RequestId, Status} where response payload is response
+from the provider, RequestId is populated if the request is asynchronously
+executed and status to set in the http response
+*/
 func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 
 	//Parse the Request and get the parameters and route information
@@ -96,24 +126,25 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 	//Get the request details from requestbody
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		//log the error
+		glog.Errorf("Error parsing http request body", err)
 	}
 
-	//Broadcast the request to all the registered providers. The provider will take call to process it or not
-	var wg sync.WaitGroup
-	for _, provider := range a.providers {
-		wg.Add(1)
-		go func(provider Provider) {
-			defer wg.Done()
-			provider.Client.Call(provider.Name+"."+routeCfg.PluginFunc, Args{Vars: vars, Request: body}, &result)
-			var m map[string]interface{}
-			json.Unmarshal(result, &m)
-			//The providers return {Status: "Not Supported"} if recieves invalid request. Ignore those and process only
-			//the valid response
-			if m["Status"] != "Not Supported" {
-				w.Write(result)
-			}
-		}(provider)
+	//Find out the provider to process this request and send the request
+	//After getting the response, pass it on to the client
+	provider := a.getProvider(body, routeCfg)
+	glog.Infof("Sending the request to provider:", provider.Name)
+	if provider != nil {
+		provider.Client.Call(provider.Name+"."+routeCfg.PluginFunc, Args{Vars: vars, Request: body}, &result)
+		//Parse the result to see if a different status needs to set
+		//By default it sets http.StatusOK(200)
+		var m map[string]interface{}
+		if err = json.Unmarshal(result, &m); err != nil {
+			glog.Errorf("Unable to Unmarshall the result from provider", err)
+		}
+		if m["Status"] != http.StatusOK {
+			w.WriteHeader(m["Status"].(int))
+		}
+		w.Write(result)
+		return
 	}
-	wg.Wait()
 }
