@@ -25,12 +25,19 @@ type Route struct {
 	PluginFunc string
 }
 
-type RouteCollection struct {
-	Routes []Route
+type ProviderConfig struct {
+	Name           string
+	ProviderBinary string
 }
 
-func LoadUrls(configFilePath string) *RouteCollection {
-	var data RouteCollection
+type ProviderInfo struct {
+	Provider               ProviderConfig
+	ProviderConfigInternal map[string]interface{}
+	Routes                 []Route
+}
+
+func LoadProviderConfig(configFilePath string) *ProviderInfo {
+	var data ProviderInfo
 	file, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
 		glog.Fatalf("Error Reading URL Config: %s", err)

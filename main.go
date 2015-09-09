@@ -105,7 +105,7 @@ func start() {
 
 	util.InitLogs(appCollection.Logging)
 
-	application = skyring.NewApp(appCollection.Config.ConfigFilePath)
+	application = skyring.NewApp(configDir)
 
 	if application == nil {
 		glog.Errorf("Unable to start application")
