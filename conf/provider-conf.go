@@ -25,11 +25,18 @@ type Route struct {
 	PluginFunc string
 }
 
-type RouteCollection struct {
-	Routes []Route
+type PluginConfig struct {
+	Name         string
+	PluginBinary string
 }
 
-func LoadUrls(configFilePath string) *RouteCollection {
+type RouteCollection struct {
+	Plugin        PluginConfig
+	Plugin_config map[string]interface{}
+	Routes        []Route
+}
+
+func LoadProviderConfig(configFilePath string) *RouteCollection {
 	var data RouteCollection
 	file, err := ioutil.ReadFile(configFilePath)
 	if err != nil {

@@ -14,6 +14,7 @@ package skyring
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/natefinch/pie"
@@ -23,7 +24,6 @@ import (
 	"net/rpc"
 	"net/rpc/jsonrpc"
 	"os"
-	"sync"
 )
 
 type Provider struct {
@@ -33,7 +33,7 @@ type Provider struct {
 
 type App struct {
 	providers map[string]Provider
-	urls      map[string]conf.Route
+	routes    map[string]conf.Route
 }
 
 type Args struct {
@@ -41,38 +41,78 @@ type Args struct {
 	Request []byte
 }
 
-func NewApp(configfile string) *App {
+func NewApp(configfilePath string) *App {
 	app := &App{}
 
+	//initialize the maps
 	app.providers = make(map[string]Provider)
+	app.routes = make(map[string]conf.Route)
 
-	//Load the plugins from the config file
+	//Load providers and routes
+	//Load all the files present in the config path
+	app.InitializeProviders(configfilePath)
 
-	pluginCollection := conf.LoadPluginConfiguration(configfile)
+	//Check if atleast one provider is initialized successfully
+	//otherwise panic
+	if len(app.providers) < 1 {
+		panic(fmt.Sprintf("None of the providers are initialized successfully"))
+	}
+	glog.Infof("Loaded URLs:", app.routes)
 
-	for _, element := range pluginCollection.Plugins {
-		client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, element.PluginBinary)
-		if err != nil {
-			glog.Errorf("Error running plugin: %s", err)
+	return app
+}
+
+func (a *App) InitializeProviders(configfilePath string) {
+	if configfilePath == "" {
+		//set to the default path
+		configfilePath = "/etc/skyring/providers"
+	}
+
+	files, err := ioutil.ReadDir(configfilePath)
+	if err != nil {
+		glog.Errorf("Unable Read Config files", err)
+		glog.Errorf("Failed to Initialize")
+		panic(fmt.Sprintf("Unable Read Config files", err))
+	}
+	for _, f := range files {
+		glog.Infof("File Name:", f.Name())
+		config := conf.LoadProviderConfig(configfilePath + "/" + f.Name())
+		for _, element := range config.Routes {
+			a.routes[element.Name] = element
 		}
 
-		app.providers[element.Name] = Provider{Name: element.Name, Client: client}
+		//Start the provider if configured
+		if config.Plugin != (conf.PluginConfig{}) {
+
+			if config.Plugin.Name == "" {
+				continue
+			}
+			//check whether the plugin is initialized already
+			if _, ok := a.providers[config.Plugin.Name]; ok {
+				//Provider already initialized
+				continue
+			}
+			if config.Plugin.PluginBinary == "" {
+				//set the default if not provided in config file
+				config.Plugin.PluginBinary = " /var/lib/skyring/providers/" + config.Plugin.Name
+			}
+			client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, config.Plugin.PluginBinary)
+			if err != nil {
+				glog.Errorf("Error running plugin:", err)
+				continue
+			}
+
+			a.providers[config.Plugin.Name] = Provider{Name: config.Plugin.Name, Client: client}
+
+		}
 
 	}
 
-	//Load URLs
-	app.urls = make(map[string]conf.Route)
-	urls := conf.LoadUrls(pluginCollection.UrlConfigPath)
-	for _, element := range urls.Routes {
-		app.urls[element.Name] = element
-	}
-	glog.Infof("Loaded URLs:", app.urls)
-	return app
 }
 
 func (a *App) SetRoutes(router *mux.Router) error {
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
-	for _, route := range a.urls {
+	for _, route := range a.routes {
 		router.
 			Methods(route.Method).
 			Path(route.Pattern).
@@ -82,6 +122,25 @@ func (a *App) SetRoutes(router *mux.Router) error {
 	return nil
 }
 
+/*
+This is the handler where all the requests to providers will land in.
+Here the parameters are extracted and passed to the providers along with
+the requestbody if any using RPC.Result will be parsed to see if a specific
+status code needs to be set for http response.
+Arguments to Provider function -
+1. type Args struct {
+	Vars    map[string]string
+	Request []byte
+}
+Each provider should expect this structure as the first argument. Vars is a map
+of parameters passed in request URL. Request is the payload(body) of the http request.
+
+2.Result - *[]byte
+Pointer to a byte array. In response, the byte array should contain
+{ response payload, RequestId, Status} where response payload is response
+from the provider, RequestId is populated if the request is asynchronously
+executed and status to set in the http response
+*/
 func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 
 	//Parse the Request and get the parameters and route information
@@ -91,29 +150,32 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 	var result []byte
 
 	//Get the route details from the map
-	routeCfg := a.urls[route.GetName()]
+	routeCfg := a.routes[route.GetName()]
 
 	//Get the request details from requestbody
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		//log the error
+		glog.Errorf("Error parsing http request body", err)
 	}
 
-	//Broadcast the request to all the registered providers. The provider will take call to process it or not
-	var wg sync.WaitGroup
-	for _, provider := range a.providers {
-		wg.Add(1)
-		go func(provider Provider) {
-			defer wg.Done()
-			provider.Client.Call(provider.Name+"."+routeCfg.PluginFunc, Args{Vars: vars, Request: body}, &result)
-			var m map[string]interface{}
-			json.Unmarshal(result, &m)
-			//The providers return {Status: "Not Supported"} if recieves invalid request. Ignore those and process only
-			//the valid response
-			if m["Status"] != "Not Supported" {
-				w.Write(result)
-			}
-		}(provider)
+	//Find out the provider to process this request and send the request
+	//After getting the response, pass it on to the client
+	provider := a.getProvider(body, routeCfg)
+	glog.Infof("Sending the request to provider:", provider.Name)
+	if provider != nil {
+		provider.Client.Call(provider.Name+"."+routeCfg.PluginFunc, Args{Vars: vars, Request: body}, &result)
+		//Parse the result to see if a different status needs to set
+		//By default it sets http.StatusOK(200)
+		glog.Infof("Got response from provider")
+		var m map[string]interface{}
+		if err = json.Unmarshal(result, &m); err != nil {
+			glog.Errorf("Unable to Unmarshall the result from provider", err)
+		}
+		status := m["Status"].(float64)
+		if status != http.StatusOK {
+			w.WriteHeader(int(status))
+		}
+		w.Write(result)
+		return
 	}
-	wg.Wait()
 }
