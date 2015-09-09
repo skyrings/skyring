@@ -1,0 +1,14 @@
+{
+    "provider": {
+        "name": "ceph",
+        "binary": "ceph_provider"
+    },
+    "routes": [
+        {
+            "name": "CephHello",
+            "method": "GET",
+            "pattern": "api/v1/ceph/hello/{name}",
+            "pluginFunc": "SayHi"
+        }
+    ]
+}
