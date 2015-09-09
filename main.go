@@ -15,7 +15,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -42,8 +41,8 @@ func main() {
 
 	// Check configuration file was given
 	if configfile == "" {
-		fmt.Fprintln(os.Stderr, "Please provide configuration file")
-		os.Exit(1)
+		//use the default path
+		configfile = "/etc/skyring/skyring.conf"
 	}
 
 	appCollection := conf.LoadAppConfiguration(configfile)
