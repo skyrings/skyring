@@ -14,6 +14,7 @@ package conf
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/golang/glog"
 	"io/ioutil"
 )
@@ -30,45 +31,22 @@ type SkyringLogging struct {
 	vmodule     string
 }
 
-type PluginConfig struct {
-	Name           string
-	PluginBinary   string
-	ConfigFilePath string
-}
-
 type SkyringCollection struct {
 	Config  SkyringConfig
 	Logging SkyringLogging
-}
-
-type PluginCollection struct {
-	Plugins       []PluginConfig
-	UrlConfigPath string
 }
 
 func LoadAppConfiguration(configFilePath string) *SkyringCollection {
 	var data SkyringCollection
 	file, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
-		glog.Fatalf("Error Reading App Config: %s", err)
+		glog.Fatalf("Error Reading SkyRing Config: %s", err)
+		panic(fmt.Sprintf("Error Reading SkyRing Config:", err))
 	}
 	err = json.Unmarshal(file, &data)
 	if err != nil {
-		glog.Fatalf("Error Unmarshalling App Config: %s", err)
-	}
-	return &data
-
-}
-
-func LoadPluginConfiguration(configFilePath string) *PluginCollection {
-	var data PluginCollection
-	file, err := ioutil.ReadFile(configFilePath)
-	if err != nil {
-		glog.Fatalf("Error Reading Plugin Config: %s", err)
-	}
-	err = json.Unmarshal(file, &data)
-	if err != nil {
-		glog.Fatalf("Error Unmarshalling plugin Config: %s", err)
+		glog.Fatalf("Error Unmarshalling SkyRing Config: %s", err)
+		panic(fmt.Sprintf("Error Unmarshalling SkyRing Config: %s", err))
 	}
 	return &data
 
