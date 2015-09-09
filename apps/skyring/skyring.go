@@ -70,10 +70,11 @@ func NewApp(configfile string) *App {
 	return app
 }
 
-func (a *App) SetRoutes(container *mux.Router) error {
-	container.HandleFunc("/", a.ProviderHandler)
+func (a *App) SetRoutes(router *mux.Router) error {
+	router.HandleFunc("/api/", a.ProviderHandler)
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 	for _, route := range a.urls {
-		container.
+		router.
 			Methods(route.Method).
 			Path(route.Pattern).
 			Name(route.Name).
