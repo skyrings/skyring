@@ -1,11 +1,17 @@
 package util
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/golang/glog"
+	"net/http"
 	"runtime"
 	"time"
 )
+
+type APIError struct {
+	Error string
+}
 
 // For testing, bypass HandleCrash.
 var ReallyCrash bool
@@ -59,4 +65,10 @@ func logPanic(r interface{}) {
 		callers = callers + fmt.Sprintf("%v:%v\n", file, line)
 	}
 	glog.Errorf("Recovered from panic: %#v (%v)\n%v", r, r, callers)
+}
+
+func HandleHHttpError(rw http.ResponseWriter, err error) {
+	bytes, _ := json.Marshal(APIError{Error: err.Error()})
+	rw.WriteHeader(http.StatusInternalServerError)
+	rw.Write(bytes)
 }
