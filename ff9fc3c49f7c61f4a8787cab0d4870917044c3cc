@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_ccb4e4f4",
+        "filename": "conf/setup-node.sh.template",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-10T23:39:59Z",
+      "side": 1,
+      "message": "The service takes some amount of time to start itself.  If you check restart/status immediately, you might not get the status properly.\n\nBetter solution than sleep would be waiting for dbus event of the service.  I feel its not required here.",
+      "parentUuid": "1ae5cdf2_e2944e46",
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_e2c36e88",
         "filename": "python/salt_wrapper.py",
         "patchSetId": 8
@@ -42,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_2ccb8873",
+        "filename": "python/salt_wrapper.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-10T23:39:59Z",
+      "side": 1,
+      "message": "They will be used in future for sure.  I will remove from this patch and add them whenever needed.",
+      "parentUuid": "1ae5cdf2_e2c36e88",
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_22be3600",
         "filename": "python/salt_wrapper.py",
         "patchSetId": 8
@@ -53,6 +89,24 @@
       "writtenOn": "2015-09-10T12:17:19Z",
       "side": 1,
       "message": "For network and device info there is an option to pass list of nodes, can we provide that option so that its consistent ?",
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_6cc5905a",
+        "filename": "python/salt_wrapper.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-10T23:39:59Z",
+      "side": 1,
+      "message": "Will do that.",
+      "parentUuid": "1ae5cdf2_22be3600",
       "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -82,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_0c95ec3f",
+        "filename": "salt/push_event.sls",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-10T23:39:59Z",
+      "side": 1,
+      "message": "Its a test function for run().  If you run the script this gets executed.  Anyways will remove that",
+      "parentUuid": "1ae5cdf2_42c5025a",
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c2b592ce",
         "filename": "utils/push_event_server.go",
         "patchSetId": 8
@@ -105,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_8c881c24",
+        "filename": "utils/push_event_server.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-10T23:39:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_c2b592ce",
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_e2c9ae5b",
         "filename": "utils/salt_bindings.go",
         "patchSetId": 8
@@ -122,6 +212,24 @@
         "endLine": 1,
         "endChar": 21
       },
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_ac8dd833",
+        "filename": "utils/salt_bindings.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-10T23:39:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_e2c9ae5b",
       "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
