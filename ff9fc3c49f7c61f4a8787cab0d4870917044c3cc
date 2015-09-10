@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e2944e46",
+        "filename": "conf/setup-node.sh.template",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-09-10T12:17:19Z",
+      "side": 1,
+      "message": "Is this needed ? won\u0027t the next command be executed only after a command is finished. Please correct me if I am wrong.",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 11
+      },
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e2c36e88",
+        "filename": "python/salt_wrapper.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-09-10T12:17:19Z",
+      "side": 1,
+      "message": "Will the above three variables used in future ? these are not used now.",
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_22be3600",
+        "filename": "python/salt_wrapper.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-09-10T12:17:19Z",
+      "side": 1,
+      "message": "For network and device info there is an option to pass list of nodes, can we provide that option so that its consistent ?",
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_42c5025a",
+        "filename": "salt/push_event.sls",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-09-10T12:17:19Z",
+      "side": 1,
+      "message": "Is this used ?",
+      "range": {
+        "startLine": 56,
+        "startChar": 3,
+        "endLine": 57,
+        "endChar": 30
+      },
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
