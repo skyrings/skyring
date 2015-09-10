@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_87bf1cd0",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-10T03:52:45Z",
+      "side": 1,
+      "message": "We can remove this line, as we are dealing with specific routes only.Otherwise anything with /api will land in this provider, which we may not want in some cases. I have removed this in my latest patch",
+      "range": {
+        "startLine": 74,
+        "startChar": 1,
+        "endLine": 74,
+        "endChar": 46
+      },
+      "revId": "aad9e1e5af367fe1a49e416a03fbc63c47e59860",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
