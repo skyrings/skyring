@@ -79,6 +79,52 @@
       "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c2b592ce",
+        "filename": "utils/push_event_server.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-10T12:26:40Z",
+      "side": 1,
+      "message": "I feel the package name could be \"util\" as for other sources in this dir",
+      "range": {
+        "startLine": 1,
+        "startChar": 8,
+        "endLine": 1,
+        "endChar": 25
+      },
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e2c9ae5b",
+        "filename": "utils/salt_bindings.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-10T12:26:40Z",
+      "side": 1,
+      "message": "I feel the package name could be \"util\" as for other sources in this dir",
+      "range": {
+        "startLine": 1,
+        "startChar": 8,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "ff9fc3c49f7c61f4a8787cab0d4870917044c3cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
