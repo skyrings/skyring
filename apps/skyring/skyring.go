@@ -79,6 +79,14 @@ func (a *App) SetRoutes(container *mux.Router) error {
 			Name(route.Name).
 			Handler(http.HandlerFunc(a.ProviderHandler))
 	}
+
+	// Set routes for core
+	container.Methods("GET").Path("/nodes").Name("GetUnManagedNodes").Handler(http.HandlerFunc(UnManagedNodesHandler))
+	container.Methods("GET").Path("/nodes/{node-id}").Name("GetUnManagedNode").Handler(http.HandlerFunc(UnManagedNodeHandler))
+	container.Methods("PUT").Path("/nodes").Name("AddUnManagedNode").Handler(http.HandlerFunc(AddUnManagedNodeHandler))
+	container.Methods("GET").Path("/nodes/{node-id}/cpu_utilization").Name("CpuUtilization").Handler(http.HandlerFunc(CpuUtilizationHandler))
+	container.Methods("GET").Path("/nodes/{node-id}/memory_utilization").Name("MemoryUtilization").Handler(http.HandlerFunc(MemoryUtilizationHandler))
+
 	return nil
 }
 
