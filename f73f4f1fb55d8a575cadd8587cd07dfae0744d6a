@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e7a2a099",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-10T09:56:35Z",
+      "side": 1,
+      "message": "Is this mandatory? Is this being used to uniquely identify a route?",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c79e8456",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-10T09:56:35Z",
+      "side": 1,
+      "message": "All the storage specific routes should start with the name of the storage tech.",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
