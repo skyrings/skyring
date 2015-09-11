@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_eacfc0ae",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-11T09:02:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_6a8d707b",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_8ae9dc1c",
         "filename": "apps/skyring/hosts.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-11T08:54:41Z",
       "side": 1,
       "message": "what is the rest api response structure? is it something below?\n\n{\"fingerprint\": \"xx:xx:xx:xx:xx:\", \"hostname\": \"hostname\"}",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_0ac4ec90",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-11T09:02:21Z",
+      "side": 1,
+      "message": "for the time being its just \"XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX\"\n\nDo you thing it should be as above? Can be done.",
+      "parentUuid": "1ae5cdf2_8ae9dc1c",
       "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_2ac1a880",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-11T09:02:21Z",
+      "side": 1,
+      "message": "Just to limit the size. May be we should finalize and use the limit.",
+      "parentUuid": "1ae5cdf2_2ada8878",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_0addcc70",
         "filename": "apps/skyring/hosts.go",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2015-09-11T08:54:41Z",
       "side": 1,
       "message": "why 422?",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_4abef400",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-11T09:02:21Z",
+      "side": 1,
+      "message": "Its actually unable to parse the request. We may say 400-Bad Request may be.",
+      "parentUuid": "1ae5cdf2_0addcc70",
       "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_6abbb00e",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-11T09:02:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_aaee9820",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_aad5b844",
         "filename": "apps/skyring/hosts.go",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2015-09-11T08:54:41Z",
       "side": 1,
       "message": "You could extend http.Request to provide json directly than parsing it every call.",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_8a371cb0",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-11T09:02:21Z",
+      "side": 1,
+      "message": "Will try that",
+      "parentUuid": "1ae5cdf2_aad5b844",
       "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false

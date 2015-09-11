@@ -16,6 +16,24 @@
       "revId": "7e79d77898513fa9580b3556bed98926542b2163",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_ca41240d",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-11T09:02:21Z",
+      "side": 0,
+      "message": "May be we can call managed hosts as \n\n/managed_hosts",
+      "parentUuid": "1ae5cdf2_0a96ac94",
+      "revId": "7e79d77898513fa9580b3556bed98926542b2163",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
