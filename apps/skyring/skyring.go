@@ -86,6 +86,8 @@ func (a *App) SetRoutes(container *mux.Router) error {
 	container.Methods("PUT").Path("/nodes").Name("AddUnManagedNode").Handler(http.HandlerFunc(AddUnManagedNodeHandler))
 	container.Methods("GET").Path("/nodes/{node-id}/cpu_utilization").Name("CpuUtilization").Handler(http.HandlerFunc(CpuUtilizationHandler))
 	container.Methods("GET").Path("/nodes/{node-id}/memory_utilization").Name("MemoryUtilization").Handler(http.HandlerFunc(MemoryUtilizationHandler))
+	container.Methods("GET").Path("/nodes/{node-id}/ssh_fingerprint").Name("SshFingerprint").Handler(http.HandlerFunc(SshFingerprintHandler))
+	container.Methods("POST").Path("/nodes/{node-id}/accept").Name("AcceptUnManagedNode").Handler(http.HandlerFunc(AcceptUnManagedNodeHandler))
 
 	return nil
 }
