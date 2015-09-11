@@ -17,9 +17,11 @@ import (
     "github.com/golang/glog"
     "github.com/gorilla/mux"
     "io"
+    "os"
     "io/ioutil"
     "net/http"
     "skyring/db"
+    "skyring/utils"
     "gopkg.in/mgo.v2/bson"
     "fmt"
     "code.google.com/p/go-uuid/uuid"
@@ -172,4 +174,98 @@ func GetUnManagedNode(node_id string) UnmanagedNode {
     }
 
     return node
+}
+
+func SshFingerprintHandler(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    node_id := vars["node-id"]
+
+    node := GetUnManagedNode(node_id)
+
+    json.NewEncoder(w).Encode(util.PyGetNodeSshFingerprint(node.Name))
+}
+
+func AcceptUnManagedNodeHandler(w http.ResponseWriter, r *http.Request) {
+    var accept_req AcceptNodeRequest
+
+    vars := mux.Vars(r)
+    node_id := vars["node-id"]
+
+    node := GetUnManagedNode(node_id)
+
+    // Check if already accepted
+    if nodeManaged(node) {
+       w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+       w.WriteHeader(405)
+       if err := json.NewEncoder(w).Encode("Node already accepted"); err != nil {
+           glog.Errorf("Error: ", err)
+       }
+       return
+    }
+
+    body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+    if err != nil {
+       glog.Errorf("Error parsing the request: ", err)
+    }
+    if err := r.Body.Close(); err != nil {
+       glog.Errorf("Error: ", err)
+    }
+    if err := json.Unmarshal(body, &accept_req); err != nil {
+       w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+       w.WriteHeader(422)
+       if err := json.NewEncoder(w).Encode(err); err != nil {
+           glog.Errorf("Error: ", err)
+       }
+    }
+
+    if err != nil {
+        glog.Errorf("Error: ", err)
+    }
+
+    ret_val := util.PyAddNode(node.Name, accept_req.FingerPrint, accept_req.User, accept_req.Password, curr_hostname)
+    if ret_val == true {
+        if err := json.NewEncoder(w).Encode("Accepted successfully"); err != nil {
+            glog.Errorf("Error: ", err)
+        }
+
+        //TODO:: Update the host status as accepted and populate the host details into DB
+        updateTheManagedNodeDetails(node)
+    } else {
+       w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+       w.WriteHeader(422)
+       if err := json.NewEncoder(w).Encode(err); err != nil {
+           glog.Errorf("Error: ", err)
+       }
+    }
+}
+
+func updateTheManagedNodeDetails(unmanaged_node UnmanagedNode) bool {
+    var managed_node ManagedNode
+
+    machine_id := util.PyGetNodeMachineId(unmanaged_node.Name)
+    util.PyGetNodeDiskInfo(unmanaged_node.Name)
+
+    managed_node.Hostname = unmanaged_node.Name
+    managed_node.UUID = machine_id
+    managed_node.PublicIp = unmanaged_node.IP
+
+    // Add the node
+    sessionCopy := db.GetDatastore()
+    managed_nodes := sessionCopy.DB("skyring").C("managed_nodes")
+    if err := managed_nodes.Insert(managed_node); err != nil {
+        glog.Errorf("Error adding the managed node: ", err)
+    }
+
+    return true
+}
+
+func nodeManaged(node UnmanagedNode) bool {
+    sessionCopy := db.GetDatastore()
+    collection := sessionCopy.DB("skyring").C("managed_nodes")
+    var managed_node ManagedNode
+    if err := collection.Find(bson.M{"hostname": node.Name}).One(&managed_node); err != nil {
+        return false
+    } else {
+        return true
+    }
 }
