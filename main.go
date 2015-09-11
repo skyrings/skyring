@@ -66,6 +66,9 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Start the push event server
+	go util.StartServer()
+
 	glog.Info("start listening on localhost:", strconv.Itoa(appCollection.Config.HttpPort))
 
 	glog.Fatalf("Error", http.ListenAndServe(":"+strconv.Itoa(appCollection.Config.HttpPort), router))
