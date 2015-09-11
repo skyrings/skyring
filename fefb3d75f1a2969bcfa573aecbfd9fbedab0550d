@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_6a8d707b",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-11T08:54:41Z",
+      "side": 1,
+      "message": "hostname is better here",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_8ae9dc1c",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-11T08:54:41Z",
+      "side": 1,
+      "message": "what is the rest api response structure? is it something below?\n\n{\"fingerprint\": \"xx:xx:xx:xx:xx:\", \"hostname\": \"hostname\"}",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_2ada8878",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-11T08:54:41Z",
+      "side": 1,
+      "message": "why 1048576?",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_0addcc70",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-11T08:54:41Z",
+      "side": 1,
+      "message": "why 422?",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_aaee9820",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-11T08:54:41Z",
+      "side": 1,
+      "message": "os.Hostname() is called every add node.  I would prefer it should be found at skyring start only once",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_aad5b844",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-11T08:54:41Z",
+      "side": 1,
+      "message": "You could extend http.Request to provide json directly than parsing it every call.",
+      "revId": "fefb3d75f1a2969bcfa573aecbfd9fbedab0550d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}

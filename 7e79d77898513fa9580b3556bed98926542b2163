@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_0a96ac94",
+        "filename": "apps/skyring/hosts.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-11T08:54:41Z",
+      "side": 0,
+      "message": "we would know whether we call storage server as node or host",
+      "revId": "7e79d77898513fa9580b3556bed98926542b2163",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
