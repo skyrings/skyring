@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_6ab6503f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-11T08:38:20Z",
+      "side": 1,
+      "message": "How do we call a storage server? host or node?",
+      "revId": "7e79d77898513fa9580b3556bed98926542b2163",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_aa877860",
+        "filename": "apps/skyring/monitor_physical_resources.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-11T08:38:20Z",
+      "side": 1,
+      "message": "You could have better name than long monitor_physical_resources.go",
+      "revId": "7e79d77898513fa9580b3556bed98926542b2163",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_ca7cc475",
+        "filename": "apps/skyring/monitor_physical_resources.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-11T08:38:20Z",
+      "side": 1,
+      "message": "This would not be a const.  It would be nice to have a struct + below func as one piece",
+      "revId": "7e79d77898513fa9580b3556bed98926542b2163",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
