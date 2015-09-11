@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_eaf8a0e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-11T08:52:03Z",
+      "side": 1,
+      "message": "Storage servers as well would be called hosts only but they would within the context of a cluster as below -\n\n/clusters/{cluster-id}/hosts\n\nDo you feel still its confusing? If so, may be managed servers we can call as \n\n/managed-hosts",
+      "parentUuid": "1ae5cdf2_6ab6503f",
+      "revId": "7e79d77898513fa9580b3556bed98926542b2163",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_aa877860",
         "filename": "apps/skyring/monitor_physical_resources.go",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_4ae7d440",
+        "filename": "apps/skyring/monitor_physical_resources.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-11T08:52:03Z",
+      "side": 1,
+      "message": "We may call it physical_resources.go only",
+      "parentUuid": "1ae5cdf2_aa877860",
+      "revId": "7e79d77898513fa9580b3556bed98926542b2163",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_ca7cc475",
         "filename": "apps/skyring/monitor_physical_resources.go",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2015-09-11T08:38:20Z",
       "side": 1,
       "message": "This would not be a const.  It would be nice to have a struct + below func as one piece",
+      "revId": "7e79d77898513fa9580b3556bed98926542b2163",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_6ae4903b",
+        "filename": "apps/skyring/monitor_physical_resources.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-11T08:52:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_ca7cc475",
       "revId": "7e79d77898513fa9580b3556bed98926542b2163",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
