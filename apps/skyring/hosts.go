@@ -17,9 +17,11 @@ import (
     "github.com/golang/glog"
     "github.com/gorilla/mux"
     "io"
+    "os"
     "io/ioutil"
     "net/http"
     "skyring/db"
+    "skyring/utils"
     "gopkg.in/mgo.v2/bson"
 )
 
@@ -145,5 +147,51 @@ func AddHostHandler(w http.ResponseWriter, r *http.Request) {
     res,_ := json.Marshal(host)
     if err := json.NewEncoder(w).Encode(string(res)); err != nil {
 	   glog.Errorf("Error: ", err)
+    }
+}
+
+func SshFingerprintHandler(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    host_name := vars["host-name"]
+
+    json.NewEncoder(w).Encode(util.PyGetNodeSshFingerprint(host_name))
+}
+
+func AcceptHostHandler(w http.ResponseWriter, r *http.Request) {
+    var accept_req AcceptHostRequest
+
+    body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+    if err != nil {
+       glog.Errorf("Error parsing the request: ", err)
+    }
+    if err := r.Body.Close(); err != nil {
+       glog.Errorf("Error: ", err)
+    }
+    if err := json.Unmarshal(body, &accept_req); err != nil {
+       w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+       w.WriteHeader(422)
+       if err := json.NewEncoder(w).Encode(err); err != nil {
+           glog.Errorf("Error: ", err)
+       }
+    }
+
+    curr_host_name, err := os.Hostname()
+    if err != nil {
+        glog.Errorf("Error: ", err)
+    }
+
+    ret_val := util.PyAddNode(accept_req.Name, accept_req.FingerPrint, accept_req.User, accept_req.Password, curr_host_name)
+    if ret_val == true {
+        if err := json.NewEncoder(w).Encode("Accepted successfully"); err != nil {
+            glog.Errorf("Error: ", err)
+        }
+
+        //TODO:: Update the host status as accepted and populate the host details into DB
+    } else {
+       w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+       w.WriteHeader(422)
+       if err := json.NewEncoder(w).Encode(err); err != nil {
+           glog.Errorf("Error: ", err)
+       }
     }
 }
