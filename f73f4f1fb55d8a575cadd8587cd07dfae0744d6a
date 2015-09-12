@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "1ae5cdf2_7f4b6b59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-12T07:43:04Z",
+      "side": 1,
+      "message": "%s/reqest/request/g",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_9f48375d",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-12T07:43:04Z",
+      "side": 1,
+      "message": "%s/od/of/g",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_e7a2a099",
         "filename": "conf/url.conf",
         "patchSetId": 1
@@ -13,6 +47,24 @@
       "writtenOn": "2015-09-10T09:56:35Z",
       "side": 1,
       "message": "Is this mandatory? Is this being used to uniquely identify a route?",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_bf74139d",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-12T07:43:04Z",
+      "side": 1,
+      "message": "Should not be there. For sample purpose may be keep one commented entry in the conf file.",
+      "parentUuid": "1ae5cdf2_e7a2a099",
       "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
