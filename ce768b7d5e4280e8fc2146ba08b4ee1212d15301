@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_85c8ea75",
+        "filename": "conf/app.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-14T00:12:06Z",
+      "side": 0,
+      "message": "I would prefer this config entries needs to be separated out.\n\n1. skyring core reads a config file /etc/skyring/skyring.conf unless otherwise overridden by a command line option --config\u003d\u003cpath\u003e\n\n2. provider config reader reads config file from default config path like /etc/skyring/providers.d/\u003cprovider-name\u003e.conf eg ceph provider specific config is /etc/skyring/providers.d//ceph.conf\n\n3. have default path/config values and overridden when specified in the config file eg provider executable can be defaulted to the path /var/lib/skyring/providers/\u003cprovider-name\u003e.  If this is needed to be overridden, plugin config file would have\n\n{\n    \"name\": \"ceph\"\n    \"pluginpath\": \"/my/own/path/to/the/myplugin\"\n}",
+      "revId": "ce768b7d5e4280e8fc2146ba08b4ee1212d15301",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_45cee284",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-14T00:12:06Z",
+      "side": 0,
+      "message": "Why can\u0027t PluginFunc be optional?  it means that \"name\"_\"method\" can be taken as default unless otherwise specified.  This will help to have less config file content.",
+      "revId": "ce768b7d5e4280e8fc2146ba08b4ee1212d15301",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}

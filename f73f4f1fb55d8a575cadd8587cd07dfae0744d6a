@@ -36,6 +36,57 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_05b5baed",
+        "filename": "auth/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-14T00:12:06Z",
+      "side": 1,
+      "message": "How about using JSON Web Token where identity provider does these things?",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_25bab6de",
+        "filename": "conf/app.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-14T00:12:06Z",
+      "side": 1,
+      "message": "1. Why can\u0027t these path/files are default to the application unless admin adds the entry in the config file to override.\n\n2. This entry should go into skyring.conf file",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a5c5e65c",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-14T00:12:06Z",
+      "side": 1,
+      "message": "route.conf would be better name",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_e7a2a099",
         "filename": "conf/url.conf",
         "patchSetId": 1
@@ -82,6 +133,23 @@
       "writtenOn": "2015-09-10T09:56:35Z",
       "side": 1,
       "message": "All the storage specific routes should start with the name of the storage tech.",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_65cbde72",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-14T00:12:06Z",
+      "side": 1,
+      "message": "Isn\u0027t this provider specific route?  If so, I would prefer to have it separate config file.  It would be nice to have separate level of directory for provider specific config like /etc/skyring/provider.d/\u003cprovider\u003e.conf",
       "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
