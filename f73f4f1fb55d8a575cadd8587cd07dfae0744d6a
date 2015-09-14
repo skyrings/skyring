@@ -122,6 +122,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_8558ea57",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-14T08:42:12Z",
+      "side": 1,
+      "message": "I understand that JSON files cannot have comments. We might think of adding a field called \"comments\" at top level and this field we dont consider while loading into struct. This field is just for info purpose.",
+      "parentUuid": "1ae5cdf2_bf74139d",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c79e8456",
         "filename": "conf/url.conf",
         "patchSetId": 1
