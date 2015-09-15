@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_1936ff52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-15T00:20:59Z",
+      "side": 1,
+      "message": "I would think CRUD\n\n1. Create - \"POST /nodes\" - add a node to managed nodes (ie manual node addition)\n\n2. Retrieve - \"GET /nodes\" - return all managed and unmanaged nodes\n\n   Retrieve - \"GET /nodes/{node_id}\" - return requested node detail\n\n  Retrieve - \"GET /nodes?type\u003dunmanaged\" return all unmanaged nodes (ie nodes are pending for approval and such nodes could have come to skyring through external provisioner and manual node addition failed somewhere in the middle)\n\n3. Update - \"PUT /nodes/{node_id}\"\n\n4. Delete - \"DELETE /nodes/{node_id}\"\n\nIt would be better for review if you submit patches for 1,2,3,4 separately.",
+      "revId": "750299a61c003115c28cbc877cd11b91365b8b3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_b946ebbd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-15T00:20:59Z",
+      "side": 1,
+      "message": "This could be a separate patch.  I would prefer\n\nGET \"/nodes/{node_id}/utilization\" - return utilization of all entites\n\nGET \"/nodes/{node_id}/utilization?cpu\" - return cpu utilization\n\nGET \"/nodes/{node_id}/utilization?memory\" - return memory utilization",
+      "revId": "750299a61c003115c28cbc877cd11b91365b8b3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
