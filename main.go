@@ -18,12 +18,12 @@ import (
 	"fmt"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring/apps"
+	"github.com/skyrings/skyring/apps/skyring"
+	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/utils"
 	"net/http"
 	"os"
-	"skyring/apps"
-	"skyring/apps/skyring"
-	"skyring/conf"
-	"skyring/utils"
 	"strconv"
 )
 
@@ -68,5 +68,5 @@ func main() {
 
 	glog.Info("start listening on localhost:", strconv.Itoa(appCollection.Config.HttpPort))
 
-	glog.Fatalf("Error", http.ListenAndServe(":"+strconv.Itoa(appCollection.Config.HttpPort), router))
+	glog.Fatalf("Error: %s", http.ListenAndServe(":"+strconv.Itoa(appCollection.Config.HttpPort), router))
 }

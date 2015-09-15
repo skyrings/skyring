@@ -15,7 +15,7 @@ package util
 import (
 	"flag"
 	"github.com/golang/glog"
-	"skyring/conf"
+	"github.com/skyrings/skyring/conf"
 	"strconv"
 	"time"
 )
