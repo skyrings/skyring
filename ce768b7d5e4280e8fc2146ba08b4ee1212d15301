@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_74ce2a5c",
+        "filename": "conf/app.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-15T08:41:56Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_85c8ea75",
+      "revId": "ce768b7d5e4280e8fc2146ba08b4ee1212d15301",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_45cee284",
         "filename": "conf/url.conf",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-14T00:12:06Z",
       "side": 0,
       "message": "Why can\u0027t PluginFunc be optional?  it means that \"name\"_\"method\" can be taken as default unless otherwise specified.  This will help to have less config file content.",
+      "revId": "ce768b7d5e4280e8fc2146ba08b4ee1212d15301",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_34d02250",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-15T08:41:56Z",
+      "side": 0,
+      "message": "For the time being we will keep it as it is as the explicit declaration will avoid confusion. Also the not expecting the config files to be very big as it will have only the technology specific routes. All the common routes will be hard-coded in the application as we discussed and closed",
+      "parentUuid": "1ae5cdf2_45cee284",
       "revId": "ce768b7d5e4280e8fc2146ba08b4ee1212d15301",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false

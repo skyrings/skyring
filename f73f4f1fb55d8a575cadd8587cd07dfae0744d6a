@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_74c1ca7f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-15T08:41:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_7f4b6b59",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_9f48375d",
         "filename": "apps/skyring/request-router.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-12T07:43:04Z",
       "side": 1,
       "message": "%s/od/of/g",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_b4bb520d",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-15T08:41:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_9f48375d",
       "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_d45e1ee9",
+        "filename": "auth/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-15T08:41:56Z",
+      "side": 1,
+      "message": "In any case we need to have local user management for the first time login and for cases where identity integration is not done. Right now added support for session based auth. token based support can added. we will discuss on this off-line and see what else needs to be added. This is the the basic support added.",
+      "parentUuid": "1ae5cdf2_05b5baed",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_25bab6de",
         "filename": "conf/app.conf",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2015-09-14T00:12:06Z",
       "side": 1,
       "message": "1. Why can\u0027t these path/files are default to the application unless admin adds the entry in the config file to override.\n\n2. This entry should go into skyring.conf file",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_94dbb61a",
+        "filename": "conf/app.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-15T08:41:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_25bab6de",
       "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -140,6 +212,42 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_14f406f1",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-15T08:41:56Z",
+      "side": 1,
+      "message": "As we discussed we can have samples folder which will have sample configuration files for reference",
+      "parentUuid": "1ae5cdf2_8558ea57",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_f4eeba21",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-15T08:41:56Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "1ae5cdf2_e7a2a099",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c79e8456",
         "filename": "conf/url.conf",
         "patchSetId": 1
@@ -157,6 +265,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_34f902ea",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-15T08:41:56Z",
+      "side": 1,
+      "message": "Yes, I modified accordingly",
+      "parentUuid": "1ae5cdf2_c79e8456",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_65cbde72",
         "filename": "conf/url.conf",
         "patchSetId": 1
@@ -168,6 +294,24 @@
       "writtenOn": "2015-09-14T00:12:06Z",
       "side": 1,
       "message": "Isn\u0027t this provider specific route?  If so, I would prefer to have it separate config file.  It would be nice to have separate level of directory for provider specific config like /etc/skyring/provider.d/\u003cprovider\u003e.conf",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_54ddae6f",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-15T08:41:56Z",
+      "side": 1,
+      "message": "yes, moved",
+      "parentUuid": "1ae5cdf2_65cbde72",
       "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
