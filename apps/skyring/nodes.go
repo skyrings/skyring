@@ -191,3 +191,16 @@ func GET_Node(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(node)
 }
+
+func GetNode(node_id string) models.StorageNode {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.StorageNode
+	if err := collection.Find(bson.M{"uuid": node_id}).One(&node); err != nil {
+		glog.Errorf("Error getting the node detail: %v", err)
+	}
+
+	return node
+}
