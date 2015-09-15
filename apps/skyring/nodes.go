@@ -17,6 +17,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/golang/glog"
+	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
@@ -145,4 +146,46 @@ func exists(key string, value string) (*models.StorageNode, error) {
 	} else {
 		return &node, nil
 	}
+}
+
+func GET_Nodes(w http.ResponseWriter, r *http.Request) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	params := r.URL.Query()
+	managed_state := params.Get("state")
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var nodes models.StorageNodes
+	if managed_state != "" {
+		if err := collection.Find(bson.M{"managedstate": managed_state}).All(&nodes); err != nil {
+			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+			glog.Errorf("Error getting the nodes list: %v", err)
+			return
+		}
+	} else {
+		if err := collection.Find(nil).All(&nodes); err != nil {
+			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+			glog.Errorf("Error getting the nodes list: %v", err)
+			return
+		}
+	}
+
+	json.NewEncoder(w).Encode(nodes)
+}
+
+func GET_Node(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	node_id := vars["node-id"]
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.StorageNode
+	if err := collection.Find(bson.M{"uuid": node_id}).One(&node); err != nil {
+		glog.Errorf("Error getting the node detail: %v", err)
+	}
+
+	json.NewEncoder(w).Encode(node)
 }
