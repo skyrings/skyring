@@ -37,5 +37,17 @@ var (
 			Pattern:     "nodes",
 			HandlerFunc: PUT_Nodes,
 		},
+		{
+			Name:        "GET_Nodes",
+			Method:      "GET",
+			Pattern:     "nodes",
+			HandlerFunc: GET_Nodes,
+		},
+		{
+			Name:        "GET_Node",
+			Method:      "GET",
+			Pattern:     "nodes/{node-id}",
+			HandlerFunc: GET_Node,
+		},
 	}
 )
