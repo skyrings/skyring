@@ -22,3 +22,10 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+# project specifics
+*~
+*.pyc
+*.pyo
+*.patch
+version.go

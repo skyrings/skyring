@@ -1,67 +1,40 @@
-#
-# Based on http://chrismckenzie.io/post/deploying-with-golang/
-#
+all: install
 
-.PHONY: version all run dist clean
+checkdeps:
+	@echo "Doing $@"
+	@bash $(PWD)/build-aux/checkdeps.sh
 
-APP_NAME := skyring
+getdeps: checkdeps getversion
+	@echo "Doing $@"
+	@go get github.com/golang/lint/golint
+	@go get -t ./...
 
+getversion:
+	@echo "Doing $@"
+	@bash $(PWD)/build-aux/pkg-version.sh $(PWD)/version.go
 
-ARCH := $(shell go env GOARCH)
-GOOS := $(shell go env GOOS)
-DIR=.
+verifiers: getdeps vet fmt lint
 
-VERSION ="1.0"
+vet:
+	@echo "Doing $@"
+	@go tool vet .
 
-# Go setup
-GO=go
-TEST=go test
+fmt:
+	@echo "Doing $@"
+	@bash $(PWD)/build-aux/gofmt.sh
 
-# Sources and Targets
-EXECUTABLES :=$(APP_NAME)
-# Build Binaries setting main.version and main.build vars
-LDFLAGS :=-ldflags "-X main.SKYRING_VERSION $(VERSION)"
-# Package target
-PACKAGE :=$(DIR)/dist/$(APP_NAME)-$(VERSION).$(GOOS).$(ARCH).tar.gz
-
-.DEFAULT: all
-
-all: build
-
-# print the version
-version:
-	@echo $(VERSION)
-
-# print the name of the app
-name:
-	@echo $(APP_NAME)
-
-# print the package path
-package:
-	@echo $(PACKAGE)
-
-build:
-	$(GO) build $(LDFLAGS) -o $(APP_NAME)
-
-run: build
-	./$(APP_NAME)
+lint:
+	@echo "Doing $@"
+	@golint .
 
 test:
-	@$(TEST) -v ./...
+	@echo "Doing $@"
+	@go test -v ./...
 
-clean:
-	@echo Cleaning Workspace...
-	rm -rf $(APP_NAME)
-	rm -rf dist
+build: getdeps verifiers test
+	@echo "Doing $@"
+	@go build
 
-$(PACKAGE): all
-	@echo Packaging Binaries...
-	@mkdir -p tmp/$(APP_NAME)
-	@cp $(APP_NAME) tmp/$(APP_NAME)/
-	@mkdir -p $(DIR)/dist/
-	tar -czf $@ -C tmp $(APP_NAME);
-	@rm -rf tmp
-	@echo
-	@echo Package $@ saved in dist directory
-
-dist: $(PACKAGE)
+install: build
+	@echo "Doing $@"
+	@go install
