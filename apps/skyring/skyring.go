@@ -74,6 +74,12 @@ var (
 			Pattern:     "/nodes/{node-id}",
 			HandlerFunc: Node_GET,
 		},
+		{
+			Name:        "Utilization_GET",
+			Method:      "GET",
+			Pattern:     "/nodes/{node-id}/utilization",
+			HandlerFunc: Utilization_GET,
+		},
 	}
 )
 
