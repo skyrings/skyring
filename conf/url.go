@@ -33,11 +33,11 @@ func LoadUrls(configFilePath string) *RouteCollection {
 	var data RouteCollection
 	file, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
-		glog.Fatalf("Error Reading URL Config:", err)
+		glog.Fatalf("Error Reading URL Config: %s", err)
 	}
 	err = json.Unmarshal(file, &data)
 	if err != nil {
-		glog.Fatalf("Error Unmarshalling URL Config:", err)
+		glog.Fatalf("Error Unmarshalling URL Config: %s", err)
 	}
 	return &data
 

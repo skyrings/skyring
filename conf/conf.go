@@ -50,11 +50,11 @@ func LoadAppConfiguration(configFilePath string) *SkyringCollection {
 	var data SkyringCollection
 	file, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
-		glog.Fatalf("Error Reading App Config:", err)
+		glog.Fatalf("Error Reading App Config: %s", err)
 	}
 	err = json.Unmarshal(file, &data)
 	if err != nil {
-		glog.Fatalf("Error Unmarshalling App Config:", err)
+		glog.Fatalf("Error Unmarshalling App Config: %s", err)
 	}
 	return &data
 
@@ -64,11 +64,11 @@ func LoadPluginConfiguration(configFilePath string) *PluginCollection {
 	var data PluginCollection
 	file, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
-		glog.Fatalf("Error Reading Plugin Config:", err)
+		glog.Fatalf("Error Reading Plugin Config: %s", err)
 	}
 	err = json.Unmarshal(file, &data)
 	if err != nil {
-		glog.Fatalf("Error Unmarshalling plugin Config:", err)
+		glog.Fatalf("Error Unmarshalling plugin Config: %s", err)
 	}
 	return &data
 

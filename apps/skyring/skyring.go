@@ -17,12 +17,12 @@ import (
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/natefinch/pie"
+	"github.com/skyrings/skyring/conf"
 	"io/ioutil"
 	"net/http"
 	"net/rpc"
 	"net/rpc/jsonrpc"
 	"os"
-	"skyring/conf"
 	"sync"
 )
 
@@ -53,7 +53,7 @@ func NewApp(configfile string) *App {
 	for _, element := range pluginCollection.Plugins {
 		client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, element.PluginBinary)
 		if err != nil {
-			glog.Errorf("Error running plugin:", err)
+			glog.Errorf("Error running plugin: %s", err)
 		}
 
 		app.providers[element.Name] = Provider{Name: element.Name, Client: client}
