@@ -69,6 +69,24 @@
       "revId": "ce768b7d5e4280e8fc2146ba08b4ee1212d15301",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_d4ee1e8b",
+        "filename": "conf/url.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-15T09:25:33Z",
+      "side": 0,
+      "message": "I would think that \"name\"_\"method\" brings discipline in provider\u0027s implementation.  Having any name would be a choice external provider writer\u0027s wish.",
+      "parentUuid": "1ae5cdf2_34d02250",
+      "revId": "ce768b7d5e4280e8fc2146ba08b4ee1212d15301",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }

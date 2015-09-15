@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_14d246d2",
+        "filename": "auth/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-15T09:25:33Z",
+      "side": 1,
+      "message": "I would think of local user management itself is a default identity provider ie we could have local user from identity management than here.  That will ease out to implement other identify providers.",
+      "parentUuid": "1ae5cdf2_d45e1ee9",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_25bab6de",
         "filename": "conf/app.conf",
         "patchSetId": 1
