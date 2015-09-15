@@ -62,6 +62,18 @@ var (
 			Pattern: "/nodes",
 			HandlerFunc: StorageNode_Put,
 		},
+		{
+			Name: "GetStorageNodes",
+			Method: "GET",
+			Pattern: "/nodes",
+			HandlerFunc: StorageNodes_Get,
+		},
+		{
+			Name: "GetStorageNode",
+			Method: "GET",
+			Pattern: "/nodes/{node-id}",
+			HandlerFunc: StorageNode_Get,
+		},
 	}
 )
 
