@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_3404a27a",
+        "filename": "buildscripts/checkdeps.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-15T08:47:32Z",
+      "side": 1,
+      "message": "Is it possible to check the git dependencies also?",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 8
+      },
+      "revId": "e4906dab6b5d561168583e2b0b9f9f0c8bdbe258",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
