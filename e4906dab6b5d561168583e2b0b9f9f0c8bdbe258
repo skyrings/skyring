@@ -22,6 +22,24 @@
       "revId": "e4906dab6b5d561168583e2b0b9f9f0c8bdbe258",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_343bc23b",
+        "filename": "buildscripts/checkdeps.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-15T08:55:33Z",
+      "side": 1,
+      "message": "I can\u0027t get what git dependencies mean here",
+      "parentUuid": "1ae5cdf2_3404a27a",
+      "revId": "e4906dab6b5d561168583e2b0b9f9f0c8bdbe258",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
