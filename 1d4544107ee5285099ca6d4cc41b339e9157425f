@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_148406d3",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-15T09:15:44Z",
+      "side": 1,
+      "message": "The usual meaning of conf.d is that the main config file is splitted into multiples and placed into that.\n\nIf we support splitted skyring.conf files, it will confuse with provider config files.\n\nIts better not to have conf.d for providers config files.",
+      "range": {
+        "startLine": 57,
+        "startChar": 2,
+        "endLine": 57,
+        "endChar": 16
+      },
+      "revId": "1d4544107ee5285099ca6d4cc41b339e9157425f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_746aaa1b",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-15T09:15:44Z",
+      "side": 1,
+      "message": "1. Do you get files in sorted order?  Loading providers in a specific (ascending) order is good.\n\n2. As running skyring can be extended at run time where provider\u0027s config file will be added/updated.  At that time, admin signals running skyring to reread config files.  To enable this feature in future, its better to have config read as separate function.",
+      "range": {
+        "startLine": 60,
+        "startChar": 22,
+        "endLine": 60,
+        "endChar": 29
+      },
+      "revId": "1d4544107ee5285099ca6d4cc41b339e9157425f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_d460de37",
+        "filename": "conf/ceph.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-15T09:15:44Z",
+      "side": 1,
+      "message": "why can\u0027t it be just \u0027ceph_provider\u0027?",
+      "range": {
+        "startLine": 4,
+        "startChar": 27,
+        "endLine": 4,
+        "endChar": 40
+      },
+      "revId": "1d4544107ee5285099ca6d4cc41b339e9157425f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_145b2688",
+        "filename": "conf/gluster.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-15T09:15:44Z",
+      "side": 1,
+      "message": "As the config file is in json, its not required to reserve elements.  I would prefer things to be added when the feature implemented.",
+      "range": {
+        "startLine": 5,
+        "startChar": 9,
+        "endLine": 5,
+        "endChar": 23
+      },
+      "revId": "1d4544107ee5285099ca6d4cc41b339e9157425f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
