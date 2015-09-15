@@ -79,6 +79,10 @@ func (a *App) SetRoutes(container *mux.Router) error {
 			Name(route.Name).
 			Handler(http.HandlerFunc(a.ProviderHandler))
 	}
+
+	// Set routes for core
+	container.Methods("GET").Path("/tools/ssh_fingerprint").Name("GetSshFingerprint").Handler(http.HandlerFunc(SshFingerprintHandler))
+
 	return nil
 }
 
