@@ -15,6 +15,7 @@ package skyring
 import (
     "encoding/json"
     "github.com/golang/glog"
+    "github.com/gorilla/mux"
     "io"
     "os"
     "io/ioutil"
@@ -177,3 +178,39 @@ func nodeAlreadyAdded(node_name string) bool {
         return true
     }
 }
+
+func StorageNodesHandler(w http.ResponseWriter, r *http.Request) {
+    sessionCopy := db.GetDatastore()
+
+    params := r.URL.Query()
+    managed_state := params.Get("state")
+
+    collection := sessionCopy.DB("skyring").C("storage_nodes")
+    var nodes StorageNodes
+    if managed_state != "" {
+        if err := collection.Find(bson.M{"managedstate": managed_state}).All(&nodes); err != nil {
+            glog.Errorf("Error getting the nodes list: ", err)
+        }
+    } else {
+        if err := collection.Find(nil).All(&nodes); err != nil {
+            glog.Errorf("Error getting the nodes list: ", err)
+        }
+    }
+
+    json.NewEncoder(w).Encode(nodes)
+}
+
+func StorageNodeHandler(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    node_id := vars["node-id"]
+
+    sessionCopy := db.GetDatastore()
+    collection := sessionCopy.DB("skyring").C("storage_nodes")
+    var node StorageNode
+    if err := collection.Find(bson.M{"uuid": node_id}).One(&node); err != nil {
+        glog.Errorf("Error getting the node detail: ", err)
+    }
+
+    json.NewEncoder(w).Encode(node)
+}
+

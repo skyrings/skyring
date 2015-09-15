@@ -83,6 +83,8 @@ func (a *App) SetRoutes(container *mux.Router) error {
 	// Set routes for core
 	container.Methods("GET").Path("/tools/ssh_fingerprint").Name("GetSshFingerprint").Handler(http.HandlerFunc(SshFingerprintHandler))
 	container.Methods("PUT").Path("/nodes").Name("AddStorageNode").Handler(http.HandlerFunc(AddStorageNodeHandler))
+	container.Methods("GET").Path("/nodes").Name("GetStorageNodes").Handler(http.HandlerFunc(StorageNodesHandler))
+	container.Methods("GET").Path("/nodes/{node-id}").Name("GetStorageNode").Handler(http.HandlerFunc(StorageNodeHandler))
 
 	return nil
 }
