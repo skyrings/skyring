@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_eb0c1897",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-15T16:14:05Z",
+      "side": 1,
+      "message": "\"name\" \u003d\u003e \"hostname\"",
+      "revId": "4b9aa431eb6e67cb22020e6914fb49748c1c3aad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_0b1224b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-15T16:14:05Z",
+      "side": 1,
+      "message": "\"ip\" is not required",
+      "revId": "4b9aa431eb6e67cb22020e6914fb49748c1c3aad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_8b1d54c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-15T16:14:05Z",
+      "side": 1,
+      "message": "\"rootuser\" \u003d\u003e \"user\"",
+      "revId": "4b9aa431eb6e67cb22020e6914fb49748c1c3aad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_2b6d2033",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-15T16:14:05Z",
+      "side": 1,
+      "message": "\"ssh_fingerprint\" required\n\n\"ssh_port\" optional",
+      "revId": "4b9aa431eb6e67cb22020e6914fb49748c1c3aad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_4b6a6c1b",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-15T16:14:05Z",
+      "side": 1,
+      "message": "User",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 12
+      },
+      "revId": "4b9aa431eb6e67cb22020e6914fb49748c1c3aad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_2bb0c08a",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-15T16:14:05Z",
+      "side": 1,
+      "message": "you could use json.Decoder",
+      "revId": "4b9aa431eb6e67cb22020e6914fb49748c1c3aad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_2b77e0d5",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-15T16:14:05Z",
+      "side": 1,
+      "message": "I see the following lines repeated,\n\n  w.Header().Set(\"Content-Type\", application/json;charset\u003dUTF-8\")\n  w.WriteHeader(422)\n  if err :\u003d json.NewEncoder(w).Encode(err); err !\u003d nil {\n      glog.Errorf(\"Error: \", err)\n  }\n\nCan they be extracted out?",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 9
+      },
+      "revId": "4b9aa431eb6e67cb22020e6914fb49748c1c3aad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_0b7304ea",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-15T16:14:05Z",
+      "side": 1,
+      "message": "hostname",
+      "range": {
+        "startLine": 170,
+        "startChar": 22,
+        "endLine": 170,
+        "endChar": 31
+      },
+      "revId": "4b9aa431eb6e67cb22020e6914fb49748c1c3aad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_ab4a1081",
+        "filename": "db/db.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-15T16:14:05Z",
+      "side": 1,
+      "message": "These values should go into skyring.conf",
+      "revId": "4b9aa431eb6e67cb22020e6914fb49748c1c3aad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
