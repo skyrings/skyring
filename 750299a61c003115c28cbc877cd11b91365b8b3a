@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_b9550b1f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-15T04:38:55Z",
+      "side": 1,
+      "message": "Sounds good. Will send individual patches.",
+      "parentUuid": "1ae5cdf2_1936ff52",
+      "revId": "750299a61c003115c28cbc877cd11b91365b8b3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_b946ebbd",
         "filename": "/COMMIT_MSG",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-15T00:20:59Z",
       "side": 1,
       "message": "This could be a separate patch.  I would prefer\n\nGET \"/nodes/{node_id}/utilization\" - return utilization of all entites\n\nGET \"/nodes/{node_id}/utilization?cpu\" - return cpu utilization\n\nGET \"/nodes/{node_id}/utilization?memory\" - return memory utilization",
+      "revId": "750299a61c003115c28cbc877cd11b91365b8b3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_d931f70c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-15T04:38:55Z",
+      "side": 1,
+      "message": "I agree. But overall utilization data could be huge in size. thats the only concern.",
+      "parentUuid": "1ae5cdf2_b946ebbd",
       "revId": "750299a61c003115c28cbc877cd11b91365b8b3a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
