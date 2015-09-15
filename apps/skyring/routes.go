@@ -49,5 +49,11 @@ var (
 			Pattern:     "nodes/{node-id}",
 			HandlerFunc: GET_Node,
 		},
+		{
+			Name:        "GET_Utilization",
+			Method:      "GET",
+			Pattern:     "nodes/{node-id}/utilization",
+			HandlerFunc: GET_Utilization,
+		},
 	}
 )
