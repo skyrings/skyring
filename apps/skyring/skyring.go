@@ -74,6 +74,12 @@ var (
 			Pattern: "/nodes/{node-id}",
 			HandlerFunc: StorageNode_Get,
 		},
+		{
+			Name: "GetResourceUtilization",
+			Method: "GET",
+			Pattern: "/nodes/{node-id}/utilization",
+			HandlerFunc: StorageNodeResourceUtilization_Get,
+		},
 	}
 )
 

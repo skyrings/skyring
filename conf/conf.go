@@ -20,6 +20,7 @@ import (
 
 type SkyringConfig struct {
 	ConfigFilePath string
+	MonitoringDBConfigFilePath string
 	HttpPort       int
 }
 

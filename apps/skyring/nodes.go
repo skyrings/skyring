@@ -210,3 +210,13 @@ func StorageNode_Get(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(node)
 }
 
+func GetNode(node_id string) StorageNode {
+    sessionCopy := db.GetDatastore()
+    collection := sessionCopy.DB("skyring").C("storage_nodes")
+    var node StorageNode
+    if err := collection.Find(bson.M{"uuid": node_id}).One(&node); err != nil {
+        glog.Errorf("Error getting the node detail: ", err)
+    }
+
+    return node
+}

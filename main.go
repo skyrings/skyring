@@ -75,5 +75,7 @@ func main() {
 
 	glog.Info("start listening on localhost:", strconv.Itoa(conf.SystemConfig.Config.HttpPort))
 
+	glog.Info("start listening on localhost:", strconv.Itoa(conf.SystemConfig.Config.HttpPort))
+
 	glog.Fatalf("Error", http.ListenAndServe(":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), router))
 }
