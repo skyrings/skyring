@@ -85,6 +85,7 @@ func (a *App) SetRoutes(container *mux.Router) error {
 	container.Methods("PUT").Path("/nodes").Name("AddStorageNode").Handler(http.HandlerFunc(AddStorageNodeHandler))
 	container.Methods("GET").Path("/nodes").Name("GetStorageNodes").Handler(http.HandlerFunc(StorageNodesHandler))
 	container.Methods("GET").Path("/nodes/{node-id}").Name("GetStorageNode").Handler(http.HandlerFunc(StorageNodeHandler))
+	container.Methods("GET").Path("/nodes/{node-id}/utilization").Name("GetResourceUtilization").Handler(http.HandlerFunc(ResourceUtilizationHandler))
 
 	return nil
 }
