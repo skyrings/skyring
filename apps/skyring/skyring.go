@@ -41,6 +41,24 @@ type Args struct {
 	Request []byte
 }
 
+type CoreRoute struct {
+	Name string
+	Method string
+	Pattern string
+	HandlerFunc http.HandlerFunc
+}
+
+var (
+	CORE_ROUTES = []CoreRoute{
+		CoreRoute{
+			Name: "GetSshFingerprint",
+			Method: "GET",
+			Pattern: "/tools/ssh_fingerprint",
+			HandlerFunc: SshFingerprint_Get,
+		},
+	}
+)
+
 func NewApp(configfile string) *App {
 	app := &App{}
 
@@ -71,7 +89,12 @@ func NewApp(configfile string) *App {
 }
 
 func (a *App) SetRoutes(router *mux.Router) error {
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+	// Set routes for core
+	for _, route := range CORE_ROUTES {
+		router.Methods(route.Method).Path(route.Pattern).Name(route.Name).Handler(http.HandlerFunc(route.HandlerFunc))
+	}
+
+	// Set the provider specific routes
 	for _, route := range a.urls {
 		router.
 			Methods(route.Method).
@@ -79,6 +102,10 @@ func (a *App) SetRoutes(router *mux.Router) error {
 			Name(route.Name).
 			Handler(http.HandlerFunc(a.ProviderHandler))
 	}
+
+	// Set the route for static content
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+
 	return nil
 }
 
