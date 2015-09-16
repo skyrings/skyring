@@ -21,6 +21,7 @@ import (
 	"github.com/skyrings/skyring/apps"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/utils"
 	"net/http"
 	"os"
@@ -117,12 +118,12 @@ func start() {
 		err         error
 	)
 
-	appCollection := conf.LoadAppConfiguration(path.Join(configDir, ConfigFile))
-	appCollection.Logging.Logtostderr = logToStderr
-	appCollection.Logging.Log_dir = logDir
-	appCollection.Logging.V = logLevel
+	conf.LoadAppConfiguration(path.Join(configDir, ConfigFile))
+	conf.SystemConfig.Logging.Logtostderr = logToStderr
+	conf.SystemConfig.Logging.Log_dir = logDir
+	conf.SystemConfig.Logging.V = logLevel
 
-	util.InitLogs(appCollection.Logging)
+	util.InitLogs(conf.SystemConfig.Logging)
 
 	application = skyring.NewApp(configDir, providersDir)
 
@@ -139,7 +140,7 @@ func start() {
 		os.Exit(1)
 	}
 
-	err = application.InitializeNodeManager(appCollection.NodeManagementConfig)
+	err = application.InitializeNodeManager(conf.SystemConfig.NodeManagementConfig)
 	if err != nil {
 		glog.Errorf("Unable to create node manager")
 		os.Exit(1)
@@ -150,10 +151,21 @@ func start() {
 
 	//Check if Port is provided, otherwise use dafault 8080
 	//If host is not provided, it binds on all IPs
-	if appCollection.Config.HttpPort == 0 {
-		appCollection.Config.HttpPort = 8080
+	if conf.SystemConfig.Config.HttpPort == 0 {
+		conf.SystemConfig.Config.HttpPort = 8080
 	}
-	glog.Infof("start listening on %s : %s", appCollection.Config.Host, strconv.Itoa(appCollection.Config.HttpPort))
 
-	glog.Fatalf("Error: %s", http.ListenAndServe(appCollection.Config.Host+":"+strconv.Itoa(appCollection.Config.HttpPort), router))
+	// Create DB session
+	if err := db.InitDBSession(conf.SystemConfig.DBConfig); err != nil {
+		glog.Errorf("Unable to initialize DB")
+		os.Exit(1)
+	}
+	if err := db.InitMonitoringDB(conf.SystemConfig.TimeSeriesDBConfig); err != nil {
+		glog.Errorf("Unable to initialize monitoring DB")
+		os.Exit(1)
+	}
+
+	glog.Infof("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
+
+	glog.Fatalf("Error: %s", http.ListenAndServe(conf.SystemConfig.Config.Host+":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), router))
 }

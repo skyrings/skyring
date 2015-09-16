@@ -34,6 +34,24 @@ type SkyringCollection struct {
 	Config               SkyringConfig     `json:"config"`
 	Logging              SkyringLogging    `json:"logging"`
 	NodeManagementConfig NodeManagerConfig `json:"nodemanagementconfig"`
+	DBConfig             MongoDBConfig     `json:"dbconfig"`
+	TimeSeriesDBConfig   InfluxDBconfig    `json:"timeseriesdbconfig"`
+}
+
+type MongoDBConfig struct {
+	Hostname string `json:"hostname"`
+	Port     int    `json:"port"`
+	Database string `json:"database"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+}
+
+type InfluxDBconfig struct {
+	Hostname string `json:"hostname"`
+	Port     int    `json:"port"`
+	Database string `json:"database"`
+	User     string `json:"user"`
+	Password string `json:"password"`
 }
 
 type NodeManagerConfig struct {
@@ -41,18 +59,17 @@ type NodeManagerConfig struct {
 	ConfigFilePath string `json:"configfilepath"`
 }
 
-func LoadAppConfiguration(configFilePath string) *SkyringCollection {
-	var data SkyringCollection
+var (
+	SystemConfig SkyringCollection
+)
+
+func LoadAppConfiguration(configFilePath string) {
 	file, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
 		glog.Fatalf("Error Reading SkyRing Config: %s", err)
-		data = SkyringCollection{}
 	}
-	err = json.Unmarshal(file, &data)
+	err = json.Unmarshal(file, &SystemConfig)
 	if err != nil {
 		glog.Fatalf("Error Unmarshalling SkyRing Config: %s", err)
-		data = SkyringCollection{}
 	}
-	return &data
-
 }
