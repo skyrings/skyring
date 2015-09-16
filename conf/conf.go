@@ -30,6 +30,22 @@ type SkyringLogging struct {
 	vmodule     string
 }
 
+type MongoDBConfig struct {
+	Hostname string
+	Port     int
+	Database string
+	User     string
+	Password string
+}
+
+type InfluxDBconfig struct {
+	Hostname string
+	Port     int
+	Database string
+	User     string
+	Password string
+}
+
 type PluginConfig struct {
 	Name           string
 	PluginBinary   string
@@ -40,6 +56,8 @@ type SkyringCollection struct {
 	Config               SkyringConfig
 	Logging              SkyringLogging
 	NodeManagementConfig NodeManagerConfig
+	DBConfig             MongoDBConfig
+	TimeSeriesDBConfig   InfluxDBconfig
 }
 
 type PluginCollection struct {
@@ -52,18 +70,19 @@ type NodeManagerConfig struct {
 	ConfigFilePath string
 }
 
-func LoadAppConfiguration(configFilePath string) *SkyringCollection {
-	var data SkyringCollection
+var (
+	SystemConfig SkyringCollection
+)
+
+func LoadAppConfiguration(configFilePath string) {
 	file, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
 		glog.Fatalf("Error Reading App Config: %s", err)
 	}
-	err = json.Unmarshal(file, &data)
+	err = json.Unmarshal(file, &SystemConfig)
 	if err != nil {
 		glog.Fatalf("Error Unmarshalling App Config: %s", err)
 	}
-	return &data
-
 }
 
 func LoadPluginConfiguration(configFilePath string) *PluginCollection {
@@ -77,5 +96,4 @@ func LoadPluginConfiguration(configFilePath string) *PluginCollection {
 		glog.Fatalf("Error Unmarshalling plugin Config: %s", err)
 	}
 	return &data
-
 }
