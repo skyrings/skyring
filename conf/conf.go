@@ -37,13 +37,19 @@ type PluginConfig struct {
 }
 
 type SkyringCollection struct {
-	Config  SkyringConfig
-	Logging SkyringLogging
+	Config               SkyringConfig
+	Logging              SkyringLogging
+	NodeManagementConfig NodeManagerConfig
 }
 
 type PluginCollection struct {
 	Plugins       []PluginConfig
 	UrlConfigPath string
+}
+
+type NodeManagerConfig struct {
+	ManagerName    string
+	ConfigFilePath string
 }
 
 func LoadAppConfiguration(configFilePath string) *SkyringCollection {

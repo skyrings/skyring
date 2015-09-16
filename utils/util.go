@@ -1,8 +1,10 @@
 package util
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/golang/glog"
+	"net/http"
 	"runtime"
 	"time"
 )
@@ -59,4 +61,13 @@ func logPanic(r interface{}) {
 		callers = callers + fmt.Sprintf("%v:%v\n", file, line)
 	}
 	glog.Errorf("Recovered from panic: %#v (%v)\n%v", r, r, callers)
+}
+
+func HttpResponse(w http.ResponseWriter, status_code int, msg string) {
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+	w.WriteHeader(status_code)
+	if err := json.NewEncoder(w).Encode(msg); err != nil {
+		glog.Errorf("Error: %v", err)
+	}
+	return
 }

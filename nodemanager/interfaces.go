@@ -10,15 +10,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package app
+package nodemanager
 
-import (
-	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/conf"
-	_ "github.com/skyrings/skyring/nodemanager/saltnodemanager"
-)
-
-type Application interface {
-	SetRoutes(container *mux.Router) error
-	InitializeNodeManager(config conf.NodeManagerConfig) error
+type NodeManagerInterface interface {
+	GetNodeSshFingerprint(node string) string
+	AcceptNode(node string, fingerprint string) bool
+	AddNode(node string, fingerprint string, username string, password string, master string, port int) bool
+	GetNodes() map[string]map[string]string
+	GetNodeMachineId(node string) string
+	GetNodeNetworkInfo(node string) map[string][]string
+	GetNodeDiskInfo(node string) map[string]map[string]string
 }
