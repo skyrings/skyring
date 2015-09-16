@@ -33,5 +33,12 @@ var (
 			HandlerFunc: GET_SshFingerprint,
 			Version:     1,
 		},
+		{
+			Name:        "POST_Nodes",
+			Method:      "POST",
+			Pattern:     "nodes",
+			HandlerFunc: POST_Nodes,
+			Version:     1,
+		},
 	}
 )
