@@ -224,6 +224,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_bcd33437",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-16T08:15:29Z",
+      "side": 1,
+      "message": "Wanted to limit the request body size so used this mechanism",
+      "parentUuid": "1ae5cdf2_c1a65dc1",
+      "revId": "4b9aa431eb6e67cb22020e6914fb49748c1c3aad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_2b77e0d5",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 1
