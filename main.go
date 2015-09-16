@@ -24,6 +24,7 @@ import (
 	"skyring/apps/skyring"
 	"skyring/conf"
 	"skyring/utils"
+	"skyring/db"
 	"strconv"
 )
 
@@ -46,12 +47,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	appCollection := conf.LoadAppConfiguration(configfile)
+	conf.LoadAppConfiguration(configfile)
 
 	//Initialize the logging
-	util.InitLogs(appCollection.Logging)
+	util.InitLogs(conf.SystemConfig.Logging)
 
-	application = skyring.NewApp(appCollection.Config.ConfigFilePath)
+	application = skyring.NewApp(conf.SystemConfig.Config.ConfigFilePath)
 
 	if application == nil {
 		glog.Errorf("Unable to start application")
@@ -66,7 +67,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	glog.Info("start listening on localhost:", strconv.Itoa(appCollection.Config.HttpPort))
+	// Start the push event server
+	go util.StartServer()
 
-	glog.Fatalf("Error", http.ListenAndServe(":"+strconv.Itoa(appCollection.Config.HttpPort), router))
+	// Create DB session
+	db.InitDBSession(conf.SystemConfig.DBConfig)
+
+	glog.Info("start listening on localhost:", strconv.Itoa(conf.SystemConfig.Config.HttpPort))
+
+	glog.Fatalf("Error", http.ListenAndServe(":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), router))
 }
