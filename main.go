@@ -139,6 +139,12 @@ func start() {
 		os.Exit(1)
 	}
 
+	err = application.InitializeNodeManager(appCollection.NodeManagementConfig)
+	if err != nil {
+		glog.Errorf("Unable to create node manager")
+		os.Exit(1)
+	}
+
 	glog.Info("Starting event listener")
 	go util.StartEventListener(eventSocket)
 

@@ -31,8 +31,14 @@ type SkyringLogging struct {
 }
 
 type SkyringCollection struct {
-	Config  SkyringConfig  `json:"config"`
-	Logging SkyringLogging `json:"logging"`
+	Config               SkyringConfig     `json:"config"`
+	Logging              SkyringLogging    `json:"logging"`
+	NodeManagementConfig NodeManagerConfig `json:"nodemanagementconfig"`
+}
+
+type NodeManagerConfig struct {
+	ManagerName    string `json:"managername"`
+	ConfigFilePath string `json:"configfilepath"`
 }
 
 func LoadAppConfiguration(configFilePath string) *SkyringCollection {

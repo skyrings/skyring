@@ -72,3 +72,12 @@ func HandleHHttpError(rw http.ResponseWriter, err error) {
 	rw.WriteHeader(http.StatusInternalServerError)
 	rw.Write(bytes)
 }
+
+func HttpResponse(w http.ResponseWriter, status_code int, msg string) {
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+	w.WriteHeader(status_code)
+	if err := json.NewEncoder(w).Encode(msg); err != nil {
+		glog.Errorf("Error: %v", err)
+	}
+	return
+}

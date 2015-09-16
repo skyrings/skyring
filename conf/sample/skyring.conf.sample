@@ -1,6 +1,6 @@
 {
     "config": {
-       "host":"127.0.0.1"
+       "host":"127.0.0.1",
         "httpPort":8080
     },
     "logging": {
@@ -8,5 +8,9 @@
         "log_dir": "/var/log/skyring",
         "v": 10,
         "vmodule": ""
+    },
+    "nodemanagementconfig": {
+        "managerName": "SaltNodeManager",
+        "configFilePath": ""
     }
 }

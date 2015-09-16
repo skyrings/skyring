@@ -19,6 +19,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/natefinch/pie"
 	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/nodemanager"
 	"io/ioutil"
 	"net/http"
 	"net/rpc"
@@ -39,8 +40,9 @@ type Provider struct {
 }
 
 type App struct {
-	providers map[string]Provider
-	routes    map[string]conf.Route
+	providers   map[string]Provider
+	routes      map[string]conf.Route
+	nodemanager nodemanager.NodeManagerInterface
 }
 
 type Args struct {
@@ -203,5 +205,15 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Matching Provider Not Found"))
+	}
+}
+
+func (a *App) InitializeNodeManager(config conf.NodeManagerConfig) error {
+	if manager, err := nodemanager.InitNodeManager(config.ManagerName, config.ConfigFilePath); err != nil {
+		glog.Errorf("Error initializing the node manager: %v", err)
+		return err
+	} else {
+		a.nodemanager = manager
+		return nil
 	}
 }
