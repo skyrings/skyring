@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_619f4960",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-16T03:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_1e418039",
+      "revId": "837b136000c48fbcd0f8daef837eb1269915eae0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_3e3e3cb9",
         "filename": "apps/skyring/monitoring.go",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-15T17:17:12Z",
       "side": 1,
       "message": "what if the node doesn\u0027t exist in DB? we should check for err here",
+      "revId": "837b136000c48fbcd0f8daef837eb1269915eae0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_819c556b",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-16T03:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_3e3e3cb9",
       "revId": "837b136000c48fbcd0f8daef837eb1269915eae0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
