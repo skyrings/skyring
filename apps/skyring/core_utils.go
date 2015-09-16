@@ -13,25 +13,19 @@ limitations under the License.
 package skyring
 
 import (
+	"encoding/json"
+	"github.com/skyrings/skyring/utils"
 	"net/http"
 )
 
-type CoreRoute struct {
-	Name        string
-	Method      string
-	Pattern     string
-	HandlerFunc http.HandlerFunc
-	Version     int
-}
+func GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
+	params := r.URL.Query()
+	hostname := params.Get("hostname")
 
-var (
-	CORE_ROUTES = []CoreRoute{
-		{
-			Name:        "GET_SshFingerprint",
-			Method:      "GET",
-			Pattern:     "utils/ssh_fingerprint",
-			HandlerFunc: GET_SshFingerprint,
-			Version:     1,
-		},
+	if hostname == "" {
+		util.HttpResponse(w, http.StatusBadRequest, "Host name not provided")
+		return
 	}
-)
+
+	json.NewEncoder(w).Encode(GetCoreNodeManager().GetNodeSshFingerprint(hostname))
+}

@@ -54,6 +54,10 @@ const (
 	DEFAULT_API_PREFIX = "/api"
 )
 
+var (
+	CoreNodeManager nodemanager.NodeManagerInterface
+)
+
 func NewApp(configDir string, binDir string) *App {
 	app := &App{}
 
@@ -234,6 +238,7 @@ func (a *App) InitializeNodeManager(config conf.NodeManagerConfig) error {
 		return err
 	} else {
 		a.nodemanager = manager
+		CoreNodeManager = manager
 		return nil
 	}
 }
@@ -245,4 +250,8 @@ func validApiVersion(version int) bool {
 		}
 	}
 	return false
+}
+
+func GetCoreNodeManager() nodemanager.NodeManagerInterface {
+	return CoreNodeManager
 }
