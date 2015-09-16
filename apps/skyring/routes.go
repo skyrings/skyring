@@ -31,5 +31,11 @@ var (
 			Pattern:     "utils/ssh_fingerprint",
 			HandlerFunc: GET_SshFingerprint,
 		},
+		{
+			Name:        "PUT_Nodes",
+			Method:      "PUT",
+			Pattern:     "nodes",
+			HandlerFunc: PUT_Nodes,
+		},
 	}
 )
