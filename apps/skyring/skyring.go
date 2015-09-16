@@ -14,6 +14,7 @@ package skyring
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/natefinch/pie"
@@ -45,6 +46,10 @@ type Args struct {
 
 const (
 	DEFAULT_API_PREFIX = "/api"
+)
+
+var (
+	CoreNodeManager nodemanager.NodeManagerInterface
 )
 
 func NewApp(configfile string) *App {
@@ -139,6 +144,11 @@ func (a *App) InitializeNodeManager(config conf.NodeManagerConfig) error {
 		return err
 	} else {
 		a.nodemanager = manager
+		CoreNodeManager = manager
 		return nil
 	}
+}
+
+func GetCoreNodeManager() nodemanager.NodeManagerInterface {
+	return CoreNodeManager
 }
