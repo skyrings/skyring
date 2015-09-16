@@ -56,6 +56,12 @@ var (
 			Pattern: "/tools/ssh_fingerprint",
 			HandlerFunc: SshFingerprint_Get,
 		},
+		{
+			Name: "AddStorageNode",
+			Method: "PUT",
+			Pattern: "/nodes",
+			HandlerFunc: StorageNode_Put,
+		},
 	}
 )
 
