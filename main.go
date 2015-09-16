@@ -21,6 +21,7 @@ import (
 	"github.com/skyrings/skyring/apps"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/utils"
 	"net/http"
 	"os"
@@ -98,14 +99,14 @@ func start() {
 	var application app.Application
 	var err error
 
-	appCollection := conf.LoadAppConfiguration(path.Join(configDir, ConfigFile))
-	appCollection.Logging.Logtostderr = logToStderr
-	appCollection.Logging.Log_dir = logDir
-	appCollection.Logging.V = logLevel
+	conf.LoadAppConfiguration(path.Join(configDir, ConfigFile))
+	conf.SystemConfig.Logging.Logtostderr = logToStderr
+	conf.SystemConfig.Logging.Log_dir = logDir
+	conf.SystemConfig.Logging.V = logLevel
 
-	util.InitLogs(appCollection.Logging)
+	util.InitLogs(conf.SystemConfig.Logging)
 
-	application = skyring.NewApp(appCollection.Config.ConfigFilePath)
+	application = skyring.NewApp(conf.SystemConfig.Config.ConfigFilePath)
 
 	if application == nil {
 		glog.Errorf("Unable to start application")
@@ -120,7 +121,13 @@ func start() {
 		os.Exit(1)
 	}
 
-	glog.Info("start listening on localhost:", strconv.Itoa(appCollection.Config.HttpPort))
+	// Start the push event server
+	go util.StartServer()
 
-	glog.Fatalf("Error: %s", http.ListenAndServe(":"+strconv.Itoa(appCollection.Config.HttpPort), router))
+	// Create DB session
+	db.InitDBSession(conf.SystemConfig.DBConfig)
+
+	glog.Info("start listening on localhost:", strconv.Itoa(conf.SystemConfig.Config.HttpPort))
+
+	glog.Fatalf("Error: %s", http.ListenAndServe(":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), router))
 }
