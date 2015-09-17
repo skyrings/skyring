@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_4d227cba",
+        "filename": "Makefile",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-17T05:30:25Z",
+      "side": 1,
+      "message": "Can we give rpm support also along with this refactoring?What I meant was make should generate a rpm which can in\nstalled.\nreference :- \nhttps://github.com/emccode/rexray/blob/master/Makefile\nhttps://github.com/emccode/rexray/blob/master/rexray.spec",
+      "revId": "a0293b7007f69ca55256c56e9500f2ac2036bf48",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
