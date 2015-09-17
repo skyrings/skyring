@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_710f1231",
+        "filename": "main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-17T05:49:46Z",
+      "side": 1,
+      "message": "This is log version. This option is to specify the logging level - \"Enable V-leveled logging at the specified level.\" We have rename the option otherwise it will create confusion",
+      "range": {
+        "startLine": 79,
+        "startChar": 22,
+        "endLine": 79,
+        "endChar": 33
+      },
+      "revId": "c2193b9c429f34740bab18e359eadf26ecffb825",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_b110ba4f",
+        "filename": "utils/logs.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-17T05:49:46Z",
+      "side": 1,
+      "message": "We need retain this code( flag.set* )because that is how you tell the glog to set the configuration. Glog does not provide any other means to set the configuration.",
+      "range": {
+        "startLine": 23,
+        "startChar": 10,
+        "endLine": 23,
+        "endChar": 13
+      },
+      "revId": "c2193b9c429f34740bab18e359eadf26ecffb825",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
