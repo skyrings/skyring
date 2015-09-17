@@ -13,21 +13,14 @@ limitations under the License.
 package util
 
 import (
-	"flag"
 	"github.com/golang/glog"
-	"github.com/skyrings/skyring/conf"
-	"strconv"
 	"time"
 )
 
 //var logFlushFreq = pflag.Duration("log_flush_frequency", 5*time.Second, "Maximum number of seconds between log flushes")
 
 // InitLogs initializes logs the way we want for SkyRing.
-func InitLogs(logConf conf.SkyringLogging) {
-	flag.Parse()
-	flag.Set("logtostderr", strconv.FormatBool(logConf.Logtostderr))
-	flag.Set("log_dir", logConf.Log_dir)
-	flag.Set("v", strconv.Itoa(logConf.V))
+func InitLogs() {
 	// The default glog flush interval is 30 seconds, which is frighteningly long.
 	go Forever(glog.Flush, 5*time.Second)
 }

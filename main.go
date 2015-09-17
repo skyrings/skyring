@@ -14,8 +14,8 @@ limitations under the License.
 package main
 
 import (
-	"flag"
 	"fmt"
+	"github.com/codegangsta/cli"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/apps"
@@ -24,32 +24,86 @@ import (
 	"github.com/skyrings/skyring/utils"
 	"net/http"
 	"os"
+	"path"
 	"strconv"
+	"strings"
 )
 
-var configfile string
+const (
+	// ConfigFile default configuration file
+	ConfigFile = "skyring.conf"
+)
 
-func init() {
-	flag.StringVar(&configfile, "config", "", "Configuration file")
-}
+var configDir string
+var logDir string
+var logToStderr bool
+var logVersion int
 
 func main() {
-	flag.Parse()
+	app := cli.NewApp()
+	app.EnableBashCompletion = true
+	app.Name = "skyring"
+	app.Version = VERSION + "-" + RELEASE
+	app.Authors = []cli.Author{{Name: "SkyRing", Email: "skyring@redhat.com"}}
+	app.Usage = "Unified storage management service"
+
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:   "config-dir, d",
+			Value:  "/etc/skyring",
+			Usage:  "override default configuration directory",
+			EnvVar: "SKYRING_CONFIGDIR",
+		},
+		cli.BoolFlag{
+			Name:  "log-to-stderr",
+			Usage: "log to console's standard error",
+		},
+		cli.StringFlag{
+			Name:   "log-dir, l",
+			Value:  "/var/log/skyring",
+			Usage:  "override default log directory",
+			EnvVar: "SKYRING_LOGDIR",
+		},
+		cli.IntFlag{
+			Name:  "log-version",
+			Value: 1,
+			Usage: "override default log version",
+		},
+	}
+
+	app.Before = func(c *cli.Context) error {
+		// Set global configuration values
+		configDir = c.String("config-dir")
+		logToStderr = c.Bool("log-to-stderr")
+		logDir = c.String("log-dir")
+		logVersion = c.Int("log-version")
+		return nil
+	}
+
+	app.Action = func(c *cli.Context) {
+		args := c.Args()
+		if len(args) != 0 {
+			fmt.Fprintf(os.Stderr, "invalid arguments: [%s]\n", strings.Join(args, " "))
+			os.Exit(-1)
+		}
+		start()
+	}
+
+	app.Run(os.Args)
+}
+
+func start() {
 	defer glog.Flush()
 
 	var application app.Application
 	var err error
 
-	// Check configuration file was given
-	if configfile == "" {
-		fmt.Fprintln(os.Stderr, "Please provide configuration file")
-		os.Exit(1)
-	}
+	appCollection := conf.LoadAppConfiguration(path.Join(configDir, ConfigFile))
+	appCollection.Logging.Logtostderr = logToStderr
+	appCollection.Logging.Log_dir = logDir
+	appCollection.Logging.V = logVersion
 
-	appCollection := conf.LoadAppConfiguration(configfile)
-
-	//Initialize the logging
-	util.InitLogs(appCollection.Logging)
+	util.InitLogs()
 
 	application = skyring.NewApp(appCollection.Config.ConfigFilePath)
 
