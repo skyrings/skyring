@@ -24,7 +24,6 @@ import (
 
 // InitLogs initializes logs the way we want for SkyRing.
 func InitLogs(logConf conf.SkyringLogging) {
-	flag.Parse()
 	flag.Set("logtostderr", strconv.FormatBool(logConf.Logtostderr))
 	flag.Set("log_dir", logConf.Log_dir)
 	flag.Set("v", strconv.Itoa(logConf.V))
