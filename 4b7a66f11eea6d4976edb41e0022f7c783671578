@@ -212,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_4084fed3",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T04:57:18Z",
+      "side": 1,
+      "message": "No guarantied time to wait.  The minion may start any time.  You could try to have maximum 10 seconds.",
+      "parentUuid": "1ae5cdf2_c0f2ce99",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_60b1faf7",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 2
