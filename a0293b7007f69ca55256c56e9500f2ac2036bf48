@@ -16,6 +16,24 @@
       "revId": "a0293b7007f69ca55256c56e9500f2ac2036bf48",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_ba76ca3c",
+        "filename": "Makefile",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T10:55:28Z",
+      "side": 1,
+      "message": "That could be a separate patch as it requires rpm specific spec file",
+      "parentUuid": "1ae5cdf2_4d227cba",
+      "revId": "a0293b7007f69ca55256c56e9500f2ac2036bf48",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
