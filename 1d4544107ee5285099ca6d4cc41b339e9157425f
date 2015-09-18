@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "1ae5cdf2_3a59dafe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-18T10:34:03Z",
+      "side": 1,
+      "message": "%s/reactored/re-factored/g",
+      "range": {
+        "startLine": 10,
+        "startChar": 47,
+        "endLine": 10,
+        "endChar": 56
+      },
+      "revId": "1d4544107ee5285099ca6d4cc41b339e9157425f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_7a72827d",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-18T10:34:03Z",
+      "side": 1,
+      "message": "Rebase with https://review.gerrithub.io/#/c/246702 and change the import statement as \"github.com/skyrings/skyring/conf\"",
+      "revId": "1d4544107ee5285099ca6d4cc41b339e9157425f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_148406d3",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 2
@@ -42,6 +82,46 @@
         "endLine": 60,
         "endChar": 29
       },
+      "revId": "1d4544107ee5285099ca6d4cc41b339e9157425f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_3a271a66",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-18T10:34:03Z",
+      "side": 1,
+      "message": "%s/paaed/passed/g",
+      "range": {
+        "startLine": 122,
+        "startChar": 38,
+        "endLine": 122,
+        "endChar": 43
+      },
+      "revId": "1d4544107ee5285099ca6d4cc41b339e9157425f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_9a1d8e12",
+        "filename": "auth/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-18T10:34:03Z",
+      "side": 1,
+      "message": "Rebased with https://review.gerrithub.io/#/c/246674/ and use the DB config details.",
       "revId": "1d4544107ee5285099ca6d4cc41b339e9157425f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
