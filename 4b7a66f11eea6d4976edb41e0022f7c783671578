@@ -405,6 +405,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_06904e42",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-18T07:59:22Z",
+      "side": 1,
+      "message": "Bala, once we have GET methods defined for nodes, what should be name for method in that case?\nI remeber this name is used as unique id for routes, so name should be descriptive may be.",
+      "parentUuid": "1ae5cdf2_603bba3a",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_80ce0682",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 2
