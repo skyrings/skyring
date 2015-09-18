@@ -300,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_da4636bf",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-18T11:56:05Z",
+      "side": 1,
+      "message": "Bala, so everytime we should get a copy of session and close the copy after use. Next patch has the changes accordingly.",
+      "parentUuid": "1ae5cdf2_002cb601",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_20a7f2be",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 2
