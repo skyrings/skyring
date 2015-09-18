@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_c0c48e42",
+        "filename": "apps/skyring/salt_node_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-18T04:23:56Z",
+      "side": 1,
+      "message": "Will try this",
+      "parentUuid": "1ae5cdf2_602c9a48",
+      "revId": "27e63adb6f7362231b0f0ee7e97eb7ca075fe805",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_a01dc211",
         "filename": "utils/util.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-18T02:43:16Z",
       "side": 1,
       "message": "How about changing order of the param like\n\nhttp.ResponseWriter, statusCode, msg\n\n?\n\nIf we want to add later some more param its would make more readable to append than insert.",
+      "revId": "27e63adb6f7362231b0f0ee7e97eb7ca075fe805",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_80ca864d",
+        "filename": "utils/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-18T04:23:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_a01dc211",
       "revId": "27e63adb6f7362231b0f0ee7e97eb7ca075fe805",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
