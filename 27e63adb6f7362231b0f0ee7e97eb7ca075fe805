@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_602c9a48",
+        "filename": "apps/skyring/salt_node_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T02:43:16Z",
+      "side": 1,
+      "message": "Isn\u0027t it possible to do\n\nreturn \u0026NodeManager{GetNodeSshFingerprint: util.PyGetNodeSshFingerprint, ...}\n\n?",
+      "revId": "27e63adb6f7362231b0f0ee7e97eb7ca075fe805",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a01dc211",
+        "filename": "utils/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T02:43:16Z",
+      "side": 1,
+      "message": "How about changing order of the param like\n\nhttp.ResponseWriter, statusCode, msg\n\n?\n\nIf we want to add later some more param its would make more readable to append than insert.",
+      "revId": "27e63adb6f7362231b0f0ee7e97eb7ca075fe805",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
