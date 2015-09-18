@@ -135,6 +135,24 @@
       "revId": "c2193b9c429f34740bab18e359eadf26ecffb825",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_866d3e35",
+        "filename": "utils/logs.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-18T08:33:29Z",
+      "side": 1,
+      "message": "I agree with you completely. But I read in the few threads that google is planning to bring glog into golang standard library soon. If that is the case we don\u0027t need worry much. Also there is not many options available. There is something called \u0027seelog\u0027 but not that stable is what I understand. Do you see any other options we can switch over to? I am open if we find a good alternative.",
+      "parentUuid": "1ae5cdf2_66883220",
+      "revId": "c2193b9c429f34740bab18e359eadf26ecffb825",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
