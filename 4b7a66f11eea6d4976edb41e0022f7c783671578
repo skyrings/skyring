@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_00bbd6e5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "it would be better\n\nrest: api to add storage node\n\nor\n\napi: add storage node",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_20c0d24f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "just \u0027username\u0027 is good, not required to be a root",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_40b5deec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "please add \u0027fingerprint\u0027",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c0c80e77",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "I feel request better than add_node_req",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a0922255",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "Can we have \"free\" and other related state as const?",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e09c2a6c",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "You can\u0027t call immediately after addNode in salt (it will fail).  The node\u0027s minion takes some amount of time to come up and available after initial sync only.\n\nThe logic would be  if AddNode() in salt is true, wait for startup event of the node\u0027s minion.  there all initial data retrieval and others needs to be done.",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_60b1faf7",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "it would be better to have func name as nodeExists()",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e0c50a5c",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "is it required to create sessionCopy everytime or have it as global?",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_20a7f2be",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_40acfea0",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "You could have a generic function exists(key, value) which would return bool.  That would be reusable later",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_60badadf",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "How about just \u0027Nodes\u0027?",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_80ce0682",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T03:17:04Z",
+      "side": 1,
+      "message": "and \u0027Nodes_PUT\u0027 is better",
+      "revId": "4b7a66f11eea6d4976edb41e0022f7c783671578",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
