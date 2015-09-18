@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_40debe40",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T02:52:51Z",
+      "side": 1,
+      "message": "How about just SshFingerprint?",
+      "revId": "025012fd255120780942011fab2c640e894a6413",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_60e3ba07",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T02:52:51Z",
+      "side": 1,
+      "message": "Name_Method gives more clarity here.  Thanks.",
+      "revId": "025012fd255120780942011fab2c640e894a6413",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a0e4e20d",
+        "filename": "apps/skyring/tools.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T02:52:51Z",
+      "side": 1,
+      "message": "This needs to be moved to global level otherwise you are creating node_manager every time.",
+      "revId": "025012fd255120780942011fab2c640e894a6413",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
