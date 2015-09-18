@@ -16,6 +16,24 @@
       "revId": "a87b8ae24d1bb2d3d221e16d8d59d8d186f32e6e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_baadea8a",
+        "filename": "utils/logs.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-18T11:01:39Z",
+      "side": 0,
+      "message": "Please check patch set #5",
+      "parentUuid": "1ae5cdf2_ba340adf",
+      "revId": "a87b8ae24d1bb2d3d221e16d8d59d8d186f32e6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
