@@ -4,14 +4,14 @@ checkdeps:
 	@echo "Doing $@"
 	@bash $(PWD)/build-aux/checkdeps.sh
 
+getversion:
+	@echo "Doing $@"
+	@bash $(PWD)/build-aux/pkg-version.sh $(PWD)/version.go
+
 getdeps: checkdeps getversion
 	@echo "Doing $@"
 	@go get github.com/golang/lint/golint
 	@go get -t ./...
-
-getversion:
-	@echo "Doing $@"
-	@bash $(PWD)/build-aux/pkg-version.sh $(PWD)/version.go
 
 verifiers: getdeps vet fmt lint
 
