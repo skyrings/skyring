@@ -24,9 +24,11 @@ import (
 	"github.com/skyrings/skyring/utils"
 	"net/http"
 	"os"
+	"os/signal"
 	"path"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 const (
@@ -131,6 +133,20 @@ func start() {
 	go util.StartEventListener(eventSocket)
 
 	glog.Info("start listening on localhost:", strconv.Itoa(appCollection.Config.HttpPort))
+	go http.ListenAndServe(":"+strconv.Itoa(appCollection.Config.HttpPort), router)
 
-	glog.Fatalf("Error: %s", http.ListenAndServe(":"+strconv.Itoa(appCollection.Config.HttpPort), router))
+	sigs := make(chan os.Signal, 1)
+	done := make(chan bool, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGHUP)
+	go func() {
+		sig := <-sigs
+		fmt.Println()
+		fmt.Println(sig)
+		done <- true
+	}()
+
+	fmt.Println("awaiting for signal")
+	<-done
+	os.Remove(eventSocket)
+	fmt.Println("exiting")
 }
