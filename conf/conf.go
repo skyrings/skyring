@@ -31,12 +31,18 @@ type SkyringLogging struct {
 	Vmodule     string `json:"vmodule"`
 }
 
+type AuthConfig struct {
+	ProviderName string
+	ConfigFile   string
+}
+
 type SkyringCollection struct {
 	Config               SkyringConfig     `json:"config"`
 	Logging              SkyringLogging    `json:"logging"`
 	NodeManagementConfig NodeManagerConfig `json:"nodemanagementconfig"`
 	DBConfig             MongoDBConfig     `json:"dbconfig"`
 	TimeSeriesDBConfig   InfluxDBconfig    `json:"timeseriesdbconfig"`
+	Authentication       AuthConfig        `json:"authentication"`
 }
 
 type MongoDBConfig struct {

@@ -1,8 +1,10 @@
 {
     "config": {
-       "host":"127.0.0.1",
-        "httpPort":8080
-        "supportedVersions":[1]
+        "host": "127.0.0.1",
+        "httpPort": 8080,
+        "supportedVersions": [
+            1
+        ]
     },
     "logging": {
         "logtostderr": false,
@@ -27,5 +29,9 @@
         "database": "collectd",
         "user": "admin",
         "password": "admin"
+    },
+    "authentication": {
+        "providerName": "localauthprovider",
+        "configFile": "/etc/skyring/authentication.conf"
     }
 }
