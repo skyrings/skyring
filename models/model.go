@@ -10,19 +10,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package app
+package model
 
-import (
-	"github.com/codegangsta/negroni"
-	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/conf"
-	"net/http"
-)
-
-type Application interface {
-	SetRoutes(container *mux.Router) error
-	//Initialize the auth module
-	InitializeAuth(authCfg conf.AuthConfig, n *negroni.Negroni) error
-	//Middleware to check the request is authenticated
-	LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
+type User struct {
+	Username string   `bson:"Username"`
+	Email    string   `bson:"Email"`
+	Hash     []byte   `bson:"Hash"`
+	Role     string   `bson:"Role"`
+	Groups   []string `bson:"Groups"`
 }
