@@ -25,6 +25,7 @@ type CoreRoute struct {
 }
 
 var (
+	//Routes that require Auth to be added here
 	CORE_ROUTES = []CoreRoute{
 		{
 			Name:        "GET_SshFingerprint",
@@ -59,6 +60,51 @@ var (
 			Method:      "GET",
 			Pattern:     "nodes/{node-id}/utilization",
 			HandlerFunc: GET_Utilization,
+			Version:     1,
+		},
+		{
+			Name:        "auth/logout",
+			Method:      "POST",
+			Pattern:     "logout",
+			HandlerFunc: logout,
+			Version:     1,
+		},
+		{
+			Name:        "GET_users",
+			Method:      "GET",
+			Pattern:     "users",
+			HandlerFunc: getUsers,
+			Version:     1,
+		},
+		{
+			Name:        "GET_user",
+			Method:      "GET",
+			Pattern:     "users/{username}",
+			HandlerFunc: getUser,
+			Version:     1,
+		},
+		{
+			Name:        "POST_users",
+			Method:      "POST",
+			Pattern:     "users",
+			HandlerFunc: addUsers,
+			Version:     1,
+		},
+		{
+			Name:        "DELETE_users",
+			Method:      "DELETE",
+			Pattern:     "users/{username}",
+			HandlerFunc: deleteUsers,
+			Version:     1,
+		},
+	}
+	//Routes that doesnot require Auth to be added here
+	CORE_ROUTES_NOAUTH = []CoreRoute{
+		{
+			Name:        "auth/login",
+			Method:      "POST",
+			Pattern:     "login",
+			HandlerFunc: login,
 			Version:     1,
 		},
 	}

@@ -15,9 +15,13 @@ package skyring
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/codegangsta/negroni"
+	"github.com/goincremental/negroni-sessions"
+	"github.com/goincremental/negroni-sessions/cookiestore"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/natefinch/pie"
+	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/nodemanager"
 	"io/ioutil"
@@ -40,9 +44,8 @@ type Provider struct {
 }
 
 type App struct {
-	providers   map[string]Provider
-	routes      map[string]conf.Route
-	nodemanager nodemanager.NodeManagerInterface
+	providers map[string]Provider
+	routes    map[string]conf.Route
 }
 
 type Args struct {
@@ -55,7 +58,8 @@ const (
 )
 
 var (
-	CoreNodeManager nodemanager.NodeManagerInterface
+	CoreNodeManager      nodemanager.NodeManagerInterface
+	AuthProviderInstance authprovider.AuthInterface
 )
 
 func NewApp(configDir string, binDir string) *App {
@@ -131,6 +135,8 @@ func (a *App) StartProviders(configDir string, binDir string) {
 			}
 			//Load the routes
 			for _, element := range config.Routes {
+				//prefix the provider name to the route
+				element.Pattern = fmt.Sprintf("%s/%s", config.Provider.Name, element.Pattern)
 				a.routes[element.Name] = element
 			}
 			//add the provider to the map
@@ -143,8 +149,18 @@ func (a *App) StartProviders(configDir string, binDir string) {
 }
 
 func (a *App) SetRoutes(router *mux.Router) error {
-	// Set routes for core
-	for _, route := range CORE_ROUTES {
+
+	// Create a router for defining the routes which require authentication
+	//For routes require auth, will be checked by a middleware which
+	//return error immediately
+
+	authReqdRouter := mux.NewRouter().StrictSlash(true)
+
+	//create a negroni with LoginReqd middleware
+	n := negroni.New(negroni.HandlerFunc(a.LoginRequired), negroni.Wrap(authReqdRouter))
+
+	// Set routes for core which doesnot require authentication
+	for _, route := range CORE_ROUTES_NOAUTH {
 		if validApiVersion(route.Version) {
 			urlPattern := fmt.Sprintf("%s/v%d/%s", DEFAULT_API_PREFIX, route.Version, route.Pattern)
 			router.Methods(route.Method).Path(urlPattern).Name(route.Name).Handler(http.HandlerFunc(route.HandlerFunc))
@@ -153,23 +169,59 @@ func (a *App) SetRoutes(router *mux.Router) error {
 		}
 	}
 
-	// Set the provider specific routes
-	for _, route := range a.routes {
-		glog.V(3).Info(route)
+	// Set routes for core which require authentication
+	for _, route := range CORE_ROUTES {
 		if validApiVersion(route.Version) {
 			urlPattern := fmt.Sprintf("%s/v%d/%s", DEFAULT_API_PREFIX, route.Version, route.Pattern)
-			router.
-				Methods(route.Method).
-				Path(urlPattern).
-				Name(route.Name).
-				Handler(http.HandlerFunc(a.ProviderHandler))
+			authReqdRouter.Methods(route.Method).Path(urlPattern).Name(route.Name).Handler(http.HandlerFunc(route.HandlerFunc))
+			router.Handle(urlPattern, n)
 		} else {
 			glog.Infof("Skipped the route: %s as version is un spported", route.Name)
 		}
 	}
 
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+	//Set the provider specific routes here
+	//All the provider specific routes are assumed to be authenticated
+	for _, route := range a.routes {
+		glog.V(3).Info(route)
+		if validApiVersion(route.Version) {
+			urlPattern := fmt.Sprintf("%s/v%d/%s", DEFAULT_API_PREFIX, route.Version, route.Pattern)
+			authReqdRouter.
+				Methods(route.Method).
+				Path(urlPattern).
+				Name(route.Name).
+				Handler(http.HandlerFunc(a.ProviderHandler))
+			router.Handle(urlPattern, n)
+		} else {
+			glog.Infof("Skipped the route: %s as version is un spported", route.Name)
+		}
+	}
+
 	return nil
+}
+
+func (a *App) InitializeAuth(authCfg conf.AuthConfig, n *negroni.Negroni) error {
+
+	//Load authorization middleware for session
+	//TODO - make this plugin based, we should be able
+	//to plug in based on the configuration - token, jwt token etc
+	//Right we are supporting only session based auth
+	store := cookiestore.New([]byte("SkyRing-secret"))
+	n.Use(sessions.Sessions("skyring_session_store", store))
+
+	//Initailize the backend auth provider based on the configuartion
+	if aaa, err := authprovider.InitAuthProvider(authCfg.ProviderName, authCfg.ConfigFile); err != nil {
+		glog.Errorf("Error Initializing the Authentication: %s", err)
+		return err
+	} else {
+		AuthProviderInstance = aaa
+	}
+	AddDefaultUser()
+	return nil
+}
+
+func GetAuthProvider() authprovider.AuthInterface {
+	return AuthProviderInstance
 }
 
 /*
@@ -237,7 +289,6 @@ func (a *App) InitializeNodeManager(config conf.NodeManagerConfig) error {
 		glog.Errorf("Error initializing the node manager: %v", err)
 		return err
 	} else {
-		a.nodemanager = manager
 		CoreNodeManager = manager
 		return nil
 	}
@@ -254,4 +305,18 @@ func validApiVersion(version int) bool {
 
 func GetCoreNodeManager() nodemanager.NodeManagerInterface {
 	return CoreNodeManager
+}
+
+//Middleware to check the request is authenticated
+func (a *App) LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+
+	session := sessions.GetSession(r)
+	sessionName := session.Get("username")
+
+	if sessionName == nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		glog.Infof("Not Authorized returning from here")
+		return
+	}
+	next(w, r)
 }

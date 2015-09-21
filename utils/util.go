@@ -67,7 +67,7 @@ func logPanic(r interface{}) {
 	glog.Errorf("Recovered from panic: %#v (%v)\n%v", r, r, callers)
 }
 
-func HandleHHttpError(rw http.ResponseWriter, err error) {
+func HandleHttpError(rw http.ResponseWriter, err error) {
 	bytes, _ := json.Marshal(APIError{Error: err.Error()})
 	rw.WriteHeader(http.StatusInternalServerError)
 	rw.Write(bytes)
