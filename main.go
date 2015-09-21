@@ -96,7 +96,6 @@ func start() {
 	defer glog.Flush()
 
 	var application app.Application
-	var err error
 
 	appCollection := conf.LoadAppConfiguration(path.Join(configDir, ConfigFile))
 	appCollection.Logging.Logtostderr = logToStderr
@@ -114,9 +113,15 @@ func start() {
 	// Create a router and do not allow any routes
 	// unless defined.
 	router := mux.NewRouter().StrictSlash(true)
-	err = application.SetRoutes(router)
-	if err != nil {
-		glog.Errorf("Unable to create http server endpoints")
+
+	if err := application.SetRoutes(router); err != nil {
+		glog.Errorf("Unable to create http server endpoints: %s", err)
+		os.Exit(1)
+	}
+
+	//Initialize the auth provider
+	if err := application.InitializeAuth(appCollection.Authentication); err != nil {
+		glog.Errorf("Unable to initialize the authentication provider: %s", err)
 		os.Exit(1)
 	}
 
