@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_bcb4fdd1",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-21T06:53:32Z",
+      "side": 1,
+      "message": "Can this be split into,\n\u0027hostname\u0027: \u0027x.x.x.x\u0027\n\u0027port\u0027: \u0027xxxx\u0027",
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_dccaa94e",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-21T06:53:32Z",
+      "side": 1,
+      "message": "Is it different from AppDatabase?",
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_fcc5a53d",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-21T06:53:32Z",
+      "side": 1,
+      "message": "Can these be uniform like\n\u0027username\u0027\n\u0027password\u0027\n\u0027database\u0027",
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_9cb101e4",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-21T06:53:32Z",
+      "side": 1,
+      "message": "why not \u0027localhost\u0027 or \u0027127.0.0.1\u0027?",
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
