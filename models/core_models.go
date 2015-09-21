@@ -101,3 +101,11 @@ const (
 	NODE_STATE_UNMANAGED    = "unmanaged"
 	NODE_STATE_USED         = "used"
 )
+
+type User struct {
+	Username string   `bson:"Username"`
+	Email    string   `bson:"Email"`
+	Hash     []byte   `bson:"Hash"`
+	Role     string   `bson:"Role"`
+	Groups   []string `bson:"Groups"`
+}
