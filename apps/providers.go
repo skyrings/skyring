@@ -10,19 +10,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package app
 
+// This file exists to force the desired provider implementations to be linked.
+// This should probably be part of some configuration fed into the build for a
+// given binary target.
 import (
-	"github.com/codegangsta/negroni"
-	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/conf"
-	"net/http"
+	// Auth providers
+	_ "github.com/skyrings/skyring/authprovider/local"
 )
-
-type Application interface {
-	SetRoutes(container *mux.Router) error
-	//Initialize the auth module
-	InitializeAuth(authCfg conf.AuthConfig, n *negroni.Negroni) error
-	//Middleware to check the request is authenticated
-	LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
-}

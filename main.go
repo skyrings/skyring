@@ -16,6 +16,7 @@ package main
 import (
 	"fmt"
 	"github.com/codegangsta/cli"
+	"github.com/codegangsta/negroni"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/apps"
@@ -114,7 +115,6 @@ func start() {
 
 	var (
 		application app.Application
-		err         error
 	)
 
 	appCollection := conf.LoadAppConfiguration(path.Join(configDir, ConfigFile))
@@ -130,14 +130,29 @@ func start() {
 		glog.Errorf("Unable to start application")
 		os.Exit(1)
 	}
-	// Create a router and do not allow any routes
-	// unless defined.
+
+	// Create router for defining the routes.
+	//do not allow any routes unless defined.
 	router := mux.NewRouter().StrictSlash(true)
-	err = application.SetRoutes(router)
-	if err != nil {
-		glog.Errorf("Unable to create http server endpoints")
+
+	//Load the autheticated routes
+	if err := application.SetRoutes(router); err != nil {
+		glog.Errorf("Unable to create http server endpoints: %s", err)
 		os.Exit(1)
 	}
+
+	// Use negroni to add middleware.  Here we add the standard
+	// middlewares: Recovery, Logger and static file serve which come with
+	// Negroni
+	n := negroni.Classic()
+
+	//Initialize the auth provider
+	if err := application.InitializeAuth(appCollection.Authentication, n); err != nil {
+		glog.Errorf("Unable to initialize the authentication provider: %s", err)
+		os.Exit(1)
+	}
+
+	n.UseHandler(router)
 
 	glog.Info("Starting event listener")
 	go util.StartEventListener(eventSocket)
@@ -149,5 +164,6 @@ func start() {
 	}
 	glog.Infof("start listening on %s : %s", appCollection.Config.Host, strconv.Itoa(appCollection.Config.HttpPort))
 
-	glog.Fatalf("Error: %s", http.ListenAndServe(appCollection.Config.Host+":"+strconv.Itoa(appCollection.Config.HttpPort), router))
+	glog.Fatalf("Error: %s", http.ListenAndServe(appCollection.Config.Host+":"+strconv.Itoa(appCollection.Config.HttpPort), n))
+	//n.Run(appCollection.Config.Host + ":" + strconv.Itoa(appCollection.Config.HttpPort))
 }

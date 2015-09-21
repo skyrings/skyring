@@ -15,9 +15,13 @@ package skyring
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/codegangsta/negroni"
+	"github.com/goincremental/negroni-sessions"
+	"github.com/goincremental/negroni-sessions/cookiestore"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/natefinch/pie"
+	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/conf"
 	"io/ioutil"
 	"net/http"
@@ -39,8 +43,9 @@ type Provider struct {
 }
 
 type App struct {
-	providers map[string]Provider
-	routes    map[string]conf.Route
+	providers    map[string]Provider
+	routes       map[string]conf.Route
+	authProvider authprovider.AuthInterface
 }
 
 type Args struct {
@@ -134,16 +139,46 @@ func (a *App) StartProviders(configDir string, binDir string) {
 
 func (a *App) SetRoutes(router *mux.Router) error {
 
+	// Create a router for defining the routes which require authentication
+	//For routes require auth, will be checked by a middleware which
+	//return error immediately
+
+	authReqdRouter := mux.NewRouter().StrictSlash(true)
+
+	//Set the provider specific routes here
+	//All the provider specific routes are assumed to be
+	//authenticated
+
 	for _, route := range a.routes {
 		glog.V(3).Info(route)
-		router.
+		authReqdRouter.
 			Methods(route.Method).
 			Path(route.Pattern).
 			Name(route.Name).
 			Handler(http.HandlerFunc(a.ProviderHandler))
 	}
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+	//router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+	a.SetAuthRoutes(router, authReqdRouter)
 	return nil
+}
+
+func (a *App) InitializeAuth(authCfg conf.AuthConfig, n *negroni.Negroni) error {
+
+	//Load authorization middleware for session
+	//TODO - make this plugin based, we should be able
+	//to plug in based on the configuration - token, jwt token etc
+	//Right we are supporting only session based auth
+	store := cookiestore.New([]byte("SkyRing-secret"))
+	n.Use(sessions.Sessions("skyring_session_store", store))
+
+	//Initailize the backend auth provider based on the configuartion
+	if aaa, err := authprovider.InitAuthProvider(authCfg.ProviderName, authCfg.ConfigFile); err != nil {
+		glog.Errorf("Error Initializing the Authentication: %s", err)
+		return err
+	} else {
+		a.authProvider = aaa
+		return nil
+	}
 }
 
 /*
@@ -204,4 +239,20 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Matching Provider Not Found"))
 	}
+}
+
+//Middleware to check the request is authenticated
+func (a *App) LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	glog.Infof("Inside Auth check middleware")
+
+	session := sessions.GetSession(r)
+	sessionName := session.Get("username")
+
+	if sessionName == nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		glog.Infof("Not Authorized returning from here")
+		return
+	}
+	glog.Infof("Inside Auth check middleware .. Fine Proceed")
+	next(w, r)
 }

@@ -30,9 +30,15 @@ type SkyringLogging struct {
 	Vmodule     string `json:"vmodule"`
 }
 
+type AuthConfig struct {
+	ProviderName string
+	ConfigFile   string
+}
+
 type SkyringCollection struct {
-	Config  SkyringConfig  `json:"config"`
-	Logging SkyringLogging `json:"logging"`
+	Config         SkyringConfig  `json:"config"`
+	Logging        SkyringLogging `json:"logging"`
+	Authentication AuthConfig     `json:"authentication"`
 }
 
 func LoadAppConfiguration(configFilePath string) *SkyringCollection {

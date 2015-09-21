@@ -1,0 +1,10 @@
+{
+    "mongoURL": "127.0.0.1",
+    "database": "test",
+    "defaultRole": "user",
+    "roles": {
+        "user": 0,
+        "admin": 1,
+        "moderator": 2
+    }
+}
