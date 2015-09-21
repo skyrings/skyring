@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_3cc0ed29",
+        "filename": "auth/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-21T07:00:15Z",
+      "side": 1,
+      "message": "Auth I have taken out from this patch. I will submit as a separate patch",
+      "parentUuid": "1ae5cdf2_14d246d2",
+      "revId": "f73f4f1fb55d8a575cadd8587cd07dfae0744d6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_25bab6de",
         "filename": "conf/app.conf",
         "patchSetId": 1
