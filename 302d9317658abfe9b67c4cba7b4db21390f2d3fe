@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_e73fd223",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-21T10:40:24Z",
+      "side": 1,
+      "message": "Thats fine, we can add that in future easily since its json.",
+      "parentUuid": "1ae5cdf2_67d4a220",
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_fcc5a53d",
         "filename": "conf/skyring.conf",
         "patchSetId": 2
