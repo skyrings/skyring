@@ -20,6 +20,9 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/utils"
 	"net/http"
+	"regexp"
+	"strings"
+	"time"
 
 	influxdb "github.com/influxdb/influxdb/client"
 )
@@ -45,6 +48,7 @@ func GET_Utilization(w http.ResponseWriter, r *http.Request) {
 
 	params := r.URL.Query()
 	resource_name := params.Get("resource")
+	duration := params.Get("duration")
 
 	storage_node := GetNode(node_id)
 
@@ -54,6 +58,30 @@ func GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	} else {
 		query_cmd = fmt.Sprintf("SELECT * FROM /(%s).*/", storage_node.Hostname)
 	}
+
+	if duration != "" {
+		if strings.Contains(duration, ",") {
+			splt := strings.Split(duration, ",")
+			if _, err := time.Parse("2006-01-02T15:04:05.000Z", splt[0]); err != nil {
+				util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error parsing start time: %s", splt[0]))
+				return
+			}
+			start_time := splt[0]
+			if _, err := time.Parse("2006-01-02T15:04:05.000Z", splt[1]); err != nil {
+				util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error parsing end time: %s", splt[1]))
+				return
+			}
+			end_time := splt[1]
+			query_cmd += " WHERE time > '" + start_time + "' and time < '" + end_time + "'"
+		} else {
+			if matched, _ := regexp.Match("^([0-5]?[0-9])?s$|^([0-5]?[0-9])?m$|^([0-2]?[0-3])?h$|^([0-9])*d$|^([0-9])*w$", []byte(duration)); !matched {
+				util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Invalid duration passed: %s", duration))
+				return
+			}
+			query_cmd += " WHERE time > now() - " + duration
+		}
+	}
+
 	res, err := queryDB(query_cmd)
 	if err == nil {
 		json.NewEncoder(w).Encode(res[0].Series)
