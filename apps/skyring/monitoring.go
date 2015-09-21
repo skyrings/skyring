@@ -21,6 +21,7 @@ import (
 	"github.com/skyrings/skyring/utils"
 	"net/http"
 	"net/url"
+	"strings"
 
 	influxdb "github.com/influxdb/influxdb/client"
 )
@@ -62,6 +63,7 @@ func Utilization_GET(w http.ResponseWriter, r *http.Request) {
 
 	params := r.URL.Query()
 	resource_name := params.Get("resource")
+	duration := params.Get("duration")
 
 	storage_node := GetNode(node_id)
 
@@ -71,6 +73,19 @@ func Utilization_GET(w http.ResponseWriter, r *http.Request) {
 	} else {
 		query_cmd = fmt.Sprintf("SELECT * FROM /(%s).*/", storage_node.Hostname)
 	}
+
+	if duration != "" {
+		if strings.Contains(duration, ",") {
+			splt := strings.Split(duration, ",")
+			start_time := splt[0]
+			end_time := splt[1]
+			query_cmd += " WHERE time > '" + start_time + "' and time < '" + end_time + "'"
+		} else {
+			query_cmd += " WHERE time > now() - " + duration
+		}
+	}
+	fmt.Println(query_cmd)
+
 	res, err := queryDB(query_cmd)
 	if err == nil {
 		json.NewEncoder(w).Encode(res[0].Series)
