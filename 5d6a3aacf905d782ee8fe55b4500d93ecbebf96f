@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e7afd2e1",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-21T08:57:38Z",
+      "side": 1,
+      "message": "Can be called as PluginConfigInternal",
+      "revId": "5d6a3aacf905d782ee8fe55b4500d93ecbebf96f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_07abded6",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-21T08:57:38Z",
+      "side": 1,
+      "message": "We need to call these as either Provider or Plugin everywhere to avoid confusion",
+      "revId": "5d6a3aacf905d782ee8fe55b4500d93ecbebf96f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
