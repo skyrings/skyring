@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_1caed185",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-21T06:29:17Z",
+      "side": 1,
+      "message": "It includes both \u0027add\u0027 and \u0027accept\u0027?",
+      "revId": "10735b2b243df02773114cbda316450d014a8205",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
