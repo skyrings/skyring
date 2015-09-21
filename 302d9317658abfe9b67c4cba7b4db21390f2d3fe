@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_4716c6f2",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-21T09:52:59Z",
+      "side": 1,
+      "message": "We can do that.",
+      "parentUuid": "1ae5cdf2_bcb4fdd1",
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_dccaa94e",
         "filename": "conf/skyring.conf",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-21T06:53:32Z",
       "side": 1,
       "message": "Is it different from AppDatabase?",
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_67d4a220",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-21T09:52:59Z",
+      "side": 1,
+      "message": "In real scenarios, authentication DB could be different from application DB so kept the option open.",
+      "parentUuid": "1ae5cdf2_dccaa94e",
       "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_87d7ee22",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-21T09:52:59Z",
+      "side": 1,
+      "message": "Will change that",
+      "parentUuid": "1ae5cdf2_fcc5a53d",
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_9cb101e4",
         "filename": "conf/skyring.conf",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2015-09-21T06:53:32Z",
       "side": 1,
       "message": "why not \u0027localhost\u0027 or \u0027127.0.0.1\u0027?",
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c7e1f6ff",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-21T09:52:59Z",
+      "side": 1,
+      "message": "Currently my influxdb running on different node. Ideally it would be 127.0.0.1",
+      "parentUuid": "1ae5cdf2_9cb101e4",
       "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
