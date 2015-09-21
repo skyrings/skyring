@@ -18,6 +18,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/natefinch/pie"
+	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/conf"
 	"io/ioutil"
 	"net/http"
@@ -39,8 +40,9 @@ type Provider struct {
 }
 
 type App struct {
-	providers map[string]Provider
-	routes    map[string]conf.Route
+	providers    map[string]Provider
+	routes       map[string]conf.Route
+	authProvider authprovider.AuthInterface
 }
 
 type Args struct {
@@ -144,6 +146,17 @@ func (a *App) SetRoutes(router *mux.Router) error {
 	}
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 	return nil
+}
+
+func (a *App) InitializeAuth(authCfg conf.AuthConfig) error {
+	//var aaa authprovider.AuthInterface
+	if aaa, err := authprovider.InitAuthProvider(authCfg.ProviderName, authCfg.ConfigFile); err != nil {
+		glog.Errorf("Error Initializing the Authentication: %s", err)
+		return err
+	} else {
+		a.authProvider = aaa
+		return nil
+	}
 }
 
 /*

@@ -1,5 +1,6 @@
 {
     "config": {
+
        "host":"127.0.0.1"
         "httpPort":8080
     },
@@ -8,5 +9,9 @@
         "log_dir": "/var/log/skyring",
         "v": 10,
         "vmodule": ""
+    },
+    "authentication": {
+        "providerName": "localauthprovider",
+        "configFile": "/etc/skyring/authentication.conf"
     }
 }
