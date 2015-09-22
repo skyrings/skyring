@@ -50,6 +50,10 @@ type Args struct {
 	Request []byte
 }
 
+const (
+	DEFAULT_API_PREFIX = "/api"
+)
+
 func NewApp(configDir string, binDir string) *App {
 	app := &App{}
 
@@ -135,15 +139,31 @@ func (a *App) StartProviders(configDir string, binDir string) {
 }
 
 func (a *App) SetRoutes(router *mux.Router) error {
+	// Set routes for core
+	for _, route := range CORE_ROUTES {
+		if validApiVersion(route.Version) {
+			urlPattern := fmt.Sprintf("%s/v%d/%s", DEFAULT_API_PREFIX, route.Version, route.Pattern)
+			router.Methods(route.Method).Path(urlPattern).Name(route.Name).Handler(http.HandlerFunc(route.HandlerFunc))
+		} else {
+			glog.Infof("Skipped the route: %s as version is un spported", route.Name)
+		}
+	}
 
+	// Set the provider specific routes
 	for _, route := range a.routes {
 		glog.V(3).Info(route)
-		router.
-			Methods(route.Method).
-			Path(route.Pattern).
-			Name(route.Name).
-			Handler(http.HandlerFunc(a.ProviderHandler))
+		if validApiVersion(route.Version) {
+			urlPattern := fmt.Sprintf("%s/v%d/%s", DEFAULT_API_PREFIX, route.Version, route.Pattern)
+			router.
+				Methods(route.Method).
+				Path(urlPattern).
+				Name(route.Name).
+				Handler(http.HandlerFunc(a.ProviderHandler))
+		} else {
+			glog.Infof("Skipped the route: %s as version is un spported", route.Name)
+		}
 	}
+
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 	return nil
 }
@@ -216,4 +236,13 @@ func (a *App) InitializeNodeManager(config conf.NodeManagerConfig) error {
 		a.nodemanager = manager
 		return nil
 	}
+}
+
+func validApiVersion(version int) bool {
+	for _, ver := range conf.SystemConfig.Config.SupportedVersions {
+		if ver == version {
+			return true
+		}
+	}
+	return false
 }
