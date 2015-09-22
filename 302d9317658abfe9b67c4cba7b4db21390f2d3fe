@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_48c4135f",
+        "filename": "conf/conf.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T04:40:51Z",
+      "side": 1,
+      "message": "Other than Influxdb, are we using anything else after initialization? even influx also, we can create the client once at the time of init and use the same for further requests. In that case you dont need to keep this config in memory right?",
+      "parentUuid": "1ae5cdf2_88be1bd3",
+      "range": {
+        "startLine": 68,
+        "startChar": 1,
+        "endLine": 68,
+        "endChar": 13
+      },
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_bcb4fdd1",
         "filename": "conf/skyring.conf",
         "patchSetId": 2
