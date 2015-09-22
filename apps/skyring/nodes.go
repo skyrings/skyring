@@ -38,6 +38,7 @@ var (
 func PUT_Nodes(w http.ResponseWriter, r *http.Request) {
 	var request models.AddStorageNodeRequest
 
+	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		glog.Errorf("Error parsing the request: %v", err)
@@ -53,11 +54,49 @@ func PUT_Nodes(w http.ResponseWriter, r *http.Request) {
 		request.SshPort = models.DEFAULT_SSH_PORT
 	}
 
+	// Validate for mandatory fields
+	if !valid(request) {
+		util.HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided")
+		return
+	}
+
 	// Check if node already added
 	if node, _ := exists("hostname", request.Hostname); node != nil {
 		util.HttpResponse(w, http.StatusMethodNotAllowed, "Node already added")
 		return
 	}
+
+	// Process the request
+	if request.User == "" {
+		// Its a accept request for un-managed node. Accept the same
+		acceptNode(w, request)
+	} else {
+		addAndAcceptNode(w, request)
+	}
+}
+
+func acceptNode(w http.ResponseWriter, request models.AddStorageNodeRequest) {
+	ret_val := GetCoreNodeManager().AcceptNode(request.Hostname, request.SshFingerprint)
+	if ret_val == true {
+		for count := 0; count < 60; count++ {
+			time.Sleep(10 * time.Second)
+			startedNodes := util.GetStartedNodes()
+			for _, nodeName := range startedNodes {
+				if nodeName == request.Hostname {
+					addStorageNodeToDB(w, request)
+				}
+			}
+		}
+	}
+}
+
+func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeRequest) {
+	// Validate for required fields
+	if request.User == "" || request.Password == "" {
+		util.HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided")
+		return
+	}
+
 	// Add the node
 	ret_val := GetCoreNodeManager().AddNode(
 		request.Hostname,
@@ -135,6 +174,14 @@ func addStorageNodeToDB(w http.ResponseWriter, r models.AddStorageNodeRequest) {
 	}
 }
 
+func valid(req models.AddStorageNodeRequest) bool {
+	if req.Hostname == "" || req.SshFingerprint == "" {
+		return false
+	}
+
+	return true
+}
+
 func exists(key string, value string) (*models.StorageNode, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
@@ -155,23 +202,27 @@ func GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	params := r.URL.Query()
 	managed_state := params.Get("state")
 
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	var nodes models.StorageNodes
-	if managed_state != "" {
-		if err := collection.Find(bson.M{"managedstate": managed_state}).All(&nodes); err != nil {
-			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-			glog.Errorf("Error getting the nodes list: %v", err)
-			return
-		}
+	if managed_state == "unmanaged" {
+		node_details := GetCoreNodeManager().GetNodes()
+		json.NewEncoder(w).Encode(node_details["unaccepted_nodes"])
 	} else {
-		if err := collection.Find(nil).All(&nodes); err != nil {
-			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-			glog.Errorf("Error getting the nodes list: %v", err)
-			return
+		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		var nodes models.StorageNodes
+		if managed_state != "" {
+			if err := collection.Find(bson.M{"managedstate": managed_state}).All(&nodes); err != nil {
+				util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+				glog.Errorf("Error getting the nodes list: %v", err)
+				return
+			}
+		} else {
+			if err := collection.Find(nil).All(&nodes); err != nil {
+				util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+				glog.Errorf("Error getting the nodes list: %v", err)
+				return
+			}
 		}
+		json.NewEncoder(w).Encode(nodes)
 	}
-
-	json.NewEncoder(w).Encode(nodes)
 }
 
 func GET_Node(w http.ResponseWriter, r *http.Request) {
