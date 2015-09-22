@@ -23,6 +23,7 @@ type Route struct {
 	Method     string
 	Pattern    string
 	PluginFunc string
+	Version    int
 }
 
 type RouteCollection struct {

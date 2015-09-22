@@ -19,8 +19,9 @@ import (
 )
 
 type SkyringConfig struct {
-	ConfigFilePath string
-	HttpPort       int
+	ConfigFilePath    string
+	HttpPort          int
+	SupportedVersions []int
 }
 
 type SkyringLogging struct {

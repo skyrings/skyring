@@ -14,6 +14,7 @@ package skyring
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/natefinch/pie"
@@ -42,6 +43,10 @@ type Args struct {
 	Vars    map[string]string
 	Request []byte
 }
+
+const (
+	DEFAULT_API_PREFIX = "/api"
+)
 
 func NewApp(configfile string) *App {
 	app := &App{}
@@ -73,14 +78,27 @@ func NewApp(configfile string) *App {
 }
 
 func (a *App) SetRoutes(router *mux.Router) error {
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+	// Set routes for core
+	for _, route := range CORE_ROUTES {
+		if validApiVersion(route.Version) {
+			urlPattern := fmt.Sprintf("%s/v%d/%s", DEFAULT_API_PREFIX, route.Version, route.Pattern)
+			router.Methods(route.Method).Path(urlPattern).Name(route.Name).Handler(http.HandlerFunc(route.HandlerFunc))
+		} else {
+			glog.Infof("Skipped the route: %s as version is un spported", route.Name)
+		}
+	}
+
+	// Set the provider specific routes
 	for _, route := range a.urls {
+		urlPattern := fmt.Sprintf("%s/v%d/%s", DEFAULT_API_PREFIX, route.Version, route.Pattern)
 		router.
 			Methods(route.Method).
-			Path(route.Pattern).
+			Path(urlPattern).
 			Name(route.Name).
 			Handler(http.HandlerFunc(a.ProviderHandler))
 	}
+
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 	return nil
 }
 
@@ -128,4 +146,13 @@ func (a *App) InitializeNodeManager(config conf.NodeManagerConfig) error {
 		a.nodemanager = manager
 		return nil
 	}
+}
+
+func validApiVersion(version int) bool {
+	for _, ver := range conf.SystemConfig.Config.SupportedVersions {
+		if ver == version {
+			return true
+		}
+	}
+	return false
 }
