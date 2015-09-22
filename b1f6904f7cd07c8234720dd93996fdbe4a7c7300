@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_68d46f20",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T04:35:08Z",
+      "side": 1,
+      "message": "If this URL is same for all calls, why to create it every time, you can pre create it once use the same always?",
+      "range": {
+        "startLine": 30,
+        "startChar": 1,
+        "endLine": 30,
+        "endChar": 2
+      },
+      "revId": "b1f6904f7cd07c8234720dd93996fdbe4a7c7300",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_88d7fb22",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T04:35:08Z",
+      "side": 1,
+      "message": "Same as above. Why to create the client every time you query?",
+      "range": {
+        "startLine": 37,
+        "startChar": 16,
+        "endLine": 37,
+        "endChar": 25
+      },
+      "revId": "b1f6904f7cd07c8234720dd93996fdbe4a7c7300",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e8cebf82",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T04:35:08Z",
+      "side": 1,
+      "message": "what the user get back in this case?",
+      "range": {
+        "startLine": 84,
+        "startChar": 18,
+        "endLine": 84,
+        "endChar": 37
+      },
+      "revId": "b1f6904f7cd07c8234720dd93996fdbe4a7c7300",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_48edf3ee",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T04:35:08Z",
+      "side": 1,
+      "message": "Use log instead",
+      "range": {
+        "startLine": 87,
+        "startChar": 16,
+        "endLine": 87,
+        "endChar": 19
+      },
+      "revId": "b1f6904f7cd07c8234720dd93996fdbe4a7c7300",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c8b823e8",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T04:35:08Z",
+      "side": 1,
+      "message": "If the data is huge(in this case it can be !!!), how to handle that case?",
+      "range": {
+        "startLine": 89,
+        "startChar": 1,
+        "endLine": 89,
+        "endChar": 9
+      },
+      "revId": "b1f6904f7cd07c8234720dd93996fdbe4a7c7300",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
