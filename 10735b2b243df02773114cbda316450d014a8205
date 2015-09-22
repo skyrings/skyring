@@ -2,6 +2,144 @@
   "comments": [
     {
       "key": {
+        "uuid": "1ae5cdf2_88c0dbe1",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T07:26:38Z",
+      "side": 1,
+      "message": "Its good to have all the data models in a separate file/package - models, so that all the data models at one place. We have to share the data models to the provider implementers and its will be good if everything is there at the same place",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 4
+      },
+      "revId": "10735b2b243df02773114cbda316450d014a8205",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e85ebf44",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T07:26:38Z",
+      "side": 1,
+      "message": "NIC UUID?",
+      "range": {
+        "startLine": 64,
+        "startChar": 5,
+        "endLine": 64,
+        "endChar": 9
+      },
+      "revId": "10735b2b243df02773114cbda316450d014a8205",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c848238a",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T07:26:38Z",
+      "side": 1,
+      "message": "We need - \ndevice UUID\nfile system uuid\ndevice path\nfile system type\nmount point etc",
+      "range": {
+        "startLine": 73,
+        "startChar": 5,
+        "endLine": 73,
+        "endChar": 10
+      },
+      "revId": "10735b2b243df02773114cbda316450d014a8205",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_2859875a",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T07:26:38Z",
+      "side": 1,
+      "message": "Dont proceed in case of error",
+      "range": {
+        "startLine": 123,
+        "startChar": 2,
+        "endLine": 123,
+        "endChar": 7
+      },
+      "revId": "10735b2b243df02773114cbda316450d014a8205",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_085a0b50",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T07:26:38Z",
+      "side": 1,
+      "message": "Not required",
+      "range": {
+        "startLine": 125,
+        "startChar": 1,
+        "endLine": 125,
+        "endChar": 15
+      },
+      "revId": "10735b2b243df02773114cbda316450d014a8205",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_48541321",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T07:26:38Z",
+      "side": 1,
+      "message": "You can move this into a separate function as it is common across all requests for nodes",
+      "range": {
+        "startLine": 121,
+        "startChar": 1,
+        "endLine": 131,
+        "endChar": 2
+      },
+      "revId": "10735b2b243df02773114cbda316450d014a8205",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_1caed185",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 3
@@ -31,6 +169,52 @@
       "side": 1,
       "message": "yes",
       "parentUuid": "1ae5cdf2_1caed185",
+      "revId": "10735b2b243df02773114cbda316450d014a8205",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_6832af11",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T07:26:38Z",
+      "side": 1,
+      "message": "Listen for events and proceed rather than waiting for finite time. This may not work always",
+      "range": {
+        "startLine": 150,
+        "startChar": 2,
+        "endLine": 150,
+        "endChar": 30
+      },
+      "revId": "10735b2b243df02773114cbda316450d014a8205",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_88353bf9",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T07:26:38Z",
+      "side": 1,
+      "message": "Don\u0027t return false in case of error. return error separately",
+      "range": {
+        "startLine": 181,
+        "startChar": 2,
+        "endLine": 181,
+        "endChar": 9
+      },
       "revId": "10735b2b243df02773114cbda316450d014a8205",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
