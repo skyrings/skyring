@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_88a53bb7",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T05:04:30Z",
+      "side": 1,
+      "message": "1. Must be prefixed with api/v1\n2. Should we use tools or utils/utilities is better?\n3. Can we move all the feature specific routes from this file to specific files(say a function setRoutes() for each feature) which will be called from setRoutes method of this packages?",
+      "range": {
+        "startLine": 56,
+        "startChar": 18,
+        "endLine": 56,
+        "endChar": 23
+      },
+      "revId": "80ad979ca0fff24c55da4c3dbfbb6b208459ecbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_489b3372",
+        "filename": "apps/skyring/tools.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T05:04:30Z",
+      "side": 1,
+      "message": "Instead of initializing it every file, we need to have one manager which will be used by everyone",
+      "range": {
+        "startLine": 22,
+        "startChar": 7,
+        "endLine": 22,
+        "endChar": 9
+      },
+      "revId": "80ad979ca0fff24c55da4c3dbfbb6b208459ecbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
