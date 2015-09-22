@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_2856e7d2",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 1,
+      "message": "you could use filepath.Match for pattern matching eg.\n\nhttp://play.golang.org/p/L6nrjUqjlZ",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a8591700",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 1,
+      "message": "1, Avoid _\n\n2. Have short name like ProviderConfDir\n\n3. It would be clean to have \"providers.d\" as name, but your choice",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_88629bab",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 1,
+      "message": "You could add this as command line arg as ProviderBinDir and needs to be moved to main.go",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c85ca3f0",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 1,
+      "message": "1. This is debug level of log\n\n2. You could have a separate function to read config files as SIGHUP signal will trigger reread of them again.\n\n3. Upon SIGHUP, you might need to reload/start/stop providers.  That could be a separate function\n\n4.  I am not sure how you will handling SIGINT/SIGSTOP/SIGTERM to do clean exit.",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_8809bbdf",
+        "filename": "conf/providers/ceph.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 1,
+      "message": "Not sure provider config have \"providers\" as a key.  I think something like below\n\n{\"ceph\" : { \"path\": \"cephpath\", \"routes\": [ ... ]}\n\nThis will avoid dups.",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e8723f7b",
+        "filename": "conf/providers/ceph.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 1,
+      "message": "1. prefixing \u0027provider\u0027 is redundant  \n\n2. ./ is not required\n\n3. suffix _provider is redundant\n\n4. you could simply say \u0027path\u0027 instead of providerBinary",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_086e8b96",
+        "filename": "conf/providers/ceph.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 1,
+      "message": "Two approaches\n\n1. provider specific configuration elements are found by the provider by its way.  its not required to be in skyring\u0027s configuration file.  if you are indented to pass configuration file at provider start, you could have \u0027config_file\" as one element at the level of \"name\"\n\n2. read configuration elements of your interest ie let provider reads the same config file you read for its own configuration elements.",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_48689387",
+        "filename": "conf/providers/ceph.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 1,
+      "message": "1. routes should be relative path.  my assumption here is that /api/v1/\u003cprovider_name\u003e/provider_specific/routes.  Let provider define its own level of routes ie in this case \"hello/{name}\"\n\nThe core makes route for mux like /api/v1/\u003cprovider_name\u003e/... eg in this case\n/api/v1/ceph/hello/{name}\n\n2. For sake of interest, do you have this hello route for an example or its real?",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e8f95fc9",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 1,
+      "message": "I think this config element is not necessary.",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_682d4f46",
+        "filename": "utils/logs.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 1,
+      "message": "You can\u0027t do this.  It will make main\u0027s command line arg parser fails",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}

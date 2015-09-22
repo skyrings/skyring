@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_280427bf",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 0,
+      "message": "you could have\n\n{\"server\": {\"name\": \"my_bind_name\", \"port\": port}}\n\nbut as optional, you fallback to the defaults ie bind to all ips and 8080 as port.",
+      "revId": "dab43c96c86846d54dc432b03bd4cc439263e831",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_48ffb3aa",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T03:07:29Z",
+      "side": 0,
+      "message": "This is optional too.",
+      "revId": "dab43c96c86846d54dc432b03bd4cc439263e831",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
