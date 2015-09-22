@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_881c5b79",
+        "filename": "main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T08:55:15Z",
+      "side": 1,
+      "message": "Use log instead of using print on console",
+      "range": {
+        "startLine": 143,
+        "startChar": 2,
+        "endLine": 143,
+        "endChar": 6
+      },
+      "revId": "113f6b81e615284f9a4e607d628db4843a1f7d45",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_7cd43020",
+        "filename": "main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T08:55:15Z",
+      "side": 1,
+      "message": "How we will handle the reloads here?. It would be better if you handle signals on a case to case basis",
+      "range": {
+        "startLine": 145,
+        "startChar": 2,
+        "endLine": 145,
+        "endChar": 3
+      },
+      "revId": "113f6b81e615284f9a4e607d628db4843a1f7d45",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
