@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_a8e837b5",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T05:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_68d46f20",
+      "range": {
+        "startLine": 30,
+        "startChar": 1,
+        "endLine": 30,
+        "endChar": 2
+      },
+      "revId": "b1f6904f7cd07c8234720dd93996fdbe4a7c7300",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_88d7fb22",
         "filename": "apps/skyring/monitoring.go",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2015-09-22T04:35:08Z",
       "side": 1,
       "message": "Same as above. Why to create the client every time you query?",
+      "range": {
+        "startLine": 37,
+        "startChar": 16,
+        "endLine": 37,
+        "endChar": 25
+      },
+      "revId": "b1f6904f7cd07c8234720dd93996fdbe4a7c7300",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c8ebc3ae",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T05:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_88d7fb22",
       "range": {
         "startLine": 37,
         "startChar": 16,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_e8d15ffc",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T05:51:13Z",
+      "side": 1,
+      "message": "json output from influxdb having timestamp and values",
+      "parentUuid": "1ae5cdf2_e8cebf82",
+      "range": {
+        "startLine": 84,
+        "startChar": 18,
+        "endLine": 84,
+        "endChar": 37
+      },
+      "revId": "b1f6904f7cd07c8234720dd93996fdbe4a7c7300",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_48edf3ee",
         "filename": "apps/skyring/monitoring.go",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_28dc2712",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T05:51:13Z",
+      "side": 1,
+      "message": "Not required. Will remove or use log info.",
+      "parentUuid": "1ae5cdf2_48edf3ee",
+      "range": {
+        "startLine": 87,
+        "startChar": 16,
+        "endLine": 87,
+        "endChar": 19
+      },
+      "revId": "b1f6904f7cd07c8234720dd93996fdbe4a7c7300",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c8b823e8",
         "filename": "apps/skyring/monitoring.go",
         "patchSetId": 1
@@ -105,6 +201,30 @@
       "writtenOn": "2015-09-22T04:35:08Z",
       "side": 1,
       "message": "If the data is huge(in this case it can be !!!), how to handle that case?",
+      "range": {
+        "startLine": 89,
+        "startChar": 1,
+        "endLine": 89,
+        "endChar": 9
+      },
+      "revId": "b1f6904f7cd07c8234720dd93996fdbe4a7c7300",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_8808db92",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T05:51:13Z",
+      "side": 1,
+      "message": "By default we are planning to have last 24hrs data only returned.\nIn case user selects a time duration for a range, will need to use chunking option from influxdb. Will explore the same and add as separate patch.",
+      "parentUuid": "1ae5cdf2_c8b823e8",
       "range": {
         "startLine": 89,
         "startChar": 1,
