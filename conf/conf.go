@@ -21,6 +21,7 @@ import (
 type SkyringConfig struct {
 	ConfigFilePath string
 	HttpPort       int
+	ApiVersion     int
 }
 
 type SkyringLogging struct {
