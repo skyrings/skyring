@@ -22,6 +22,30 @@
       "revId": "b90085f58667c9511948c30b9a47ae7f68518c36",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_48c0932a",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T05:48:03Z",
+      "side": 1,
+      "message": "Same as for earlier patches.",
+      "parentUuid": "1ae5cdf2_a883d702",
+      "range": {
+        "startLine": 80,
+        "startChar": 17,
+        "endLine": 80,
+        "endChar": 21
+      },
+      "revId": "b90085f58667c9511948c30b9a47ae7f68518c36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
