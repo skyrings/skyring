@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_88e1bbd2",
+        "filename": "apps/skyring/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T05:49:22Z",
+      "side": 1,
+      "message": "1. We are not mandating that the plugin implementer must implement all interface methods. Interface is just defined but not really used\n\n2. If we have a requirement of supporting multiple plugins(salt, REST) at the same time and choosing one based on the configuration(customer choice), need to have a framework for managing the plug-ins as we discussed. Can refer to Auth patch -  https://review.gerrithub.io/#/c/247916/",
+      "revId": "427abd1fc13a267ef248ff1060bed6aac2426b2b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
