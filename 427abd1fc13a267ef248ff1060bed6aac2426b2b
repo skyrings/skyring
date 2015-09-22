@@ -16,6 +16,24 @@
       "revId": "427abd1fc13a267ef248ff1060bed6aac2426b2b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_08f4cb85",
+        "filename": "apps/skyring/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T05:53:08Z",
+      "side": 1,
+      "message": "Done. Will change accordingly.",
+      "parentUuid": "1ae5cdf2_88e1bbd2",
+      "revId": "427abd1fc13a267ef248ff1060bed6aac2426b2b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
