@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_887d3bea",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T06:34:14Z",
+      "side": 1,
+      "message": "Do we really need to close this explicitly? It will be closed automatically by the server. Is there any specific reason why we need to do this?",
+      "range": {
+        "startLine": 210,
+        "startChar": 3,
+        "endLine": 210,
+        "endChar": 26
+      },
+      "revId": "3f4306dd6a46231908b47bba974e4aca1b59b1c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_08692b25",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T06:34:14Z",
+      "side": 1,
+      "message": "Why continuing after getting the parse error? We must return from here right?",
+      "range": {
+        "startLine": 217,
+        "startChar": 3,
+        "endLine": 217,
+        "endChar": 7
+      },
+      "revId": "3f4306dd6a46231908b47bba974e4aca1b59b1c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a80d9792",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T06:34:14Z",
+      "side": 1,
+      "message": "Why to do this, its already checked right?",
+      "range": {
+        "startLine": 221,
+        "startChar": 4,
+        "endLine": 221,
+        "endChar": 11
+      },
+      "revId": "3f4306dd6a46231908b47bba974e4aca1b59b1c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_484a53ad",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T06:34:14Z",
+      "side": 1,
+      "message": "Error Handling?",
+      "range": {
+        "startLine": 231,
+        "startChar": 8,
+        "endLine": 232,
+        "endChar": 12
+      },
+      "revId": "3f4306dd6a46231908b47bba974e4aca1b59b1c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_28e6e7b4",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T06:34:14Z",
+      "side": 1,
+      "message": "Always returning True? Need to handle error and return appropriately",
+      "range": {
+        "startLine": 259,
+        "startChar": 4,
+        "endLine": 259,
+        "endChar": 15
+      },
+      "revId": "3f4306dd6a46231908b47bba974e4aca1b59b1c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_68ef0f88",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T06:34:14Z",
+      "side": 1,
+      "message": "Why returning false in case of error? I think we need to have one more return value error which need to be set on error and the calling function handle it appropriately.",
+      "range": {
+        "startLine": 267,
+        "startChar": 7,
+        "endLine": 267,
+        "endChar": 18
+      },
+      "revId": "3f4306dd6a46231908b47bba974e4aca1b59b1c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
