@@ -140,6 +140,24 @@
       "revId": "2e9e9a4b844944f39b24335da4b824a79208e545",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c81023ab",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-22T06:09:18Z",
+      "side": 1,
+      "message": "I am favor of relative path here ie nodes/{node-id}",
+      "parentUuid": "1ae5cdf2_e8ca3f4e",
+      "revId": "2e9e9a4b844944f39b24335da4b824a79208e545",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
