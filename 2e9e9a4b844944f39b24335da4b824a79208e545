@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_4872534a",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T05:39:02Z",
+      "side": 1,
+      "message": "In case of error we need to send error response - may be Internal server error",
+      "range": {
+        "startLine": 207,
+        "startChar": 1,
+        "endLine": 207,
+        "endChar": 8
+      },
+      "revId": "2e9e9a4b844944f39b24335da4b824a79208e545",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_6890ef43",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T05:39:02Z",
+      "side": 1,
+      "message": "In case of error we need to send error response - may be Internal server error",
+      "range": {
+        "startLine": 223,
+        "startChar": 1,
+        "endLine": 223,
+        "endChar": 7
+      },
+      "revId": "2e9e9a4b844944f39b24335da4b824a79208e545",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_88937b4e",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-22T05:39:02Z",
+      "side": 1,
+      "message": "Must be prefixed with api/v1",
+      "range": {
+        "startLine": 74,
+        "startChar": 18,
+        "endLine": 74,
+        "endChar": 19
+      },
+      "revId": "2e9e9a4b844944f39b24335da4b824a79208e545",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
