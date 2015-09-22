@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_68bb8fe5",
+        "filename": "conf/conf.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T04:23:58Z",
+      "side": 1,
+      "message": "In mongo db authentication DB and application db could be different so kept the option open",
+      "parentUuid": "1ae5cdf2_081ccb12",
+      "range": {
+        "startLine": 35,
+        "startChar": 1,
+        "endLine": 35,
+        "endChar": 2
+      },
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_281b471c",
         "filename": "conf/conf.go",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2015-09-22T04:10:07Z",
       "side": 1,
       "message": "Why to keep this in memory? Are we using this anywhere after the initialization?",
+      "range": {
+        "startLine": 68,
+        "startChar": 1,
+        "endLine": 68,
+        "endChar": 13
+      },
+      "revId": "302d9317658abfe9b67c4cba7b4db21390f2d3fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_88be1bd3",
+        "filename": "conf/conf.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T04:23:58Z",
+      "side": 1,
+      "message": "Following patches are using this to refer the configurations.",
+      "parentUuid": "1ae5cdf2_281b471c",
       "range": {
         "startLine": 68,
         "startChar": 1,
