@@ -24,6 +24,7 @@ type Route struct {
 	Method     string `json:"method"`
 	Pattern    string `json:"pattern"`
 	PluginFunc string `json:"pluginFunc"`
+	Version    int    `json:"version"`
 }
 
 type ProviderConfig struct {
