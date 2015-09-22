@@ -35,11 +35,12 @@ type StorageNode struct {
 }
 
 type AddStorageNodeRequest struct {
-	Hostname       string
-	SshFingerprint string
-	User           string
-	Password       string
-	SshPort        int
+	Hostname        string
+	SshFingerprint  string
+	SaltFingerprint string
+	User            string
+	Password        string
+	SshPort         int
 }
 
 type CPU struct {
