@@ -284,6 +284,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_d248cd89",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T18:02:47Z",
+      "side": 1,
+      "message": "We are un-marshallin into a struct here. So in different case it might be possible to utilize this method. Every api needs to do this with different structs.",
+      "parentUuid": "1ae5cdf2_b28421d5",
+      "range": {
+        "startLine": 121,
+        "startChar": 1,
+        "endLine": 131,
+        "endChar": 2
+      },
+      "revId": "10735b2b243df02773114cbda316450d014a8205",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_1caed185",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 3
