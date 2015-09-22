@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_28aee785",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T05:46:01Z",
+      "side": 1,
+      "message": "1. api root and api version should be defined as part of skyring.conf and that value should be used for route definitions, I feel\n2. May be we can have the route as \"/utils/ssh_fingerprint\"\n3. Agree. That can be done.",
+      "parentUuid": "1ae5cdf2_88a53bb7",
+      "range": {
+        "startLine": 56,
+        "startChar": 18,
+        "endLine": 56,
+        "endChar": 23
+      },
+      "revId": "80ad979ca0fff24c55da4c3dbfbb6b208459ecbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_489b3372",
         "filename": "apps/skyring/tools.go",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2015-09-22T05:04:30Z",
       "side": 1,
       "message": "Instead of initializing it every file, we need to have one manager which will be used by everyone",
+      "range": {
+        "startLine": 22,
+        "startChar": 7,
+        "endLine": 22,
+        "endChar": 9
+      },
+      "revId": "80ad979ca0fff24c55da4c3dbfbb6b208459ecbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_48a9737a",
+        "filename": "apps/skyring/tools.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-22T05:46:01Z",
+      "side": 1,
+      "message": "Will change to use interface properly and redo this.",
+      "parentUuid": "1ae5cdf2_489b3372",
       "range": {
         "startLine": 22,
         "startChar": 7,
