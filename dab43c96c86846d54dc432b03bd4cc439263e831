@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_b0997921",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 0,
+      "message": "Done.\nInstead name I will make it as \"Host\"(IPAdddress)",
+      "parentUuid": "1ae5cdf2_280427bf",
+      "revId": "dab43c96c86846d54dc432b03bd4cc439263e831",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_48ffb3aa",
         "filename": "conf/skyring.conf",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-22T03:07:29Z",
       "side": 0,
       "message": "This is optional too.",
+      "revId": "dab43c96c86846d54dc432b03bd4cc439263e831",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_90963def",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 0,
+      "message": "1. log_dir and logtostderr can be command line option.\n2. Setting log_level and other stuff to be read from the config file. it not good have this at both places. If you agree I can make this change",
+      "parentUuid": "1ae5cdf2_48ffb3aa",
       "revId": "dab43c96c86846d54dc432b03bd4cc439263e831",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false

@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_105f8d42",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 1,
+      "message": "maynot be useful here as I am checking if the providername in URL. For example if the URL is \u0027/ceph/hello/nishanth\u0027, I just need to check if provider name(ceph) in the URL. The matching pattern /ceph/*/* work only for that URL.The patterns and levels may not be same always(for /ceph/hello/hello1/nishanth the matcher may not work)",
+      "parentUuid": "1ae5cdf2_2856e7d2",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_a8591700",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-22T03:07:29Z",
       "side": 1,
       "message": "1, Avoid _\n\n2. Have short name like ProviderConfDir\n\n3. It would be clean to have \"providers.d\" as name, but your choice",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_bc9a3861",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_a8591700",
       "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_dc9d445b",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "1ae5cdf2_88629bab",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c85ca3f0",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 8
@@ -64,6 +118,24 @@
       "writtenOn": "2015-09-22T03:07:29Z",
       "side": 1,
       "message": "1. This is debug level of log\n\n2. You could have a separate function to read config files as SIGHUP signal will trigger reread of them again.\n\n3. Upon SIGHUP, you might need to reload/start/stop providers.  That could be a separate function\n\n4.  I am not sure how you will handling SIGINT/SIGSTOP/SIGTERM to do clean exit.",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_5f192678",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 1,
+      "message": "1. Done\n2. Done\n3.reload/stop will be implemented when the signal handling is done\n4. Singnals handled at main and should call the respective functions start/stop/reload.",
+      "parentUuid": "1ae5cdf2_c85ca3f0",
       "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_b035f9f8",
+        "filename": "conf/providers/ceph.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 1,
+      "message": "As discussed, this remains same as we need to read into a struct",
+      "parentUuid": "1ae5cdf2_8809bbdf",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_e8723f7b",
         "filename": "conf/providers/ceph.conf",
         "patchSetId": 8
@@ -98,6 +188,24 @@
       "writtenOn": "2015-09-22T03:07:29Z",
       "side": 1,
       "message": "1. prefixing \u0027provider\u0027 is redundant  \n\n2. ./ is not required\n\n3. suffix _provider is redundant\n\n4. you could simply say \u0027path\u0027 instead of providerBinary",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_702b7194",
+        "filename": "conf/providers/ceph.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 1,
+      "message": "1. Done\n2. changed based on the biConfDir\n3.this is a sample config file, it can be anyhing as the implementer\u0027s wish\n4. it is Name of the exe",
+      "parentUuid": "1ae5cdf2_e8723f7b",
       "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_d03c45e5",
+        "filename": "conf/providers/ceph.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 1,
+      "message": "As we discussed, this portion will be anything. From core we are interested in only routes and provider details. Rest of things can be added and read by the providers. Core passes the same config to providers",
+      "parentUuid": "1ae5cdf2_086e8b96",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_48689387",
         "filename": "conf/providers/ceph.conf",
         "patchSetId": 8
@@ -132,6 +258,24 @@
       "writtenOn": "2015-09-22T03:07:29Z",
       "side": 1,
       "message": "1. routes should be relative path.  my assumption here is that /api/v1/\u003cprovider_name\u003e/provider_specific/routes.  Let provider define its own level of routes ie in this case \"hello/{name}\"\n\nThe core makes route for mux like /api/v1/\u003cprovider_name\u003e/... eg in this case\n/api/v1/ceph/hello/{name}\n\n2. For sake of interest, do you have this hello route for an example or its real?",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_2b0fbc2f",
+        "filename": "conf/providers/ceph.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 1,
+      "message": "As we discussed yesterday, it will absolute path for the time being. We will revisit that at a later point of time.\nThis is just a sample config file",
+      "parentUuid": "1ae5cdf2_48689387",
       "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_d0a0c545",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_e8f95fc9",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_682d4f46",
         "filename": "utils/logs.go",
         "patchSetId": 8
@@ -166,6 +328,24 @@
       "writtenOn": "2015-09-22T03:07:29Z",
       "side": 1,
       "message": "You can\u0027t do this.  It will make main\u0027s command line arg parser fails",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_3cf2a8d2",
+        "filename": "utils/logs.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-23T09:09:39Z",
+      "side": 1,
+      "message": "Logging is broken since you removed it. This is the only way we can configure the glog",
+      "parentUuid": "1ae5cdf2_682d4f46",
       "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
