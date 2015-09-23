@@ -1,0 +1,284 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_864b6786",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "As this is a method to App struct, you should move this to where App declared.",
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_6147254c",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "I think this is debug level of logging, but not sure what this glog does here.",
+      "range": {
+        "startLine": 80,
+        "startChar": 6,
+        "endLine": 80,
+        "endChar": 7
+      },
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e1a975e0",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "Does it mean latest declaration of route overrides previously declared route?  for eg, below are routes\nroute1 \u003d {\"name\": \"myname\", \"pattern\": \"/cluster/create\"}\nroute2 \u003d {\"name\": \"myname\", \"pattern\": \"/cluster/delete\"}\n\nIf you load route2 later route2 overrides route1.\n\nDo we allow this?  I would prefer to error out and stop loading.",
+      "range": {
+        "startLine": 83,
+        "startChar": 24,
+        "endLine": 83,
+        "endChar": 25
+      },
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_01b02142",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "why an nil provider be in config?",
+      "range": {
+        "startLine": 87,
+        "startChar": 12,
+        "endLine": 87,
+        "endChar": 20
+      },
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_61b56530",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "its a debug log",
+      "range": {
+        "startLine": 121,
+        "startChar": 12,
+        "endLine": 121,
+        "endChar": 17
+      },
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_01974191",
+        "filename": "conf/conf.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "panic() is not a good idea here",
+      "range": {
+        "startLine": 49,
+        "startChar": 19,
+        "endLine": 49,
+        "endChar": 21
+      },
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_46595f59",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "It would be nice to extend mux.Router to fit it into our needs\n\nor\n\nYou could have same variable names what mux.Router has ie Name, Method, Path and Handler",
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_062677ce",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "You could fix the message that \u0027unable to read directory\u0027",
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c63c8fe5",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "I think panic() is not godd idea here in case this function is called on interrupt handling.",
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e63fcbd4",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "This needs to be debug level.  I don\u0027t know what V(3) means here.",
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_6602db0c",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "Does json unmarshaling take care that data has all required elements filed properly? I mean provider name should be given in the config file what if that element is missed or mis-valued",
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c10ab920",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "This is debug level of logging",
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_21927d9f",
+        "filename": "main.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "This is too generic.  You could better to change more specific like providers-dir or something like that",
+      "range": {
+        "startLine": 61,
+        "startChar": 20,
+        "endLine": 61,
+        "endChar": 21
+      },
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_618c8580",
+        "filename": "main.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 1,
+      "message": "\":PORT\" does the same thing.",
+      "range": {
+        "startLine": 139,
+        "startChar": 23,
+        "endLine": 139,
+        "endChar": 27
+      },
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}

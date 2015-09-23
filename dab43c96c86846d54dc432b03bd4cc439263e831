@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1ae5cdf2_210fdd2f",
+        "filename": "conf/sample/skyring.conf.sample",
+        "patchSetId": 9
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T15:24:38Z",
+      "side": 0,
+      "message": "It would be better to do how apache/nginx doing\n\nlisten 8080\nlisten 192.168.1.2:8080\n\netc",
+      "revId": "dab43c96c86846d54dc432b03bd4cc439263e831",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_280427bf",
         "filename": "conf/skyring.conf",
         "patchSetId": 8
