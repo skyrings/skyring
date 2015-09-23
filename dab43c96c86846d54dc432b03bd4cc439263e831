@@ -69,6 +69,24 @@
       "revId": "dab43c96c86846d54dc432b03bd4cc439263e831",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_66a65b55",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T14:38:29Z",
+      "side": 0,
+      "message": "As I noted these elements can be optional ie not necessarily added to run skyring.  You always have default value in your code if configuration element is not available\n\nYou should have command line option and config file settings too.  In this case command line options supersedes configuration file.   If you remove command line arguments, you need to edit configuration file every time for dev/testing/debugging/production.",
+      "parentUuid": "1ae5cdf2_90963def",
+      "revId": "dab43c96c86846d54dc432b03bd4cc439263e831",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }

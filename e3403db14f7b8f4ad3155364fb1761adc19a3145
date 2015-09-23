@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_268533ad",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T14:38:29Z",
+      "side": 1,
+      "message": "Then you support to check starts with \"/{provider-name}/\" else you will be end up giving provider wrongly\neg\n\n/nodes/ceph - succeeds\n\n/cepher/my/invalid/uri  - succeeds",
+      "parentUuid": "1ae5cdf2_105f8d42",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_a8591700",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 8
@@ -212,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_4694ffe1",
+        "filename": "conf/providers/ceph.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T14:38:29Z",
+      "side": 1,
+      "message": "Regarding 4)\nWhat is the difference between name and exe name?",
+      "parentUuid": "1ae5cdf2_702b7194",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_086e8b96",
         "filename": "conf/providers/ceph.conf",
         "patchSetId": 8
@@ -346,6 +382,24 @@
       "side": 1,
       "message": "Logging is broken since you removed it. This is the only way we can configure the glog",
       "parentUuid": "1ae5cdf2_682d4f46",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_86644723",
+        "filename": "utils/logs.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-23T14:38:29Z",
+      "side": 1,
+      "message": "If you do this, its not possible to run skyring at all and not possible to verify your patch.\n\nThree options\n\n1. Fix glog to work properly\n\n2. Move to another logger which does not alter program\u0027s command line parsing algo\n\n3. Revert my command line argument patch and use flag package to do command line argument parsing.",
+      "parentUuid": "1ae5cdf2_3cf2a8d2",
       "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
