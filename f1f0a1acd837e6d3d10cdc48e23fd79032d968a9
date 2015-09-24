@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_883ff1d5",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-24T10:08:34Z",
+      "side": 1,
+      "message": "Its not able package thing.  If someone wants to find related method, its hard to lock different files",
+      "parentUuid": "1ae5cdf2_c52004b3",
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_014ca141",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 9
@@ -160,6 +178,24 @@
         "endLine": 80,
         "endChar": 7
       },
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a8258dc3",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-24T10:08:34Z",
+      "side": 1,
+      "message": "quite confusing though if each V(N) has Info/Warning/Error etc",
+      "parentUuid": "1ae5cdf2_052bcc94",
       "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -494,6 +530,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_c82019b3",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-24T10:08:34Z",
+      "side": 1,
+      "message": "this is quite different logging though.  its hard to decide what verbose level this log is info.",
+      "parentUuid": "1ae5cdf2_a8966d92",
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_6602db0c",
         "filename": "conf/provider-conf.go",
         "patchSetId": 9
@@ -523,6 +577,24 @@
       "side": 1,
       "message": "Un-Marshalling will not make sure the data is filled. Validity of the needs to be validated by the callee methods",
       "parentUuid": "1ae5cdf2_6602db0c",
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e82f959f",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-24T10:08:34Z",
+      "side": 1,
+      "message": "Then you need to validate before append it into collections?",
+      "parentUuid": "1ae5cdf2_68f465f2",
       "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
