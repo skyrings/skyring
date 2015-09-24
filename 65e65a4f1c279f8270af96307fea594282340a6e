@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e82075f9",
+        "filename": "conf/conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-24T09:05:41Z",
+      "side": 1,
+      "message": "the error \u0027err\u0027 should be returned if any",
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_081cc1c0",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-24T09:05:41Z",
+      "side": 1,
+      "message": "error \u0027err\u0027 should be returned as well",
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_487de9e6",
+        "filename": "main.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-24T09:05:41Z",
+      "side": 1,
+      "message": "If there is an error loading the config, it should error out",
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
