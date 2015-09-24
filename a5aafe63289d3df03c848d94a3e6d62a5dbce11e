@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_0873e115",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-24T09:09:23Z",
+      "side": 1,
+      "message": "Returns the available nodes. Once nodes are available we can get additional details like machine id, network info and disk info etc.",
+      "parentUuid": "1ae5cdf2_8810d1a9",
+      "revId": "a5aafe63289d3df03c848d94a3e6d62a5dbce11e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c821f9fd",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 5
@@ -42,6 +60,24 @@
         "endLine": 128,
         "endChar": 14
       },
+      "revId": "a5aafe63289d3df03c848d94a3e6d62a5dbce11e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_885e1175",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-24T09:09:23Z",
+      "side": 1,
+      "message": "This case insert has failed, but based on boolean return value I break from loop. So returning true and populated error response which would be displayed to end user",
+      "parentUuid": "1ae5cdf2_c821f9fd",
       "revId": "a5aafe63289d3df03c848d94a3e6d62a5dbce11e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
