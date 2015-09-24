@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_653c90e3",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T06:42:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_268533ad",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_a8591700",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 8
@@ -248,6 +266,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_45c074e0",
+        "filename": "conf/providers/ceph.conf",
+        "patchSetId": 8
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T06:42:57Z",
+      "side": 1,
+      "message": "Name is textual name using which the provider registers with the core.\n\nexe name - name of the executable. both can be same or different",
+      "parentUuid": "1ae5cdf2_4694ffe1",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_086e8b96",
         "filename": "conf/providers/ceph.conf",
         "patchSetId": 8
@@ -400,6 +436,24 @@
       "side": 1,
       "message": "If you do this, its not possible to run skyring at all and not possible to verify your patch.\n\nThree options\n\n1. Fix glog to work properly\n\n2. Move to another logger which does not alter program\u0027s command line parsing algo\n\n3. Revert my command line argument patch and use flag package to do command line argument parsing.",
       "parentUuid": "1ae5cdf2_3cf2a8d2",
+      "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e5aa6018",
+        "filename": "utils/logs.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T06:42:57Z",
+      "side": 1,
+      "message": "For the time being I will revert this change. Let us discuss and figure out what needs to be done on this. That means logging is broken and we will be fixing it soon",
+      "parentUuid": "1ae5cdf2_86644723",
       "revId": "e3403db14f7b8f4ad3155364fb1761adc19a3145",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
