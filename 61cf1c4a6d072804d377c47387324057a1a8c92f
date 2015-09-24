@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_a8410d3b",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-24T05:08:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_284edd6f",
+      "revId": "61cf1c4a6d072804d377c47387324057a1a8c92f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_4851690d",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-24T05:07:28Z",
       "side": 1,
       "message": "All of them return an array?",
+      "revId": "61cf1c4a6d072804d377c47387324057a1a8c92f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c83c99c2",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-24T05:08:54Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "1ae5cdf2_4851690d",
       "revId": "61cf1c4a6d072804d377c47387324057a1a8c92f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
