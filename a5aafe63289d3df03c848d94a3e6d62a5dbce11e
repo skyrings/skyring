@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_8810d1a9",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T09:04:59Z",
+      "side": 1,
+      "message": "What this function does?",
+      "range": {
+        "startLine": 72,
+        "startChar": 24,
+        "endLine": 72,
+        "endChar": 41
+      },
+      "revId": "a5aafe63289d3df03c848d94a3e6d62a5dbce11e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c821f9fd",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T09:04:59Z",
+      "side": 1,
+      "message": "Why returning true on error? Other cases you are returning false?",
+      "range": {
+        "startLine": 128,
+        "startChar": 3,
+        "endLine": 128,
+        "endChar": 14
+      },
+      "revId": "a5aafe63289d3df03c848d94a3e6d62a5dbce11e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
