@@ -22,6 +22,24 @@
       "revId": "3e6cf81c4c124bb2ac43502f0b9a5ca0e1968dad",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_2bd4171f",
+        "filename": "conf/skyring.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-24T11:55:47Z",
+      "side": 1,
+      "message": "Wouldnt that mean that we should have version also maintained at route level?",
+      "parentUuid": "1ae5cdf2_eb1a2f16",
+      "revId": "3e6cf81c4c124bb2ac43502f0b9a5ca0e1968dad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
