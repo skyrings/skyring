@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_eb906f97",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T11:01:30Z",
+      "side": 1,
+      "message": "I am leaving this as it is for time being as the URLs with version 9 will not come here as it will be filtered out at MUX level. The URL versioning part needs to discussed and finalized",
+      "parentUuid": "1ae5cdf2_481c0978",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 18
+      },
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_68138566",
         "filename": "conf/conf.go",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2015-09-24T10:17:52Z",
       "side": 1,
       "message": "please remove this comment",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 7
+      },
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_ab3ae7ca",
+        "filename": "conf/conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T11:01:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_68138566",
       "range": {
         "startLine": 17,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_cb3573dc",
+        "filename": "conf/conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T11:01:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_88161154",
+      "range": {
+        "startLine": 44,
+        "startChar": 13,
+        "endLine": 44,
+        "endChar": 14
+      },
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_e82075f9",
         "filename": "conf/conf.go",
         "patchSetId": 10
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_8b5b6b2d",
+        "filename": "conf/conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T11:01:30Z",
+      "side": 1,
+      "message": "Not handling the error, just logging the error and proceeding further. We will discuss and finalize how to handle USM reloading",
+      "parentUuid": "1ae5cdf2_e82075f9",
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_a80cad43",
         "filename": "conf/provider-conf.go",
         "patchSetId": 10
@@ -99,6 +189,30 @@
       "writtenOn": "2015-09-24T10:17:52Z",
       "side": 1,
       "message": "please remove this comment",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 7
+      },
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_ab41073b",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T11:01:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_a80cad43",
       "range": {
         "startLine": 17,
         "startChar": 4,
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_eb4b0f57",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T11:01:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_c807391c",
+      "range": {
+        "startLine": 50,
+        "startChar": 13,
+        "endLine": 50,
+        "endChar": 14
+      },
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_081cc1c0",
         "filename": "conf/provider-conf.go",
         "patchSetId": 10
@@ -151,6 +289,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_0b475b4c",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T11:01:30Z",
+      "side": 1,
+      "message": "Same as the case with config.go",
+      "parentUuid": "1ae5cdf2_081cc1c0",
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_487de9e6",
         "filename": "main.go",
         "patchSetId": 10
@@ -162,6 +318,24 @@
       "writtenOn": "2015-09-24T09:05:41Z",
       "side": 1,
       "message": "If there is an error loading the config, it should error out",
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_6bf45ff2",
+        "filename": "main.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T11:01:30Z",
+      "side": 1,
+      "message": "As mentioned, earlier, if we error out it there may be issue with reloading. Error are logged while parsing and will move forward with default values",
+      "parentUuid": "1ae5cdf2_487de9e6",
       "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
