@@ -99,6 +99,24 @@
       "revId": "a5aafe63289d3df03c848d94a3e6d62a5dbce11e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_28bdfd68",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-24T09:28:27Z",
+      "side": 1,
+      "message": "I understand but based on this bool, I just decide whether to break the loop. Not used for any other purpose",
+      "parentUuid": "1ae5cdf2_48f24970",
+      "revId": "a5aafe63289d3df03c848d94a3e6d62a5dbce11e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
