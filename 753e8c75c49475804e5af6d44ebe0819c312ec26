@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_68a62512",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-24T05:19:56Z",
+      "side": 1,
+      "message": "You need to check if the duration is in correct format \"\"YYYY-MM-DD HH:MM:SS.mmm\"",
+      "revId": "753e8c75c49475804e5af6d44ebe0819c312ec26",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_489fa9b4",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-24T05:19:56Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "753e8c75c49475804e5af6d44ebe0819c312ec26",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
