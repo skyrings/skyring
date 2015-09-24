@@ -19,6 +19,46 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_014ca141",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-24T04:38:58Z",
+      "side": 1,
+      "message": "ProviderBinaryDir",
+      "range": {
+        "startLine": 33,
+        "startChar": 1,
+        "endLine": 33,
+        "endChar": 18
+      },
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_2147dd1e",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-24T04:38:58Z",
+      "side": 1,
+      "message": "CamelCase",
+      "revId": "f1f0a1acd837e6d3d10cdc48e23fd79032d968a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_6147254c",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 9
