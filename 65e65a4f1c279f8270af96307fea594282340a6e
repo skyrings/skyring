@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "1ae5cdf2_481c0978",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-24T10:17:52Z",
+      "side": 1,
+      "message": "I think this allows /api/v9/ceph/ where version 9 does not exist.",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 18
+      },
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_68138566",
+        "filename": "conf/conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-24T10:17:52Z",
+      "side": 1,
+      "message": "please remove this comment",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 7
+      },
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_88161154",
+        "filename": "conf/conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-24T10:17:52Z",
+      "side": 1,
+      "message": "please remove this comment",
+      "range": {
+        "startLine": 44,
+        "startChar": 13,
+        "endLine": 44,
+        "endChar": 14
+      },
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_e82075f9",
         "filename": "conf/conf.go",
         "patchSetId": 10
@@ -13,6 +82,52 @@
       "writtenOn": "2015-09-24T09:05:41Z",
       "side": 1,
       "message": "the error \u0027err\u0027 should be returned if any",
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a80cad43",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-24T10:17:52Z",
+      "side": 1,
+      "message": "please remove this comment",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 7
+      },
+      "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c807391c",
+        "filename": "conf/provider-conf.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-24T10:17:52Z",
+      "side": 1,
+      "message": "remove this",
+      "range": {
+        "startLine": 50,
+        "startChar": 13,
+        "endLine": 50,
+        "endChar": 14
+      },
       "revId": "65e65a4f1c279f8270af96307fea594282340a6e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
