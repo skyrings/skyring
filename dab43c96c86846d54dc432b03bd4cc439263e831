@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_c8aad9d1",
+        "filename": "conf/sample/skyring.conf.sample",
+        "patchSetId": 9
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T06:42:57Z",
+      "side": 0,
+      "message": "We will take this up later",
+      "parentUuid": "1ae5cdf2_210fdd2f",
+      "revId": "dab43c96c86846d54dc432b03bd4cc439263e831",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_280427bf",
         "filename": "conf/skyring.conf",
         "patchSetId": 8
