@@ -81,6 +81,24 @@
       "revId": "a5aafe63289d3df03c848d94a3e6d62a5dbce11e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_48f24970",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T09:18:19Z",
+      "side": 1,
+      "message": "Sorry its confusing - \nyou are returning true in case of error as well as for success(down). How will it help you to make whether it success or failure?",
+      "parentUuid": "1ae5cdf2_885e1175",
+      "revId": "a5aafe63289d3df03c848d94a3e6d62a5dbce11e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
