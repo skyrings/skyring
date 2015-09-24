@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_2896ddf0",
+        "filename": "db/db.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T09:24:49Z",
+      "side": 1,
+      "message": "This error must be returned and handled in the calling function",
+      "range": {
+        "startLine": 48,
+        "startChar": 1,
+        "endLine": 48,
+        "endChar": 11
+      },
+      "revId": "247a499b99931da4c129380d0a2e7862b2c2ef80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_4899691e",
+        "filename": "db/db.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-24T09:24:49Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 57,
+        "startChar": 8,
+        "endLine": 57,
+        "endChar": 12
+      },
+      "revId": "247a499b99931da4c129380d0a2e7862b2c2ef80",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
