@@ -22,6 +22,7 @@ import (
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/task"
 	"github.com/skyrings/skyring/utils"
 	"net/http"
 	"os"
@@ -146,8 +147,12 @@ func start() {
 		os.Exit(1)
 	}
 
-	glog.Info("Starting event listener")
-	go util.StartEventListener(eventSocket)
+	taskManager := task.NewTaskManager()
+	if tid, err := taskManager.Run(util.StartEventListener, eventSocket); err != nil {
+		glog.Fatalf("failed to run EventListener as task")
+	} else {
+		glog.Info("EventListener is running as task %s", tid)
+	}
 
 	//Check if Port is provided, otherwise use dafault 8080
 	//If host is not provided, it binds on all IPs
