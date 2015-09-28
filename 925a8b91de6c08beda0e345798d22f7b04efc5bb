@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_07ae6785",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-28T08:16:49Z",
+      "side": 1,
+      "message": "If user name password etc not passed and only hostname and saltfingerprint passed, the request is treated for accepting a un-managed node.\nIf all the details like hostname, sshfingerprint, user,password etc passed its treated as adhoc addition of node",
+      "parentUuid": "1ae5cdf2_678c8b36",
+      "revId": "925a8b91de6c08beda0e345798d22f7b04efc5bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_87835703",
         "filename": "models/core_models.go",
         "patchSetId": 4
@@ -42,6 +60,24 @@
         "endLine": 40,
         "endChar": 7
       },
+      "revId": "925a8b91de6c08beda0e345798d22f7b04efc5bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_27a9a37b",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-28T08:16:49Z",
+      "side": 1,
+      "message": "In case od adhoc addition of nodes we need to pass ssh fingerprint whereas for accepting an un-managed nodes, we need to pass salt-key (minion\u0027s key i feel). The salt key is returned while calling the GetNodes() from master. The same value has to be passed here.",
+      "parentUuid": "1ae5cdf2_87835703",
       "revId": "925a8b91de6c08beda0e345798d22f7b04efc5bb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
