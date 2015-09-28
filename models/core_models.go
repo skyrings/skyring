@@ -13,25 +13,24 @@ limitations under the License.
 package models
 
 type StorageNode struct {
-	UUID           string
-	Hostname       string
-	SshFingerprint string
-	Tags           map[string]string
-	MachineId      string
-	ManagementIp   string
-	ClusterIp      string
-	PublicIp       string
-	ClusterId      string
-	Location       string
-	Status         string
-	Options        map[string]string
-	State          string
-	CPUs           []CPU
-	NetworkInfo    StorageNodeNetwork
-	StorageDisks   []StorageDisk
-	Memory         []Memory
-	OS             OperatingSystem
-	ManagedState   string
+	UUID         string
+	Hostname     string
+	Tags         map[string]string
+	MachineId    string
+	ManagementIp string
+	ClusterIp    string
+	PublicIp     string
+	ClusterId    string
+	Location     string
+	Status       string
+	Options      map[string]string
+	State        string
+	CPUs         []CPU
+	NetworkInfo  StorageNodeNetwork
+	StorageDisks []StorageDisk
+	Memory       []Memory
+	OS           OperatingSystem
+	ManagedState string
 }
 
 type AddStorageNodeRequest struct {
@@ -88,6 +87,11 @@ type OperatingSystem struct {
 }
 
 type StorageNodes []StorageNode
+
+type UnmanagedNode struct {
+	Name            string
+	SaltFingerprint string
+}
 
 const (
 	DEFAULT_SSH_PORT        = 22

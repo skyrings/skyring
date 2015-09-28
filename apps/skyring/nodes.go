@@ -60,29 +60,46 @@ func POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Process the request
-	if request.User == "" {
-		// Its a accept request for un-managed node. Accept the same
-		acceptNode(w, request)
-	} else {
-		addAndAcceptNode(w, request)
-	}
+	addAndAcceptNode(w, request)
 }
 
-func acceptNode(w http.ResponseWriter, request models.AddStorageNodeRequest) {
+func POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	hostname := vars["hostname"]
+
+	var request models.UnmanagedNode
+
+	// Unmarshal the request body
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
+	if err != nil {
+		glog.Errorf("Error parsing the request: %v", err)
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
+		return
+	}
+	if err := json.Unmarshal(body, &request); err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
+		return
+	}
+
+	// Process the request
+	acceptNode(w, hostname, request.SaltFingerprint)
+}
+
+func acceptNode(w http.ResponseWriter, hostname string, fingerprint string) {
 	// Validate for required fields
-	if request.Hostname == "" || request.SaltFingerprint == "" {
+	if hostname == "" || fingerprint == "" {
 		util.HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided")
 		return
 	}
 
-	ret_val := GetCoreNodeManager().AcceptNode(request.Hostname, request.SaltFingerprint)
+	ret_val := GetCoreNodeManager().AcceptNode(hostname, fingerprint)
 	if ret_val == true {
 		for count := 0; count < 60; count++ {
 			time.Sleep(10 * time.Second)
 			startedNodes := util.GetStartedNodes()
 			for _, nodeName := range startedNodes {
-				if nodeName == request.Hostname {
-					if addStorageNodeToDB(w, request) {
+				if nodeName == hostname {
+					if addStorageNodeToDB(w, hostname) {
 						return
 					}
 				}
@@ -115,7 +132,7 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 			startedNodes := util.GetStartedNodes()
 			for _, nodeName := range startedNodes {
 				if nodeName == request.Hostname {
-					if addStorageNodeToDB(w, request) {
+					if addStorageNodeToDB(w, request.Hostname) {
 						return
 					}
 				}
@@ -126,20 +143,19 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 	}
 }
 
-func addStorageNodeToDB(w http.ResponseWriter, r models.AddStorageNodeRequest) bool {
+func addStorageNodeToDB(w http.ResponseWriter, hostname string) bool {
 	var storage_node models.StorageNode
 
 	storage_node.UUID = uuid.New().String()
-	storage_node.Hostname = r.Hostname
-	storage_node.SshFingerprint = r.SshFingerprint
+	storage_node.Hostname = hostname
 	storage_node.ManagedState = models.NODE_STATE_FREE
 
-	storage_node.MachineId = GetCoreNodeManager().GetNodeMachineId(r.Hostname)
-	networkInfo := GetCoreNodeManager().GetNodeNetworkInfo(r.Hostname)
+	storage_node.MachineId = GetCoreNodeManager().GetNodeMachineId(hostname)
+	networkInfo := GetCoreNodeManager().GetNodeNetworkInfo(hostname)
 	storage_node.NetworkInfo.Subnet = networkInfo["subnet"]
 	storage_node.NetworkInfo.Ipv4 = networkInfo["ipv4"]
 	storage_node.NetworkInfo.Ipv6 = networkInfo["ipv6"]
-	diskInfo := GetCoreNodeManager().GetNodeDiskInfo(r.Hostname)
+	diskInfo := GetCoreNodeManager().GetNodeDiskInfo(hostname)
 	var storageDisks []models.StorageDisk
 	for _, v := range diskInfo {
 		var disk models.StorageDisk
@@ -199,27 +215,22 @@ func GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	params := r.URL.Query()
 	managed_state := params.Get("state")
 
-	if managed_state == "unmanaged" {
-		node_details := GetCoreNodeManager().GetNodes()
-		json.NewEncoder(w).Encode(node_details["unaccepted_nodes"])
-	} else {
-		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-		var nodes models.StorageNodes
-		if managed_state != "" {
-			if err := collection.Find(bson.M{"managedstate": managed_state}).All(&nodes); err != nil {
-				util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-				glog.Errorf("Error getting the nodes list: %v", err)
-				return
-			}
-		} else {
-			if err := collection.Find(nil).All(&nodes); err != nil {
-				util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-				glog.Errorf("Error getting the nodes list: %v", err)
-				return
-			}
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var nodes models.StorageNodes
+	if managed_state != "" {
+		if err := collection.Find(bson.M{"managedstate": managed_state}).All(&nodes); err != nil {
+			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+			glog.Errorf("Error getting the nodes list: %v", err)
+			return
 		}
-		json.NewEncoder(w).Encode(nodes)
+	} else {
+		if err := collection.Find(nil).All(&nodes); err != nil {
+			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+			glog.Errorf("Error getting the nodes list: %v", err)
+			return
+		}
 	}
+	json.NewEncoder(w).Encode(nodes)
 }
 
 func GET_Node(w http.ResponseWriter, r *http.Request) {
@@ -236,6 +247,44 @@ func GET_Node(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(node)
+}
+
+func GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
+	node_details := GetCoreNodeManager().GetNodes()
+
+	// Get the list of un-accepted nodes and add to un-managed nodes list
+	unaccepted_nodes := node_details["unaccepted_nodes"]
+
+	var nodes []models.UnmanagedNode
+	for k, v := range unaccepted_nodes {
+		// var node models.UnmanagedNode
+		// node.Name = k
+		// node.SaltFingerprint = v
+		nodes = append(nodes,
+			models.UnmanagedNode{
+				Name:            k,
+				SaltFingerprint: v,
+			})
+	}
+
+	// Get the list of accepted nodes and check if the node is managed by
+	// skyring. If not add to the list of un-managed nodes
+	accepted_nodes := node_details["unaccepted_nodes"]
+	for k, v := range accepted_nodes {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		var node models.StorageNode
+		if err := collection.Find(bson.M{"name": k}).One(&node); err != nil {
+			nodes = append(nodes,
+				models.UnmanagedNode{
+					Name:            k,
+					SaltFingerprint: v,
+				})
+		}
+	}
+
+	json.NewEncoder(w).Encode(nodes)
 }
 
 func GetNode(node_id string) models.StorageNode {
