@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_0777473b",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-28T07:46:53Z",
+      "side": 1,
+      "message": "Is it a good idea to send the start_time and end_time as separate parameters rather than passing a , separated list? Just a suggestion",
+      "range": {
+        "startLine": 51,
+        "startChar": 2,
+        "endLine": 51,
+        "endChar": 19
+      },
+      "revId": "a9d073470f7024e34056e3855f549dd9da1f49be",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
