@@ -63,6 +63,20 @@ var (
 			Version:     1,
 		},
 		{
+			Name:        "GET_UnmanagedNodes",
+			Method:      "GET",
+			Pattern:     "unmanaged_nodes",
+			HandlerFunc: GET_UnmanagedNodes,
+			Version:     1,
+		},
+		{
+			Name:        "POST_AcceptUnamangedNode",
+			Method:      "POST",
+			Pattern:     "unmanaged_nodes/{hostname}/accept",
+			HandlerFunc: POST_AcceptUnamangedNode,
+			Version:     1,
+		},
+		{
 			Name:        "logout",
 			Method:      "POST",
 			Pattern:     "auth/logout",

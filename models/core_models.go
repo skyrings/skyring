@@ -17,81 +17,83 @@ import (
 )
 
 type StorageNode struct {
-	UUID           uuid.UUID
-	Hostname       string
-	SshFingerprint string
-	Tags           map[string]string
-	MachineId      string
-	ManagementIp   string
-	ClusterIp      string
-	PublicIp       string
-	ClusterId      string
-	Location       string
-	Status         string
-	Options        map[string]string
-	State          string
-	CPUs           []CPU
-	NetworkInfo    StorageNodeNetwork
-	StorageDisks   []StorageDisk
-	Memory         []Memory
-	OS             OperatingSystem
-	ManagedState   string
+	UUID              uuid.UUID          `bson:"uuid"`
+	Hostname          string             `bson:"hostname"`
+	Tags              map[string]string  `bson:"tags"`
+	ManagementIp      string             `bson:"managementip"`
+	ClusterIp         string             `bson:"clusterip"`
+	PublicAddressIpv4 string             `bson:"publicaddressipv4"`
+	ClusterId         string             `bson:"clusterid"`
+	Location          string             `bson:"location"`
+	Status            string             `bson:"status"`
+	Options           map[string]string  `bson:"options"`
+	State             string             `bson:"state"`
+	CPUs              []CPU              `bson:"cpus"`
+	NetworkInfo       StorageNodeNetwork `bson:"networkinfo"`
+	StorageDisks      []StorageDisk      `bson:"storagedisks"`
+	Memory            []Memory           `bson:"memory"`
+	OS                OperatingSystem    `bson:"os"`
+	ManagedState      string             `bson:"managedstate"`
 }
 
 type AddStorageNodeRequest struct {
-	Hostname        string
-	SshFingerprint  string
-	SaltFingerprint string
-	User            string
-	Password        string
-	SshPort         int
+	Hostname       string `json:"hostname"`
+	SshFingerprint string `json:"sshfingerprint"`
+	User           string `json:"user"`
+	Password       string `json:"password"`
+	SshPort        int    `json:"sshport"`
 }
 
 type CPU struct {
-	CPUId string
+	CPUId string `bson:"cpuid"`
 }
 
 type StorageNodeNetwork struct {
-	Subnet []string
-	Ipv4   []string
-	Ipv6   []string
+	Subnet []string `bson:"subnet"`
+	Ipv4   []string `bson:"ipv4"`
+	Ipv6   []string `bson:"ipv6"`
 }
 
 type StorageDisk struct {
-	UUID       string
-	Name       string
-	Pkname     string
-	MountPoint string
-	Kname      string
-	PartUUID   string
-	Type       string
-	Model      string
-	Vendor     string
-	FsType     string
-	Size       int
-	InUze      string
+	UUID       string `bson:"uuid"`
+	Name       string `bson:"name"`
+	Pkname     string `bson:"pkname"`
+	MountPoint string `bson:"mountpoint"`
+	Kname      string `bson:"kname"`
+	PartUUID   string `bson:"partuuid"`
+	Type       string `bson:"type"`
+	Model      string `bson:"model"`
+	Vendor     string `bson:"vendor"`
+	FsType     string `bson:"fstype"`
+	Size       int    `bson:"size"`
+	InUze      string `bson:"inuze"`
 }
 
 type Memory struct {
-	Name       string
-	Type       string
-	TotalSize  int
-	FreeSize   int
-	Attributes string
+	Name       string `bson:"name"`
+	Type       string `bson:"type"`
+	TotalSize  int    `bson:"totalsize"`
+	FreeSize   int    `bson:"freesize"`
+	Attributes string `bson:"attribute"`
 }
 
 type OperatingSystem struct {
-	Name                    string
-	OSVersion               string
-	KernelVersion           string
-	StorageProviderVersion  string
-	KdumpStatus             string
-	MemoryPageSharingStatus string
-	AutomaticLaregPages     bool
-	SELinuxMode             string
+	Name                    string `bson:"name"`
+	OSVersion               string `bson:"osversion"`
+	KernelVersion           string `bson:"kernelversion"`
+	StorageProviderVersion  string `bson:"storageproviderversion"`
+	KdumpStatus             string `bson:"kdumpstatus"`
+	MemoryPageSharingStatus string `bson:"memorypagesharingstatus"`
+	AutomaticLargePages     bool   `bson:"automaticlargepages"`
+	SELinuxMode             string `bson:"selinuxmode"`
 }
 
 type StorageNodes []StorageNode
+
+type UnmanagedNode struct {
+	Name            string `json:"name"`
+	SaltFingerprint string `json:"saltfingerprint"`
+}
 
 const (
 	DEFAULT_SSH_PORT        = 22
