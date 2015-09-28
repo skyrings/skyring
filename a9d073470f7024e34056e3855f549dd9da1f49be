@@ -22,6 +22,24 @@
       "revId": "a9d073470f7024e34056e3855f549dd9da1f49be",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c7a39f9c",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-28T08:13:53Z",
+      "side": 1,
+      "message": "Could be but just to keep no fields less, passed duration\u003d\"s/m/h/d/w\" or \"startdate,enddate\"",
+      "parentUuid": "1ae5cdf2_0777473b",
+      "revId": "a9d073470f7024e34056e3855f549dd9da1f49be",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
