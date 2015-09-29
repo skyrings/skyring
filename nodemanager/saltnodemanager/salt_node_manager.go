@@ -214,3 +214,17 @@ func (a SaltNodeManager) EnableNode(node string) (bool, error) {
 
 	return true, nil
 }
+
+func (a SaltNodeManager) RemoveNode(node string) (bool, error) {
+	_, err := salt_backend.DisableService(node, "collectd", true)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = salt_backend.IgnoreNode(node)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}

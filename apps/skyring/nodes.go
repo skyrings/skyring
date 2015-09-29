@@ -54,6 +54,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if node already added
+	// No need to check for error, as node would be nil in case of error and the same is checked
 	if node, _ := node_exists("hostname", request.Hostname); node != nil {
 		util.HttpResponse(w, http.StatusMethodNotAllowed, "Node already added")
 		return
@@ -82,6 +83,7 @@ func POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if node already added
+	// No need to check for error, as node would be nil in case of error and the same is checked
 	if node, _ := node_exists("hostname", hostname); node != nil {
 		util.HttpResponse(w, http.StatusMethodNotAllowed, "Node already added")
 		return
@@ -187,7 +189,11 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	node_id_str := vars["node-id"]
-	node_id, _ := uuid.Parse(node_id_str)
+	node_id, err := uuid.Parse(node_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s", node_id_str))
+		return
+	}
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
@@ -212,7 +218,7 @@ func GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 		logger.Get().Error("Nodes not found: %v", err)
 	} else {
-		if nodes == nil {
+		if nodes == nil || len(*nodes) == 0 {
 			json.NewEncoder(w).Encode([]models.Node{})
 		} else {
 			json.NewEncoder(w).Encode(nodes)
@@ -282,5 +288,70 @@ func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error
 			return nodes, nil
 		}
 		return models.Nodes{}, nil
+	}
+}
+
+func removeNode(w http.ResponseWriter, nodeId uuid.UUID) (bool, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	// Check if the node is free. If so remove the node
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.Node
+	if err := collection.Find(bson.M{"nodeid": nodeId}).One(&node); err != nil {
+		return false, errors.New("Unable to get node")
+	}
+	if !node.ClusterId.IsZero() {
+		return false, errors.New("Node(s) participating in a cluster. Cannot be removed")
+	}
+	ret_val, err := GetCoreNodeManager().RemoveNode(node.Hostname)
+	if ret_val {
+		if err := collection.Remove(bson.M{"nodeid": nodeId}); err != nil {
+			return false, errors.New("Error deleting the node(s) from DB")
+		}
+	} else {
+		return false, err
+	}
+	return true, nil
+}
+
+func DELETE_Node(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	node_id_str := vars["node-id"]
+	node_id, err := uuid.Parse(node_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s", node_id_str))
+		return
+	}
+
+	if ok, err := removeNode(w, *node_id); err != nil || !ok {
+		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error removing the node: %v", err))
+		return
+	}
+}
+
+func DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
+	var nodeIds []struct {
+		NodeId string `json:"nodeid"`
+	}
+
+	// Unmarshal the request body
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
+	if err != nil {
+		logger.Get().Error("Error parsing the request: %v", err)
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
+		return
+	}
+	if err := json.Unmarshal(body, &nodeIds); err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request"))
+		return
+	}
+
+	for _, item := range nodeIds {
+		node_id, _ := uuid.Parse(item.NodeId)
+		if ok, err := removeNode(w, *node_id); err != nil || !ok {
+			util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error removing the node(s): %v", err))
+			return
+		}
 	}
 }

@@ -23,4 +23,5 @@ type NodeManagerInterface interface {
 	DisableNode(node string) (bool, error)
 	EnableNode(node string) (bool, error)
 	SyncStorageDisks(node string) (bool, error)
+	RemoveNode(node string) (bool, error)
 }

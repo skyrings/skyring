@@ -69,6 +69,20 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "DELETE_Node",
+			Method:      "DELETE",
+			Pattern:     "nodes/{node-id}",
+			HandlerFunc: DELETE_Node,
+			Version:     1,
+		},
+		{
+			Name:        "DELETE_Nodes",
+			Method:      "DELETE",
+			Pattern:     "nodes",
+			HandlerFunc: DELETE_Nodes,
+			Version:     1,
+		},
+		{
 			Name:        "GET_Utilization",
 			Method:      "GET",
 			Pattern:     "nodes/{node-id}/utilization",
