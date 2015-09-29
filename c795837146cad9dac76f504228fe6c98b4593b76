@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_da1c4dc4",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-29T15:42:30Z",
+      "side": 1,
+      "message": "This file should be placed under \u0027auth\u0027 package",
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_da4a8dab",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-29T15:42:30Z",
+      "side": 1,
+      "message": "\u0027HandleHHttpError\u0027 \u003d\u003e \u0027HandleHttpError\u0027",
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_9ad725bf",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-29T15:42:30Z",
+      "side": 1,
+      "message": "the url can be \u0027auth/logout\u0027",
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_bae6a1b2",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-29T15:42:30Z",
+      "side": 1,
+      "message": "Pattern:     \"users/{username}\" ?",
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_dae1ad9b",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-29T15:42:30Z",
+      "side": 1,
+      "message": "is this different from glog.V(3).Info ?",
+      "range": {
+        "startLine": 196,
+        "startChar": 3,
+        "endLine": 196,
+        "endChar": 13
+      },
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_7a8a59c0",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-29T15:42:30Z",
+      "side": 1,
+      "message": "This should be removed",
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_5aed9d8a",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-29T15:42:30Z",
+      "side": 1,
+      "message": "This should be removed",
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
