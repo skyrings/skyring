@@ -13,13 +13,13 @@ limitations under the License.
 package skyring
 
 import (
-	"code.google.com/p/go-uuid/uuid"
 	"encoding/json"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"gopkg.in/mgo.v2/bson"
 	"io"
@@ -129,7 +129,8 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 func addStorageNodeToDB(w http.ResponseWriter, r models.AddStorageNodeRequest) bool {
 	var storage_node models.StorageNode
 
-	storage_node.UUID = uuid.NewUUID().String()
+	node_uuid, _ := uuid.New()
+	storage_node.UUID = *node_uuid
 	storage_node.Hostname = r.Hostname
 	storage_node.SshFingerprint = r.SshFingerprint
 	storage_node.ManagedState = models.NODE_STATE_FREE
@@ -224,21 +225,28 @@ func GET_Nodes(w http.ResponseWriter, r *http.Request) {
 
 func GET_Node(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	node_id := vars["node-id"]
+	node_id_str := vars["node-id"]
+	node_id, _ := uuid.Parse(node_id_str)
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	var node models.StorageNode
-	if err := collection.Find(bson.M{"uuid": node_id}).One(&node); err != nil {
+	if err := collection.Find(bson.M{"uuid": *node_id}).One(&node); err != nil {
 		glog.Errorf("Error getting the node detail: %v", err)
 	}
 
-	json.NewEncoder(w).Encode(node)
+	if node.Hostname == "" {
+		util.HttpResponse(w, http.StatusBadRequest, "Node not found")
+		glog.Errorf("Node not found: %v", err)
+		return
+	} else {
+		json.NewEncoder(w).Encode(node)
+	}
 }
 
-func GetNode(node_id string) models.StorageNode {
+func GetNode(node_id uuid.UUID) models.StorageNode {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 

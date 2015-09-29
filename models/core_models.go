@@ -12,8 +12,12 @@ limitations under the License.
 */
 package models
 
+import (
+	"github.com/skyrings/skyring/tools/uuid"
+)
+
 type StorageNode struct {
-	UUID           string
+	UUID           uuid.UUID
 	Hostname       string
 	SshFingerprint string
 	Tags           map[string]string
@@ -66,10 +70,6 @@ type StorageDisk struct {
 	FsType     string
 	Size       int
 	InUze      string
-	FreeSize   int
-	Latency    int
-	Throughput int
-	Location   string
 }
 
 type Memory struct {
