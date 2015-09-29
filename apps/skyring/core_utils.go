@@ -15,6 +15,7 @@ package skyring
 import (
 	"encoding/json"
 	"github.com/skyrings/skyring/utils"
+	"net"
 	"net/http"
 )
 
@@ -27,5 +28,25 @@ func GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(GetCoreNodeManager().GetNodeSshFingerprint(hostname))
+	fingerprint := make(map[string]string)
+	fingerprint["sshfingerprint"] = GetCoreNodeManager().GetNodeSshFingerprint(hostname)
+	json.NewEncoder(w).Encode(fingerprint)
+}
+
+func GET_LookupNode(w http.ResponseWriter, r *http.Request) {
+	params := r.URL.Query()
+	hostname := params.Get("hostname")
+
+	if hostname == "" {
+		util.HttpResponse(w, http.StatusBadRequest, "Host name not provided")
+		return
+	}
+
+	addrs, err := net.LookupHost(hostname)
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, "Error looking up the node detail")
+		return
+	}
+
+	json.NewEncoder(w).Encode(addrs)
 }
