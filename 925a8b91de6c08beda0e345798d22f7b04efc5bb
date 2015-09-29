@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_13f86548",
+        "filename": "apps/app.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-29T07:40:28Z",
+      "side": 0,
+      "message": "Moved this to skyring/providers.go, where all the plugins will get loaded",
+      "parentUuid": "1ae5cdf2_13722549",
+      "revId": "925a8b91de6c08beda0e345798d22f7b04efc5bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_53082d91",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-29T05:21:08Z",
       "side": 0,
       "message": "Are we removing this URL?",
+      "revId": "925a8b91de6c08beda0e345798d22f7b04efc5bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_137dc5b1",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-29T07:40:28Z",
+      "side": 0,
+      "message": "This will taken care by the negroni middleware",
+      "parentUuid": "1ae5cdf2_53082d91",
       "revId": "925a8b91de6c08beda0e345798d22f7b04efc5bb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
