@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_139b0573",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T04:08:25Z",
+      "side": 1,
+      "message": "skyring: add task management support",
+      "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_3389e126",
+        "filename": "task/task.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T04:08:25Z",
+      "side": 1,
+      "message": "Source level licensing comments etc missing",
+      "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_538cad35",
+        "filename": "task/task.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T04:08:25Z",
+      "side": 1,
+      "message": "remove the commented lines",
+      "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_93863512",
+        "filename": "task/task.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T04:08:25Z",
+      "side": 1,
+      "message": "Wouldnt it be better to return a list with task ids and some description as well. Caller would get better understanding of the tasks running in the system.",
+      "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_b37c1122",
+        "filename": "uuid/uuid.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T04:08:25Z",
+      "side": 1,
+      "message": "I feel this should be used in pther packages as well for generating uuid.\nCan we move this to util package?",
+      "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
