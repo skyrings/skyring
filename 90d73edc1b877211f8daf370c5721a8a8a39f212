@@ -22,6 +22,30 @@
       "revId": "90d73edc1b877211f8daf370c5721a8a8a39f212",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_d7ffc8a8",
+        "filename": "apps/app.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-29T09:00:39Z",
+      "side": 1,
+      "message": "Yes. Lot of people use this, pretty stable. Web frameworks like Martini uses this I think. and less lines of code",
+      "parentUuid": "1ae5cdf2_d7ba6809",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 16,
+        "endChar": 33
+      },
+      "revId": "90d73edc1b877211f8daf370c5721a8a8a39f212",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
