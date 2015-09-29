@@ -35,6 +35,13 @@ var (
 			Version:     1,
 		},
 		{
+			Name:        "GET_LookupNode",
+			Method:      "GET",
+			Pattern:     "utils/lookup_node/{hostname}",
+			HandlerFunc: GET_LookupNode,
+			Version:     1,
+		},
+		{
 			Name:        "POST_Nodes",
 			Method:      "POST",
 			Pattern:     "nodes",
