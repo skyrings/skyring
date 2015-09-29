@@ -83,6 +83,16 @@ def add_node(node, fingerprint, username, password,
     return accept_node(node, minion_finger)
 
 
+def remove_node(node):
+    finger = d['unaccepted_nodes'].get(node)
+    if not finger:
+        utils.log.warn("node %s not in unaccepted node list" % node)
+        return False
+
+    removed = master.call_func('key.reject', match=node)
+    return (True if accepted else False)
+
+
 def get_nodes():
     return _get_keys()
 
