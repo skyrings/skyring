@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_97c62048",
+        "filename": "apps/app.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T10:27:11Z",
+      "side": 1,
+      "message": "may be just \"handler\".\nwhile calling you may pass \"next\" :)",
+      "parentUuid": "1ae5cdf2_73a0c943",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_939d555c",
         "filename": "apps/providers.go",
         "patchSetId": 1
@@ -352,6 +370,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_f7de8410",
+        "filename": "authprovider/interfaces.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T10:27:11Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "1ae5cdf2_9348f588",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_f3f21999",
         "filename": "authprovider/local/auth.go",
         "patchSetId": 1
@@ -381,6 +417,24 @@
       "side": 1,
       "message": "It is a backend, not just a session, it gives a handle to struct which implement the interfaces for auth backend. You are calling those methods with this backend handle",
       "parentUuid": "1ae5cdf2_f3f21999",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_17e210d5",
+        "filename": "authprovider/local/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T10:27:11Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "1ae5cdf2_3332c110",
       "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -521,6 +575,24 @@
       "side": 1,
       "message": "It is specific to backend we are using. Tomorrow if want to change to something else like mysql or redis, just write another one, implement the interface defined in auth.go, you are done.That is reason why i choose go with this.",
       "parentUuid": "1ae5cdf2_9339d543",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_37e9ccb8",
+        "filename": "authprovider/local/mongoBackend.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T10:27:11Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "1ae5cdf2_b35ed143",
       "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
