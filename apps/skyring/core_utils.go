@@ -14,7 +14,9 @@ package skyring
 
 import (
 	"encoding/json"
+	"github.com/golang/glog"
 	"github.com/gorilla/mux"
+	"net"
 	"net/http"
 )
 
@@ -25,4 +27,37 @@ func GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
 	fingerprint := make(map[string]string)
 	fingerprint["sshfingerprint"] = GetCoreNodeManager().GetNodeSshFingerprint(hostname)
 	json.NewEncoder(w).Encode(fingerprint)
+}
+
+func GET_LookupNode(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	hostname := vars["hostname"]
+
+	if host_addrs, err := net.LookupHost(hostname); err == nil {
+		if iaddrs, err := net.InterfaceAddrs(); err != nil {
+			glog.Errorf("Error getting the local host subnet details")
+			json.NewEncoder(w).Encode(host_addrs)
+			return
+		} else {
+			var ret_addrs []string
+			for _, host_addr := range host_addrs {
+				for _, iaddr := range iaddrs {
+					if ipnet, ok := iaddr.(*net.IPNet); ok &&
+						!ipnet.IP.IsLoopback() &&
+						ipnet.IP.To4() != nil &&
+						ipnet.Contains(net.ParseIP(host_addr)) {
+						ret_addrs = append(ret_addrs, host_addr)
+					}
+				}
+			}
+			if len(ret_addrs) == 0 {
+				// In case of geo replication none of the host IPs might fall under skyring
+				// server's subnet. So return the output of host lookup only
+				json.NewEncoder(w).Encode(host_addrs)
+			} else {
+				json.NewEncoder(w).Encode(ret_addrs)
+			}
+			return
+		}
+	}
 }
