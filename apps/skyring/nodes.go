@@ -276,3 +276,42 @@ func GetNode(node_id string) models.StorageNode {
 
 	return node
 }
+
+func DELETE_Node(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	node_id := vars["node-id"]
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := collection.Remove(bson.M{"uuid": node_id}); err != nil {
+		glog.Errorf("Error deleting the node: %v", err)
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
+	var node_ids map[string]interface{}
+
+	// Unmarshal the request body
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
+	if err != nil {
+		glog.Errorf("Error parsing the request: %v", err)
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
+		return
+	}
+	if err := json.Unmarshal(body, &node_ids); err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := collection.Remove(node_ids); err != nil {
+		glog.Errorf("Error deleting the nodes: %v", err)
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
