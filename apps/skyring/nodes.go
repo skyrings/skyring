@@ -14,6 +14,7 @@ package skyring
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
@@ -278,4 +279,63 @@ func GetNode(node_id string) models.StorageNode {
 	}
 
 	return node
+}
+
+func removeNode(w http.ResponseWriter, node_id string) bool {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	// Check if the node is free. If so remove the node
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.StorageNode
+	if err := collection.Find(bson.M{"uuid": node_id}).One(&node); err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error getting the node for id: %s. Cannot be removed", node_id))
+		return false
+	}
+	if node.State == models.NODE_STATE_USED {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Node for id: %s is participating in cluster. Cannot be removed", node_id))
+		return false
+	}
+	ret_val := GetCoreNodeManager().RemoveNode(node.Hostname)
+	if ret_val {
+		if err := collection.Remove(bson.M{"uuid": node_id}); err != nil {
+			util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error deleting the node for id: %s from DB", node_id))
+			return false
+		}
+	} else {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to remove node for id: %s", node_id))
+		return false
+	}
+	return true
+}
+
+func DELETE_Node(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	node_id := vars["node-id"]
+
+	removeNode(w, node_id)
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
+	var node_ids []string
+
+	// Unmarshal the request body
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
+	if err != nil {
+		glog.Errorf("Error parsing the request: %v", err)
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
+		return
+	}
+	if err := json.Unmarshal(body, &node_ids); err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
+		return
+	}
+
+	for _, node_id := range node_ids {
+		if removeNode(w, node_id) {
+			return
+		}
+	}
+	w.WriteHeader(http.StatusNoContent)
 }

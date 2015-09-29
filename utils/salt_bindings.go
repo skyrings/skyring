@@ -18,6 +18,7 @@ var functions = [...]string{
 	"get_node_machine_id",
 	"get_node_network_info",
 	"get_node_disk_info",
+	"remove_node",
 }
 
 type PyFunction struct {
@@ -168,4 +169,9 @@ func PyGetNodeNetworkInfo(node string) map[string][]string {
 func PyGetNodeDiskInfo(node string) map[string]map[string]string {
 	py_out := py_functions["get_node_disk_info"].call(node)
 	return ToMapStringMapStringString(python.PyDict_GetItemString(py_out, node))
+}
+
+func PyRemoveNode(node string) bool {
+	py_out := py_functions["remove_node"].call(node)
+	return py_out.IsTrue()
 }
