@@ -1,0 +1,259 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_f376993d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "Remove the below conflicts info from comments",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_5393cd4e",
+        "filename": "apps/app.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "The variable name \"next\" does not look too intuitive.",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_939d555c",
+        "filename": "apps/providers.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "Above commented line not required",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_13d785ee",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "I feel method names should not end with \"Handler\" word. They could more of verbs..",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_b3a3319d",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "We can have constnats defined for default user name, mail etc..",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_f3adb989",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "%s/Unable marshal/Unable to marshal/g",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_13a9457b",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_3305617a",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "method naming as suggested earlier",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_9302b56d",
+        "filename": "authprovider/authprovider.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "If not handled the case, should we really have this check?",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_b3f8917d",
+        "filename": "authprovider/interfaces.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "Should we move node manager interface as well here and move this code to common package?",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_f3f21999",
+        "filename": "authprovider/local/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "Should we call this NewMongoDBSession?",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_13eea5b4",
+        "filename": "authprovider/local/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "What hash algorithm it uses here?",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_332c8102",
+        "filename": "authprovider/local/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "I am not able to understand the need for this method",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_532f4df6",
+        "filename": "authprovider/local/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_9339d543",
+        "filename": "authprovider/local/mongoBackend.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-29T05:21:08Z",
+      "side": 1,
+      "message": "I feel we should use generic name like AuthCollection. Why keep specific name like Mongo*. We might use some other DB later and then this name does not look good.",
+      "revId": "f1ffa0394d3dc66b73c484c264b9724c7d91585b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
