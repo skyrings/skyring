@@ -15,10 +15,12 @@ package skyring
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/utils"
+	"github.com/skyrings/skyring/uuid"
 	"net/http"
 	"regexp"
 	"strings"
@@ -44,13 +46,19 @@ func queryDB(cmd string) (res []influxdb.Result, err error) {
 
 func GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	node_id := vars["node-id"]
+	node_id_str := vars["node-id"]
+	node_id, _ := uuid.Parse(node_id_str)
 
 	params := r.URL.Query()
 	resource_name := params.Get("resource")
 	duration := params.Get("duration")
 
-	storage_node := GetNode(node_id)
+	storage_node := GetNode(*node_id)
+	if storage_node.Hostname == "" {
+		util.HttpResponse(w, http.StatusBadRequest, "Node not found")
+		glog.Errorf("Node not found: %v", err)
+		return
+	}
 
 	var query_cmd string
 	if resource_name != "" {
