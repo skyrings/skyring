@@ -13,7 +13,6 @@ limitations under the License.
 package skyring
 
 import (
-	"code.google.com/p/go-uuid/uuid"
 	"encoding/json"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
@@ -21,6 +20,7 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/utils"
+	"github.com/skyrings/skyring/uuid"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
@@ -129,7 +129,8 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 func addStorageNodeToDB(w http.ResponseWriter, r models.AddStorageNodeRequest) bool {
 	var storage_node models.StorageNode
 
-	storage_node.UUID = uuid.NewUUID().String()
+	node_uuid, _ := uuid.New()
+	storage_node.UUID = node_uuid.String()
 	storage_node.Hostname = r.Hostname
 	storage_node.SshFingerprint = r.SshFingerprint
 	storage_node.ManagedState = models.NODE_STATE_FREE
