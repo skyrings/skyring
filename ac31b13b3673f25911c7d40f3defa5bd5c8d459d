@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_f3aa1918",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-29T06:57:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_139b0573",
+      "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_3389e126",
         "filename": "task/task.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-09-29T04:08:25Z",
       "side": 1,
       "message": "Source level licensing comments etc missing",
+      "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_13a6a553",
+        "filename": "task/task.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-29T06:57:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_3389e126",
       "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_53674d25",
+        "filename": "task/task.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-29T06:57:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_538cad35",
+      "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_93863512",
         "filename": "task/task.go",
         "patchSetId": 1
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_9371d5e2",
+        "filename": "task/task.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-29T06:57:29Z",
+      "side": 1,
+      "message": "I would rather prefer tags to each task.  currently task struct does not have it.  that can be added too.",
+      "parentUuid": "1ae5cdf2_93863512",
+      "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_b37c1122",
         "filename": "uuid/uuid.go",
         "patchSetId": 1
@@ -81,6 +153,24 @@
       "writtenOn": "2015-09-29T04:08:25Z",
       "side": 1,
       "message": "I feel this should be used in pther packages as well for generating uuid.\nCan we move this to util package?",
+      "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_33648121",
+        "filename": "uuid/uuid.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-29T06:57:29Z",
+      "side": 1,
+      "message": "util is quite wrongly used here.  I would prefer to be as separate package as uuid (like now) which would help other project to comsume as well.",
+      "parentUuid": "1ae5cdf2_b37c1122",
       "revId": "ac31b13b3673f25911c7d40f3defa5bd5c8d459d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
