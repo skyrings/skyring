@@ -61,6 +61,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_2630bc55",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-30T10:57:50Z",
+      "side": 1,
+      "message": "I can give one example from ovirt-engine as \n/clusters/{cluster-id}/glustervolumes/{volume-id}/start.\n\nHere start is an action on a specific resource.",
+      "parentUuid": "1ae5cdf2_26099c95",
+      "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c6ae3885",
         "filename": "models/core_models.go",
         "patchSetId": 3
@@ -114,6 +132,24 @@
       "side": 1,
       "message": "MachineId is from hardware it should be unique otherwise wrong node.",
       "parentUuid": "1ae5cdf2_86cb5052",
+      "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_4637884e",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-30T10:57:50Z",
+      "side": 1,
+      "message": "Ok. will change to save machine id itself as uuid of the storage node.",
+      "parentUuid": "1ae5cdf2_46006867",
       "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
