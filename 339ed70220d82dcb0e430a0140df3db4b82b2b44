@@ -97,6 +97,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_06be6065",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T11:49:42Z",
+      "side": 1,
+      "message": "My choice would be how amazon aws is doing\n\nPOST /photo1.jpg?restore HTTP/1.1\nHost: bucket.s3.amazonaws.com\nDate: Mon, 22 Oct 2012 01:49:52 GMT\nAuthorization: authorization string\nContent-Length: 53\n\n\u003cRestoreRequest\u003e\n  \u003cDays\u003e2\u003c/Days\u003e\n\u003c/RestoreRequest\u003e\n\n\nTo specific this patch, I don\u0027t see other POST operation required for unmanaged-nodes to confuse \u0027accept\u0027.  In simple words, /accept is not necessary",
+      "parentUuid": "1ae5cdf2_86551052",
+      "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c6ae3885",
         "filename": "models/core_models.go",
         "patchSetId": 3
