@@ -79,6 +79,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_5184a00b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-30T15:26:16Z",
+      "side": 1,
+      "message": "this can be changed to \nGET /utils/lookup_node/{hostname}",
+      "parentUuid": "1ae5cdf2_267efce4",
+      "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_4bb87176",
         "filename": "apps/skyring/core_utils.go",
         "patchSetId": 4
