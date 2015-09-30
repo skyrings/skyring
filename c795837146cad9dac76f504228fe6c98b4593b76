@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_abfe5536",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-30T04:14:53Z",
+      "side": 1,
+      "message": "As discussed want to keep all the APIs inside one package - skyring. So keeping this as it is",
+      "parentUuid": "1ae5cdf2_da1c4dc4",
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_da4a8dab",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 3
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_0bc90926",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-30T04:14:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_9ad725bf",
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_bae6a1b2",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 3
@@ -64,6 +100,24 @@
       "writtenOn": "2015-09-29T15:42:30Z",
       "side": 1,
       "message": "Pattern:     \"users/{username}\" ?",
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_eb4a1dab",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-30T04:14:53Z",
+      "side": 1,
+      "message": "That is good one, Yes, I missed it",
+      "parentUuid": "1ae5cdf2_bae6a1b2",
       "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -93,6 +147,30 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_0b62e93d",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-30T04:14:53Z",
+      "side": 1,
+      "message": "Yes. Info, Error, Fatal etc will be always logged. V(*).Info* is for trace/Debug logging. Here also you can set multiple levels to control levels of logging.",
+      "parentUuid": "1ae5cdf2_dae1ad9b",
+      "range": {
+        "startLine": 196,
+        "startChar": 3,
+        "endLine": 196,
+        "endChar": 13
+      },
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_7a8a59c0",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 3
@@ -110,6 +188,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_6b5fed72",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-30T04:14:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_7a8a59c0",
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_5aed9d8a",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 3
@@ -121,6 +217,24 @@
       "writtenOn": "2015-09-29T15:42:30Z",
       "side": 1,
       "message": "This should be removed",
+      "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_8b551952",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-30T04:14:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_5aed9d8a",
       "revId": "c795837146cad9dac76f504228fe6c98b4593b76",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
