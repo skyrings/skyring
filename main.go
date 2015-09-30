@@ -22,6 +22,7 @@ import (
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/utils"
 	"net/http"
 	"os"
@@ -147,7 +148,7 @@ func start() {
 	}
 
 	glog.Info("Starting event listener")
-	go util.StartEventListener(eventSocket)
+	go util.StartListener(eventSocket)
 
 	//Check if Port is provided, otherwise use dafault 8080
 	//If host is not provided, it binds on all IPs

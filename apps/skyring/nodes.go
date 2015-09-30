@@ -19,6 +19,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/utils"
 	"gopkg.in/mgo.v2/bson"
@@ -79,7 +80,7 @@ func acceptNode(w http.ResponseWriter, request models.AddStorageNodeRequest) {
 	if ret_val == true {
 		for count := 0; count < 60; count++ {
 			time.Sleep(10 * time.Second)
-			startedNodes := util.GetStartedNodes()
+			startedNodes := event.GetStartedNodes()
 			for _, nodeName := range startedNodes {
 				if nodeName == request.Hostname {
 					if addStorageNodeToDB(w, request) {
@@ -112,7 +113,7 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 	if ret_val == true {
 		for count := 0; count < 60; count++ {
 			time.Sleep(10 * time.Second)
-			startedNodes := util.GetStartedNodes()
+			startedNodes := event.GetStartedNodes()
 			for _, nodeName := range startedNodes {
 				if nodeName == request.Hostname {
 					if addStorageNodeToDB(w, request) {
