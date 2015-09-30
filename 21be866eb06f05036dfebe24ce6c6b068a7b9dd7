@@ -58,6 +58,24 @@
       "revId": "21be866eb06f05036dfebe24ce6c6b068a7b9dd7",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e645f4b3",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-30T10:59:57Z",
+      "side": 1,
+      "message": "So, what should be type of the field StorageNode.UUID in struct definition?",
+      "parentUuid": "1ae5cdf2_86f99082",
+      "revId": "21be866eb06f05036dfebe24ce6c6b068a7b9dd7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
