@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_66ec84c8",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:45:34Z",
+      "side": 1,
+      "message": "delete will make the node reappear in a unaccepted node.  Is it expected?",
+      "range": {
+        "startLine": 93,
+        "startChar": 26,
+        "endLine": 93,
+        "endChar": 32
+      },
+      "revId": "09602daf36a0171b951c865f93c418b125314ecd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_06df400e",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:45:34Z",
+      "side": 1,
+      "message": "Why just return True?",
+      "range": {
+        "startLine": 94,
+        "startChar": 11,
+        "endLine": 94,
+        "endChar": 15
+      },
+      "revId": "09602daf36a0171b951c865f93c418b125314ecd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
