@@ -69,6 +69,24 @@
       "revId": "45da51922001c41ae18572c9c85515c6e0c9f351",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_2bf32574",
+        "filename": "uuid/uuid.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-30T04:11:14Z",
+      "side": 1,
+      "message": "That should be fine",
+      "parentUuid": "1ae5cdf2_6b144df5",
+      "revId": "45da51922001c41ae18572c9c85515c6e0c9f351",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
