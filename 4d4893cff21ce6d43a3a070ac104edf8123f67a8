@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_c61b9819",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-30T10:19:39Z",
+      "side": 1,
+      "message": "It expects a hostname passed a query string else errors out",
+      "parentUuid": "1ae5cdf2_662ba430",
+      "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_4bb87176",
         "filename": "apps/skyring/core_utils.go",
         "patchSetId": 4
@@ -72,6 +90,24 @@
       "side": 1,
       "message": "No.  You could return list of ip addresses in skyring server\u0027s subnet.",
       "parentUuid": "1ae5cdf2_e65ed411",
+      "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_06d5801b",
+        "filename": "apps/skyring/core_utils.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-30T10:19:39Z",
+      "side": 1,
+      "message": "You mean instead of calling lookup, return the IP4 entries from network info of the node?",
+      "parentUuid": "1ae5cdf2_86fa70bb",
       "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
