@@ -79,6 +79,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_86551052",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-09-30T11:37:55Z",
+      "side": 1,
+      "message": "I agree with Bala.\nBut how implement actions? There is no specific guidelines for that. Different people takes different approaches and some continue to do it in a non RESTful way. \nThe below link give some good approaches and it is worth considering . I second the approach of creating subcollection called actions and do a POST on that with action name.\n\nhttps://groups.google.com/forum/#!topic/api-craft/2ikpMRK1UWQ\n\nJust a suggestion !!!",
+      "parentUuid": "1ae5cdf2_2630bc55",
+      "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c6ae3885",
         "filename": "models/core_models.go",
         "patchSetId": 3
