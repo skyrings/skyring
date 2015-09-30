@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e6725448",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:37:48Z",
+      "side": 1,
+      "message": "accept is not a resource here.  All actions suppose to be GET/PUT/POST/DELETE methods",
+      "range": {
+        "startLine": 14,
+        "startChar": 39,
+        "endLine": 14,
+        "endChar": 45
+      },
+      "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_c6ae3885",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:37:48Z",
+      "side": 1,
+      "message": "why two uuids UUID/MachineId here?",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 10
+      },
+      "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_86a430a7",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:37:48Z",
+      "side": 1,
+      "message": "eventually you will have ipv6 addresses.  You better name this may be \u0027PublicAddressIPv4\u0027",
+      "range": {
+        "startLine": 22,
+        "startChar": 14,
+        "endLine": 22,
+        "endChar": 20
+      },
+      "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
