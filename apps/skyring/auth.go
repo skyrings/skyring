@@ -161,7 +161,7 @@ func addUsers(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func deleteUsers(rw http.ResponseWriter, req *http.Request) {
+func deleteUser(rw http.ResponseWriter, req *http.Request) {
 
 	vars := mux.Vars(req)
 

@@ -100,7 +100,6 @@ func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 	if provider, err := NewAuthorizer(backend, providerCfg.DefaultRole, providerCfg.Roles); err != nil {
 		glog.Errorf("Unable to initialize the authorizer for localauthprovider:%s", err)
 		panic(err)
-		return nil, err
 	} else {
 		return &provider, nil
 	}
@@ -297,7 +296,7 @@ func (a Authorizer) GetUser(u string) (user models.User, e error) {
 func (a Authorizer) ListUsers() (users []models.User, err error) {
 
 	if users, err = a.backend.Users(); err != nil {
-		glog.Errorf("Unable get the list of Users", err)
+		glog.Errorf("Unable get the list of Users: %v", err)
 		return users, err
 	}
 	return users, nil
@@ -308,7 +307,7 @@ func (a Authorizer) ListUsers() (users []models.User, err error) {
 func (a Authorizer) DeleteUser(username string) error {
 	err := a.backend.DeleteUser(username)
 	if err != nil {
-		glog.Errorf("Unable delete the user", err)
+		glog.Errorf("Unable delete the user: %v", err)
 		return err
 	}
 	return nil

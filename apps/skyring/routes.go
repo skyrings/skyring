@@ -63,9 +63,9 @@ var (
 			Version:     1,
 		},
 		{
-			Name:        "auth/logout",
+			Name:        "logout",
 			Method:      "POST",
-			Pattern:     "logout",
+			Pattern:     "auth/logout",
 			HandlerFunc: logout,
 			Version:     1,
 		},
@@ -94,16 +94,16 @@ var (
 			Name:        "DELETE_users",
 			Method:      "DELETE",
 			Pattern:     "users/{username}",
-			HandlerFunc: deleteUsers,
+			HandlerFunc: deleteUser,
 			Version:     1,
 		},
 	}
 	//Routes that doesnot require Auth to be added here
 	CORE_ROUTES_NOAUTH = []CoreRoute{
 		{
-			Name:        "auth/login",
+			Name:        "login",
 			Method:      "POST",
-			Pattern:     "login",
+			Pattern:     "auth/login",
 			HandlerFunc: login,
 			Version:     1,
 		},
