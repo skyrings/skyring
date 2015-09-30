@@ -40,6 +40,24 @@
       "revId": "21be866eb06f05036dfebe24ce6c6b068a7b9dd7",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_86f99082",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:54:27Z",
+      "side": 1,
+      "message": "node_uuid is go type of UUID.  UUID is 128bit long binary number.",
+      "parentUuid": "1ae5cdf2_e6a9747c",
+      "revId": "21be866eb06f05036dfebe24ce6c6b068a7b9dd7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
