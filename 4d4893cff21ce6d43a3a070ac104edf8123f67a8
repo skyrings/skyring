@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1ae5cdf2_662ba430",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:16:41Z",
+      "side": 1,
+      "message": "what does simple \"GET /utils/lookup_node\" return?",
+      "range": {
+        "startLine": 11,
+        "startChar": 18,
+        "endLine": 11,
+        "endChar": 29
+      },
+      "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_4bb87176",
         "filename": "apps/skyring/core_utils.go",
         "patchSetId": 4
@@ -31,6 +54,24 @@
       "side": 1,
       "message": "Actually net.Lookup returns a list.\nMay be will return as {\"ipaddress\": addrs[0]}. That would be mostly management IP for the node.",
       "parentUuid": "1ae5cdf2_4bb87176",
+      "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_86fa70bb",
+        "filename": "apps/skyring/core_utils.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:16:41Z",
+      "side": 1,
+      "message": "No.  You could return list of ip addresses in skyring server\u0027s subnet.",
+      "parentUuid": "1ae5cdf2_e65ed411",
       "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
