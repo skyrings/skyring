@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_c6dc7815",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-30T10:48:55Z",
+      "side": 1,
+      "message": "Deleted node would re-appear in un-accepted nodes after minion restart only. Later user can opt to add them back so I feel it correct to have these nodes back in un-accepted nodes.",
+      "parentUuid": "1ae5cdf2_66ec84c8",
+      "revId": "09602daf36a0171b951c865f93c418b125314ecd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_06df400e",
         "filename": "python/skyring/salt_wrapper.py",
         "patchSetId": 3
@@ -42,6 +60,24 @@
         "endLine": 94,
         "endChar": 15
       },
+      "revId": "09602daf36a0171b951c865f93c418b125314ecd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e6d7b4eb",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-30T10:48:55Z",
+      "side": 1,
+      "message": "key.delete call returns a dict and its blank, so just returned True. not sure what it returns if failed.",
+      "parentUuid": "1ae5cdf2_06df400e",
       "revId": "09602daf36a0171b951c865f93c418b125314ecd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
