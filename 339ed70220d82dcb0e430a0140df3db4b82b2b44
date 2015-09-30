@@ -43,6 +43,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_26099c95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:52:21Z",
+      "side": 1,
+      "message": "It violates rest principle here (I may be wrong).  Rest is about doing action using HTTP method on a resource.  Here I don\u0027t see \u0027accept\u0027 resource.",
+      "parentUuid": "1ae5cdf2_66b564cc",
+      "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c6ae3885",
         "filename": "models/core_models.go",
         "patchSetId": 3
@@ -78,6 +96,24 @@
       "side": 1,
       "message": "No specific reason. uuid is generated one and machine id is returned from salt. If you feel that salt provided id itself could be used, we are fine.",
       "parentUuid": "1ae5cdf2_c6ae3885",
+      "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_46006867",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:52:21Z",
+      "side": 1,
+      "message": "MachineId is from hardware it should be unique otherwise wrong node.",
+      "parentUuid": "1ae5cdf2_86cb5052",
       "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
