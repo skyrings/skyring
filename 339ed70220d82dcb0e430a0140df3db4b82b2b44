@@ -115,6 +115,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_0665801d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-30T12:17:09Z",
+      "side": 1,
+      "message": "Ok. we can change it.",
+      "parentUuid": "1ae5cdf2_06be6065",
+      "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c6ae3885",
         "filename": "models/core_models.go",
         "patchSetId": 3
