@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_66872410",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:31:57Z",
+      "side": 1,
+      "message": "Why is uuid stored as string?",
+      "range": {
+        "startLine": 133,
+        "startChar": 13,
+        "endLine": 133,
+        "endChar": 14
+      },
+      "revId": "21be866eb06f05036dfebe24ce6c6b068a7b9dd7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
