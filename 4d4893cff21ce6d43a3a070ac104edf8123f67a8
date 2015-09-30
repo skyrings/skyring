@@ -16,6 +16,24 @@
       "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e65ed411",
+        "filename": "apps/skyring/core_utils.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-09-30T08:30:25Z",
+      "side": 1,
+      "message": "Actually net.Lookup returns a list.\nMay be will return as {\"ipaddress\": addrs[0]}. That would be mostly management IP for the node.",
+      "parentUuid": "1ae5cdf2_4bb87176",
+      "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
