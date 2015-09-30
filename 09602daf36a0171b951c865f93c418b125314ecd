@@ -43,6 +43,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_2617dca4",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T11:03:04Z",
+      "side": 1,
+      "message": "Why can\u0027t it be put into managed node-list?  If the node is not a interest of management entity I think its better to be rejected as well.\n\nNote that \u0027key.delete\u0027 removes the key from any list.",
+      "parentUuid": "1ae5cdf2_c6dc7815",
+      "revId": "09602daf36a0171b951c865f93c418b125314ecd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_06df400e",
         "filename": "python/skyring/salt_wrapper.py",
         "patchSetId": 3
@@ -78,6 +96,24 @@
       "side": 1,
       "message": "key.delete call returns a dict and its blank, so just returned True. not sure what it returns if failed.",
       "parentUuid": "1ae5cdf2_06df400e",
+      "revId": "09602daf36a0171b951c865f93c418b125314ecd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_663ac437",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T11:03:04Z",
+      "side": 1,
+      "message": "FYI, salt error\n\nThe key glob \u0027foo\u0027 does not match any accepted, unaccepted or rejected keys.",
+      "parentUuid": "1ae5cdf2_e6d7b4eb",
       "revId": "09602daf36a0171b951c865f93c418b125314ecd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
