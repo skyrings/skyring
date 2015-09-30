@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e616d4f0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:30:09Z",
+      "side": 1,
+      "message": "When are these calls get used?",
+      "range": {
+        "startLine": 13,
+        "startChar": 13,
+        "endLine": 13,
+        "endChar": 18
+      },
+      "revId": "1a407347c87049fbdf02c9011270340df4459881",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e6edf4f0",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:30:09Z",
+      "side": 1,
+      "message": "since you do reject the key, reject_node() is more appropriate.",
+      "range": {
+        "startLine": 86,
+        "startChar": 15,
+        "endLine": 86,
+        "endChar": 16
+      },
+      "revId": "1a407347c87049fbdf02c9011270340df4459881",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a6e3ec03",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:30:09Z",
+      "side": 1,
+      "message": "1. where does \u0027d\u0027 gets initialized?\n\n2. if node in d[\u0027unaccepted_nodes\u0027] is enough\n\n3. Why only reject node in unaccepted_nodes list?  I think you don\u0027t need to do this check.  you pass it to salt and lets salt throws respective error.",
+      "range": {
+        "startLine": 87,
+        "startChar": 14,
+        "endLine": 87,
+        "endChar": 16
+      },
+      "revId": "1a407347c87049fbdf02c9011270340df4459881",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_e69b3470",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T10:30:09Z",
+      "side": 1,
+      "message": "there is no \u0027accepted\u0027 here",
+      "range": {
+        "startLine": 93,
+        "startChar": 20,
+        "endLine": 93,
+        "endChar": 28
+      },
+      "revId": "1a407347c87049fbdf02c9011270340df4459881",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
