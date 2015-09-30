@@ -43,6 +43,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_8627d011",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T11:08:07Z",
+      "side": 1,
+      "message": "As per our previous discussion, I believe ?filter is to filter out GETs return.  Is this rest call violates that?",
+      "parentUuid": "1ae5cdf2_c61b9819",
+      "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_4bb87176",
         "filename": "apps/skyring/core_utils.go",
         "patchSetId": 4
@@ -108,6 +126,24 @@
       "side": 1,
       "message": "You mean instead of calling lookup, return the IP4 entries from network info of the node?",
       "parentUuid": "1ae5cdf2_86fa70bb",
+      "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_a6220cff",
+        "filename": "apps/skyring/core_utils.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-09-30T11:08:07Z",
+      "side": 1,
+      "message": "No.  return ipaddrs from lookups only in subnet of skyring\u0027s subnet ie the node and skyring master are in same network.",
+      "parentUuid": "1ae5cdf2_06d5801b",
       "revId": "4d4893cff21ce6d43a3a070ac104edf8123f67a8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
