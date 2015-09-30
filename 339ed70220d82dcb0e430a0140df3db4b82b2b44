@@ -133,6 +133,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_264fdc93",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-09-30T12:41:26Z",
+      "side": 1,
+      "message": "Its a matter of flexibility. If there are very few actions on a resource, placing the action in the request itself is fine. When there are lot of actions, it make sense to put the action as part of the url [1]\n\n\n[1] - https://developer.github.com/v3/gists/#star-a-gist",
+      "parentUuid": "1ae5cdf2_0665801d",
+      "revId": "339ed70220d82dcb0e430a0140df3db4b82b2b44",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_c6ae3885",
         "filename": "models/core_models.go",
         "patchSetId": 3
