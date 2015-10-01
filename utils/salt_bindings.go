@@ -169,3 +169,8 @@ func PyGetNodeDiskInfo(node string) map[string]map[string]string {
 	py_out := py_functions["get_node_disk_info"].call(node)
 	return ToMapStringMapStringString(python.PyDict_GetItemString(py_out, node))
 }
+
+func PyRejectNode(node string) bool {
+	py_out := py_functions["reject_node"].call(node)
+	return py_out.IsTrue()
+}

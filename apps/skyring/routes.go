@@ -26,12 +26,18 @@ type CoreRoute struct {
 
 var (
 	//Routes that require Auth to be added here
-	CORE_ROUTES = []CoreRoute{
+	CORE_ROUTES []CoreRoute
+	//Routes that doesnot require Auth to be added here
+	CORE_ROUTES_NOAUTH []CoreRoute
+)
+
+func (a *App) LoadRoutes() {
+	var routes = []CoreRoute{
 		{
 			Name:        "GET_SshFingerprint",
 			Method:      "GET",
 			Pattern:     "utils/ssh_fingerprint/{hostname}",
-			HandlerFunc: GET_SshFingerprint,
+			HandlerFunc: a.GET_SshFingerprint,
 			Version:     1,
 		},
 		{
@@ -45,28 +51,28 @@ var (
 			Name:        "POST_Nodes",
 			Method:      "POST",
 			Pattern:     "nodes",
-			HandlerFunc: POST_Nodes,
+			HandlerFunc: a.POST_Nodes,
 			Version:     1,
 		},
 		{
 			Name:        "GET_Nodes",
 			Method:      "GET",
 			Pattern:     "nodes",
-			HandlerFunc: GET_Nodes,
+			HandlerFunc: a.GET_Nodes,
 			Version:     1,
 		},
 		{
 			Name:        "GET_Node",
 			Method:      "GET",
 			Pattern:     "nodes/{node-id}",
-			HandlerFunc: GET_Node,
+			HandlerFunc: a.GET_Node,
 			Version:     1,
 		},
 		{
 			Name:        "GET_Utilization",
 			Method:      "GET",
 			Pattern:     "nodes/{node-id}/utilization",
-			HandlerFunc: GET_Utilization,
+			HandlerFunc: a.GET_Utilization,
 			Version:     1,
 		},
 		{
@@ -87,46 +93,80 @@ var (
 			Name:        "logout",
 			Method:      "POST",
 			Pattern:     "auth/logout",
-			HandlerFunc: logout,
+			HandlerFunc: a.logout,
 			Version:     1,
 		},
 		{
 			Name:        "GET_users",
 			Method:      "GET",
 			Pattern:     "users",
-			HandlerFunc: getUsers,
+			HandlerFunc: a.getUsers,
 			Version:     1,
 		},
 		{
 			Name:        "GET_user",
 			Method:      "GET",
 			Pattern:     "users/{username}",
-			HandlerFunc: getUser,
+			HandlerFunc: a.getUser,
 			Version:     1,
 		},
 		{
 			Name:        "POST_users",
 			Method:      "POST",
 			Pattern:     "users",
-			HandlerFunc: addUsers,
+			HandlerFunc: a.addUsers,
 			Version:     1,
 		},
 		{
 			Name:        "DELETE_users",
 			Method:      "DELETE",
 			Pattern:     "users/{username}",
-			HandlerFunc: deleteUser,
+			HandlerFunc: a.deleteUser,
+			Version:     1,
+		},
+		{
+			Name:        "POST_Clusters",
+			Method:      "POST",
+			Pattern:     "clusters",
+			HandlerFunc: a.POST_Clusters,
+			Version:     1,
+		},
+		{
+			Name:        "GET_Clusters",
+			Method:      "GET",
+			Pattern:     "clusters",
+			HandlerFunc: a.GET_Clusters,
+			Version:     1,
+		},
+		{
+			Name:        "GET_Cluster",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}",
+			HandlerFunc: a.GET_Cluster,
+			Version:     1,
+		},
+		{
+			Name:        "Forget_Cluster",
+			Method:      "DELETE",
+			Pattern:     "clusters/{cluster-id}",
+			HandlerFunc: a.Forget_Cluster,
 			Version:     1,
 		},
 	}
-	//Routes that doesnot require Auth to be added here
-	CORE_ROUTES_NOAUTH = []CoreRoute{
+	for _, route := range routes {
+		CORE_ROUTES = append(CORE_ROUTES, route)
+	}
+
+	var noauth_routes = []CoreRoute{
 		{
 			Name:        "login",
 			Method:      "POST",
 			Pattern:     "auth/login",
-			HandlerFunc: login,
+			HandlerFunc: a.login,
 			Version:     1,
 		},
 	}
-)
+	for _, route := range noauth_routes {
+		CORE_ROUTES_NOAUTH = append(CORE_ROUTES_NOAUTH, route)
+	}
+}

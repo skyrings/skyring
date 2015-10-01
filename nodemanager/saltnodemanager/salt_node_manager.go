@@ -62,3 +62,7 @@ func (a SaltNodeManager) GetNodeNetworkInfo(node string) map[string][]string {
 func (a SaltNodeManager) GetNodeDiskInfo(node string) map[string]map[string]string {
 	return util.PyGetNodeDiskInfo(node)
 }
+
+func (a SaltNodeManager) RejectNode(node string) bool {
+	return util.PyRejectNode(node)
+}

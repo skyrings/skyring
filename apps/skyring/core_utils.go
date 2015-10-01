@@ -20,7 +20,7 @@ import (
 	"net/http"
 )
 
-func GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
+func (a *App) GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	hostname := vars["hostname"]
 

@@ -10,15 +10,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package nodemanager
+package models
 
-type NodeManagerInterface interface {
-	GetNodeSshFingerprint(node string) string
-	AcceptNode(node string, fingerprint string) bool
-	AddNode(node string, fingerprint string, username string, password string, master string, port int) bool
-	GetNodes() map[string]map[string]string
-	GetNodeMachineId(node string) string
-	GetNodeNetworkInfo(node string) map[string][]string
-	GetNodeDiskInfo(node string) map[string]map[string]string
-	RejectNode(node string) bool
+type Args struct {
+	Vars    map[string]string
+	Request []byte
+}
+
+type RpcResponse struct {
+	Status RpcResponseStatus `json:"status"`
+	Data   RpcResponseData   `json:"data"`
+}
+
+type RpcResponseStatus struct {
+	StatusCode    int    `json:"statuscode"`
+	StatusMessage string `json:"statusmessage"`
+}
+
+type RpcResponseData struct {
+	RequestId string `json:"requestid"`
+	Result    []byte `json:"result"`
 }
