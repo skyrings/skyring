@@ -14,7 +14,7 @@ package nodemanager
 
 type NodeManagerInterface interface {
 	AcceptNode(node string, fingerprint string) bool
-	AddNode(node string, fingerprint string, username string, password string, master string, port int) bool
+	AddNode(master string, node string, port uint, fingerprint string, username string, password string) bool
 	GetNodes() map[string]map[string]string
 	GetNodeMachineId(node string) string
 	GetNodeNetworkInfo(node string) map[string][]string

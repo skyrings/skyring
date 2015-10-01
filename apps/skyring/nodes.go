@@ -102,12 +102,12 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 
 	// Add the node
 	ret_val := GetCoreNodeManager().AddNode(
+		curr_hostname,
 		request.Hostname,
+		uint(request.SshPort),
 		request.SshFingerprint,
 		request.User,
-		request.Password,
-		curr_hostname,
-		request.SshPort)
+		request.Password)
 
 	if ret_val == true {
 		for count := 0; count < 60; count++ {

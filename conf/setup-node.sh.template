@@ -34,7 +34,7 @@ function abort()
 }
 
 [ -f /etc/salt/minion ] && quiet_abort 1 'failed to take backup /etc/salt/minion' mv -fv /etc/salt/minion /etc/salt/minion.skyring-add-node
-echo "master: {{ skyring_master }}" >/etc/salt/minion || abort 1 'failed to create minion configuration /etc/salt/minion'
+echo "master: {{.Master}}" >/etc/salt/minion || abort 1 'failed to create minion configuration /etc/salt/minion'
 quiet_abort 1 'failed to remove /etc/salt/pki/minion/minion_master.pub' rm -fv /etc/salt/pki/minion/minion_master.pub
 
 if which systemctl >/dev/null 2>&1; then
@@ -49,13 +49,11 @@ else
     quiet_abort 2 'failed to start salt-minion' service salt-minion status
 fi
 
-{% raw %}
 finger=$(salt-call --local key.finger --no-color | tail -n1)
 array=(${finger//:/ })
 if (( ${#array[@]} == 16 )); then
     echo $finger
     exit 0
 fi
-{% endraw %}
 
 abort 3 "failed to get fingerprint"
