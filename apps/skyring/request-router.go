@@ -15,20 +15,18 @@ package skyring
 import (
 	"github.com/golang/glog"
 	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/tools/uuid"
+	"gopkg.in/mgo.v2/bson"
 	"regexp"
 )
 
 /*
 This function has the logic to find out the specific provider the request to be
-routed. All the generic cases are covered here. But if any of the new endpoints
-has any specific logic, that needs to be added here.
-case 1: Technology specific APIs, has the name in the URL and if there is match
-        route it to the specific provider
-case 2: Looking at the cluster type in the body of the request
-case 3: Looking at the cluster where operation is done
+routed using the route information. Route would contain specific technology name
 */
-func (a *App) getProvider(body []byte, routeCfg conf.Route) *Provider {
-	var result *Provider = nil
+func (a *App) getProviderFromRoute(routeCfg conf.Route) *Provider {
 	//Look at the URL to see if there is a match
 	for _, provider := range a.providers {
 		glog.V(3).Infof("provider:", provider)
@@ -41,19 +39,28 @@ func (a *App) getProvider(body []byte, routeCfg conf.Route) *Provider {
 		} else {
 			glog.V(3).Infof("Pattern:", routeCfg.Pattern)
 			if r.MatchString(routeCfg.Pattern) == true {
-				result = &provider
-				return result
+				return &provider
 			}
 		}
 	}
-	// case 2: Looking at the cluster type in the body of the request
-	if result == nil {
-
-	}
-
-	// Looking at the cluster where operation is done - cluster-id
-	if result == nil {
-
-	}
 	return nil
+}
+
+func (a *App) getProviderFromClusterType(cluster_type string) *Provider {
+	provider := a.providers[cluster_type]
+	return &provider
+}
+
+func (a *App) getProviderFromClusterId(cluster_id uuid.UUID) *Provider {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var cluster models.StorageCluster
+	if err := collection.Find(bson.M{"clusterid": cluster_id}).One(&cluster); err != nil {
+		glog.Errorf("Error getting the cluster details: %v", err)
+		return nil
+	}
+	provider := a.providers[cluster.ClusterType]
+	return &provider
 }

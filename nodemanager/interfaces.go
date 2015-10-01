@@ -20,4 +20,5 @@ type NodeManagerInterface interface {
 	GetNodeMachineId(node string) string
 	GetNodeNetworkInfo(node string) map[string][]string
 	GetNodeDiskInfo(node string) map[string]map[string]string
+	RejectNode(node string) bool
 }

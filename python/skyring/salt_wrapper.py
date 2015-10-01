@@ -76,6 +76,16 @@ def accept_node(node, fingerprint):
     return (True if accepted else False)
 
 
+def reject_node(node):
+    d = _get_keys(node)
+    if not d['accepted_nodes'].get(node):
+        utils.log.info("node %s not in accepted node list" % node)
+        return True
+
+    rejected = master.call_func('key.reject', match=node)
+    return (True if rejected else False)
+
+
 def add_node(node, fingerprint, username, password,
              skyring_master=socket.getfqdn(), port=22):
     minion_finger = bootstrap_node(node, fingerprint, username,

@@ -36,14 +36,6 @@ type StorageNode struct {
 	ManagedState      string             `bson:"managedstate"`
 }
 
-type AddStorageNodeRequest struct {
-	Hostname       string `json:"hostname"`
-	SshFingerprint string `json:"sshfingerprint"`
-	User           string `json:"user"`
-	Password       string `json:"password"`
-	SshPort        int    `json:"sshport"`
-}
-
 type CPU struct {
 	CPUId string `bson:"cpuid"`
 }
@@ -88,26 +80,28 @@ type OperatingSystem struct {
 	SELinuxMode             string `bson:"selinuxmode"`
 }
 
-type StorageNodes []StorageNode
-
-type UnmanagedNode struct {
-	Name            string `json:"name"`
-	SaltFingerprint string `json:"saltfingerprint"`
-}
-
-const (
-	DEFAULT_SSH_PORT        = 22
-	REQUEST_SIZE_LIMIT      = 1048576
-	COLL_NAME_STORAGE_NODES = "storage_nodes"
-	NODE_STATE_FREE         = "free"
-	NODE_STATE_UNMANAGED    = "unmanaged"
-	NODE_STATE_USED         = "used"
-)
-
 type User struct {
 	Username string   `bson:"Username"`
 	Email    string   `bson:"Email"`
 	Hash     []byte   `bson:"Hash"`
 	Role     string   `bson:"Role"`
 	Groups   []string `bson:"Groups"`
+}
+
+type StorageCluster struct {
+	ClusterId            uuid.UUID     `json:"cluster_id"`
+	ClusterName          string        `json:"cluster_name"`
+	CompatibilityVersion string        `json:"compatibility_version"`
+	ClusterType          string        `json:"cluster_type"`
+	WorkLoad             string        `json:"workload"`
+	ClusterStatus        string        `json:"status"`
+	Tags                 []string      `json:"tags"`
+	Options              interface{}   `json:"options"`
+	Nodes                []ClusterNode `json:"nodes"`
+	OpenStackServices    []string      `json:"openstackservices"`
+}
+
+type ClusterNode struct {
+	ClusterIPAddress string `json:"cluster_ip_address"`
+	PublicIPAddress  string `json:"public_ip_adress"`
 }
