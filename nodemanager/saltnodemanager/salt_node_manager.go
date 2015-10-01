@@ -43,8 +43,8 @@ func (a SaltNodeManager) AcceptNode(node string, fingerprint string) bool {
 	return util.PyAcceptNode(node, fingerprint)
 }
 
-func (a SaltNodeManager) AddNode(node string, fingerprint string, username string, password string, master string, port int) bool {
-	return util.PyAddNode(node, fingerprint, username, password, master, port)
+func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) bool {
+	return util.PyAddNode(master, node, port, fingerprint, username, password)
 }
 
 func (a SaltNodeManager) GetNodes() map[string]map[string]string {
