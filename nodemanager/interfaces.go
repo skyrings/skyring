@@ -13,7 +13,6 @@ limitations under the License.
 package nodemanager
 
 type NodeManagerInterface interface {
-	GetNodeSshFingerprint(node string) string
 	AcceptNode(node string, fingerprint string) bool
 	AddNode(node string, fingerprint string, username string, password string, master string, port int) bool
 	GetNodes() map[string]map[string]string

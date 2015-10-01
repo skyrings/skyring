@@ -14,6 +14,7 @@ package skyring
 
 import (
 	"encoding/json"
+	"github.com/skyrings/skyring/ssh"
 	"github.com/skyrings/skyring/utils"
 	"net/http"
 )
@@ -27,5 +28,5 @@ func GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(GetCoreNodeManager().GetNodeSshFingerprint(hostname))
+	json.NewEncoder(w).Encode(ssh.GetFingerprint(hostname, 22))
 }

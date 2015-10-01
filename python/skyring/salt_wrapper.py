@@ -31,13 +31,6 @@ setattr(salt.client.LocalClient, 'cmd',
 local = salt.client.LocalClient()
 
 
-def get_node_ssh_fingerprint(node):
-    '''
-    This function needs to be removed once we find solution in core
-    '''
-    return utils.get_host_ssh_key(node)[0]
-
-
 def _get_keys(match='*'):
     keys = master.call_func('key.finger', match=match)
     return {'accepted_nodes': keys.get('minions', {}),
