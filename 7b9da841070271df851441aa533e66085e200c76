@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_40b92be8",
+        "filename": "ssh/ssh.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-01T04:45:45Z",
+      "side": 1,
+      "message": "Same thing we tried earlier but only missing thing was I think EncodeToString :) Thanks for the patch.",
+      "revId": "7b9da841070271df851441aa533e66085e200c76",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
