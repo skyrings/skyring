@@ -13,21 +13,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import socket
-from jinja2 import Template
+import logging
+from functools import wraps
 
 import salt
 from salt import wheel, client
 import salt.config
 
-import utils
+
+log = logging.getLogger(__name__)
 
 
-SETUP_NODE_TEMPLATE = 'setup-node.sh.template'
+def enableLogger(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print 'args=%s, kwargs=%s' % (args, kwargs)
+        log.info('args=%s, kwargs=%s' % (args, kwargs))
+        rv = func(*args, **kwargs)
+        print 'rv=%s' % rv
+        log.info('rv=%s' % rv)
+        return rv
+    return wrapper
+
+
 opts = salt.config.master_config('/etc/salt/master')
 master = salt.wheel.WheelClient(opts)
 setattr(salt.client.LocalClient, 'cmd',
-        utils.enableLogger(salt.client.LocalClient.cmd))
+        enableLogger(salt.client.LocalClient.cmd))
 local = salt.client.LocalClient()
 
 
@@ -39,41 +51,24 @@ def _get_keys(match='*'):
             'rejected_nodes': keys.get('minions_rejected', {})}
 
 
-def bootstrap_node(node, fingerprint, username, password,
-                   skyring_master=socket.getfqdn(), port=22):
-    t = Template(open(SETUP_NODE_TEMPLATE).read())
-    cmd = t.render(skyring_master=skyring_master)
-    rc, out, err = utils.rexecCmd(str(cmd), node, fingerprint=fingerprint,
-                                  username=username, password=password,
-                                  port=port)
-    return out.strip()
-
-
 def accept_node(node, fingerprint):
     d = _get_keys(node)
     if d['accepted_nodes'].get(node):
-        utils.log.info("node %s already in accepted node list" % node)
+        log.info("node %s already in accepted node list" % node)
         return True
 
     finger = d['unaccepted_nodes'].get(node)
     if not finger:
-        utils.log.warn("node %s not in unaccepted node list" % node)
+        log.warn("node %s not in unaccepted node list" % node)
         return False
 
     if finger != fingerprint:
-        utils.log.error(("node %s minion fingerprint does not match %s != %s" %
-                         (node, finger, fingerprint)))
+        log.error(("node %s minion fingerprint does not match %s != %s" %
+                   (node, finger, fingerprint)))
         return False
 
     accepted = master.call_func('key.accept', match=node)
     return (True if accepted else False)
-
-
-def add_node(node, fingerprint, username, password,
-             skyring_master=socket.getfqdn(), port=22):
-    minion_finger = bootstrap_node(node, fingerprint, username,
-                                   password, skyring_master, port=port)
-    return accept_node(node, minion_finger)
 
 
 def get_nodes():
