@@ -139,9 +139,23 @@ func PyAcceptNode(node string, fingerprint string) bool {
 	return py_out.IsTrue()
 }
 
-func PyAddNode(node string, fingerprint string, username string, password string, master string, port int) bool {
-	py_out := py_functions["add_node"].call(node, fingerprint, username, password, master, port)
-	return py_out.IsTrue()
+func BootstrapNode(master string, node string, port uint, fingerprint string, username string, password string) (saltfinger string, err error) {
+	var buf bytes.Buffer
+	t, err := template.ParseFiles("setup-node.sh.template")
+	t.Execute(&buf, struct{Master string}{Master: master})
+	if sout, serr, err := ssh.Run(buf.String(), node, port, fingerprint, username, password); err == nil {
+		saltfinger = strings.TrimSpace(sout)
+	} else {
+		fmt.Println("bootstrap failed: ", serr)
+	}
+	return
+}
+
+func PyAddNode(master string, node string, port uint, fingerprint string, username string, password string) bool {
+	if finger, err := BootstrapNode(master, node, port, fingerprint, username, password); err == nil {
+		return PyAcceptNode(node, finger)
+	}
+	return false
 }
 
 func PyGetNodes() map[string]map[string]string {
