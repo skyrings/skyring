@@ -23,6 +23,7 @@ import (
 	"github.com/natefinch/pie"
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/nodemanager"
 	"io/ioutil"
 	"net/http"
@@ -46,11 +47,6 @@ type Provider struct {
 type App struct {
 	providers map[string]Provider
 	routes    map[string]conf.Route
-}
-
-type Args struct {
-	Vars    map[string]string
-	Request []byte
 }
 
 const (
@@ -128,7 +124,8 @@ func (a *App) StartProviders(configDir string, binDir string) {
 				config.Provider.ProviderBinary = path.Join(providerBinaryPath, config.Provider.ProviderBinary)
 			}
 
-			client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, config.Provider.ProviderBinary)
+			dbConfStr, _ := json.Marshal(conf.SystemConfig.DBConfig)
+			client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, config.Provider.ProviderBinary, string(dbConfStr))
 			if err != nil {
 				glog.Errorf("Error running plugin:%s", err)
 				continue
@@ -141,14 +138,13 @@ func (a *App) StartProviders(configDir string, binDir string) {
 			}
 			//add the provider to the map
 			a.providers[config.Provider.Name] = Provider{Name: config.Provider.Name, Client: client}
-
 		}
-
 	}
-
 }
 
 func (a *App) SetRoutes(router *mux.Router) error {
+	// Load App specific routes
+	a.LoadRoutes()
 
 	// Create a router for defining the routes which require authentication
 	//For routes require auth, will be checked by a middleware which
@@ -227,21 +223,26 @@ func GetAuthProvider() authprovider.AuthInterface {
 /*
 This is the handler where all the requests to providers will land in.
 Here the parameters are extracted and passed to the providers along with
-the requestbody if any using RPC.Result will be parsed to see if a specific
+the requestbody if any using RPC. Result will be parsed to see if a specific
 status code needs to be set for http response.
 Arguments to Provider function -
-1. type Args struct {
-	Vars    map[string]string
-	Request []byte
+1. type RpcRequest struct {
+	RpcRequestVars map[string]string
+	RpcRequestData []byte
 }
-Each provider should expect this structure as the first argument. Vars is a map
-of parameters passed in request URL. Request is the payload(body) of the http request.
+Each provider should expect this structure as the first argument. RpcRequestVars
+is a map of parameters passed in request URL. RpcRequestData is the payload(body)
+of the http request.
 
 2.Result - *[]byte
 Pointer to a byte array. In response, the byte array should contain
-{ response payload, RequestId, Status} where response payload is response
-from the provider, RequestId is populated if the request is asynchronously
-executed and status to set in the http response
+{
+    "status": {"statuscode": <Code>, "statusmessage": "<msg>"},
+    "data": {"requestid": "<id>", "result": []byte}
+}
+where result is response payload from the provider, RequestId is populated if the
+request is asynchronously executed and statuscode and statusmessage to be set in the
+status field. The statuscode field should be valid http status code
 */
 func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -261,18 +262,18 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 
 	//Find out the provider to process this request and send the request
 	//After getting the response, pass it on to the client
-	provider := a.getProvider(body, routeCfg)
+	provider := a.getProviderFromRoute(routeCfg)
 	if provider != nil {
 		glog.Infof("Sending the request to provider:", provider.Name)
-		provider.Client.Call(provider.Name+"."+routeCfg.PluginFunc, Args{Vars: vars, Request: body}, &result)
+		provider.Client.Call(provider.Name+"."+routeCfg.PluginFunc, models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body}, &result)
 		//Parse the result to see if a different status needs to set
 		//By default it sets http.StatusOK(200)
 		glog.Infof("Got response from provider")
-		var m map[string]interface{}
+		var m models.RpcResponse
 		if err = json.Unmarshal(result, &m); err != nil {
 			glog.Errorf("Unable to Unmarshall the result from provider : %s", err)
 		}
-		status := m["Status"].(float64)
+		status := m.Status.StatusCode
 		if status != http.StatusOK {
 			w.WriteHeader(int(status))
 		}

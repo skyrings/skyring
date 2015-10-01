@@ -42,7 +42,7 @@ func AddDefaultUser() error {
 	return nil
 }
 
-func login(rw http.ResponseWriter, req *http.Request) {
+func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
@@ -65,7 +65,7 @@ func login(rw http.ResponseWriter, req *http.Request) {
 	rw.Write(bytes)
 }
 
-func logout(rw http.ResponseWriter, req *http.Request) {
+func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
 	if err := GetAuthProvider().Logout(rw, req); err != nil {
 		glog.Errorf("Unable to logout User:%s", err)
 		util.HandleHttpError(rw, err)
@@ -75,7 +75,7 @@ func logout(rw http.ResponseWriter, req *http.Request) {
 	rw.Write(bytes)
 }
 
-func getUsers(rw http.ResponseWriter, req *http.Request) {
+func (a *App) getUsers(rw http.ResponseWriter, req *http.Request) {
 
 	users, err := GetAuthProvider().ListUsers()
 	if err != nil {
@@ -106,7 +106,7 @@ func getUsers(rw http.ResponseWriter, req *http.Request) {
 
 }
 
-func getUser(rw http.ResponseWriter, req *http.Request) {
+func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 
 	vars := mux.Vars(req)
 
@@ -133,7 +133,7 @@ func getUser(rw http.ResponseWriter, req *http.Request) {
 
 }
 
-func addUsers(rw http.ResponseWriter, req *http.Request) {
+func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 
 	var user models.User
 
@@ -161,7 +161,7 @@ func addUsers(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func deleteUser(rw http.ResponseWriter, req *http.Request) {
+func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 
 	vars := mux.Vars(req)
 

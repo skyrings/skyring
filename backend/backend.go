@@ -55,5 +55,5 @@ type Backend interface {
 	GetNodeID(node string) (uuid.UUID, error)
 	GetNodeDisk(node string) ([]Disk, error)
 	GetNodeNetwork(node string) (Network, error)
-	RemoveNode(node string) (bool, error)
+	RejectNode(node string) (bool, error)
 }
