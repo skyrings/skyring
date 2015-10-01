@@ -23,6 +23,7 @@ import (
 	"github.com/natefinch/pie"
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/nodemanager"
 	"io/ioutil"
 	"net/http"
@@ -46,11 +47,6 @@ type Provider struct {
 type App struct {
 	providers map[string]Provider
 	routes    map[string]conf.Route
-}
-
-type Args struct {
-	Vars    map[string]string
-	Request []byte
 }
 
 const (
@@ -141,14 +137,13 @@ func (a *App) StartProviders(configDir string, binDir string) {
 			}
 			//add the provider to the map
 			a.providers[config.Provider.Name] = Provider{Name: config.Provider.Name, Client: client}
-
 		}
-
 	}
-
 }
 
 func (a *App) SetRoutes(router *mux.Router) error {
+	// Load App specific routes
+	a.LoadRoutes()
 
 	// Create a router for defining the routes which require authentication
 	//For routes require auth, will be checked by a middleware which
@@ -264,7 +259,7 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 	provider := a.getProvider(body, routeCfg)
 	if provider != nil {
 		glog.Infof("Sending the request to provider:", provider.Name)
-		provider.Client.Call(provider.Name+"."+routeCfg.PluginFunc, Args{Vars: vars, Request: body}, &result)
+		provider.Client.Call(provider.Name+"."+routeCfg.PluginFunc, models.Args{Vars: vars, Request: body}, &result)
 		//Parse the result to see if a different status needs to set
 		//By default it sets http.StatusOK(200)
 		glog.Infof("Got response from provider")

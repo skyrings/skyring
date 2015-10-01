@@ -24,6 +24,49 @@ type CoreRoute struct {
 	Version     int
 }
 
+func (a *App) LoadRoutes() {
+	var ROUTES = []CoreRoute{
+		{
+			Name:        "POST_Clusters",
+			Method:      "POST",
+			Pattern:     "clusters",
+			HandlerFunc: a.POST_Clusters,
+			Version:     1,
+		},
+		{
+			Name:        "GET_Clusters",
+			Method:      "GET",
+			Pattern:     "clusters",
+			HandlerFunc: a.GET_Clusters,
+			Version:     1,
+		},
+		{
+			Name:        "GET_Cluster",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}",
+			HandlerFunc: a.GET_Cluster,
+			Version:     1,
+		},
+		{
+			Name:        "Extend_Cluster",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}?extend",
+			HandlerFunc: a.Extend_Cluster,
+			Version:     1,
+		},
+		{
+			Name:        "Shrink_Cluster",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}?shrink",
+			HandlerFunc: a.Shrink_Cluster,
+			Version:     1,
+		},
+	}
+	for _, route := range ROUTES {
+		CORE_ROUTES = append(CORE_ROUTES, route)
+	}
+}
+
 var (
 	//Routes that require Auth to be added here
 	CORE_ROUTES = []CoreRoute{
