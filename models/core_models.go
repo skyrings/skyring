@@ -94,12 +94,13 @@ type OperatingSystem struct {
 type StorageNodes []StorageNode
 
 const (
-	DEFAULT_SSH_PORT        = 22
-	REQUEST_SIZE_LIMIT      = 1048576
-	COLL_NAME_STORAGE_NODES = "storage_nodes"
-	NODE_STATE_FREE         = "free"
-	NODE_STATE_UNMANAGED    = "unmanaged"
-	NODE_STATE_USED         = "used"
+	DEFAULT_SSH_PORT           = 22
+	REQUEST_SIZE_LIMIT         = 1048576
+	COLL_NAME_STORAGE_NODES    = "storage_nodes"
+	COLL_NAME_STORAGE_CLUSTERS = "storage_clusters"
+	NODE_STATE_FREE            = "free"
+	NODE_STATE_UNMANAGED       = "unmanaged"
+	NODE_STATE_USED            = "used"
 )
 
 type User struct {
@@ -109,3 +110,18 @@ type User struct {
 	Role     string   `bson:"Role"`
 	Groups   []string `bson:"Groups"`
 }
+
+type StorageCluster struct {
+	ClusterId            string      `json:"cluster_id"`
+	ClusterName          string      `json:"cluster_name"`
+	CompatibilityVersion string      `json:"compatibility_version"`
+	ClusterType          string      `json:"cluster_type"`
+	WorkLoad             string      `json:"workload"`
+	ClusterStatus        string      `json:"status"`
+	Tags                 []string    `json:"tags"`
+	Options              interface{} `json:"options"`
+	Nodes                []string    `json:"nodes"`
+	OpenStackServices    []string    `json:"openstackservices"`
+}
+
+type StorageClusters []StorageCluster
