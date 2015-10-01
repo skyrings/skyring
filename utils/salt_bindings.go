@@ -11,7 +11,6 @@ var lock sync.Mutex
 var py_salt_wrapper *python.PyObject
 
 var functions = [...]string{
-	"get_node_ssh_fingerprint",
 	"accept_node",
 	"add_node",
 	"get_nodes",
@@ -133,11 +132,6 @@ func ToMapStringMapStringString(py_dict *python.PyObject) map[string]map[string]
 	}
 
 	return rv
-}
-
-func PyGetNodeSshFingerprint(node string) string {
-	py_out := py_functions["get_node_ssh_fingerprint"].call(node)
-	return python.PyString_AsString(py_out)
 }
 
 func PyAcceptNode(node string, fingerprint string) bool {
