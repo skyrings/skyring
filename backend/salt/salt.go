@@ -31,6 +31,7 @@ var funcNames = [...]string{
 	"GetNodeID",
 	"GetNodeNetwork",
 	"GetNodeDisk",
+	"RemoveNode",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -103,8 +104,11 @@ func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
 	return
 }
 
-func (s Salt) RemoveNode(node string) (bool, error) {
-	return true, nil
+func (s Salt) RemoveNode(node string) (status bool, err error) {
+	if pyobj, err := pyFuncs["RemoveNode"].Call(node); err == nil {
+		err = gopy.Convert(pyobj, &status)
+	}
+	return
 }
 
 func New() backend.Backend {

@@ -44,7 +44,7 @@ func queryDB(cmd string) (res []influxdb.Result, err error) {
 	return
 }
 
-func GET_Utilization(w http.ResponseWriter, r *http.Request) {
+func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	node_id_str := vars["node-id"]
 	node_id, _ := uuid.Parse(node_id_str)

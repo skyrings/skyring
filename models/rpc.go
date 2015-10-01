@@ -10,15 +10,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package nodemanager
+package models
 
-import (
-	"github.com/skyrings/skyring/models"
-)
+type Args struct {
+	Vars    map[string]string
+	Request []byte
+}
 
-type NodeManagerInterface interface {
-	AcceptNode(node string, fingerprint string) (*models.StorageNode, error)
-	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.StorageNode, error)
-	GetUnmanagedNodes() (*models.UnmanagedNodes, error)
-	RejectNode(node string) (bool, error)
+type RpcResponse struct {
+	Status RpcResponseStatus `json:"status"`
+	Data   RpcResponseData   `json:"data"`
+}
+
+type RpcResponseStatus struct {
+	StatusCode    int    `json:"statuscode"`
+	StatusMessage string `json:"statusmessage"`
+}
+
+type RpcResponseData struct {
+	RequestId string `json:"requestid"`
+	Result    []byte `json:"result"`
 }

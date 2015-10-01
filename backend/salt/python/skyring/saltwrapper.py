@@ -72,6 +72,16 @@ def AcceptNode(node, fingerprint):
     return (True if accepted else False)
 
 
+def RemoveNode(node):
+    d = _get_keys(node)
+    if not d['accepted_nodes'].get(node):
+        log.info("node %s not in accepted node list" % node)
+        return True
+
+    rejected = master.call_func('key.reject', match=node)
+    return (True if rejected else False)
+
+
 def GetNodes():
     '''
     returns structure
