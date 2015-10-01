@@ -13,35 +13,28 @@ limitations under the License.
 package models
 
 import (
+	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/tools/uuid"
 )
 
 type StorageNode struct {
-	UUID              uuid.UUID          `bson:"uuid"`
-	Hostname          string             `bson:"hostname"`
-	Tags              map[string]string  `bson:"tags"`
-	ManagementIp      string             `bson:"managementip"`
-	ClusterIp         string             `bson:"clusterip"`
-	PublicAddressIpv4 string             `bson:"publicaddressipv4"`
-	ClusterId         string             `bson:"clusterid"`
-	Location          string             `bson:"location"`
-	Status            string             `bson:"status"`
-	Options           map[string]string  `bson:"options"`
-	State             string             `bson:"state"`
-	CPUs              []CPU              `bson:"cpus"`
-	NetworkInfo       StorageNodeNetwork `bson:"networkinfo"`
-	StorageDisks      []StorageDisk      `bson:"storagedisks"`
-	Memory            []Memory           `bson:"memory"`
-	OS                OperatingSystem    `bson:"os"`
-	ManagedState      string             `bson:"managedstate"`
-}
-
-type AddStorageNodeRequest struct {
-	Hostname       string `json:"hostname"`
-	SshFingerprint string `json:"sshfingerprint"`
-	User           string `json:"user"`
-	Password       string `json:"password"`
-	SshPort        int    `json:"sshport"`
+	UUID              uuid.UUID          `json:"uuid"`
+	Hostname          string             `json:"hostname"`
+	Tags              map[string]string  `json:"tags"`
+	ManagementIp      string             `json:"managementip"`
+	ClusterIp         string             `json:"clusterip"`
+	PublicAddressIpv4 string             `json:"publicaddressipv4"`
+	ClusterId         uuid.UUID          `json:"clusterid"`
+	Location          string             `json:"location"`
+	Status            string             `json:"status"`
+	Options           map[string]string  `json:"options"`
+	State             string             `json:"state"`
+	CPUs              []CPU              `json:"cpus"`
+	NetworkInfo       StorageNodeNetwork `json:"networkinfo"`
+	StorageDisks      []backend.Disk     `json:"storagedisks"`
+	Memory            []Memory           `json:"memory"`
+	OS                OperatingSystem    `json:"os"`
+	ManagedState      string             `json:"managedstate"`
 }
 
 type CPU struct {
@@ -54,20 +47,20 @@ type StorageNodeNetwork struct {
 	Ipv6   []string `bson:"ipv6"`
 }
 
-type StorageDisk struct {
-	UUID       string `bson:"uuid"`
-	Name       string `bson:"name"`
-	Pkname     string `bson:"pkname"`
-	MountPoint string `bson:"mountpoint"`
-	Kname      string `bson:"kname"`
-	PartUUID   string `bson:"partuuid"`
-	Type       string `bson:"type"`
-	Model      string `bson:"model"`
-	Vendor     string `bson:"vendor"`
-	FsType     string `bson:"fstype"`
-	Size       int    `bson:"size"`
-	InUze      string `bson:"inuze"`
-}
+// type StorageDisk struct {
+// 	UUID       string   `bson:"uuid"`
+// 	Name       string   `bson:"name"`
+// 	Pkname     string   `bson:"pkname"`
+// 	MountPoint []string `bson:"mountpoint"`
+// 	Kname      string   `bson:"kname"`
+// 	PartUUID   string   `bson:"partuuid"`
+// 	Type       string   `bson:"type"`
+// 	Model      string   `bson:"model"`
+// 	Vendor     string   `bson:"vendor"`
+// 	FsType     string   `bson:"fstype"`
+// 	Size       unit64   `bson:"size"`
+// 	Used       bool     `bson:"used"`
+// }
 
 type Memory struct {
 	Name       string `bson:"name"`
@@ -88,22 +81,6 @@ type OperatingSystem struct {
 	SELinuxMode             string `bson:"selinuxmode"`
 }
 
-type StorageNodes []StorageNode
-
-type UnmanagedNode struct {
-	Name            string `json:"name"`
-	SaltFingerprint string `json:"saltfingerprint"`
-}
-
-const (
-	DEFAULT_SSH_PORT        = 22
-	REQUEST_SIZE_LIMIT      = 1048576
-	COLL_NAME_STORAGE_NODES = "storage_nodes"
-	NODE_STATE_FREE         = "free"
-	NODE_STATE_UNMANAGED    = "unmanaged"
-	NODE_STATE_USED         = "used"
-)
-
 type User struct {
 	Username string   `bson:"Username"`
 	Email    string   `bson:"Email"`
@@ -112,4 +89,28 @@ type User struct {
 	Groups   []string `bson:"Groups"`
 	Type     int      `bson:"Type"`
 	Status   bool     `bson:"Status"`
+}
+
+type StorageCluster struct {
+	ClusterId            uuid.UUID       `json:"cluster_id"`
+	ClusterName          string          `json:"cluster_name"`
+	CompatibilityVersion string          `json:"compatibility_version"`
+	ClusterType          string          `json:"cluster_type"`
+	WorkLoad             string          `json:"workload"`
+	ClusterStatus        string          `json:"status"`
+	Tags                 []string        `json:"tags"`
+	Options              interface{}     `json:"options"`
+	Nodes                []ClusterNode   `json:"nodes"`
+	OpenStackServices    []string        `json:"openstackservices"`
+	Networks             ClusterNetworks `json:"networks"`
+}
+
+type ClusterNode struct {
+	Hostname string            `json:"hostname"`
+	Options  map[string]string `json:"options"`
+}
+
+type ClusterNetworks struct {
+	Cluster string `json:"cluster"`
+	Public  string `json:"public"`
 }

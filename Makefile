@@ -33,7 +33,7 @@ test:
 
 pybuild:
 	@echo "Doing $@"
-	@cd python; python setup.py build
+	@cd backend/salt/python; python setup.py build
 
 build: getdeps verifiers pybuild test
 	@echo "Doing $@"
@@ -41,7 +41,7 @@ build: getdeps verifiers pybuild test
 
 pyinstall:
 	@echo "Doing $@"
-	@cd python; python setup.py --quiet install --user
+	@cd backend/salt/python; python setup.py --quiet install --user
 	@echo "INFO: You should set PYTHONPATH make it into effect"
 	@echo "INFO: or run skyring by \`PYTHONPATH=~/.local/lib/python2.7/site-packages skyring\`"
 
