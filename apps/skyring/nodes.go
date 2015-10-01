@@ -34,7 +34,7 @@ var (
 	curr_hostname, err = os.Hostname()
 )
 
-func POST_Nodes(w http.ResponseWriter, r *http.Request) {
+func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	var request models.AddStorageNodeRequest
 
 	// Unmarshal the request body
@@ -54,7 +54,7 @@ func POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if node already added
-	if node, _ := exists("hostname", request.Hostname); node != nil {
+	if node, _ := node_exists("hostname", request.Hostname); node != nil {
 		util.HttpResponse(w, http.StatusMethodNotAllowed, "Node already added")
 		return
 	}
@@ -194,7 +194,7 @@ func addStorageNodeToDB(w http.ResponseWriter, hostname string) bool {
 	return true
 }
 
-func exists(key string, value string) (*models.StorageNode, error) {
+func node_exists(key string, value string) (*models.StorageNode, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
@@ -207,7 +207,7 @@ func exists(key string, value string) (*models.StorageNode, error) {
 	}
 }
 
-func GET_Nodes(w http.ResponseWriter, r *http.Request) {
+func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
@@ -232,7 +232,7 @@ func GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(nodes)
 }
 
-func GET_Node(w http.ResponseWriter, r *http.Request) {
+func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	node_id_str := vars["node-id"]
 	node_id, _ := uuid.Parse(node_id_str)

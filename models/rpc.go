@@ -10,19 +10,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package skyring
+package models
 
-import (
-	"encoding/json"
-	"github.com/gorilla/mux"
-	"net/http"
-)
+type Args struct {
+	Vars    map[string]string
+	Request []byte
+}
 
-func (a *App) GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	hostname := vars["hostname"]
+type RpcResponse struct {
+	Status RpcResponseStatus `json:"status"`
+	Data   RpcResponseData   `json:"data"`
+}
 
-	fingerprint := make(map[string]string)
-	fingerprint["sshfingerprint"] = GetCoreNodeManager().GetNodeSshFingerprint(hostname)
-	json.NewEncoder(w).Encode(fingerprint)
+type RpcResponseStatus struct {
+	StatusCode    int    `json:"statuscode"`
+	StatusMessage string `json:"statusmessage"`
+}
+
+type RpcResponseData struct {
+	RequestId string `json:"requestid"`
+	Result    []byte `json:"result"`
 }
