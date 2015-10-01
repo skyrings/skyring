@@ -16,6 +16,7 @@ import (
 	"encoding/json"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring/tools/ssh"
 	"net"
 	"net/http"
 )
@@ -25,7 +26,8 @@ func GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
 	hostname := vars["hostname"]
 
 	fingerprint := make(map[string]string)
-	fingerprint["sshfingerprint"] = GetCoreNodeManager().GetNodeSshFingerprint(hostname)
+	fingerprint["sshfingerprint"], _ := ssh.GetFingerprint(hostname, 22)
+	// TODO: handle error and return response properly
 	json.NewEncoder(w).Encode(fingerprint)
 }
 

@@ -35,10 +35,6 @@ func NewSaltNodeManager(config io.Reader) (*SaltNodeManager, error) {
 	return &SaltNodeManager{}, nil
 }
 
-func (a SaltNodeManager) GetNodeSshFingerprint(node string) string {
-	return util.PyGetNodeSshFingerprint(node)
-}
-
 func (a SaltNodeManager) AcceptNode(node string, fingerprint string) bool {
 	return util.PyAcceptNode(node, fingerprint)
 }
