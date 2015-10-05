@@ -108,4 +108,6 @@ type User struct {
 	Hash     []byte   `bson:"Hash"`
 	Role     string   `bson:"Role"`
 	Groups   []string `bson:"Groups"`
+	Type     int      `bson:"Type"`
+	Status   bool     `bson:"Status"`
 }

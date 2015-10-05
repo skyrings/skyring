@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package localauthprovider
+package authprovider
 
 import (
 	"errors"
@@ -21,6 +21,11 @@ import (
 	"github.com/skyrings/skyring/models"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+)
+
+var (
+	ErrDeleteNull  = mkmgoerror("deleting non-existant user")
+	ErrMissingUser = mkmgoerror("can't find user")
 )
 
 // MongodbAuthBackend stores database connection information.
@@ -33,7 +38,7 @@ func (b MongodbAuthBackend) connect() *mgo.Collection {
 }
 
 func mkmgoerror(msg string) error {
-	return errors.New("mongobackend: " + msg)
+	return errors.New(msg)
 }
 
 // NewMongodbBackend initializes a new backend.
