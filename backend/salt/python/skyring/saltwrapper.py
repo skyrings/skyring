@@ -15,6 +15,7 @@
 
 import logging
 from functools import wraps
+import uuid
 
 import salt
 from salt import wheel, client
@@ -27,10 +28,8 @@ log = logging.getLogger(__name__)
 def enableLogger(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        print 'args=%s, kwargs=%s' % (args, kwargs)
         log.info('args=%s, kwargs=%s' % (args, kwargs))
         rv = func(*args, **kwargs)
-        print 'rv=%s' % rv
         log.info('rv=%s' % rv)
         return rv
     return wrapper
@@ -51,7 +50,7 @@ def _get_keys(match='*'):
             'rejected_nodes': keys.get('minions_rejected', {})}
 
 
-def accept_node(node, fingerprint):
+def AcceptNode(node, fingerprint):
     d = _get_keys(node)
     if d['accepted_nodes'].get(node):
         log.info("node %s already in accepted node list" % node)
@@ -71,11 +70,38 @@ def accept_node(node, fingerprint):
     return (True if accepted else False)
 
 
-def get_nodes():
-    return _get_keys()
+def GetNodes():
+    '''
+    returns structure
+    {"Manage":   [{"Name": "nodename", "Fingerprint": "nodefinger"}, ...],
+     "Unmanage": [{"Name": "nodename", "Fingerprint": "nodefinger"}, ...],
+     "Ignore":   [{"Name": "nodename", "Fingerprint": "nodefinger"}, ...]}
+    '''
+    keys = _get_keys()
+
+    manage = []
+    for name, finger in keys.get("accepted_nodes", {}).iteritems():
+        manage.append({"Name": name, "Fingerprint": finger})
+
+    unmanage = []
+    ignore = []
+    for name, finger in keys.get("unaccepted_nodes", {}).iteritems():
+        unmanage.append({"Name": name, "Fingerprint": finger})
+
+    ignore = []
+    for name, finger in keys.get("rejected_nodes", {}).iteritems():
+        ignore.append({"Name": name, "Fingerprint": finger})
+    for name, finger in keys.get("denied_nodes", {}).iteritems():
+        ignore.append({"Name": name, "Fingerprint": finger})
+
+    return {"Manage": manage, "Unmanage": unmanage, "Ignore": ignore}
 
 
-def get_node_machine_id(node):
+def GetNodeID(node):
+    '''
+    returns structure
+    {"nodename": "uuidstring", ...}
+    '''
     if type(node) is list:
         minions = node
     else:
@@ -88,7 +114,13 @@ def get_node_machine_id(node):
     return rv
 
 
-def get_node_network_info(node):
+def GetNodeNetwork(node):
+    '''
+    returns structure
+    {"nodename": {"IPv4": ["ipv4address", ...],
+                  "IPv6": ["ipv6address", ...],
+                  "Subnet": ["subnet", ...]}, ...}
+    '''
     if type(node) is list:
         minions = node
     else:
@@ -100,33 +132,29 @@ def get_node_network_info(node):
     for minion in minions:
         info = out.get(minion)
         if info:
-            netinfo[minion] = {'ipv4': info['grains.item']['ipv4'],
-                               'ipv6': info['grains.item']['ipv6'],
-                               'subnet': info['network.subnets']}
+            netinfo[minion] = {'IPv4': info['grains.item']['ipv4'],
+                               'IPv6': info['grains.item']['ipv6'],
+                               'Subnet': info['network.subnets']}
         else:
-            netinfo[minion] = {'ipv4': [], 'ipv6': [], 'subnet': []}
+            netinfo[minion] = {'IPv4': [], 'IPv6': [], 'Subnet': []}
 
     return netinfo
 
 
-def get_node_disk_info(node):
+def GetNodeDisk(node):
     '''
-    This function returns disk/storage device info excluding their
-    parent devices
-
-    Output dictionary is
-    {DEV_MAME: {'INUSE': BOOLEAN,
-                'NAME': SHORT_NAME,
-                'KNAME': DEV_NAME,
-                'FSTYPE': FS_TYPE,
-                'MOUNTPOINT': MOUNT_POINT,
-                'UUID': FS_UUID,
-                'PARTUUID': PART_UUID,
-                'MODEL': MODEL_STRING,
-                'SIZE': SIZE_BYTES,
-                'TYPE': TYPE,
-                'PKNAME', PARENT_DEV_NAME,
-                'VENDOR': VENDOR_STRING}, ...}
+    returns structure
+    {"nodename": [{"DevName":   "devicename",
+                  "FSType":     "fstype",
+                  "FSUUID":     "uuid",
+                  "Model":      "model",
+                  "MountPoint": ["mountpoint", ...],
+                  "Name":       "name",
+                  "Parent":     "parentdevicename",
+                  "Size":       uint64,
+                  "Type":       "type",
+                  "Used":       boolean,
+                  "Vendor":     "string"}, ...], ...}
     '''
 
     if type(node) is list:
@@ -172,4 +200,24 @@ def get_node_disk_info(node):
 
         minion_dev_info[minion] = dev_info
 
-    return minion_dev_info
+    rv = {}
+    for node, ddict in minion_dev_info.iteritems():
+        rv[node] = []
+        for disk in ddict.values():
+            try:
+                u = list(bytearray(uuid.UUID(disk["UUID"]).get_bytes()))
+            except ValueError:
+                # TODO: log the error
+                u = [0] * 16
+            rv[node].append({"DevName": disk["KNAME"],
+                              "FSType": disk["FSTYPE"],
+                              "FSUUID": u,
+                              "Model": disk["MODEL"],
+                              "MountPoint": [disk["MOUNTPOINT"]],
+                              "Name": disk["NAME"],
+                              "Parent": disk["PKNAME"],
+                              "Size": long(disk["SIZE"]),
+                              "Type": disk["TYPE"],
+                              "Used": disk["INUSE"],
+                              "Vendor": disk.get("VENDOR", "")})
+    return rv
