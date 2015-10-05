@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "fab399f4_c36e7c96",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-05T16:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_9d8867c8",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_bd852baf",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -36,6 +54,24 @@
       "writtenOn": "2015-10-05T11:14:05Z",
       "side": 1,
       "message": "We need one more field \u0027openstack_services\u0027, an array required openstack services",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_e36b8083",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-05T16:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_bd852baf",
       "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -59,6 +95,24 @@
     },
     {
       "key": {
+        "uuid": "fab399f4_230578c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-05T16:58:55Z",
+      "side": 1,
+      "message": "Bala had a different view point on this. I had used the same way for accepting a node as \n/api/\u003cver\u003e/unmanaged_nodes/{hostname}/accept",
+      "parentUuid": "fab399f4_dda9ff25",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_5d6def03",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -70,6 +124,24 @@
       "writtenOn": "2015-10-05T11:14:05Z",
       "side": 1,
       "message": "DELETE can be used here since you are going to remove the record from DB. else i would prefer \"/forget\"",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_831484f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-05T16:58:55Z",
+      "side": 1,
+      "message": "Done. Would do as a DELETE request",
+      "parentUuid": "fab399f4_5d6def03",
       "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -93,6 +165,24 @@
     },
     {
       "key": {
+        "uuid": "fab399f4_a3f8a8c5",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-05T16:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_5d440f74",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_dd801f8e",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 2
@@ -110,6 +200,24 @@
     },
     {
       "key": {
+        "uuid": "fab399f4_c3f59ccc",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-05T16:58:55Z",
+      "side": 1,
+      "message": "Oh yes. copy+paste issue :)",
+      "parentUuid": "fab399f4_dd801f8e",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_7d72b3e6",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 2
@@ -121,6 +229,24 @@
       "writtenOn": "2015-10-05T11:14:05Z",
       "side": 1,
       "message": "This is not right. Even though we removed the cluster from the DB, it actually live and operating. So calling a node which is part of the cluster as \u0027free\u0027 is wrong. We need to forget the nodes as well here (volumes/pools too).",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_e302a0b3",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-05T16:58:55Z",
+      "side": 1,
+      "message": "Ok. So ideally the managed nodes details should be removed in addition to the volumes/pool. Correct?",
+      "parentUuid": "fab399f4_7d72b3e6",
       "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
