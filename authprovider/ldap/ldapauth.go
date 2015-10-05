@@ -10,7 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package localauthprovider
+package ldapauthprovider
 
 import (
 	"encoding/json"
@@ -18,15 +18,17 @@ import (
 	"fmt"
 	"github.com/goincremental/negroni-sessions"
 	"github.com/golang/glog"
+	"github.com/mqu/openldap"
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/models"
 	"golang.org/x/crypto/bcrypt"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
-const ProviderName = "localauthprovider"
+const ProviderName = "ldapauthprovider"
 
 // ErrDeleteNull is returned by DeleteUser when that user didn't exist at the
 // time of call.
@@ -43,19 +45,72 @@ type Role int
 // Authorizer structures contain the store of user session cookies a reference
 // to a backend storage system.
 type Authorizer struct {
-	backend     authprovider.AuthBackend
-	defaultRole string
-	roles       map[string]Role
+	backend          authprovider.AuthBackend
+	ldapServer       string
+	port             int
+	connectionString string
+	defaultRole      string
+	roles            map[string]Role
 }
 
-type LocalProviderCfg struct {
+type LdapProviderCfg struct {
+	LdapServer Directory `json:"ldapserver"`
+	UserRoles  RolesConf `joson:"userroles"`
+}
+
+type RolesConf struct {
 	Roles       map[string]Role
 	DefaultRole string
 }
 
+type Directory struct {
+	Address string
+	Port    int
+	Base    string
+}
+
+func Authenticate(url string, base string,
+	user string, passwd string) error {
+
+	ldap, err := openldap.Initialize(url)
+	defer ldap.Close()
+
+	if err != nil {
+		glog.Errorf("Failed to connect the server!")
+		return err
+	}
+
+	ldap.SetOption(openldap.LDAP_OPT_PROTOCOL_VERSION, openldap.LDAP_VERSION3)
+	userConnStr := fmt.Sprintf("uid=%s,%s", user, base)
+
+	err = ldap.Bind(userConnStr, passwd)
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+func GetUrl(ldapserver string, port int) string {
+	return fmt.Sprintf("ldap://%s:%d/", ldapserver, port)
+}
+
+func LdapAuth(a Authorizer, user, passwd string) bool {
+	url := GetUrl(a.ldapServer, a.port)
+	glog.Errorf("URL VALUE IS:%s", url)
+	// Authenticating user
+	err := Authenticate(url, a.connectionString, user, passwd)
+	if err != nil {
+		glog.Errorf("Authentication Failed: %s", err)
+		return false
+	} else {
+		glog.Infof("Ldap user login success!")
+		return true
+	}
+}
+
 func init() {
 	authprovider.RegisterAuthProvider(ProviderName, func(config io.Reader) (authprovider.AuthInterface, error) {
-		return NewLocalAuthProvider(config)
+		return NewLdapAuthProvider(config)
 	})
 }
 
@@ -63,13 +118,13 @@ func mkerror(msg string) error {
 	return errors.New(msg)
 }
 
-func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
+func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 	if config == nil {
-		glog.Errorln("missing configuration file for Local Auth provider")
-		return nil, fmt.Errorf("missing configuration file for Local Auth provider")
+		glog.Errorln("missing configuration file for Ldap Auth provider")
+		return nil, fmt.Errorf("missing configuration file for Ldap Auth provider")
 	}
 
-	providerCfg := LocalProviderCfg{}
+	providerCfg := LdapProviderCfg{}
 
 	bytes, err := ioutil.ReadAll(config)
 	if err != nil {
@@ -83,12 +138,17 @@ func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 	//Create DB Backend
 	backend, err := authprovider.NewMongodbBackend()
 	if err != nil {
-		glog.Errorf("Unable to initialize the DB backend for localauthprovider:%s", err)
+		glog.Errorf("Unable to initialize the DB backend for Ldapauthprovider:%s", err)
 		panic(err)
 	}
 	//Create the Provider
-	if provider, err := NewAuthorizer(backend, providerCfg.DefaultRole, providerCfg.Roles); err != nil {
-		glog.Errorf("Unable to initialize the authorizer for localauthprovider:%s", err)
+	if provider, err := NewAuthorizer(backend,
+		providerCfg.LdapServer.Address,
+		providerCfg.LdapServer.Port,
+		providerCfg.LdapServer.Base,
+		providerCfg.UserRoles.DefaultRole,
+		providerCfg.UserRoles.Roles); err != nil {
+		glog.Errorf("Unable to initialize the authorizer for Ldapauthprovider:%s", err)
 		panic(err)
 	} else {
 		return &provider, nil
@@ -96,20 +156,13 @@ func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 
 }
 
-// NewAuthorizer returns a new Authorizer given an AuthBackend
-// Roles are a map of string to httpauth.Role values (integers). Higher Role values
-// have more access.
-//
-// Example roles:
-//
-//     var roles map[string]httpauth.Role
-//     roles["user"] = 2
-//     roles["admin"] = 4
-//     roles["moderator"] = 3
-
-func NewAuthorizer(backend authprovider.AuthBackend, defaultRole string, roles map[string]Role) (Authorizer, error) {
+func NewAuthorizer(backend authprovider.AuthBackend, address string, port int, base string,
+	defaultRole string, roles map[string]Role) (Authorizer, error) {
 	var a Authorizer
 	a.backend = backend
+	a.ldapServer = address
+	a.port = port
+	a.connectionString = base
 	a.roles = roles
 	a.defaultRole = defaultRole
 	if _, ok := roles[defaultRole]; !ok {
@@ -135,24 +188,95 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 		return nil
 	}
 
+	// Verify user allowed to user usm with group privilage in the db
 	if user, err := a.backend.User(u); err == nil {
 		if user.Status {
-			verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(p))
-			if verify != nil {
-				glog.Errorln("Passwords Doesnot match")
-				return mkerror("password doesn't match")
+			if user.Type == authprovider.External {
+				if LdapAuth(a, u, p) {
+					glog.Infof("Login Success for LDAP")
+				} else {
+					glog.Errorln("Invalid username / password")
+					return mkerror("Invalid username / password")
+				}
+			} else {
+				verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(p))
+				if verify != nil {
+					glog.Errorln("Passwords Doesnot match")
+					return mkerror("password doesn't match")
+				}
 			}
 		} else {
 			glog.Errorln("This user is not allowed. Status Disabled")
 			return mkerror("This user is not allowed. Status Disabled")
 		}
 	} else {
-		glog.Errorln("User Not Found")
-		return mkerror("user not found")
+		glog.Errorln("This user is not allowed to use this app")
+		return mkerror("This user is not allowed to use this app")
 	}
 	session.Set("username", u)
 
 	return nil
+}
+
+// Logout clears an authentication session and add a logged out message.
+func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
+	session := sessions.GetSession(req)
+	session.Delete("username")
+	return nil
+}
+
+// List the LDAP users
+func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
+
+	url := GetUrl(a.ldapServer, a.port)
+
+	ldap, err := openldap.Initialize(url)
+	if err != nil {
+		glog.Errorf("failed to connect the LDAP/AD server:%s", err)
+		return nil, err
+	}
+
+	scope := openldap.LDAP_SCOPE_SUBTREE
+	// LDAP_SCOPE_BASE, LDAP_SCOPE_ONELEVEL, LDAP_SCOPE_SUBTREE
+	// filter := "cn=*group*"
+	filter := "(objectclass=*)"
+	attributes := []string{"Uid", "UidNumber", "CN", "SN",
+		"Givenname", "Displayname", "mail"}
+
+	rv, err := ldap.SearchAll(a.connectionString, scope, filter, attributes)
+
+	if err != nil {
+		glog.Errorf("failed to search LDAP/AD server:%s", err)
+		return nil, err
+	}
+
+	for _, entry := range rv.Entries() {
+		user := models.User{}
+		for _, attr := range entry.Attributes() {
+			switch attr.Name() {
+			case "Uid":
+				user.Username = strings.Join(attr.Values(), ", ")
+			case "Mail":
+				user.Email = strings.Join(attr.Values(), ", ")
+			default:
+				glog.Errorf("This property is not supported:%s", attr.Name())
+			}
+		}
+		// find the user role and group from the db and assign it
+		users = append(users, user)
+
+	}
+	return users, nil
+}
+
+// List the users in DB
+func (a Authorizer) ListUsers() (users []models.User, err error) {
+
+	if users, err = a.backend.Users(); err != nil {
+		glog.Errorf("Unable get the list of Users: %v", err)
+		return users, err
+	}
+	return users, nil
 }
 
 // Register and save a new user. Returns an error and adds a message if the
@@ -170,13 +294,9 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		glog.Errorln("no email given")
 		return mkerror("no email given")
 	}
-	if password == "" {
-		glog.Errorln("no password given")
-		return mkerror("no password given")
-	}
 
-	//Set the usertype to internal
-	user.Type = authprovider.Internal
+	//Set the usertype to external
+	user.Type = authprovider.External
 	user.Status = true
 
 	// Validate username
@@ -192,13 +312,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		return nil
 	}
 
-	// Generate and save hash
-	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		glog.Errorf("couldn't save password:%s", err)
-		return mkerror("couldn't save password: " + err.Error())
-	}
-	user.Hash = hash
+	user.Hash = nil
 
 	// Validate role
 	if user.Role == "" {
@@ -221,6 +335,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 // Update changes data for an existing user. Needs thought...
 //Just added for completeness. Will revisit later
 func (a Authorizer) UpdateUser(req *http.Request, username string, p string, e string) error {
+
 	var (
 		hash  []byte
 		email string
@@ -231,30 +346,36 @@ func (a Authorizer) UpdateUser(req *http.Request, username string, p string, e s
 		glog.Errorln("Error retrieving the user:%s", err)
 		return err
 	}
-	if p != "" {
-		hash, err = bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
-		if err != nil {
-			glog.Errorln("Error saving the password:%s", err)
-			return mkerror("couldn't save password: " + err.Error())
+
+	if user.Type == authprovider.Internal {
+		if p != "" {
+			hash, err = bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
+			if err != nil {
+				glog.Errorln("Error saving the password:%s", err)
+				return mkerror("couldn't save password: " + err.Error())
+			}
+		} else {
+			hash = user.Hash
 		}
+		if e != "" {
+			email = e
+		} else {
+			email = user.Email
+		}
+
+		newuser := models.User{Username: username, Email: email, Hash: hash, Role: user.Role}
+
+		err = a.backend.SaveUser(newuser)
+		if err != nil {
+			glog.Errorln("Error saving the user to DB:%s", err)
+			return err
+		}
+
+		return nil
 	} else {
-		hash = user.Hash
-	}
-	if e != "" {
-		email = e
-	} else {
-		email = user.Email
+		return mkerror("Operation Not Supported")
 	}
 
-	newuser := models.User{Username: username, Email: email, Hash: hash, Role: user.Role}
-
-	err = a.backend.SaveUser(newuser)
-	if err != nil {
-		glog.Errorln("Error saving the user to DB:%s", err)
-		return err
-	}
-
-	return nil
 }
 
 // Authorize checks if a user is logged in and returns an error on failed
@@ -273,17 +394,13 @@ func (a Authorizer) AuthorizeRole(rw http.ResponseWriter, req *http.Request, rol
 	return nil
 }
 
-// Logout clears an authentication session and add a logged out message.
-func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
-	session := sessions.GetSession(req)
-	session.Delete("username")
-	return nil
-}
-
 // CurrentUser returns the currently logged in user and a boolean validating
 // the information.
 func (a Authorizer) GetUser(u string) (user models.User, e error) {
 
+	// This should search and fetch the user name based on the given value
+	// and can also check whether the available users are already imported
+	// into the database or not.
 	user, e = a.backend.User(u)
 	if e != nil {
 		glog.Errorf("Error retrieving the user:%s", e)
@@ -292,25 +409,14 @@ func (a Authorizer) GetUser(u string) (user models.User, e error) {
 	return user, nil
 }
 
-func (a Authorizer) ListUsers() (users []models.User, err error) {
-
-	if users, err = a.backend.Users(); err != nil {
-		glog.Errorf("Unable get the list of Users: %v", err)
-		return users, err
-	}
-	return users, nil
-}
-
-func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
-	return users, errors.New("Not Supported")
-}
-
 // DeleteUser removes a user from the Authorize. ErrMissingUser is returned if
 // the user to be deleted isn't found.
+// This will delete the ldap user name from the db so that
+// he will be no longer available for login to use skyring
 func (a Authorizer) DeleteUser(username string) error {
 	err := a.backend.DeleteUser(username)
 	if err != nil {
-		glog.Errorf("Unable delete the user: %v", err)
+		glog.Errorf("Unable delete the user: %s", err)
 		return err
 	}
 	return nil
