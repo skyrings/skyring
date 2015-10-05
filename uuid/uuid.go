@@ -57,10 +57,10 @@ func New() (*UUID, error) {
 	} else {
 		// variant bits; for more info
 		// see https://www.ietf.org/rfc/rfc4122.txt section 4.1.1
-		uuid[8] = uuid[8] & 0x3f | 0x80
+		uuid[8] = uuid[8]&0x3f | 0x80
 		// version 4 (pseudo-random); for more info
 		// see https://www.ietf.org/rfc/rfc4122.txt section 4.1.3
-		uuid[6] = uuid[6] & 0x0f | 0x40
+		uuid[6] = uuid[6]&0x0f | 0x40
 	}
 
 	return uuid, nil

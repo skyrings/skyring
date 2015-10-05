@@ -75,10 +75,10 @@ func NewApp(configDir string, binDir string) *App {
 
 	//Check if atleast one provider is initialized successfully
 	//otherwise panic
-	if len(app.providers) < 1 {
+	/*if len(app.providers) < 1 {
 		panic(fmt.Sprintf("None of the providers are initialized successfully"))
 	}
-	glog.Infof("Loaded URLs:", app.routes)
+	glog.Infof("Loaded URLs:", app.routes)*/
 
 	return app
 }
