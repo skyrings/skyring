@@ -43,19 +43,9 @@ type Role int
 // Authorizer structures contain the store of user session cookies a reference
 // to a backend storage system.
 type Authorizer struct {
-	backend     AuthBackend
+	backend     authprovider.AuthBackend
 	defaultRole string
 	roles       map[string]Role
-}
-
-// The AuthBackend interface defines a set of methods an AuthBackend must
-// implement.
-type AuthBackend interface {
-	SaveUser(u models.User) error
-	User(username string) (user models.User, e error)
-	Users() (users []models.User, e error)
-	DeleteUser(username string) error
-	Close()
 }
 
 type LocalProviderCfg struct {
@@ -91,7 +81,7 @@ func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 		return nil, err
 	}
 	//Create DB Backend
-	backend, err := NewMongodbBackend()
+	backend, err := authprovider.NewMongodbBackend()
 	if err != nil {
 		glog.Errorf("Unable to initialize the DB backend for localauthprovider:%s", err)
 		panic(err)
@@ -117,7 +107,7 @@ func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 //     roles["admin"] = 4
 //     roles["moderator"] = 3
 
-func NewAuthorizer(backend AuthBackend, defaultRole string, roles map[string]Role) (Authorizer, error) {
+func NewAuthorizer(backend authprovider.AuthBackend, defaultRole string, roles map[string]Role) (Authorizer, error) {
 	var a Authorizer
 	a.backend = backend
 	a.roles = roles
@@ -146,10 +136,15 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 	}
 
 	if user, err := a.backend.User(u); err == nil {
-		verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(p))
-		if verify != nil {
-			glog.Errorln("Passwords Doesnot match")
-			return mkerror("password doesn't match")
+		if user.Status {
+			verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(p))
+			if verify != nil {
+				glog.Errorln("Passwords Doesnot match")
+				return mkerror("password doesn't match")
+			}
+		} else {
+			glog.Errorln("This user is not allowed. Status Disabled")
+			return mkerror("This user is not allowed. Status Disabled")
 		}
 	} else {
 		glog.Errorln("User Not Found")
@@ -180,12 +175,16 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		return mkerror("no password given")
 	}
 
+	//Set the usertype to internal
+	user.Type = authprovider.Internal
+	user.Status = true
+
 	// Validate username
 	_, err := a.backend.User(user.Username)
 	if err == nil {
 		glog.Errorln("Username already exists")
 		return mkerror("user already exists")
-	} else if err != ErrMissingUser {
+	} else if err.Error() != ErrMissingUser.Error() {
 		if err != nil {
 			glog.Errorf("Error retrieving user:%s", err)
 			return mkerror(err.Error())
@@ -300,6 +299,10 @@ func (a Authorizer) ListUsers() (users []models.User, err error) {
 		return users, err
 	}
 	return users, nil
+}
+
+func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
+	return users, errors.New("Not Supported")
 }
 
 // DeleteUser removes a user from the Authorize. ErrMissingUser is returned if

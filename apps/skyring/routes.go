@@ -105,6 +105,13 @@ var (
 			Version:     1,
 		},
 		{
+			Name:        "IMPORT_users",
+			Method:      "GET",
+			Pattern:     "externalusers",
+			HandlerFunc: getExternalUsers,
+			Version:     1,
+		},
+		{
 			Name:        "POST_users",
 			Method:      "POST",
 			Pattern:     "users",
