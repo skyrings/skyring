@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fab399f4_9d8867c8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-05T11:14:05Z",
+      "side": 1,
+      "message": "This is not required. It depends on cluster_type",
+      "range": {
+        "startLine": 15,
+        "startChar": 10,
+        "endLine": 15,
+        "endChar": 56
+      },
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_bd852baf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-05T11:14:05Z",
+      "side": 1,
+      "message": "We need one more field \u0027openstack_services\u0027, an array required openstack services",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_dda9ff25",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-05T11:14:05Z",
+      "side": 1,
+      "message": "why not \"api/\u003cver\u003e/clusters/{cluster-id}/expand\" ?\n\nI don\u0027t think its a good practice to use query parameters to say what action to be performed.",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_5d6def03",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-05T11:14:05Z",
+      "side": 1,
+      "message": "DELETE can be used here since you are going to remove the record from DB. else i would prefer \"/forget\"",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_5d440f74",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-05T11:14:05Z",
+      "side": 1,
+      "message": "extend \u003d\u003e \"Expand\"",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_dd801f8e",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-05T11:14:05Z",
+      "side": 1,
+      "message": "cluster_id should not be generated here. Its already part of the request",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_7d72b3e6",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-05T11:14:05Z",
+      "side": 1,
+      "message": "This is not right. Even though we removed the cluster from the DB, it actually live and operating. So calling a node which is part of the cluster as \u0027free\u0027 is wrong. We need to forget the nodes as well here (volumes/pools too).",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
