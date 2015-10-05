@@ -34,7 +34,7 @@ func (uuid UUID) IsZero() bool {
 }
 
 func (uuid UUID) MarshalJSON() ([]byte, error) {
-	return uuid[:], nil
+	return []byte(`"` + uuid.String() + `"`), nil
 }
 
 func (uuid *UUID) UnmarshalJSON(b []byte) error {
