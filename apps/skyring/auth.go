@@ -92,7 +92,7 @@ func getUsers(rw http.ResponseWriter, req *http.Request) {
 	for _, user := range users {
 
 		pUsers = append(pUsers, PublicUser{
-			User: &models.User{Username: user.Username, Email: user.Email, Role: user.Role, Groups: user.Groups},
+			User: &models.User{Username: user.Username, Email: user.Email, Role: user.Role, Groups: user.Groups, Type: user.Type, Status: user.Status},
 		})
 	}
 	//marshal and send it across
@@ -133,6 +133,36 @@ func getUser(rw http.ResponseWriter, req *http.Request) {
 
 }
 
+func getExternalUsers(rw http.ResponseWriter, req *http.Request) {
+
+	users, err := GetAuthProvider().ListExternalUsers()
+	if err != nil {
+		glog.Errorf("Unable to List the users:%s", err)
+		util.HandleHttpError(rw, err)
+		return
+	}
+	//hide the hash field for users in the list
+	type PublicUser struct {
+		*models.User
+		Hash bool `json:"Hash,omitempty"`
+	}
+	var pUsers []PublicUser
+	for _, user := range users {
+
+		pUsers = append(pUsers, PublicUser{
+			User: &models.User{Username: user.Username, Email: user.Email, Role: user.Role, Groups: user.Groups, Type: user.Type, Status: user.Status},
+		})
+	}
+	//marshal and send it across
+	bytes, err := json.Marshal(pUsers)
+	if err != nil {
+		glog.Errorf("Unable to marshal the list of Users:%s", err)
+		util.HandleHttpError(rw, err)
+		return
+	}
+	rw.Write(bytes)
+}
+
 func addUsers(rw http.ResponseWriter, req *http.Request) {
 
 	var user models.User
@@ -150,9 +180,15 @@ func addUsers(rw http.ResponseWriter, req *http.Request) {
 		util.HandleHttpError(rw, err)
 		return
 	}
-	user.Username = m["username"].(string)
-	user.Email = m["email"].(string)
-	user.Role = m["role"].(string)
+	if val, ok := m["username"]; ok {
+		user.Username = val.(string)
+	}
+	if val, ok := m["email"]; ok {
+		user.Email = val.(string)
+	}
+	if val, ok := m["role"]; ok {
+		user.Role = val.(string)
+	}
 
 	if err := GetAuthProvider().AddUser(user, m["password"].(string)); err != nil {
 		glog.Errorf("Unable to create User:%s", err)
