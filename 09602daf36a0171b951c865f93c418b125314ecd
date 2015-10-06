@@ -61,6 +61,24 @@
     },
     {
       "key": {
+        "uuid": "fab399f4_eee447ae",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-06T05:51:48Z",
+      "side": 1,
+      "message": "Node is getting deleted so effectively its like skyring is going to forget this node. In such a scenario, the node should be shown as un-managed node to the user and so we should move it to un-accepted/rejected list.\n\nIn that case, ideally while listing the un-managed nodes for UI, we should consider un-accepted and rejected keys both.\n\nWhat you suggest here?",
+      "parentUuid": "1ae5cdf2_2617dca4",
+      "revId": "09602daf36a0171b951c865f93c418b125314ecd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_06df400e",
         "filename": "python/skyring/salt_wrapper.py",
         "patchSetId": 3
@@ -114,6 +132,24 @@
       "side": 1,
       "message": "FYI, salt error\n\nThe key glob \u0027foo\u0027 does not match any accepted, unaccepted or rejected keys.",
       "parentUuid": "1ae5cdf2_e6d7b4eb",
+      "revId": "09602daf36a0171b951c865f93c418b125314ecd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_ced783be",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-06T05:51:48Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "1ae5cdf2_663ac437",
       "revId": "09602daf36a0171b951c865f93c418b125314ecd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
