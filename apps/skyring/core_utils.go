@@ -14,18 +14,15 @@ package skyring
 
 import (
 	"encoding/json"
-	"github.com/skyrings/skyring/utils"
+	"github.com/gorilla/mux"
 	"net/http"
 )
 
 func GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
-	params := r.URL.Query()
-	hostname := params.Get("hostname")
+	vars := mux.Vars(r)
+	hostname := vars["hostname"]
 
-	if hostname == "" {
-		util.HttpResponse(w, http.StatusBadRequest, "Host name not provided")
-		return
-	}
-
-	json.NewEncoder(w).Encode(GetCoreNodeManager().GetNodeSshFingerprint(hostname))
+	fingerprint := make(map[string]string)
+	fingerprint["sshfingerprint"] = GetCoreNodeManager().GetNodeSshFingerprint(hostname)
+	json.NewEncoder(w).Encode(fingerprint)
 }

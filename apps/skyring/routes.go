@@ -30,7 +30,7 @@ var (
 		{
 			Name:        "GET_SshFingerprint",
 			Method:      "GET",
-			Pattern:     "utils/ssh_fingerprint",
+			Pattern:     "utils/ssh_fingerprint/{hostname}",
 			HandlerFunc: GET_SshFingerprint,
 			Version:     1,
 		},
