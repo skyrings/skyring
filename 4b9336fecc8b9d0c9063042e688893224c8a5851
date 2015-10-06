@@ -250,6 +250,24 @@
       "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_a92409c7",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-06T11:20:47Z",
+      "side": 1,
+      "message": "Will take care of volume/pool removal once we have volume/pool creation logic implemented",
+      "parentUuid": "fab399f4_e302a0b3",
+      "revId": "4b9336fecc8b9d0c9063042e688893224c8a5851",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
