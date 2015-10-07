@@ -159,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_39304f56",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T09:51:07Z",
+      "side": 1,
+      "message": "why? Provider is doing the cluster creation and updating cluster details into DB. Then why this part alone is done at core?",
+      "parentUuid": "dab895d6_b90fff2d",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_041dd766",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -322,6 +340,24 @@
       "side": 1,
       "message": "Nodes should not be deleted as we are just forgetting the cluster from skyring but it still remains in backend.\nAll we are doing here is setting the clusterid field to blank for the node and deleting the cluster. We cannot mark the node as free as its actually participating in cluster but cluster not known to skyring.\n\nYes all the volumes and pools (at later stage once available) would be deleted as part of this.",
       "parentUuid": "fab399f4_a45c2b27",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_7903a773",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T09:51:07Z",
+      "side": 1,
+      "message": "We should delete all the entities related to that cluster including the nodes. Since it is a forget, we will be deleting it only from DB and not going to do anything with devices",
+      "parentUuid": "dab895d6_99395bdb",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -569,6 +605,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_99d07bf9",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T09:51:07Z",
+      "side": 1,
+      "message": "My opinion is to move everything into a single list and follow the same approach for all routes func(a *App), so that it looks uniform across all.\nIts a suggestion, up to you",
+      "parentUuid": "dab895d6_795c8726",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_012069f6",
         "filename": "models/core_models.go",
         "patchSetId": 3
@@ -598,6 +652,24 @@
       "side": 1,
       "message": "Then why not specific sources like nodes.go etc??",
       "parentUuid": "fab399f4_012069f6",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_79b567cc",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T09:51:07Z",
+      "side": 1,
+      "message": "That will be too much I guess. I prefer one single file contains only the model definitions. One for RPC . And another one for other misc items",
+      "parentUuid": "dab895d6_b93d3fbe",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -645,6 +717,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_398daf32",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T09:51:07Z",
+      "side": 1,
+      "message": "I see some additional things like OpenStackServices and things like storage_type is missing. What I meant was both should be sync otherwise it will be difficult to manage later. I am fine to make mnodification in the spec as well. Let us discuss and update accordingly. This is applicable to nodes as well",
+      "parentUuid": "dab895d6_19746b9b",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_417981fb",
         "filename": "models/rpc.go",
         "patchSetId": 3
@@ -680,6 +770,24 @@
       "side": 1,
       "message": "Response is just a byte array which is a json I feel. Referred from ProviderHandler() method",
       "parentUuid": "fab399f4_417981fb",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_39a68fc2",
+        "filename": "models/rpc.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T09:51:07Z",
+      "side": 1,
+      "message": "But the providers needs to construct the response in a specific format right? As below\n\n{\n    \"title\": \"RPC Output\",\n    \"description\": \"Output expected from provider RPC methods\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"Data\": {\n            \"description\": \"Output Data\",\n            \"type\": \"object\",\n            \"properties\": {\n                \"result\": {\n                    \"description\": \"Response body, data structures specific to method\",\n                    \"type\": \"object\",\n                    \"properties\": {}\n                },\n                \"requestId\": {\n                    \"description\": \"Id of asynchronous task\",\n                    \"type\": \"string”\n                }\n                }\n        },\n        \"Status\": {\n            \"description\": \"Request Status\",\n            \"type\": \"object\",\n            \"properties\": {\n                \"statusCode\": {\n                        \"type\": \"integer\"\n                },\n                \"statusMessage\": {\n                        \"type\": \"string\"\n                }\n            }\n        }\n    }\n}",
+      "parentUuid": "dab895d6_79aac7d5",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
