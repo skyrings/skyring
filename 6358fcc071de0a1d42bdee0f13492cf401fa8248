@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fab399f4_819f1903",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "Did we decide on the way to go for actions like shrink,expand?",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_61ccc536",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -37,6 +54,167 @@
       "side": 1,
       "message": "My mistake, forgot to remove /forget from URL. Will do that",
       "parentUuid": "fab399f4_61ccc536",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_012f89a2",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "Checking for failure case? Why to set cluster/node status to UP/USED in failure case?",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 21
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_e40f032d",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "I think these updates to be done in provider. These ops are going to be async and you will not get a chance to update the cluster and node status",
+      "range": {
+        "startLine": 62,
+        "startChar": 2,
+        "endLine": 80,
+        "endChar": 4
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_041dd766",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 92,
+        "startChar": 1,
+        "endLine": 102,
+        "endChar": 8
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_241adb6e",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 115,
+        "startChar": 1,
+        "endLine": 126,
+        "endChar": 4
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_21900dec",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "provider.Name is better",
+      "range": {
+        "startLine": 157,
+        "startChar": 43,
+        "endLine": 157,
+        "endChar": 57
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_4426efbb",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "provider.Name is better",
+      "range": {
+        "startLine": 205,
+        "startChar": 51,
+        "endLine": 205,
+        "endChar": 56
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_a45c2b27",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "What is plan ? Are we removing only the cluster or we will remove the nodes as well? if not what will be status of nodes? I think we need to remove the nodes as well from DB.",
+      "range": {
+        "startLine": 225,
+        "startChar": 1,
+        "endLine": 225,
+        "endChar": 38
+      },
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -120,6 +298,52 @@
     },
     {
       "key": {
+        "uuid": "fab399f4_81d1d9cf",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "It always return from here and other condition will never be checked. We need to check whether the map has that provider and only that case we need to return otherwise continue",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 61,
+        "endChar": 8
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_c1daf1e8",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "I think we need to have the same check here too",
+      "range": {
+        "startLine": 76,
+        "startChar": 3,
+        "endLine": 76,
+        "endChar": 8
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_a1d6ddc3",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 3
@@ -155,6 +379,92 @@
       "side": 1,
       "message": "These routes are bit different from core routes as they end up calls in external providers, whereas pure core apis are within skyring.\n\nThe handler functions are defined attached to App because from app we need to get access to the providers map. From the provider map we get specific provider and invoke the rpc call. See the POST_Clusters() method in clusters.go",
       "parentUuid": "fab399f4_a1d6ddc3",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_a15fbd71",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "I think we need to put all the routes into this function.Just define the global variables(CORE_ROUTES and CORE_ROUTES_NOAUTH) outside and the route definitions inside so that it is uniform across all routes. Otherwise it may cause confusion\nIs there any issue with that?",
+      "range": {
+        "startLine": 28,
+        "startChar": 9,
+        "endLine": 28,
+        "endChar": 13
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_012069f6",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "We need to separate out models definitions and others. Let model definitions only in this file and take out others like  AddStorageNodeRequest, type StorageNodes []StorageNode etc into a different file",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_e1229500",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "Are these model definition in-line with what is defined in the provider spec? If not we need to make it in-line either updating provider spec or model defintion, whichever is appropriate.\nApplicable for all models definitions",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 16
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_417981fb",
+        "filename": "models/rpc.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T07:16:27Z",
+      "side": 1,
+      "message": "be in-line with what is defined in spec, including the var names. Also we need to define the RPC response here",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 16,
+        "endChar": 5
+      },
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
