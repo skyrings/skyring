@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "fab399f4_419501e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T05:49:08Z",
+      "side": 1,
+      "message": "My mistake, forgot to remove /forget from URL. Will do that",
+      "parentUuid": "fab399f4_61ccc536",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_a1edfd8d",
         "filename": "apps/skyring/request-router.go",
         "patchSetId": 3
@@ -48,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "fab399f4_619a0516",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T05:49:08Z",
+      "side": 1,
+      "message": "By handled differently you mean to have different methods?\n\nI feel, in a request which is not provider specific, at least cluster_id would for sure be there. In what scenario you see cluster_id not present there?",
+      "parentUuid": "fab399f4_a1edfd8d",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_a1d6ddc3",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 3
@@ -65,6 +101,24 @@
         "endLine": 28,
         "endChar": 11
       },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_c18831c9",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T05:49:08Z",
+      "side": 1,
+      "message": "These routes are bit different from core routes as they end up calls in external providers, whereas pure core apis are within skyring.\n\nThe handler functions are defined attached to App because from app we need to get access to the providers map. From the provider map we get specific provider and invoke the rpc call. See the POST_Clusters() method in clusters.go",
+      "parentUuid": "fab399f4_a1d6ddc3",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
