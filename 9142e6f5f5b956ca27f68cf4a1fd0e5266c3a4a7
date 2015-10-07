@@ -22,6 +22,24 @@
       "revId": "9142e6f5f5b956ca27f68cf4a1fd0e5266c3a4a7",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_b9fe1f37",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T10:19:16Z",
+      "side": 1,
+      "message": "Once https://review.gerrithub.io/#/c/249094/ merged, will rebase and send.",
+      "parentUuid": "dab895d6_f94a57ab",
+      "revId": "9142e6f5f5b956ca27f68cf4a1fd0e5266c3a4a7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
