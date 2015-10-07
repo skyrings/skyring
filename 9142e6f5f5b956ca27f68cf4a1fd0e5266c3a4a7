@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab895d6_f94a57ab",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-07T10:10:11Z",
+      "side": 1,
+      "message": "Need to rebase based on bala\u0027s patch as the uuid moved in to tools. Need to make this change wherever you are using uuid",
+      "range": {
+        "startLine": 23,
+        "startChar": 11,
+        "endLine": 23,
+        "endChar": 24
+      },
+      "revId": "9142e6f5f5b956ca27f68cf4a1fd0e5266c3a4a7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
