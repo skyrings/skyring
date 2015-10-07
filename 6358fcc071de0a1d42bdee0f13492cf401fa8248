@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "fab399f4_41bc216d",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-07T05:58:52Z",
+      "side": 1,
+      "message": "yes, different functions.\n\n\u0027cluster_id\u0027 will not be part of the request body but in URL mostly.\n\nThe important thing here is, you always try to match with storage specific apis which is not required for core APIs.",
+      "parentUuid": "fab399f4_619a0516",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_a1d6ddc3",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 3
