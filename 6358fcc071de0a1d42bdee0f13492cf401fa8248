@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_d91f53b6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T10:13:01Z",
+      "side": 1,
+      "message": "If not may be would do in further patches. Would remove for the time being.",
+      "parentUuid": "fab399f4_819f1903",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dab895d6_793ac737",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2015-10-07T09:43:02Z",
       "side": 1,
       "message": "this should be another json array. It should have cluster_ip_address and public_ip_address of the hosts.",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_f91c17c4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T10:13:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dab895d6_793ac737",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -171,6 +207,24 @@
       "side": 1,
       "message": "why? Provider is doing the cluster creation and updating cluster details into DB. Then why this part alone is done at core?",
       "parentUuid": "dab895d6_b90fff2d",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_1979cbfc",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T10:13:01Z",
+      "side": 1,
+      "message": "Lets decide first if providers are going to have their own DB or they would be writing to core DB. As long as providers write to the core DB, this could be moved to provider code I feel and just after invoking rpc call we can return 202 with task id to UI",
+      "parentUuid": "dab895d6_39304f56",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -358,6 +412,24 @@
       "side": 1,
       "message": "We should delete all the entities related to that cluster including the nodes. Since it is a forget, we will be deleting it only from DB and not going to do anything with devices",
       "parentUuid": "dab895d6_99395bdb",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_99531b6c",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T10:13:01Z",
+      "side": 1,
+      "message": "Problem is if you delete the nodes from managed list, their salt keys as well would be removed as if we dont know these nodes. Later these nodes would re-appear as un-managed nodes because their keys are in un-accepted keys list and user might try to use them in some other cluster.\n\nBut actually they are already participating in a different cluster which is not known to skyring. Not sure how that would be avoided if we delete the nodes from DB permanently.",
+      "parentUuid": "dab895d6_7903a773",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -623,6 +695,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_b950df5f",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T10:13:01Z",
+      "side": 1,
+      "message": "I am not too specific. Will do this.",
+      "parentUuid": "dab895d6_99d07bf9",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_012069f6",
         "filename": "models/core_models.go",
         "patchSetId": 3
@@ -735,6 +825,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_39cccf35",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T10:13:01Z",
+      "side": 1,
+      "message": "OPenStackServices was suggested from Kanagaraj to be added.\nStorageType shoud be here but not passed as create request and is derived based on cluster type.\n\n@Kanagaraj, should we add OPenStackServices field in spec?",
+      "parentUuid": "dab895d6_398daf32",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_417981fb",
         "filename": "models/rpc.go",
         "patchSetId": 3
@@ -788,6 +896,24 @@
       "side": 1,
       "message": "But the providers needs to construct the response in a specific format right? As below\n\n{\n    \"title\": \"RPC Output\",\n    \"description\": \"Output expected from provider RPC methods\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"Data\": {\n            \"description\": \"Output Data\",\n            \"type\": \"object\",\n            \"properties\": {\n                \"result\": {\n                    \"description\": \"Response body, data structures specific to method\",\n                    \"type\": \"object\",\n                    \"properties\": {}\n                },\n                \"requestId\": {\n                    \"description\": \"Id of asynchronous task\",\n                    \"type\": \"string”\n                }\n                }\n        },\n        \"Status\": {\n            \"description\": \"Request Status\",\n            \"type\": \"object\",\n            \"properties\": {\n                \"statusCode\": {\n                        \"type\": \"integer\"\n                },\n                \"statusMessage\": {\n                        \"type\": \"string\"\n                }\n            }\n        }\n    }\n}",
       "parentUuid": "dab895d6_79aac7d5",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_99da3be8",
+        "filename": "models/rpc.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T10:13:01Z",
+      "side": 1,
+      "message": "Got it. Would add the struct for response and use the same to unmarshal result into.",
+      "parentUuid": "dab895d6_39a68fc2",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
