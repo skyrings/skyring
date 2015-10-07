@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_793ac737",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-07T09:43:02Z",
+      "side": 1,
+      "message": "this should be another json array. It should have cluster_ip_address and public_ip_address of the hosts.",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_61ccc536",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
