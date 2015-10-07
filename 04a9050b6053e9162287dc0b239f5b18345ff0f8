@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dab895d6_bcca8d6c",
+        "filename": "apps/skyring/core_utils.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-07T11:48:59Z",
+      "side": 1,
+      "message": "if I give a string contains ip address as hostname, how is it behaving?",
+      "range": {
+        "startLine": 39,
+        "startChar": 35,
+        "endLine": 39,
+        "endChar": 43
+      },
+      "revId": "04a9050b6053e9162287dc0b239f5b18345ff0f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_fcc40561",
+        "filename": "apps/skyring/core_utils.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-07T11:48:59Z",
+      "side": 1,
+      "message": "as per our discussion this is not applicable for geo node/cluster ie none of ip addresses of LookupHost() will match.  If none is matching, its better to return output of LookupHost()",
+      "range": {
+        "startLine": 45,
+        "startChar": 20,
+        "endLine": 45,
+        "endChar": 34
+      },
+      "revId": "04a9050b6053e9162287dc0b239f5b18345ff0f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_3ca67dc2",
+        "filename": "apps/skyring/core_utils.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-07T11:48:59Z",
+      "side": 1,
+      "message": "I think its not required to fail this request.  Just log and continue.",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 96
+      },
+      "revId": "04a9050b6053e9162287dc0b239f5b18345ff0f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
