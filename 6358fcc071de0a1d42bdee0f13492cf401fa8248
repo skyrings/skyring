@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fab399f4_61ccc536",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-07T05:35:23Z",
+      "side": 1,
+      "message": "It should be either \n\n DELETE \"/api/\u003cver\u003e/clusters/{cluster-id}\"\n\nor\n\n POST \"/api/\u003cver\u003e/clusters/{cluster-id}/forget\"",
+      "range": {
+        "startLine": 35,
+        "startChar": 6,
+        "endLine": 35,
+        "endChar": 54
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_a1edfd8d",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-07T05:35:23Z",
+      "side": 1,
+      "message": "This serves two different purposes\n\n1. When the user calls a core API\n\n2. When the user calls a storage specific API\n\nIn case 1, the core knows about the type of the cluster. The lookup is very simple.\n\nIn case 2, the core doesn\u0027t know anything. The provider is selected base on the URL.\n\nI feel, these two cases should be handled differently. \n\nAlso the below code assumes, either \u0027cluster_type\u0027 or \u0027cluster_id\u0027 is part of request body which is not always true.",
+      "range": {
+        "startLine": 34,
+        "startChar": 13,
+        "endLine": 34,
+        "endChar": 25
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fab399f4_a1d6ddc3",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-07T05:35:23Z",
+      "side": 1,
+      "message": "Is this different from CORE_ROUTES?",
+      "range": {
+        "startLine": 28,
+        "startChar": 5,
+        "endLine": 28,
+        "endChar": 11
+      },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
