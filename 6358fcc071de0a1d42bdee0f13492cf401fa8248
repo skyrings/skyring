@@ -83,6 +83,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_790e4736",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T07:53:42Z",
+      "side": 1,
+      "message": "I think slip. In success case this whole piece of code is to be called.",
+      "parentUuid": "fab399f4_012f89a2",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_e40f032d",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -100,6 +118,24 @@
         "endLine": 80,
         "endChar": 4
       },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_b90fff2d",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T07:53:42Z",
+      "side": 1,
+      "message": "Once task management used based on success of the tasks, this DB update should happen but in core only I feel.",
+      "parentUuid": "fab399f4_e40f032d",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -175,6 +211,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_f919777a",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T07:53:42Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "fab399f4_21900dec",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_4426efbb",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -198,6 +252,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_19262bbb",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T07:53:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_4426efbb",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_a45c2b27",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -215,6 +287,24 @@
         "endLine": 225,
         "endChar": 38
       },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_99395bdb",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T07:53:42Z",
+      "side": 1,
+      "message": "Nodes should not be deleted as we are just forgetting the cluster from skyring but it still remains in backend.\nAll we are doing here is setting the clusterid field to blank for the node and deleting the cluster. We cannot mark the node as free as its actually participating in cluster but cluster not known to skyring.\n\nYes all the volumes and pools (at later stage once available) would be deleted as part of this.",
+      "parentUuid": "fab399f4_a45c2b27",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -321,6 +411,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_b9361fe6",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T07:53:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_81d1d9cf",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_c1daf1e8",
         "filename": "apps/skyring/request-router.go",
         "patchSetId": 3
@@ -338,6 +446,24 @@
         "endLine": 76,
         "endChar": 8
       },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_d933d3f4",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T07:53:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_c1daf1e8",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -408,6 +534,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_795c8726",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T07:53:42Z",
+      "side": 1,
+      "message": "I feel definition of CORE_ROUTES we should move before this func() and its clear that local array of routes we are appending to the CORE_ROUTES.",
+      "parentUuid": "fab399f4_a15fbd71",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_012069f6",
         "filename": "models/core_models.go",
         "patchSetId": 3
@@ -419,6 +563,24 @@
       "writtenOn": "2015-10-07T07:16:27Z",
       "side": 1,
       "message": "We need to separate out models definitions and others. Let model definitions only in this file and take out others like  AddStorageNodeRequest, type StorageNodes []StorageNode etc into a different file",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_b93d3fbe",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T07:53:42Z",
+      "side": 1,
+      "message": "Then why not specific sources like nodes.go etc??",
+      "parentUuid": "fab399f4_012069f6",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -448,6 +610,24 @@
     },
     {
       "key": {
+        "uuid": "dab895d6_19746b9b",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T07:53:42Z",
+      "side": 1,
+      "message": "I referred the spec and created this model.",
+      "parentUuid": "fab399f4_e1229500",
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_417981fb",
         "filename": "models/rpc.go",
         "patchSetId": 3
@@ -465,6 +645,24 @@
         "endLine": 16,
         "endChar": 5
       },
+      "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_79aac7d5",
+        "filename": "models/rpc.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-07T07:53:42Z",
+      "side": 1,
+      "message": "Response is just a byte array which is a json I feel. Referred from ProviderHandler() method",
+      "parentUuid": "fab399f4_417981fb",
       "revId": "6358fcc071de0a1d42bdee0f13492cf401fa8248",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
