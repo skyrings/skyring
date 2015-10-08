@@ -22,6 +22,24 @@
       "revId": "2de8b3a04694c8cf0bf11c20fef67b5b214bf4c2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_b847f91c",
+        "filename": "apps/skyring/core_utils.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-08T09:29:50Z",
+      "side": 1,
+      "message": "If out of looked up IP addresses, multiple match in subnet all of them should be returned.",
+      "parentUuid": "baada198_58a5fd02",
+      "revId": "2de8b3a04694c8cf0bf11c20fef67b5b214bf4c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
