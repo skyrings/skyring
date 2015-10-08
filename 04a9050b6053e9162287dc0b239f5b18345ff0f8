@@ -122,6 +122,24 @@
       "revId": "04a9050b6053e9162287dc0b239f5b18345ff0f8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab895d6_a276e4d6",
+        "filename": "apps/skyring/core_utils.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-08T04:05:24Z",
+      "side": 1,
+      "message": "Bala, you mean just return null in case if not able  to get the interface addresses? \nor\ncontinue below and finally return result of lookup host?",
+      "parentUuid": "dab895d6_626dac04",
+      "revId": "04a9050b6053e9162287dc0b239f5b18345ff0f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
