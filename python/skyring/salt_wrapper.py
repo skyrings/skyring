@@ -19,7 +19,6 @@ from jinja2 import Template
 import salt
 from salt import wheel, client
 import salt.config
-
 import utils
 
 
@@ -30,6 +29,8 @@ setattr(salt.client.LocalClient, 'cmd',
         utils.enableLogger(salt.client.LocalClient.cmd))
 local = salt.client.LocalClient()
 
+def execute_salt_commands_on_target(commands= [], target='*'):
+    return local.cmd(target, 'cmd.run', commands)
 
 def get_node_ssh_fingerprint(node):
     '''
