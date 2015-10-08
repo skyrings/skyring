@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_d88f4d74",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-08T08:57:06Z",
+      "side": 1,
+      "message": "Sorry i missed it initially. I remember having some discussion around this sometime back. I think bala was suggesting to use subnet for this purpose. So having another field in the cluster itself like \n\n\"networks\": {\n \"cluster\": \"x.x.x.x/24\",\n \"public\": \"y.y.y.y/24\"\n}\n\nthese values are optional. if not provided, management network should be used.",
+      "revId": "5b838d2f84965c077a7024e6e3b0a8590edad773",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
