@@ -108,6 +108,8 @@ def get_node_network_info(node):
 
     return netinfo
 
+def get_volume_utilization(node, volumeName, warningLimit, criticalLimit):
+    return local.cmd(node, 'cmd.run', ["/usr/lib64/nagios/plugins/gluster/check_vol_utilization.py" +  volumeName + " -w " + warningLimit + " -c " + criticalLimit])
 
 def get_node_disk_info(node):
     '''

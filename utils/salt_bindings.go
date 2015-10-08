@@ -21,6 +21,7 @@ var functions = [...]string{
 	"get_node_machine_id",
 	"get_node_network_info",
 	"get_node_disk_info",
+	"get_volume_utilization",
 }
 
 type PyFunction struct {
@@ -174,6 +175,11 @@ func PyGetNodeMachineId(node string) string {
 
 func PyGetNodeNetworkInfo(node string) map[string][]string {
 	py_out := py_functions["get_node_network_info"].call(node)
+	return ToMapStringListString(python.PyDict_GetItemString(py_out, node))
+}
+
+func PyGetVolumeUtilization(node, volumeName string) map[string][]string {
+	py_out := py_functions["get_volume_utilization"].call(node, volumeName)
 	return ToMapStringListString(python.PyDict_GetItemString(py_out, node))
 }
 

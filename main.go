@@ -24,6 +24,7 @@ import (
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/event"
+	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/task"
 	"github.com/skyrings/skyring/utils"
 	"net/http"
@@ -166,6 +167,7 @@ func start() {
 	}
 
 
+	monitoring.InitSchedules(taskManager)
 	//Check if Port is provided, otherwise use dafault 8080
 	//If host is not provided, it binds on all IPs
 	if conf.SystemConfig.Config.HttpPort == 0 {
