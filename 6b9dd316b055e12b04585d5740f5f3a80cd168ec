@@ -22,6 +22,30 @@
       "revId": "6b9dd316b055e12b04585d5740f5f3a80cd168ec",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_012cf0aa",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-09T08:02:35Z",
+      "side": 1,
+      "message": "1. devicename is a kernel name of the device eg. /dev/sda\n\n2. name is device name in general eg. sda or /dev/sda or nil\n\n3. parentdevicename is kernel name of the parent device eg. /dev/sda is a parent for /dev/sda1 device.  Useful if you want to show relationship between devices.\n\n4. Its not available by default.  Its required to integrate with other libraries such as libstoragemgmt, smartmontools etc.  That will be an additional key/values once its integrated.",
+      "parentUuid": "baada198_0155d01c",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 44
+      },
+      "revId": "6b9dd316b055e12b04585d5740f5f3a80cd168ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
