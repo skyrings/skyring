@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_6135ac45",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-09T06:29:45Z",
+      "side": 1,
+      "message": "Need not be part of App. This is a utility func",
+      "range": {
+        "startLine": 175,
+        "startChar": 5,
+        "endLine": 175,
+        "endChar": 11
+      },
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_8111e0ae",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-09T06:29:45Z",
+      "side": 1,
+      "message": "I think we need to check the status code here and return the specific code in case of error. Now it always return status 200(default)",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 1
+      },
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_c122f800",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-09T06:29:45Z",
+      "side": 1,
+      "message": "We are supposed move the salt keys to rejected/ignored list right?",
+      "range": {
+        "startLine": 103,
+        "startChar": 1,
+        "endLine": 103,
+        "endChar": 11
+      },
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_a16c2438",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-09T06:29:45Z",
+      "side": 1,
+      "message": "what if the key is not in map? Check for that if key is not there return nil explicitly",
+      "range": {
+        "startLine": 50,
+        "startChar": 1,
+        "endLine": 50,
+        "endChar": 10
+      },
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_c1691827",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-09T06:29:45Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 64,
+        "startChar": 1,
+        "endLine": 64,
+        "endChar": 16
+      },
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_41650844",
+        "filename": "models/rpc.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-09T06:29:45Z",
+      "side": 1,
+      "message": "It will be good if you can change the names Args and vars etc on the similar lines of RpcResponse\n\nmay be \nRpcInput{\n       RpcInputVars\n       RpcRequestData\n}",
+      "range": {
+        "startLine": 15,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 9
+      },
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
