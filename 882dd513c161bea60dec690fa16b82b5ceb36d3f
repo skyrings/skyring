@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_6c41230b",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-09T09:33:57Z",
+      "side": 1,
+      "message": "Unreachable code here. Please remove \"return false\"",
+      "revId": "882dd513c161bea60dec690fa16b82b5ceb36d3f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_cc478f1c",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-09T09:33:57Z",
+      "side": 1,
+      "message": "unreachable code",
+      "range": {
+        "startLine": 154,
+        "startChar": 14,
+        "endLine": 154,
+        "endChar": 17
+      },
+      "revId": "882dd513c161bea60dec690fa16b82b5ceb36d3f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_0cbb470f",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-09T09:33:57Z",
+      "side": 1,
+      "message": "no formatting directive in Errorf call. Please add %s",
+      "revId": "882dd513c161bea60dec690fa16b82b5ceb36d3f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
