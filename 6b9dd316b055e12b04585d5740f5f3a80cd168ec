@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_0155d01c",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-09T07:49:12Z",
+      "side": 1,
+      "message": "What is devicename, name and parentdevicename?\nHow will I determine the disk is SSD or not Or performance of the disks so that i can use it tiers appropriately",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 44
+      },
+      "revId": "6b9dd316b055e12b04585d5740f5f3a80cd168ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
