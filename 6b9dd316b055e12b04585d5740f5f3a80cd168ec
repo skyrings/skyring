@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "baada198_8c14b7f6",
+        "filename": "backend/backend.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-10T11:10:31Z",
+      "side": 1,
+      "message": "1. Shubhendu has implemented this pluggability at layer above. Look at github.com/skyrings/skyring/nodemanager. I don\u0027t think we need this at two levels.\n\n2. The driver selection part is hard coded. Means as per the current code, if the user wants to choose a different driver, needs to make code changes.",
+      "range": {
+        "startLine": 50,
+        "startChar": 5,
+        "endLine": 50,
+        "endChar": 24
+      },
+      "revId": "6b9dd316b055e12b04585d5740f5f3a80cd168ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_0155d01c",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 4
