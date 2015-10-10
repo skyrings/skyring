@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_12c51c5b",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-10T07:53:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_617e85e6",
+      "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_e169b526",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-10-07T05:32:44Z",
       "side": 1,
       "message": "Shouldnt this interface be externalized and reused by different auth providers?",
+      "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_32ba20e2",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-10T07:53:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_e169b526",
       "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_52bf94d0",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-10T07:53:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_01778903",
+      "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_014ea9c1",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2015-10-07T05:32:44Z",
       "side": 1,
       "message": "Defer should ideally be immediately after open",
+      "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_72b498f2",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-10T07:53:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_014ea9c1",
       "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_92b92cec",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-10T07:53:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_214badb1",
+      "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_41c7c112",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2015-10-07T05:32:44Z",
       "side": 1,
       "message": "\"Authentication failed\"??",
+      "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_b2cd5089",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-10T07:53:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_41c7c112",
       "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_d2cac46d",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-10T07:53:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_01e5c9a7",
+      "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_21e2cd9f",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 1
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_f2c7c862",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-10T07:53:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_21e2cd9f",
+      "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fab399f4_61f3e573",
         "filename": "authprovider/ldap/mongoBackend.go",
         "patchSetId": 1
@@ -149,6 +293,24 @@
       "writtenOn": "2015-10-07T05:32:44Z",
       "side": 1,
       "message": "Isnt this logic already available? Why we write this code again. Should be reused from earlier...",
+      "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_32a140aa",
+        "filename": "authprovider/ldap/mongoBackend.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-10T07:53:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fab399f4_61f3e573",
       "revId": "bc997f18ae1d55166ea6e61bbc9b84abeddfec94",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
