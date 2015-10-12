@@ -118,6 +118,30 @@
       "revId": "9663168b6b9b56c305cf1d8ec2e5291dfc8bc9b9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_e2d9b784",
+        "filename": "main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-12T10:55:42Z",
+      "side": 1,
+      "message": "This is done by system signal handling and the patch https://review.gerrithub.io/#/c/247870/ is doing that",
+      "parentUuid": "baada198_0234ebdc",
+      "range": {
+        "startLine": 151,
+        "startChar": 1,
+        "endLine": 151,
+        "endChar": 33
+      },
+      "revId": "9663168b6b9b56c305cf1d8ec2e5291dfc8bc9b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
