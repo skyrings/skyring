@@ -108,6 +108,24 @@
       "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_dffe4c38",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-12T07:22:42Z",
+      "side": 1,
+      "message": "Thats correct. You can have specific command defined and run them only. No need to have generic command execution mechanism exposed.",
+      "parentUuid": "baada198_df69ec26",
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
