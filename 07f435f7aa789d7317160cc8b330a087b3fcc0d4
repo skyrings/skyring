@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_7f354045",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-12T05:33:21Z",
+      "side": 1,
+      "message": "Can you set up a session to take us through the flow?",
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_5f307c56",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-12T05:33:21Z",
+      "side": 1,
+      "message": "How you handle the case where a cluster/storage added after the USM gets started?",
+      "range": {
+        "startLine": 73,
+        "startChar": 1,
+        "endLine": 75,
+        "endChar": 11
+      },
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
