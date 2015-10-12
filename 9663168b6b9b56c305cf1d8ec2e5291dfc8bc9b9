@@ -70,6 +70,30 @@
       "revId": "9663168b6b9b56c305cf1d8ec2e5291dfc8bc9b9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_9f8854e9",
+        "filename": "main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-12T06:55:00Z",
+      "side": 1,
+      "message": "1) What if you start a service where the same service is already running?\n\nAs per my knowledge, there is no working solution to check whether currently ports/sockets are in use unless you handle listen failure.\n\n\n2) look at this https://review.gerrithub.io/#/c/247870/",
+      "parentUuid": "baada198_1f4604c0",
+      "range": {
+        "startLine": 151,
+        "startChar": 1,
+        "endLine": 151,
+        "endChar": 33
+      },
+      "revId": "9663168b6b9b56c305cf1d8ec2e5291dfc8bc9b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
