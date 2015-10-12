@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_7fb0e0dd",
+        "filename": "tools/gopy/gopy.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-12T04:35:14Z",
+      "side": 1,
+      "message": "Use log instead",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 12
+      },
+      "revId": "fdb1bbfc81d8c828c91601c87d758807b19c9a25",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
