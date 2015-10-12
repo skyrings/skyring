@@ -94,6 +94,30 @@
       "revId": "9663168b6b9b56c305cf1d8ec2e5291dfc8bc9b9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_0234ebdc",
+        "filename": "main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-12T09:41:53Z",
+      "side": 1,
+      "message": "This is what I was looking for.\nWhen the app stopped gracefully(service stop skyring), will this be taken care?",
+      "parentUuid": "baada198_9f8854e9",
+      "range": {
+        "startLine": 151,
+        "startChar": 1,
+        "endLine": 151,
+        "endChar": 33
+      },
+      "revId": "9663168b6b9b56c305cf1d8ec2e5291dfc8bc9b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
