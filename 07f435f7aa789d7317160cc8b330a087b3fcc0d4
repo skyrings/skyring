@@ -19,6 +19,52 @@
     },
     {
       "key": {
+        "uuid": "baada198_7f5aa084",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-12T07:07:56Z",
+      "side": 1,
+      "message": "1. Why do you have your own task manager as there is one in the core already?\n\n2. Whenever Schedule() gets called you create new taskmanager.  Why do you need that?",
+      "range": {
+        "startLine": 16,
+        "startChar": 21,
+        "endLine": 16,
+        "endChar": 35
+      },
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_7fd1c0cc",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-12T07:07:56Z",
+      "side": 1,
+      "message": "what is this channel meant for?",
+      "range": {
+        "startLine": 23,
+        "startChar": 20,
+        "endLine": 23,
+        "endChar": 27
+      },
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_5f307c56",
         "filename": "monitoring/monitor_base.go",
         "patchSetId": 2
@@ -35,6 +81,29 @@
         "startChar": 1,
         "endLine": 75,
         "endChar": 11
+      },
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_df69ec26",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-12T07:07:56Z",
+      "side": 1,
+      "message": "Why do you want to run arbitrary commands? This is bad idea.",
+      "range": {
+        "startLine": 33,
+        "startChar": 40,
+        "endLine": 33,
+        "endChar": 48
       },
       "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
