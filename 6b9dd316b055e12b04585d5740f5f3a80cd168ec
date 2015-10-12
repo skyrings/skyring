@@ -168,6 +168,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_dff48c89",
+        "filename": "backend/backend.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-12T05:18:56Z",
+      "side": 1,
+      "message": "Bala, node_manager.go maintains a map of all the node providers. Every node manager (salt based/ssh based etc) registers with the node manager using the method nodemanager.RegisterNodeManager.\n\nRuntime we look at the configuration \n\n    \"nodemanagementconfig\": {\n        \"managerName\": \"SaltNodeManager\",\n        \"configFilePath\": \"\"\n    },\n\nin skyring.conf and initialize the appropriate node manager, and all the node related calls are passed through this specific node manager then onwards.",
+      "parentUuid": "baada198_ffc31036",
+      "revId": "6b9dd316b055e12b04585d5740f5f3a80cd168ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_0155d01c",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 4
