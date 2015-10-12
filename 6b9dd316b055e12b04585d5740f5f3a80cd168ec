@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "baada198_5f94fc36",
+        "filename": "backend/backend.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-12T03:06:49Z",
+      "side": 1,
+      "message": "What I meant was node manager has this functionality already. It defines an interface as you have in backend.go and ensures that any backend that needs to work with node manager should implement this interface(nodemanager/interfaces.go). If you are going to implement a new backend say ssh, you need to implement all the methods specified in interfaces.go",
+      "parentUuid": "baada198_72e8187d",
+      "range": {
+        "startLine": 50,
+        "startChar": 5,
+        "endLine": 50,
+        "endChar": 24
+      },
+      "revId": "6b9dd316b055e12b04585d5740f5f3a80cd168ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_0155d01c",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 4
