@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_b311cfae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_98114aaf",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_d822e200",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2015-10-13T09:58:33Z",
       "side": 1,
       "message": "Remove the blank line below",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_33bbff0f",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_d822e200",
       "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_7363b7b1",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_b86c4e38",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_f876c605",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 6
@@ -64,6 +118,24 @@
       "writtenOn": "2015-10-13T09:58:33Z",
       "side": 1,
       "message": "Errorf or info??",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_535eb3ea",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_f876c605",
       "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_33521fde",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_5865f243",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_785ab684",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 6
@@ -98,6 +188,24 @@
       "writtenOn": "2015-10-13T09:58:33Z",
       "side": 1,
       "message": "errStr :\u003d \"missing configuration file for Ldap Auth provider\"\nglog.Errorln(errStr)\nreturn nil, fmt.Errorf(errStr)",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_13551bc6",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_785ab684",
       "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_93584bfc",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "I think this should be panic as auth component itself is not initialized",
+      "parentUuid": "baada198_d8502261",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_f84de6c5",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 6
@@ -132,6 +258,24 @@
       "writtenOn": "2015-10-13T09:58:33Z",
       "side": 1,
       "message": "user name and passwords are not passed as request body??",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_d371e378",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Yes but the un-marshalling is at the REST handlers, not here. This is the backend func need not worry about that",
+      "parentUuid": "baada198_f84de6c5",
       "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_f36ee795",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_184b7ab1",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_78d1d6cc",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 6
@@ -166,6 +328,24 @@
       "writtenOn": "2015-10-13T09:58:33Z",
       "side": 1,
       "message": "Form string once and use",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_532b13eb",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_78d1d6cc",
       "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_73301757",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_98d6aac4",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_d8d742be",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 6
@@ -200,6 +398,24 @@
       "writtenOn": "2015-10-13T09:58:33Z",
       "side": 1,
       "message": "Why not have a method which logs the error and forms the error instance as well. It looks odd having 2-2 lines everywhere.",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_d3f803c7",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "I think it will be too much write a function to perform this two lines op",
+      "parentUuid": "baada198_d8d742be",
       "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_d33e4329",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_f8fb2645",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_38959ee4",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 6
@@ -240,6 +474,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_f33b4736",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "Probably I will keep it as it is as it is used only here",
+      "parentUuid": "baada198_38959ee4",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_789f1604",
         "filename": "authprovider/mongoBackend.go",
         "patchSetId": 6
@@ -251,6 +503,24 @@
       "writtenOn": "2015-10-13T09:58:33Z",
       "side": 1,
       "message": "I feel just users should be fine as its in skyring DB instance",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_13499bd0",
+        "filename": "authprovider/mongoBackend.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-13T13:27:21Z",
+      "side": 1,
+      "message": "there is something system.users also present. Hence I named as this",
+      "parentUuid": "baada198_789f1604",
       "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
