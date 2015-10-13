@@ -2,6 +2,11 @@ package util
 
 import (
 	"fmt"
+	"github.com/golang/glog"
+	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/models"
+	"io/ioutil"
 	"log"
 	"net"
 	"net/rpc"
@@ -30,10 +35,17 @@ type NodeStartEventArgs struct {
 	Node      string    `json:"node"`
 }
 
+type NodeDbusEventArgs struct {
+	Timestamp time.Time `json:"timestamp"`
+	Node      string    `json:"node"`
+	Tag       string    `json:"tag"`
+	Message   string    `json:"message"`
+	Severity  string    `json:"severity"`
+}
+
 func (l *Listener) PushNodeStartEvent(args *NodeStartEventArgs, ack *bool) error {
 	timestamp := args.Timestamp
 	node := strings.TrimSpace(args.Node)
-
 	if node == "" || timestamp.IsZero() {
 		*ack = false
 		return nil
@@ -42,6 +54,33 @@ func (l *Listener) PushNodeStartEvent(args *NodeStartEventArgs, ack *bool) error
 	StartedNodesLock.Lock()
 	defer StartedNodesLock.Unlock()
 	StartedNodes[args.Node] = args.Timestamp
+	*ack = true
+	return nil
+}
+
+func (l *Listener) PushNodeDbusEvent(args *NodeDbusEventArgs, ack *bool) error {
+	d1 := []byte("hello\ngo\n")
+	//a := []byte(fmt.Sprintf("%v", *args))
+	err := ioutil.WriteFile("/tmp/dat1.txt", d1, 0644)
+	if err != nil {
+		*ack = false
+		return nil
+	}
+	var event models.NodeEventStructure
+	event.Timestamp = args.Timestamp
+	event.Node = args.Node
+	event.Tag = args.Tag
+	event.Message = args.Message
+	event.Severity = args.Severity
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.NODE_EVENT_COLLECTION)
+	if err := coll.Insert(event); err != nil {
+		glog.Fatalf("Error adding the node event: %v", err)
+		*ack = false
+		return nil
+	}
 	*ack = true
 	return nil
 }
