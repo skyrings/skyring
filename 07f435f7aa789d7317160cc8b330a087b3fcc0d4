@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_7826366a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-13T07:08:12Z",
+      "side": 1,
+      "message": "Nishanth, sure I can do that.",
+      "parentUuid": "baada198_7f354045",
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_7f5aa084",
         "filename": "monitoring/monitor_base.go",
         "patchSetId": 2
@@ -30,6 +48,30 @@
       "writtenOn": "2015-10-12T07:07:56Z",
       "side": 1,
       "message": "1. Why do you have your own task manager as there is one in the core already?\n\n2. Whenever Schedule() gets called you create new taskmanager.  Why do you need that?",
+      "range": {
+        "startLine": 16,
+        "startChar": 21,
+        "endLine": 16,
+        "endChar": 35
+      },
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_f86b2683",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-13T07:08:12Z",
+      "side": 1,
+      "message": "I wanted actually to create a task here. But I saw this being the only route to create a new task and assign an id to it currently. Not sure if I miss-understood something.",
+      "parentUuid": "baada198_7f5aa084",
       "range": {
         "startLine": 16,
         "startChar": 21,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "baada198_1869ba8b",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-13T07:08:12Z",
+      "side": 1,
+      "message": "The schedule is cluster level. So if the cluster for some reason is deleted(I understand it is very LEAST likely but I don\u0027t think it is ignorable), then the schedule needs to be terminated.",
+      "parentUuid": "baada198_7fd1c0cc",
+      "range": {
+        "startLine": 23,
+        "startChar": 20,
+        "endLine": 23,
+        "endChar": 27
+      },
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_5f307c56",
         "filename": "monitoring/monitor_base.go",
         "patchSetId": 2
@@ -76,6 +142,30 @@
       "writtenOn": "2015-10-12T05:33:21Z",
       "side": 1,
       "message": "How you handle the case where a cluster/storage added after the USM gets started?",
+      "range": {
+        "startLine": 73,
+        "startChar": 1,
+        "endLine": 75,
+        "endChar": 11
+      },
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_38059ec2",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-13T07:08:12Z",
+      "side": 1,
+      "message": "Yes, in case of \n\n1. addition of cluster,\n\nI am assuming MonitorGluster of monitor_gluster_cluster.go to be invoked directly after the successful cluster creation. But I think I need a little more refactoring to suit this.\n\n2. Addition of storage,\n\nAnyway, the schedules are cluster wise and each schedule interval a fresh list of applicable entities in the hierarchy is fetched from USM\nand then monitored.",
+      "parentUuid": "baada198_5f307c56",
       "range": {
         "startLine": 73,
         "startChar": 1,
@@ -123,6 +213,24 @@
       "side": 1,
       "message": "Thats correct. You can have specific command defined and run them only. No need to have generic command execution mechanism exposed.",
       "parentUuid": "baada198_df69ec26",
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_b8f8cec5",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-13T07:08:12Z",
+      "side": 1,
+      "message": "But I have one doubt still, we are exposing it only to the core right and not to the outside world(through rest or usm ui).\n\nAnyway the core is aware of what needs to be done as I think this module would be only task specific(I mean I assume we don\u0027t have wrappers around sub-tasks). then, instead of the core telling this module that it wants a task performed and then this module doing  its corresponding job here, why not keep this diminished and do things from the core itself?\n\nAlso, by giving it this flexibility, this module\u0027s size would diminish right? and it would simply emerge as mere communication only library.\n\nThis was the motivation behind me doing this. But please correct me if I am wrong and enlighten me about the negative implications of this approach.\n\nI was basically imagining about the following approach ehile writing this code.\n1. Every command is mapped to a tag indicating its purpose.\n2. Every task is an collection of one or more of these tags\n   (representing sub-tasks)\n3. USMs job then would to figure out the sequence of events \n   to achieve the user requested tasks.\n4. Off-course at the end of execution of commands mapped to \n   each of the tags in the collection the corresponding   \n   results in form of json would be passed back to USM which \n   will be handled in custom fashion(may not be generic)\n\nBut this was my dreasm :)) not sure to what extent this is achievable although :D",
+      "parentUuid": "baada198_dffe4c38",
       "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
