@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_b8afee2a",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T10:12:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_6135ac45",
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_8111e0ae",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 5
@@ -42,6 +60,24 @@
         "endLine": 72,
         "endChar": 1
       },
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_d8aca238",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T10:12:20Z",
+      "side": 1,
+      "message": "Done in following patches.",
+      "parentUuid": "baada198_8111e0ae",
       "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_f8a96625",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T10:12:20Z",
+      "side": 1,
+      "message": "Below method RejectNode(nodename) is supposed to reject the salt key. Some issue though to close :)",
+      "parentUuid": "baada198_c122f800",
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_a16c2438",
         "filename": "apps/skyring/request-router.go",
         "patchSetId": 5
@@ -88,6 +142,24 @@
         "endLine": 50,
         "endChar": 10
       },
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_18a7fa50",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T10:12:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_a16c2438",
       "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -117,6 +189,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_3863de1b",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T10:12:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_c1691827",
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_41650844",
         "filename": "models/rpc.go",
         "patchSetId": 5
@@ -134,6 +224,24 @@
         "endLine": 15,
         "endChar": 9
       },
+      "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_586892f5",
+        "filename": "models/rpc.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T10:12:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_41650844",
       "revId": "f83a9ff271839c221694816b5df4cd9253cf6b47",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
