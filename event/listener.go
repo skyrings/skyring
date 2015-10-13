@@ -1,4 +1,4 @@
-package util
+package event
 
 import (
 	"fmt"
@@ -53,7 +53,7 @@ func (l *Listener) PushEvent(line string, ack *bool) error {
 	return nil
 }
 
-func StartEventListener(eventSocket string) {
+func StartListener(eventSocket string) {
 	listener := new(Listener)
 	server := rpc.NewServer()
 	server.Register(listener)
