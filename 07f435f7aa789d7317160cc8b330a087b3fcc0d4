@@ -234,6 +234,24 @@
       "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_b81fee08",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-13T07:10:06Z",
+      "side": 1,
+      "message": "point 3 : I meant the following:\n\"USMs job then would to figure out the sequence of tags \n   to achieve the user requested tasks.\"",
+      "parentUuid": "baada198_b8f8cec5",
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
