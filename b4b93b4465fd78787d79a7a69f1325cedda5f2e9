@@ -1,0 +1,259 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_98114aaf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "rest: apis for ldap based authentication support",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_d822e200",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "Remove the blank line below",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_b86c4e38",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "Do we need this if as we are anyway returning err",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_f876c605",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "Errorf or info??",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_5865f243",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "%s/Authentication unsuccess/Authentication failed/g",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_785ab684",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "errStr :\u003d \"missing configuration file for Ldap Auth provider\"\nglog.Errorln(errStr)\nreturn nil, fmt.Errorf(errStr)",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_d8502261",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "panic or just return err??",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_f84de6c5",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "user name and passwords are not passed as request body??",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_184b7ab1",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "Info??",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_78d1d6cc",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "Form string once and use",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_98d6aac4",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_d8d742be",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "Why not have a method which logs the error and forms the error instance as well. It looks odd having 2-2 lines everywhere.",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_f8fb2645",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "Do we need these commented lines?",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_38959ee4",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "May be you can have validate method for inputs separate. suggestion!",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_789f1604",
+        "filename": "authprovider/mongoBackend.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T09:58:33Z",
+      "side": 1,
+      "message": "I feel just users should be fine as its in skyring DB instance",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
