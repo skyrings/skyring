@@ -14,6 +14,7 @@ package models
 
 import (
 	"github.com/skyrings/skyring/tools/uuid"
+	"time"
 )
 
 type StorageNode struct {
@@ -34,6 +35,14 @@ type StorageNode struct {
 	Memory            []Memory           `bson:"memory"`
 	OS                OperatingSystem    `bson:"os"`
 	ManagedState      string             `bson:"managedstate"`
+}
+
+type NodeEvent struct {
+	Timestamp time.Time `json:"timestamp"`
+	Node      string    `json:"node"`
+	Tag       string    `json:"tag"`
+	Message   string    `json:"message"`
+	Severity  string    `json:"severity"`
 }
 
 type AddStorageNodeRequest struct {
@@ -99,6 +108,7 @@ const (
 	DEFAULT_SSH_PORT        = 22
 	REQUEST_SIZE_LIMIT      = 1048576
 	COLL_NAME_STORAGE_NODES = "storage_nodes"
+	COLL_NAME_NODE_EVENTS   = "node_events"
 	NODE_STATE_FREE         = "free"
 	NODE_STATE_UNMANAGED    = "unmanaged"
 	NODE_STATE_USED         = "used"

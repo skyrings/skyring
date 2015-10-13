@@ -13,6 +13,7 @@ limitations under the License.
 package skyring
 
 import (
+	"github.com/skyrings/skyring/events"
 	"net/http"
 )
 
@@ -116,6 +117,13 @@ var (
 			Method:      "DELETE",
 			Pattern:     "users/{username}",
 			HandlerFunc: deleteUser,
+			Version:     1,
+		},
+		{
+			Name:        "GET_events",
+			Method:      "GET",
+			Pattern:     "events",
+			HandlerFunc: events.GetEvents,
 			Version:     1,
 		},
 	}
