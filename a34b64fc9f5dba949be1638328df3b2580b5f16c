@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_ae1168ae",
+        "filename": "conf/sample/ldapauth.conf.sample",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-13T18:19:55Z",
+      "side": 1,
+      "message": "roles are not required here",
+      "revId": "a34b64fc9f5dba949be1638328df3b2580b5f16c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
