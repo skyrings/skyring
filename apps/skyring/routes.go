@@ -118,6 +118,13 @@ var (
 			HandlerFunc: deleteUser,
 			Version:     1,
 		},
+		{
+			Name:        "GET_events",
+			Method:      "GET",
+			Pattern:     "events",
+			HandlerFunc: GetEvents,
+			Version:     1,
+		},
 	}
 	//Routes that doesnot require Auth to be added here
 	CORE_ROUTES_NOAUTH = []CoreRoute{
