@@ -26,7 +26,7 @@ func GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
 	hostname := vars["hostname"]
 
 	fingerprint := make(map[string]string)
-	fingerprint["sshfingerprint"], _ := ssh.GetFingerprint(hostname, 22)
+	fingerprint["sshfingerprint"], _ = ssh.GetFingerprint(hostname, 22)
 	// TODO: handle error and return response properly
 	json.NewEncoder(w).Encode(fingerprint)
 }

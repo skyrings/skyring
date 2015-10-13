@@ -154,7 +154,7 @@ func start() {
 	n := negroni.Classic()
 
 	glog.Info("Starting event listener")
-	go util.StartListener(eventSocket)
+	go event.StartListener(eventSocket)
 
 	//Check if Port is provided, otherwise use dafault 8080
 	//If host is not provided, it binds on all IPs
