@@ -247,6 +247,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_ee1c4016",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T17:00:42Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "baada198_93584bfc",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_f84de6c5",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 6
@@ -276,6 +294,24 @@
       "side": 1,
       "message": "Yes but the un-marshalling is at the REST handlers, not here. This is the backend func need not worry about that",
       "parentUuid": "baada198_f84de6c5",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_0e1a5417",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T17:00:42Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "baada198_d371e378",
       "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -422,6 +458,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_8edd8445",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T17:00:42Z",
+      "side": 1,
+      "message": "I saw this kind of thing in multiple places so suggested",
+      "parentUuid": "baada198_d3f803c7",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_f8fb2645",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 6
@@ -492,6 +546,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_aee24801",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T17:00:42Z",
+      "side": 1,
+      "message": "Thats fine",
+      "parentUuid": "baada198_f33b4736",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_789f1604",
         "filename": "authprovider/mongoBackend.go",
         "patchSetId": 6
@@ -521,6 +593,24 @@
       "side": 1,
       "message": "there is something system.users also present. Hence I named as this",
       "parentUuid": "baada198_789f1604",
+      "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_cee69c16",
+        "filename": "authprovider/mongoBackend.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-13T17:00:42Z",
+      "side": 1,
+      "message": "anyway this collection would be effectively skyring.users as suggested. currently it would be skyring.skyringusers.\nBut its ok. Not a critical one :)",
+      "parentUuid": "baada198_13499bd0",
       "revId": "b4b93b4465fd78787d79a7a69f1325cedda5f2e9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
