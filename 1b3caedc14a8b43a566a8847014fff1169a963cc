@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_aa7cf173",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-14T10:38:09Z",
+      "side": 1,
+      "message": "I feel it should be part of event package",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_ca81254c",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-14T10:38:09Z",
+      "side": 1,
+      "message": "Run build and verify as I can see fmt errors",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_ea950989",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-14T10:38:09Z",
+      "side": 1,
+      "message": "%s/NODE_EVENT_COLLECTION/COLL_NAME_NODE_EVENTS/g\n\nand create the table with name \"node_events\"",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_0a931da4",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-14T10:38:09Z",
+      "side": 1,
+      "message": "%s/NodeEventStructure/NodeEvent/g",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_2a90e194",
+        "filename": "models/core_models.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-14T10:38:09Z",
+      "side": 1,
+      "message": "use tag \"json:\" for the fields",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_4a8d157b",
+        "filename": "salt/push_event.sls",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-14T10:38:09Z",
+      "side": 1,
+      "message": "Remove tabs",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_4ae4353b",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-14T10:38:09Z",
+      "side": 1,
+      "message": "I remember this is struct for the events received on dbus. In that case we could this struct as \"NodeDBusEvent\"",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_0ac15d80",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-14T10:38:09Z",
+      "side": 1,
+      "message": "This could be called as PersistNodeDBusEvent",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_4abb550e",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-14T10:38:09Z",
+      "side": 1,
+      "message": "What is above code meant for??",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
