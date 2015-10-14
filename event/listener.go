@@ -2,7 +2,7 @@ package event
 
 import (
 	"fmt"
-	"log"
+	"github.com/skyrings/skyring/tools/logger"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
@@ -60,13 +60,13 @@ func StartListener(eventSocket string) {
 
 	l, e := net.Listen("unix", eventSocket)
 	if e != nil {
-		log.Fatal("listen error:", e)
+		logger.Get().Fatal("listen error:", e)
 	}
 
 	for {
 		conn, err := l.Accept()
 		if err != nil {
-			log.Fatal(err)
+			logger.Get().Fatal(err)
 		}
 
 		go server.ServeCodec(jsonrpc.NewServerCodec(conn))

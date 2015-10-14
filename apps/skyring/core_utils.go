@@ -14,8 +14,8 @@ package skyring
 
 import (
 	"encoding/json"
-	"github.com/golang/glog"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/ssh"
 	"net"
 	"net/http"
@@ -37,7 +37,7 @@ func GET_LookupNode(w http.ResponseWriter, r *http.Request) {
 
 	if host_addrs, err := net.LookupHost(hostname); err == nil {
 		if iaddrs, err := net.InterfaceAddrs(); err != nil {
-			glog.Errorf("Error getting the local host subnet details")
+			logger.Get().Error("Error getting the local host subnet details")
 			json.NewEncoder(w).Encode(host_addrs)
 			return
 		} else {

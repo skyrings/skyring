@@ -17,7 +17,7 @@ verifiers: getdeps vet fmt lint
 
 vet:
 	@echo "Doing $@"
-	@go tool vet .
+	@$(PWD)/build-aux/vet .
 
 fmt:
 	@echo "Doing $@"

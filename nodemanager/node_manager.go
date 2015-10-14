@@ -14,7 +14,7 @@ package nodemanager
 
 import (
 	"fmt"
-	"github.com/golang/glog"
+	"github.com/skyrings/skyring/tools/logger"
 	"io"
 	"os"
 	"sync"
@@ -37,7 +37,7 @@ func RegisterNodeManager(name string, factory NodeManagersFactory) {
 	defer nodeManagersMutex.Unlock()
 
 	if _, found := nodeManagers[name]; found {
-		glog.Info("Node manager already registered. Returing..")
+		logger.Get().Info("Node manager already registered. Returing..")
 		return
 	}
 
@@ -50,7 +50,7 @@ func GetNodeManager(name string, config io.Reader) (NodeManagerInterface, error)
 
 	factory_func, found := nodeManagers[name]
 	if !found {
-		glog.Info("Node manager not found", name)
+		logger.Get().Info("Node manager not found", name)
 		return nil, nil
 	}
 
@@ -68,7 +68,7 @@ func InitNodeManager(name string, configPath string) (NodeManagerInterface, erro
 	if configPath != "" {
 		config, err := os.Open(configPath)
 		if err != nil {
-			glog.Info("Couldnt open node manager config file", configPath)
+			logger.Get().Info("Couldnt open node manager config file", configPath)
 			return nil, nil
 		}
 

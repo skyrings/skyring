@@ -17,9 +17,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/goincremental/negroni-sessions"
-	"github.com/golang/glog"
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/tools/logger"
 	"golang.org/x/crypto/bcrypt"
 	"io"
 	"io/ioutil"
@@ -65,7 +65,7 @@ func mkerror(msg string) error {
 
 func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 	if config == nil {
-		glog.Errorln("missing configuration file for Local Auth provider")
+		logger.Get().Error("missing configuration file for Local Auth provider")
 		return nil, fmt.Errorf("missing configuration file for Local Auth provider")
 	}
 
@@ -73,22 +73,22 @@ func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 
 	bytes, err := ioutil.ReadAll(config)
 	if err != nil {
-		glog.Errorf("Error reading Configuration file:%s", err)
+		logger.Get().Error("Error reading Configuration file:%s", err)
 		return nil, err
 	}
 	if err = json.Unmarshal(bytes, &providerCfg); err != nil {
-		glog.Errorf("Unable to Unmarshall the data:%s", err)
+		logger.Get().Error("Unable to Unmarshall the data:%s", err)
 		return nil, err
 	}
 	//Create DB Backend
 	backend, err := authprovider.NewMongodbBackend()
 	if err != nil {
-		glog.Errorf("Unable to initialize the DB backend for localauthprovider:%s", err)
+		logger.Get().Error("Unable to initialize the DB backend for localauthprovider:%s", err)
 		panic(err)
 	}
 	//Create the Provider
 	if provider, err := NewAuthorizer(backend, providerCfg.DefaultRole, providerCfg.Roles); err != nil {
-		glog.Errorf("Unable to initialize the authorizer for localauthprovider:%s", err)
+		logger.Get().Error("Unable to initialize the authorizer for localauthprovider:%s", err)
 		panic(err)
 	} else {
 		return &provider, nil
@@ -113,7 +113,7 @@ func NewAuthorizer(backend authprovider.AuthBackend, defaultRole string, roles m
 	a.roles = roles
 	a.defaultRole = defaultRole
 	if _, ok := roles[defaultRole]; !ok {
-		glog.Errorln("Default role provided is not valid")
+		logger.Get().Error("Default role provided is not valid")
 		return a, mkerror("defaultRole missing")
 	}
 	return a, nil
@@ -131,7 +131,7 @@ func (a Authorizer) ProviderName() string {
 func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p string) error {
 	session := sessions.GetSession(req)
 	if sess := session.Get("username"); sess != nil {
-		glog.Errorln("Already logged in")
+		logger.Get().Error("Already logged in")
 		return nil
 	}
 
@@ -139,15 +139,15 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 		if user.Status {
 			verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(p))
 			if verify != nil {
-				glog.Errorln("Passwords Doesnot match")
+				logger.Get().Error("Passwords Doesnot match")
 				return mkerror("password doesn't match")
 			}
 		} else {
-			glog.Errorln("This user is not allowed. Status Disabled")
+			logger.Get().Error("This user is not allowed. Status Disabled")
 			return mkerror("This user is not allowed. Status Disabled")
 		}
 	} else {
-		glog.Errorln("User Not Found")
+		logger.Get().Error("User Not Found")
 		return mkerror("user not found")
 	}
 	session.Set("username", u)
@@ -163,15 +163,15 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 
 func (a Authorizer) AddUser(user models.User, password string) error {
 	if user.Username == "" {
-		glog.Errorln("no user name given")
+		logger.Get().Error("no user name given")
 		return mkerror("no username given")
 	}
 	if user.Email == "" {
-		glog.Errorln("no email given")
+		logger.Get().Error("no email given")
 		return mkerror("no email given")
 	}
 	if password == "" {
-		glog.Errorln("no password given")
+		logger.Get().Error("no password given")
 		return mkerror("no password given")
 	}
 
@@ -182,11 +182,11 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 	// Validate username
 	_, err := a.backend.User(user.Username)
 	if err == nil {
-		glog.Errorln("Username already exists")
+		logger.Get().Error("Username already exists")
 		return mkerror("user already exists")
 	} else if err.Error() != ErrMissingUser.Error() {
 		if err != nil {
-			glog.Errorf("Error retrieving user:%s", err)
+			logger.Get().Error("Error retrieving user:%s", err)
 			return mkerror(err.Error())
 		}
 		return nil
@@ -195,7 +195,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 	// Generate and save hash
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		glog.Errorf("couldn't save password:%s", err)
+		logger.Get().Error("couldn't save password:%s", err)
 		return mkerror("couldn't save password: " + err.Error())
 	}
 	user.Hash = hash
@@ -205,14 +205,14 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		user.Role = a.defaultRole
 	} else {
 		if _, ok := a.roles[user.Role]; !ok {
-			glog.Errorln("Non Existing Role")
+			logger.Get().Error("Non Existing Role")
 			return mkerror("non-existant role")
 		}
 	}
 
 	err = a.backend.SaveUser(user)
 	if err != nil {
-		glog.Errorf("Erro Saving the User:%s", err)
+		logger.Get().Error("Erro Saving the User:%s", err)
 		return mkerror(err.Error())
 	}
 	return nil
@@ -228,13 +228,13 @@ func (a Authorizer) UpdateUser(req *http.Request, username string, p string, e s
 
 	user, err := a.backend.User(username)
 	if err != nil {
-		glog.Errorln("Error retrieving the user:%s", err)
+		logger.Get().Error("Error retrieving the user:%s", err)
 		return err
 	}
 	if p != "" {
 		hash, err = bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
 		if err != nil {
-			glog.Errorln("Error saving the password:%s", err)
+			logger.Get().Error("Error saving the password:%s", err)
 			return mkerror("couldn't save password: " + err.Error())
 		}
 	} else {
@@ -250,7 +250,7 @@ func (a Authorizer) UpdateUser(req *http.Request, username string, p string, e s
 
 	err = a.backend.SaveUser(newuser)
 	if err != nil {
-		glog.Errorln("Error saving the user to DB:%s", err)
+		logger.Get().Error("Error saving the user to DB:%s", err)
 		return err
 	}
 
@@ -286,7 +286,7 @@ func (a Authorizer) GetUser(u string) (user models.User, e error) {
 
 	user, e = a.backend.User(u)
 	if e != nil {
-		glog.Errorf("Error retrieving the user:%s", e)
+		logger.Get().Error("Error retrieving the user:%s", e)
 		return user, e
 	}
 	return user, nil
@@ -295,7 +295,7 @@ func (a Authorizer) GetUser(u string) (user models.User, e error) {
 func (a Authorizer) ListUsers() (users []models.User, err error) {
 
 	if users, err = a.backend.Users(); err != nil {
-		glog.Errorf("Unable get the list of Users: %v", err)
+		logger.Get().Error("Unable get the list of Users: %v", err)
 		return users, err
 	}
 	return users, nil
@@ -310,7 +310,7 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 func (a Authorizer) DeleteUser(username string) error {
 	err := a.backend.DeleteUser(username)
 	if err != nil {
-		glog.Errorf("Unable delete the user: %v", err)
+		logger.Get().Error("Unable delete the user: %v", err)
 		return err
 	}
 	return nil

@@ -15,7 +15,7 @@ package authprovider
 
 import (
 	"fmt"
-	"github.com/golang/glog"
+	"github.com/skyrings/skyring/tools/logger"
 	"io"
 	"os"
 	"sync"
@@ -43,9 +43,9 @@ func RegisterAuthProvider(name string, factory ProvidersFactory) {
 	providersMutex.Lock()
 	defer providersMutex.Unlock()
 	if _, found := providers[name]; found {
-		glog.Fatalf("Auth provider %q was registered twice", name)
+		logger.Get().Critical("Auth provider %q was registered twice", name)
 	}
-	glog.V(1).Infof("Registered auth provider %q", name)
+	logger.Get().Debug("Registered auth provider %q", name)
 	providers[name] = factory
 }
 
@@ -65,7 +65,7 @@ func InitAuthProvider(name string, configFilePath string) (AuthInterface, error)
 	var authprovider AuthInterface
 
 	if name == "" {
-		glog.Info("No providers specified.")
+		logger.Get().Info("No providers specified.")
 		return nil, nil
 	}
 
@@ -74,7 +74,7 @@ func InitAuthProvider(name string, configFilePath string) (AuthInterface, error)
 	if configFilePath != "" {
 		config, err := os.Open(configFilePath)
 		if err != nil {
-			glog.Fatalf("Couldn't open auth provider configuration %s: %#v",
+			logger.Get().Critical("Couldn't open auth provider configuration %s: %#v",
 				configFilePath, err)
 		}
 

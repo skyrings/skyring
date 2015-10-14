@@ -29,6 +29,3 @@ _testmain.go
 *.pyo
 *.patch
 version.go
-python/build
-python/dist
-python/skyring.egg-info

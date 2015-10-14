@@ -13,10 +13,10 @@ limitations under the License.
 package skyring
 
 import (
-	"github.com/golang/glog"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/uuid"
 	"gopkg.in/mgo.v2/bson"
 	"regexp"
@@ -29,15 +29,15 @@ routed using the route information. Route would contain specific technology name
 func (a *App) getProviderFromRoute(routeCfg conf.Route) *Provider {
 	//Look at the URL to see if there is a match
 	for _, provider := range a.providers {
-		glog.V(3).Infof("provider:", provider)
+		logger.Get().Debug("provider:", provider)
 		//check for the URLs start with /api/v*/{provider-name}
 		regex := "\\bapi/v\\d/" + provider.Name + "/"
-		glog.V(3).Infof("regex:", regex)
+		logger.Get().Debug("regex:", regex)
 		if r, err := regexp.Compile(regex); err != nil {
-			glog.Errorf("Error compiling Regex %s", err)
+			logger.Get().Error("Error compiling Regex %s", err)
 			return nil
 		} else {
-			glog.V(3).Infof("Pattern:", routeCfg.Pattern)
+			logger.Get().Debug("Pattern:", routeCfg.Pattern)
 			if r.MatchString(routeCfg.Pattern) == true {
 				return &provider
 			}
@@ -61,7 +61,7 @@ func (a *App) getProviderFromClusterId(cluster_id uuid.UUID) *Provider {
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 	var cluster models.StorageCluster
 	if err := collection.Find(bson.M{"clusterid": cluster_id}).One(&cluster); err != nil {
-		glog.Errorf("Error getting the cluster details: %v", err)
+		logger.Get().Error("Error getting the cluster details: %v", err)
 		return nil
 	}
 	if provider, ok := a.providers[cluster.ClusterType]; ok {

@@ -17,14 +17,13 @@ import (
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/codegangsta/negroni"
-	"github.com/golang/glog"
 	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/apps"
+	"github.com/op/go-logging"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/event"
-	"github.com/skyrings/skyring/utils"
+	"github.com/skyrings/skyring/tools/logger"
 	"net/http"
 	"os"
 	"path"
@@ -35,13 +34,15 @@ import (
 const (
 	// ConfigFile default configuration file
 	ConfigFile = "skyring.conf"
+	// DefaultLogLevel default log level
+	DefaultLogLevel = logging.DEBUG
 )
 
 var (
 	configDir    string
-	logDir       string
+	logFile      string
 	logToStderr  bool
-	logLevel     int
+	logLevel     string
 	providersDir string
 	eventSocket  string
 )
@@ -77,15 +78,14 @@ func main() {
 			Usage: "log to console's standard error",
 		},
 		cli.StringFlag{
-			Name:   "log-dir, l",
-			Value:  "/var/log/skyring",
-			Usage:  "Override default log directory",
-			EnvVar: "SKYRING_LOGDIR",
+			Name:  "log-file, l",
+			Value: "/var/log/skyring/skyring.log",
+			Usage: "Override default log file",
 		},
-		cli.IntFlag{
+		cli.StringFlag{
 			Name:  "log-level",
-			Value: 0,
-			Usage: "Enable V-leveled logging at the specified level",
+			Value: DefaultLogLevel.String(),
+			Usage: "Set log level",
 		},
 	}
 
@@ -94,8 +94,8 @@ func main() {
 		configDir = c.String("config-dir")
 		eventSocket = c.String("event-socket")
 		logToStderr = c.Bool("log-to-stderr")
-		logDir = c.String("log-dir")
-		logLevel = c.Int("log-level")
+		logFile = c.String("log-file")
+		logLevel = c.String("log-level")
 		providersDir = c.String("providers-dir")
 		return nil
 	}
@@ -113,23 +113,26 @@ func main() {
 }
 
 func start() {
-	defer glog.Flush()
-
-	var (
-		application app.Application
-	)
+	var level logging.Level
+	var err error
+	if level, err = logging.LogLevel(logLevel); err != nil {
+		fmt.Fprintf(os.Stderr, "log level error. %s\n", err)
+		fmt.Fprintf(os.Stderr, "Using default log level %s\n", DefaultLogLevel)
+		level = DefaultLogLevel
+	}
+	// TODO: use logToStderr when deamonizing.
+	if err := logger.Init(logFile, true, level); err != nil {
+		panic(fmt.Sprintf("log init failed. %s", err))
+	}
 
 	conf.LoadAppConfiguration(path.Join(configDir, ConfigFile))
-	conf.SystemConfig.Logging.Logtostderr = logToStderr
-	conf.SystemConfig.Logging.Log_dir = logDir
-	conf.SystemConfig.Logging.V = logLevel
+	conf.SystemConfig.Logging.LogToStderr = logToStderr
+	conf.SystemConfig.Logging.Filename = logFile
+	conf.SystemConfig.Logging.Level = level
 
-	util.InitLogs(conf.SystemConfig.Logging)
-
-	application = skyring.NewApp(configDir, providersDir)
-
+	application := skyring.NewApp(configDir, providersDir)
 	if application == nil {
-		glog.Errorf("Unable to start application")
+		logger.Get().Error("Unable to start application")
 		os.Exit(1)
 	}
 
@@ -139,12 +142,12 @@ func start() {
 
 	//Load the autheticated routes
 	if err := application.SetRoutes(router); err != nil {
-		glog.Errorf("Unable to create http server endpoints: %s", err)
+		logger.Get().Error("Unable to create http server endpoints: %s", err)
 		os.Exit(1)
 	}
 
 	if err := application.InitializeNodeManager(conf.SystemConfig.NodeManagementConfig); err != nil {
-		glog.Errorf("Unable to create node manager")
+		logger.Get().Error("Unable to create node manager")
 		os.Exit(1)
 	}
 
@@ -153,7 +156,7 @@ func start() {
 	// Negroni
 	n := negroni.Classic()
 
-	glog.Info("Starting event listener")
+	logger.Get().Info("Starting event listener")
 	go event.StartListener(eventSocket)
 
 	//Check if Port is provided, otherwise use dafault 8080
@@ -164,23 +167,23 @@ func start() {
 
 	// Create DB session
 	if err := db.InitDBSession(conf.SystemConfig.DBConfig); err != nil {
-		glog.Errorf("Unable to initialize DB")
+		logger.Get().Error("Unable to initialize DB")
 		os.Exit(1)
 	}
 	if err := db.InitMonitoringDB(conf.SystemConfig.TimeSeriesDBConfig); err != nil {
-		glog.Errorf("Unable to initialize monitoring DB")
+		logger.Get().Error("Unable to initialize monitoring DB")
 		os.Exit(1)
 	}
 
 	//Initialize the auth provider
 	if err := application.InitializeAuth(conf.SystemConfig.Authentication, n); err != nil {
-		glog.Errorf("Unable to initialize the authentication provider: %s", err)
+		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
 		os.Exit(1)
 	}
 
 	n.UseHandler(router)
 
-	glog.Infof("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
+	logger.Get().Info("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
 
-	glog.Fatalf("Error: %s", http.ListenAndServe(conf.SystemConfig.Config.Host+":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), n))
+	logger.Get().Critical("Error: %s", http.ListenAndServe(conf.SystemConfig.Config.Host+":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), n))
 }
