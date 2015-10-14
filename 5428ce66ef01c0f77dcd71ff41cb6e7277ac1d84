@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baada198_a9ede28d",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-14T03:54:36Z",
+      "side": 1,
+      "message": "Where the logging is done. Is there a log file created?",
+      "revId": "5428ce66ef01c0f77dcd71ff41cb6e7277ac1d84",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_89e81e7e",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-14T03:54:36Z",
+      "side": 1,
+      "message": "Remove the \u0027print\u0027 statements",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 15
+      },
+      "revId": "5428ce66ef01c0f77dcd71ff41cb6e7277ac1d84",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
