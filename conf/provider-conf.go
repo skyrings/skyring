@@ -14,10 +14,13 @@ package conf
 
 import (
 	"encoding/json"
-	"github.com/golang/glog"
+	"github.com/op/go-logging"
+	"github.com/skyrings/skyring/tools/logger"
 	"io/ioutil"
 	"path"
 )
+
+log := logger.Get()
 
 type Route struct {
 	Name       string `json:"name"`
@@ -45,27 +48,27 @@ func LoadProviderConfig(providerConfigDir string) []ProviderInfo {
 
 	files, err := ioutil.ReadDir(providerConfigDir)
 	if err != nil {
-		glog.Errorf("Unable to read directory: %s", err)
-		glog.Errorf("Failed to Initialize")
+		log.Error("Unable to read directory: %s", err)
+		log.Error("Failed to Initialize")
 		return collection
 	}
 	for _, f := range files {
-		glog.V(3).Infof("File Name:", f.Name())
+		log.Debug("File Name:", f.Name())
 
 		file, err := ioutil.ReadFile(path.Join(providerConfigDir, f.Name()))
 		if err != nil {
-			glog.Fatalf("Error Reading Config: %s", err)
+			log.Critical("Error Reading Config: %s", err)
 			continue
 		}
 		err = json.Unmarshal(file, &data)
 		if err != nil {
-			glog.Fatalf("Error Unmarshalling Config: %s", err)
+			log.Critical("Error Unmarshalling Config: %s", err)
 			continue
 		}
 		collection = append(collection, data)
 		data = ProviderInfo{}
 	}
-	glog.V(3).Infof("Collection:", collection)
+	log.Debug("Collection:", collection)
 	return collection
 
 }

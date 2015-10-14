@@ -15,13 +15,16 @@ package authprovider
 
 import (
 	"errors"
-	"github.com/golang/glog"
+	"github.com/op/go-logging"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/tools/logger"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
+
+log := logger.Get()
 
 var (
 	ErrDeleteNull  = mkmgoerror("deleting non-existant user")
@@ -59,7 +62,7 @@ func NewMongodbBackend() (b MongodbAuthBackend, e error) {
 
 	err := c.EnsureIndex(index)
 	if err != nil {
-		glog.Errorf("Error Setting goauth collection:%s", err)
+		log.Error("Error Setting goauth collection:%s", err)
 		return b, mkmgoerror(err.Error())
 	}
 	return
@@ -73,7 +76,7 @@ func (b MongodbAuthBackend) User(username string) (user models.User, e error) {
 
 	err := c.Find(bson.M{"Username": username}).One(&user)
 	if err != nil {
-		glog.Errorf("Error getting record from DB:%s", err)
+		log.Error("Error getting record from DB:%s", err)
 		return user, ErrMissingUser
 	}
 	return user, nil
@@ -86,7 +89,7 @@ func (b MongodbAuthBackend) Users() (us []models.User, e error) {
 
 	err := c.Find(bson.M{}).All(&us)
 	if err != nil {
-		glog.Errorf("Error getting record from DB:%s", err)
+		log.Error("Error getting record from DB:%s", err)
 		return us, mkmgoerror(err.Error())
 	}
 	return
@@ -109,7 +112,7 @@ func (b MongodbAuthBackend) DeleteUser(username string) error {
 	// raises error if "username" doesn't exist
 	err := c.Remove(bson.M{"Username": username})
 	if err == mgo.ErrNotFound {
-		glog.Errorf("Error deleting record from DB:%s", err)
+		log.Error("Error deleting record from DB:%s", err)
 		return ErrDeleteNull
 	}
 	return err

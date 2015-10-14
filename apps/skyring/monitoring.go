@@ -15,10 +15,11 @@ package skyring
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/golang/glog"
+	"github.com/op/go-logging"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"net/http"
@@ -28,6 +29,8 @@ import (
 
 	influxdb "github.com/influxdb/influxdb/client"
 )
+
+log := logger.Get()
 
 func queryDB(cmd string) (res []influxdb.Result, err error) {
 	q := influxdb.Query{
@@ -56,7 +59,7 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	storage_node := GetNode(*node_id)
 	if storage_node.Hostname == "" {
 		util.HttpResponse(w, http.StatusBadRequest, "Node not found")
-		glog.Errorf("Node not found: %v", err)
+		log.Error("Node not found: %v", err)
 		return
 	}
 

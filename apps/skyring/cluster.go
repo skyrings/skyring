@@ -15,11 +15,12 @@ package skyring
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/golang/glog"
+	"github.com/op/go-logging"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"gopkg.in/mgo.v2/bson"
@@ -27,6 +28,8 @@ import (
 	"io/ioutil"
 	"net/http"
 )
+
+log := logger.Get()
 
 var (
 	cluster_post_functions = map[string]string{
@@ -50,7 +53,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
-		glog.Errorf("Error parsing the request: %v", err)
+		log.Error("Error parsing the request: %v", err)
 		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
 		return
 	}
@@ -80,11 +83,11 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 
 	var m models.RpcResponse
 	if err = json.Unmarshal(result, &m); err != nil {
-		glog.Errorf("Unable to Unmarshall the result from provider : %s", err)
+		log.Error("Unable to Unmarshall the result from provider : %s", err)
 	}
 	if m.Status.StatusCode == http.StatusOK {
 		if err := json.NewEncoder(w).Encode("Added successfully"); err != nil {
-			glog.Errorf("Error: %v", err)
+			log.Error("Error: %v", err)
 		}
 	} else {
 		util.HttpResponse(w, http.StatusInternalServerError, m.Status.StatusMessage)
@@ -116,16 +119,16 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 	var nodes models.StorageNodes
 	if err := collection.Find(bson.M{"clusterid": cluster_id}).All(&nodes); err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-		glog.Errorf("Error getting the nodes for the cluster: %v", err)
+		log.Error("Error getting the nodes for the cluster: %v", err)
 		return
 	}
 	for _, node := range nodes {
 		if _, err := GetCoreNodeManager().RejectNode(node.Hostname); err != nil {
-			glog.Errorf("Error rejecting the key for node %s : %v", node.Hostname, err)
+			log.Error("Error rejecting the key for node %s : %v", node.Hostname, err)
 			continue
 		} else {
 			if err := collection.Remove(bson.M{"uuid": node.UUID}); err != nil {
-				glog.Errorf("Error deleting the node: %s for the cluster: %v", node.Hostname, err)
+				log.Error("Error deleting the node: %s for the cluster: %v", node.Hostname, err)
 				continue
 			}
 		}
@@ -138,7 +141,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 	var cluster models.StorageCluster
 	if err := collection.Remove(bson.M{"cluster_id": cluster_id}); err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-		glog.Errorf("Error removing the cluster: %v", err)
+		log.Error("Error removing the cluster: %v", err)
 		return
 	}
 
@@ -153,7 +156,7 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 	var clusters models.StorageClusters
 	if err := collection.Find(nil).All(&clusters); err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-		glog.Errorf("Error getting the clusters list: %v", err)
+		log.Error("Error getting the clusters list: %v", err)
 		return
 	}
 	json.NewEncoder(w).Encode(clusters)
@@ -172,7 +175,7 @@ func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
 	var cluster models.StorageCluster
 	if err := collection.Find(bson.M{"clusterid": *cluster_id}).One(&cluster); err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-		glog.Errorf("Error getting the cluster: %v", err)
+		log.Error("Error getting the cluster: %v", err)
 		return
 	}
 	json.NewEncoder(w).Encode(cluster)

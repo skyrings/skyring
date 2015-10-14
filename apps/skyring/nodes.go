@@ -14,11 +14,12 @@ package skyring
 
 import (
 	"encoding/json"
-	"github.com/golang/glog"
+	"github.com/op/go-logging"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"gopkg.in/mgo.v2/bson"
@@ -27,6 +28,8 @@ import (
 	"net/http"
 	"os"
 )
+
+log := logger.Get()
 
 var (
 	curr_hostname, err = os.Hostname()
@@ -38,7 +41,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
-		glog.Errorf("Error parsing the request: %v", err)
+		log.Error("Error parsing the request: %v", err)
 		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
 		return
 	}
@@ -70,7 +73,7 @@ func POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
-		glog.Errorf("Error parsing the request: %v", err)
+		log.Error("Error parsing the request: %v", err)
 		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
 		return
 	}
@@ -126,10 +129,10 @@ func addStorageNodeToDB(w http.ResponseWriter, storage_node models.StorageNode) 
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Insert(storage_node); err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-		glog.Fatalf("Error adding the node: %v", err)
+		log.Critical("Error adding the node: %v", err)
 	}
 	if err := json.NewEncoder(w).Encode("Added successfully"); err != nil {
-		glog.Errorf("Error: %v", err)
+		log.Error("Error: %v", err)
 	}
 }
 
@@ -158,13 +161,13 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	if managed_state != "" {
 		if err := collection.Find(bson.M{"managedstate": managed_state}).All(&nodes); err != nil {
 			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-			glog.Errorf("Error getting the nodes list: %v", err)
+			log.Error("Error getting the nodes list: %v", err)
 			return
 		}
 	} else {
 		if err := collection.Find(nil).All(&nodes); err != nil {
 			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-			glog.Errorf("Error getting the nodes list: %v", err)
+			log.Error("Error getting the nodes list: %v", err)
 			return
 		}
 	}
@@ -182,12 +185,12 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	var node models.StorageNode
 	if err := collection.Find(bson.M{"uuid": *node_id}).One(&node); err != nil {
-		glog.Errorf("Error getting the node detail: %v", err)
+		log.Error("Error getting the node detail: %v", err)
 	}
 
 	if node.Hostname == "" {
 		util.HttpResponse(w, http.StatusBadRequest, "Node not found")
-		glog.Errorf("Node not found: %v", err)
+		log.Error("Node not found: %v", err)
 		return
 	} else {
 		json.NewEncoder(w).Encode(node)
@@ -197,7 +200,7 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 func GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
 	if nodes, err := GetCoreNodeManager().GetUnmanagedNodes(); err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-		glog.Errorf("Node not found: %v", err)
+		log.Error("Node not found: %v", err)
 	} else {
 		json.NewEncoder(w).Encode(nodes)
 	}
@@ -210,7 +213,7 @@ func GetNode(node_id uuid.UUID) models.StorageNode {
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	var node models.StorageNode
 	if err := collection.Find(bson.M{"uuid": node_id}).One(&node); err != nil {
-		glog.Errorf("Error getting the node detail: %v", err)
+		log.Error("Error getting the node detail: %v", err)
 	}
 
 	return node

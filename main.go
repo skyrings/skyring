@@ -17,7 +17,7 @@ import (
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/codegangsta/negroni"
-	"github.com/golang/glog"
+	"github.com/op/go-logging"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/apps"
 	"github.com/skyrings/skyring/apps/skyring"
@@ -25,12 +25,15 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/utils"
+	"github.com/skyrings/skyring/tools/logger"
 	"net/http"
 	"os"
 	"path"
 	"strconv"
 	"strings"
 )
+
+log := logger.Get()
 
 const (
 	// ConfigFile default configuration file
@@ -113,8 +116,6 @@ func main() {
 }
 
 func start() {
-	defer glog.Flush()
-
 	var (
 		application app.Application
 	)
@@ -129,7 +130,7 @@ func start() {
 	application = skyring.NewApp(configDir, providersDir)
 
 	if application == nil {
-		glog.Errorf("Unable to start application")
+		log.Error("Unable to start application")
 		os.Exit(1)
 	}
 
@@ -139,12 +140,12 @@ func start() {
 
 	//Load the autheticated routes
 	if err := application.SetRoutes(router); err != nil {
-		glog.Errorf("Unable to create http server endpoints: %s", err)
+		log.Error("Unable to create http server endpoints: %s", err)
 		os.Exit(1)
 	}
 
 	if err := application.InitializeNodeManager(conf.SystemConfig.NodeManagementConfig); err != nil {
-		glog.Errorf("Unable to create node manager")
+		log.Error("Unable to create node manager")
 		os.Exit(1)
 	}
 
@@ -153,7 +154,7 @@ func start() {
 	// Negroni
 	n := negroni.Classic()
 
-	glog.Info("Starting event listener")
+	log.Info("Starting event listener")
 	go event.StartListener(eventSocket)
 
 	//Check if Port is provided, otherwise use dafault 8080
@@ -164,23 +165,23 @@ func start() {
 
 	// Create DB session
 	if err := db.InitDBSession(conf.SystemConfig.DBConfig); err != nil {
-		glog.Errorf("Unable to initialize DB")
+		log.Error("Unable to initialize DB")
 		os.Exit(1)
 	}
 	if err := db.InitMonitoringDB(conf.SystemConfig.TimeSeriesDBConfig); err != nil {
-		glog.Errorf("Unable to initialize monitoring DB")
+		log.Error("Unable to initialize monitoring DB")
 		os.Exit(1)
 	}
 
 	//Initialize the auth provider
 	if err := application.InitializeAuth(conf.SystemConfig.Authentication, n); err != nil {
-		glog.Errorf("Unable to initialize the authentication provider: %s", err)
+		log.Error("Unable to initialize the authentication provider: %s", err)
 		os.Exit(1)
 	}
 
 	n.UseHandler(router)
 
-	glog.Infof("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
+	log.Info("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
 
-	glog.Fatalf("Error: %s", http.ListenAndServe(conf.SystemConfig.Config.Host+":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), n))
+	log.Critical("Error: %s", http.ListenAndServe(conf.SystemConfig.Config.Host+":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), n))
 }

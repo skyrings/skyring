@@ -14,14 +14,17 @@ package db
 
 import (
 	"fmt"
-	"github.com/golang/glog"
+	"github.com/op/go-logging"
 	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/tools/logger"
 	"gopkg.in/mgo.v2"
 	"net/url"
 	"time"
 
 	influxdb "github.com/influxdb/influxdb/client"
 )
+
+log := logger.Get()
 
 var (
 	session        *mgo.Session
@@ -38,7 +41,7 @@ func InitDBSession(dbconf conf.MongoDBConfig) error {
 		Password: dbconf.Password,
 	})
 	if err != nil {
-		glog.Fatalf("Error: %v", err)
+		log.Critical("Error: %v", err)
 		return err
 	}
 	return nil
@@ -52,7 +55,7 @@ func InitMonitoringDB(mondbconf conf.InfluxDBconfig) error {
 	u, err := url.Parse(fmt.Sprintf("http://%s:%d",
 		mondbconf.Hostname, mondbconf.Port))
 	if err != nil {
-		glog.Fatalf("Error: %v", err)
+		log.Critical("Error: %v", err)
 		return err
 	}
 
@@ -62,7 +65,7 @@ func InitMonitoringDB(mondbconf conf.InfluxDBconfig) error {
 		Password: mondbconf.Password,
 	})
 	if err != nil {
-		glog.Fatalf("Error: %v", err)
+		log.Critical("Error: %v", err)
 		return err
 	}
 

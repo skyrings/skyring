@@ -15,13 +15,16 @@ package skyring
 import (
 	"encoding/json"
 	"errors"
-	"github.com/golang/glog"
+	"github.com/op/go-logging"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/utils"
+	"github.com/skyrings/skyring/tools/logger"
 	"io/ioutil"
 	"net/http"
 )
+
+log := logger.Get()
 
 const (
 	DefaultUserName = "admin"
@@ -35,7 +38,7 @@ func AddDefaultUser() error {
 	defaultUser := models.User{Username: DefaultUserName, Email: DefaultEmail, Role: DefaultRole}
 
 	if err := GetAuthProvider().AddUser(defaultUser, DefaultPassword); err != nil {
-		glog.Errorf("Unable to create default User:%s", err)
+		log.Error("Unable to create default User:%s", err)
 		return err
 	}
 
@@ -46,18 +49,18 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		glog.Errorf("Error parsing http request body:%s", err)
+		log.Error("Error parsing http request body:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
 	var m map[string]interface{}
 	if err = json.Unmarshal(body, &m); err != nil {
-		glog.Errorf("Unable to Unmarshall the data:%s", err)
+		log.Error("Unable to Unmarshall the data:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
 	if err := GetAuthProvider().Login(rw, req, m["username"].(string), m["password"].(string)); err != nil {
-		glog.Errorf("Unable to login User:%s", err)
+		log.Error("Unable to login User:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -67,7 +70,7 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 
 func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
 	if err := GetAuthProvider().Logout(rw, req); err != nil {
-		glog.Errorf("Unable to logout User:%s", err)
+		log.Error("Unable to logout User:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -79,7 +82,7 @@ func (a *App) getUsers(rw http.ResponseWriter, req *http.Request) {
 
 	users, err := GetAuthProvider().ListUsers()
 	if err != nil {
-		glog.Errorf("Unable to List the users:%s", err)
+		log.Error("Unable to List the users:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -98,7 +101,7 @@ func (a *App) getUsers(rw http.ResponseWriter, req *http.Request) {
 	//marshal and send it across
 	bytes, err := json.Marshal(pUsers)
 	if err != nil {
-		glog.Errorf("Unable to marshal the list of Users:%s", err)
+		log.Error("Unable to marshal the list of Users:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -112,7 +115,7 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 
 	user, err := GetAuthProvider().GetUser(vars["username"])
 	if err != nil {
-		glog.Errorf("Unable to Get the user:%s", err)
+		log.Error("Unable to Get the user:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -125,7 +128,7 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 		User: &user,
 	})
 	if err != nil {
-		glog.Errorf("Unable to marshal the User:%s", err)
+		log.Error("Unable to marshal the User:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -137,7 +140,7 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 
 	users, err := GetAuthProvider().ListExternalUsers()
 	if err != nil {
-		glog.Errorf("Unable to List the users:%s", err)
+		log.Error("Unable to List the users:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -156,7 +159,7 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 	//marshal and send it across
 	bytes, err := json.Marshal(pUsers)
 	if err != nil {
-		glog.Errorf("Unable to marshal the list of Users:%s", err)
+		log.Error("Unable to marshal the list of Users:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -169,14 +172,14 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		glog.Errorf("Error parsing http request body:%s", err)
+		log.Error("Error parsing http request body:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
 	var m map[string]interface{}
 
 	if err = json.Unmarshal(body, &m); err != nil {
-		glog.Errorf("Unable to Unmarshall the data:%s", err)
+		log.Error("Unable to Unmarshall the data:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -191,7 +194,7 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	if err := GetAuthProvider().AddUser(user, m["password"].(string)); err != nil {
-		glog.Errorf("Unable to create User:%s", err)
+		log.Error("Unable to create User:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -202,7 +205,7 @@ func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 
 	if err := GetAuthProvider().DeleteUser(vars["username"]); err != nil {
-		glog.Errorf("Unable to delete User:%s", err)
+		log.Error("Unable to delete User:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -215,11 +218,11 @@ func parseAuthRequestBody(req *http.Request, user *models.User) error {
 		err  error
 	)
 	if body, err = ioutil.ReadAll(req.Body); err != nil {
-		glog.Errorf("Error parsing http request body:%s", err)
+		log.Error("Error parsing http request body:%s", err)
 		return errors.New(err.Error())
 	}
 	if err = json.Unmarshal(body, &user); err != nil {
-		glog.Errorf("Unable to Unmarshall the data:%s", err)
+		log.Error("Unable to Unmarshall the data:%s", err)
 		return errors.New(err.Error())
 	}
 	return nil
