@@ -15,7 +15,6 @@ package skyring
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
@@ -56,7 +55,7 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	storage_node := GetNode(*node_id)
 	if storage_node.Hostname == "" {
 		util.HttpResponse(w, http.StatusBadRequest, "Node not found")
-		glog.Errorf("Node not found: %v", err)
+		log.Error("Node not found: %v", err)
 		return
 	}
 

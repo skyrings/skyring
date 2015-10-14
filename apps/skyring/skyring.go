@@ -18,7 +18,6 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/goincremental/negroni-sessions"
 	"github.com/goincremental/negroni-sessions/cookiestore"
-	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/natefinch/pie"
 	"github.com/skyrings/skyring/authprovider"
@@ -74,7 +73,7 @@ func NewApp(configDir string, binDir string) *App {
 	/*if len(app.providers) < 1 {
 		panic(fmt.Sprintf("None of the providers are initialized successfully"))
 	}
-	glog.Infof("Loaded URLs:", app.routes)*/
+	log.Info("Loaded URLs:", app.routes)*/
 
 	return app
 }
@@ -84,10 +83,10 @@ func (a *App) StartProviders(configDir string, binDir string) {
 	providerBinaryPath := path.Join(binDir, ProviderBinaryDir)
 
 	configs := conf.LoadProviderConfig(path.Join(configDir, ProviderConfDir))
-	glog.Infof("Config:", configs)
+	log.Info("Config:", configs)
 
 	for _, config := range configs {
-		glog.V(3).Infof("Config:", config)
+		log.Debug("Config:", config)
 
 		//check if the routes are unique
 		//Load the routes later after the provider starts
@@ -96,7 +95,7 @@ func (a *App) StartProviders(configDir string, binDir string) {
 		var found bool
 		for _, element := range config.Routes {
 			if _, ok := a.routes[element.Name]; ok {
-				glog.Errorln("Error in Route configuration, Duplicate routes")
+				log.Error("Error in Route configuration, Duplicate routes")
 				//Dont proceed further
 				found = true
 				break
@@ -127,7 +126,7 @@ func (a *App) StartProviders(configDir string, binDir string) {
 			dbConfStr, _ := json.Marshal(conf.SystemConfig.DBConfig)
 			client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, config.Provider.ProviderBinary, string(dbConfStr))
 			if err != nil {
-				glog.Errorf("Error running plugin:%s", err)
+				log.Error("Error running plugin:%s", err)
 				continue
 			}
 			//Load the routes
@@ -161,7 +160,7 @@ func (a *App) SetRoutes(router *mux.Router) error {
 			urlPattern := fmt.Sprintf("%s/v%d/%s", DEFAULT_API_PREFIX, route.Version, route.Pattern)
 			router.Methods(route.Method).Path(urlPattern).Name(route.Name).Handler(http.HandlerFunc(route.HandlerFunc))
 		} else {
-			glog.Infof("Skipped the route: %s as version is un spported", route.Name)
+			log.Info("Skipped the route: %s as version is un spported", route.Name)
 		}
 	}
 
@@ -172,14 +171,14 @@ func (a *App) SetRoutes(router *mux.Router) error {
 			authReqdRouter.Methods(route.Method).Path(urlPattern).Name(route.Name).Handler(http.HandlerFunc(route.HandlerFunc))
 			router.Handle(urlPattern, n)
 		} else {
-			glog.Infof("Skipped the route: %s as version is un spported", route.Name)
+			log.Info("Skipped the route: %s as version is un spported", route.Name)
 		}
 	}
 
 	//Set the provider specific routes here
 	//All the provider specific routes are assumed to be authenticated
 	for _, route := range a.routes {
-		glog.V(3).Info(route)
+		log.Debug("%s", route)
 		if validApiVersion(route.Version) {
 			urlPattern := fmt.Sprintf("%s/v%d/%s", DEFAULT_API_PREFIX, route.Version, route.Pattern)
 			authReqdRouter.
@@ -189,7 +188,7 @@ func (a *App) SetRoutes(router *mux.Router) error {
 				Handler(http.HandlerFunc(a.ProviderHandler))
 			router.Handle(urlPattern, n)
 		} else {
-			glog.Infof("Skipped the route: %s as version is un spported", route.Name)
+			log.Info("Skipped the route: %s as version is un spported", route.Name)
 		}
 	}
 
@@ -207,7 +206,7 @@ func (a *App) InitializeAuth(authCfg conf.AuthConfig, n *negroni.Negroni) error 
 
 	//Initailize the backend auth provider based on the configuartion
 	if aaa, err := authprovider.InitAuthProvider(authCfg.ProviderName, authCfg.ConfigFile); err != nil {
-		glog.Errorf("Error Initializing the Authentication: %s", err)
+		log.Error("Error Initializing the Authentication: %s", err)
 		return err
 	} else {
 		AuthProviderInstance = aaa
@@ -257,21 +256,21 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 	//Get the request details from requestbody
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		glog.Errorf("Error parsing http request body: %s", err)
+		log.Error("Error parsing http request body: %s", err)
 	}
 
 	//Find out the provider to process this request and send the request
 	//After getting the response, pass it on to the client
 	provider := a.getProviderFromRoute(routeCfg)
 	if provider != nil {
-		glog.Infof("Sending the request to provider:", provider.Name)
+		log.Info("Sending the request to provider:", provider.Name)
 		provider.Client.Call(provider.Name+"."+routeCfg.PluginFunc, models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body}, &result)
 		//Parse the result to see if a different status needs to set
 		//By default it sets http.StatusOK(200)
-		glog.Infof("Got response from provider")
+		log.Info("Got response from provider")
 		var m models.RpcResponse
 		if err = json.Unmarshal(result, &m); err != nil {
-			glog.Errorf("Unable to Unmarshall the result from provider : %s", err)
+			log.Error("Unable to Unmarshall the result from provider : %s", err)
 		}
 		status := m.Status.StatusCode
 		if status != http.StatusOK {
@@ -287,7 +286,7 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) InitializeNodeManager(config conf.NodeManagerConfig) error {
 	if manager, err := nodemanager.InitNodeManager(config.ManagerName, config.ConfigFilePath); err != nil {
-		glog.Errorf("Error initializing the node manager: %v", err)
+		log.Error("Error initializing the node manager: %v", err)
 		return err
 	} else {
 		CoreNodeManager = manager
@@ -316,7 +315,7 @@ func (a *App) LoginRequired(w http.ResponseWriter, r *http.Request, next http.Ha
 
 	if sessionName == nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		glog.Infof("Not Authorized returning from here")
+		log.Info("Not Authorized returning from here")
 		return
 	}
 	next(w, r)

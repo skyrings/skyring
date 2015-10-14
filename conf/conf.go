@@ -14,9 +14,12 @@ package conf
 
 import (
 	"encoding/json"
-	"github.com/golang/glog"
+	"github.com/op/go-logging"
+	"github.com/skyrings/skyring/tools/logger"
 	"io/ioutil"
 )
+
+var log = logger.Get()
 
 type SkyringConfig struct {
 	Host              string `json:"host"`
@@ -25,10 +28,9 @@ type SkyringConfig struct {
 }
 
 type SkyringLogging struct {
-	Logtostderr bool   `json:"logtostderr"`
-	Log_dir     string `json:"log_dir"`
-	V           int    `json:"v"`
-	Vmodule     string `json:"vmodule"`
+	LogToStderr bool          `json:"logToStderr"`
+	Filename    string        `json:"filename"`
+	Level       logging.Level `json:"level"`
 }
 
 type AuthConfig struct {
@@ -73,10 +75,10 @@ var (
 func LoadAppConfiguration(configFilePath string) {
 	file, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
-		glog.Fatalf("Error Reading SkyRing Config: %s", err)
+		log.Critical("Error Reading SkyRing Config: %s", err)
 	}
 	err = json.Unmarshal(file, &SystemConfig)
 	if err != nil {
-		glog.Fatalf("Error Unmarshalling SkyRing Config: %s", err)
+		log.Critical("Error Unmarshalling SkyRing Config: %s", err)
 	}
 }
