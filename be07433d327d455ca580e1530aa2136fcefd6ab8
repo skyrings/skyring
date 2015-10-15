@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_9753e46b",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-15T10:38:25Z",
+      "side": 1,
+      "message": "Need to Add a README in git format, how to use this script",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_57830ccc",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-15T10:38:25Z",
+      "side": 1,
+      "message": "Are you checking for Fed 22? I think as per our discussion we need to check for Fed 22 or higher",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 13,
+        "endChar": 13
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_575a2c84",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-15T10:38:25Z",
+      "side": 1,
+      "message": "Why to copy to /usr/sbin? the path is set to $HOME/golang/gopath/bin right?\nwe can ask the user to run .bashrc or start in a new terminal?",
+      "range": {
+        "startLine": 188,
+        "startChar": 4,
+        "endLine": 188,
+        "endChar": 17
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
