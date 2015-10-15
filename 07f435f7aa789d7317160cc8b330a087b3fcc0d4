@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_3d3cb793",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-15T16:21:23Z",
+      "side": 1,
+      "message": "Have it named as stopCh.  Anyways, task framework will come with these things by default.",
+      "parentUuid": "baada198_1869ba8b",
+      "range": {
+        "startLine": 23,
+        "startChar": 20,
+        "endLine": 23,
+        "endChar": 27
+      },
+      "revId": "07f435f7aa789d7317160cc8b330a087b3fcc0d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_5f307c56",
         "filename": "monitoring/monitor_base.go",
         "patchSetId": 2
