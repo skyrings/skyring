@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_1afff902",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-15T11:38:55Z",
+      "side": 1,
+      "message": "have this script under misc directory",
+      "parentUuid": "9ab29df4_9753e46b",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_57830ccc",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -615,6 +633,24 @@
       "writtenOn": "2015-10-15T11:05:58Z",
       "side": 1,
       "message": "We need create egg file for bigfin project as well.\n@Bala, plz provide the details on how to go about this egg file creation.",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_f702600a",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-15T11:38:55Z",
+      "side": 1,
+      "message": "use python setup.py install --root \u003cmypath\u003e  and copy respective python modules to /usr/lib/pythonXXX/site-packages/...",
+      "parentUuid": "9ab29df4_5744ec73",
       "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
