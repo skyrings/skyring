@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_b3b62889",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-15T07:12:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_aa7cf173",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_ca81254c",
         "filename": "apps/skyring/events.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-10-14T10:38:09Z",
       "side": 1,
       "message": "Run build and verify as I can see fmt errors",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_d3bb9c70",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-15T07:12:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_ca81254c",
       "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_f3afc029",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-15T07:12:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_ea950989",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_0a931da4",
         "filename": "apps/skyring/events.go",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2015-10-14T10:38:09Z",
       "side": 1,
       "message": "%s/NodeEventStructure/NodeEvent/g",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_13ad1432",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-15T07:12:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_0a931da4",
       "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_33aa181a",
+        "filename": "models/core_models.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-15T07:12:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_2a90e194",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_4a8d157b",
         "filename": "salt/push_event.sls",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2015-10-14T10:38:09Z",
       "side": 1,
       "message": "Remove tabs",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_53a78c4f",
+        "filename": "salt/push_event.sls",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-15T07:12:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_4a8d157b",
       "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_7363b01a",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-15T07:12:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_4ae4353b",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_0ac15d80",
         "filename": "utils/event_listener.go",
         "patchSetId": 1
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "baada198_936844f7",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-15T07:12:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baada198_0ac15d80",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baada198_4abb550e",
         "filename": "utils/event_listener.go",
         "patchSetId": 1
@@ -149,6 +293,24 @@
       "writtenOn": "2015-10-14T10:38:09Z",
       "side": 1,
       "message": "What is above code meant for??",
+      "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baada198_b36d4807",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-15T07:12:56Z",
+      "side": 1,
+      "message": "removed it.",
+      "parentUuid": "baada198_4abb550e",
       "revId": "1b3caedc14a8b43a566a8847014fff1169a963cc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
