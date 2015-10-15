@@ -14,7 +14,10 @@
 
 package backend
 
-import "github.com/skyrings/skyring/tools/uuid"
+import (
+	"github.com/skyrings/skyring/tools/uuid"
+	//	"github.com/skyrings/skyring/models"
+)
 
 type Node struct {
 	Name        string
@@ -56,4 +59,6 @@ type Backend interface {
 	GetNodeDisk(node string) ([]Disk, error)
 	GetNodeNetwork(node string) (Network, error)
 	RejectNode(node string) (bool, error)
+	ConfigureCollectdPhysicalResources(node string, master string) (success bool, err error)
+	UpdateCollectdThresholds(nodes []string, threshold interface{}) (err error)
 }

@@ -16,7 +16,6 @@
 import logging
 from functools import wraps
 import uuid
-
 import salt
 from salt import wheel, client
 import salt.config
@@ -40,6 +39,69 @@ master = salt.wheel.WheelClient(opts)
 setattr(salt.client.LocalClient, 'cmd',
         enableLogger(salt.client.LocalClient.cmd))
 local = salt.client.LocalClient()
+threshold_type_map = {"Warning" : "WarningMax", "Critical" : "FailureMax"}
+
+def ConfigureCollectdPhysicalResources(plugin_list, node, master=None, thresholds=None):
+    state_list = ''
+    no_of_plugins = len(plugin_list)
+    for index in range(no_of_plugins):
+        state_list += ('collectd.' + plugin_list[index])
+        if index < no_of_plugins -1:
+            state_list += ","
+    dict = {}
+    if master != None:
+        dict["master_name"] = master
+    if thresholds != None:
+        dict["thresholds"] = thresholds
+    pillar = {"collectd": dict}
+    print node, state_list,pillar
+    result = []
+    try:
+        result = run_state(node, state_list, kwarg={'pillar':pillar})
+    except Exception as e:
+        print e
+
+
+
+def _get_state_result(out):
+    failed_minions = {}
+    for minion, v in out.iteritems():
+        failed_results = {}
+        for id, res in v.iteritems():
+            if not res['result']:
+                failed_results.update({id: res})
+        if not v:
+            failed_minions[minion] = {}
+        if failed_results:
+            failed_minions[minion] = failed_results
+    return failed_minions
+
+
+def run_state(tgt, state, *args, **kwargs):
+    out = local.cmd(tgt, 'state.sls', [state], *args, **kwargs)
+    return _get_state_result(out)
+
+
+def _executeSaltStates(node, state_list, pillar):
+    out = local.cmd(node, "state.apply", kwarg={'mods':state_list, 'pillar':pillar})
+    print out
+    success = True
+    error = []
+    for category in out.get(node).keys() :
+        if not out.get(node).get(category).get("result") :
+            success = False
+            error.append(out.get(node).get(category).get("comment"))
+    return success, error
+
+
+def UpdateCollectdThresholds(nodes, plugin_threshold_dict):
+    for key, value in plugin_threshold_dict.iteritems():
+        path = '/etc/collectd.d/' + key + '.conf'
+        for threshold_type, threshold in value.iteritems():
+            pattern_type = threshold_type_map.get(threshold_type)
+            pattern = pattern_type + " " + "[0-9]*"
+            repl = pattern_type + " " + threshold
+            local.cmd(nodes, "file.replace", kwarg={'path': path, 'pattern':pattern, 'repl':repl})
 
 
 def _get_keys(match='*'):

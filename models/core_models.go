@@ -92,17 +92,18 @@ type User struct {
 }
 
 type StorageCluster struct {
-	ClusterId            uuid.UUID       `json:"cluster_id"`
-	ClusterName          string          `json:"cluster_name"`
-	CompatibilityVersion string          `json:"compatibility_version"`
-	ClusterType          string          `json:"cluster_type"`
-	WorkLoad             string          `json:"workload"`
-	ClusterStatus        string          `json:"status"`
-	Tags                 []string        `json:"tags"`
-	Options              interface{}     `json:"options"`
-	Nodes                []ClusterNode   `json:"nodes"`
-	OpenStackServices    []string        `json:"openstackservices"`
-	Networks             ClusterNetworks `json:"networks"`
+	ClusterId            uuid.UUID          `json:"cluster_id"`
+	ClusterName          string             `json:"cluster_name"`
+	CompatibilityVersion string             `json:"compatibility_version"`
+	ClusterType          string             `json:"cluster_type"`
+	WorkLoad             string             `json:"workload"`
+	ClusterStatus        string             `json:"status"`
+	Tags                 []string           `json:"tags"`
+	Options              interface{}        `json:"options"`
+	Nodes                []ClusterNode      `json:"nodes"`
+	OpenStackServices    []string           `json:"openstackservices"`
+	Networks             ClusterNetworks    `json:"networks"`
+	MonitoringThresholds PluginThresholdMap `json:"monitoring_thresholds"`
 }
 
 type ClusterNode struct {

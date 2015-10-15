@@ -14,6 +14,7 @@ package skyring
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
@@ -67,6 +68,7 @@ func POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 
 	var request models.UnmanagedNode
 
+	fmt.Println("In Accept Unmanaged Node POST_AcceptUnamangedNode")
 	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
@@ -85,6 +87,7 @@ func POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 
 func acceptNode(w http.ResponseWriter, hostname string, fingerprint string) {
 	// Validate for required fields
+	fmt.Println(hostname, curr_hostname)
 	if hostname == "" || fingerprint == "" {
 		util.HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided")
 		return
@@ -92,6 +95,10 @@ func acceptNode(w http.ResponseWriter, hostname string, fingerprint string) {
 
 	if node, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint); err == nil {
 		addStorageNodeToDB(w, *node)
+		logger.Get().Info("In nodes.go ConfigureCollectd")
+		if success, _ := GetCoreNodeManager().ConfigureCollectdPhysicalResources(hostname, curr_hostname); !success {
+			util.HttpResponse(w, http.StatusInternalServerError, "Unable to configure node")
+		}
 	} else {
 		util.HttpResponse(w, http.StatusInternalServerError, "Unable to accept node")
 	}

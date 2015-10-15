@@ -14,6 +14,7 @@ package saltnodemanager
 
 import (
 	"errors"
+	"fmt"
 	"github.com/skyrings/skyring/backend/salt"
 	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/models"
@@ -62,6 +63,11 @@ func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.St
 	}
 
 	return nil, errors.New("Unable to accept the node")
+}
+
+func (a SaltNodeManager) ConfigureCollectdPhysicalResources(node string, master string) (bool, error) {
+	fmt.Println("In saltnodemanager.go ConfigureCollectdPhysicalResources", node, master)
+	return salt_backend.ConfigureCollectdPhysicalResources(node, master)
 }
 
 func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.StorageNode, error) {
