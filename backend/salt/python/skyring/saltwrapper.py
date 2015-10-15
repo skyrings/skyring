@@ -16,7 +16,6 @@
 import logging
 from functools import wraps
 import uuid
-
 import salt
 from salt import wheel, client
 import salt.config
@@ -40,6 +39,45 @@ master = salt.wheel.WheelClient(opts)
 setattr(salt.client.LocalClient, 'cmd',
         enableLogger(salt.client.LocalClient.cmd))
 local = salt.client.LocalClient()
+threshold_type_map = {"Warning" : "WarningMax", "Critical" : "FailureMax"}
+
+def ConfigureCollectdPhysicalResources(plugin_list, node, master=None, thresholds=None):
+    state_list = []
+    for index in range(len(plugin_list)):
+        if (plugin_list[index] == 'collectd' or plugin_list[index] == '' or plugin_list[index] == None):
+            state_list.append(plugin_list[index])
+        else :
+            state_list.append('collectd.' + plugin_list[index])
+    dict = {}
+    if master != None:
+        dict["master_name"] = master
+    if thresholds != None:
+        dict["thresholds"] = thresholds
+    pillar = {"collectd": dict}
+    print pillar, state_list
+    return _executeSaltStates(node, state_list, pillar)
+
+
+def _executeSaltStates(node, state_list, pillar):
+    out = local.cmd(node, "state.apply", kwarg={'mods':state_list, 'pillar':pillar})
+    print out
+    success = True
+    error = []
+    for category in out.get(node).keys() :
+        if not out.get(node).get(category).get("result") :
+            success = False
+            error.append(out.get(node).get(category).get("comment"))
+    return success, error
+
+
+def UpdateCollectdThresholds(nodes, plugin_threshold_dict):
+    for key, value in plugin_threshold_dict.iteritems():
+        path = '/etc/collectd.d/' + key + '.conf'
+        for threshold_type, threshold in value.iteritems():
+            pattern_type = threshold_type_map.get(threshold_type)
+            pattern = pattern_type + " " + "[0-9]*"
+            repl = pattern_type + " " + threshold
+            local.cmd(nodes, "file.replace", kwarg={'path': path, 'pattern':pattern, 'repl':repl})
 
 
 def _get_keys(match='*'):

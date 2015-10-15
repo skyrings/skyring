@@ -92,6 +92,10 @@ info "Configuring Skyring providers\n"
 cp -f ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/backend/salt/sls/* /srv/salt/
 cp -f ~/.skyring_build/golang/gopath/src/github.com/skyrings/bigfin/backend/salt/sls/* /srv/salt/
 
+info "Configuring salt"
+cp -f ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/salt/conf/* /srv/salt/
+
+
 # Create the configuration files
 cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/skyring.conf.sample /etc/skyring/skyring.conf
 cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/authentication.conf.sample /etc/skyring/authentication.conf

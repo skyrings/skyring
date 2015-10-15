@@ -21,6 +21,7 @@ import (
 	"github.com/skyrings/skyring/tools/gopy"
 	"github.com/skyrings/skyring/tools/ssh"
 	"github.com/skyrings/skyring/tools/uuid"
+	"github.com/skyrings/skyring/models"
 	"strings"
 	"text/template"
 )
@@ -32,6 +33,8 @@ var funcNames = [...]string{
 	"GetNodeNetwork",
 	"GetNodeDisk",
 	"RejectNode",
+	"ConfigureCollectdPhysicalResources",
+	"UpdateCollectdThresholds",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -56,6 +59,20 @@ func (s Salt) AddNode(master string, node string, port uint, fingerprint string,
 func (s Salt) AcceptNode(node string, fingerprint string) (status bool, err error) {
 	if pyobj, err := pyFuncs["AcceptNode"].Call(node, fingerprint); err == nil {
 		err = gopy.Convert(pyobj, &status)
+	}
+	return
+}
+
+func (s Salt) ConfigureCollectdPhysicalResources(node string, master string) (success bool, err error) {
+	if pyobj, err := pyFuncs["ConfigureCollectdPhysicalResources"].Call(node, master, models.GetDefaultThresholdValues()); err != nil {
+		err = gopy.Convert(pyobj, &success)
+	}
+	return
+}
+
+func (s Salt) UpdateCollectdThresholds(nodes []string, threshold models.PluginThresholdMap) {
+	if pyobj, err := pyFuncs["UpdateCollectdPhysicalThresholds"].Call(nodes, threshold); err!=nil {
+		err = gopy.Convert(pyobj, &success)
 	}
 	return
 }

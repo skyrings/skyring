@@ -24,8 +24,13 @@ import (
 	"github.com/skyrings/skyring/utils"
 	"gopkg.in/mgo.v2/bson"
 	"io"
+	"reflect"
 	"io/ioutil"
 	"net/http"
+)
+
+var (
+	salt_backend = salt.New()
 )
 
 var (
@@ -85,10 +90,60 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	if m.Status.StatusCode == http.StatusOK {
 		if err := json.NewEncoder(w).Encode("Added successfully"); err != nil {
 			glog.Errorf("Error: %v", err)
+		} else {
+			if reflect.ValueOf(request.MonitoringThresholds).IsValid() && len(request.MonitoringThresholds) != 0 && err == nil {
+				var nodes []string
+				for _, node := range request.Nodes {
+					nodes = append(nodes, node.Hostname)
+				}
+				salt_backend.UpdateCollectdThresholds(nodes, request.MonitoringThresholds)
+			}
 		}
 	} else {
 		util.HttpResponse(w, http.StatusInternalServerError, m.Status.StatusMessage)
 	}
+}
+
+func (a *App) POST_Thresholds(w http.ResponseWriter, r *http.Request) {
+	var request models.StorageCluster.MonitoringThresholds
+
+	vars := mux.Vars(r)
+	cluster_id := vars["cluster-id"]
+
+	// Unmarshal the request body
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
+	if err != nil {
+		glog.Errorf("Error parsing the request: %v", err)
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
+		return
+	}
+	if err := json.Unmarshal(body, &request); err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
+		return
+	}
+	fmt.Println(request)
+
+	if reflect.ValueOf(request).IsValid() && len(request) != 0 && err == nil {
+		err := salt_backend.UpdateCollectdThresholds(getNodesInCluster(cluster_id), request)
+	}
+}
+
+func getNodesInCluster(cluster_id string) (cluster_node_names []string, err error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var nodes models.StorageNodes
+	if err := collection.Find(bson.M{"clusterid": cluster_id}).All(&nodes); err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		glog.Errorf("Error getting the nodes for the cluster: %v", err)
+		return nil, err
+	}
+	var cluster_node_names []string
+	for _, node := range nodes {
+			nodes = append(cluster_node_names, node.Hostname)
+	}
+	return cluster_node_names, nil
 }
 
 func cluster_exists(key string, value string) (*models.StorageCluster, error) {

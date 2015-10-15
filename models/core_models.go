@@ -103,6 +103,7 @@ type StorageCluster struct {
 	Nodes                []ClusterNode   `json:"nodes"`
 	OpenStackServices    []string        `json:"openstackservices"`
 	Networks             ClusterNetworks `json:"networks"`
+	MonitoringThresholds PluginThresholdMap `json:"monitoring_thresholds"`
 }
 
 type ClusterNode struct {
