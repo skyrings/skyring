@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_fa16c5f0",
+        "filename": "events/events.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-15T12:56:01Z",
+      "side": 1,
+      "message": "Even I meant to use the same existing package. Somehow missed to verify in the re-review.",
+      "parentUuid": "9ab29df4_3a0afdd2",
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_3aee7d23",
         "filename": "salt/push_event.sls",
         "patchSetId": 2
