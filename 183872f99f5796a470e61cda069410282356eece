@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_3d63d7b2",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-15T16:21:23Z",
+      "side": 1,
+      "message": "1. there is a salt execution module for gluster.  you should enhance it for the usage eg\n    salt \u0027node1\u0027 \u0027gluster.volume_usage\u0027 myvol\n\n2. As this is gluster provider specific, you should have this code in there.\n\n3. FYI, gluster provider is not a priority.  you supposes to work with ceph provider.",
+      "range": {
+        "startLine": 112,
+        "startChar": 17,
+        "endLine": 112,
+        "endChar": 20
+      },
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_5d588bfa",
+        "filename": "utils/salt_bindings.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-15T16:21:23Z",
+      "side": 1,
+      "message": "please use https://review.gerrithub.io/249090 as your base",
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
