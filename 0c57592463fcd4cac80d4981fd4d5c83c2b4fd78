@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_3a0afdd2",
+        "filename": "events/events.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-15T12:51:29Z",
+      "side": 1,
+      "message": "1. If you want to keep http handler separately from existing one,  you should have this in the same directory level\n\n2. There is already an event package.  Why do you need events package?",
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_3aee7d23",
+        "filename": "salt/push_event.sls",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-15T12:51:29Z",
+      "side": 1,
+      "message": "Have a function to getTimestamp()",
+      "range": {
+        "startLine": 114,
+        "startChar": 26,
+        "endLine": 114,
+        "endChar": 33
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_ba928d9d",
+        "filename": "salt/push_event.sls",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-15T12:51:29Z",
+      "side": 1,
+      "message": "Does it mean you push any dbus/node/* event?  Why?",
+      "range": {
+        "startLine": 140,
+        "startChar": 28,
+        "endLine": 140,
+        "endChar": 29
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_1ad0d952",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-15T12:51:29Z",
+      "side": 1,
+      "message": "You need to check args has properly returned ie what if args{Timestamp, Node} are empty/nil?",
+      "range": {
+        "startLine": 58,
+        "startChar": 22,
+        "endLine": 58,
+        "endChar": 23
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_fae32531",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-15T12:51:29Z",
+      "side": 1,
+      "message": "Why do you want to store arbitrary values?  Statically typed values are prevent runtime errors",
+      "range": {
+        "startLine": 62,
+        "startChar": 9,
+        "endLine": 62,
+        "endChar": 20
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_bac0cd7d",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-15T12:51:29Z",
+      "side": 1,
+      "message": "Why not log.error()?",
+      "range": {
+        "startLine": 64,
+        "startChar": 15,
+        "endLine": 64,
+        "endChar": 20
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
