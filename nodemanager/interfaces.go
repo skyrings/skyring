@@ -21,4 +21,5 @@ type NodeManagerInterface interface {
 	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.StorageNode, error)
 	GetUnmanagedNodes() (*models.UnmanagedNodes, error)
 	RejectNode(node string) (bool, error)
+	ConfigureCollectdPhysicalResources(master string, node string) (bool, error)
 }

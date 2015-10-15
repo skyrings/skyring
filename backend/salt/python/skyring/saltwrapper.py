@@ -16,7 +16,7 @@
 import logging
 from functools import wraps
 import uuid
-
+import json
 import salt
 from salt import wheel, client
 import salt.config
@@ -40,6 +40,18 @@ master = salt.wheel.WheelClient(opts)
 setattr(salt.client.LocalClient, 'cmd',
         enableLogger(salt.client.LocalClient.cmd))
 local = salt.client.LocalClient()
+
+
+def ConfigureCollectdPhysicalResources(node, pillar):
+    pillar_string = 'pillar='+json.dumps(pillar)
+    out = local.cmd(node, "state.highstate", [pillar_string])
+    success = True
+    error = []
+    for category in out.get(node).keys() :
+        if not out.get(node).get(category).get("result") :
+            success = False
+            error.append(out.get(node).get(category).get("comment"))
+    return success, error
 
 
 def _get_keys(match='*'):

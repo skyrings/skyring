@@ -56,4 +56,5 @@ type Backend interface {
 	GetNodeDisk(node string) ([]Disk, error)
 	GetNodeNetwork(node string) (Network, error)
 	RejectNode(node string) (bool, error)
+	ConfigureCollectdPhysicalResources(node string, pillar map[string]string) (success bool, err error)
 }

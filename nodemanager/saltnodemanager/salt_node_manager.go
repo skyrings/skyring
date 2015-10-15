@@ -64,6 +64,10 @@ func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.St
 	return nil, errors.New("Unable to accept the node")
 }
 
+func (a SaltNodeManager) ConfigureCollectdPhysicalResources(master string, node string) (bool, error) {
+	return salt_backend.ConfigureCollectdPhysicalResources(node, map[string]string{"master_name": master})
+}
+
 func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.StorageNode, error) {
 	if _, err := salt_backend.AddNode(master, node, port, fingerprint, username, password); err != nil {
 		return nil, err
