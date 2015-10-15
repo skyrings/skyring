@@ -1,8 +1,9 @@
 {
-    "defaultRole": "user",
+    "defaultRole": "admin",
     "roles": {
-        "user": 0,
-        "admin": 1,
-        "moderator": 2
+        "tenantuser": 0,
+        "custom": 1,
+        "securityadmin": 2,
+        "admin": 3
     }
 }

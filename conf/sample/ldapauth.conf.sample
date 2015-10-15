@@ -1,0 +1,16 @@
+{
+    "ldapserver": {
+        "address": "192.168.122.219",
+        "port": 389,
+        "base": "cn=users,cn=accounts,dc=info,dc=com"
+    },
+    "userroles": {
+        "defaultRole": "admin",
+        "roles": {
+            "tenantuser": 0,
+            "custom": 1,
+            "securityadmin": 2,
+            "admin": 3
+        }
+    }
+}
