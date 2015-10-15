@@ -32,6 +32,7 @@ var funcNames = [...]string{
 	"GetNodeNetwork",
 	"GetNodeDisk",
 	"RejectNode",
+	"ConfigureCollectdPhysicalResources",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -56,6 +57,13 @@ func (s Salt) AddNode(master string, node string, port uint, fingerprint string,
 func (s Salt) AcceptNode(node string, fingerprint string) (status bool, err error) {
 	if pyobj, err := pyFuncs["AcceptNode"].Call(node, fingerprint); err == nil {
 		err = gopy.Convert(pyobj, &status)
+	}
+	return
+}
+
+func (s Salt) ConfigureCollectdPhysicalResources(node string, master string) (success bool, err error) {
+	if pyobj, err := pyFuncs["ConfigureCollectdPhysicalResources"].Call(node, master); err == nil {
+		err = gopy.Convert(pyobj, &success)
 	}
 	return
 }
