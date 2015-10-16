@@ -17,24 +17,23 @@ import (
 	"github.com/skyrings/skyring/tools/uuid"
 )
 
-type StorageNode struct {
-	UUID              uuid.UUID          `json:"uuid"`
-	Hostname          string             `json:"hostname"`
-	Tags              map[string]string  `json:"tags"`
-	ManagementIp      string             `json:"managementip"`
-	ClusterIp         string             `json:"clusterip"`
-	PublicAddressIpv4 string             `json:"publicaddressipv4"`
-	ClusterId         uuid.UUID          `json:"clusterid"`
-	Location          string             `json:"location"`
-	Status            string             `json:"status"`
-	Options           map[string]string  `json:"options"`
-	State             string             `json:"state"`
-	CPUs              []CPU              `json:"cpus"`
-	NetworkInfo       StorageNodeNetwork `json:"networkinfo"`
-	StorageDisks      []backend.Disk     `json:"storagedisks"`
-	Memory            []Memory           `json:"memory"`
-	OS                OperatingSystem    `json:"os"`
-	ManagedState      string             `json:"managedstate"`
+type Node struct {
+	NodeId        uuid.UUID          `json:"nodeid"`
+	Hostname      string             `json:"hostname"`
+	Tags          []string           `json:"tags"`
+	ManagementIP4 string             `json:"management_ip4"`
+	ClusterIP4    string             `json:"cluster_ip4"`
+	PublicIP4     string             `json:"public_ip4"`
+	ClusterId     uuid.UUID          `json:"clusterid"`
+	Location      string             `json:"location"`
+	Status        string             `json:"status"`
+	Options       map[string]string  `json:"options"`
+	CPUs          []CPU              `json:"cpus"`
+	NetworkInfo   StorageNodeNetwork `json:"network_info"`
+	StorageDisks  []backend.Disk     `json:"storage_disks"`
+	Memory        []Memory           `json:"memory"`
+	OS            OperatingSystem    `json:"os"`
+	Enabled       bool               `json:"enabled"`
 }
 
 type CPU struct {
@@ -47,21 +46,6 @@ type StorageNodeNetwork struct {
 	Ipv6   []string `bson:"ipv6"`
 }
 
-// type StorageDisk struct {
-// 	UUID       string   `bson:"uuid"`
-// 	Name       string   `bson:"name"`
-// 	Pkname     string   `bson:"pkname"`
-// 	MountPoint []string `bson:"mountpoint"`
-// 	Kname      string   `bson:"kname"`
-// 	PartUUID   string   `bson:"partuuid"`
-// 	Type       string   `bson:"type"`
-// 	Model      string   `bson:"model"`
-// 	Vendor     string   `bson:"vendor"`
-// 	FsType     string   `bson:"fstype"`
-// 	Size       unit64   `bson:"size"`
-// 	Used       bool     `bson:"used"`
-// }
-
 type Memory struct {
 	Name       string `bson:"name"`
 	Type       string `bson:"type"`
@@ -71,14 +55,14 @@ type Memory struct {
 }
 
 type OperatingSystem struct {
-	Name                    string `bson:"name"`
-	OSVersion               string `bson:"osversion"`
-	KernelVersion           string `bson:"kernelversion"`
-	StorageProviderVersion  string `bson:"storageproviderversion"`
-	KdumpStatus             string `bson:"kdumpstatus"`
-	MemoryPageSharingStatus string `bson:"memorypagesharingstatus"`
-	AutomaticLargePages     bool   `bson:"automaticlargepages"`
-	SELinuxMode             string `bson:"selinuxmode"`
+	Name                string `bson:"name"`
+	OSVersion           string `bson:"osversion"`
+	KernelVersion       string `bson:"kernel_version"`
+	StorageSWVersion    string `bson:"storage_sw_version"`
+	KdumpStatus         string `bson:"kdump_status"`
+	MemPageShareStatus  string `bson:"mem_page_share_status"`
+	AutomaticLargePages bool   `bson:"automatic_large_pages"`
+	SELinuxMode         string `bson:"selinuxmode"`
 }
 
 type User struct {
@@ -91,26 +75,33 @@ type User struct {
 	Status   bool     `bson:"Status"`
 }
 
-type StorageCluster struct {
-	ClusterId            uuid.UUID       `json:"cluster_id"`
-	ClusterName          string          `json:"cluster_name"`
-	CompatibilityVersion string          `json:"compatibility_version"`
-	ClusterType          string          `json:"cluster_type"`
-	WorkLoad             string          `json:"workload"`
-	ClusterStatus        string          `json:"status"`
-	Tags                 []string        `json:"tags"`
-	Options              interface{}     `json:"options"`
-	Nodes                []ClusterNode   `json:"nodes"`
-	OpenStackServices    []string        `json:"openstackservices"`
-	Networks             ClusterNetworks `json:"networks"`
-}
-
-type ClusterNode struct {
-	Hostname string            `json:"hostname"`
-	Options  map[string]string `json:"options"`
+type Cluster struct {
+	ClusterId         uuid.UUID         `json:"clusterid"`
+	Name              string            `json:"name"`
+	CompatVersion     string            `json:"compat_version"`
+	Type              string            `json:"type"`
+	WorkLoad          string            `json:"workload"`
+	Status            int               `json:"status"`
+	Tags              []string          `json:"tags"`
+	Options           map[string]string `json:"options"`
+	OpenStackServices []string          `json:"openstack_services"`
+	Networks          ClusterNetworks   `json:"networks"`
+	Enabled           bool              `json:"enabled"`
 }
 
 type ClusterNetworks struct {
 	Cluster string `json:"cluster"`
 	Public  string `json:"public"`
+}
+
+type StorageLogicalUnit struct {
+	SluId           uuid.UUID         `json:"sluid"`
+	Name            string            `json:"name"`
+	Type            int               `json:"type"`
+	ClusterId       uuid.UUID         `json:"clusterid"`
+	NodeId          uuid.UUID         `json:"nodeid"`
+	StorageId       uuid.UUID         `json:"storageid"`
+	StorageDeviceId uuid.UUID         `json:"storagedeviceid"`
+	Status          string            `json:"status"`
+	Options         map[string]string `json:"options"`
 }

@@ -31,3 +31,17 @@ type RpcResponseData struct {
 	RequestId string `json:"requestid"`
 	Result    []byte `json:"result"`
 }
+
+/**
+ * Below generic RPC methods should be implemented by storage providers
+ * to work with skyring.
+ * Input parameters:
+ * - req : RpcRequest instance
+ * Output parameter:
+ * - resp : pointer to RpcResponse instance
+ * Returns:
+ * - error
+ */
+type StorageProviderInterface interface {
+	CreateCluster(req RpcRequest, resp *RpcResponse) error
+}
