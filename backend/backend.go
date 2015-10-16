@@ -56,4 +56,8 @@ type Backend interface {
 	GetNodeDisk(node string) ([]Disk, error)
 	GetNodeNetwork(node string) (Network, error)
 	RejectNode(node string) (bool, error)
+	GetRejectedFingerprint(node string) (string, error)
+	StopAndDisableService(node string, service string) (bool, error)
+	EnableAndStartService(node string, service string) (bool, error)
+	AcceptRejectedNode(node string, fingerprint string) (bool, error)
 }

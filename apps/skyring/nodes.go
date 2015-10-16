@@ -14,6 +14,7 @@ package skyring
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
@@ -76,6 +77,12 @@ func POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
 		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
+		return
+	}
+
+	// Check if node already added
+	if node, _ := node_exists("hostname", hostname); node != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Node already added")
 		return
 	}
 
@@ -151,18 +158,23 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	defer sessionCopy.Close()
 
 	params := r.URL.Query()
-	managed_state := params.Get("state")
+	admin_state_str := params.Get("state")
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	var nodes models.StorageNodes
-	if managed_state != "" {
-		if err := collection.Find(bson.M{"managedstate": managed_state}).All(&nodes); err != nil {
+	if admin_state_str == "" {
+		if err := collection.Find(nil).All(&nodes); err != nil {
 			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 			glog.Errorf("Error getting the nodes list: %v", err)
 			return
 		}
 	} else {
-		if err := collection.Find(nil).All(&nodes); err != nil {
+		ok, admin_state := valid_state(admin_state_str)
+		if !ok {
+			util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid state %s", admin_state))
+			return
+		}
+		if err := collection.Find(bson.M{"administrativestatus": admin_state}).All(&nodes); err != nil {
 			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 			glog.Errorf("Error getting the nodes list: %v", err)
 			return
@@ -214,4 +226,17 @@ func GetNode(node_id uuid.UUID) models.StorageNode {
 	}
 
 	return node
+}
+
+func valid_state(state string) (bool, models.AdministrativeStatus) {
+	var found = false
+	var status models.AdministrativeStatus
+	for index, value := range models.AdminStatuses {
+		if state == value {
+			found = true
+			status = models.AdministrativeStatus(index + 1)
+			break
+		}
+	}
+	return found, status
 }

@@ -18,7 +18,7 @@ from functools import wraps
 import uuid
 
 import salt
-from salt import wheel, client
+from salt import wheel, client, key
 import salt.config
 
 
@@ -72,12 +72,32 @@ def AcceptNode(node, fingerprint):
 
 def RejectNode(node):
     d = _get_keys(node)
+    opts.update({"yes": True})
+    key_cli = salt.key.KeyCLI(opts)
     if not d['accepted_nodes'].get(node):
         log.info("node %s not in accepted node list" % node)
-        return True
+        return False
 
-    rejected = master.call_func('key.reject', match=node, include_accepted=True)
-    return (True if rejected else False)
+    key_cli.reject(node, include_accepted=True)
+    return True
+
+
+def AcceptRejectedNode(node, fingerprint):
+    d = _get_keys(node)
+    finger = d['rejected_nodes'].get(node)
+    if not finger:
+        log.info("node %s not in rejected list" % node)
+        return False
+    else:
+        if finger != fingerprint:
+            log.error(("node %s minion fingerprint does not match %s != %s" %
+                   (node, finger, fingerprint)))
+            return False
+        opts.update({"yes": True})
+        key_cli = salt.key.KeyCLI(opts)
+        key_cli.accept(node, include_rejected=True)
+        local.cmd(node, 'cmd.run', ["systemctl restart salt-minion.service"])
+        return True
 
 
 def GetNodes():
@@ -231,3 +251,20 @@ def GetNodeDisk(node):
                               "Used": disk["INUSE"],
                               "Vendor": disk.get("VENDOR", "")})
     return rv
+
+
+def GetRejectedFingerprint(node):
+    d = _get_keys(node)
+    return d['rejected_nodes'].get(node)
+
+
+def StopAndDisableService(node, srvc):
+    local.cmd(node, 'cmd.run', ["systemctl stop %s" % srvc])
+    local.cmd(node, "cmd.run", ["systemctl disable %s" % srvc])
+    return True
+
+
+def EnableAndStartService(node, srvc):
+    local.cmd(node, 'cmd.run', ["systemctl enable %s" % srvc])
+    local.cmd(node, 'cmd.run', ["systemctl start %s" % srvc])
+    return True

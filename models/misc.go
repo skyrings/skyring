@@ -27,9 +27,6 @@ const (
 	REQUEST_SIZE_LIMIT         = 1048576
 	COLL_NAME_STORAGE_NODES    = "storage_nodes"
 	COLL_NAME_STORAGE_CLUSTERS = "storage_clusters"
-	NODE_STATE_FREE            = "free"
-	NODE_STATE_UNMANAGED       = "unmanaged"
-	NODE_STATE_USED            = "used"
 )
 
 type StorageClusters []StorageCluster
@@ -40,3 +37,46 @@ type UnmanagedNode struct {
 }
 
 type UnmanagedNodes []UnmanagedNode
+
+type AdministrativeStatus int
+
+// Administrative status values
+const (
+	FREE = 1 + iota
+	UNMANAGED
+	USED
+)
+
+var AdminStatuses = [...]string{
+	"free",
+	"unmanaged",
+	"used",
+}
+
+func (a AdministrativeStatus) String() string { return AdminStatuses[a-1] }
+
+type ClusterStatus int
+
+// Status values for the cluster
+const (
+	CLUSTER_STATUS_INACTIVE = 1 + iota
+	CLUSTER_STATUS_NOT_AVAILABLE
+	CLUSTER_STATUS_ACTIVE_AND_AVAILABLE
+	CLUSTER_STATUS_CREATING
+	CLUSTER_STATUS_FAILED
+)
+
+var ClusterStatuses = [...]string{
+	"inactive",
+	"not available",
+	"active & available",
+	"creating",
+	"failed",
+}
+
+func (c ClusterStatus) String() string { return ClusterStatuses[c-1] }
+
+type ExpandClusterRequest struct {
+	Nodes    []ClusterNode   `json:"nodes"`
+	Networks ClusterNetworks `json:"networks"`
+}
