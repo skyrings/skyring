@@ -37,6 +37,42 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_4bf36573",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_9753e46b",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_cb0f752d",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_1afff902",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_57830ccc",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -83,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_eb1c396d",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_b750e85f",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 2
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_f74a60ab",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -94,6 +154,30 @@
       "writtenOn": "2015-10-15T11:14:41Z",
       "side": 1,
       "message": "if you are interested to do colored output, then\n\nRed - for error\nWhite - for info\nYellow - for warning\nGreen - for debug\n\n\nhave a functions error(), warning(), info(), debug() where you pass args to display according.",
+      "range": {
+        "startLine": 18,
+        "startChar": 16,
+        "endLine": 18,
+        "endChar": 26
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_0b1a4d6e",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_f74a60ab",
       "range": {
         "startLine": 18,
         "startChar": 16,
@@ -146,6 +230,48 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_6b20299c",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_57d14ccc",
+      "range": {
+        "startLine": 22,
+        "startChar": 49,
+        "endLine": 22,
+        "endChar": 55
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_4b2b6582",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_17bc346c",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_17c7d413",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -157,6 +283,30 @@
       "writtenOn": "2015-10-15T11:14:41Z",
       "side": 1,
       "message": "1. you should update packages first ie \u0027yum update\u0027\n2. do one \u0027yum install\u0027 command\n3. check for failures.",
+      "range": {
+        "startLine": 23,
+        "startChar": 14,
+        "endLine": 23,
+        "endChar": 15
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_8b257dad",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_17c7d413",
       "range": {
         "startLine": 23,
         "startChar": 14,
@@ -192,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_ab3961da",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_b7d708bf",
+      "range": {
+        "startLine": 28,
+        "startChar": 29,
+        "endLine": 28,
+        "endChar": 36
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_d7e47cae",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -203,6 +377,30 @@
       "writtenOn": "2015-10-15T11:14:41Z",
       "side": 1,
       "message": "1. why not \u0027yum install http://influxdb.s3.amazonaws.com/influxdb-0.9.4.2-1.x86_64.rpm\u0027 ?\n\n2. check for errors.",
+      "range": {
+        "startLine": 34,
+        "startChar": 33,
+        "endLine": 34,
+        "endChar": 34
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_cb3695e7",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_d7e47cae",
       "range": {
         "startLine": 34,
         "startChar": 33,
@@ -238,6 +436,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_eb3359f4",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_57e86c7c",
+      "range": {
+        "startLine": 38,
+        "startChar": 14,
+        "endLine": 38,
+        "endChar": 19
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_77ed708b",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -249,6 +471,30 @@
       "writtenOn": "2015-10-15T11:14:41Z",
       "side": 1,
       "message": "why debug everywhere?",
+      "range": {
+        "startLine": 41,
+        "startChar": 3,
+        "endLine": 41,
+        "endChar": 4
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_0b316dec",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "I will remove and minimize the debug",
+      "parentUuid": "9ab29df4_77ed708b",
       "range": {
         "startLine": 41,
         "startChar": 3,
@@ -301,6 +547,48 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_2b4d5173",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_1763541b",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_4b528514",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_d7fb9c45",
+      "range": {
+        "startLine": 43,
+        "startChar": 22,
+        "endLine": 43,
+        "endChar": 27
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_f7f8a04b",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -312,6 +600,30 @@
       "writtenOn": "2015-10-15T11:14:41Z",
       "side": 1,
       "message": "you better do everything under known/private dir like  ~/.skyring_build",
+      "range": {
+        "startLine": 46,
+        "startChar": 14,
+        "endLine": 46,
+        "endChar": 20
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_6b574903",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_f7f8a04b",
       "range": {
         "startLine": 46,
         "startChar": 14,
@@ -364,6 +676,48 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_ab408136",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "As per bala suggestion i will clone it under the specific path instead of symlink to avoid any gobuild failures",
+      "parentUuid": "9ab29df4_376858f5",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_8b5c9d27",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_379a1815",
+      "range": {
+        "startLine": 47,
+        "startChar": 40,
+        "endLine": 47,
+        "endChar": 46
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_77a49057",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -375,6 +729,30 @@
       "writtenOn": "2015-10-15T11:14:41Z",
       "side": 1,
       "message": "why do you need bashrc update?  Why not\n\nexport GOLANG\u003dgolangpath\nexport GOPATH\u003dgopath\n...",
+      "range": {
+        "startLine": 50,
+        "startChar": 78,
+        "endLine": 50,
+        "endChar": 82
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_eb4a7954",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_77a49057",
       "range": {
         "startLine": 50,
         "startChar": 78,
@@ -410,6 +788,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_0b488d5a",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_b78548af",
+      "range": {
+        "startLine": 69,
+        "startChar": 11,
+        "endLine": 69,
+        "endChar": 14
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_576dcc03",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -427,6 +829,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_2b74719b",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_576dcc03",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_f78fc0ca",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -438,6 +858,30 @@
       "writtenOn": "2015-10-15T11:14:41Z",
       "side": 1,
       "message": "cat \u003e\u003e /etc/salt/master \u003c\u003cEOF\nwhatever i want to add it to the file\nEOF",
+      "range": {
+        "startLine": 89,
+        "startChar": 17,
+        "endLine": 89,
+        "endChar": 21
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_4b79a592",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_f78fc0ca",
       "range": {
         "startLine": 89,
         "startChar": 17,
@@ -473,6 +917,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_cbf5b5cc",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_7772d0e6",
+      "range": {
+        "startLine": 104,
+        "startChar": 9,
+        "endLine": 104,
+        "endChar": 12
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_f77d00b3",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -484,6 +952,30 @@
       "writtenOn": "2015-10-15T11:14:41Z",
       "side": 1,
       "message": "why true for failures?",
+      "range": {
+        "startLine": 112,
+        "startChar": 32,
+        "endLine": 112,
+        "endChar": 37
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_8b2bbd2f",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "I will fix it properly by checking the db and the user exists status and create.",
+      "parentUuid": "9ab29df4_f77d00b3",
       "range": {
         "startLine": 112,
         "startChar": 32,
@@ -519,6 +1011,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_ab1fa108",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_374f7894",
+      "range": {
+        "startLine": 120,
+        "startChar": 21,
+        "endLine": 120,
+        "endChar": 22
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_975da44b",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -542,6 +1058,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_cb1cd516",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "I will remove the function and use directly",
+      "parentUuid": "9ab29df4_975da44b",
+      "range": {
+        "startLine": 129,
+        "startChar": 9,
+        "endLine": 129,
+        "endChar": 29
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_977684d7",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -553,6 +1093,24 @@
       "writtenOn": "2015-10-15T11:05:58Z",
       "side": 1,
       "message": "bigfin has got no of .sls files. They also needs to be copied to /srv/salt",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_0b17adee",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_977684d7",
       "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -599,6 +1157,48 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_40c184e3",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "We are creating the configuration files in /etc/skyring out of samples.",
+      "parentUuid": "9ab29df4_d7571c25",
+      "range": {
+        "startLine": 157,
+        "startChar": 40,
+        "endLine": 157,
+        "endChar": 47
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_2bd39139",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_b77388e6",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_f7542023",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -610,6 +1210,30 @@
       "writtenOn": "2015-10-15T11:14:41Z",
       "side": 1,
       "message": "can\u0027t understand this.  What is the problem with localhost?",
+      "range": {
+        "startLine": 165,
+        "startChar": 21,
+        "endLine": 165,
+        "endChar": 22
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_6bdd8942",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "By mistake i replace for all hostip, i will replace only for \"host\": \"127.0.0.1\" only so that it can be accessed outside the local server.",
+      "parentUuid": "9ab29df4_f7542023",
       "range": {
         "startLine": 165,
         "startChar": 21,
@@ -650,6 +1274,42 @@
       "writtenOn": "2015-10-15T11:38:55Z",
       "side": 1,
       "message": "use python setup.py install --root \u003cmypath\u003e  and copy respective python modules to /usr/lib/pythonXXX/site-packages/...",
+      "parentUuid": "9ab29df4_5744ec73",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_cbd775be",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_f702600a",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_abda41e7",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "9ab29df4_5744ec73",
       "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
@@ -703,6 +1363,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_ebe439ae",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_37369804",
+      "range": {
+        "startLine": 188,
+        "startChar": 16,
+        "endLine": 188,
+        "endChar": 22
+      },
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_77401057",
         "filename": "setup/install_skyring.sh",
         "patchSetId": 1
@@ -714,6 +1398,24 @@
       "writtenOn": "2015-10-15T11:14:41Z",
       "side": 1,
       "message": "Overall.  You should fix the logic of execution.\n\n1. Check for the environment ie fedora version, whether you are running as root or not etc.\n\n2. Install necessary packages including compile/install\n\n3. Configure necessary packages\n\n4. start services\n\n5. show messages what you have done ie username/password of various accounts and how to access skyring etc",
+      "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_0be24d9f",
+        "filename": "setup/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-10-16T09:53:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_77401057",
       "revId": "be07433d327d455ca580e1530aa2136fcefd6ab8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
