@@ -15,10 +15,14 @@ package saltnodemanager
 import (
 	"errors"
 	"github.com/skyrings/skyring/backend/salt"
+	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/nodemanager"
+	"gopkg.in/mgo.v2/bson"
 	"io"
+	"net"
 	"time"
 )
 
@@ -43,8 +47,8 @@ func NewSaltNodeManager(config io.Reader) (*SaltNodeManager, error) {
 	return &SaltNodeManager{}, nil
 }
 
-func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.StorageNode, error) {
-	if _, err := salt_backend.AcceptNode(node, fingerprint); err != nil {
+func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.Node, error) {
+	if _, err := salt_backend.AcceptNode(node, fingerprint, false); err != nil {
 		return nil, err
 	} else {
 		for count := 0; count < 60; count++ {
@@ -64,7 +68,7 @@ func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.St
 	return nil, errors.New("Unable to accept the node")
 }
 
-func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.StorageNode, error) {
+func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.Node, error) {
 	if _, err := salt_backend.AddNode(master, node, port, fingerprint, username, password); err != nil {
 		return nil, err
 	} else {
@@ -85,18 +89,23 @@ func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerpr
 	return nil, errors.New("Unable to add the node")
 }
 
-func populateStorageNodeInstance(node string) (*models.StorageNode, bool) {
-	var storage_node models.StorageNode
+func populateStorageNodeInstance(node string) (*models.Node, bool) {
+	var storage_node models.Node
 	storage_node.Hostname = node
-	storage_node.ManagedState = models.NODE_STATE_FREE
-	storage_node.UUID, _ = salt_backend.GetNodeID(node)
+	storage_node.Enabled = true
+	storage_node.NodeId, _ = salt_backend.GetNodeID(node)
 	networkInfo, _ := salt_backend.GetNodeNetwork(node)
 	storage_node.NetworkInfo.Subnet = networkInfo.Subnet
 	storage_node.NetworkInfo.Ipv4 = networkInfo.IPv4
 	storage_node.NetworkInfo.Ipv6 = networkInfo.IPv6
-	storage_node.StorageDisks, _ = salt_backend.GetNodeDisk(node)
+	addrs, _ := net.LookupHost(node)
+	storage_node.ManagementIP4 = addrs[0]
+	disks, _ := salt_backend.GetNodeDisk(node)
+	for _, disk := range disks {
+		storage_node.StorageDisks = append(storage_node.StorageDisks, disk)
+	}
 
-	if !storage_node.UUID.IsZero() && len(storage_node.NetworkInfo.Subnet) != 0 && len(storage_node.StorageDisks) != 0 {
+	if !storage_node.NodeId.IsZero() && len(storage_node.NetworkInfo.Subnet) != 0 && len(storage_node.StorageDisks) != 0 {
 		return &storage_node, true
 	} else {
 		return nil, false
@@ -118,6 +127,74 @@ func (a SaltNodeManager) GetUnmanagedNodes() (*models.UnmanagedNodes, error) {
 	}
 }
 
-func (a SaltNodeManager) RejectNode(node string) (bool, error) {
-	return salt_backend.RejectNode(node)
+func (a SaltNodeManager) SyncStorageDisks(node string) (bool, error) {
+	disks, err := salt_backend.GetNodeDisk(node)
+	if err != nil {
+		return false, err
+	}
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if len(disks) != 0 {
+		if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"storagedisks": disks}}); err != nil {
+			return false, err
+		}
+	}
+	return true, nil
+}
+
+func (a SaltNodeManager) DisableNode(node string) (bool, error) {
+	_, err := salt_backend.DisableServices(node, []string{"collectd"}, true)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = salt_backend.IgnoreNode(node)
+	if err != nil {
+		return false, err
+	}
+
+	// Disable any POST actions for participating nodes
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (a SaltNodeManager) EnableNode(node string) (bool, error) {
+	nodes, err := salt_backend.GetNodes()
+	if err != nil {
+		return false, err
+	}
+
+	fingerprint := ""
+	for _, ignored_node := range nodes.Ignore {
+		if ignored_node.Name == node {
+			fingerprint = ignored_node.Fingerprint
+			break
+		}
+	}
+
+	if _, err := salt_backend.AcceptNode(node, fingerprint, true); err != nil {
+		return false, err
+	}
+
+	ok, err := salt_backend.EnableServices(node, []string{"collectd"}, true)
+	if err != nil || !ok {
+		return ok, err
+	}
+
+	// Enable any POST actions for participating nodes
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
+		return false, err
+	}
+
+	return true, nil
 }

@@ -59,7 +59,7 @@ func (a *App) getProviderFromClusterId(cluster_id uuid.UUID) *Provider {
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	var cluster models.StorageCluster
+	var cluster models.Cluster
 	if err := collection.Find(bson.M{"clusterid": cluster_id}).One(&cluster); err != nil {
 		logger.Get().Error("Error getting the cluster details: %v", err)
 		return nil

@@ -49,11 +49,13 @@ type Disk struct {
 
 type Backend interface {
 	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error)
-	AcceptNode(node string, fingerprint string) (bool, error)
+	AcceptNode(node string, fingerprint string, include_rejected bool) (bool, error)
 	BootstrapNode(master string, node string, port uint, fingerprint string, username string, password string) (string, error)
 	GetNodes() (NodeList, error)
 	GetNodeID(node string) (uuid.UUID, error)
 	GetNodeDisk(node string) ([]Disk, error)
 	GetNodeNetwork(node string) (Network, error)
-	RejectNode(node string) (bool, error)
+	IgnoreNode(node string) (bool, error)
+	DisableServices(node string, services []string, stop bool) (bool, error)
+	EnableServices(node string, services []string, start bool) (bool, error)
 }
