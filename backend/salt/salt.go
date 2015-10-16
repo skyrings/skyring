@@ -32,6 +32,10 @@ var funcNames = [...]string{
 	"GetNodeNetwork",
 	"GetNodeDisk",
 	"RejectNode",
+	"GetRejectedFingerprint",
+	"StopAndDisableService",
+	"EnableAndStartService",
+	"AcceptRejectedNode",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -106,6 +110,34 @@ func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
 
 func (s Salt) RejectNode(node string) (status bool, err error) {
 	if pyobj, err := pyFuncs["RejectNode"].Call(node); err == nil {
+		err = gopy.Convert(pyobj, &status)
+	}
+	return
+}
+
+func (s Salt) GetRejectedFingerprint(node string) (fingerprint string, err error) {
+	if pyobj, err := pyFuncs["GetRejectedFingerprint"].Call(node); err == nil {
+		err = gopy.Convert(pyobj, &fingerprint)
+	}
+	return
+}
+
+func (s Salt) StopAndDisableService(node string, service string) (status bool, err error) {
+	if pyobj, err := pyFuncs["StopAndDisableService"].Call(node, service); err == nil {
+		err = gopy.Convert(pyobj, &status)
+	}
+	return
+}
+
+func (s Salt) EnableAndStartService(node string, service string) (status bool, error error) {
+	if pyobj, err := pyFuncs["EnableAndStartService"].Call(node, service); err == nil {
+		err = gopy.Convert(pyobj, &status)
+	}
+	return
+}
+
+func (s Salt) AcceptRejectedNode(node string, fingerprint string) (status bool, err error) {
+	if pyobj, err := pyFuncs["AcceptRejectedNode"].Call(node, fingerprint); err == nil {
 		err = gopy.Convert(pyobj, &status)
 	}
 	return

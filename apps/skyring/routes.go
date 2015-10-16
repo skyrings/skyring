@@ -159,6 +159,27 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.Forget_Cluster,
 			Version:     1,
 		},
+		{
+			Name:        "Disable_Cluster",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}/disable",
+			HandlerFunc: a.Disable_Cluster,
+			Version:     1,
+		},
+		{
+			Name:        "Enable_Cluster",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}/enable",
+			HandlerFunc: a.Enable_Cluster,
+			Version:     1,
+		},
+		{
+			Name:        "Expand_Cluster",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}",
+			HandlerFunc: a.Expand_Cluster,
+			Version:     1,
+		},
 	}
 	for _, route := range routes {
 		CORE_ROUTES = append(CORE_ROUTES, route)

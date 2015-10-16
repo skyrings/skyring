@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/golang/glog"
 	"net/http"
+	"reflect"
 	"runtime"
 	"time"
 )
@@ -80,4 +81,8 @@ func HttpResponse(w http.ResponseWriter, status_code int, msg string) {
 		glog.Errorf("Error: %v", err)
 	}
 	return
+}
+
+func GetFunctionName(inf interface{}) string {
+	return runtime.FuncForPC(reflect.ValueOf(inf).Pointer()).Name()
 }

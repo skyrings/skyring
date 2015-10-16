@@ -21,4 +21,7 @@ type NodeManagerInterface interface {
 	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.StorageNode, error)
 	GetUnmanagedNodes() (*models.UnmanagedNodes, error)
 	RejectNode(node string) (bool, error)
+	AcceptRejectedNode(node string) (bool, error)
+	StopAndDisableService(node string, srvc string) (bool, error)
+	EnableAndStartService(node string, srvc string) (bool, error)
 }

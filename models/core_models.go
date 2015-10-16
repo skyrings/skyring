@@ -18,23 +18,28 @@ import (
 )
 
 type StorageNode struct {
-	UUID              uuid.UUID          `json:"uuid"`
-	Hostname          string             `json:"hostname"`
-	Tags              map[string]string  `json:"tags"`
-	ManagementIp      string             `json:"managementip"`
-	ClusterIp         string             `json:"clusterip"`
-	PublicAddressIpv4 string             `json:"publicaddressipv4"`
-	ClusterId         uuid.UUID          `json:"clusterid"`
-	Location          string             `json:"location"`
-	Status            string             `json:"status"`
-	Options           map[string]string  `json:"options"`
-	State             string             `json:"state"`
-	CPUs              []CPU              `json:"cpus"`
-	NetworkInfo       StorageNodeNetwork `json:"networkinfo"`
-	StorageDisks      []backend.Disk     `json:"storagedisks"`
-	Memory            []Memory           `json:"memory"`
-	OS                OperatingSystem    `json:"os"`
-	ManagedState      string             `json:"managedstate"`
+	UUID                 uuid.UUID          `json:"uuid"`
+	Hostname             string             `json:"hostname"`
+	Tags                 map[string]string  `json:"tags"`
+	ManagementIp         string             `json:"managementip"`
+	ClusterIp            string             `json:"clusterip"`
+	PublicAddressIpv4    string             `json:"publicaddressipv4"`
+	ClusterId            uuid.UUID          `json:"clusterid"`
+	Location             string             `json:"location"`
+	Status               string             `json:"status"`
+	Options              map[string]string  `json:"options"`
+	State                string             `json:"state"`
+	CPUs                 []CPU              `json:"cpus"`
+	NetworkInfo          StorageNodeNetwork `json:"networkinfo"`
+	StorageDisks         []StorageDisk      `json:"storagedisks"`
+	Memory               []Memory           `json:"memory"`
+	OS                   OperatingSystem    `json:"os"`
+	AdministrativeStatus int                `json:"administrativestatus"`
+}
+
+type StorageDisk struct {
+	Disk                 backend.Disk `json:"disk"`
+	AdministrativeStatus int          `json:"administrativestatus"`
 }
 
 type CPU struct {
@@ -46,21 +51,6 @@ type StorageNodeNetwork struct {
 	Ipv4   []string `bson:"ipv4"`
 	Ipv6   []string `bson:"ipv6"`
 }
-
-// type StorageDisk struct {
-// 	UUID       string   `bson:"uuid"`
-// 	Name       string   `bson:"name"`
-// 	Pkname     string   `bson:"pkname"`
-// 	MountPoint []string `bson:"mountpoint"`
-// 	Kname      string   `bson:"kname"`
-// 	PartUUID   string   `bson:"partuuid"`
-// 	Type       string   `bson:"type"`
-// 	Model      string   `bson:"model"`
-// 	Vendor     string   `bson:"vendor"`
-// 	FsType     string   `bson:"fstype"`
-// 	Size       unit64   `bson:"size"`
-// 	Used       bool     `bson:"used"`
-// }
 
 type Memory struct {
 	Name       string `bson:"name"`
@@ -92,21 +82,23 @@ type User struct {
 }
 
 type StorageCluster struct {
-	ClusterId            uuid.UUID       `json:"cluster_id"`
-	ClusterName          string          `json:"cluster_name"`
-	CompatibilityVersion string          `json:"compatibility_version"`
-	ClusterType          string          `json:"cluster_type"`
-	WorkLoad             string          `json:"workload"`
-	ClusterStatus        string          `json:"status"`
-	Tags                 []string        `json:"tags"`
-	Options              interface{}     `json:"options"`
-	Nodes                []ClusterNode   `json:"nodes"`
-	OpenStackServices    []string        `json:"openstackservices"`
-	Networks             ClusterNetworks `json:"networks"`
+	ClusterId            uuid.UUID         `json:"cluster_id"`
+	ClusterName          string            `json:"cluster_name"`
+	CompatibilityVersion string            `json:"compatibility_version"`
+	ClusterType          string            `json:"cluster_type"`
+	WorkLoad             string            `json:"workload"`
+	ClusterStatus        string            `json:"status"`
+	Tags                 []string          `json:"tags"`
+	Options              map[string]string `json:"options"`
+	Nodes                []ClusterNode     `json:"nodes"`
+	OpenStackServices    []string          `json:"openstackservices"`
+	Networks             ClusterNetworks   `json:"networks"`
+	AdministrativeStatus int               `json:"administrativestatus"`
 }
 
 type ClusterNode struct {
 	Hostname string            `json:"hostname"`
+	Disks    []string          `json:"disks"`
 	Options  map[string]string `json:"options"`
 }
 

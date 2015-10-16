@@ -88,13 +88,20 @@ func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerpr
 func populateStorageNodeInstance(node string) (*models.StorageNode, bool) {
 	var storage_node models.StorageNode
 	storage_node.Hostname = node
-	storage_node.ManagedState = models.NODE_STATE_FREE
+	storage_node.AdministrativeStatus = models.FREE
 	storage_node.UUID, _ = salt_backend.GetNodeID(node)
 	networkInfo, _ := salt_backend.GetNodeNetwork(node)
 	storage_node.NetworkInfo.Subnet = networkInfo.Subnet
 	storage_node.NetworkInfo.Ipv4 = networkInfo.IPv4
 	storage_node.NetworkInfo.Ipv6 = networkInfo.IPv6
-	storage_node.StorageDisks, _ = salt_backend.GetNodeDisk(node)
+	storage_node.ManagementIp = networkInfo.IPv4[0]
+	disks, _ := salt_backend.GetNodeDisk(node)
+	for _, disk := range disks {
+		var storageDisk models.StorageDisk
+		storageDisk.Disk = disk
+		storageDisk.AdministrativeStatus = models.FREE
+		storage_node.StorageDisks = append(storage_node.StorageDisks, storageDisk)
+	}
 
 	if !storage_node.UUID.IsZero() && len(storage_node.NetworkInfo.Subnet) != 0 && len(storage_node.StorageDisks) != 0 {
 		return &storage_node, true
@@ -120,4 +127,25 @@ func (a SaltNodeManager) GetUnmanagedNodes() (*models.UnmanagedNodes, error) {
 
 func (a SaltNodeManager) RejectNode(node string) (bool, error) {
 	return salt_backend.RejectNode(node)
+}
+
+func (a SaltNodeManager) AcceptRejectedNode(node string) (bool, error) {
+	fingerprint, err := salt_backend.GetRejectedFingerprint(node)
+	if err != nil {
+		return false, err
+	}
+
+	if _, err := salt_backend.AcceptRejectedNode(node, fingerprint); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (a SaltNodeManager) StopAndDisableService(node string, srvc string) (bool, error) {
+	return salt_backend.StopAndDisableService(node, srvc)
+}
+
+func (a SaltNodeManager) EnableAndStartService(node string, srvc string) (bool, error) {
+	return salt_backend.EnableAndStartService(node, srvc)
 }

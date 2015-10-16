@@ -30,7 +30,8 @@ import (
 
 var (
 	cluster_post_functions = map[string]string{
-		"create": "CreateCluster",
+		"create":         "CreateCluster",
+		"remove_storage": "RemoveStorage",
 	}
 
 	storage_types = map[string]string{
@@ -58,7 +59,6 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
 		return
 	}
-	fmt.Println(request)
 
 	// Check if cluster already added
 	if cluster, _ := cluster_exists("clustername", request.ClusterName); cluster != nil {
@@ -66,41 +66,30 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var result []byte
-	// Get the specific provider and invoke the method
-	provider := a.getProviderFromClusterType(request.ClusterType)
-	err = provider.Client.Call(fmt.Sprintf("%s.%s", provider.Name,
-		cluster_post_functions["create"]),
-		models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body},
-		&result)
-	if err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, "Error while cluster creation")
+	// Check if passed disks already utilized
+	if used, _ := disks_used(request.Nodes); used {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Passed disks are already used")
 		return
 	}
 
-	var m models.RpcResponse
-	if err = json.Unmarshal(result, &m); err != nil {
-		glog.Errorf("Unable to Unmarshall the result from provider : %s", err)
+	var result models.RpcResponse
+	// Get the specific provider and invoke the method
+	provider := a.getProviderFromClusterType(request.ClusterType)
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, cluster_post_functions["create"]),
+		models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body},
+		&result)
+	if err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error while cluster creation %v", err))
+		return
 	}
-	if m.Status.StatusCode == http.StatusOK {
-		if err := json.NewEncoder(w).Encode("Added successfully"); err != nil {
+
+	if result.Status.StatusCode == http.StatusOK {
+		if err := json.NewEncoder(w).Encode(result.Status.StatusMessage); err != nil {
 			glog.Errorf("Error: %v", err)
 		}
 	} else {
-		util.HttpResponse(w, http.StatusInternalServerError, m.Status.StatusMessage)
-	}
-}
-
-func cluster_exists(key string, value string) (*models.StorageCluster, error) {
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	var cluster models.StorageCluster
-	if err := collection.Find(bson.M{key: value}).One(&cluster); err != nil {
-		return nil, err
-	} else {
-		return &cluster, nil
+		util.HttpResponse(w, http.StatusInternalServerError, result.Status.StatusMessage)
 	}
 }
 
@@ -108,10 +97,17 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	cluster_id := vars["cluster-id"]
 
+	// Check if cluster is already disabled, if not forget not allowed
+	uuid, _ := uuid.Parse(cluster_id)
+	ok, cluster, _ := cluster_disabled(*uuid)
+	if !ok {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is not in um-managed state. Cannot run forget.")
+		return
+	}
+
+	// Delete the participating nodes from DB
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
-
-	// Reject the node keys and delete the nodes
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	var nodes models.StorageNodes
 	if err := collection.Find(bson.M{"clusterid": cluster_id}).All(&nodes); err != nil {
@@ -120,29 +116,37 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for _, node := range nodes {
-		if _, err := GetCoreNodeManager().RejectNode(node.Hostname); err != nil {
-			glog.Errorf("Error rejecting the key for node %s : %v", node.Hostname, err)
+		if err := collection.Remove(bson.M{"uuid": node.UUID}); err != nil {
+			glog.Errorf("Error deleting the node: %s for the cluster: %v", node.Hostname, err)
 			continue
-		} else {
-			if err := collection.Remove(bson.M{"uuid": node.UUID}); err != nil {
-				glog.Errorf("Error deleting the node: %s for the cluster: %v", node.Hostname, err)
-				continue
-			}
 		}
 	}
 
-	// TODO:: Forget the volumes/pools of the cluster (remove entries from DB only)
+	// Remove storage entities for cluster
+	var result models.RpcResponse
+	provider := a.getProviderFromClusterType(cluster.ClusterType)
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, cluster_post_functions["remove_storage"]),
+		models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: nil},
+		&result)
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error removing storage for cluster %s", result.Status.StatusMessage))
+		return
+	}
+
+	// Remove the sync jobs if any for the cluster
+	// Remove the performance monitoring details for the cluster
+	// Remove the collectd, salt etc configurations from the nodes
 
 	// Delete the cluster from DB
 	collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	var cluster models.StorageCluster
 	if err := collection.Remove(bson.M{"cluster_id": cluster_id}); err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 		glog.Errorf("Error removing the cluster: %v", err)
 		return
 	}
 
-	json.NewEncoder(w).Encode(cluster)
+	json.NewEncoder(w).Encode("Done")
 }
 
 func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
@@ -163,7 +167,6 @@ func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	cluster_id, _ := uuid.Parse(cluster_id_str)
-	fmt.Println(*cluster_id)
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
@@ -176,4 +179,159 @@ func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewEncoder(w).Encode(cluster)
+}
+
+func (a *App) Disable_Cluster(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, _ := uuid.Parse(cluster_id_str)
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var cluster models.StorageCluster
+
+	// TODO: Disable sync jobs for the cluster
+	// TODO: Disable performance monitoring for the cluster
+
+	// Disable collectd, salt configurations on the nodes participating in the cluster
+	if err := collection.Find(bson.M{"clusterid": *cluster_id}).One(&cluster); err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	for _, node := range cluster.Nodes {
+		fmt.Println("Stopping services on " + node.Hostname)
+		ok, err := GetCoreNodeManager().StopAndDisableService(node.Hostname, "collectd")
+		if err != nil || !ok {
+			util.HttpResponse(w, http.StatusInternalServerError, "Error stopping the services on node")
+			return
+		}
+		fmt.Println("Disabling salt communication for " + node.Hostname)
+		ok, err = GetCoreNodeManager().RejectNode(node.Hostname)
+		if err != nil || !ok {
+			util.HttpResponse(w, http.StatusInternalServerError, "Error disabling the salt communication with node")
+			return
+		}
+		// Disable any POST actions for participating nodes
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		if err := coll.Update(bson.M{"hostname": node.Hostname}, bson.M{"$set": bson.M{"administrativestatus": models.UNMANAGED}}); err != nil {
+			util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error updating nodes state information %v", err))
+			return
+		}
+	}
+
+	// Disable any POST actions on cluster
+	if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"administrativestatus": models.CLUSTER_STATUS_INACTIVE}}); err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	json.NewEncoder(w).Encode("Cluster disabled")
+}
+
+func (a *App) Enable_Cluster(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, _ := uuid.Parse(cluster_id_str)
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var cluster models.StorageCluster
+
+	// TODO: Enable sync jobs for the cluster
+	// TODO: Enable performance monitoring for the cluster
+
+	// Enable collectd, salt configurations on the nodes participating in the cluster
+	if err := collection.Find(bson.M{"clusterid": *cluster_id}).One(&cluster); err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	for _, node := range cluster.Nodes {
+		ok, err := GetCoreNodeManager().EnableAndStartService(node.Hostname, "collectd")
+		if err != nil {
+			util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error starting the services on node %v", err))
+			return
+		}
+		fmt.Println(ok)
+		ok, err = GetCoreNodeManager().AcceptRejectedNode(node.Hostname)
+		if err != nil {
+			util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error accepting node %v", err))
+			return
+		}
+		fmt.Println(ok)
+		// Enable any POST actions for participating nodes
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		if err := coll.Update(bson.M{"hostname": node.Hostname}, bson.M{"$set": bson.M{"administrativestatus": models.USED}}); err != nil {
+			util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error updating nodes state information %v", err))
+			return
+		}
+		fmt.Println("update node status")
+	}
+
+	// Enable any POST actions on cluster
+	if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"administrativestatus": models.CLUSTER_STATUS_ACTIVE_AND_AVAILABLE}}); err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	fmt.Println("updated cluster status")
+
+	json.NewEncoder(w).Encode("Cluster enabled")
+}
+
+func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, _ := uuid.Parse(cluster_id_str)
+
+	json.NewEncoder(w).Encode(cluster_id)
+}
+
+func cluster_exists(key string, value string) (*models.StorageCluster, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var cluster models.StorageCluster
+	if err := collection.Find(bson.M{key: value}).One(&cluster); err != nil {
+		return nil, err
+	} else {
+		return &cluster, nil
+	}
+}
+
+func disks_used(nodes []models.ClusterNode) (bool, error) {
+	for _, node := range nodes {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		var storageNode models.StorageNode
+		if err := coll.Find(bson.M{"hostname": node.Hostname}).One(&storageNode); err != nil {
+			return false, err
+		}
+		for _, disk := range storageNode.StorageDisks {
+			for _, diskname := range node.Disks {
+				if disk.Disk.DevName == diskname && disk.AdministrativeStatus == models.USED {
+					return true, nil
+				}
+			}
+		}
+	}
+
+	return false, nil
+}
+
+func cluster_disabled(cluster_id uuid.UUID) (bool, *models.StorageCluster, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var cluster models.StorageCluster
+	if err := collection.Find(bson.M{"clusterid": cluster_id}).One(&cluster); err != nil {
+		return false, nil, err
+	}
+	if cluster.AdministrativeStatus == models.CLUSTER_STATUS_INACTIVE {
+		return true, &cluster, nil
+	} else {
+		return false, &cluster, nil
+	}
 }
