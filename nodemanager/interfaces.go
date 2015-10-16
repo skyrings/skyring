@@ -17,8 +17,10 @@ import (
 )
 
 type NodeManagerInterface interface {
-	AcceptNode(node string, fingerprint string) (*models.StorageNode, error)
-	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.StorageNode, error)
+	AcceptNode(node string, fingerprint string) (*models.Node, error)
+	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.Node, error)
 	GetUnmanagedNodes() (*models.UnmanagedNodes, error)
-	RejectNode(node string) (bool, error)
+	DisableNode(node string) (bool, error)
+	EnableNode(node string) (bool, error)
+	SyncStorageDisks(node string) (bool, error)
 }

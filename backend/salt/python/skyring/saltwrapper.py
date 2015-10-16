@@ -18,7 +18,7 @@ from functools import wraps
 import uuid
 
 import salt
-from salt import wheel, client
+from salt import wheel, client, key, states, modules
 import salt.config
 
 
@@ -42,6 +42,26 @@ setattr(salt.client.LocalClient, 'cmd',
 local = salt.client.LocalClient()
 
 
+def _get_state_result(out):
+    failed_minions = {}
+    for minion, v in out.iteritems():
+        failed_results = {}
+        for id, res in v.iteritems():
+            if not res['result']:
+                failed_results.update({id: res})
+        if not v:
+            failed_minions[minion] = {}
+        if failed_results:
+            failed_minions[minion] = failed_results
+
+    return failed_minions
+
+
+def run_state(local, tgt, state, *args, **kwargs):
+    out = local.cmd(tgt, 'state.sls', [state], *args, **kwargs)
+    return _get_state_result(out)
+
+
 def _get_keys(match='*'):
     keys = master.call_func('key.finger', match=match)
     return {'accepted_nodes': keys.get('minions', {}),
@@ -50,7 +70,7 @@ def _get_keys(match='*'):
             'rejected_nodes': keys.get('minions_rejected', {})}
 
 
-def AcceptNode(node, fingerprint):
+def AcceptNode(node, fingerprint, include_rejected=False):
     d = _get_keys(node)
     if d['accepted_nodes'].get(node):
         log.info("node %s already in accepted node list" % node)
@@ -66,18 +86,18 @@ def AcceptNode(node, fingerprint):
                    (node, finger, fingerprint)))
         return False
 
-    accepted = master.call_func('key.accept', match=node)
+    if include_rejected:
+        accepted = master.call_func('key.accept', match=node, include_rejected=True)
+    else:
+        accepted = master.call_func('key.accept', match=node)
+
     return (True if accepted else False)
 
 
-def RejectNode(node):
-    d = _get_keys(node)
-    if not d['accepted_nodes'].get(node):
-        log.info("node %s not in accepted node list" % node)
-        return True
-
-    rejected = master.call_func('key.reject', match=node, include_accepted=True)
-    return (True if rejected else False)
+def IgnoreNode(node):
+    skey = salt.key.Key(opts)
+    out = skey.reject(node, include_accepted=True)
+    return (node in out['minions_rejected'])
 
 
 def GetNodes():
@@ -231,3 +251,19 @@ def GetNodeDisk(node):
                               "Used": disk["INUSE"],
                               "Vendor": disk.get("VENDOR", "")})
     return rv
+
+
+def DisableServices(node, srvcs, stop=False):
+    out = local.cmd(node, 'service.disable', srvcs)
+    if out[node] and stop:
+        out = local.cmd(node, 'service.stop', srvcs)
+
+    return out[node]
+
+
+def EnableServices(node, srvcs, start=False):
+    out = local.cmd(node, 'service.enable', srvcs)
+    if out[node] and start:
+        out = local.cmd(node, 'service.start', srvcs)
+
+    return out[node]

@@ -20,19 +20,36 @@ type AddStorageNodeRequest struct {
 	SshPort        int    `json:"sshport"`
 }
 
-type StorageNodes []StorageNode
+type AddClusterRequest struct {
+	ClusterName          string            `json:"clustername"`
+	CompatibilityVersion string            `json:"compatibilityversion"`
+	ClusterType          string            `json:"clustertype"`
+	WorkLoad             string            `json:"workload"`
+	Tags                 []string          `json:"tags"`
+	Options              map[string]string `json:"options"`
+	OpenStackServices    []string          `json:"openstackservices"`
+	Nodes                []ClusterNode     `json:"nodes"`
+	Networks             ClusterNetworks   `json:"networks"`
+}
+
+type ClusterNode struct {
+	NodeId  string            `json:"nodeid"`
+	Disks   []string          `json:"disks"`
+	Options map[string]string `json:"options"`
+}
+
+type Nodes []Node
 
 const (
-	DEFAULT_SSH_PORT           = 22
-	REQUEST_SIZE_LIMIT         = 1048576
-	COLL_NAME_STORAGE_NODES    = "storage_nodes"
-	COLL_NAME_STORAGE_CLUSTERS = "storage_clusters"
-	NODE_STATE_FREE            = "free"
-	NODE_STATE_UNMANAGED       = "unmanaged"
-	NODE_STATE_USED            = "used"
+	DEFAULT_SSH_PORT                = 22
+	DEFAULT_FS_TYPE                 = "xfs"
+	REQUEST_SIZE_LIMIT              = 1048576
+	COLL_NAME_STORAGE_NODES         = "storage_nodes"
+	COLL_NAME_STORAGE_CLUSTERS      = "storage_clusters"
+	COLL_NAME_STORAGE_LOGICAL_UNITS = "storage_logical_units"
 )
 
-type StorageClusters []StorageCluster
+type Clusters []Cluster
 
 type UnmanagedNode struct {
 	Name            string `json:"name"`
@@ -40,3 +57,35 @@ type UnmanagedNode struct {
 }
 
 type UnmanagedNodes []UnmanagedNode
+
+type ClusterStatus int
+
+// Status values for the cluster
+const (
+	CLUSTER_STATUS_INACTIVE = 1 + iota
+	CLUSTER_STATUS_NOT_AVAILABLE
+	CLUSTER_STATUS_ACTIVE_AND_AVAILABLE
+	CLUSTER_STATUS_CREATING
+	CLUSTER_STATUS_FAILED
+)
+
+var ClusterStatuses = [...]string{
+	"inactive",
+	"not available",
+	"active and available",
+	"creating",
+	"failed",
+}
+
+// Storage logical unit types
+const (
+	CEPH_OSD = 1 + iota
+	CEPH_MON
+)
+
+var StorageLogicalUnitTypes = [...]string{
+	"osd",
+	"mon",
+}
+
+func (c ClusterStatus) String() string { return ClusterStatuses[c-1] }
