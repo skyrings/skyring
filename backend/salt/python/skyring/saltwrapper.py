@@ -18,7 +18,7 @@ from functools import wraps
 import uuid
 
 import salt
-from salt import wheel, client
+from salt import wheel, client, key, states, modules
 import salt.config
 
 
@@ -50,7 +50,7 @@ def _get_keys(match='*'):
             'rejected_nodes': keys.get('minions_rejected', {})}
 
 
-def AcceptNode(node, fingerprint):
+def AcceptNode(node, fingerprint, include_rejected=False):
     d = _get_keys(node)
     if d['accepted_nodes'].get(node):
         log.info("node %s already in accepted node list" % node)
@@ -58,7 +58,10 @@ def AcceptNode(node, fingerprint):
 
     finger = d['unaccepted_nodes'].get(node)
     if not finger:
-        log.warn("node %s not in unaccepted node list" % node)
+        if include_rejected:
+           finger = d['rejected_nodes'].get(node)
+    if not finger:
+        log.warn("node %s not in unaccepted/rejected node list" % node)
         return False
 
     if finger != fingerprint:
@@ -66,18 +69,16 @@ def AcceptNode(node, fingerprint):
                    (node, finger, fingerprint)))
         return False
 
-    accepted = master.call_func('key.accept', match=node)
-    return (True if accepted else False)
+    skey = salt.key.Key(opts)
+    out = skey.accept(match=node, include_rejected=include_rejected)
+
+    return (node in out['minions'])
 
 
-def RejectNode(node):
-    d = _get_keys(node)
-    if not d['accepted_nodes'].get(node):
-        log.info("node %s not in accepted node list" % node)
-        return True
-
-    rejected = master.call_func('key.reject', match=node, include_accepted=True)
-    return (True if rejected else False)
+def IgnoreNode(node):
+    skey = salt.key.Key(opts)
+    out = skey.reject(node, include_accepted=True)
+    return (node in out['minions_rejected'])
 
 
 def GetNodes():
@@ -231,3 +232,19 @@ def GetNodeDisk(node):
                               "Used": disk["INUSE"],
                               "Vendor": disk.get("VENDOR", "")})
     return rv
+
+
+def DisableService(node, service, stop=False):
+    out = local.cmd(node, 'service.disable', [service])
+    if out[node] and stop:
+        out = local.cmd(node, 'service.stop', [service])
+
+    return out[node]
+
+
+def EnableService(node, service, start=False):
+    out = local.cmd(node, 'service.enable', [service])
+    if out[node] and start:
+        out = local.cmd(node, 'service.start', [service])
+
+    return out[node]

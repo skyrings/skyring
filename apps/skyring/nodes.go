@@ -14,6 +14,8 @@ package skyring
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
@@ -39,11 +41,11 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		logger.Get().Error("Error parsing the request: %v", err)
-		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
-		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err))
 		return
 	}
 
@@ -71,11 +73,17 @@ func POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		logger.Get().Error("Error parsing the request: %v", err)
-		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
-		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err))
+		return
+	}
+
+	// Check if node already added
+	if node, _ := node_exists("hostname", hostname); node != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Node already added")
 		return
 	}
 
@@ -93,7 +101,7 @@ func acceptNode(w http.ResponseWriter, hostname string, fingerprint string) {
 	if node, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint); err == nil {
 		addStorageNodeToDB(w, *node)
 	} else {
-		util.HttpResponse(w, http.StatusInternalServerError, "Unable to accept node")
+		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Unable to accept node: %v", err))
 	}
 }
 
@@ -114,11 +122,11 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 		request.Password); err == nil {
 		addStorageNodeToDB(w, *node)
 	} else {
-		util.HttpResponse(w, http.StatusInternalServerError, "Unable to add node")
+		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Unable to add node: %v", err))
 	}
 }
 
-func addStorageNodeToDB(w http.ResponseWriter, storage_node models.StorageNode) {
+func addStorageNodeToDB(w http.ResponseWriter, storage_node models.Node) {
 	// Add the node details to the DB
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
@@ -133,12 +141,12 @@ func addStorageNodeToDB(w http.ResponseWriter, storage_node models.StorageNode) 
 	}
 }
 
-func node_exists(key string, value string) (*models.StorageNode, error) {
+func node_exists(key string, value string) (*models.Node, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	var node models.StorageNode
+	var node models.Node
 	if err := collection.Find(bson.M{key: value}).One(&node); err != nil {
 		return nil, err
 	} else {
@@ -151,24 +159,29 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	defer sessionCopy.Close()
 
 	params := r.URL.Query()
-	managed_state := params.Get("state")
+	admin_state_str := params.Get("state")
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	var nodes models.StorageNodes
-	if managed_state != "" {
-		if err := collection.Find(bson.M{"managedstate": managed_state}).All(&nodes); err != nil {
-			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-			logger.Get().Error("Error getting the nodes list: %v", err)
-			return
-		}
-	} else {
+	var nodes models.Nodes
+	if admin_state_str == "" {
 		if err := collection.Find(nil).All(&nodes); err != nil {
 			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 			logger.Get().Error("Error getting the nodes list: %v", err)
 			return
 		}
+	} else {
+		nodes, err = getNodesWithState(w, admin_state_str)
+		if err != nil {
+			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+			logger.Get().Error("Error getting the nodes list: %v", err)
+			return
+		}
 	}
-	json.NewEncoder(w).Encode(nodes)
+	if len(nodes) == 0 {
+		json.NewEncoder(w).Encode([]models.Node{})
+	} else {
+		json.NewEncoder(w).Encode(nodes)
+	}
 }
 
 func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
@@ -180,8 +193,8 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	var node models.StorageNode
-	if err := collection.Find(bson.M{"uuid": *node_id}).One(&node); err != nil {
+	var node models.Node
+	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
 		logger.Get().Error("Error getting the node detail: %v", err)
 	}
 
@@ -197,21 +210,77 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 func GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
 	if nodes, err := GetCoreNodeManager().GetUnmanagedNodes(); err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-		logger.Get().Error("Node not found: %v", err)
+		logger.Get().Error("Nodes not found: %v", err)
 	} else {
-		json.NewEncoder(w).Encode(nodes)
+		if nodes == nil {
+			json.NewEncoder(w).Encode([]models.Node{})
+		} else {
+			json.NewEncoder(w).Encode(nodes)
+		}
 	}
 }
 
-func GetNode(node_id uuid.UUID) models.StorageNode {
+func GetNode(node_id uuid.UUID) models.Node {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	var node models.StorageNode
-	if err := collection.Find(bson.M{"uuid": node_id}).One(&node); err != nil {
+	var node models.Node
+	if err := collection.Find(bson.M{"nodeid": node_id}).One(&node); err != nil {
 		logger.Get().Error("Error getting the node detail: %v", err)
 	}
 
 	return node
+}
+
+func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error) {
+	var validStates = [...]string{"free", "used", "unmanaged"}
+	var found = false
+	var foundIndex = -1
+	for index, value := range validStates {
+		if state == value {
+			found = true
+			foundIndex = index
+			break
+		}
+	}
+
+	if !found {
+		return models.Nodes{}, errors.New(fmt.Sprintf("Invalid state value: %s", state))
+	} else {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		var nodes models.Nodes
+		switch foundIndex {
+		case 0:
+			if err := coll.Find(bson.M{}).All(&nodes); err != nil {
+				return models.Nodes{}, err
+			}
+			var unusedNodes models.Nodes
+			for _, node := range nodes {
+				if node.ClusterId.IsZero() {
+					unusedNodes = append(unusedNodes, node)
+				}
+			}
+			return unusedNodes, nil
+		case 1:
+			if err := coll.Find(bson.M{}).All(&nodes); err != nil {
+				return models.Nodes{}, err
+			}
+			var usedNodes models.Nodes
+			for _, node := range nodes {
+				if !node.ClusterId.IsZero() {
+					usedNodes = append(usedNodes, node)
+				}
+			}
+			return usedNodes, nil
+		case 2:
+			if err := coll.Find(bson.M{"enabled": true}).All(&nodes); err != nil {
+				return models.Nodes{}, err
+			}
+			return nodes, nil
+		}
+		return models.Nodes{}, nil
+	}
 }
