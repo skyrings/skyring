@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_60e8487d",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-16T05:36:59Z",
+      "side": 1,
+      "message": "1. done\n2. done\n3. done. I just wrote it for gluster bcoz on ceph side we have to still build ways to get the statistics or I am not sure if they are already there",
+      "parentUuid": "9ab29df4_3d63d7b2",
+      "range": {
+        "startLine": 112,
+        "startChar": 17,
+        "endLine": 112,
+        "endChar": 20
+      },
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_5d588bfa",
         "filename": "utils/salt_bindings.go",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2015-10-15T16:21:23Z",
       "side": 1,
       "message": "please use https://review.gerrithub.io/249090 as your base",
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_209570e4",
+        "filename": "utils/salt_bindings.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-16T05:36:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_5d588bfa",
       "revId": "183872f99f5796a470e61cda069410282356eece",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
