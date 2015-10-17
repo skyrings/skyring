@@ -1,0 +1,372 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_ec1fefb5",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "$PWD has CWD",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 8
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_cc222b01",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "Why can\u0027t you use built-in echo command?\n\necho -e \"${RED}$@${NC}\"",
+      "range": {
+        "startLine": 15,
+        "startChar": 20,
+        "endLine": 15,
+        "endChar": 22
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_0c1d03be",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "why echo?",
+      "range": {
+        "startLine": 43,
+        "startChar": 27,
+        "endLine": 43,
+        "endChar": 29
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_e66b9083",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "why do you want set -x?",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 5
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_260588c2",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "yum -q for quiet mode.  note that yum is deprecated by dnf in fedora 22.",
+      "range": {
+        "startLine": 51,
+        "startChar": 12,
+        "endLine": 51,
+        "endChar": 18
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_861494f6",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "I dont think you need to run yum install in quiet mode ie user gets progress of yum install",
+      "range": {
+        "startLine": 55,
+        "startChar": 20,
+        "endLine": 55,
+        "endChar": 23
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_4c30db56",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "below mkdirs are related to configuration",
+      "range": {
+        "startLine": 65,
+        "startChar": 41,
+        "endLine": 65,
+        "endChar": 47
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_a6f8b8c5",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "why not 755?",
+      "range": {
+        "startLine": 70,
+        "startChar": 6,
+        "endLine": 70,
+        "endChar": 9
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_6c359f45",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "you should have\n\nSKYRINGS_SRC\u003d$GOPATH/github.com/skyrings\nSKYRING_GIT\u003d$SKYRINGS_SRC/skyring\nBIGFIN_GIT\u003d$SKYRINGS_SRC/bigfin\n\nand use them everywhere",
+      "range": {
+        "startLine": 90,
+        "startChar": 68,
+        "endLine": 90,
+        "endChar": 75
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_8c3af334",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "doesn\u0027t the system work without config file?  I believe it should know default values without config files.",
+      "range": {
+        "startLine": 95,
+        "startChar": 78,
+        "endLine": 95,
+        "endChar": 87
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_ac3ed727",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "I feel, its bad name \u0027ceph_provider\u0027.  Just \u0027ceph\u0027 is good enough where it goes into .../providers/ dir",
+      "range": {
+        "startLine": 99,
+        "startChar": 68,
+        "endLine": 99,
+        "endChar": 81
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_cc3b0b37",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "why do you need to set only ip has route?  Why can\u0027t it be just \u0027localhost\u0027 or \u0027*\u0027",
+      "range": {
+        "startLine": 103,
+        "startChar": 43,
+        "endLine": 103,
+        "endChar": 46
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_ec48cfce",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "As this is primary package, why can\u0027t --root be /usr/lib/python2.7/site-packages/ ?",
+      "range": {
+        "startLine": 109,
+        "startChar": 55,
+        "endLine": 109,
+        "endChar": 56
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_4c17fba3",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "you should copy ceph module only.",
+      "range": {
+        "startLine": 115,
+        "startChar": 68,
+        "endLine": 115,
+        "endChar": 76
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_6c0cbf95",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "As ~/.local/... is removed, you do you need to set PYTHONPATH to it?",
+      "range": {
+        "startLine": 177,
+        "startChar": 25,
+        "endLine": 177,
+        "endChar": 26
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_ac25f70b",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-17T01:49:13Z",
+      "side": 1,
+      "message": "what is the default username/password for skyring to access?",
+      "range": {
+        "startLine": 182,
+        "startChar": 14,
+        "endLine": 182,
+        "endChar": 22
+      },
+      "revId": "eeb1146665258adfe5a8c22e8a60f36126c3cbbc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
