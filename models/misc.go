@@ -12,7 +12,10 @@ limitations under the License.
 */
 package models
 
-import "github.com/skyrings/skyring/tools/uuid"
+import (
+	"github.com/skyrings/skyring/tools/uuid"
+	"time"
+)
 
 type AddStorageNodeRequest struct {
 	Hostname       string `json:"hostname"`
@@ -57,11 +60,32 @@ type AddStorageRequest struct {
 
 type Nodes []Node
 
+type NodeEvent struct {
+	Timestamp time.Time         `json:"timestamp"`
+	Node      string            `json:"node"`
+	Tag       string            `json:"tag"`
+	Tags      map[string]string `json:"tags"`
+	Message   string            `json:"message"`
+	Severity  string            `json:"severity"`
+}
+
+type Event struct {
+	EventId   uuid.UUID         `json:"event_id"`
+	ClusterId uuid.UUID         `json:"cluster_id"`
+	NodeId    uuid.UUID         `json:"node_id"`
+	Timestamp time.Time         `json:"timestamp"`
+	Tag       string            `json:"tag"`
+	Tags      map[string]string `json:"tags"`
+	Message   string            `json:"message"`
+	Severity  string            `json:"severity"`
+}
+
 const (
 	DEFAULT_SSH_PORT                = 22
 	DEFAULT_FS_TYPE                 = "xfs"
 	REQUEST_SIZE_LIMIT              = 1048576
 	COLL_NAME_STORAGE               = "storage"
+	COLL_NAME_NODE_EVENTS           = "node_events"
 	COLL_NAME_STORAGE_NODES         = "storage_nodes"
 	COLL_NAME_STORAGE_CLUSTERS      = "storage_clusters"
 	COLL_NAME_STORAGE_LOGICAL_UNITS = "storage_logical_units"

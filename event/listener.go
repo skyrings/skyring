@@ -2,10 +2,16 @@ package event
 
 import (
 	"fmt"
+	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/uuid"
+	"gopkg.in/mgo.v2/bson"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -33,7 +39,6 @@ type NodeStartEventArgs struct {
 func (l *Listener) PushNodeStartEvent(args *NodeStartEventArgs, ack *bool) error {
 	timestamp := args.Timestamp
 	node := strings.TrimSpace(args.Node)
-
 	if node == "" || timestamp.IsZero() {
 		*ack = false
 		return nil
@@ -42,6 +47,72 @@ func (l *Listener) PushNodeStartEvent(args *NodeStartEventArgs, ack *bool) error
 	StartedNodesLock.Lock()
 	defer StartedNodesLock.Unlock()
 	StartedNodes[args.Node] = args.Timestamp
+	*ack = true
+	return nil
+}
+
+func RouteEvent(event models.NodeEvent) {
+
+	var e models.Event
+	e.Timestamp = event.Timestamp
+	e.Tag = event.Tag
+	e.Tags = event.Tags
+	e.Message = event.Message
+	e.Severity = event.Severity
+	eventId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Uuid generation for the event failed: ", err)
+	}
+
+	e.EventId = *eventId
+
+	// querying DB to get node ID and Cluster ID for the event
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var node []models.Node
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := coll.Find(bson.M{"hostname": event.Node}).All(&node); err != nil {
+		logger.Get().Error("Node information read from DB failed for node: %s", err)
+	}
+
+	// Push the event to DB only if the node is managed
+	if !node[0].Enabled {
+		return
+	}
+	e.ClusterId = node[0].ClusterId
+	e.NodeId = node[0].NodeId
+
+	// Invoking the event handler
+	for tag, handler := range handlermap {
+		if match, err := filepath.Match(tag, e.Tag); err == nil {
+			if match {
+				if err := handler.(func(models.Event) error)(e); err != nil {
+					logger.Get().Error("Event Handling Failed for event: %s", err)
+					return
+				}
+				if err := persist_event(e); err != nil {
+					logger.Get().Error("Could not persist the event to DB: %s", err)
+					return
+				} else {
+					return
+				}
+			}
+		} else {
+			logger.Get().Error("Error while maping handler:", err)
+			return
+		}
+	}
+	logger.Get().Warning("Handler not defined for event %s", e.Tag)
+	return
+}
+
+func (l *Listener) PersistNodeDbusEvent(args *models.NodeEvent, ack *bool) error {
+	if args.Timestamp.IsZero() || args.Node == "" || args.Tag == "" || args.Message == "" || args.Severity == "" {
+		logger.Get().Error("Incomplete details in the event", *args)
+		*ack = false
+		return nil
+	}
+	go RouteEvent(*args)
 	*ack = true
 	return nil
 }
