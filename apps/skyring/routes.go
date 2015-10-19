@@ -222,6 +222,13 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.GET_ClusterSlu,
 			Version:     1,
 		},
+		{
+			Name:        "GET_events",
+			Method:      "GET",
+			Pattern:     "events",
+			HandlerFunc: GetEvents,
+			Version:     1,
+		},
 	}
 	for _, route := range routes {
 		CORE_ROUTES = append(CORE_ROUTES, route)
