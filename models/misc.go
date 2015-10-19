@@ -12,12 +12,22 @@ limitations under the License.
 */
 package models
 
+import "time"
+
 type AddStorageNodeRequest struct {
 	Hostname       string `json:"hostname"`
 	SshFingerprint string `json:"sshfingerprint"`
 	User           string `json:"user"`
 	Password       string `json:"password"`
 	SshPort        int    `json:"sshport"`
+}
+
+type NodeEvent struct {
+	Timestamp time.Time `json:"timestamp"`
+	Node      string    `json:"node"`
+	Tag       string    `json:"tag"`
+	Message   string    `json:"message"`
+	Severity  string    `json:"severity"`
 }
 
 type StorageNodes []StorageNode
@@ -27,6 +37,7 @@ const (
 	REQUEST_SIZE_LIMIT         = 1048576
 	COLL_NAME_STORAGE_NODES    = "storage_nodes"
 	COLL_NAME_STORAGE_CLUSTERS = "storage_clusters"
+	COLL_NAME_NODE_EVENTS      = "node_events"
 	NODE_STATE_FREE            = "free"
 	NODE_STATE_UNMANAGED       = "unmanaged"
 	NODE_STATE_USED            = "used"
