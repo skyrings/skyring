@@ -97,15 +97,32 @@ class JsonRpcClient:
         else:
             self.close()
 
+def getTimestamp(time_stamp):
+    naiveTime = datetime.strptime(time_stamp, "%Y-%m-%dT%H:%M:%S.%f")
+    timestamp = naiveTime.replace(tzinfo=pytz.UTC)
+    return timestamp
 
 def PushNodeStartEvent(data):
-    naiveTime = datetime.strptime(data['_stamp'], "%Y-%m-%dT%H:%M:%S.%f")
-    timestamp = naiveTime.replace(tzinfo=pytz.UTC)
+    timestamp = getTimestamp(data['_stamp'])
     node = data['id']
     try:
         with JsonRpcClient() as c:
             c.call("Listener.PushNodeStartEvent",
                    {'timestamp': timestamp, 'node': node})
+    except (socket.error, JSONRPCError) as e:
+        log.error(e, exc_info=True)
+
+def PushNodeDbusEvent(data):
+    timestamp = getTimestamp(data['_stamp'])
+    node = data['id']
+    tag = data['tag']
+    message = data['data']['message']
+    severity = data['data']['severity']
+    try:
+        with JsonRpcClient() as c:
+            c.call("Listener.PersistNodeDbusEvent",
+                   {'timestamp': timestamp, 'node': node, 'tag': tag, 'message': message,
+                    'severity': severity})
     except (socket.error, JSONRPCError) as e:
         log.error(e, exc_info=True)
 
@@ -122,7 +139,8 @@ def run():
     # tag and data variables are from salt
     if data.get('tag') and fnmatch.fnmatch(data['tag'], 'salt/minion/*/start'):
         PushNodeStartEvent(data)
+    elif data.get('tag') and fnmatch.fnmatch(data['tag'], 'dbus/node/*'):
+        PushNodeDbusEvent(data)
     else:
         PushEvent(data)
-
     return {}
