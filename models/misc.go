@@ -12,7 +12,10 @@ limitations under the License.
 */
 package models
 
-import "github.com/skyrings/skyring/tools/uuid"
+import (
+	"github.com/skyrings/skyring/tools/uuid"
+	"time"
+)
 
 type AddStorageNodeRequest struct {
 	Hostname       string `json:"hostname"`
@@ -22,6 +25,26 @@ type AddStorageNodeRequest struct {
 	SshPort        int    `json:"sshport"`
 }
 
+type NodeEvent struct {
+	Timestamp time.Time         `json:"timestamp"`
+	Node      string            `json:"node"`
+	Tag       string            `json:"tag"`
+	Tags      map[string]string `json:"tags"`
+	Message   string            `json:"message"`
+	Severity  string            `json:"severity"`
+}
+
+type Event struct {
+	EventId   uuid.UUID         `json:"event_id"`
+	ClusterId uuid.UUID         `json:"cluster_id"`
+	NodeId    uuid.UUID         `json:"node_id"`
+	Timestamp time.Time         `json:"timestamp"`
+	Tag       string            `json:"tag"`
+	Tags      map[string]string `json:"tags"`
+	Message   string            `json:"message"`
+	Severity  string            `json:"severity"`
+}
+
 type StorageNodes []StorageNode
 
 const (
@@ -29,6 +52,7 @@ const (
 	REQUEST_SIZE_LIMIT         = 1048576
 	COLL_NAME_STORAGE_NODES    = "storage_nodes"
 	COLL_NAME_STORAGE_CLUSTERS = "storage_clusters"
+	COLL_NAME_NODE_EVENTS      = "node_events"
 	NODE_STATE_FREE            = "free"
 	NODE_STATE_UNMANAGED       = "unmanaged"
 	NODE_STATE_USED            = "used"
