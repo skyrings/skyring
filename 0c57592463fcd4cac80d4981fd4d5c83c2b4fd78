@@ -243,6 +243,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_63f3ed73",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-19T09:27:49Z",
+      "side": 1,
+      "message": "For example, disk event may have different structure than network device event.  How are they differentiated in the event structure?",
+      "parentUuid": "9ab29df4_439b49c9",
+      "range": {
+        "startLine": 62,
+        "startChar": 9,
+        "endLine": 62,
+        "endChar": 20
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_bac0cd7d",
         "filename": "utils/event_listener.go",
         "patchSetId": 2
