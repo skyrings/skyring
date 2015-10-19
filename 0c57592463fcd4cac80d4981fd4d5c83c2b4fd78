@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_c024afc8",
+        "filename": "events/events.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-19T07:00:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_3a0afdd2",
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_3aee7d23",
         "filename": "salt/push_event.sls",
         "patchSetId": 2
@@ -48,6 +66,30 @@
       "writtenOn": "2015-10-15T12:51:29Z",
       "side": 1,
       "message": "Have a function to getTimestamp()",
+      "range": {
+        "startLine": 114,
+        "startChar": 26,
+        "endLine": 114,
+        "endChar": 33
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_e021b3b5",
+        "filename": "salt/push_event.sls",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-19T07:00:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_3aee7d23",
       "range": {
         "startLine": 114,
         "startChar": 26,
@@ -83,6 +125,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_00fce73d",
+        "filename": "salt/push_event.sls",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-19T07:00:26Z",
+      "side": 1,
+      "message": "Since we push only interested events to salt master in dbus_agent and only events pushed by the dbus_agent will have a tag dbus/node/*. All these events are interested events, these can be handled appropriately in skyring.So pushing everything here.",
+      "parentUuid": "9ab29df4_ba928d9d",
+      "range": {
+        "startLine": 140,
+        "startChar": 28,
+        "endLine": 140,
+        "endChar": 29
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_1ad0d952",
         "filename": "utils/event_listener.go",
         "patchSetId": 2
@@ -94,6 +160,30 @@
       "writtenOn": "2015-10-15T12:51:29Z",
       "side": 1,
       "message": "You need to check args has properly returned ie what if args{Timestamp, Node} are empty/nil?",
+      "range": {
+        "startLine": 58,
+        "startChar": 22,
+        "endLine": 58,
+        "endChar": 23
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_e3645de7",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-19T07:00:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_1ad0d952",
       "range": {
         "startLine": 58,
         "startChar": 22,
@@ -129,6 +219,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_439b49c9",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-19T07:00:26Z",
+      "side": 1,
+      "message": "Here I am storing the \"event\" which is a defined structure, Not sure of what you meant by arbitrary values.",
+      "parentUuid": "9ab29df4_fae32531",
+      "range": {
+        "startLine": 62,
+        "startChar": 9,
+        "endLine": 62,
+        "endChar": 20
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_bac0cd7d",
         "filename": "utils/event_listener.go",
         "patchSetId": 2
@@ -140,6 +254,30 @@
       "writtenOn": "2015-10-15T12:51:29Z",
       "side": 1,
       "message": "Why not log.error()?",
+      "range": {
+        "startLine": 64,
+        "startChar": 15,
+        "endLine": 64,
+        "endChar": 20
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_036231d8",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-19T07:00:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_bac0cd7d",
       "range": {
         "startLine": 64,
         "startChar": 15,
