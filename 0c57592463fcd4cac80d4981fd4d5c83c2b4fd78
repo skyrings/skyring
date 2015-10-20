@@ -267,6 +267,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_2f1d54be",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-20T05:57:29Z",
+      "side": 1,
+      "message": "As of this patch, only the details that is common to all events is handled. I will send another patch(working on it currently) to take care of the variable details which comes as tags.",
+      "parentUuid": "9ab29df4_63f3ed73",
+      "range": {
+        "startLine": 62,
+        "startChar": 9,
+        "endLine": 62,
+        "endChar": 20
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_bac0cd7d",
         "filename": "utils/event_listener.go",
         "patchSetId": 2
