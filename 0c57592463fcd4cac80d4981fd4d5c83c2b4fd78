@@ -291,6 +291,30 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_ea226a00",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-20T08:59:10Z",
+      "side": 1,
+      "message": "This is what I was talking about arbitrary value ie tag may have any value which may lead into run time error.  I would prefer to have it as statically typed.",
+      "parentUuid": "9ab29df4_2f1d54be",
+      "range": {
+        "startLine": 62,
+        "startChar": 9,
+        "endLine": 62,
+        "endChar": 20
+      },
+      "revId": "0c57592463fcd4cac80d4981fd4d5c83c2b4fd78",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_bac0cd7d",
         "filename": "utils/event_listener.go",
         "patchSetId": 2
