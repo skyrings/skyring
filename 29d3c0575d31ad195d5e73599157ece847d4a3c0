@@ -81,6 +81,30 @@
       "revId": "29d3c0575d31ad195d5e73599157ece847d4a3c0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_ca25a60b",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-20T08:59:10Z",
+      "side": 1,
+      "message": "Why does an event tell about the severity? I thought skyring core knows about each event\u0027s severity.  I can\u0027t understand this part.",
+      "parentUuid": "9ab29df4_af1164ae",
+      "range": {
+        "startLine": 58,
+        "startChar": 23,
+        "endLine": 58,
+        "endChar": 31
+      },
+      "revId": "29d3c0575d31ad195d5e73599157ece847d4a3c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
