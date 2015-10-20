@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_a52505ad",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-20T11:36:05Z",
+      "side": 1,
+      "message": "please use tools/logger from https://review.gerrithub.io/249790",
+      "range": {
+        "startLine": 17,
+        "startChar": 9,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "a98fd16f5d39721e2b7a8b5aca0a3c370eddf99d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_056231d8",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-20T11:36:05Z",
+      "side": 1,
+      "message": "I would prefer a function in db package something like func GetEvents() which returns []models.NodeEvents",
+      "range": {
+        "startLine": 27,
+        "startChar": 19,
+        "endLine": 27,
+        "endChar": 31
+      },
+      "revId": "a98fd16f5d39721e2b7a8b5aca0a3c370eddf99d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_e5645de7",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-20T11:36:05Z",
+      "side": 1,
+      "message": "use if like below\n\nif err :\u003d collection....; err !\u003d nil {\n    failure\n} else if bytes, err :\u003d json.Marshal...; err !\u003d nil {\n    failure\n} else {\n    success\n}",
+      "range": {
+        "startLine": 32,
+        "startChar": 18,
+        "endLine": 32,
+        "endChar": 19
+      },
+      "revId": "a98fd16f5d39721e2b7a8b5aca0a3c370eddf99d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_255f3510",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-20T11:36:05Z",
+      "side": 1,
+      "message": "It would be better if we have http.ResponseWriter as json aware.",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 9
+      },
+      "revId": "a98fd16f5d39721e2b7a8b5aca0a3c370eddf99d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
