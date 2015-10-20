@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_161a6d6e",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-20T05:57:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_e3fe1d38",
+      "revId": "29d3c0575d31ad195d5e73599157ece847d4a3c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_23f9f54d",
         "filename": "utils/event_listener.go",
         "patchSetId": 3
@@ -30,6 +48,30 @@
       "writtenOn": "2015-10-19T09:27:49Z",
       "side": 1,
       "message": "What is severity here?",
+      "range": {
+        "startLine": 58,
+        "startChar": 23,
+        "endLine": 58,
+        "endChar": 31
+      },
+      "revId": "29d3c0575d31ad195d5e73599157ece847d4a3c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_af1164ae",
+        "filename": "utils/event_listener.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-10-20T05:57:29Z",
+      "side": 1,
+      "message": "Each event will have a severity which tells, if an event is { INFO or WARNING of CRITICAL} event",
+      "parentUuid": "9ab29df4_23f9f54d",
       "range": {
         "startLine": 58,
         "startChar": 23,
