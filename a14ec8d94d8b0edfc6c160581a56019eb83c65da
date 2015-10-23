@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9ab29df4_c182dfff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-10-23T12:29:59Z",
+      "side": 1,
+      "message": "\u0027networks\u0027 is already provided in cluster creation. this is not required again",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_41624fd9",
         "filename": "backend/backend.go",
         "patchSetId": 2
