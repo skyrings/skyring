@@ -224,6 +224,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_619cb36a",
+        "filename": "backend/backend.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T12:31:27Z",
+      "side": 1,
+      "message": "You could enhance AcceptNode() to have rejected(ignored) keys as well.  Technically there is no difference",
+      "parentUuid": "9ab29df4_01205748",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_01af77e4",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 2
@@ -282,6 +300,24 @@
       "side": 1,
       "message": "I tried master.call_func and keys were not getting rejected. So finallu used keycli reject function.\nNow this function intercatively asks for confirmation and if yes\u003dTrue passed in opts, supresses the same.",
       "parentUuid": "9ab29df4_21ac7bed",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_e187e30d",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T12:31:27Z",
+      "side": 1,
+      "message": "I guess input (match) could be wrong.  You can check what value salt.wheel.key.reject/reject_dict expects",
+      "parentUuid": "9ab29df4_81d38737",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -569,6 +605,24 @@
       "side": 1,
       "message": "AdminStatus",
       "parentUuid": "9ab29df4_81e9c71c",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_017cd71f",
+        "filename": "models/core_models.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T12:31:27Z",
+      "side": 1,
+      "message": "What is this string variable for?  If you keep whether this node needs to be monitored or not, i would prefer to have just \u0027Disable\u0027 or \u0027DisableMgmt\u0027 as bool",
+      "parentUuid": "9ab29df4_a1bfabcf",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
