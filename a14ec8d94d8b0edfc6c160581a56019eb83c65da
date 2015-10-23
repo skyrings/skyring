@@ -1,0 +1,366 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_41624fd9",
+        "filename": "backend/backend.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "NodeList struct already has \u0027Ignore []Node\u0027.  Why do you need salt specific \u0027RejectedFingerprint\u0027?",
+      "range": {
+        "startLine": 59,
+        "startChar": 1,
+        "endLine": 59,
+        "endChar": 23
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_819b87c8",
+        "filename": "backend/backend.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "Its better to have prototype as\n\nDisableService(node string, service string, stop bool)",
+      "range": {
+        "startLine": 60,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 22
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_a1a08bf5",
+        "filename": "backend/backend.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 61,
+        "startChar": 1,
+        "endLine": 61,
+        "endChar": 22
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_e17363af",
+        "filename": "backend/backend.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "Overall, you should avoid salt specific function names",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 66
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_c1a57f05",
+        "filename": "backend/backend.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "There is already AcceptNode()? Why do you need this function?",
+      "range": {
+        "startLine": 62,
+        "startChar": 1,
+        "endLine": 62,
+        "endChar": 19
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_01af77e4",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "Why are you changing global opts?",
+      "range": {
+        "startLine": 75,
+        "startChar": 21,
+        "endLine": 75,
+        "endChar": 23
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_21ac7bed",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "Why can\u0027t you use master.call_func()?",
+      "range": {
+        "startLine": 76,
+        "startChar": 23,
+        "endLine": 76,
+        "endChar": 29
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_e181a34b",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "You should use service state module or execution module",
+      "range": {
+        "startLine": 263,
+        "startChar": 43,
+        "endLine": 263,
+        "endChar": 50
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_21939ba4",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "remove this println()",
+      "range": {
+        "startLine": 137,
+        "startChar": 6,
+        "endLine": 137,
+        "endChar": 13
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_41908f95",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "remove these println",
+      "range": {
+        "startLine": 146,
+        "startChar": 13,
+        "endLine": 146,
+        "endChar": 14
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_81d0e754",
+        "filename": "models/core_models.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "Why can\u0027t it be just Node?",
+      "range": {
+        "startLine": 20,
+        "startChar": 16,
+        "endLine": 20,
+        "endChar": 17
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_41e7af40",
+        "filename": "models/core_models.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "Why can\u0027t it be just ID?",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 21,
+        "endChar": 5
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_01ddb770",
+        "filename": "models/core_models.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "You could have PublicIP4 similarly ManagementIP4 and ClusterIP4",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_81e9c71c",
+        "filename": "models/core_models.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "variable name is too long I feel",
+      "range": {
+        "startLine": 37,
+        "startChar": 1,
+        "endLine": 37,
+        "endChar": 21
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_c1cadfa0",
+        "filename": "models/misc.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "Why is it called misc?",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_01c4d790",
+        "filename": "utils/util.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:39:50Z",
+      "side": 1,
+      "message": "Why do you need this?",
+      "range": {
+        "startLine": 86,
+        "startChar": 25,
+        "endLine": 86,
+        "endChar": 34
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
