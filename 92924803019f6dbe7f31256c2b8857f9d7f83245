@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_0113f75c",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:13:17Z",
+      "side": 1,
+      "message": "Why are you running arbitrary pillar data?",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_2110fb4d",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:13:17Z",
+      "side": 1,
+      "message": "Why are you running highstate?",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_e10e0334",
+        "filename": "salt/collectd_formulae/collectd/df.sls",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:13:17Z",
+      "side": 1,
+      "message": "have these files under salt/conf/collectd",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_2622d1b9",
+        "filename": "salt/collectd_formulae/collectd/files/collectd.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:13:17Z",
+      "side": 1,
+      "message": "I can\u0027t understand the requirement of pillar data.",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_a61d0176",
+        "filename": "salt/collectd_formulae/collectd/files/collectd.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:13:17Z",
+      "side": 1,
+      "message": "Why do need to change default value of FQDNLookup ?",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_c612f561",
+        "filename": "salt/collectd_formulae/collectd/files/collectd.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:13:17Z",
+      "side": 1,
+      "message": "Why do we need pillar data?",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_2609f131",
+        "filename": "salt/collectd_formulae/collectd/files/df.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:13:17Z",
+      "side": 1,
+      "message": "What does this plugin do?",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_c109ff2d",
+        "filename": "salt/collectd_formulae/top.sls",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-23T10:13:17Z",
+      "side": 1,
+      "message": "why do you need this?",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
