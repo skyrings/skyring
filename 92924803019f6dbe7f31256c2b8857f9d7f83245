@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_7788f122",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-24T09:19:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_0113f75c",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_2110fb4d",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-10-23T10:13:17Z",
       "side": 1,
       "message": "Why are you running highstate?",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_978d8534",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-24T09:19:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_2110fb4d",
       "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_d787fd0d",
+        "filename": "salt/collectd_formulae/collectd/df.sls",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-24T09:19:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_e10e0334",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_2622d1b9",
         "filename": "salt/collectd_formulae/collectd/files/collectd.conf",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2015-10-23T10:13:17Z",
       "side": 1,
       "message": "I can\u0027t understand the requirement of pillar data.",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_1779752f",
+        "filename": "salt/collectd_formulae/collectd/files/collectd.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-24T09:19:47Z",
+      "side": 1,
+      "message": "When we push to influxdb this value is used in the name of the table as you say its least likely that anyone would like to have a hostname that is not something returned by hostname command but yet collectd kept this option open for configuration and so I thought it might make sense for us also to keep it open. I\u0027ll modify it to use its fqdn itself in my subsequent patch",
+      "parentUuid": "9ab29df4_2622d1b9",
       "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_3776793f",
+        "filename": "salt/collectd_formulae/collectd/files/collectd.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-24T09:19:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_a61d0176",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_c612f561",
         "filename": "salt/collectd_formulae/collectd/files/collectd.conf",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2015-10-23T10:13:17Z",
       "side": 1,
       "message": "Why do we need pillar data?",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_5773ed4c",
+        "filename": "salt/collectd_formulae/collectd/files/collectd.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-24T09:19:47Z",
+      "side": 1,
+      "message": "This data anyway is coming from the map.jinja file. So, user need not compulsorily provide value for this. However, if we want to have some other path we could do it with this option.",
+      "parentUuid": "9ab29df4_c612f561",
       "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -132,6 +240,24 @@
       "writtenOn": "2015-10-23T10:13:17Z",
       "side": 1,
       "message": "why do you need this?",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_778f1124",
+        "filename": "salt/collectd_formulae/top.sls",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-24T09:19:47Z",
+      "side": 1,
+      "message": "Removing in my next commit. In my previous approach I used to do it as highstate which requires a top file.",
+      "parentUuid": "9ab29df4_c109ff2d",
       "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
