@@ -229,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_57aa0d71",
+        "filename": "salt/collectd_formulae/collectd/files/df.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-10-24T10:06:39Z",
+      "side": 1,
+      "message": "This is for mount point utilization and inode utilization",
+      "parentUuid": "9ab29df4_2609f131",
+      "revId": "92924803019f6dbe7f31256c2b8857f9d7f83245",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_c109ff2d",
         "filename": "salt/collectd_formulae/top.sls",
         "patchSetId": 1
