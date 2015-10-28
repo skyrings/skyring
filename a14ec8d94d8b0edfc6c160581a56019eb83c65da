@@ -342,6 +342,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_7f9c3e6a",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-28T07:42:25Z",
+      "side": 1,
+      "message": "Where do you need include_accepted\u003dTrue?  IMO we should not use CLI tools",
+      "parentUuid": "9ab29df4_dcd8fd55",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_e181a34b",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 2
@@ -395,6 +413,24 @@
       "side": 1,
       "message": "I tried with master.call_func to invoke the method service.disable and service.start etc but no success.\nDo you mean some other way for this?",
       "parentUuid": "9ab29df4_c1dd7f44",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_df82aaff",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-28T07:42:25Z",
+      "side": 1,
+      "message": "Why did you use master here as you suppose run in minions?",
+      "parentUuid": "9ab29df4_3ca3b99f",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -677,6 +713,24 @@
       "side": 1,
       "message": "Its not only for disable mgmt, node can have different admin status values like free/used/unmanaged",
       "parentUuid": "9ab29df4_017cd71f",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_5f769a3f",
+        "filename": "models/core_models.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-28T07:42:25Z",
+      "side": 1,
+      "message": "I am unable to relate these status values as the struct has clusterID member",
+      "parentUuid": "9ab29df4_9cc12531",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
