@@ -378,6 +378,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_3f51e662",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-28T08:54:58Z",
+      "side": 1,
+      "message": "I am still not clear.  Do you want salt.wheel.key.reject()/reject_dict() have option for include_accepted\u003dTrue?",
+      "parentUuid": "9ab29df4_1fca624f",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_e181a34b",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 2
@@ -467,6 +485,24 @@
       "side": 1,
       "message": "I am planning to have run_state kind of method and have two sls files like disable_service.sls and enable_service.sls.\nI will use this mechanism for service handling. Hope that is fine?",
       "parentUuid": "9ab29df4_df82aaff",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_ffd68ec4",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-28T08:54:58Z",
+      "side": 1,
+      "message": "Still I am not clear here too.  why local.cmd(node, \"service.disable\", [\"myservice\"]) is not working for you.",
+      "parentUuid": "9ab29df4_3fc72647",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -785,6 +821,24 @@
       "side": 1,
       "message": "Earlier this was called managed_state and values are free/used/unmanaged. The same variable is re-named as adminstatus.\n\nOn the similar lines for cluster we admin status with valid values as inactive/active/creating etc.\n\nHope this clarifies!",
       "parentUuid": "9ab29df4_5f769a3f",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_dfe8ea7e",
+        "filename": "models/core_models.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-28T08:54:58Z",
+      "side": 1,
+      "message": "When does StorageNode{} have adminStatus \u003d \"free\"? when ClusterID \u003d\u003d nil?",
+      "parentUuid": "9ab29df4_9fdd9217",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
