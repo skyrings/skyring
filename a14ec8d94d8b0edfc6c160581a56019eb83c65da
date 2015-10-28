@@ -19,6 +19,98 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_323e7db9",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-28T11:23:31Z",
+      "side": 1,
+      "message": "Once the OSDs are created, we need to mark the disks as used. Are we doing that?. Also we need to have a sync job to sync up the node info\n\nThis is applicable when creating the clusters too",
+      "range": {
+        "startLine": 269,
+        "startChar": 1,
+        "endLine": 271,
+        "endChar": 9
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_32375de5",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-28T11:23:31Z",
+      "side": 1,
+      "message": "Remove the prints",
+      "range": {
+        "startLine": 278,
+        "startChar": 1,
+        "endLine": 278,
+        "endChar": 20
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_924d8975",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-28T11:23:31Z",
+      "side": 1,
+      "message": "same a s above",
+      "range": {
+        "startLine": 279,
+        "startChar": 1,
+        "endLine": 279,
+        "endChar": 18
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_5255b1c4",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-28T11:23:31Z",
+      "side": 1,
+      "message": "modify as manage/unmanage, which is kind of more used in network management world",
+      "range": {
+        "startLine": 163,
+        "startChar": 18,
+        "endLine": 163,
+        "endChar": 29
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_41624fd9",
         "filename": "backend/backend.go",
         "patchSetId": 2
@@ -874,6 +966,144 @@
       "side": 1,
       "message": "core_models define the basic entity models and all other helper models are defined here.\nJust thought of using name misc.go\nCan you suggest any other name, will use that.",
       "parentUuid": "9ab29df4_c1cadfa0",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_52be9100",
+        "filename": "models/misc.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-28T11:23:31Z",
+      "side": 1,
+      "message": "Do we really need three states? managed/unmanaged is good enough I think",
+      "range": {
+        "startLine": 51,
+        "startChar": 1,
+        "endLine": 53,
+        "endChar": 8
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_b23c4d95",
+        "filename": "models/misc.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-28T11:23:31Z",
+      "side": 1,
+      "message": "this may create some issue when you send resp. can use \u0027and\u0027 instead",
+      "range": {
+        "startLine": 72,
+        "startChar": 9,
+        "endLine": 72,
+        "endChar": 11
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_b2bfedcf",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-28T11:23:31Z",
+      "side": 1,
+      "message": "remove print",
+      "range": {
+        "startLine": 139,
+        "startChar": 1,
+        "endLine": 139,
+        "endChar": 29
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_f2b965ea",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-28T11:23:31Z",
+      "side": 1,
+      "message": "remove print",
+      "range": {
+        "startLine": 158,
+        "startChar": 1,
+        "endLine": 158,
+        "endChar": 5
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_32cbdd73",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-28T11:23:31Z",
+      "side": 1,
+      "message": "remove prints",
+      "range": {
+        "startLine": 172,
+        "startChar": 1,
+        "endLine": 173,
+        "endChar": 15
+      },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_52c85174",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-28T11:23:31Z",
+      "side": 1,
+      "message": "remove prints",
+      "range": {
+        "startLine": 182,
+        "startChar": 12,
+        "endLine": 182,
+        "endChar": 35
+      },
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
