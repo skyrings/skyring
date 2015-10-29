@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_01ee8588",
+        "filename": "tools/task/manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-29T16:13:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_6134a1de",
+      "revId": "92e7e41b57fa796a2b0e5fc25c0ae4c9e05ed569",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_c1a00df7",
         "filename": "tools/task/manager.go",
         "patchSetId": 4
@@ -42,6 +60,24 @@
         "endLine": 38,
         "endChar": 17
       },
+      "revId": "92e7e41b57fa796a2b0e5fc25c0ae4c9e05ed569",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_2102a93e",
+        "filename": "tools/task/manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-29T16:13:00Z",
+      "side": 1,
+      "message": "Will be done as separate patch",
+      "parentUuid": "9ab29df4_c1a00df7",
       "revId": "92e7e41b57fa796a2b0e5fc25c0ae4c9e05ed569",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
