@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_ab885823",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "9ab29df4_c182dfff",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_323e7db9",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 2
@@ -36,6 +54,24 @@
         "endLine": 271,
         "endChar": 9
       },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_cb8d8c33",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_323e7db9",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -65,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_eb8250ff",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_32375de5",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_924d8975",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 2
@@ -88,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_0b88641e",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_924d8975",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_5255b1c4",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 2
@@ -105,6 +177,24 @@
         "endLine": 163,
         "endChar": 29
       },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_2b7c4820",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_5255b1c4",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -334,6 +424,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_4b797c2e",
+        "filename": "backend/backend.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_619cb36a",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_01af77e4",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 2
@@ -488,6 +596,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_6b764040",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Modified to use salt.key.Key.reject as discussed",
+      "parentUuid": "9ab29df4_3f51e662",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_e181a34b",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 2
@@ -595,6 +721,24 @@
       "side": 1,
       "message": "Still I am not clear here too.  why local.cmd(node, \"service.disable\", [\"myservice\"]) is not working for you.",
       "parentUuid": "9ab29df4_3fc72647",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_8b73944c",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_ffd68ec4",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -937,6 +1081,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_ab8f7822",
+        "filename": "models/core_models.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Will change as Enabled\u003dTrue/False",
+      "parentUuid": "9ab29df4_dfe8ea7e",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_c1cadfa0",
         "filename": "models/misc.go",
         "patchSetId": 2
@@ -995,6 +1157,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_cb94ac39",
+        "filename": "models/misc.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Will rename as Enabled\u003dTrue/False and Node would be considered as free if ClusterId field is not populated yet.",
+      "parentUuid": "9ab29df4_52be9100",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_b23c4d95",
         "filename": "models/misc.go",
         "patchSetId": 2
@@ -1012,6 +1192,24 @@
         "endLine": 72,
         "endChar": 11
       },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_eb99706f",
+        "filename": "models/misc.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_b23c4d95",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -1041,6 +1239,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_0b9f8453",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_b2bfedcf",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_f2b965ea",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 2
@@ -1058,6 +1274,24 @@
         "endLine": 158,
         "endChar": 5
       },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_2ba3689f",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_f2b965ea",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -1087,6 +1321,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_4ba09c90",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_32cbdd73",
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_52c85174",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 2
@@ -1104,6 +1356,24 @@
         "endLine": 182,
         "endChar": 35
       },
+      "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_6bad6088",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-10-29T04:16:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_52c85174",
       "revId": "a14ec8d94d8b0edfc6c160581a56019eb83c65da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
