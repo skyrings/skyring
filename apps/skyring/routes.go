@@ -180,6 +180,34 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.Expand_Cluster,
 			Version:     1,
 		},
+		{
+			Name:        "GET_ClusterNodes",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/nodes",
+			HandlerFunc: a.GET_ClusterNodes,
+			Version:     1,
+		},
+		{
+			Name:        "GET_ClusterNode",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/nodes/{node-id}",
+			HandlerFunc: a.GET_ClusterNode,
+			Version:     1,
+		},
+		{
+			Name:        "GET_ClusterSlus",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/slus",
+			HandlerFunc: a.GET_ClusterSlus,
+			Version:     1,
+		},
+		{
+			Name:        "GET_ClusterSlu",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/slus/{slu-id}",
+			HandlerFunc: a.GET_ClusterSlu,
+			Version:     1,
+		},
 	}
 	for _, route := range routes {
 		CORE_ROUTES = append(CORE_ROUTES, route)

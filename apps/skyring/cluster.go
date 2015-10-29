@@ -350,6 +350,122 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (a *App) GET_ClusterNodes(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Errpr parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var nodes models.Nodes
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("Error getting the clusters nodes: %v", err)
+		return
+	}
+	if len(nodes) == 0 {
+		json.NewEncoder(w).Encode(models.Nodes{})
+	} else {
+		json.NewEncoder(w).Encode(nodes)
+	}
+}
+
+func (a *App) GET_ClusterNode(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	node_id_str := vars["node-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Errpr parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+	node_id, err := uuid.Parse(node_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Errpr parsing the node id: %s", node_id_str))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var node models.Node
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := coll.Find(bson.M{"clusterid": *cluster_id, "nodeid": *node_id}).One(&node); err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("Error getting the clusters node: %v", err)
+		return
+	}
+	if node.Hostname == "" {
+		util.HttpResponse(w, http.StatusBadRequest, "Node not found")
+		logger.Get().Error("Node not found: %v", err)
+		return
+	} else {
+		json.NewEncoder(w).Encode(node)
+	}
+}
+
+func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Errpr parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var slus []models.StorageLogicalUnit
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&slus); err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("Error getting the clusters slus: %v", err)
+		return
+	}
+	if len(slus) == 0 {
+		json.NewEncoder(w).Encode([]models.StorageLogicalUnit{})
+	} else {
+		json.NewEncoder(w).Encode(slus)
+	}
+}
+
+func (a *App) GET_ClusterSlu(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	slu_id_str := vars["slu-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Errpr parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+	slu_id, err := uuid.Parse(slu_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Errpr parsing the slu id: %s", slu_id_str))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var slu models.StorageLogicalUnit
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	if err := coll.Find(bson.M{"clusterid": *cluster_id, "sluid": *slu_id}).One(&slu); err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("Error getting the clusters slu: %v", err)
+		return
+	}
+	if slu.Name == "" {
+		util.HttpResponse(w, http.StatusBadRequest, "Slu not found")
+		logger.Get().Error("Slu not found: %v", err)
+		return
+	} else {
+		json.NewEncoder(w).Encode(slu)
+	}
+}
+
 func disks_used(nodes []models.ClusterNode) (bool, error) {
 	for _, node := range nodes {
 		uuid, err := uuid.Parse(node.NodeId)
