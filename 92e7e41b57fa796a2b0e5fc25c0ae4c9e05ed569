@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_6134a1de",
+        "filename": "tools/task/manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-29T13:37:02Z",
+      "side": 1,
+      "message": "As discussed, return the value rather than returning a pointer",
+      "range": {
+        "startLine": 27,
+        "startChar": 59,
+        "endLine": 27,
+        "endChar": 66
+      },
+      "revId": "92e7e41b57fa796a2b0e5fc25c0ae4c9e05ed569",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_c1a00df7",
+        "filename": "tools/task/manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-10-29T13:37:02Z",
+      "side": 1,
+      "message": "As discussed, we need to update the task information into DB",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 17
+      },
+      "revId": "92e7e41b57fa796a2b0e5fc25c0ae4c9e05ed569",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
