@@ -1,0 +1,418 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_45b7a886",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "Any cluster entity in skyring are managed ie a cluster is enable/disable management, expand/forget etc.  An unmanaged cluster means skyring has no control on the cluster, such cluster can be added/imported.\n\nI feel manage/unmanage is quite confusing.",
+      "range": {
+        "startLine": 13,
+        "startChar": 16,
+        "endLine": 13,
+        "endChar": 20
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_65bcac6a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "Its not very clear whether mon is an optional entity.  It would be clear if input is like below\n\n{\"node_id\": ID,\n # node_type is provider specific value which has to be there even if its not applicable for the given cluster eg. no node_type in gluster cluster\n \"node_type\": \"TYPE\",\n \"devices\": [{\"name\": \"vdb\", \"fs_type\": \"xfs\", \"options\": {}}, ...]\n  \"options\": {\"provider\": \"specific\", \"key\": \"value\", ...}}",
+      "range": {
+        "startLine": 18,
+        "startChar": 32,
+        "endLine": 18,
+        "endChar": 39
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_456ec802",
+        "filename": "backend/backend.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "You should avoid salt specific things here.  I am not favor of having a new argument here.  AcceptNode() should work with ignore list by default.  If this is confusing, I would prefer \u0027ignored\u0027 than \u0027include_rejected\u0027.",
+      "range": {
+        "startLine": 52,
+        "startChar": 45,
+        "endLine": 52,
+        "endChar": 61
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_a57404d0",
+        "filename": "backend/backend.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "it would be good to work with one service at a time.  Otherwise its very difficult to have clear return value ie (bool, error) is not enough.",
+      "range": {
+        "startLine": 60,
+        "startChar": 20,
+        "endLine": 60,
+        "endChar": 21
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_c581f890",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "Please remove these unused functions.",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 10
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_a55b2453",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "0. just use \u0027accepted \u003d master.call_func(\"key.accept\", match\u003dnode, include_rejected\u003dinclude_rejected). No \u0027if\u0027 block required\n\n1. If possible, please use salt.key.Key class",
+      "range": {
+        "startLine": 92,
+        "startChar": 18,
+        "endLine": 92,
+        "endChar": 19
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_054bf087",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "\"service\" is better than \"srvcs\"",
+      "range": {
+        "startLine": 256,
+        "startChar": 26,
+        "endLine": 256,
+        "endChar": 31
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_2550f431",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "\"DisableService\" is more appropriate as it works for only one service.",
+      "range": {
+        "startLine": 259,
+        "startChar": 30,
+        "endLine": 259,
+        "endChar": 31
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_4545e86e",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 267,
+        "startChar": 0,
+        "endLine": 267,
+        "endChar": 53
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_c5581859",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "Run pep8 and pyflakes",
+      "range": {
+        "startLine": 269,
+        "startChar": 4,
+        "endLine": 269,
+        "endChar": 10
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_65410c5a",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "It would be clear to read if we have json element \u0027management_ip4\u0027 than \u0027managementip4\u0027.  If you agree, you could fix wherever its applicable",
+      "range": {
+        "startLine": 24,
+        "startChar": 41,
+        "endLine": 24,
+        "endChar": 54
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_852540c4",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "too long",
+      "range": {
+        "startLine": 61,
+        "startChar": 39,
+        "endLine": 61,
+        "endChar": 61
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_05193088",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "too long",
+      "range": {
+        "startLine": 63,
+        "startChar": 1,
+        "endLine": 63,
+        "endChar": 24
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_251e3471",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "Why not just ID",
+      "range": {
+        "startLine": 79,
+        "startChar": 1,
+        "endLine": 79,
+        "endChar": 10
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_45132866",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "Just Name",
+      "range": {
+        "startLine": 80,
+        "startChar": 1,
+        "endLine": 80,
+        "endChar": 12
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_65182c82",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "CompatVer or CompatVersion is better",
+      "range": {
+        "startLine": 81,
+        "startChar": 1,
+        "endLine": 81,
+        "endChar": 21
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_850c6044",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "Type is good",
+      "range": {
+        "startLine": 82,
+        "startChar": 1,
+        "endLine": 82,
+        "endChar": 12
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_c5065820",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-30T05:31:33Z",
+      "side": 1,
+      "message": "In short, its not good idea to repeat struct name eg \n\ntype User struct {Username string}\n\ncould be changed\n\ntype User struct {Name string}",
+      "range": {
+        "startLine": 89,
+        "startChar": 1,
+        "endLine": 89,
+        "endChar": 8
+      },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
