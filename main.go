@@ -19,6 +19,7 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/op/go-logging"
+	"github.com/skyrings/skyring/apps"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
@@ -113,6 +114,9 @@ func main() {
 }
 
 func start() {
+	var (
+		application app.Application
+	)
 	var level logging.Level
 	var err error
 	if level, err = logging.LogLevel(logLevel); err != nil {
@@ -130,7 +134,7 @@ func start() {
 	conf.SystemConfig.Logging.Filename = logFile
 	conf.SystemConfig.Logging.Level = level
 
-	application := skyring.NewApp(configDir, providersDir)
+	application = skyring.NewApp(configDir, providersDir)
 	if application == nil {
 		logger.Get().Error("Unable to start application")
 		os.Exit(1)

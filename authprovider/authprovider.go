@@ -45,7 +45,6 @@ func RegisterAuthProvider(name string, factory ProvidersFactory) {
 	if _, found := providers[name]; found {
 		logger.Get().Critical("Auth provider %q was registered twice", name)
 	}
-	logger.Get().Debug("Registered auth provider %q", name)
 	providers[name] = factory
 }
 
@@ -54,7 +53,6 @@ func GetAuthProvider(name string, config io.Reader) (AuthInterface, error) {
 	defer providersMutex.Unlock()
 	f, found := providers[name]
 	if !found {
-		fmt.Println("Plugin not found", name)
 		return nil, nil
 	}
 	return f(config)
