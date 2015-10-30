@@ -9,22 +9,21 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
-CWD=`pwd`
 
 function error {
-    printf "${RED}$1${NC}\n"
+    echo -e "${RED}$@${NC}"
 }
 
 function info {
-    printf "${NC}$1${NC}\n"
+    echo -e "${NC}$@${NC}"
 }
 
 function warning {
-    printf "${YELLOW}$1${NC}\n"
+    echo -e "${YELLOW}$@${NC}"
 }
 
 function debug {
-    printf "${GREEN}$1${NC}\n"
+    echo -e "${GREEN}$@${NC}"
 }
 
 function createUser {
@@ -40,14 +39,13 @@ if ! grep -q '^Fedora release 22 (Twenty Two)$' /etc/issue; then
 fi
 
 if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root" 1>&2
+    error "This script must be run as root"
     exit 1
 fi
 
 
 # Package installation
 info "Installing necessary packages for skyring\n"
-set -x
 yum -y update
 if [ $? -ne 0 ]; then
     error "Failed to update packages"
@@ -59,47 +57,50 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-set +x
 export GOROOT=/usr/lib/golang/
 export GOPATH=~/.skyring_build/golang/gopath
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 
+SKYRINGS_SRC=$GOPATH/src/github.com/skyrings
+SKYRING_GIT=$SKYRINGS_SRC/skyring
+BIGFIN_GIT=$SKYRINGS_SRC/bigfin
+
 info "Creating go build path and structure"
-mkdir ~/.skyring_build/golang/gopath/src/github.com/skyrings/ -p
+mkdir $SKYRING_GIT -p
 mkdir -p /var/lib/skyring/providers
 mkdir /srv/salt -p
 mkdir -p /etc/skyring/providers.d
 mkdir -p /var/log/skyring
-chmod 777 /var/log/skyring
+chmod 755 /var/log/skyring
 
-# Build packages
-cd ~/.skyring_build/golang/gopath/src/github.com/skyrings/
+# Building packages
+cd $SKYRING_GIT
 [ -d skyring ] || git clone https://review.gerrithub.io/skyrings/skyring
 cd skyring
 make
 
-cd ~/.skyring_build/golang/gopath/src/github.com/skyrings/
+cd $SKYRING_GIT
 [ -d bigfin ] || git clone https://review.gerrithub.io/skyrings/bigfin
 cd bigfin
 make
-cd $CWD
+cd $PWD
 
 # Configuring packages
 # ~~~~~~~~~~~~~~~~~~~~
 
 info "Configuring Skyring providers\n"
 # Copy the salt template files:
-cp -f ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/backend/salt/sls/* /srv/salt/
-cp -f ~/.skyring_build/golang/gopath/src/github.com/skyrings/bigfin/backend/salt/sls/* /srv/salt/
+cp -f $SKYRING_GIT/backend/salt/sls/* /srv/salt/
+cp -f $BIGFIN_GIT/backend/salt/sls/* /srv/salt/
 
 # Create the configuration files
-cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/skyring.conf.sample /etc/skyring/skyring.conf
-cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/authentication.conf.sample /etc/skyring/authentication.conf
-cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/providers.d/ceph.conf.sample /etc/skyring/providers.d/ceph.conf
+cp $SKYRING_GIT/conf/sample/skyring.conf.sample /etc/skyring/skyring.conf
+cp $SKYRING_GIT/conf/sample/authentication.conf.sample /etc/skyring/authentication.conf
+cp $SKYRING_GIT/conf/sample/providers.d/ceph.conf.sample /etc/skyring/providers.d/ceph.conf
 
 # Copy the binaries into appropriate path
 cp -f ~/.skyring_build/golang/gopath/bin/skyring /usr/sbin/.
-cp -f ~/.skyring_build/golang/gopath/src/github.com/skyrings/bigfin/ceph_provider /var/lib/skyring/providers
+cp -f $BIGFIN_GIT/ceph_provider /var/lib/skyring/providers
 
 # Configuring host ip into skyring.conf
 hostip=`ip route get 1 | awk '{print $NF;exit}'`
@@ -108,12 +109,11 @@ sed -i -e "s/\"host\": \"127.0.0.1\"/\"host\": \"${hostip}\"/g" /etc/skyring/sky
 # Build python modules
 info "Building python modules"
 mkdir -p ~/.skyring_build/skyring-provider-modules
-cd ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/backend/salt/python
-python setup.py install --root ~/.skyring_build/skyring-provider-modules
-cp -r ~/.skyring_build/skyring-provider-modules/usr/lib/python2.7/site-packages/skyring /usr/lib/python2.7/site-packages/
+cd $SKYRING_GIT/backend/salt/python
+python setup.py install --root /usr/lib/python2.7/site-packages/
 
 mkdir -p ~/.skyring_build/ceph-provider-modules
-cd ~/.skyring_build/golang/gopath/src/github.com/skyrings/bigfin/backend/salt/python/
+cd $BIGFIN_GIT/backend/salt/python/
 python setup.py install --root ~/.skyring_build/ceph-provider-modules
 cp -r ~/.skyring_build/ceph-provider-modules/usr/lib/python2.7/site-packages/skyring /usr/lib/python2.7/site-packages/
 
@@ -174,13 +174,14 @@ mongo <<EOF
     show users
 EOF
 
-info "\n\n\n-------------------------------------------------------"
+info "\n\n\n-----------------------------------------------------------"
 info "Now the host setup is ready!"
-info "You can start the server by executing the following cmd:"
-info "PYTHONPATH=~/.local/lib/python2.7/site-packages skyring"
-info "Skyring log directory: /var/log/skyring"
 info "Influxdb user name: admin"
 info "Influxdb password: admin"
 info "Mongodb user name: admin"
 info "Mongodb password: admin"
-info "-------------------------------------------------------"
+info "You can start the server by executing the following cmd:"
+info "PYTHONPATH=~/.local/lib/python2.7/site-packages skyring"
+info "You can use user name as admin and password as admin to login"
+info "Skyring log directory: /var/log/skyring"
+info "-----------------------------------------------------------------"
