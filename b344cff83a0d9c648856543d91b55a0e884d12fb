@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_792531c1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-31T04:31:49Z",
+      "side": 1,
+      "message": "1. Why mon is optional? How radosgw will be added?  How a node with multiple types ie it can be mon+radosgw+something-else will handled?\n\n2. How does an admin change different filesystem for different type of nodes eg. mon would run better with ext4 whereas osd would run better in xfs with inode-size\u003d1024 and a community user prefer to use btrfs? How mount options of different fstype is selected?",
+      "parentUuid": "9ab29df4_c8c82d77",
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_456ec802",
         "filename": "backend/backend.go",
         "patchSetId": 4
@@ -248,6 +266,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_790c5143",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-31T04:31:49Z",
+      "side": 1,
+      "message": "I can\u0027t understand.  Why do we worry about salt.key.reject in key.accept?  Why isn\u0027t \u0027accepted \u003d master.call_func(\"key.accept\", match\u003dnode, include_rejected\u003dinclude_rejected)\u0027 working?",
+      "parentUuid": "9ab29df4_28a7e9be",
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_054bf087",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 4
@@ -324,6 +360,24 @@
       "side": 1,
       "message": "It works for list of services. Here srvcs is list of strings .",
       "parentUuid": "9ab29df4_2550f431",
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_99092534",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-31T04:31:49Z",
+      "side": 1,
+      "message": "Unforunately I am not able to find service module working with list of services.  Are you referring other than https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.service.html?",
+      "parentUuid": "9ab29df4_68b1e1f7",
       "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -429,6 +483,24 @@
       "side": 1,
       "message": "The provider spec has got all the names without underscore so kept inline with the same.",
       "parentUuid": "9ab29df4_65410c5a",
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_b906e91e",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-10-31T04:31:49Z",
+      "side": 1,
+      "message": "If so, provider spec would lead to unreadable structure.  I would prefer the provider spec has to be fixed first.",
+      "parentUuid": "9ab29df4_e89c116c",
       "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
