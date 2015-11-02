@@ -138,6 +138,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_7f6d1132",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-02T08:04:47Z",
+      "side": 1,
+      "message": "Ok. Adding a NodeType field",
+      "parentUuid": "9ab29df4_ff2be1e8",
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_456ec802",
         "filename": "backend/backend.go",
         "patchSetId": 4
