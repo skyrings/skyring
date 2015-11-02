@@ -120,6 +120,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_ff2be1e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-02T07:32:40Z",
+      "side": 1,
+      "message": "We would need NodeType here (which is missing) and NodeType is a list of known type of a provider.  For ceph, it could have something like \n\nNodeType: [\"MON\"]\nNodeType: [\"MON\", \"RADOSGW\"]\nNodeType: [\"OSD\"]\nNodeType: [\"MON\", \"OSD\"]  \u003c\u003d good for testing setup\n\nOther privider might have different NodeType values.  For gluster I would be just [] ATM.  But gluster.next might bring mons/bricks type of nodes here.",
+      "parentUuid": "9ab29df4_dfc1bd2f",
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_456ec802",
         "filename": "backend/backend.go",
         "patchSetId": 4
@@ -314,6 +332,24 @@
       "side": 1,
       "message": "Sorry, my bad in last comment.\nThe accept method in salt.wheel.key is as below \n\ndef accept(match):\n    \u0027\u0027\u0027\n    Accept keys based on a glob match\n    \u0027\u0027\u0027\n    skey \u003d salt.key.Key(__opts__)\n    return skey.accept(match)\n\nSo we cannot pass include_rejected here. I would have to invoke salt.key.Key.accept() functions which looks as below\n\ndef accept(self, match\u003dNone, match_dict\u003dNone, include_rejected\u003dFalse):",
       "parentUuid": "9ab29df4_790c5143",
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_5f3bed39",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-02T07:32:40Z",
+      "side": 1,
+      "message": "Ok. In previous comment, I was requesting to use salt.key.Key class in AcceptNode() too :-)",
+      "parentUuid": "9ab29df4_1fe335da",
       "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
