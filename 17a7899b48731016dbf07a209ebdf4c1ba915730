@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_fad04f55",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-02T10:35:59Z",
+      "side": 1,
+      "message": "except Info(), other functions should out to stderr",
+      "revId": "17a7899b48731016dbf07a209ebdf4c1ba915730",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_fa376fae",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-02T10:35:59Z",
+      "side": 1,
+      "message": "Why \u0027\\n\u0027?  You could add it as by default in info/error/warning/debug functions",
+      "range": {
+        "startLine": 48,
+        "startChar": 27,
+        "endLine": 48,
+        "endChar": 35
+      },
+      "revId": "17a7899b48731016dbf07a209ebdf4c1ba915730",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_da52abdc",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-02T10:35:59Z",
+      "side": 1,
+      "message": "This matches \u0027# reactor:\u0027 line too.",
+      "range": {
+        "startLine": 125,
+        "startChar": 12,
+        "endLine": 125,
+        "endChar": 19
+      },
+      "revId": "17a7899b48731016dbf07a209ebdf4c1ba915730",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_1a6423b8",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-02T10:35:59Z",
+      "side": 1,
+      "message": "Its better to check the service status after the sleep",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 5
+      },
+      "revId": "17a7899b48731016dbf07a209ebdf4c1ba915730",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
