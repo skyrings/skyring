@@ -31,7 +31,7 @@ func (s Status) String() string {
 }
 
 type Task struct {
-	Mutex     sync.Mutex
+	Mutex     *sync.Mutex
 	ID        uuid.UUID
 	Name      string
 	Tag       map[string]string
