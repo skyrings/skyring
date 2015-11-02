@@ -102,6 +102,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_dfc1bd2f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-02T06:27:18Z",
+      "side": 1,
+      "message": "1. The same API wuould be used for gluster and other providers as well. In that case why mon has to be provided by the user? All that is needed specific to gluster would be provided under \"options\" and that would be tackled by individual provider and not at all looked at in skyring code.\n2. I think I get your point for disks. Will change to pass name, fstype and options",
+      "parentUuid": "9ab29df4_792531c1",
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_456ec802",
         "filename": "backend/backend.go",
         "patchSetId": 4
@@ -284,6 +302,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_1fe335da",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-02T06:27:18Z",
+      "side": 1,
+      "message": "Sorry, my bad in last comment.\nThe accept method in salt.wheel.key is as below \n\ndef accept(match):\n    \u0027\u0027\u0027\n    Accept keys based on a glob match\n    \u0027\u0027\u0027\n    skey \u003d salt.key.Key(__opts__)\n    return skey.accept(match)\n\nSo we cannot pass include_rejected here. I would have to invoke salt.key.Key.accept() functions which looks as below\n\ndef accept(self, match\u003dNone, match_dict\u003dNone, include_rejected\u003dFalse):",
+      "parentUuid": "9ab29df4_790c5143",
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_054bf087",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 4
@@ -384,6 +420,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_3fe8f9b3",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-02T06:27:18Z",
+      "side": 1,
+      "message": "Ok. will change to accept one service as a time",
+      "parentUuid": "9ab29df4_99092534",
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_4545e86e",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 4
@@ -401,6 +455,24 @@
         "endLine": 267,
         "endChar": 53
       },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_5fedadc2",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-02T06:27:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_4545e86e",
       "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -501,6 +573,24 @@
       "side": 1,
       "message": "If so, provider spec would lead to unreadable structure.  I would prefer the provider spec has to be fixed first.",
       "parentUuid": "9ab29df4_e89c116c",
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_7fd191fa",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-02T06:27:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_b906e91e",
       "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -729,6 +819,24 @@
         "endLine": 82,
         "endChar": 12
       },
+      "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_9fce6559",
+        "filename": "models/core_models.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-02T06:27:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_850c6044",
       "revId": "b344cff83a0d9c648856543d91b55a0e884d12fb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
