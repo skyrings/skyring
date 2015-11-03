@@ -1,3 +1,15 @@
+# store the current working directory
+CWD := $(shell pwd)
+PRINT_STATUS = export EC=$$?; cd $(CWD); if [ "$$EC" -eq "0" ]; then printf "SUCCESS!\n"; else exit $$EC; fi
+
+VERSION   := 0.0.1
+RELEASE   := 1
+TARDIR    := ../skyring-$(VERSION)
+RPMBUILD  := $(HOME)/rpmbuild
+SKYRING_BUILD  := $(HOME)/.skyring_build
+SKYRING_BUILD_SRC  := $(SKYRING_BUILD)/golang/gopath/src/github.com/skyrings/skyring
+SKYRING_BUILD_TARDIR := $(SKYRING_BUILD)/golang/gopath/src/github.com/skyrings/skyring/$(TARDIR)
+
 all: install
 
 checkdeps:
@@ -43,6 +55,18 @@ build: verifiers vendor-update pybuild test
 	@echo "Doing $@"
 	@GO15VENDOREXPERIMENT=1 go build
 
+build-special:
+	rm -fr $(SKYRING_BUILD_SRC) $(SKYRING_BUILD)
+	mkdir $(SKYRING_BUILD_SRC) -p
+	cp -ai $(CWD)/* $(SKYRING_BUILD_SRC)/
+	cd $(SKYRING_BUILD_SRC); \
+	export GOROOT=/usr/lib/golang/; \
+	export GOPATH=$(SKYRING_BUILD)/golang/gopath; \
+	cp -r $(SKYRING_BUILD_SRC)/vendor/* $(SKYRING_BUILD)/golang/gopath/src/ ; \
+	export PATH=$(PATH):$(GOPATH)/bin:$(GOROOT)/bin; \
+	go build
+	cp $(SKYRING_BUILD_SRC)/skyring $(CWD)
+
 pyinstall:
 	@echo "Doing $@"
 	@cd backend/salt/python; python setup.py --quiet install --user
@@ -59,3 +83,24 @@ saltinstall:
 install: build pyinstall saltinstall
 	@echo "Doing $@"
 	@GO15VENDOREXPERIMENT=1 go install
+
+dist:
+	@echo "Doing $@"
+	rm -fr $(TARDIR)
+	mkdir -p $(TARDIR)
+	rsync -r --exclude .git/ $(CWD)/ $(TARDIR)
+	tar -zcf $(TARDIR).tar.gz $(TARDIR);
+
+rpm:    dist
+	@echo "Doing $@"
+	rm -rf $(RPMBUILD)/SOURCES
+	mkdir -p $(RPMBUILD)/SOURCES
+	cp ../skyring-$(VERSION).tar.gz $(RPMBUILD)/SOURCES; \
+	rpmbuild -ba skyring.spec
+	$(PRINT_STATUS); \
+	if [ "$$EC" -eq "0" ]; then \
+		FILE=$$(readlink -f $$(find $(RPMBUILD)/RPMS -name skyring-$(VERSION)*.rpm)); \
+		cp -f $$FILE $(SKYRING_BUILD)/; \
+		printf "\nThe Skyring RPMs are located at:\n\n"; \
+		printf "   $(SKYRING_BUILD)/\n\n\n\n"; \
+	fi

@@ -10,5 +10,7 @@ SkyRing development happens in [gerrithub.io](https://review.gerrithub.io/#/admi
 # Build
 Running 'make' builds SkyRing.  Git clone of SkyRing from [gerrithub.io](https://review.gerrithub.io/#/admin/projects/skyrings/skyring) should be placed in $GOPATH/src/github.com/skyrings/skyring to 'make' work cleanly.
 
+'make rpm' can be used to create rpm.
+
 # Licensing
 SkyRing is licensed under the Apache License, Version 2.0.  See [LICENSE](https://github.com/skyrings/skyring/blob/master/LICENSE) for the full license text.
