@@ -113,3 +113,14 @@ type Task struct {
 	Completed  bool          `json:"completed"`
 	StatusList []task.Status `json:"statuslist"`
 }
+
+type Storage struct {
+	StorageId uuid.UUID         `json:"storageid"`
+	Name      string            `json:"name"`
+	Type      string            `json:"type"`
+	Tags      []string          `json:"tags"`
+	ClusterId uuid.UUID         `json:"clusterid"`
+	Size      uint64            `json:"size"`
+	Status    string            `json:"status"`
+	Options   map[string]string `json:"options"`
+}

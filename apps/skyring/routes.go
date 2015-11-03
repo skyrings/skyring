@@ -239,6 +239,27 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.GET_ClusterSlu,
 			Version:     1,
 		},
+		{
+			Name:        "POST_Storages",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}/storages",
+			HandlerFunc: a.POST_Storages,
+			Version:     1,
+		},
+		{
+			Name:        "GET_Storages",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/storages",
+			HandlerFunc: a.GET_Storages,
+			Version:     1,
+		},
+		{
+			Name:        "GET_Storage",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}",
+			HandlerFunc: a.GET_Storage,
+			Version:     1,
+		},
 	}
 	for _, route := range routes {
 		CORE_ROUTES = append(CORE_ROUTES, route)
