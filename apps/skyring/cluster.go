@@ -41,11 +41,6 @@ var (
 	}
 )
 
-const (
-	CLUSTER_STATUS_UP   = "up"
-	CLUSTER_STATUS_DOWN = "down"
-)
-
 func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	var request models.AddClusterRequest
 
