@@ -1,3 +1,17 @@
+# store the current working directory
+CWD := $(shell pwd)
+BASEPKG := github.com/skyrings/skyring
+BASEDIR := $(GOPATH)/src/$(BASEPKG)
+BASEDIR_PARENTDIR := $(shell dirname $(BASEDIR))
+BIGFINDIR := $(BASEDIR_PARENTDIR)/bigfin
+PRINT_STATUS = export EC=$$?; cd $(CWD); if [ "$$EC" -eq "0" ]; then printf "SUCCESS!\n"; else exit $$EC; fi
+
+BUILDS    := .build
+DEPLOY    := $(BUILDS)/deploy
+VERSION   := 1.0
+TARDIR    := skyring-$(VERSION)
+RPMBUILD  := $(HOME)/rpmbuild/
+
 all: install
 
 checkdeps:
@@ -55,3 +69,30 @@ saltinstall:
 install: build pyinstall saltinstall
 	@echo "Doing $@"
 	@go install
+
+rpm:
+	@echo "target: rpm"
+	@echo  "  ...building rpm $(V_ARCH)..."
+	if [ ! -f 'skyring' ] && [ ! -x 'skyring' ] ; then make build ; fi
+	rm -fr $(BUILDS) $(HOME)/$(BUILDS)
+	mkdir -p $(DEPLOY)/latest $(HOME)/$(BUILDS)
+	cd $(BIGFINDIR)/backend/salt/python; \
+	python setup.py bdist --formats=rpm
+	cp -f $(BIGFINDIR)/backend/salt/python/dist/skyring*noarch.rpm $(DEPLOY)/latest/
+	cp -fr $(BASEDIR) $(HOME)/$(BUILDS)/$(TARDIR)
+	cd $(HOME)/$(BUILDS); \
+	cp -f $(TARDIR)/skyring $(TARDIR)/_skyring; \
+	cp -f $(TARDIR)/backend/salt/python/setup.py $(TARDIR); \
+	cp -fr $(TARDIR)/backend/salt/python/skyring $(TARDIR)/; \
+	tar -zcf skyring-$(VERSION).tar.gz $(TARDIR); \
+	cp skyring-$(VERSION).tar.gz $(RPMBUILD)/SOURCES
+	# Cleaning the work directory
+	rm -fr $(HOME)/$(BUILDS)
+	rpmbuild -ba skyring.spec
+	$(PRINT_STATUS); \
+	if [ "$$EC" -eq "0" ]; then \
+		FILE=$$(readlink -f $$(find $(RPMBUILD)/RPMS -name skyring-$(VERSION)*.rpm)); \
+		cp -f $$FILE $(DEPLOY)/latest/; \
+		printf "\nThe Skyring RPMs are located at:\n\n"; \
+		printf "   $(DEPLOY)/latest\n\n\n\n"; \
+	fi
