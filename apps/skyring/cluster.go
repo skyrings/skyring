@@ -41,11 +41,6 @@ var (
 	}
 )
 
-const (
-	CLUSTER_STATUS_UP   = "up"
-	CLUSTER_STATUS_DOWN = "down"
-)
-
 func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	var request models.AddClusterRequest
 
@@ -517,6 +512,10 @@ func removeStorageEntities(clusterId uuid.UUID) error {
 	}
 
 	// TODO: Remove the pools
+	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
+	if changeInfo, err := coll.RemoveAll(bson.M{"clusterid": clusterId}); err != nil || changeInfo == nil {
+		return err
+	}
 
 	return nil
 }

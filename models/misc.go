@@ -45,18 +45,28 @@ type ClusterNodeDevice struct {
 	Options map[string]string `json:"options"`
 }
 
+type AddStorageRequest struct {
+	Name    string            `json:"name"`
+	Type    string            `json:"type"`
+	Tags    []string          `json:"tags"`
+	Size    uint64            `json:"size"`
+	Options map[string]string `json:"options"`
+}
+
 type Nodes []Node
 
 const (
 	DEFAULT_SSH_PORT                = 22
 	DEFAULT_FS_TYPE                 = "xfs"
 	REQUEST_SIZE_LIMIT              = 1048576
+	COLL_NAME_STORAGE               = "storage"
 	COLL_NAME_STORAGE_NODES         = "storage_nodes"
 	COLL_NAME_STORAGE_CLUSTERS      = "storage_clusters"
 	COLL_NAME_STORAGE_LOGICAL_UNITS = "storage_logical_units"
 )
 
 type Clusters []Cluster
+type Storages []Storage
 
 type UnmanagedNode struct {
 	Name            string `json:"name"`
@@ -87,12 +97,15 @@ var ClusterStatuses = [...]string{
 // Storage logical unit types
 const (
 	CEPH_OSD = 1 + iota
-	CEPH_MON
 )
 
 var StorageLogicalUnitTypes = [...]string{
 	"osd",
-	"mon",
 }
+
+const (
+	STATUS_UP   = "up"
+	STATUS_DOWN = "down"
+)
 
 func (c ClusterStatus) String() string { return ClusterStatuses[c-1] }
