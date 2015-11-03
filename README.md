@@ -8,7 +8,8 @@ Please visit the [WIKI](https://github.com/skyrings/skyring/wiki) for project do
 SkyRing development happens in [gerrithub.io](https://review.gerrithub.io/#/admin/projects/skyrings/skyring).  Please submit your patches to gerrithub than pull request.
 
 # Build
-Running 'make' builds SkyRing.  Git clone of SkyRing from [gerrithub.io](https://review.gerrithub.io/#/admin/projects/skyrings/skyring) should be placed in $GOPATH/src/github.com/skyrings/skyring to 'make' work cleanly.
+Executing 'make build' will build the source
+One can use 'make rpm' command or 'rpmbuild -ba skyring.spec' to build an rpm
 
 # Licensing
 SkyRing is licensed under the Apache License, Version 2.0.  See [LICENSE](https://github.com/skyrings/skyring/blob/master/LICENSE) for the full license text.
