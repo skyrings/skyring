@@ -16,6 +16,24 @@
       "revId": "585e290dc170ed0d49f17e75cf445031cb62958b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_d35c4cf0",
+        "filename": "tools/task/task_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-04T17:21:18Z",
+      "side": 1,
+      "message": "Here also this will be initialized by the main(initialize() method is called from main). Even if I keep this code in skyring package, it will be global as i assume that there will be only one task manager instance for skyring. Please let me know",
+      "parentUuid": "9ab29df4_c5ce46b4",
+      "revId": "585e290dc170ed0d49f17e75cf445031cb62958b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
