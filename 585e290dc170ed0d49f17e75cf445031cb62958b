@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_c5ce46b4",
+        "filename": "tools/task/task_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-04T12:08:40Z",
+      "side": 1,
+      "message": "Why do you need a global taskMgr?  I believe the consumer should create own task manager(s).  In our case, its skyring\u0027s main or skyrings.skyring package probably.   Note that, all global vars needs to be locked/unlocked.",
+      "revId": "585e290dc170ed0d49f17e75cf445031cb62958b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
