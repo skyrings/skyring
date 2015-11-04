@@ -28,13 +28,13 @@ type Manager struct {
 func (manager *Manager) Run(name string, f func(t *Task)) (uuid.UUID, error) {
 	if id, err := uuid.New(); err == nil {
 		task := Task{
-			Mutex: &sync.Mutex{},
-			ID: *id,
-			Name: name,
-			DoneCh: make(chan bool, 1),
+			Mutex:      &sync.Mutex{},
+			ID:         *id,
+			Name:       name,
+			DoneCh:     make(chan bool, 1),
 			StatusList: []Status{},
-			StopCh: make(chan bool, 1),
-			Func: f,
+			StopCh:     make(chan bool, 1),
+			Func:       f,
 		}
 		task.Run()
 		manager.tasks[*id] = &task
@@ -47,6 +47,15 @@ func (manager *Manager) Run(name string, f func(t *Task)) (uuid.UUID, error) {
 func (manager *Manager) IsDone(id uuid.UUID) (b bool, err error) {
 	if task, ok := manager.tasks[id]; ok {
 		b = task.IsDone()
+	} else {
+		err = errors.New(fmt.Sprintf("task id %s not found", id))
+	}
+	return
+}
+
+func (manager *Manager) IsStarted(id uuid.UUID) (b bool, err error) {
+	if task, ok := manager.tasks[id]; ok {
+		b = task.Started
 	} else {
 		err = errors.New(fmt.Sprintf("task id %s not found", id))
 	}
