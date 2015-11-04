@@ -19,6 +19,7 @@ import (
 	"github.com/sbinet/go-python"
 	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/tools/gopy"
+	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/ssh"
 	"github.com/skyrings/skyring/tools/uuid"
 	"strings"
@@ -63,7 +64,14 @@ func (s Salt) AcceptNode(node string, fingerprint string) (status bool, err erro
 func (s Salt) BootstrapNode(master string, node string, port uint, fingerprint string, username string, password string) (finger string, err error) {
 	var buf bytes.Buffer
 	t, err := template.ParseFiles("setup-node.sh.template")
-	t.Execute(&buf, struct{ Master string }{Master: master})
+	if err != nil {
+		logger.Get().Critical("Error Parsing the setup-node.sh.template", err)
+		return
+	}
+	if err = t.Execute(&buf, struct{ Master string }{Master: master}); err != nil {
+		logger.Get().Critical("Error Executing the setup-node.sh.template", err)
+		return
+	}
 
 	if sout, _, err := ssh.Run(buf.String(), node, port, fingerprint, username, password); err == nil {
 		finger = strings.TrimSpace(sout)

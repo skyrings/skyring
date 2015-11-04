@@ -25,6 +25,7 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/task"
 	"net/http"
 	"os"
 	"path"
@@ -182,6 +183,12 @@ func start() {
 	//Initialize the auth provider
 	if err := application.InitializeAuth(conf.SystemConfig.Authentication, n); err != nil {
 		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
+		os.Exit(1)
+	}
+
+	//Initialize the task manager
+	if err := task.Initialize(); err != nil {
+		logger.Get().Error("Unable to initialize the task manager: %s", err)
 		os.Exit(1)
 	}
 

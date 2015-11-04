@@ -120,7 +120,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for _, node := range nodes {
-		if _, err := GetCoreNodeManager().RejectNode(node.Hostname); err != nil {
+		if status, err := GetCoreNodeManager().RejectNode(node.Hostname); err != nil || !status {
 			logger.Get().Error("Error rejecting the key for node %s : %v", node.Hostname, err)
 			continue
 		} else {
