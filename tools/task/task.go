@@ -31,16 +31,16 @@ func (s Status) String() string {
 }
 
 type Task struct {
-	Mutex     *sync.Mutex
-	ID        uuid.UUID
-	Name      string
-	Tag       map[string]string
-	Started   bool
-	Completed bool
-	DoneCh    chan bool
+	Mutex      *sync.Mutex
+	ID         uuid.UUID
+	Name       string
+	Tag        map[string]string
+	Started    bool
+	Completed  bool
+	DoneCh     chan bool
 	StatusList []Status
-	StopCh    chan bool
-	Func      func(t *Task)
+	StopCh     chan bool
+	Func       func(t *Task)
 }
 
 func (t Task) String() string {
