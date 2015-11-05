@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_f420564b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-05T04:43:14Z",
+      "side": 1,
+      "message": "make: Enabled for rpm build of package",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_141cea12",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-05T04:43:14Z",
+      "side": 1,
+      "message": "BIGFIN_DIR??",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_541662f2",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-05T04:43:14Z",
+      "side": 1,
+      "message": ".skyring_build ??",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_341bae1c",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-05T04:43:14Z",
+      "side": 1,
+      "message": "Can we have version.mak and replace value here?",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_74d44620",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-05T04:43:14Z",
+      "side": 1,
+      "message": "Remove the commented lines",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_94d71a23",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-05T04:43:14Z",
+      "side": 1,
+      "message": "Shouldnt the below steps be done as part of setup rather being done as part of rpm creation??\n1. Enabling reactors for salt\n2. Disable firewalld\n3. Enable / start salt master\n4. Influxdb setup and start\n5. mongodb setup and start\n6. Timeseries and skyring DB creation",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
