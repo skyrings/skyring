@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_74a286af",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-05T05:32:42Z",
+      "side": 1,
+      "message": "Yes. As per latest changes its like this. will rebase and push the patch",
+      "parentUuid": "baada198_c412fb57",
+      "revId": "09602daf36a0171b951c865f93c418b125314ecd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_66ec84c8",
         "filename": "python/skyring/salt_wrapper.py",
         "patchSetId": 3
@@ -114,6 +132,24 @@
       "side": 1,
       "message": "My opinion is to move into rejected or denied list.\nMove it to un-accepted causes it to reappear in the un-managed list which is not right.\n\nWhy should we show rejected nodes list?\n\nKey.delete will remove only from un-accpted list. If want to remove it from any list use the directive \u0027--include-all\u0027\nFor ex  salt-key --include-all -r gluster5",
       "parentUuid": "fab399f4_eee447ae",
+      "revId": "09602daf36a0171b951c865f93c418b125314ecd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_d486f212",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-05T05:32:42Z",
+      "side": 1,
+      "message": "Will move the minions to rejected list. This should do.",
+      "parentUuid": "baada198_a42507ad",
       "revId": "09602daf36a0171b951c865f93c418b125314ecd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
