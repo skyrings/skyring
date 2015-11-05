@@ -87,6 +87,23 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_14e30a06",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-11-05T05:00:55Z",
+      "side": 1,
+      "message": "Commented line",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_94d71a23",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -98,6 +115,24 @@
       "writtenOn": "2015-11-05T04:43:14Z",
       "side": 1,
       "message": "Shouldnt the below steps be done as part of setup rather being done as part of rpm creation??\n1. Enabling reactors for salt\n2. Disable firewalld\n3. Enable / start salt master\n4. Influxdb setup and start\n5. mongodb setup and start\n6. Timeseries and skyring DB creation",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_f4e77610",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-11-05T05:00:55Z",
+      "side": 1,
+      "message": "1. for this, we should try to have a new separate salt conf file. ref: https://github.com/skyrings/skyring/issues/5",
+      "parentUuid": "9ab29df4_94d71a23",
       "revId": "380b8172f64885fb84728886914901b076569e16",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
