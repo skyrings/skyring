@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_f9d7b3eb",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-05T18:57:59Z",
+      "side": 1,
+      "message": "We should not have these blanks in the code. these things needs to be handled appropriately. Same for all the places in this file",
+      "range": {
+        "startLine": 317,
+        "startChar": 1,
+        "endLine": 317,
+        "endChar": 3
+      },
+      "revId": "55d3ca9d29d0ea25b34c00c92356bad8f75cb0e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_799e4358",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-05T18:57:59Z",
+      "side": 1,
+      "message": "Status need to be handled appropriately, otherwise it may create problems",
+      "range": {
+        "startLine": 203,
+        "startChar": 1,
+        "endLine": 203,
+        "endChar": 4
+      },
+      "revId": "55d3ca9d29d0ea25b34c00c92356bad8f75cb0e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_39bbebc5",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-05T18:57:59Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 208,
+        "startChar": 1,
+        "endLine": 208,
+        "endChar": 3
+      },
+      "revId": "55d3ca9d29d0ea25b34c00c92356bad8f75cb0e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
