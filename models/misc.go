@@ -12,6 +12,8 @@ limitations under the License.
 */
 package models
 
+import "github.com/skyrings/skyring/tools/uuid"
+
 type AddStorageNodeRequest struct {
 	Hostname       string `json:"hostname"`
 	SshFingerprint string `json:"sshfingerprint"`
@@ -40,3 +42,7 @@ type UnmanagedNode struct {
 }
 
 type UnmanagedNodes []UnmanagedNode
+
+type AsyncResponse struct {
+	TaskId uuid.UUID `json:"taskid"`
+}
