@@ -12,6 +12,8 @@ limitations under the License.
 */
 package models
 
+import "github.com/skyrings/skyring/tools/uuid"
+
 type AddStorageNodeRequest struct {
 	Hostname       string `json:"hostname"`
 	SshFingerprint string `json:"sshfingerprint"`
@@ -96,3 +98,7 @@ var StorageLogicalUnitTypes = [...]string{
 }
 
 func (c ClusterStatus) String() string { return ClusterStatuses[c-1] }
+
+type AsyncResponse struct {
+	TaskId uuid.UUID `json:"taskid"`
+}
