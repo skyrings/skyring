@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_34ae4e86",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "Why do you build bigfin in skyring?",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_541662f2",
         "filename": "Makefile",
         "patchSetId": 1
@@ -70,6 +87,23 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_54a9027a",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "You should use version.go like things",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_74d44620",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -87,6 +121,23 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_74b7e6d8",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "Why release is 1",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_14e30a06",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -98,6 +149,91 @@
       "writtenOn": "2015-11-05T05:00:55Z",
       "side": 1,
       "message": "Commented line",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_b4b17ee3",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "Remove Vendor.  See fedora guidelines.",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_d4b432d3",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "1. Where is go build?\n2. You should set build requires",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_14c6aa49",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "I think these conf files should be ghost",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_f4ca164e",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "You should depend on salt master",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_34c56e3c",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "why do you hardcode python site package path?",
       "revId": "380b8172f64885fb84728886914901b076569e16",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -133,6 +269,91 @@
       "side": 1,
       "message": "1. for this, we should try to have a new separate salt conf file. ref: https://github.com/skyrings/skyring/issues/5",
       "parentUuid": "9ab29df4_94d71a23",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_54c0222a",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "You should not do this way",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_74de0613",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "Why do you disable stop/firewall?  You should ship firewall configuration for your application.",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_94e1dad2",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "You should not enable any service in the post. You should have your systemd unit file and have dependency there\n\n-2 for starting any service",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_b4e89eb5",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "you should follow fedora guidelines how to deal with python install/egg-info",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_d4eb52ae",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-05T06:28:18Z",
+      "side": 1,
+      "message": "you should use macros than path like /etc, /usr/lib etc",
       "revId": "380b8172f64885fb84728886914901b076569e16",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
