@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_f98fb3ca",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-05T19:32:46Z",
+      "side": 1,
+      "message": "Correct the error handling. All the errors/statuses need to be handled. discourage the use of _",
+      "revId": "33611e825bcbe4f63f0693af6abce9055aa251a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_d992f7f5",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-05T19:32:46Z",
+      "side": 1,
+      "message": "why we are syncing the disks here?",
+      "range": {
+        "startLine": 88,
+        "startChar": 1,
+        "endLine": 89,
+        "endChar": 10
+      },
+      "revId": "33611e825bcbe4f63f0693af6abce9055aa251a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_59d187cc",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-05T19:32:46Z",
+      "side": 1,
+      "message": "Correct the error handling. Check for the status from the python modules and return the error messages appropriately",
+      "revId": "33611e825bcbe4f63f0693af6abce9055aa251a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
