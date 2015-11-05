@@ -40,3 +40,7 @@ type UnmanagedNode struct {
 }
 
 type UnmanagedNodes []UnmanagedNode
+
+type AsyncResponse struct {
+	TaskId string
+}

@@ -14,6 +14,7 @@ package models
 
 import (
 	"github.com/skyrings/skyring/backend"
+	"github.com/skyrings/skyring/tools/task"
 	"github.com/skyrings/skyring/tools/uuid"
 )
 
@@ -113,4 +114,11 @@ type ClusterNode struct {
 type ClusterNetworks struct {
 	Cluster string `json:"cluster"`
 	Public  string `json:"public"`
+}
+
+type Task struct {
+	Id         uuid.UUID
+	Started    bool
+	Completed  bool
+	StatusList []task.Status
 }
