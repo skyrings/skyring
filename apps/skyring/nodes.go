@@ -19,7 +19,6 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/task"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"gopkg.in/mgo.v2/bson"
@@ -48,42 +47,18 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if request.SshPort == 0 {
+		request.SshPort = models.DEFAULT_SSH_PORT
+	}
+
 	// Check if node already added
 	if node, _ := node_exists("hostname", request.Hostname); node != nil {
 		util.HttpResponse(w, http.StatusMethodNotAllowed, "Node already added")
 		return
 	}
 
-	if request.SshPort == 0 {
-		request.SshPort = models.DEFAULT_SSH_PORT
-	}
-
-	// Validate for required fields
-	if request.Hostname == "" || request.SshFingerprint == "" || request.User == "" || request.Password == "" {
-		util.HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided")
-		return
-	}
-
-	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("started the task for addAndAcceptNode: %s", t.ID)
-		// Process the request
-		if err := addAndAcceptNode(w, request, t); err != nil {
-			t.UpdateStatus("Failed")
-		} else {
-			t.UpdateStatus("Success")
-		}
-		t.Done()
-	}
-	if taskId, err := task.GetManager().Run("addAndAcceptNode", asyncTask); err != nil {
-		logger.Get().Error("Unable to create the task for addAndAcceptNode", err)
-		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
-
-	} else {
-		logger.Get().Debug("Task Created: ", taskId.String())
-		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId.String()})
-		w.WriteHeader(http.StatusAccepted)
-		w.Write(bytes)
-	}
+	// Process the request
+	addAndAcceptNode(w, request)
 }
 
 func POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
@@ -122,9 +97,13 @@ func acceptNode(w http.ResponseWriter, hostname string, fingerprint string) {
 	}
 }
 
-func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeRequest, t *task.Task) error {
+func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeRequest) {
+	// Validate for required fields
+	if request.Hostname == "" || request.SshFingerprint == "" || request.User == "" || request.Password == "" {
+		util.HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided")
+		return
+	}
 
-	t.UpdateStatus("Bootstrapping the node")
 	// Add the node
 	if node, err := GetCoreNodeManager().AddNode(
 		curr_hostname,
@@ -133,30 +112,25 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 		request.SshFingerprint,
 		request.User,
 		request.Password); err == nil {
-		t.UpdateStatus("Adding the node to DB: %s", request.Hostname)
-		if err = addStorageNodeToDB(w, *node); err != nil {
-			t.UpdateStatus("Unable to add the node to DB: %s", request.Hostname)
-			return err
-		}
+		addStorageNodeToDB(w, *node)
 	} else {
-		logger.Get().Critical("Bootstrapping the node failed: ", request.Hostname)
-		t.UpdateStatus("Unable to Bootstrap the node: %s", request.Hostname)
-		return err
+		util.HttpResponse(w, http.StatusInternalServerError, "Unable to add node")
 	}
-	return nil
 }
 
-func addStorageNodeToDB(w http.ResponseWriter, storage_node models.StorageNode) error {
+func addStorageNodeToDB(w http.ResponseWriter, storage_node models.StorageNode) {
 	// Add the node details to the DB
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Insert(storage_node); err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 		logger.Get().Critical("Error adding the node: %v", err)
-		return err
 	}
-	return nil
+	if err := json.NewEncoder(w).Encode("Added successfully"); err != nil {
+		logger.Get().Error("Error: %v", err)
+	}
 }
 
 func node_exists(key string, value string) (*models.StorageNode, error) {
