@@ -25,6 +25,7 @@ import (
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/nodemanager"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/task"
 	"io/ioutil"
 	"net/http"
 	"net/rpc"
@@ -56,6 +57,7 @@ const (
 var (
 	CoreNodeManager      nodemanager.NodeManagerInterface
 	AuthProviderInstance authprovider.AuthInterface
+	TaskManager          task.Manager
 )
 
 func NewApp(configDir string, binDir string) *App {
@@ -320,4 +322,13 @@ func (a *App) LoginRequired(w http.ResponseWriter, r *http.Request, next http.Ha
 		return
 	}
 	next(w, r)
+}
+
+func (a *App) InitializeTaskManager() error {
+	TaskManager = task.NewManager()
+	return nil
+}
+
+func (a *App) GetTaskManager() *task.Manager {
+	return &TaskManager
 }

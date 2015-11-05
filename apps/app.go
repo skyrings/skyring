@@ -26,4 +26,5 @@ type Application interface {
 	InitializeAuth(authCfg conf.AuthConfig, n *negroni.Negroni) error
 	//Middleware to check the request is authenticated
 	LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
+	InitializeTaskManager() error
 }

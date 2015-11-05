@@ -185,6 +185,12 @@ func start() {
 		os.Exit(1)
 	}
 
+	//Initialize the task manager
+	if err := application.InitializeTaskManager(); err != nil {
+		logger.Get().Error("Unable to initialize the task manager: %s", err)
+		os.Exit(1)
+	}
+
 	n.UseHandler(router)
 
 	logger.Get().Info("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))

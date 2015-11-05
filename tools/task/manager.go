@@ -53,6 +53,15 @@ func (manager *Manager) IsDone(id uuid.UUID) (b bool, err error) {
 	return
 }
 
+func (manager *Manager) IsStarted(id uuid.UUID) (b bool, err error) {
+	if task, ok := manager.tasks[id]; ok {
+		b = task.Started
+	} else {
+		err = errors.New(fmt.Sprintf("task id %s not found", id))
+	}
+	return
+}
+
 func (manager *Manager) GetStatus(id uuid.UUID) (status []Status, err error) {
 	if task, ok := manager.tasks[id]; ok {
 		status = task.GetStatus()

@@ -110,6 +110,7 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.logout,
 			Version:     1,
 		},
+		//Routes for User Management
 		{
 			Name:        "GET_users",
 			Method:      "GET",
@@ -145,6 +146,22 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.deleteUser,
 			Version:     1,
 		},
+		//Routes for Task Management
+		{
+			Name:        "GET_tasks",
+			Method:      "GET",
+			Pattern:     "tasks",
+			HandlerFunc: a.getTasks,
+			Version:     1,
+		},
+		{
+			Name:        "GET_task",
+			Method:      "GET",
+			Pattern:     "tasks/{taskid}",
+			HandlerFunc: a.getTask,
+			Version:     1,
+		},
+		//Routes for Cluster Management
 		{
 			Name:        "POST_Clusters",
 			Method:      "POST",
