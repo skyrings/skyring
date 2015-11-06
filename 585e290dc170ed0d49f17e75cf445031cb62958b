@@ -105,6 +105,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_ff7dd3b2",
+        "filename": "tools/task/task_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-11-06T06:38:00Z",
+      "side": 1,
+      "message": "Whoever is using the package gets one global task manager which is not the intention.  I would prefer you should avoid that.\n\nAs I asked previously who will do locking/unlocking the global var.  Think about two or more go routines using this global.",
+      "parentUuid": "9ab29df4_d35c4cf0",
+      "revId": "585e290dc170ed0d49f17e75cf445031cb62958b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_9430fa9f",
         "filename": "tools/task/task_manager.go",
         "patchSetId": 1
