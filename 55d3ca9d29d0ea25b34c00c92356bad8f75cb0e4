@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_9f3e9f28",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-06T03:50:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_f9d7b3eb",
+      "revId": "55d3ca9d29d0ea25b34c00c92356bad8f75cb0e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_799e4358",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 4
@@ -48,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_bf3b5b37",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-06T03:50:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_799e4358",
+      "revId": "55d3ca9d29d0ea25b34c00c92356bad8f75cb0e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_39bbebc5",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 4
@@ -65,6 +101,24 @@
         "endLine": 208,
         "endChar": 3
       },
+      "revId": "55d3ca9d29d0ea25b34c00c92356bad8f75cb0e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_df4817cf",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-06T03:50:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_39bbebc5",
       "revId": "55d3ca9d29d0ea25b34c00c92356bad8f75cb0e4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
