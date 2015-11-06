@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_eabd0f04",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-06T08:28:34Z",
+      "side": 1,
+      "message": "replicated/erasure-encoded etc!",
+      "parentUuid": "7ac7a964_8acf3bb0",
+      "revId": "a7789a9791dca299e09b8a1a9911c36930f4041c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_aac31789",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-06T08:24:17Z",
       "side": 1,
       "message": "size units? GB/TB",
+      "revId": "a7789a9791dca299e09b8a1a9911c36930f4041c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_2a3707b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-06T08:28:34Z",
+      "side": 1,
+      "message": "I thought of using bytes only. Let that GB/TB taken care at consumer level.\nWhat you suggest?",
+      "parentUuid": "7ac7a964_aac31789",
       "revId": "a7789a9791dca299e09b8a1a9911c36930f4041c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
