@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_8acf3bb0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-11-06T08:24:17Z",
+      "side": 1,
+      "message": "what\u0027s type here? object/block or replicate/erasure-coded",
+      "revId": "a7789a9791dca299e09b8a1a9911c36930f4041c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_aac31789",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-11-06T08:24:17Z",
+      "side": 1,
+      "message": "size units? GB/TB",
+      "revId": "a7789a9791dca299e09b8a1a9911c36930f4041c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
