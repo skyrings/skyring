@@ -78,6 +78,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_bf699b27",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-06T05:50:59Z",
+      "side": 1,
+      "message": "Sync of disks is done just after cluster creation and expansion of cluster.\nThis is required as to make sure we get the latest disks list post OSD creation.\nLooks bit confusing in patch review mode, check the final source in editor.",
+      "parentUuid": "7ac7a964_1f128fb4",
+      "revId": "33611e825bcbe4f63f0693af6abce9055aa251a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_59d187cc",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 7
