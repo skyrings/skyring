@@ -31,7 +31,9 @@ var funcNames = [...]string{
 	"GetNodeID",
 	"GetNodeNetwork",
 	"GetNodeDisk",
-	"RejectNode",
+	"IgnoreNode",
+	"DisableService",
+	"EnableService",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -48,13 +50,13 @@ type Salt struct {
 
 func (s Salt) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (status bool, err error) {
 	if finger, err := s.BootstrapNode(master, node, port, fingerprint, username, password); err == nil {
-		status, err = s.AcceptNode(node, finger)
+		status, err = s.AcceptNode(node, finger, false)
 	}
 	return
 }
 
-func (s Salt) AcceptNode(node string, fingerprint string) (status bool, err error) {
-	if pyobj, err := pyFuncs["AcceptNode"].Call(node, fingerprint); err == nil {
+func (s Salt) AcceptNode(node string, fingerprint string, ignored bool) (status bool, err error) {
+	if pyobj, err := pyFuncs["AcceptNode"].Call(node, fingerprint, ignored); err == nil {
 		err = gopy.Convert(pyobj, &status)
 	}
 	return
@@ -104,8 +106,22 @@ func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
 	return
 }
 
-func (s Salt) RejectNode(node string) (status bool, err error) {
-	if pyobj, err := pyFuncs["RejectNode"].Call(node); err == nil {
+func (s Salt) IgnoreNode(node string) (status bool, err error) {
+	if pyobj, err := pyFuncs["IgnoreNode"].Call(node); err == nil {
+		err = gopy.Convert(pyobj, &status)
+	}
+	return
+}
+
+func (s Salt) DisableService(node string, service string, stop bool) (status bool, err error) {
+	if pyobj, err := pyFuncs["DisableService"].Call(node, service, stop); err == nil {
+		err = gopy.Convert(pyobj, &status)
+	}
+	return
+}
+
+func (s Salt) EnableService(node string, service string, start bool) (status bool, error error) {
+	if pyobj, err := pyFuncs["EnableService"].Call(node, service, start); err == nil {
 		err = gopy.Convert(pyobj, &status)
 	}
 	return

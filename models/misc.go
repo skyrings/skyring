@@ -7,7 +7,7 @@ You may obtain a copy of the License at
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
+See the License for the  specific language governing permissions and
 limitations under the License.
 */
 package models
@@ -20,19 +20,43 @@ type AddStorageNodeRequest struct {
 	SshPort        int    `json:"sshport"`
 }
 
-type StorageNodes []StorageNode
+type AddClusterRequest struct {
+	Name              string            `json:"name"`
+	CompatVersion     string            `json:"compat_version"`
+	Type              string            `json:"type"`
+	WorkLoad          string            `json:"workload"`
+	Tags              []string          `json:"tags"`
+	Options           map[string]string `json:"options"`
+	OpenStackServices []string          `json:"openstackservices"`
+	Nodes             []ClusterNode     `json:"nodes"`
+	Networks          ClusterNetworks   `json:"networks"`
+}
+
+type ClusterNode struct {
+	NodeId   string              `json:"nodeid"`
+	NodeType []string            `json:"nodetype"`
+	Devices  []ClusterNodeDevice `json:"disks"`
+	Options  map[string]string   `json:"options"`
+}
+
+type ClusterNodeDevice struct {
+	Name    string            `json:"name"`
+	FSType  string            `json:"fstype"`
+	Options map[string]string `json:"options"`
+}
+
+type Nodes []Node
 
 const (
-	DEFAULT_SSH_PORT           = 22
-	REQUEST_SIZE_LIMIT         = 1048576
-	COLL_NAME_STORAGE_NODES    = "storage_nodes"
-	COLL_NAME_STORAGE_CLUSTERS = "storage_clusters"
-	NODE_STATE_FREE            = "free"
-	NODE_STATE_UNMANAGED       = "unmanaged"
-	NODE_STATE_USED            = "used"
+	DEFAULT_SSH_PORT                = 22
+	DEFAULT_FS_TYPE                 = "xfs"
+	REQUEST_SIZE_LIMIT              = 1048576
+	COLL_NAME_STORAGE_NODES         = "storage_nodes"
+	COLL_NAME_STORAGE_CLUSTERS      = "storage_clusters"
+	COLL_NAME_STORAGE_LOGICAL_UNITS = "storage_logical_units"
 )
 
-type StorageClusters []StorageCluster
+type Clusters []Cluster
 
 type UnmanagedNode struct {
 	Name            string `json:"name"`
@@ -40,3 +64,35 @@ type UnmanagedNode struct {
 }
 
 type UnmanagedNodes []UnmanagedNode
+
+type ClusterStatus int
+
+// Status values for the cluster
+const (
+	CLUSTER_STATUS_INACTIVE = 1 + iota
+	CLUSTER_STATUS_NOT_AVAILABLE
+	CLUSTER_STATUS_ACTIVE_AND_AVAILABLE
+	CLUSTER_STATUS_CREATING
+	CLUSTER_STATUS_FAILED
+)
+
+var ClusterStatuses = [...]string{
+	"inactive",
+	"not available",
+	"active and available",
+	"creating",
+	"failed",
+}
+
+// Storage logical unit types
+const (
+	CEPH_OSD = 1 + iota
+	CEPH_MON
+)
+
+var StorageLogicalUnitTypes = [...]string{
+	"osd",
+	"mon",
+}
+
+func (c ClusterStatus) String() string { return ClusterStatuses[c-1] }
