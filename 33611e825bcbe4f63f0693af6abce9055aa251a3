@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_3f174ba5",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-06T03:52:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_f98fb3ca",
+      "revId": "33611e825bcbe4f63f0693af6abce9055aa251a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_d992f7f5",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 7
@@ -42,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_1f128fb4",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-06T03:52:03Z",
+      "side": 1,
+      "message": "Will check this and remove if not required",
+      "parentUuid": "7ac7a964_d992f7f5",
+      "revId": "33611e825bcbe4f63f0693af6abce9055aa251a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_59d187cc",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 7
@@ -53,6 +89,24 @@
       "writtenOn": "2015-11-05T19:32:46Z",
       "side": 1,
       "message": "Correct the error handling. Check for the status from the python modules and return the error messages appropriately",
+      "revId": "33611e825bcbe4f63f0693af6abce9055aa251a3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_5f0c0795",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-06T03:52:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_59d187cc",
       "revId": "33611e825bcbe4f63f0693af6abce9055aa251a3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
