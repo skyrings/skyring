@@ -183,6 +183,20 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: GetEvents,
 			Version:     1,
 		},
+		{
+			Name:        "GET_node_events",
+			Method:      "GET",
+			Pattern:     "events/node/{node-id}",
+			HandlerFunc: GetNodeEvents,
+			Version:     1,
+		},
+		{
+			Name:        "GET_cluster_events",
+			Method:      "GET",
+			Pattern:     "events/cluster/{cluster-id}",
+			HandlerFunc: GetClusterEvents,
+			Version:     1,
+		},
 	}
 	for _, route := range routes {
 		CORE_ROUTES = append(CORE_ROUTES, route)
