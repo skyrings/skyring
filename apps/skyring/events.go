@@ -18,6 +18,7 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
@@ -29,11 +30,55 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_NODE_EVENTS)
 	var events []models.Event
 
-	if err := collection.Find(bson.M{}).All(&events); err != nil {
-		logger.Get().Error("Error getting record from DB:%s", err)
-		util.HandleHttpError(rw, err)
-		return
+	node_id_str := req.URL.Query().Get("node_id")
+	cluster_id_str := req.URL.Query().Get("cluster_id")
+	if len(node_id_str) != 0 {
+		node_id, err := uuid.Parse(node_id_str)
+		if err != nil {
+			logger.Get().Error("Error parsing node id :%s", err)
+			util.HandleHttpError(rw, err)
+			return
+		}
+		error := collection.Find(bson.M{"nodeid": *node_id}).All(&events)
+		if error != nil {
+			logger.Get().Error("Error getting record from DB:%s", error)
+			util.HandleHttpError(rw, error)
+			return
+		}
+		if len(events) == 0 {
+			json.NewEncoder(rw).Encode([]models.Event{})
+		} else {
+			json.NewEncoder(rw).Encode(events)
+		}
+	} else if len(cluster_id_str) != 0 {
+		cluster_id, err := uuid.Parse(cluster_id_str)
+		if err != nil {
+			logger.Get().Error("Error parsing cluster id :%s", err)
+			util.HandleHttpError(rw, err)
+			return
+		}
+		error := collection.Find(bson.M{"clusterid": *cluster_id}).All(&events)
+		if error != nil {
+			logger.Get().Error("Error getting record from DB:%s", error)
+			util.HandleHttpError(rw, error)
+			return
+		}
+		if len(events) == 0 {
+			json.NewEncoder(rw).Encode([]models.Event{})
+		} else {
+			json.NewEncoder(rw).Encode(events)
+		}
 	} else {
-		json.NewEncoder(rw).Encode(events)
+		error := collection.Find(bson.M{}).All(&events)
+		if error != nil {
+			logger.Get().Error("Error getting record from DB:%s", error)
+			util.HandleHttpError(rw, error)
+			return
+		}
+		if len(events) == 0 {
+			json.NewEncoder(rw).Encode([]models.Event{})
+		} else {
+			json.NewEncoder(rw).Encode(events)
+		}
 	}
 }
