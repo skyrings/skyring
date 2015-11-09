@@ -69,6 +69,52 @@
       "revId": "a7789a9791dca299e09b8a1a9911c36930f4041c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_d3c64b49",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-09T12:56:17Z",
+      "side": 1,
+      "message": "Typo I guess",
+      "range": {
+        "startLine": 38,
+        "startChar": 23,
+        "endLine": 38,
+        "endChar": 27
+      },
+      "revId": "a7789a9791dca299e09b8a1a9911c36930f4041c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_73e737e5",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-09T12:56:17Z",
+      "side": 1,
+      "message": "Based on the routes defintion, you need to get the cluster_id and get the storages belongs to the cluster id right?",
+      "range": {
+        "startLine": 96,
+        "startChar": 14,
+        "endLine": 96,
+        "endChar": 27
+      },
+      "revId": "a7789a9791dca299e09b8a1a9911c36930f4041c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
