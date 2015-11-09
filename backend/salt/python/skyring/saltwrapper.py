@@ -40,7 +40,8 @@ master = salt.wheel.WheelClient(opts)
 setattr(salt.client.LocalClient, 'cmd',
         enableLogger(salt.client.LocalClient.cmd))
 local = salt.client.LocalClient()
-
+plugin_root_path = '/etc/collectd.d/'
+plugin_disabled_root_path = '/etc/disabled_collectd.d/'
 
 def _get_keys(match='*'):
     keys = master.call_func('key.finger', match=match)
@@ -248,3 +249,107 @@ def EnableService(node, service, start=False):
         out = local.cmd(node, 'service.start', [service])
 
     return out[node]
+
+threshold_type_map = {"warning" : "WarningMax", "critical" : "FailureMax"}
+
+def ConfigureCollectdPhysicalResources(plugin_list, nodes, master=None, configs=None):
+    state_list = ''
+    no_of_plugins = len(plugin_list)
+    for index in range(no_of_plugins):
+        state_list += ('collectd.' + plugin_list[index])
+        if index < no_of_plugins -1:
+            state_list += ","
+    plugin_thresholds = {}
+    for plugin, value in configs.iteritems():
+        thresholds = {}
+        for threshold_type, threshold in value.iteritems():
+            thresholds[threshold_type_map.get(threshold_type)] = threshold
+        plugin_thresholds[plugin] = thresholds
+    dict = {}
+    if master != None or master != "":
+        dict["master_name"] = master
+    if thresholds != None:
+        dict["thresholds"] = plugin_thresholds
+    pillar = {"collectd": dict}
+    result = run_state(nodes, state_list, kwarg={'pillar':pillar})
+    if result:
+        log.error('Collectd configuring failed for %s. error=%s' %(node, result))
+        raise Exception('Collectd configuring failed for %s. error=%s' %(node, result))
+    return True
+
+
+def DisableCollectdPlugin(nodes, pluginName):
+    source_file = plugin_root_path + pluginName + '.conf'
+    destination = plugin_disabled_root_path
+    local.cmd(nodes, "cmd.run", ["mkdir -p " + destination], expr_form='list')
+    out = local.cmd(nodes, "cmd.run", ["mv " + source_file + " " +destination], expr_form='list')
+    isError = False
+    for nodeName, message in out.iteritems():
+        if out.get(nodeName) != '':
+            log.error('Failed to disable collectd plugin %s because %s on %s' %(pluginName, out.get(nodeName), nodeName))
+            isError = True
+    if isError:
+        raise Exception('Failed to disable collectd plugin %s' %(pluginName))
+    local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+    return True
+
+
+def EnableCollectdPlugin(nodes, pluginName):
+    source_file = plugin_disabled_root_path + pluginName + '.conf'
+    destination = plugin_root_path
+    out = local.cmd(nodes, "cmd.run", ["mv " + source_file + " " +destination], expr_form='list')
+    print out
+    isError = False
+    for nodeName, message in out.iteritems():
+        if out.get(nodeName) != '':
+            log.error('Failed to enable collectd plugin %s because %s on %s' %(pluginName, out.get(nodeName), nodeName))
+            isError = True
+    if isError:
+        raise Exception('Failed to disable collectd plugin %s' %(pluginName))
+    local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+    return True
+
+
+def RemoveCollectdPlugin(nodes, pluginName):
+    source_file = plugin_root_path + pluginName + '.conf'
+    out = local.cmd(nodes, "cmd.run", ["rm -fr " + source_file], expr_form='list')
+    isError = False
+    for nodeName, message in out.iteritems():
+        if out.get(nodeName) != '':
+            log.error('Failed to enable collectd plugin %s because %s on %s' %(pluginName, out.get(nodeName), nodeName))
+            isError = True
+    if isError:
+        raise Exception('Failed to disable collectd plugin %s' %(pluginName))
+    local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+    return True
+
+
+def _get_state_result(out):
+    failed_minions = {}
+    for minion, v in out.iteritems():
+        failed_results = {}
+        for id, res in v.iteritems():
+            if not res['result']:
+                failed_results.update({id: res})
+        if not v:
+            failed_minions[minion] = {}
+        if failed_results:
+            failed_minions[minion] = failed_results
+    return failed_minions
+
+
+def run_state(tgts, state, *args, **kwargs):
+    out = local.cmd(tgts, 'state.sls', [state], expr_form='list', *args, **kwargs)
+    return _get_state_result(out)
+
+
+def UpdateCollectdThresholds(nodes, plugin_threshold_dict):
+    for key, value in plugin_threshold_dict.iteritems():
+        path = plugin_root_path + key + '.conf'
+        for threshold_type, threshold in value.iteritems():
+            pattern_type = threshold_type_map.get(threshold_type)
+            pattern = pattern_type + " " + "[0-9]*"
+            repl = pattern_type + " " + str(threshold)
+            local.cmd(nodes, "file.replace", expr_form='list', kwarg={'path': path, 'pattern':pattern, 'repl':repl})
+            local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+
