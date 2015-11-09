@@ -14,6 +14,7 @@ package models
 
 import (
 	"github.com/skyrings/skyring/backend"
+	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/tools/uuid"
 	"time"
 )
@@ -80,17 +81,18 @@ type User struct {
 }
 
 type Cluster struct {
-	ClusterId         uuid.UUID         `json:"clusterid"`
-	Name              string            `json:"name"`
-	CompatVersion     string            `json:"compat_version"`
-	Type              string            `json:"type"`
-	WorkLoad          string            `json:"workload"`
-	Status            int               `json:"status"`
-	Tags              []string          `json:"tags"`
-	Options           map[string]string `json:"options"`
-	OpenStackServices []string          `json:"openstack_services"`
-	Networks          ClusterNetworks   `json:"networks"`
-	Enabled           bool              `json:"enabled"`
+	ClusterId         uuid.UUID           `json:"clusterid"`
+	Name              string              `json:"name"`
+	CompatVersion     string              `json:"compat_version"`
+	Type              string              `json:"type"`
+	WorkLoad          string              `json:"workload"`
+	Status            int                 `json:"status"`
+	Tags              []string            `json:"tags"`
+	Options           map[string]string   `json:"options"`
+	OpenStackServices []string            `json:"openstack_services"`
+	Networks          ClusterNetworks     `json:"networks"`
+	Enabled           bool                `json:"enabled"`
+	MonitoringPlugins []monitoring.Plugin `json:"monitoringplugins"`
 }
 
 type ClusterNetworks struct {
