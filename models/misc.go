@@ -14,6 +14,7 @@ package models
 
 import (
 	"fmt"
+	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/tools/uuid"
 	"time"
 )
@@ -27,15 +28,16 @@ type AddStorageNodeRequest struct {
 }
 
 type AddClusterRequest struct {
-	Name              string            `json:"name"`
-	CompatVersion     string            `json:"compat_version"`
-	Type              string            `json:"type"`
-	WorkLoad          string            `json:"workload"`
-	Tags              []string          `json:"tags"`
-	Options           map[string]string `json:"options"`
-	OpenStackServices []string          `json:"openstackservices"`
-	Nodes             []ClusterNode     `json:"nodes"`
-	Networks          ClusterNetworks   `json:"networks"`
+	Name              string              `json:"name"`
+	CompatVersion     string              `json:"compat_version"`
+	Type              string              `json:"type"`
+	WorkLoad          string              `json:"workload"`
+	Tags              []string            `json:"tags"`
+	Options           map[string]string   `json:"options"`
+	OpenStackServices []string            `json:"openstackservices"`
+	Nodes             []ClusterNode       `json:"nodes"`
+	Networks          ClusterNetworks     `json:"networks"`
+	MonitoringPlugins []monitoring.Plugin `json:"monitoringplugins"`
 }
 
 type ClusterNode struct {
