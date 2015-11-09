@@ -89,8 +89,8 @@ cd $CWD
 
 info "Configuring Skyring providers\n"
 # Copy the salt template files:
-cp -f ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/backend/salt/sls/* /srv/salt/
-cp -f ~/.skyring_build/golang/gopath/src/github.com/skyrings/bigfin/backend/salt/sls/* /srv/salt/
+cp -rf ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/backend/salt/sls/* /srv/salt/
+cp -rf ~/.skyring_build/golang/gopath/src/github.com/skyrings/bigfin/backend/salt/sls/* /srv/salt/
 
 # Create the configuration files
 cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/skyring.conf.sample /etc/skyring/skyring.conf

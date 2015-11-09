@@ -14,7 +14,9 @@
 
 package backend
 
-import "github.com/skyrings/skyring/tools/uuid"
+import (
+	"github.com/skyrings/skyring/tools/uuid"
+)
 
 type Node struct {
 	Name        string
