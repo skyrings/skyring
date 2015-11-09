@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_00c86773",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T07:07:58Z",
+      "side": 1,
+      "message": "I feel we should break the patch in two -\n1. Which provides configure mechanism for collectd\n2. Which provides threshold setting/management mechanism",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_60d83b54",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T07:07:58Z",
+      "side": 1,
+      "message": "%s/USM/skyring/g ??",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_a0e25301",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T07:07:58Z",
+      "side": 1,
+      "message": "spelling \"thresholda\"",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_e0e36b03",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T07:07:58Z",
+      "side": 1,
+      "message": "request.Nodes structure was changed recently. Rebase",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_60bf5bd1",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T07:07:58Z",
+      "side": 1,
+      "message": "Remove prints",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_80b477f3",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T07:07:58Z",
+      "side": 1,
+      "message": "Instead of calling threshilds, can we have some more user friendly names like configs?\nPass a dict of name\u003dvalue for setting any configs, at cluster level or system level using this",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_a0b973eb",
+        "filename": "backend/backend.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T07:07:58Z",
+      "side": 1,
+      "message": "remove commented lines",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_c0cd8f88",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T07:07:58Z",
+      "side": 1,
+      "message": "You can use logger to log the errors",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_e0ca8b6d",
+        "filename": "models/plugin_types.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T07:07:58Z",
+      "side": 1,
+      "message": "Cant we define a type as below?\n\ntype Plugin struct {\n  Name string `json:\"name\"`\n  Type string `json:\"type\"`\n  Thresholds map[string]map[string]int\n}",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
