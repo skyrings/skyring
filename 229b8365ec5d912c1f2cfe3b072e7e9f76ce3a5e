@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_d391eb53",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T12:37:10Z",
+      "side": 1,
+      "message": "minor one \n\n%s/retrive/retrieve/g",
+      "revId": "229b8365ec5d912c1f2cfe3b072e7e9f76ce3a5e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_33885f22",
+        "filename": "event/handlermap.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T12:37:10Z",
+      "side": 1,
+      "message": "Just thinking, do we really need these methods? cant we invoke persist_event with event from callers ?",
+      "revId": "229b8365ec5d912c1f2cfe3b072e7e9f76ce3a5e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
