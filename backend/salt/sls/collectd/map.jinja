@@ -1,0 +1,27 @@
+{% set default_settings = {
+'config': '/etc/collectd.conf',
+        'pkg': 'collectd',
+        'plugindirconfig': '/etc/collectd.d',
+        'service': 'collectd',
+        'TypesDB': ['/usr/share/collectd/types.db'],
+        'moduledirconfig': '/usr/lib64/collectd/',
+        'user': 'root',
+        'group': 'root',
+'collectd': {
+        'pkg': 'collectd',
+        'plugindirconfig': '/etc/collectd.d',
+        'service': 'collectd',
+        'TypesDB': ['/usr/share/collectd/types.db'],
+        'moduledirconfig': '/usr/lib64/collectd/',
+        'user': 'root',
+        'group': 'root',
+        'config': '/etc/collectd.conf',
+        'Hostname': salt['grains.get']('fqdn'),
+        'Interval': 10,
+        'Timeout': 2,
+        'ReadThreads': 5,
+        'FQDNLookup': 'false'
+}
+}%}
+{# Update settings defaults from pillar data #}
+{% set collectd_settings = salt['pillar.get']('collectd', default=default_settings.collectd, merge=True) %}
