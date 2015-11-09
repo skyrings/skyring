@@ -1,0 +1,7 @@
+setup.py
+skyring/__init__.py
+skyring/saltwrapper.py
+skyring.egg-info/PKG-INFO
+skyring.egg-info/SOURCES.txt
+skyring.egg-info/dependency_links.txt
+skyring.egg-info/top_level.txt

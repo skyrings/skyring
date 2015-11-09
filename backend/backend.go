@@ -14,7 +14,11 @@
 
 package backend
 
-import "github.com/skyrings/skyring/tools/uuid"
+import (
+	"github.com/skyrings/skyring/tools/uuid"
+	"encoding/json"
+	"fmt"
+)
 
 type Node struct {
 	Name        string
@@ -45,6 +49,93 @@ type Disk struct {
 	Type       string
 	Used       bool
 	Vendor     string
+}
+
+type Plugin struct {
+	Name    string           `json:"name"`
+	Enable  bool             `json:"enable"`
+	Configs []PluginConfig `json:"configs"`
+}
+
+type PluginConfig struct {
+	Category string `json:"category"`
+	Type     string `json:"type"`
+	Value    string `json:"value"`
+}
+
+const SupportedConfigCategories = []string{
+	"threshold",
+	"interval",
+	"miscellaneous",
+}
+
+const SupportedThresholdTypes = []string{
+	"critical",
+	"warning",
+}
+
+func (p Plugin) Valid() bool {
+	validPluginName := Contains(p.Name, SupportedCollectdPlugins)
+	if validPluginName {
+		for _, config := range p.Configs {
+			if !config.Valid() {
+				return false
+			}
+		}
+		return true
+	}
+	return false
+}
+
+func (c PluginConfig) IsConfigTypeValid() bool {
+	switch c.Category {
+	case "threshold":
+		return c.Type != "" && Contains(c.Type, SupportedThresholdTypes)
+	}
+	return true
+}
+
+func (c PluginConfig) IsConfigCategoryValid() bool {
+	return Contains(c.Category, SupportedConfigCategories)
+}
+
+func (c PluginConfig) Valid() bool {
+	return c.IsConfigCategoryValid() && c.IsConfigTypeValid()
+}
+
+type collectd_config PluginConfig
+type collectd_plugin Plugin
+
+const SupportedCollectdPlugins = []string{
+	"df",
+	"memory",
+	"cpu",
+	"python",
+}
+
+func (p *Plugin) UnmarshalJSON(data []byte) (err error) {
+	tPlugin := collectd_plugin{}
+	if err := json.Unmarshal(data, &tPlugin); err != nil {
+		return err
+	}
+	if !(Plugin(tPlugin)).Valid() {
+		return fmt.Errorf("Couldn't Parse %v", tPlugin)
+	}
+	*p = Plugin(tPlugin)
+	fmt.Println(*p)
+	return nil
+}
+
+func (c *PluginConfig) UnmarshalJSON(data []byte) (err error) {
+	tConfig := collectd_config{}
+	if err := json.Unmarshal(data, &tConfig); err != nil {
+		return err
+	}
+	if !(PluginConfig(tConfig)).Valid() {
+		return fmt.Errorf("Couldn't Parse %v", tConfig)
+	}
+	*c = PluginConfig(tConfig)
+	return nil
 }
 
 type Backend interface {
