@@ -14,6 +14,7 @@ package models
 
 import (
 	"fmt"
+	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/tools/uuid"
 	"time"
 )
@@ -36,6 +37,7 @@ type AddClusterRequest struct {
 	OpenStackServices []string          `json:"openstackservices"`
 	Nodes             []ClusterNode     `json:"nodes"`
 	Networks          ClusterNetworks   `json:"networks"`
+	MonitoringPlugins []backend.Plugin  `json:"monitoringplugins"`
 }
 
 type ClusterNode struct {
