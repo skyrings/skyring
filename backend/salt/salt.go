@@ -16,8 +16,10 @@ package salt
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/sbinet/go-python"
 	"github.com/skyrings/skyring/backend"
+	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/gopy"
 	"github.com/skyrings/skyring/tools/ssh"
 	"github.com/skyrings/skyring/tools/uuid"
@@ -34,6 +36,8 @@ var funcNames = [...]string{
 	"IgnoreNode",
 	"DisableService",
 	"EnableService",
+	"ConfigureCollectdPhysicalResources",
+	"UpdateCollectdThresholds",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -102,6 +106,24 @@ func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
 func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
 	if pyobj, err := pyFuncs["GetNodeNetwork"].Call(node); err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &n)
+	}
+	return
+}
+
+func (s Salt) ConfigureCollectdPhysicalResources(node string, master string) (success bool, err error) {
+	fmt.Println("In salt.go ConfigureCollectdPhysicalResources", models.GetDefaultThresholdValues())
+	var p models.Plugin
+	pyobj, err := pyFuncs["ConfigureCollectdPhysicalResources"].Call(p.GetValues(), node, master, models.GetDefaultThresholdValues())
+	fmt.Println("return values are :", pyobj, err)
+	if err != nil {
+		err = gopy.Convert(pyobj, &success)
+	}
+	return
+}
+
+func (s Salt) UpdateCollectdThresholds(nodes []string, threshold interface{}) (err error) {
+	if _, err := pyFuncs["UpdateCollectdPhysicalThresholds"].Call(nodes, threshold); err != nil {
+		//err = gopy.Convert(pyobj, &success)
 	}
 	return
 }
