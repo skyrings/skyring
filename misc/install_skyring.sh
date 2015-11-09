@@ -48,7 +48,7 @@ fi
 # Package installation
 info "Installing necessary packages for skyring\n"
 set -x
-yum -y update
+#yum -y update
 if [ $? -ne 0 ]; then
     error "Failed to update packages"
 fi
@@ -60,7 +60,7 @@ if [ $? -ne 0 ]; then
 fi
 
 set +x
-export GOROOT=/usr/lib/golang/
+export GOROOT=/usr/lib/golang
 export GOPATH=~/.skyring_build/golang/gopath
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 
@@ -91,6 +91,11 @@ info "Configuring Skyring providers\n"
 # Copy the salt template files:
 cp -f ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/backend/salt/sls/* /srv/salt/
 cp -f ~/.skyring_build/golang/gopath/src/github.com/skyrings/bigfin/backend/salt/sls/* /srv/salt/
+
+info "Configuring salt"
+mkdir -p /srv/salt/collectd/files
+cp -rf ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/backend/salt/conf/collectd/* /srv/salt/collectd/files/
+cp -rf ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/backend/salt/sls/collectd/* /srv/salt/collectd/
 
 # Create the configuration files
 cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/skyring.conf.sample /etc/skyring/skyring.conf
