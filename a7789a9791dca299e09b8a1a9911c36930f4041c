@@ -95,6 +95,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_73fe576d",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T13:07:38Z",
+      "side": 1,
+      "message": "Ah. will correct this :)",
+      "parentUuid": "7ac7a964_d3c64b49",
+      "revId": "a7789a9791dca299e09b8a1a9911c36930f4041c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_73e737e5",
         "filename": "apps/skyring/storage.go",
         "patchSetId": 3
@@ -112,6 +130,24 @@
         "endLine": 96,
         "endChar": 27
       },
+      "revId": "a7789a9791dca299e09b8a1a9911c36930f4041c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_9303f372",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T13:07:38Z",
+      "side": 1,
+      "message": "Oh yes. thank for identifying. will correct it.",
+      "parentUuid": "7ac7a964_73e737e5",
       "revId": "a7789a9791dca299e09b8a1a9911c36930f4041c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
