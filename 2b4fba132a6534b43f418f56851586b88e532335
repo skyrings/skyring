@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_33ba1fe2",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T12:26:31Z",
+      "side": 1,
+      "message": "Check for the error as well and return if unable to parse uuid",
+      "revId": "2b4fba132a6534b43f418f56851586b88e532335",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_53bf9bd0",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T12:26:31Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "2b4fba132a6534b43f418f56851586b88e532335",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_73b497f2",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T12:26:31Z",
+      "side": 1,
+      "message": "Shouldnt the URLs be \n\n/api/\u003cver\u003e/clusters/{cluster-id}/events and \n/api/\u003cver\u003e/clusters/{cluster-id}/nodes/{node-id}/events\n\nWhereas all the system level events still happen to be accessed using \n\n/api/\u003cver\u003e/events!\n\n@Kanagaraj/Nishanth, what you suggest??",
+      "revId": "2b4fba132a6534b43f418f56851586b88e532335",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
