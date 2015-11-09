@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_405edfea",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T05:16:51Z",
+      "side": 1,
+      "message": "Shouldnt this task list persisted into DB and returned from there??",
+      "revId": "1633c11c55d7711356fa798a0c93c54e0439ffbd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
