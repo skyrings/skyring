@@ -58,4 +58,6 @@ type Backend interface {
 	IgnoreNode(node string) (bool, error)
 	DisableService(node string, service string, stop bool) (bool, error)
 	EnableService(node string, service string, start bool) (bool, error)
+	ConfigureCollectdPhysicalResources(node string, master string) (success bool, err error)
+	UpdateCollectdThresholds(nodes []string, threshold PluginThresholdMap) (err error)
 }

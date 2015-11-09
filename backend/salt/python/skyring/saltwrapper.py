@@ -248,3 +248,54 @@ def EnableService(node, service, start=False):
         out = local.cmd(node, 'service.start', [service])
 
     return out[node]
+
+threshold_type_map = {"Warning" : "WarningMax", "Critical" : "FailureMax"}
+
+def ConfigureCollectdPhysicalResources(plugin_list, node, master=None, thresholds=None):
+    state_list = ''
+    no_of_plugins = len(plugin_list)
+    for index in range(no_of_plugins):
+        state_list += ('collectd.' + plugin_list[index])
+        if index < no_of_plugins -1:
+            state_list += ","
+    dict = {}
+    if master != None:
+        dict["master_name"] = master
+    if thresholds != None:
+        dict["thresholds"] = thresholds
+    pillar = {"collectd": dict}
+    result = run_state(node, state_list, kwarg={'pillar':pillar})
+    if result:
+        log.error('Collectd configuring failed for %s. error=%s' %(node, result))
+        raise Exception('Collectd configuring failed for %s. error=%s' %(node, result))
+    return True
+
+
+def _get_state_result(out):
+    failed_minions = {}
+    for minion, v in out.iteritems():
+        failed_results = {}
+        for id, res in v.iteritems():
+            if not res['result']:
+                failed_results.update({id: res})
+        if not v:
+            failed_minions[minion] = {}
+        if failed_results:
+            failed_minions[minion] = failed_results
+    return failed_minions
+
+
+def run_state(tgt, state, *args, **kwargs):
+    out = local.cmd(tgt, 'state.sls', [state], *args, **kwargs)
+    return _get_state_result(out)
+
+
+def UpdateCollectdThresholds(nodes, plugin_threshold_dict):
+    for key, value in plugin_threshold_dict.iteritems():
+        path = '/etc/collectd.d/' + key + '.conf'
+        for threshold_type, threshold in value.iteritems():
+            pattern_type = threshold_type_map.get(threshold_type)
+            pattern = pattern_type + " " + "[0-9]*"
+            repl = pattern_type + " " + str(threshold)
+            local.cmd(nodes, "file.replace", expr_form='list', kwarg={'path': path, 'pattern':pattern, 'repl':repl})
+

@@ -24,4 +24,5 @@ type NodeManagerInterface interface {
 	EnableNode(node string) (bool, error)
 	SyncStorageDisks(node string) (bool, error)
 	RemoveNode(node string) (bool, error)
+	ConfigureCollectdPhysicalResources(node string, master string) (bool, error)
 }

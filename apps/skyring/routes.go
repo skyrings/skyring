@@ -153,6 +153,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "POST_Thresholds",
+			Method:      "POST",
+			Pattern:     "cluster/{cluster-id}/thresholds",
+			HandlerFunc: a.POST_Thresholds,
+			Version:     1,
+		},
+		{
 			Name:        "GET_Clusters",
 			Method:      "GET",
 			Pattern:     "clusters",

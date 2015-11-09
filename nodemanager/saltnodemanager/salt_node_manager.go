@@ -49,6 +49,10 @@ func NewSaltNodeManager(config io.Reader) (*SaltNodeManager, error) {
 	return &SaltNodeManager{}, nil
 }
 
+func (a SaltNodeManager) ConfigureCollectdPhysicalResources(node string, master string) (bool, error) {
+	return salt_backend.ConfigureCollectdPhysicalResources(node, master)
+}
+
 func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.Node, error) {
 	if ok, err := salt_backend.AcceptNode(node, fingerprint, false); err != nil || !ok {
 		return nil, err

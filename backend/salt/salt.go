@@ -34,6 +34,8 @@ var funcNames = [...]string{
 	"IgnoreNode",
 	"DisableService",
 	"EnableService",
+	"ConfigureCollectdPhysicalResources",
+	"UpdateCollectdThresholds",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -102,6 +104,21 @@ func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
 func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
 	if pyobj, err := pyFuncs["GetNodeNetwork"].Call(node); err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &n)
+	}
+	return
+}
+
+func (s Salt) ConfigureCollectdPhysicalResources(node string, master string) (success bool, err error) {
+	pyobj, err := pyFuncs["ConfigureCollectdPhysicalResources"].Call(backend.Plugins, node, master, backend.GetDefaultThresholdValues())
+	if err != nil {
+		err = gopy.Convert(pyobj, &success)
+	}
+	return
+}
+
+func (s Salt) UpdateCollectdThresholds(nodes []string, threshold backend.PluginThresholdMap) (err error) {
+	if _, err := pyFuncs["UpdateCollectdThresholds"].Call(nodes, threshold); err != nil {
+		//err = gopy.Convert(pyobj, &success)
 	}
 	return
 }

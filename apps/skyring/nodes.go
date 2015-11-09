@@ -102,6 +102,9 @@ func acceptNode(w http.ResponseWriter, hostname string, fingerprint string) {
 
 	if node, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint); err == nil {
 		addStorageNodeToDB(w, *node)
+		if _, configureError := GetCoreNodeManager().ConfigureCollectdPhysicalResources(hostname, curr_hostname); configureError != nil {
+			util.HttpResponse(w, http.StatusInternalServerError, "Unable to configure node")
+		}
 	} else {
 		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Unable to accept node: %v", err))
 	}

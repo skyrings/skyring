@@ -12,6 +12,8 @@ limitations under the License.
 */
 package models
 
+import "github.com/skyrings/skyring/backend"
+
 type AddStorageNodeRequest struct {
 	Hostname       string `json:"hostname"`
 	SshFingerprint string `json:"sshfingerprint"`
@@ -21,15 +23,16 @@ type AddStorageNodeRequest struct {
 }
 
 type AddClusterRequest struct {
-	Name              string            `json:"name"`
-	CompatVersion     string            `json:"compat_version"`
-	Type              string            `json:"type"`
-	WorkLoad          string            `json:"workload"`
-	Tags              []string          `json:"tags"`
-	Options           map[string]string `json:"options"`
-	OpenStackServices []string          `json:"openstackservices"`
-	Nodes             []ClusterNode     `json:"nodes"`
-	Networks          ClusterNetworks   `json:"networks"`
+	Name                 string                     `json:"name"`
+	CompatVersion        string                     `json:"compat_version"`
+	Type                 string                     `json:"type"`
+	WorkLoad             string                     `json:"workload"`
+	Tags                 []string                   `json:"tags"`
+	Options              map[string]string          `json:"options"`
+	OpenStackServices    []string                   `json:"openstackservices"`
+	Nodes                []ClusterNode              `json:"nodes"`
+	Networks             ClusterNetworks            `json:"networks"`
+	MonitoringThresholds backend.PluginThresholdMap `json:"monitoring_thresholds"`
 }
 
 type ClusterNode struct {

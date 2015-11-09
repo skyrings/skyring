@@ -17,6 +17,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring/backend"
+	"github.com/skyrings/skyring/backend/salt"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
@@ -27,6 +29,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"reflect"
 )
 
 var (
@@ -46,13 +49,16 @@ const (
 	CLUSTER_STATUS_DOWN = "down"
 )
 
+var (
+	salt_backend = salt.New()
+)
+
 func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	var request models.AddClusterRequest
 
 	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
-		logger.Get().Error("Error parsing the request: %v", err)
 		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
 		return
 	}
@@ -94,7 +100,90 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	if err := syncStorageDisks(request.Nodes); err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
+	} else {
+		if reflect.ValueOf(request.MonitoringThresholds).IsValid() && len(request.MonitoringThresholds) != 0 && err == nil {
+			var nodes []string
+			nodesMap, nodesFetchError := getNodes(request.Nodes)
+			if nodesFetchError == nil {
+				for _, node := range nodesMap {
+					nodes = append(nodes, node.Hostname)
+				}
+				salt_backend.UpdateCollectdThresholds(nodes, request.MonitoringThresholds)
+			} else {
+				util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+			}
+		}
 	}
+}
+
+func (a *App) POST_Thresholds(w http.ResponseWriter, r *http.Request) {
+	var request backend.PluginThresholdMap
+
+	vars := mux.Vars(r)
+	cluster_id := vars["cluster-id"]
+
+	// Unmarshal the request body
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
+		return
+	}
+	if err := json.Unmarshal(body, &request); err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
+		return
+	}
+
+	if reflect.ValueOf(request).IsValid() && len(request) != 0 && err == nil {
+		cluster_id_uuid, cluster_id_parse_error := uuid.Parse(cluster_id)
+		if cluster_id_parse_error == nil {
+			cluster_node_names, err := getNodesInCluster(cluster_id_uuid)
+			if err == nil {
+				updateErr := salt_backend.UpdateCollectdThresholds(cluster_node_names, request)
+				if updateErr != nil {
+					util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+				}
+
+			} else {
+				util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+			}
+		}
+	}
+}
+
+func getNodesInCluster(cluster_id *uuid.UUID) (cluster_node_names []string, err error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var nodes models.Nodes
+	if err := collection.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+		//util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("Error getting the nodes for the cluster: %s", err)
+		return nil, err
+	}
+	for _, node := range nodes {
+		cluster_node_names = append(cluster_node_names, node.Hostname)
+	}
+	return cluster_node_names, nil
+}
+
+func getNodes(clusterNodes []models.ClusterNode) (map[uuid.UUID]models.Node, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var nodes = make(map[uuid.UUID]models.Node)
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	for _, clusterNode := range clusterNodes {
+		uuid, err := uuid.Parse(clusterNode.NodeId)
+		if err != nil {
+			return nodes, errors.New(fmt.Sprintf("Error parsing node id: %v", clusterNode.NodeId))
+		}
+		var node models.Node
+		if err := coll.Find(bson.M{"nodeid": *uuid}).One(&node); err != nil {
+			return nodes, err
+		}
+		nodes[node.NodeId] = node
+	}
+	return nodes, nil
 }
 
 func cluster_exists(key string, value string) (*models.Cluster, error) {
