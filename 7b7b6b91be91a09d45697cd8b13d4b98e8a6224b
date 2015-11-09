@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_402c1f4b",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T06:54:28Z",
+      "side": 1,
+      "message": "%s/NodeEventDoc/NodeEvent/g",
+      "revId": "7b7b6b91be91a09d45697cd8b13d4b98e8a6224b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_60311ba2",
+        "filename": "event/handlermap.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T06:54:28Z",
+      "side": 1,
+      "message": "Source header?",
+      "revId": "7b7b6b91be91a09d45697cd8b13d4b98e8a6224b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_80263767",
+        "filename": "event/handlermap.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T06:54:28Z",
+      "side": 1,
+      "message": "We can say just as below as you are returing the err only nil to not :)\n\nreturn persist_event(event)",
+      "revId": "7b7b6b91be91a09d45697cd8b13d4b98e8a6224b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_a02b332f",
+        "filename": "event/listener.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T06:54:28Z",
+      "side": 1,
+      "message": "handle the error and return if not able to form the uuid",
+      "revId": "7b7b6b91be91a09d45697cd8b13d4b98e8a6224b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_c01f4f08",
+        "filename": "event/listener.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T06:54:28Z",
+      "side": 1,
+      "message": "Some better name other than \"fun\"? May be \"handler\"?",
+      "revId": "7b7b6b91be91a09d45697cd8b13d4b98e8a6224b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_e01c4b16",
+        "filename": "models/misc.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T06:54:28Z",
+      "side": 1,
+      "message": "I understand this structure defines the event which is received from node and the second one below defines the DB entity structure.\n\nWe can keep this name as NodeEvent and change the below one as \"Event\" only??",
+      "revId": "7b7b6b91be91a09d45697cd8b13d4b98e8a6224b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_001a2717",
+        "filename": "tools/task/task.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-09T06:54:28Z",
+      "side": 1,
+      "message": "I think this was fixed recently. Rebase the patch.",
+      "revId": "7b7b6b91be91a09d45697cd8b13d4b98e8a6224b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
