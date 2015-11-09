@@ -73,6 +73,15 @@ func HandleHttpError(rw http.ResponseWriter, err error) {
 	rw.Write(bytes)
 }
 
+func Contains(key string, keys []string) bool {
+	for _, permittedKey := range keys {
+		if permittedKey == key {
+			return true
+		}
+	}
+	return false
+}
+
 func HttpResponse(w http.ResponseWriter, status_code int, msg string) {
 	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
 	w.WriteHeader(status_code)

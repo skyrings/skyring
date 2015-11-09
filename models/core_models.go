@@ -88,6 +88,7 @@ type Cluster struct {
 	OpenStackServices []string          `json:"openstack_services"`
 	Networks          ClusterNetworks   `json:"networks"`
 	Enabled           bool              `json:"enabled"`
+	MonitoringPlugins []backend.Plugin  `json:"monitoringplugins"`
 }
 
 type ClusterNetworks struct {
