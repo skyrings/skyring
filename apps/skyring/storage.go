@@ -152,3 +152,21 @@ func (a *App) GET_Storage(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(storage)
 	}
 }
+
+func (a *App) GET_AllStorages(w http.ResponseWriter, r *http.Request) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
+	var storages models.Storages
+	if err := collection.Find(nil).All(&storages); err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("Error getting the storage list: %v", err)
+		return
+	}
+	if len(storages) == 0 {
+		json.NewEncoder(w).Encode(models.Storages{})
+	} else {
+		json.NewEncoder(w).Encode(storages)
+	}
+}
