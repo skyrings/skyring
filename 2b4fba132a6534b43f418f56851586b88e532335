@@ -50,6 +50,24 @@
       "revId": "2b4fba132a6534b43f418f56851586b88e532335",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_42e97f19",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-10T10:28:27Z",
+      "side": 1,
+      "message": "Do we really need separate APIs here? I think we can live with the single API  -/api/\u003cver\u003e/events with filtering parameters for nodeId and clusterId\n\nIn the above approach there may nodes which are in the free pool, so you may have come up with another API to get the events from those nodes",
+      "parentUuid": "7ac7a964_73b497f2",
+      "revId": "2b4fba132a6534b43f418f56851586b88e532335",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
