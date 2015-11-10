@@ -33,6 +33,93 @@
       "revId": "229b8365ec5d912c1f2cfe3b072e7e9f76ce3a5e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_a7b505cf",
+        "filename": "event/handlermap.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-10T08:05:35Z",
+      "side": 1,
+      "message": "Even I am thinking on the similar lines. I understand that these handler function are required if we need to do special processing for a specific event. But persistence is common for all events and hence can be called from calle func( RouteEvent). You can have this infrastructure here but implement these handlers and entry into the map whenever required(when we add support for corelation etc)",
+      "parentUuid": "7ac7a964_33885f22",
+      "revId": "229b8365ec5d912c1f2cfe3b072e7e9f76ce3a5e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_2773b54e",
+        "filename": "event/listener.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-10T08:05:35Z",
+      "side": 1,
+      "message": "Are we checking the managed status of the node anywhere? Events from unmanaged nodes should be dropped.",
+      "range": {
+        "startLine": 82,
+        "startChar": 1,
+        "endLine": 83,
+        "endChar": 24
+      },
+      "revId": "229b8365ec5d912c1f2cfe3b072e7e9f76ce3a5e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_c7a2019a",
+        "filename": "event/listener.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-10T08:05:35Z",
+      "side": 1,
+      "message": "Error needs to be handled",
+      "range": {
+        "startLine": 87,
+        "startChar": 11,
+        "endLine": 87,
+        "endChar": 13
+      },
+      "revId": "229b8365ec5d912c1f2cfe3b072e7e9f76ce3a5e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_07add988",
+        "filename": "event/listener.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-10T08:05:35Z",
+      "side": 1,
+      "message": "Is there is anyone looking for these task completion status?\nIf not, I feel that using task framework here would be an overhead as this update status will be persisted to the DB. What we need here is just to spawn a go routine then and there to do this job. We can discuss ..",
+      "range": {
+        "startLine": 108,
+        "startChar": 1,
+        "endLine": 116,
+        "endChar": 2
+      },
+      "revId": "229b8365ec5d912c1f2cfe3b072e7e9f76ce3a5e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
