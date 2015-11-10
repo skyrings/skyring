@@ -68,6 +68,24 @@
       "revId": "2b4fba132a6534b43f418f56851586b88e532335",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_e247eb1b",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-10T10:38:26Z",
+      "side": 1,
+      "message": "/api/\u003cver\u003e/clusters/{cluster-id}/nodes/{node-id}\n\nlists a node participating in the cluster \n\n/api/\u003cver\u003e/nodes lists all the nodes in the system partcipating and non-participating in clusters\n\nBut I am ok as long as system level events serve our purpose :))",
+      "parentUuid": "7ac7a964_42e97f19",
+      "revId": "2b4fba132a6534b43f418f56851586b88e532335",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
