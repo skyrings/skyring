@@ -228,3 +228,12 @@ func (a SaltNodeManager) RemoveNode(node string) (bool, error) {
 
 	return true, nil
 }
+
+func (a SaltNodeManager) IgnoreNode(node string) (bool, error) {
+	if ok, err := salt_backend.IgnoreNode(node); err != nil || !ok {
+		logger.Get().Error(fmt.Sprintf("Error rejecting node: %s, error: %v", node, err))
+		return false, err
+	}
+
+	return true, nil
+}
