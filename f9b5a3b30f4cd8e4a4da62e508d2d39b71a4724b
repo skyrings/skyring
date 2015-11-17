@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_751d3b66",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-17T19:15:02Z",
+      "side": 1,
+      "message": "Done.Will do it as a subsequent patch.",
+      "parentUuid": "7ac7a964_00c86773",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_60d83b54",
         "filename": "/COMMIT_MSG",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-09T07:07:58Z",
       "side": 1,
       "message": "%s/USM/skyring/g ??",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_5593dfa2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-17T19:15:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_60d83b54",
       "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_7590db95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-17T19:15:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_a0e25301",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_e0e36b03",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 5
@@ -64,6 +118,24 @@
       "writtenOn": "2015-11-09T07:07:58Z",
       "side": 1,
       "message": "request.Nodes structure was changed recently. Rebase",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_b526f3b8",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-17T19:15:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_e0e36b03",
       "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_1526c7b7",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-17T19:15:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_60bf5bd1",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_80b477f3",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 5
@@ -98,6 +188,24 @@
       "writtenOn": "2015-11-09T07:07:58Z",
       "side": 1,
       "message": "Instead of calling threshilds, can we have some more user friendly names like configs?\nPass a dict of name\u003dvalue for setting any configs, at cluster level or system level using this",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_150fa731",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-17T19:15:02Z",
+      "side": 1,
+      "message": "I am not sure if I got it right but I feel it should be custom right I mean in this case its more of a file edit but it could be command execution and more over we also need to evaluate the validity of the key value pair passed right and this is specific to the case right.",
+      "parentUuid": "7ac7a964_80b477f3",
       "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_353ae3cd",
+        "filename": "backend/backend.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-17T19:15:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_a0b973eb",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_c0cd8f88",
         "filename": "backend/salt/salt.go",
         "patchSetId": 5
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_75345bde",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-17T19:15:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_c0cd8f88",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_e0ca8b6d",
         "filename": "models/plugin_types.go",
         "patchSetId": 5
@@ -149,6 +293,24 @@
       "writtenOn": "2015-11-09T07:07:58Z",
       "side": 1,
       "message": "Cant we define a type as below?\n\ntype Plugin struct {\n  Name string `json:\"name\"`\n  Type string `json:\"type\"`\n  Thresholds map[string]map[string]int\n}",
+      "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_356823ba",
+        "filename": "models/plugin_types.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-17T19:15:02Z",
+      "side": 1,
+      "message": "I thought of just having a map bcoz it has no concrete purpose other than just creating a few configurations and CRUD on them. And the field Thresholds needs to be just an int no need of map with the structure you suggested. But I have a small issue here that int has a zero value 0. Although the map also has a non-nil zero value I can atleast check if its zero value and also its length which lets me differentiate between user not passing any value and user passing a zero value.",
+      "parentUuid": "7ac7a964_e0ca8b6d",
       "revId": "f9b5a3b30f4cd8e4a4da62e508d2d39b71a4724b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
