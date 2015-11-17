@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_a4e9671c",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2015-11-17T08:35:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_33ba1fe2",
+      "revId": "2b4fba132a6534b43f418f56851586b88e532335",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_53bf9bd0",
         "filename": "apps/skyring/events.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-09T12:26:31Z",
       "side": 1,
       "message": "Same as above",
+      "revId": "2b4fba132a6534b43f418f56851586b88e532335",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_c4ee6322",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2015-11-17T08:35:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_53bf9bd0",
       "revId": "2b4fba132a6534b43f418f56851586b88e532335",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -83,6 +119,24 @@
       "side": 1,
       "message": "/api/\u003cver\u003e/clusters/{cluster-id}/nodes/{node-id}\n\nlists a node participating in the cluster \n\n/api/\u003cver\u003e/nodes lists all the nodes in the system partcipating and non-participating in clusters\n\nBut I am ok as long as system level events serve our purpose :))",
       "parentUuid": "7ac7a964_42e97f19",
+      "revId": "2b4fba132a6534b43f418f56851586b88e532335",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_e4f35f08",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2015-11-17T08:35:43Z",
+      "side": 1,
+      "message": "Now We can filters the events based on node and cluster with existing event APi.(/api/\u003cver\u003e/events )\n\n*query parameter for filtering events for node - node_id\u003d\u003cnode_id\u003e (/api/\u003cver\u003e/events?node_id\u003d\u003cnode_id\u003e )\n\n*query parameter for filtering events for cluster - cluster_id\u003d\u003ccluster_id\u003e (/api/\u003cver\u003e/events?cluster_id\u003d\u003ccluster_id\u003e )",
+      "parentUuid": "7ac7a964_e247eb1b",
       "revId": "2b4fba132a6534b43f418f56851586b88e532335",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
