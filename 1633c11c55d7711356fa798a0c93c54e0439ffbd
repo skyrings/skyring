@@ -16,6 +16,24 @@
       "revId": "1633c11c55d7711356fa798a0c93c54e0439ffbd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_a11239b2",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-18T07:14:10Z",
+      "side": 1,
+      "message": "Didn\u0027t get this point, could you pls explain?",
+      "parentUuid": "7ac7a964_405edfea",
+      "revId": "1633c11c55d7711356fa798a0c93c54e0439ffbd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
