@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "9ab29df4_28d99283",
+        "filename": "tools/task/manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-18T07:13:03Z",
+      "side": 1,
+      "message": "didn\u0027t get it?",
+      "parentUuid": "9ab29df4_54ff42aa",
+      "revId": "585e290dc170ed0d49f17e75cf445031cb62958b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_c5ce46b4",
         "filename": "tools/task/task_manager.go",
         "patchSetId": 1
@@ -123,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_c11735a2",
+        "filename": "tools/task/task_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-18T07:13:03Z",
+      "side": 1,
+      "message": "I will move this code to skyring package as you suggested",
+      "parentUuid": "7ac7a964_ff7dd3b2",
+      "revId": "585e290dc170ed0d49f17e75cf445031cb62958b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_9430fa9f",
         "filename": "tools/task/task_manager.go",
         "patchSetId": 1
@@ -134,6 +170,24 @@
       "writtenOn": "2015-11-05T04:35:44Z",
       "side": 1,
       "message": "Source header?? Copyright etc",
+      "revId": "585e290dc170ed0d49f17e75cf445031cb62958b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_e8f79af3",
+        "filename": "tools/task/task_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-18T07:13:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_9430fa9f",
       "revId": "585e290dc170ed0d49f17e75cf445031cb62958b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
