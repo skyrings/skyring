@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_ab4db274",
+        "filename": "tools/lock/applock.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-18T04:24:34Z",
+      "side": 1,
+      "message": "Source level comments??",
+      "revId": "2a6f646c9892722577de90ee26b19241c05ce92f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_0b5dc621",
+        "filename": "tools/lock/lock.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-18T04:24:34Z",
+      "side": 1,
+      "message": "Source level comments",
+      "revId": "2a6f646c9892722577de90ee26b19241c05ce92f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_eb57aa00",
+        "filename": "tools/lock/lock.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-18T04:24:34Z",
+      "side": 1,
+      "message": "Messages??",
+      "revId": "2a6f646c9892722577de90ee26b19241c05ce92f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_2b41a239",
+        "filename": "tools/lock/lockmanager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-18T04:24:34Z",
+      "side": 1,
+      "message": "Source level comments",
+      "revId": "2a6f646c9892722577de90ee26b19241c05ce92f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_6b4b9a59",
+        "filename": "tools/lock/lockmanager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-18T04:24:34Z",
+      "side": 1,
+      "message": "Are we going to allow locking across providers as well??\nShouldnt we acquire lock in skyring only in case the call goes through skyring.\n\nAnyway for provider specific calls, providers would acquire the locks themselves and skyring does not need to worry about that.",
+      "revId": "2a6f646c9892722577de90ee26b19241c05ce92f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
