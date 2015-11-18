@@ -16,6 +16,24 @@
       "revId": "2999fe33e31f40e80a0be6cd0b42b387658fb9ac",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_0b9f8653",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2015-11-18T07:26:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_2b3a82cd",
+      "revId": "2999fe33e31f40e80a0be6cd0b42b387658fb9ac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
