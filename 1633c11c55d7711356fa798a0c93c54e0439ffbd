@@ -34,6 +34,24 @@
       "revId": "1633c11c55d7711356fa798a0c93c54e0439ffbd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_6b9f1a60",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-18T07:16:31Z",
+      "side": 1,
+      "message": "Not to worry. Next patch for cluster management would take care.",
+      "parentUuid": "7ac7a964_a11239b2",
+      "revId": "1633c11c55d7711356fa798a0c93c54e0439ffbd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
