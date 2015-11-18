@@ -31,16 +31,19 @@ func (s Status) String() string {
 }
 
 type Task struct {
-	Mutex      *sync.Mutex
-	ID         uuid.UUID
-	Name       string
-	Tag        map[string]string
-	Started    bool
-	Completed  bool
-	DoneCh     chan bool
-	StatusList []Status
-	StopCh     chan bool
-	Func       func(t *Task)
+	Mutex            *sync.Mutex
+	ID               uuid.UUID
+	Name             string
+	Tag              map[string]string
+	Started          bool
+	Completed        bool
+	DoneCh           chan bool
+	StatusList       []Status
+	StopCh           chan bool
+	Func             func(t *Task)
+	StartedCbkFunc   func(t *Task)
+	CompletedCbkFunc func(t *Task)
+	StatusCbkFunc    func(t *Task, s *Status)
 }
 
 func (t Task) String() string {
@@ -48,9 +51,13 @@ func (t Task) String() string {
 }
 
 func (t *Task) UpdateStatus(format string, args ...interface{}) {
+	s := Status{time.Now(), fmt.Sprintf(format, args...)}
 	t.Mutex.Lock()
-	defer t.Mutex.Unlock()
-	t.StatusList = append(t.StatusList, Status{time.Now(), fmt.Sprintf(format, args...)})
+	t.StatusList = append(t.StatusList, s)
+	t.Mutex.Unlock()
+	if t.StatusCbkFunc != nil {
+		go t.StatusCbkFunc(t, &s)
+	}
 }
 
 func (t *Task) GetStatus() (status []Status) {
@@ -64,6 +71,9 @@ func (t *Task) GetStatus() (status []Status) {
 func (t *Task) Run() {
 	go t.Func(t)
 	t.Started = true
+	if t.StartedCbkFunc != nil {
+		go t.StartedCbkFunc(t)
+	}
 }
 
 func (t *Task) Done() {
@@ -77,6 +87,9 @@ func (t *Task) IsDone() bool {
 	case _, read := <-t.DoneCh:
 		if read == true {
 			t.Completed = true
+			if t.CompletedCbkFunc != nil {
+				go t.CompletedCbkFunc(t)
+			}
 			return true
 		} else {
 			// DoneCh is in closed state
