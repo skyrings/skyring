@@ -14,7 +14,6 @@ package models
 
 import (
 	"github.com/skyrings/skyring/backend"
-	"github.com/skyrings/skyring/tools/task"
 	"github.com/skyrings/skyring/tools/uuid"
 )
 
@@ -105,13 +104,6 @@ type StorageLogicalUnit struct {
 	StorageDeviceId uuid.UUID         `json:"storagedeviceid"`
 	Status          string            `json:"status"`
 	Options         map[string]string `json:"options"`
-}
-
-type Task struct {
-	Id         uuid.UUID     `json:"id"`
-	Started    bool          `json:"started"`
-	Completed  bool          `json:"completed"`
-	StatusList []task.Status `json:"statuslist"`
 }
 
 type Storage struct {
