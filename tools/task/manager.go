@@ -17,12 +17,15 @@ package task
 import (
 	"errors"
 	"fmt"
+	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/uuid"
+	"gopkg.in/mgo.v2/bson"
 	"sync"
 )
 
 type Manager struct {
-	tasks map[uuid.UUID]*Task
 }
 
 func (manager *Manager) Run(name string, f func(t *Task)) (uuid.UUID, error) {
@@ -37,7 +40,6 @@ func (manager *Manager) Run(name string, f func(t *Task)) (uuid.UUID, error) {
 			Func:       f,
 		}
 		task.Run()
-		manager.tasks[*id] = &task
 		return *id, nil
 	} else {
 		return uuid.UUID{}, err
@@ -45,45 +47,66 @@ func (manager *Manager) Run(name string, f func(t *Task)) (uuid.UUID, error) {
 }
 
 func (manager *Manager) IsDone(id uuid.UUID) (b bool, err error) {
-	if task, ok := manager.tasks[id]; ok {
-		b = task.IsDone()
-	} else {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	var task AppTask
+	if err := coll.Find(bson.M{"id": id}).One(&task); err != nil {
 		err = errors.New(fmt.Sprintf("task id %s not found", id))
+	} else {
+		b = task.Completed
 	}
 	return
 }
 
 func (manager *Manager) IsStarted(id uuid.UUID) (b bool, err error) {
-	if task, ok := manager.tasks[id]; ok {
-		b = task.Started
-	} else {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	var task AppTask
+	if err := coll.Find(bson.M{"id": id}).One(&task); err != nil {
 		err = errors.New(fmt.Sprintf("task id %s not found", id))
+	} else {
+		b = task.Started
 	}
 	return
 }
 
 func (manager *Manager) GetStatus(id uuid.UUID) (status []Status, err error) {
-	if task, ok := manager.tasks[id]; ok {
-		status = task.GetStatus()
-	} else {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	var task AppTask
+	if err := coll.Find(bson.M{"id": id}).One(&task); err != nil {
 		err = errors.New(fmt.Sprintf("task id %s not found", id))
+	} else {
+		status = task.StatusList
 	}
 	return
 }
 
 func (manager *Manager) Remove(id uuid.UUID) {
-	delete(manager.tasks, id)
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	_ = coll.Remove(bson.M{"id": id})
 }
 
 func (manager *Manager) List() []uuid.UUID {
-	ids := make([]uuid.UUID, 0, len(manager.tasks))
-	for k := range manager.tasks {
-		ids = append(ids, k)
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	var tasks []AppTask
+	if err := coll.Find(nil).All(&tasks); err != nil {
+		return []uuid.UUID{}
 	}
-
+	ids := make([]uuid.UUID, 0, len(tasks))
+	for _, task := range tasks {
+		ids = append(ids, task.Id)
+	}
 	return ids
 }
 
 func NewManager() Manager {
-	return Manager{make(map[uuid.UUID]*Task)}
+	return Manager{}
 }
