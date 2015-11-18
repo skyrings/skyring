@@ -21,6 +21,7 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/task"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"gopkg.in/mgo.v2/bson"
@@ -74,21 +75,66 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var result models.RpcResponse
-	// Get the specific provider and invoke the method
-	provider := a.getProviderFromClusterType(request.Type)
-	err = provider.Client.Call(fmt.Sprintf("%s.%s",
-		provider.Name, cluster_post_functions["create"]),
-		models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body},
-		&result)
-	if err != nil || result.Status.StatusCode != http.StatusOK {
-		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error while cluster creation %v", err))
-		return
+	var providerTaskId *uuid.UUID
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for cluster creation: %v", t.ID)
+		// Get the specific provider and invoke the method
+		provider := a.getProviderFromClusterType(request.Type)
+		err = provider.Client.Call(fmt.Sprintf("%s.%s",
+			provider.Name, cluster_post_functions["create"]),
+			models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body},
+			&result)
+		if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+			t.UpdateStatus("Failed")
+			return
+		} else {
+			// Update the master task id
+			providerTaskId, err = uuid.Parse(result.Data.RequestId)
+			if err != nil {
+				t.UpdateStatus("Failed. Error parsing provider async task id")
+				return
+			}
+			sessionCopy := db.GetDatastore().Copy()
+			defer sessionCopy.Close()
+			coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+			logger.Get().Info("Provider task id: %v", *providerTaskId)
+			logger.Get().Info("Parent Id: %v", t.ID)
+			t.UpdateStatus("Updating parent task id")
+			if err := coll.Update(bson.M{"id": *providerTaskId}, bson.M{"$set": bson.M{"parentid": t.ID}}); err != nil {
+				t.UpdateStatus("Failed. Error updating the parent task id")
+				return
+			}
+
+			// Check for provider task to complete and update the disk info
+			for {
+				var providerTask task.AppTask
+				if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+					t.UpdateStatus("Failed. Error getting provider task status")
+					return
+				}
+				if providerTask.Completed {
+					t.UpdateStatus("Staring disk sync")
+					if err := syncStorageDisks(request.Nodes); err != nil {
+						t.UpdateStatus("Failed")
+					} else {
+						t.UpdateStatus("Success")
+					}
+					t.Done()
+					break
+				}
+			}
+		}
 	}
 
-	// Sync the storage disk information for the cluster nodes
-	if err := syncStorageDisks(request.Nodes); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+	if taskId, err := a.GetTaskManager().Run("CreateCluster", asyncTask); err != nil {
+		logger.Get().Error("Unable to create task for create cluster. error: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create cluster")
 		return
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 
@@ -338,11 +384,11 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Sync the storage disk information for the cluster nodes
-	if err := syncStorageDisks(new_nodes); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+	// // Sync the storage disk information for the cluster nodes
+	// if err := syncStorageDisks(new_nodes); err != nil {
+	// 	util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+	// 	return
+	// }
 }
 
 func (a *App) GET_ClusterNodes(w http.ResponseWriter, r *http.Request) {

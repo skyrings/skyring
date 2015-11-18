@@ -16,7 +16,11 @@ package task
 
 import (
 	"fmt"
+	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/uuid"
+	"gopkg.in/mgo.v2/bson"
 	"sync"
 	"time"
 )
@@ -43,6 +47,14 @@ type Task struct {
 	Func       func(t *Task)
 }
 
+type AppTask struct {
+	Id         uuid.UUID
+	ParentId   uuid.UUID
+	Started    bool
+	Completed  bool
+	StatusList []Status
+}
+
 func (t Task) String() string {
 	return fmt.Sprintf("Task{ID=%s, Name=%s, Started=%t, Completed=%t}", t.ID, t.Name, t.Started, t.Completed)
 }
@@ -51,6 +63,7 @@ func (t *Task) UpdateStatus(format string, args ...interface{}) {
 	t.Mutex.Lock()
 	defer t.Mutex.Unlock()
 	t.StatusList = append(t.StatusList, Status{time.Now(), fmt.Sprintf(format, args...)})
+	t.UpdateStatusList(t.StatusList)
 }
 
 func (t *Task) GetStatus() (status []Status) {
@@ -64,12 +77,14 @@ func (t *Task) GetStatus() (status []Status) {
 func (t *Task) Run() {
 	go t.Func(t)
 	t.Started = true
+	t.Persist()
 }
 
 func (t *Task) Done() {
 	t.DoneCh <- true
 	close(t.DoneCh)
 	t.Completed = true
+	t.UpdateTaskCompleted(t.Completed)
 }
 
 func (t *Task) IsDone() bool {
@@ -85,4 +100,45 @@ func (t *Task) IsDone() bool {
 	default:
 		return false
 	}
+}
+
+func (t *Task) Persist() (bool, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+
+	// Populate the task details. The parent ID should always be updated by the parent task later.
+	var appTask AppTask
+	appTask.Id = t.ID
+	appTask.Started = t.Started
+	appTask.Completed = t.Completed
+	appTask.StatusList = t.StatusList
+
+	if err := coll.Insert(appTask); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (t *Task) UpdateStatusList(status []Status) (bool, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	if err := coll.Update(bson.M{"id": t.ID}, bson.M{"$set": bson.M{"statuslist": status}}); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (t *Task) UpdateTaskCompleted(b bool) (bool, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	if err := coll.Update(bson.M{"id": t.ID}, bson.M{"$set": bson.M{"completed": b}}); err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
