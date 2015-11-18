@@ -3,35 +3,31 @@ package skyring
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
+	"gopkg.in/mgo.v2/bson"
 	"net/http"
 )
 
 func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
-	var taskList []models.Task
-	tasks := a.GetTaskManager().List()
-	for _, taskId := range tasks {
-		started, _ := a.GetTaskManager().IsStarted(taskId)
-		completed, _ := a.GetTaskManager().IsDone(taskId)
-		statusList, _ := a.GetTaskManager().GetStatus(taskId)
-		taskInfo := models.Task{
-			Id:         taskId,
-			Started:    started,
-			Completed:  completed,
-			StatusList: statusList}
-		taskList = append(taskList, taskInfo)
-	}
-	//marshal and send it across
-	bytes, err := json.Marshal(taskList)
-	if err != nil {
-		logger.Get().Error("Unable to marshal the list of Tasks:%s", err)
-		util.HandleHttpError(rw, err)
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	var tasks []models.AppTask
+	if err := coll.Find(nil).All(&tasks); err != nil {
+		util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
 		return
 	}
-	rw.Write(bytes)
+	if len(tasks) == 0 {
+		json.NewEncoder(rw).Encode([]models.AppTask{})
+	} else {
+		json.NewEncoder(rw).Encode(tasks)
+	}
+
 }
 
 func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
@@ -42,21 +38,21 @@ func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 		util.HandleHttpError(rw, err)
 		return
 	}
-	started, _ := a.GetTaskManager().IsStarted(*taskId)
-	completed, _ := a.GetTaskManager().IsDone(*taskId)
-	statusList, _ := a.GetTaskManager().GetStatus(*taskId)
-	taskInfo := models.Task{
-		Id:         *taskId,
-		Started:    started,
-		Completed:  completed,
-		StatusList: statusList}
-	//marshal and send it across
-	bytes, err := json.Marshal(taskInfo)
-	if err != nil {
-		logger.Get().Error("Unable to marshal the Task Info:%s", err)
-		util.HandleHttpError(rw, err)
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	var task models.AppTask
+	if err := coll.Find(bson.M{"id": *taskId}).One(&task); err != nil {
+		util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
 		return
 	}
-	rw.Write(bytes)
+	if task.Id.IsZero() {
+		util.HttpResponse(rw, http.StatusBadRequest, "Task not found")
+		logger.Get().Error("Task not found: %v", err)
+		return
+	} else {
+		json.NewEncoder(rw).Encode(task)
+	}
 
 }

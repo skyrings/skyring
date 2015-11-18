@@ -152,7 +152,7 @@ func (a SaltNodeManager) SyncStorageDisks(node string) (bool, error) {
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if len(disks) != 0 {
-		if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"storage_disks": disks}}); err != nil {
+		if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"storagedisks": disks}}); err != nil {
 			return false, err
 		}
 	}

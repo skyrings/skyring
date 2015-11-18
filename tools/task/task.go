@@ -16,19 +16,14 @@ package task
 
 import (
 	"fmt"
+	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/uuid"
+	"gopkg.in/mgo.v2/bson"
 	"sync"
 	"time"
 )
-
-type Status struct {
-	Timestamp time.Time
-	Message   string
-}
-
-func (s Status) String() string {
-	return fmt.Sprintf("%s %s", s.Timestamp, s.Message)
-}
 
 type Task struct {
 	Mutex            *sync.Mutex
@@ -38,12 +33,12 @@ type Task struct {
 	Started          bool
 	Completed        bool
 	DoneCh           chan bool
-	StatusList       []Status
+	StatusList       []models.Status
 	StopCh           chan bool
 	Func             func(t *Task)
 	StartedCbkFunc   func(t *Task)
 	CompletedCbkFunc func(t *Task)
-	StatusCbkFunc    func(t *Task, s *Status)
+	StatusCbkFunc    func(t *Task, s *models.Status)
 }
 
 func (t Task) String() string {
@@ -51,26 +46,28 @@ func (t Task) String() string {
 }
 
 func (t *Task) UpdateStatus(format string, args ...interface{}) {
-	s := Status{time.Now(), fmt.Sprintf(format, args...)}
+	s := models.Status{Timestamp: time.Now(), Message: fmt.Sprintf(format, args...)}
 	t.Mutex.Lock()
 	t.StatusList = append(t.StatusList, s)
+	t.UpdateStatusList(t.StatusList)
 	t.Mutex.Unlock()
 	if t.StatusCbkFunc != nil {
 		go t.StatusCbkFunc(t, &s)
 	}
 }
 
-func (t *Task) GetStatus() (status []Status) {
+func (t *Task) GetStatus() (status []models.Status) {
 	t.Mutex.Lock()
 	defer t.Mutex.Unlock()
 	status = t.StatusList
-	t.StatusList = []Status{}
+	t.StatusList = []models.Status{}
 	return
 }
 
 func (t *Task) Run() {
 	go t.Func(t)
 	t.Started = true
+	t.Persist()
 	if t.StartedCbkFunc != nil {
 		go t.StartedCbkFunc(t)
 	}
@@ -80,6 +77,7 @@ func (t *Task) Done() {
 	t.DoneCh <- true
 	close(t.DoneCh)
 	t.Completed = true
+	t.UpdateTaskCompleted(t.Completed)
 }
 
 func (t *Task) IsDone() bool {
@@ -98,4 +96,45 @@ func (t *Task) IsDone() bool {
 	default:
 		return false
 	}
+}
+
+func (t *Task) Persist() (bool, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+
+	// Populate the task details. The parent ID should always be updated by the parent task later.
+	var appTask models.AppTask
+	appTask.Id = t.ID
+	appTask.Started = t.Started
+	appTask.Completed = t.Completed
+	appTask.StatusList = t.StatusList
+
+	if err := coll.Insert(appTask); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (t *Task) UpdateStatusList(status []models.Status) (bool, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	if err := coll.Update(bson.M{"id": t.ID}, bson.M{"$set": bson.M{"statuslist": status}}); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (t *Task) UpdateTaskCompleted(b bool) (bool, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	if err := coll.Update(bson.M{"id": t.ID}, bson.M{"$set": bson.M{"completed": b}}); err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
