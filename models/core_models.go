@@ -13,9 +13,10 @@ limitations under the License.
 package models
 
 import (
+	"fmt"
 	"github.com/skyrings/skyring/backend"
-	"github.com/skyrings/skyring/tools/task"
 	"github.com/skyrings/skyring/tools/uuid"
+	"time"
 )
 
 type Node struct {
@@ -107,13 +108,6 @@ type StorageLogicalUnit struct {
 	Options         map[string]string `json:"options"`
 }
 
-type Task struct {
-	Id         uuid.UUID     `json:"id"`
-	Started    bool          `json:"started"`
-	Completed  bool          `json:"completed"`
-	StatusList []task.Status `json:"statuslist"`
-}
-
 type Storage struct {
 	StorageId uuid.UUID         `json:"storageid"`
 	Name      string            `json:"name"`
@@ -123,4 +117,21 @@ type Storage struct {
 	Size      uint64            `json:"size"`
 	Status    string            `json:"status"`
 	Options   map[string]string `json:"options"`
+}
+
+type Status struct {
+	Timestamp time.Time
+	Message   string
+}
+
+func (s Status) String() string {
+	return fmt.Sprintf("%s %s", s.Timestamp, s.Message)
+}
+
+type AppTask struct {
+	Id         uuid.UUID
+	ParentId   uuid.UUID
+	Started    bool
+	Completed  bool
+	StatusList []Status
 }
