@@ -31,7 +31,7 @@ func (a *App) GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(fingerprint)
 }
 
-func GET_LookupNode(w http.ResponseWriter, r *http.Request) {
+func (a *App) GET_LookupNode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	hostname := vars["hostname"]
 

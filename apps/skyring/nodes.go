@@ -94,7 +94,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
+func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	hostname := vars["hostname"]
 
@@ -271,7 +271,7 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
+func (a *App) GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
 	if nodes, err := GetCoreNodeManager().GetUnmanagedNodes(); err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 		logger.Get().Error("Nodes not found: %v", err)
@@ -373,7 +373,7 @@ func removeNode(w http.ResponseWriter, nodeId uuid.UUID) (bool, error) {
 	return true, nil
 }
 
-func DELETE_Node(w http.ResponseWriter, r *http.Request) {
+func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	node_id_str := vars["node-id"]
 	node_id, err := uuid.Parse(node_id_str)
@@ -388,7 +388,7 @@ func DELETE_Node(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
+func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 	var nodeIds []struct {
 		NodeId string `json:"nodeid"`
 	}

@@ -44,7 +44,7 @@ func (a *App) LoadRoutes() {
 			Name:        "GET_LookupNode",
 			Method:      "GET",
 			Pattern:     "utils/lookup_node/{hostname}",
-			HandlerFunc: GET_LookupNode,
+			HandlerFunc: a.GET_LookupNode,
 			Version:     1,
 		},
 		{
@@ -72,14 +72,14 @@ func (a *App) LoadRoutes() {
 			Name:        "DELETE_Node",
 			Method:      "DELETE",
 			Pattern:     "nodes/{node-id}",
-			HandlerFunc: DELETE_Node,
+			HandlerFunc: a.DELETE_Node,
 			Version:     1,
 		},
 		{
 			Name:        "DELETE_Nodes",
 			Method:      "DELETE",
 			Pattern:     "nodes",
-			HandlerFunc: DELETE_Nodes,
+			HandlerFunc: a.DELETE_Nodes,
 			Version:     1,
 		},
 		{
@@ -93,14 +93,14 @@ func (a *App) LoadRoutes() {
 			Name:        "GET_UnmanagedNodes",
 			Method:      "GET",
 			Pattern:     "unmanaged_nodes",
-			HandlerFunc: GET_UnmanagedNodes,
+			HandlerFunc: a.GET_UnmanagedNodes,
 			Version:     1,
 		},
 		{
 			Name:        "POST_AcceptUnamangedNode",
 			Method:      "POST",
 			Pattern:     "unmanaged_nodes/{hostname}/accept",
-			HandlerFunc: POST_AcceptUnamangedNode,
+			HandlerFunc: a.POST_AcceptUnamangedNode,
 			Version:     1,
 		},
 		{
