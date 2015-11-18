@@ -13,6 +13,7 @@ limitations under the License.
 package models
 
 import (
+	"fmt"
 	"github.com/skyrings/skyring/tools/uuid"
 	"time"
 )
@@ -89,6 +90,7 @@ const (
 	COLL_NAME_STORAGE_NODES         = "storage_nodes"
 	COLL_NAME_STORAGE_CLUSTERS      = "storage_clusters"
 	COLL_NAME_STORAGE_LOGICAL_UNITS = "storage_logical_units"
+	COLL_NAME_TASKS                 = "tasks"
 )
 
 type Clusters []Cluster
@@ -138,4 +140,8 @@ func (c ClusterStatus) String() string { return ClusterStatuses[c-1] }
 
 type AsyncResponse struct {
 	TaskId uuid.UUID `json:"taskid"`
+}
+
+func (s Status) String() string {
+	return fmt.Sprintf("%s %s", s.Timestamp, s.Message)
 }

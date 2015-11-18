@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/task"
 	"net/http"
 	"runtime"
 	"time"
@@ -80,4 +81,10 @@ func HttpResponse(w http.ResponseWriter, status_code int, msg string) {
 		logger.Get().Error("Error: %v", err)
 	}
 	return
+}
+
+func FailTask(msg string, err error, t *task.Task) {
+	logger.Get().Error("%s: %v", msg, err)
+	t.UpdateStatus("Failed. error: %v", err)
+	t.Done()
 }
