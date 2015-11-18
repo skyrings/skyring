@@ -50,8 +50,10 @@ func NewSaltNodeManager(config io.Reader) (*SaltNodeManager, error) {
 }
 
 func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.Node, error) {
-	if ok, err := salt_backend.AcceptNode(node, fingerprint, false); err != nil || !ok {
+	if status, err := salt_backend.AcceptNode(node, fingerprint, false); err != nil {
 		return nil, err
+	} else if !status {
+		return nil, errors.New("Unable to accept the node")
 	} else {
 		for count := 0; count < 60; count++ {
 			time.Sleep(10 * time.Second)
@@ -66,13 +68,14 @@ func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.No
 		}
 
 	}
-
 	return nil, errors.New("Unable to accept the node")
 }
 
 func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.Node, error) {
-	if ok, err := salt_backend.AddNode(master, node, port, fingerprint, username, password); err != nil || !ok {
+	if status, err := salt_backend.AddNode(master, node, port, fingerprint, username, password); err != nil {
 		return nil, err
+	} else if !status {
+		return nil, errors.New("Unable to add the node")
 	} else {
 		for count := 0; count < 60; count++ {
 			time.Sleep(10 * time.Second)
@@ -87,7 +90,6 @@ func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerpr
 		}
 
 	}
-
 	return nil, errors.New("Unable to add the node")
 }
 
