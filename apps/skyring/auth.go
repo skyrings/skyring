@@ -189,9 +189,51 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 	if val, ok := m["role"]; ok {
 		user.Role = val.(string)
 	}
+	if val, ok := m["type"]; ok {
+		user.Type = val.(int)
+	}
 
 	if err := GetAuthProvider().AddUser(user, m["password"].(string)); err != nil {
 		logger.Get().Error("Unable to create User:%s", err)
+		util.HandleHttpError(rw, err)
+		return
+	}
+}
+
+func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
+
+	var (
+		user     models.User
+		password string
+	)
+
+	vars := mux.Vars(req)
+
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Get().Error("Error parsing http request body:%s", err)
+		util.HandleHttpError(rw, err)
+		return
+	}
+	var m map[string]interface{}
+
+	if err = json.Unmarshal(body, &m); err != nil {
+		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		util.HandleHttpError(rw, err)
+		return
+	}
+	if val, ok := vars["username"]; ok {
+		user.Username = val
+	}
+	if val, ok := m["email"]; ok {
+		user.Email = val.(string)
+	}
+	if val, ok := m["password"]; ok {
+		password = val.(string)
+	}
+
+	if err := GetAuthProvider().UpdateUser(user.Username, password, user.Email); err != nil {
+		logger.Get().Error("Unable to update User:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
