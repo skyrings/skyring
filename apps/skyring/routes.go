@@ -146,6 +146,13 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.deleteUser,
 			Version:     1,
 		},
+		{
+			Name:        "PUT_users",
+			Method:      "PUT",
+			Pattern:     "users/{username}",
+			HandlerFunc: a.modifyUsers,
+			Version:     1,
+		},
 		//Routes for Task Management
 		{
 			Name:        "GET_tasks",
