@@ -197,19 +197,15 @@ func addStorageNodeToDB(w http.ResponseWriter, storage_node models.Node) error {
 	// Before persisting the node check if node with same node_id already exists
 	// If so dont add the node to DB and reject the minion
 	var node models.Node
-	if err := coll.Find(bson.M{"nodeid": storage_node.NodeId}).One(&node); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, "Error checking pre-existnace of node")
-		return err
-	}
+	// No need to check for error as if node does not exist, that also returned as error
+	// As long as node details populated, its a valid node existing
+	_ = coll.Find(bson.M{"nodeid": storage_node.NodeId}).One(&node)
 	if node.Hostname != "" {
 		if ok, err := GetCoreNodeManager().IgnoreNode(node.Hostname); !ok || err != nil {
-			util.HttpResponse(
-				w,
-				http.StatusInternalServerError,
-				fmt.Sprintf("Node with id: %v already exists. Error rejecting the node.", storage_node.NodeId))
+			logger.Get().Critical(fmt.Sprintf("Node with id: %v already exists. Error rejecting the node.", storage_node.NodeId))
 			return errors.New(fmt.Sprintf("Node with id: %v already exists. Error rejecting the node.", storage_node.NodeId))
 		}
-		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
+		logger.Get().Critical(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
 		return errors.New(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
 	}
 
