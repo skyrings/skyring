@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_715d4821",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-19T03:18:51Z",
+      "side": 1,
+      "message": "You can re-phrase the commit message as below\n\nIntroduced below filtering for events\n  - /api/\u003cver\u003e/events?node_id\u003d\u003cnodeid\u003e\n    to list node specific events\n  - /api/\u003cver\u003e/events?cluster_id\u003d\u003cclusterid\u003e\n    to list cluster specific events\n\nThe logic as like\n\nif node id provided\n  return node specific events\nelse if cluster id present\n  return cluster specific events\nelse\n  return full list of events\nendif",
+      "revId": "b32f03407d9bedf74fcbc6478f8540df35f73d36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_9141043c",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-19T03:18:51Z",
+      "side": 1,
+      "message": "%s/Error doing parse for node id/Error parsing node id/g",
+      "revId": "b32f03407d9bedf74fcbc6478f8540df35f73d36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_1175f497",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-19T03:18:51Z",
+      "side": 1,
+      "message": "If no events found for node, it would print \"null\" in result I feel.\nwe can write the logic as below\n\nif err :\u003d collection.Find(bson.M{\"nodeid\": *node_id}).All(\u0026events); err !\u003d nil {\n  logger.Get().Error(\"Error getting record from DB:%s\", error)\n  util.HandleHttpError(rw, error)\n  return\n}\nif len(events) \u003d\u003d 0 {\n  json.NewEncoder(rw).Encode([]models.Event{})\n} else {\n  json.NewEncoder(rw).Encode(events)\n}\n\nThis would make sure if the returned value is null, you return a balnk list to response.\n\nSame should be done for below two cases as well.",
+      "revId": "b32f03407d9bedf74fcbc6478f8540df35f73d36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_317af088",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-19T03:18:51Z",
+      "side": 1,
+      "message": "%s/Error doing parse for cluster id/Error parsing cluster id/g",
+      "revId": "b32f03407d9bedf74fcbc6478f8540df35f73d36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
