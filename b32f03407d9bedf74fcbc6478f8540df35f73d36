@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_7189c8ea",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2015-11-19T08:49:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_9141043c",
+      "revId": "b32f03407d9bedf74fcbc6478f8540df35f73d36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_1175f497",
         "filename": "apps/skyring/events.go",
         "patchSetId": 5
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_916d8435",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2015-11-19T08:49:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_1175f497",
+      "revId": "b32f03407d9bedf74fcbc6478f8540df35f73d36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_317af088",
         "filename": "apps/skyring/events.go",
         "patchSetId": 5
@@ -64,6 +100,24 @@
       "writtenOn": "2015-11-19T03:18:51Z",
       "side": 1,
       "message": "%s/Error doing parse for cluster id/Error parsing cluster id/g",
+      "revId": "b32f03407d9bedf74fcbc6478f8540df35f73d36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_b16a8018",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2015-11-19T08:49:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_317af088",
       "revId": "b32f03407d9bedf74fcbc6478f8540df35f73d36",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
