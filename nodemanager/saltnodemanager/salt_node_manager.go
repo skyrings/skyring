@@ -199,19 +199,29 @@ func (a SaltNodeManager) EnableNode(node string) (bool, error) {
 	if ok, err := salt_backend.AcceptNode(node, fingerprint, true); err != nil || !ok {
 		logger.Get().Error(fmt.Sprintf("Error accepting the node:%s back. error: %v", node, err))
 		return false, err
-	}
-
-	if ok, err := salt_backend.EnableService(node, "collectd", true); err != nil || !ok {
-		logger.Get().Error(fmt.Sprintf("Error enabling services on the node: %s. error: %v", node, err))
-		return false, err
-	}
-
-	// Enable any POST actions for participating nodes
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
-		return false, err
+	} else {
+		for count := 0; count < 60; count++ {
+			time.Sleep(10 * time.Second)
+			startedNodes := event.GetStartedNodes()
+			for _, nodeName := range startedNodes {
+				if nodeName == node {
+					if ok, _ := salt_backend.EnableService(node, "collectd", true); ok {
+						logger.Get().Info("Enabled services on node: %s", node)
+						// Enable any POST actions for node
+						sessionCopy := db.GetDatastore().Copy()
+						defer sessionCopy.Close()
+						coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+						if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
+							logger.Get().Error("Error updating manage state of node: %s", node)
+							return false, err
+						}
+						return ok, nil
+					} else {
+						continue
+					}
+				}
+			}
+		}
 	}
 
 	return true, nil

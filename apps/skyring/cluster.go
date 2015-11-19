@@ -264,32 +264,50 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for cluster unmanage: %v", t.ID)
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 
-	// TODO: Disable sync jobs for the cluster
-	// TODO: Disable performance monitoring for the cluster
+		// TODO: Disable sync jobs for the cluster
+		// TODO: Disable performance monitoring for the cluster
 
-	// Disable collectd, salt configurations on the nodes participating in the cluster
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	var nodes models.Nodes
-	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting nodes for cluster: %v", err))
-		return
-	}
-	for _, node := range nodes {
-		ok, err := GetCoreNodeManager().DisableNode(node.Hostname)
-		if err != nil || !ok {
-			util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error disabling the node: %v", err))
+		t.UpdateStatus("Getting nodes of the cluster for unmanage")
+		// Disable collectd, salt configurations on the nodes participating in the cluster
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		var nodes models.Nodes
+		if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+			t.UpdateStatus("Failed. Error getting nodes of the cluster")
 			return
 		}
-	}
+		for _, node := range nodes {
+			t.UpdateStatus("Disabling node: %s", node.Hostname)
+			ok, err := GetCoreNodeManager().DisableNode(node.Hostname)
+			if err != nil || !ok {
+				t.UpdateStatus("Failed. Error disabling node: %s", node.Hostname)
+				return
+			}
+		}
 
-	// Disable any POST actions on cluster
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		t.UpdateStatus("Disabling post actions on the cluster")
+		// Disable any POST actions on cluster
+		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+		if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
+			t.UpdateStatus("Failed. Error updating cluster manage state")
+			return
+		}
+		t.UpdateStatus("Success")
+		t.Done()
+	}
+	if taskId, err := a.GetTaskManager().Run("UnmanageCluster", asyncTask); err != nil {
+		logger.Get().Error("Unable to create task for cluster unmanage. error: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster unmanage")
 		return
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 
@@ -312,32 +330,50 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for cluster manage: %v", t.ID)
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 
-	// TODO: Enable sync jobs for the cluster
-	// TODO: Enable performance monitoring for the cluster
+		// TODO: Enable sync jobs for the cluster
+		// TODO: Enable performance monitoring for the cluster
 
-	// Enable collectd, salt configurations on the nodes participating in the cluster
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	var nodes models.Nodes
-	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting nodes for cluster: %v", err))
-		return
-	}
-	for _, node := range nodes {
-		ok, err := GetCoreNodeManager().EnableNode(node.Hostname)
-		if err != nil || !ok {
-			util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error enabling the node: %v", err))
+		t.UpdateStatus("Getting nodes of cluster for manage back")
+		// Enable collectd, salt configurations on the nodes participating in the cluster
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		var nodes models.Nodes
+		if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+			t.UpdateStatus("Failed. Error getting nodes of cluster")
 			return
 		}
-	}
+		for _, node := range nodes {
+			t.UpdateStatus("Enabling node")
+			ok, err := GetCoreNodeManager().EnableNode(node.Hostname)
+			if err != nil || !ok {
+				t.UpdateStatus("Failed. Error enabling node: %s", node.Hostname)
+				return
+			}
+		}
 
-	// Enable any POST actions on cluster
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		t.UpdateStatus("Enabling post actions on the cluster")
+		// Enable any POST actions on cluster
+		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+		if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
+			t.UpdateStatus("Failed. Error updating cluster manage state")
+			return
+		}
+		t.UpdateStatus("Success")
+		t.Done()
+	}
+	if taskId, err := a.GetTaskManager().Run("ManageCluster", asyncTask); err != nil {
+		logger.Get().Error("Unable to create task for cluster manage. error: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster manage")
 		return
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 
