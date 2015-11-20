@@ -171,31 +171,55 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: Remove the sync jobs if any for the cluster
-	// TODO: Remove the performance monitoring details for the cluster
-	// TODO: Remove the collectd, salt etc configurations from the nodes
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for cluster forget: %v", t.ID)
+		// TODO: Remove the sync jobs if any for the cluster
+		// TODO: Remove the performance monitoring details for the cluster
+		// TODO: Remove the collectd, salt etc configurations from the nodes
 
-	// Remove storage entities for cluster
-	if err := removeStorageEntities(*uuid); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error removing storage for cluster: %v", err))
-		return
+		// Ignore the cluster nodes
+		if ok, err := ignoreClusterNodes(*uuid); err != nil || !ok {
+			t.UpdateStatus("Failed. Error ignoring the cluster nodes")
+			return
+		}
+
+		// Remove storage entities for cluster
+		t.UpdateStatus("Removing storage entities for cluster")
+		if err := removeStorageEntities(*uuid); err != nil {
+			t.UpdateStatus("Failed. Error removing storage entoties for cluster: %v", err)
+			return
+		}
+
+		// Delete the participating nodes from DB
+		t.UpdateStatus("Deleting cluster nodes")
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		if changeInfo, err := collection.RemoveAll(bson.M{"clusterid": *uuid}); err != nil || changeInfo == nil {
+			t.UpdateStatus("Failed. Error removing nodes: %v", err)
+			return
+		}
+
+		// Delete the cluster from DB
+		t.UpdateStatus("removing the cluster")
+		collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+		if err := collection.Remove(bson.M{"clusterid": *uuid}); err != nil {
+			t.UpdateStatus("Failed. Error removing the cluster: %v", err)
+			logger.Get().Error("Error removing the cluster: %v", err)
+			return
+		}
+		t.UpdateStatus("Success")
+		t.Done()
 	}
-
-	// Delete the participating nodes from DB
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	if changeInfo, err := collection.RemoveAll(bson.M{"clusterid": *uuid}); err != nil || changeInfo == nil {
-		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error removing nodes: %v", err))
+	if taskId, err := a.GetTaskManager().Run("ForgetCluster", asyncTask); err != nil {
+		logger.Get().Error("Unable to create task for cluster forget. error: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster forget")
 		return
-	}
-
-	// Delete the cluster from DB
-	collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	if err := collection.Remove(bson.M{"clusterid": *uuid}); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
-		logger.Get().Error("Error removing the cluster: %v", err)
-		return
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 
@@ -264,32 +288,50 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for cluster unmanage: %v", t.ID)
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 
-	// TODO: Disable sync jobs for the cluster
-	// TODO: Disable performance monitoring for the cluster
+		// TODO: Disable sync jobs for the cluster
+		// TODO: Disable performance monitoring for the cluster
 
-	// Disable collectd, salt configurations on the nodes participating in the cluster
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	var nodes models.Nodes
-	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting nodes for cluster: %v", err))
-		return
-	}
-	for _, node := range nodes {
-		ok, err := GetCoreNodeManager().DisableNode(node.Hostname)
-		if err != nil || !ok {
-			util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error disabling the node: %v", err))
+		t.UpdateStatus("Getting nodes of the cluster for unmanage")
+		// Disable collectd, salt configurations on the nodes participating in the cluster
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		var nodes models.Nodes
+		if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+			t.UpdateStatus("Failed. Error getting nodes of the cluster")
 			return
 		}
-	}
+		for _, node := range nodes {
+			t.UpdateStatus("Disabling node: %s", node.Hostname)
+			ok, err := GetCoreNodeManager().DisableNode(node.Hostname)
+			if err != nil || !ok {
+				t.UpdateStatus("Failed. Error disabling node: %s", node.Hostname)
+				return
+			}
+		}
 
-	// Disable any POST actions on cluster
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		t.UpdateStatus("Disabling post actions on the cluster")
+		// Disable any POST actions on cluster
+		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+		if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
+			t.UpdateStatus("Failed. Error updating cluster manage state")
+			return
+		}
+		t.UpdateStatus("Success")
+		t.Done()
+	}
+	if taskId, err := a.GetTaskManager().Run("UnmanageCluster", asyncTask); err != nil {
+		logger.Get().Error("Unable to create task for cluster unmanage. error: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster unmanage")
 		return
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 
@@ -312,32 +354,50 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for cluster manage: %v", t.ID)
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 
-	// TODO: Enable sync jobs for the cluster
-	// TODO: Enable performance monitoring for the cluster
+		// TODO: Enable sync jobs for the cluster
+		// TODO: Enable performance monitoring for the cluster
 
-	// Enable collectd, salt configurations on the nodes participating in the cluster
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	var nodes models.Nodes
-	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting nodes for cluster: %v", err))
-		return
-	}
-	for _, node := range nodes {
-		ok, err := GetCoreNodeManager().EnableNode(node.Hostname)
-		if err != nil || !ok {
-			util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error enabling the node: %v", err))
+		t.UpdateStatus("Getting nodes of cluster for manage back")
+		// Enable collectd, salt configurations on the nodes participating in the cluster
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		var nodes models.Nodes
+		if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+			t.UpdateStatus("Failed. Error getting nodes of cluster")
 			return
 		}
-	}
+		for _, node := range nodes {
+			t.UpdateStatus("Enabling node")
+			ok, err := GetCoreNodeManager().EnableNode(node.Hostname)
+			if err != nil || !ok {
+				t.UpdateStatus("Failed. Error enabling node: %s", node.Hostname)
+				return
+			}
+		}
 
-	// Enable any POST actions on cluster
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		t.UpdateStatus("Enabling post actions on the cluster")
+		// Enable any POST actions on cluster
+		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+		if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
+			t.UpdateStatus("Failed. Error updating cluster manage state")
+			return
+		}
+		t.UpdateStatus("Success")
+		t.Done()
+	}
+	if taskId, err := a.GetTaskManager().Run("ManageCluster", asyncTask); err != nil {
+		logger.Get().Error("Unable to create task for cluster manage. error: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster manage")
 		return
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 
@@ -629,4 +689,20 @@ func syncStorageDisks(nodes []models.ClusterNode) error {
 		}
 	}
 	return nil
+}
+
+func ignoreClusterNodes(clusterId uuid.UUID) (bool, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var nodes models.Nodes
+	if err := coll.Find(bson.M{"clusterid": clusterId}).All(&nodes); err != nil {
+		return false, err
+	}
+	for _, node := range nodes {
+		if ok, err := GetCoreNodeManager().IgnoreNode(node.Hostname); err != nil || !ok {
+			return false, err
+		}
+	}
+	return true, nil
 }
