@@ -59,7 +59,7 @@ def AcceptNode(node, fingerprint, include_rejected=False):
     finger = d['unaccepted_nodes'].get(node)
     if not finger:
         if include_rejected:
-           finger = d['rejected_nodes'].get(node)
+            finger = d['rejected_nodes'].get(node)
     if not finger:
         log.warn("node %s not in unaccepted/rejected node list" % node)
         return False
@@ -77,8 +77,8 @@ def AcceptNode(node, fingerprint, include_rejected=False):
 
 def IgnoreNode(node):
     skey = salt.key.Key(opts)
-    out = skey.reject(node, include_accepted=True)
-    return (node in out['minions_rejected'])
+    out = skey.delete_key(node)
+    return True
 
 
 def GetNodes():
