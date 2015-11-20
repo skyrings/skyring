@@ -165,11 +165,6 @@ func (a SaltNodeManager) DisableNode(node string) (bool, error) {
 		return false, err
 	}
 
-	if ok, err := salt_backend.IgnoreNode(node); err != nil || !ok {
-		logger.Get().Error(fmt.Sprintf("Error rejecting node: %s, error: %v", node, err))
-		return false, err
-	}
-
 	// Disable any POST actions for participating nodes
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
@@ -182,35 +177,17 @@ func (a SaltNodeManager) DisableNode(node string) (bool, error) {
 }
 
 func (a SaltNodeManager) EnableNode(node string) (bool, error) {
-	nodes, err := salt_backend.GetNodes()
-	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting started nodes. error: %v", err))
-		return false, err
-	}
-
-	fingerprint := ""
-	for _, ignored_node := range nodes.Ignore {
-		if ignored_node.Name == node {
-			fingerprint = ignored_node.Fingerprint
-			break
-		}
-	}
-
-	if ok, err := salt_backend.AcceptNode(node, fingerprint, true); err != nil || !ok {
-		logger.Get().Error(fmt.Sprintf("Error accepting the node:%s back. error: %v", node, err))
-		return false, err
-	}
-
 	if ok, err := salt_backend.EnableService(node, "collectd", true); err != nil || !ok {
-		logger.Get().Error(fmt.Sprintf("Error enabling services on the node: %s. error: %v", node, err))
+		logger.Get().Error("Error enabling services on node: %s. error: %v", node, err)
 		return false, err
 	}
 
-	// Enable any POST actions for participating nodes
+	// Enable any POST actions for node
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
+		logger.Get().Error("Error updating manage state of node: %s", node)
 		return false, err
 	}
 
