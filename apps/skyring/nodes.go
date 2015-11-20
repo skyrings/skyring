@@ -201,10 +201,6 @@ func addStorageNodeToDB(w http.ResponseWriter, storage_node models.Node) error {
 	// As long as node details populated, its a valid node existing
 	_ = coll.Find(bson.M{"nodeid": storage_node.NodeId}).One(&node)
 	if node.Hostname != "" {
-		if ok, err := GetCoreNodeManager().IgnoreNode(node.Hostname); !ok || err != nil {
-			logger.Get().Critical(fmt.Sprintf("Node with id: %v already exists. Error rejecting the node.", storage_node.NodeId))
-			return errors.New(fmt.Sprintf("Node with id: %v already exists. Error rejecting the node.", storage_node.NodeId))
-		}
 		logger.Get().Critical(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
 		return errors.New(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
 	}
@@ -356,7 +352,7 @@ func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error
 			}
 			return usedNodes, nil
 		case 2:
-			if err := coll.Find(bson.M{"enabled": true}).All(&nodes); err != nil {
+			if err := coll.Find(bson.M{"enabled": false}).All(&nodes); err != nil {
 				return models.Nodes{}, err
 			}
 			return nodes, nil
