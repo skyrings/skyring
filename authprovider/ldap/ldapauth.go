@@ -243,7 +243,7 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 
 	filter := "(objectclass=*)"
 	attributes := []string{"Uid", "UidNumber", "CN", "SN",
-		"Givenname", "Displayname", "mail"}
+		"Givenname", "Displayname", "Mail"}
 
 	rv, err := ldap.SearchAll(a.connectionString, scope, filter, attributes)
 
