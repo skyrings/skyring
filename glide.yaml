@@ -1,0 +1,31 @@
+parent: null
+package: github.com/gluster/glusterd2
+import:
+- package: github.com/gorilla/context
+  version: 1c83b3eabd45b6d76072b66b746c20815fb2872d
+- package: github.com/gorilla/mux
+  version: 9c068cf16d982f8bd444b8c352acbeec34c4fe5b
+- package: github.com/gorilla/sessions
+  version: f7261893ca3ea922c30eabe742c036d2c1de6e0a
+- package: github.com/gorilla/securecookie
+  version: e95799a481bbcc3d01c2ad5178524cb8bec9f370
+- package: github.com/influxdb/influxdb
+  version: 8fe2469c75edce4909c71f931332c7e74d3f08ea
+- package: github.com/goincremental/negroni-sessions
+  version: b07e2d18b97e3f627edaa67876c21fa23eba6a08
+- package: github.com/mqu/openldap
+  version: 91bfc2150f6c4991335de476c800caf26a990324
+- package: github.com/natefinch/pie
+  version: 83bfd1821ee0ba96a47d98cbed424313fb60f57a
+- package: github.com/op/go-logging
+  version: e8d5414f0947014548c2334044a0fac13187dfee
+- package: github.com/sbinet/go-python
+  version: 7991d394a7e307f6e5b28a76146fe1b9303f5c56
+- package: github.com/gogo/protobuf
+  version: d3235f01ecae4901dd9f7ea6af57a352c0189deb
+- package: github.com/codegangsta/negroni
+  version: c7477ad8e330bef55bf1ebe300cf8aa67c492d1b
+- package: golang.org/x/crypto
+  version: beef0f4390813b96e8e68fd78570396d0f4751fc
+- package: gopkg.in/mgo.v2
+  version: 4d04138ffef2791c479c0c8bbffc30b34081b8d9
