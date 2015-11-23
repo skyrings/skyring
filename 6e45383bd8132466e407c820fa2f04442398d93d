@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_5899816d",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-23T05:16:27Z",
+      "side": 1,
+      "message": "If see user.Email is set equal to non empty value of \"e\" regardless of user.Type.\nCan we put in the last outside the if-else block?",
+      "revId": "6e45383bd8132466e407c820fa2f04442398d93d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
