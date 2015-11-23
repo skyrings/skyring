@@ -130,6 +130,9 @@ cat >> /etc/salt/master <<EOF
 reactor:
   - 'salt/minion/*/start':
     - /srv/salt/push_event.sls
+
+  - 'dbus/node/*':
+    - /srv/salt/push_event.sls
 EOF
 fi
 
