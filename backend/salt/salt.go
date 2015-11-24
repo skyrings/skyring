@@ -35,6 +35,11 @@ var funcNames = [...]string{
 	"IgnoreNode",
 	"DisableService",
 	"EnableService",
+	"ConfigureCollectdPhysicalResources",
+	"UpdateCollectdThresholds",
+	"EnableCollectdPlugin",
+	"DisableCollectdPlugin",
+	"RemoveCollectdPlugin",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -110,6 +115,59 @@ func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
 func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
 	if pyobj, err := pyFuncs["GetNodeNetwork"].Call(node); err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &n)
+	}
+	return
+}
+
+func (s Salt) ConfigureCollectdPhysicalResources(node string, master string) (success bool, err error) {
+	var nodes []string
+	nodes = append(nodes, node)
+	pyobj, err := pyFuncs["ConfigureCollectdPhysicalResources"].Call(backend.SupportedCollectdPlugins, nodes, master, backend.ToSaltPillarCompat(backend.GetDefaultThresholdValues()))
+	if err != nil {
+		err = gopy.Convert(pyobj, &success)
+	}
+	return
+}
+
+func (s Salt) UpdateCollectdThresholds(nodes []string, threshold []backend.CollectdPlugin) (err error) {
+	if _, err := pyFuncs["UpdateCollectdThresholds"].Call(nodes, backend.ToSaltPillarCompat(threshold)); err != nil {
+		//err = gopy.Convert(pyobj, &success)
+	}
+	return
+}
+
+func (s Salt) EnableCollectdPlugin(nodes []string, pluginName string) (success bool, err error) {
+	pyobj, err := pyFuncs["EnableCollectdPlugin"].Call(nodes, pluginName)
+	if err != nil {
+		err = gopy.Convert(pyobj, &success)
+	}
+	return
+}
+
+func (s Salt) RemoveCollectdPlugin(nodes []string, pluginName string) (success bool, err error) {
+	pyobj, err := pyFuncs["RemoveCollectdPlugin"].Call(nodes, pluginName)
+	if err != nil {
+		err = gopy.Convert(pyobj, &success)
+	}
+	return
+}
+
+func (s Salt) AddMonitoringPlugin(nodes []string, plugin backend.CollectdPlugin) (success bool, err error) {
+	var pluginNames []string
+	pluginNames = append(pluginNames, plugin.Name)
+	var plugins []backend.CollectdPlugin
+	plugins = append(plugins, plugin)
+	pyobj, err := pyFuncs["ConfigureCollectdPhysicalResources"].Call(pluginNames, nodes, "", backend.ToSaltPillarCompat(plugins))
+	if err != nil {
+		err = gopy.Convert(pyobj, &success)
+	}
+	return
+}
+
+func (s Salt) DisableCollectdPlugin(nodes []string, pluginName string) (success bool, err error) {
+	pyobj, err := pyFuncs["DisableCollectdPlugin"].Call(nodes, pluginName)
+	if err != nil {
+		err = gopy.Convert(pyobj, &success)
 	}
 	return
 }

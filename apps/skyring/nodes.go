@@ -138,7 +138,6 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	if taskId, err := a.GetTaskManager().Run("AcceptNode", asyncTask); err != nil {
 		logger.Get().Error("Unable to create the task for AcceptNode", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
-
 	} else {
 		logger.Get().Debug("Task Created: ", taskId.String())
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
@@ -155,6 +154,11 @@ func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *t
 		if err = addStorageNodeToDB(w, *node); err != nil {
 			t.UpdateStatus("Unable to add the node to DB: %s", hostname)
 			return err
+		}
+		t.UpdateStatus("Setting up collectd on node: %s", hostname)
+		if _, configureError := GetCoreNodeManager().ConfigureCollectdPhysicalResources(hostname, curr_hostname); configureError != nil {
+			t.UpdateStatus("Unable to setup collectd on node: %s", hostname)
+			return configureError
 		}
 	} else {
 		logger.Get().Critical("Accepting the node failed: ", hostname)
@@ -179,6 +183,11 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 		if err = addStorageNodeToDB(w, *node); err != nil {
 			t.UpdateStatus("Unable to add the node to DB: %s", request.Hostname)
 			return err
+		}
+		t.UpdateStatus("Setting up collectd on node: %s", request.Hostname)
+		if _, configureError := GetCoreNodeManager().ConfigureCollectdPhysicalResources(request.Hostname, curr_hostname); configureError != nil {
+			t.UpdateStatus("Unable to setup collectd on node: %s", request.Hostname)
+			return configureError
 		}
 	} else {
 		logger.Get().Critical("Bootstrapping the node failed: ", request.Hostname)

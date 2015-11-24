@@ -58,4 +58,10 @@ type Backend interface {
 	IgnoreNode(node string) (bool, error)
 	DisableService(node string, service string, stop bool) (bool, error)
 	EnableService(node string, service string, start bool) (bool, error)
+	ConfigureCollectdPhysicalResources(node string, master string) (success bool, err error)
+	UpdateCollectdThresholds(nodes []string, threshold []CollectdPlugin) (err error)
+	EnableCollectdPlugin(nodes []string, pluginName string) (success bool, err error)
+	DisableCollectdPlugin(nodes []string, pluginName string) (success bool, err error)
+	RemoveCollectdPlugin(nodes []string, pluginName string) (success bool, err error)
+	AddMonitoringPlugin(nodes []string, plugin CollectdPlugin) (success bool, err error)
 }
