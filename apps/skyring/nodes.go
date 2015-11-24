@@ -82,7 +82,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 		}
 		t.Done()
 	}
-	if taskId, err := a.GetTaskManager().Run("addAndAcceptNode", asyncTask); err != nil {
+	if taskId, err := a.GetTaskManager().Run("addAndAcceptNode", asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for addAndAcceptNode", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
@@ -135,7 +135,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 		}
 		t.Done()
 	}
-	if taskId, err := a.GetTaskManager().Run("AcceptNode", asyncTask); err != nil {
+	if taskId, err := a.GetTaskManager().Run("AcceptNode", asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for AcceptNode", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 

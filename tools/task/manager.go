@@ -37,7 +37,7 @@ func (manager *Manager) Run(name string, f func(t *Task), startedFunc func(t *Ta
 			Func:             f,
 			StartedCbkFunc:   startedFunc,
 			CompletedCbkFunc: completedFunc,
-			StatusCbkFunc:    statusFunc
+			StatusCbkFunc:    statusFunc,
 		}
 		task.Run()
 		manager.tasks[*id] = &task
