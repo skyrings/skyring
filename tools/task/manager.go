@@ -25,16 +25,19 @@ type Manager struct {
 	tasks map[uuid.UUID]*Task
 }
 
-func (manager *Manager) Run(name string, f func(t *Task)) (uuid.UUID, error) {
+func (manager *Manager) Run(name string, f func(t *Task), startedFunc func(t *Task), completedFunc func(t *Task), statusFunc func(t *Task, s *Status)) (uuid.UUID, error) {
 	if id, err := uuid.New(); err == nil {
 		task := Task{
-			Mutex:      &sync.Mutex{},
-			ID:         *id,
-			Name:       name,
-			DoneCh:     make(chan bool, 1),
-			StatusList: []Status{},
-			StopCh:     make(chan bool, 1),
-			Func:       f,
+			Mutex:            &sync.Mutex{},
+			ID:               *id,
+			Name:             name,
+			DoneCh:           make(chan bool, 1),
+			StatusList:       []Status{},
+			StopCh:           make(chan bool, 1),
+			Func:             f,
+			StartedCbkFunc:   startedFunc,
+			CompletedCbkFunc: completedFunc,
+			StatusCbkFunc:    statusFunc
 		}
 		task.Run()
 		manager.tasks[*id] = &task
