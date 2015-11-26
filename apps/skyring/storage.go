@@ -14,18 +14,22 @@ package skyring
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/task"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"regexp"
+	"time"
 )
 
 var (
@@ -60,6 +64,12 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Validate storage target size info
+	if ok, err := valid_storage_size(request.Size); !ok || err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid storage size: %s", request.Size))
+		return
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
@@ -68,15 +78,63 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var result models.RpcResponse
+	var providerTaskId *uuid.UUID
 	// Get the specific provider and invoke the method
-	provider := a.getProviderFromClusterId(*cluster_id)
-	err = provider.Client.Call(fmt.Sprintf("%s.%s",
-		provider.Name, storage_post_functions["create"]),
-		models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body},
-		&result)
-	if err != nil || result.Status.StatusCode != http.StatusOK {
-		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error while storage creation %v", err))
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for pool creation: %v", t.ID)
+		provider := a.getProviderFromClusterId(*cluster_id)
+		err = provider.Client.Call(fmt.Sprintf("%s.%s",
+			provider.Name, storage_post_functions["create"]),
+			models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+			&result)
+		if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+			t.UpdateStatus("Failed. error: %v", err)
+			t.Done()
+			return
+		} else {
+			providerTaskId, err = uuid.Parse(result.Data.RequestId)
+			// Update the master task id
+			providerTaskId, err = uuid.Parse(result.Data.RequestId)
+			if err != nil {
+				t.UpdateStatus("Failed. error: %v", err)
+				t.Done()
+				return
+			}
+			sessionCopy := db.GetDatastore().Copy()
+			defer sessionCopy.Close()
+			coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+			t.UpdateStatus("Updating parent task id")
+			if err := coll.Update(bson.M{"id": *providerTaskId}, bson.M{"$set": bson.M{"parentid": t.ID}}); err != nil {
+				t.UpdateStatus("Failed. error: %v", err)
+				t.Done()
+				return
+			}
+			// Check for provider task to complete and update the parent task
+			for {
+				time.Sleep(2 * time.Second)
+				var providerTask models.AppTask
+				if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+					t.UpdateStatus("Failed. error: %v", err)
+					t.Done()
+					return
+				}
+				if providerTask.Completed {
+					t.UpdateStatus("Success")
+					t.Done()
+					break
+				}
+			}
+		}
+	}
+	if taskId, err := a.GetTaskManager().Run("CreateStorage", asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("Unable to create task for create storage. error: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create storage")
 		return
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 
@@ -91,6 +149,19 @@ func storage_exists(key string, value string) (*models.Storage, error) {
 	} else {
 		return &storage, nil
 	}
+}
+
+func valid_storage_size(size string) (bool, error) {
+	matched, err := regexp.Match(
+		"^([0-9])*MB$|^([0-9])*mb$|^([0-9])*GB$|^([0-9])*gb$|^([0-9])*TB$|^([0-9])*tb$|^([0-9])*PB$|^([0-9])*pb$",
+		[]byte(size))
+	if err != nil {
+		return false, errors.New(fmt.Sprintf("Error parsing the size: %s", size))
+	}
+	if !matched {
+		return false, errors.New(fmt.Sprintf("Invalid format size: %s", size))
+	}
+	return true, nil
 }
 
 func (a *App) GET_Storages(w http.ResponseWriter, r *http.Request) {
