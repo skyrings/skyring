@@ -14,18 +14,22 @@ package skyring
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/task"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"regexp"
+	"time"
 )
 
 var (
@@ -39,8 +43,25 @@ var (
 )
 
 func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
-	var request models.AddStorageRequest
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
+		return
+	}
 
+	ok, err := ClusterDisabled(*cluster_id)
+	if err != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking enabled state of cluster")
+		return
+	}
+	if ok {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in disabled state")
+		return
+	}
+
+	var request models.AddStorageRequest
 	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
@@ -60,23 +81,66 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	vars := mux.Vars(r)
-	cluster_id_str := vars["cluster-id"]
-	cluster_id, err := uuid.Parse(cluster_id_str)
-	if err != nil {
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
+	// Validate storage target size info
+	if ok, err := valid_storage_size(request.Size); !ok || err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid storage size: %s", request.Size))
 		return
 	}
+
 	var result models.RpcResponse
+	var providerTaskId *uuid.UUID
 	// Get the specific provider and invoke the method
-	provider := a.getProviderFromClusterId(*cluster_id)
-	err = provider.Client.Call(fmt.Sprintf("%s.%s",
-		provider.Name, storage_post_functions["create"]),
-		models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body},
-		&result)
-	if err != nil || result.Status.StatusCode != http.StatusOK {
-		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error while storage creation %v", err))
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for pool creation: %v", t.ID)
+		provider := a.getProviderFromClusterId(*cluster_id)
+		err = provider.Client.Call(fmt.Sprintf("%s.%s",
+			provider.Name, storage_post_functions["create"]),
+			models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+			&result)
+		if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+			util.FailTask("Error creating pool", err, t)
+			return
+		} else {
+			// Update the master task id
+			providerTaskId, err = uuid.Parse(result.Data.RequestId)
+			if err != nil {
+				util.FailTask("Error parsing provider task id", err, t)
+				return
+			}
+			t.UpdateStatus("Adding sub task")
+			if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+				util.FailTask("Error adding sub task", err, t)
+				return
+			}
+
+			// Check for provider task to complete and update the parent task
+			for {
+				time.Sleep(2 * time.Second)
+				sessionCopy := db.GetDatastore().Copy()
+				defer sessionCopy.Close()
+				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+				var providerTask models.AppTask
+				if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+					util.FailTask("Error getting sub task status", err, t)
+					return
+				}
+				if providerTask.Completed {
+					t.UpdateStatus("Success")
+					t.Done()
+					break
+				}
+			}
+		}
+	}
+	if taskId, err := a.GetTaskManager().Run("CreateStorage", asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("Unable to create task for create storage. error: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create storage")
 		return
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 
@@ -91,6 +155,19 @@ func storage_exists(key string, value string) (*models.Storage, error) {
 	} else {
 		return &storage, nil
 	}
+}
+
+func valid_storage_size(size string) (bool, error) {
+	matched, err := regexp.Match(
+		"^([0-9])*MB$|^([0-9])*mb$|^([0-9])*GB$|^([0-9])*gb$|^([0-9])*TB$|^([0-9])*tb$|^([0-9])*PB$|^([0-9])*pb$",
+		[]byte(size))
+	if err != nil {
+		return false, errors.New(fmt.Sprintf("Error parsing the size: %s", size))
+	}
+	if !matched {
+		return false, errors.New(fmt.Sprintf("Invalid format size: %s", size))
+	}
+	return true, nil
 }
 
 func (a *App) GET_Storages(w http.ResponseWriter, r *http.Request) {
