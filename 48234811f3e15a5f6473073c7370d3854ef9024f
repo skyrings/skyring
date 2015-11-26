@@ -1,0 +1,344 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_17c4263f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "You should not invoke salt backend apis directly from here.\nUse node manager rather!\n\nUse generic names like UpdatePluginThresholds etc...",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_97abd688",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "Task integration?",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_77e2bad6",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "%s/ConfigureCollectdPhysicalResources/ConfigurePhysicalResourceMonitoring/g\n\nmay be. just to make generic",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_f7cdea5e",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "clusters/{cluster-id}/mon_plugins",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_17db461c",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "clusters/{cluster-id}/mon_plugins/{plugin-name}/enable",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_5704de7d",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "clusters/{cluster-id}/mon_plugins/{plugin-name}/disable",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_97359648",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "clusters/{cluster-id}/mon_plugins/{plugin-name}/thresholds to set threshold for a specific plugin at a time.\n\nThere could be different apis if required for setting for whole cluster as \n\nGET\nclusters/{cluster-id}/mon_plugin_thresholds\n\nPOST\nclusters/{cluster-id}/mon_plugin_thresholds",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_b73a9234",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "clusters/{cluster-id}/mon_plugins/{plugin-name}\n\nAnothere DELETE required for deleting all the mon plugins for the cluster as\n\nDELETE\nclusters/{cluster-id}/mon_plugins",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_d73e2e29",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "clusters/{cluster-id}/mon_plugins",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_f73b2a36",
+        "filename": "backend/backend.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "Remove \"collectd\" word from names. Rather call MonitoringPlugin(s)",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_b711b2ae",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "Same as earlier. remove \"collectd\" and rather use names as MonitoringPlugins",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_371da2be",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "\"if master\" is sufficient I feel",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_d76c6e39",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "\"if threshols\" is sufficient",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_57605e35",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "How do we know for which node it failed?",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_374be2b1",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_57c77e12",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_97d116d0",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "Same as earlier. remove collect and rather use MonitoringPlugins",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_b7d612c4",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "Can we say something like []string{node} while calling the function?",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_f7d7aabd",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "Mostly all the methods return bool and error. Why different here?",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_d7daaee8",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T10:51:58Z",
+      "side": 1,
+      "message": "Commented?",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
