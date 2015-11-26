@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_d240fc37",
+        "filename": "backend/backend.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T11:29:32Z",
+      "side": 1,
+      "message": "%s/IsConfigTypeValid/ValidConfigType/g",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_124b545a",
+        "filename": "backend/backend.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T11:29:32Z",
+      "side": 1,
+      "message": "%s/IsConfigCategoryValid/ValidConfigCategory/g",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_3248505b",
+        "filename": "backend/backend.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T11:29:32Z",
+      "side": 1,
+      "message": "Why we need these? Use the types defined above.",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_5274ec9b",
+        "filename": "backend/backend.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T11:29:32Z",
+      "side": 1,
+      "message": "Remove print",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_926e84c8",
+        "filename": "backend/salt/python/build/lib/skyring/__init__.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T11:29:32Z",
+      "side": 1,
+      "message": "Is it part of this patch?",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_b27380b0",
+        "filename": "backend/salt/python/build/lib/skyring/saltwrapper.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T11:29:32Z",
+      "side": 1,
+      "message": "Is it part of this patch?",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
