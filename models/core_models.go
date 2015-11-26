@@ -107,12 +107,28 @@ type StorageLogicalUnit struct {
 }
 
 type Storage struct {
-	StorageId uuid.UUID         `json:"storageid"`
-	Name      string            `json:"name"`
-	Type      string            `json:"type"`
-	Tags      []string          `json:"tags"`
-	ClusterId uuid.UUID         `json:"clusterid"`
-	Size      uint64            `json:"size"`
-	Status    string            `json:"status"`
-	Options   map[string]string `json:"options"`
+	StorageId           uuid.UUID         `json:"storageid"`
+	Name                string            `json:"name"`
+	Type                string            `json:"type"`
+	Tags                []string          `json:"tags"`
+	ClusterId           uuid.UUID         `json:"clusterid"`
+	Size                string            `json:"size"`
+	Status              string            `json:"status"`
+	Replicas            int               `json:"replicas"`
+	Profile             string            `json:"profile"`
+	SnapshotsEnabled    bool              `json:"snapshots_enabled"`
+	SnapshotScheduleIds []uuid.UUID       `json:"snapshot_schedule_ids"`
+	QuotaEnabled        bool              `json:"quota_enabled"`
+	QuotaParams         map[string]string `json:"quota_params"`
+	Options             map[string]string `json:"options"`
+}
+
+type SnapshotSchedule struct {
+	Id            uuid.UUID `json:"id"`
+	Recurrence    string    `json:"recurrence"`
+	Interval      int       `json:"interval"`
+	ExecutionTime string    `json:"execution_time"`
+	Days          []string  `json:"days"`
+	StartFrom     string    `json:"start_from"`
+	EndBy         string    `json:"endby"`
 }

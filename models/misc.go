@@ -48,11 +48,26 @@ type ClusterNodeDevice struct {
 }
 
 type AddStorageRequest struct {
-	Name    string            `json:"name"`
-	Type    string            `json:"type"`
-	Tags    []string          `json:"tags"`
-	Size    uint64            `json:"size"`
-	Options map[string]string `json:"options"`
+	Name             string            `json:"name"`
+	Type             string            `json:"type"`
+	Tags             []string          `json:"tags"`
+	Size             string            `json:"size"`
+	Replicas         int               `json:"replicas"`
+	Profile          string            `json:"profile"`
+	SnapshotsEnabled bool              `json:"snapshots_enabled"`
+	SnapshotSchedule SnapshotSchedule  `json:"snapshot_schedule"`
+	QuotaEnabled     bool              `json:"quota_enabled"`
+	QuotaParams      map[string]string `json:"quota_params"`
+	Options          map[string]string `json:"options"`
+}
+
+type SnapshotScheduleRequest struct {
+	Recurrence    string   `json:"recurrence"`
+	Interval      int      `json:"interval"`
+	ExecutionTime string   `json:"execution_time"`
+	Days          []string `json:"days"`
+	StartFrom     string   `json:"start_from"`
+	EndBy         string   `json:"endby"`
 }
 
 type Nodes []Node
