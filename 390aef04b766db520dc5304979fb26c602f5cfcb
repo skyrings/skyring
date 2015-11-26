@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_ec0b5d29",
+        "filename": "backend/plugin_types.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T09:26:19Z",
+      "side": 1,
+      "message": "Source level comments?\n\nI feel the struct definitions belong more to backend.go with struct attached methods.\n\nUtils methods can go to plugin_utils.go",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_f7d96a84",
+        "filename": "backend/plugin_types.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T09:26:19Z",
+      "side": 1,
+      "message": "Should we call this \"Plugin\" ?",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_17e7c641",
+        "filename": "backend/plugin_types.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T09:26:19Z",
+      "side": 1,
+      "message": "PluginConfig??",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_176c269c",
+        "filename": "salt/conf/collectd/cpu.sls",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T09:26:19Z",
+      "side": 1,
+      "message": "I feel all the conf files can move to backend/salt/conf/collectd\n\nand sls files to backend/salt/sls/collectd dirs",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
