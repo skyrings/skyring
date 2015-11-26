@@ -53,6 +53,57 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_5705bec0",
+        "filename": "backend/plugin_types.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T09:32:14Z",
+      "side": 1,
+      "message": "Can we move this defaults into a separate go source? say default_configs.go",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_970f56e1",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T09:32:14Z",
+      "side": 1,
+      "message": "commented??",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_b71452f6",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T09:32:14Z",
+      "side": 1,
+      "message": "commented??",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_176c269c",
         "filename": "salt/conf/collectd/cpu.sls",
         "patchSetId": 9
@@ -64,6 +115,40 @@
       "writtenOn": "2015-11-26T09:26:19Z",
       "side": 1,
       "message": "I feel all the conf files can move to backend/salt/conf/collectd\n\nand sls files to backend/salt/sls/collectd dirs",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_f7f5eacb",
+        "filename": "salt/conf/collectd/files/collectd.conf",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T09:32:14Z",
+      "side": 1,
+      "message": "Is this file generated?\nIf so why we should manage in source base? It should be generated during build and used.",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_572cde4a",
+        "filename": "salt/conf/collectd/files/python.conf",
+        "patchSetId": 9
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-26T09:32:14Z",
+      "side": 1,
+      "message": "Same as earlier",
       "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
