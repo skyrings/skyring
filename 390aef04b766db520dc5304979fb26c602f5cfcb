@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_970cb696",
+        "filename": "backend/plugin_types.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-26T11:00:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_ec0b5d29",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_f7d96a84",
         "filename": "backend/plugin_types.go",
         "patchSetId": 9
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-26T09:26:19Z",
       "side": 1,
       "message": "Should we call this \"Plugin\" ?",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_97b67689",
+        "filename": "backend/plugin_types.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-26T11:00:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_f7d96a84",
       "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_f7696a26",
+        "filename": "backend/plugin_types.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-26T11:00:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_17e7c641",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_5705bec0",
         "filename": "backend/plugin_types.go",
         "patchSetId": 9
@@ -64,6 +118,24 @@
       "writtenOn": "2015-11-26T09:32:14Z",
       "side": 1,
       "message": "Can we move this defaults into a separate go source? say default_configs.go",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_77655a44",
+        "filename": "backend/plugin_types.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-26T11:00:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_5705bec0",
       "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_174ee6c1",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-26T11:00:09Z",
+      "side": 1,
+      "message": "Sorry this was an unintentional push",
+      "parentUuid": "5ac4a560_970f56e1",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_b71452f6",
         "filename": "misc/install_skyring.sh",
         "patchSetId": 9
@@ -98,6 +188,24 @@
       "writtenOn": "2015-11-26T09:32:14Z",
       "side": 1,
       "message": "commented??",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_77cc7a36",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-26T11:00:09Z",
+      "side": 1,
+      "message": "Sorry this was unintentional push",
+      "parentUuid": "5ac4a560_b71452f6",
       "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_37e202a0",
+        "filename": "salt/conf/collectd/cpu.sls",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-26T11:00:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_176c269c",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_f7f5eacb",
         "filename": "salt/conf/collectd/files/collectd.conf",
         "patchSetId": 9
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_d701ce3a",
+        "filename": "salt/conf/collectd/files/collectd.conf",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-26T11:00:09Z",
+      "side": 1,
+      "message": "Nope. Its not actually generated but instead it means that when an actual conf file is generated from this template conf, that shouldn\u0027t be altered but instead this could be.\n\nThese same lines will appear in the generated conf file.That\u0027s the intention behind putting it.",
+      "parentUuid": "5ac4a560_f7f5eacb",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_572cde4a",
         "filename": "salt/conf/collectd/files/python.conf",
         "patchSetId": 9
@@ -149,6 +293,24 @@
       "writtenOn": "2015-11-26T09:32:14Z",
       "side": 1,
       "message": "Same as earlier",
+      "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_f7ac0a38",
+        "filename": "salt/conf/collectd/files/python.conf",
+        "patchSetId": 9
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-26T11:00:09Z",
+      "side": 1,
+      "message": "Nope. Its not actually generated but instead it means that when an actual conf file is generated from this template conf, that shouldn\u0027t be altered but instead this could be.\nThese same lines will appear in the generated conf file.That\u0027s the intention behind putting it.",
+      "parentUuid": "5ac4a560_572cde4a",
       "revId": "390aef04b766db520dc5304979fb26c602f5cfcb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
