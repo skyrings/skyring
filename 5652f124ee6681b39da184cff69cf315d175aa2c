@@ -1,0 +1,567 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_720ac8d3",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "t.updateStatus(\"Failed\") after this statement\nAlso log the error",
+      "range": {
+        "startLine": 89,
+        "startChar": 3,
+        "endLine": 89,
+        "endChar": 5
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_920f64e1",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "t.updateStatus(\"Failed\") after this statement\nAlso log the error",
+      "range": {
+        "startLine": 95,
+        "startChar": 5,
+        "endLine": 95,
+        "endChar": 8
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_b2b9c0eb",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "We need to write a method in task manager to update the task information. Better to avoid direct db updates",
+      "range": {
+        "startLine": 103,
+        "startChar": 14,
+        "endLine": 104,
+        "endChar": 54
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_d2f8fcc6",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "t.updateStatus(\"Failed\") after this statement\nAlso log the error",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 10
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_52ba2ce2",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "No direct db queries. Use taskmanager.IsDone()",
+      "range": {
+        "startLine": 114,
+        "startChar": 4,
+        "endLine": 114,
+        "endChar": 35
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_320050aa",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "t.updateStatus(\"Failed\") after this statement\nAlso log the error",
+      "range": {
+        "startLine": 115,
+        "startChar": 5,
+        "endLine": 116,
+        "endChar": 12
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_52d30c38",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "Add logs",
+      "range": {
+        "startLine": 121,
+        "startChar": 12,
+        "endLine": 124,
+        "endChar": 12
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_f2917853",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "t.updateStatus(\"Failed\") after this statement\nAlso log the error",
+      "range": {
+        "startLine": 390,
+        "startChar": 3,
+        "endLine": 390,
+        "endChar": 7
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_129fd460",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "t.updateStatus(\"Failed\") after this statement\nAlso log the error",
+      "range": {
+        "startLine": 397,
+        "startChar": 4,
+        "endLine": 398,
+        "endChar": 12
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_32c5b05b",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "We need to write a method in task manager to update the task information. Better to avoid direct db updates",
+      "range": {
+        "startLine": 404,
+        "startChar": 19,
+        "endLine": 404,
+        "endChar": 33
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_928204ff",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "Use taskmanager.IsDone()",
+      "range": {
+        "startLine": 415,
+        "startChar": 14,
+        "endLine": 415,
+        "endChar": 46
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_329cd069",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "t.updateStatus(\"Failed\") after this statement\nAlso log the error",
+      "range": {
+        "startLine": 416,
+        "startChar": 5,
+        "endLine": 418,
+        "endChar": 11
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_52886c22",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "Addlogs",
+      "range": {
+        "startLine": 422,
+        "startChar": 12,
+        "endLine": 425,
+        "endChar": 11
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_7263a8b1",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "Log the error",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 7
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_b25d40ec",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "do we need to handle the error here?",
+      "range": {
+        "startLine": 26,
+        "startChar": 2,
+        "endLine": 29,
+        "endChar": 2
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_925844fc",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "Log the error",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 7
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_126c349c",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "do we need to handle the error here?",
+      "range": {
+        "startLine": 55,
+        "startChar": 2,
+        "endLine": 55,
+        "endChar": 17
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_d24abc26",
+        "filename": "models/core_models.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "Move this out from this file(misc?). Let us have only the core data models defined in this file",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 1
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_92ca04a0",
+        "filename": "tools/task/manager.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "Need to add logs. errors are not logged which will make our life difficult to debug the issues",
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_f29fb84e",
+        "filename": "tools/task/manager.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "I think we need to call task.IsDone() in any case. This will make sure if any of the tasks exited without setting t.Done() will be taken care",
+      "range": {
+        "startLine": 54,
+        "startChar": 1,
+        "endLine": 56,
+        "endChar": 23
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_52d06c53",
+        "filename": "tools/task/task.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "Need to add logs. errors are not logged which will make our life difficult to debug the issues",
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_52e94c19",
+        "filename": "tools/task/task.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "Do we need this method? Are we using it anywhere?\nif yes, then it will overwrite the statusList in as DB as you are always overwriting it in UpdateStatusList(). So if this func is reqd fix the issue, else remove it",
+      "range": {
+        "startLine": 59,
+        "startChar": 6,
+        "endLine": 59,
+        "endChar": 24
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_32e4d03a",
+        "filename": "tools/task/task.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "handle error",
+      "range": {
+        "startLine": 70,
+        "startChar": 7,
+        "endLine": 70,
+        "endChar": 10
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_12e7d441",
+        "filename": "tools/task/task.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "Handle error",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 15
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_d2dc7c77",
+        "filename": "tools/task/task.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-26T12:29:00Z",
+      "side": 1,
+      "message": "Need to call UpdateTaskCompleted to mark the completion of the task",
+      "range": {
+        "startLine": 87,
+        "startChar": 3,
+        "endLine": 87,
+        "endChar": 21
+      },
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
