@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_7709da94",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2015-11-26T10:34:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_98a23999",
+      "revId": "47bf8a61790ddb0482f3cbfe5c52fa1c23c9818d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_b89ff54f",
         "filename": "apps/skyring/events.go",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-23T05:20:44Z",
       "side": 1,
       "message": "This error checking and setting of json.NewEncoder(rw).Encode() is common to all the cases.\nThese lines can be moved down outside the if-else block.",
+      "revId": "47bf8a61790ddb0482f3cbfe5c52fa1c23c9818d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_97fe766a",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2015-11-26T10:34:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_b89ff54f",
       "revId": "47bf8a61790ddb0482f3cbfe5c52fa1c23c9818d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
