@@ -22,6 +22,24 @@
       "revId": "f5ead27226e63ff61dd6194f15b4858e70a56647",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_625f510f",
+        "filename": "glide.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-27T07:25:17Z",
+      "side": 1,
+      "message": "Will correct",
+      "parentUuid": "5ac4a560_efbb4a70",
+      "revId": "f5ead27226e63ff61dd6194f15b4858e70a56647",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
