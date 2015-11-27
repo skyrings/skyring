@@ -816,6 +816,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_a24fa991",
+        "filename": "tools/task/manager.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-27T10:47:14Z",
+      "side": 1,
+      "message": "I think task.IsDone not required to call. This is just to get the status of the task. Whenever there is a t.Done() invoked from a task context, it would be updated immediately in DB. Later if somebody call manager.IsDone he/she would get the up to date state",
+      "parentUuid": "5ac4a560_522b0ceb",
+      "revId": "5652f124ee6681b39da184cff69cf315d175aa2c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_52d06c53",
         "filename": "tools/task/task.go",
         "patchSetId": 5
