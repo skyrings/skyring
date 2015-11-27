@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_0f540653",
+        "filename": "backend/backend.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-27T05:18:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_d240fc37",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_124b545a",
         "filename": "backend/backend.go",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-26T11:29:32Z",
       "side": 1,
       "message": "%s/IsConfigCategoryValid/ValidConfigCategory/g",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_4f4efec2",
+        "filename": "backend/backend.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-27T05:18:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_124b545a",
       "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_0fdb26ee",
+        "filename": "backend/backend.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-27T05:18:52Z",
+      "side": 1,
+      "message": "Actually in respective UnmarshalJson, what I am doing is just unmarshalling into struct and then verifying it to contain supported values.\n\nBut if I don\u0027t alias the type and unmarshal into it, it will catch up an infinite loop because I call unmarshal on the type itself.",
+      "parentUuid": "5ac4a560_3248505b",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_5274ec9b",
         "filename": "backend/backend.go",
         "patchSetId": 11
@@ -64,6 +118,24 @@
       "writtenOn": "2015-11-26T11:29:32Z",
       "side": 1,
       "message": "Remove print",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_2fd8e2ee",
+        "filename": "backend/backend.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-27T05:18:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_5274ec9b",
       "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_6fe2daa0",
+        "filename": "backend/salt/python/build/lib/skyring/__init__.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-27T05:18:52Z",
+      "side": 1,
+      "message": "nope, Actually I did git commit all and it brought this in :(\nI\u0027ll remove this noise.",
+      "parentUuid": "5ac4a560_926e84c8",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_b27380b0",
         "filename": "backend/salt/python/build/lib/skyring/saltwrapper.py",
         "patchSetId": 11
@@ -98,6 +188,24 @@
       "writtenOn": "2015-11-26T11:29:32Z",
       "side": 1,
       "message": "Is it part of this patch?",
+      "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_8fee568a",
+        "filename": "backend/salt/python/build/lib/skyring/saltwrapper.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-11-27T05:18:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_b27380b0",
       "revId": "b79697ebbe169efdd10726eb27a0590f88a67756",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
