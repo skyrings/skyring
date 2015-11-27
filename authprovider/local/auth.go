@@ -136,15 +136,15 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 	}
 
 	if user, err := a.backend.User(u); err == nil {
-		if user.Status {
+		if user.Type == authprovider.Internal && user.Status {
 			verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(p))
 			if verify != nil {
 				logger.Get().Error("Passwords Doesnot match")
 				return mkerror("password doesn't match")
 			}
 		} else {
-			logger.Get().Error("This user is not allowed. Status Disabled")
-			return mkerror("This user is not allowed. Status Disabled")
+			logger.Get().Error("This user is not allowed by localauthprovider")
+			return mkerror("This user is not allowed by localauthprovider")
 		}
 	} else {
 		logger.Get().Error("User Not Found")
@@ -220,10 +220,9 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 
 // Update changes data for an existing user. Needs thought...
 //Just added for completeness. Will revisit later
-func (a Authorizer) UpdateUser(req *http.Request, username string, p string, e string) error {
+func (a Authorizer) UpdateUser(username string, p string, e string) error {
 	var (
-		hash  []byte
-		email string
+		hash []byte
 	)
 
 	user, err := a.backend.User(username)
@@ -237,18 +236,13 @@ func (a Authorizer) UpdateUser(req *http.Request, username string, p string, e s
 			logger.Get().Error("Error saving the password:%s", err)
 			return mkerror("couldn't save password: " + err.Error())
 		}
-	} else {
-		hash = user.Hash
+		user.Hash = hash
 	}
 	if e != "" {
-		email = e
-	} else {
-		email = user.Email
+		user.Email = e
 	}
 
-	newuser := models.User{Username: username, Email: email, Hash: hash, Role: user.Role}
-
-	err = a.backend.SaveUser(newuser)
+	err = a.backend.SaveUser(user)
 	if err != nil {
 		logger.Get().Error("Error saving the user to DB:%s", err)
 		return err

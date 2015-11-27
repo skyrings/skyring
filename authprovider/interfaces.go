@@ -39,7 +39,7 @@ type AuthInterface interface {
 	Authorize(rw http.ResponseWriter, req *http.Request) error
 	AuthorizeRole(rw http.ResponseWriter, req *http.Request, role string) error
 	AddUser(user models.User, password string) error
-	UpdateUser(req *http.Request, username string, password string, email string) error
+	UpdateUser(username string, password string, email string) error
 	GetUser(username string) (models.User, error)
 	ListUsers() ([]models.User, error)
 	DeleteUser(username string) error

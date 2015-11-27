@@ -213,8 +213,8 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 			return mkerror(errStrNotAllowed)
 		}
 	} else {
-		logger.Get().Error(errStrNotAllowed)
-		return mkerror(errStrNotAllowed)
+		logger.Get().Error("User Doesnot Exists:", user)
+		return mkerror("User Doesnot Exists")
 	}
 	session.Set("username", u)
 
@@ -297,8 +297,6 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		return mkerror("no email given")
 	}
 
-	//Set the usertype to external
-	user.Type = authprovider.External
 	user.Status = true
 
 	// Validate username
@@ -313,19 +311,41 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		}
 		return nil
 	}
+	if user.Type == authprovider.External {
+		user.Hash = nil
 
-	user.Hash = nil
-
-	// Validate role
-	if user.Role == "" {
-		user.Role = a.defaultRole
+		// Validate role
+		if user.Role == "" {
+			user.Role = a.defaultRole
+		} else {
+			if _, ok := a.roles[user.Role]; !ok {
+				logger.Get().Error("Non Existing Role")
+				return mkerror("non-existant role")
+			}
+		}
 	} else {
-		if _, ok := a.roles[user.Role]; !ok {
-			logger.Get().Error("Non Existing Role")
-			return mkerror("non-existant role")
+		if password == "" {
+			logger.Get().Error("no password given")
+			return mkerror("no password given")
+		}
+		// Generate and save hash
+		hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+		if err != nil {
+			logger.Get().Error("couldn't save password:%s", err)
+			return mkerror("couldn't save password: " + err.Error())
+		}
+		user.Hash = hash
+
+		// Validate role
+		if user.Role == "" {
+			user.Role = a.defaultRole
+		} else {
+			if _, ok := a.roles[user.Role]; !ok {
+				logger.Get().Error("Non Existing Role")
+				return mkerror("non-existant role")
+			}
 		}
 	}
-
 	err = a.backend.SaveUser(user)
 	if err != nil {
 		logger.Get().Error("Erro Saving the User:%s", err)
@@ -336,11 +356,11 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 
 // Update changes data for an existing user. Needs thought...
 //Just added for completeness. Will revisit later
-func (a Authorizer) UpdateUser(req *http.Request, username string, p string, e string) error {
+func (a Authorizer) UpdateUser(username string, p string, e string) error {
 
 	var (
-		hash  []byte
-		email string
+		hash    []byte
+		updated bool
 	)
 
 	user, err := a.backend.User(username)
@@ -356,27 +376,24 @@ func (a Authorizer) UpdateUser(req *http.Request, username string, p string, e s
 				logger.Get().Error("Error saving the password:%s", err)
 				return mkerror("couldn't save password: " + err.Error())
 			}
-		} else {
-			hash = user.Hash
-		}
-		if e != "" {
-			email = e
-		} else {
-			email = user.Email
+			user.Hash = hash
+			updated = true
 		}
 
-		newuser := models.User{Username: username, Email: email, Hash: hash, Role: user.Role}
+	}
+	if e != "" {
+		user.Email = e
+		updated = true
+	}
 
-		err = a.backend.SaveUser(newuser)
+	if updated {
+		err = a.backend.SaveUser(user)
 		if err != nil {
 			logger.Get().Error("Error saving the user to DB:%s", err)
 			return err
 		}
-
-		return nil
-	} else {
-		return mkerror("Operation Not Supported")
 	}
+	return nil
 
 }
 
