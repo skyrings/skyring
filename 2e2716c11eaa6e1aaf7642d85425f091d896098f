@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_02685db9",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-27T07:24:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_efed0a8d",
+      "revId": "2e2716c11eaa6e1aaf7642d85425f091d896098f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_cfe84e7f",
         "filename": "models/core_models.go",
         "patchSetId": 3
@@ -42,6 +60,24 @@
         "endLine": 123,
         "endChar": 59
       },
+      "revId": "2e2716c11eaa6e1aaf7642d85425f091d896098f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_226559e1",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-11-27T07:24:04Z",
+      "side": 1,
+      "message": "All at this level applicable to ceph and gluster at least",
+      "parentUuid": "5ac4a560_cfe84e7f",
       "revId": "2e2716c11eaa6e1aaf7642d85425f091d896098f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
