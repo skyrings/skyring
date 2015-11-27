@@ -28,7 +28,6 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 	} else {
 		json.NewEncoder(rw).Encode(tasks)
 	}
-
 }
 
 func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
@@ -45,6 +44,64 @@ func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 	var task models.AppTask
 	if err := coll.Find(bson.M{"id": *taskId}).One(&task); err != nil {
+		logger.Get().Error("Unable to get task: %v", err)
+		util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if task.Id.IsZero() {
+		util.HttpResponse(rw, http.StatusBadRequest, "Task not found")
+		logger.Get().Error("Task not found: %v", err)
+		return
+	} else {
+		json.NewEncoder(rw).Encode(task)
+	}
+}
+
+func (a *App) getSubTasks(rw http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	taskId, err := uuid.Parse(vars["taskid"])
+	if err != nil {
+		logger.Get().Error("Unable to Parse the Id:%s", err)
+		util.HandleHttpError(rw, err)
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	var tasks []models.AppTask
+	if err := coll.Find(bson.M{"parentid": *taskId}).All(&tasks); err != nil {
+		logger.Get().Error("Unable to get tasks: %v", err)
+		util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if len(tasks) == 0 {
+		json.NewEncoder(rw).Encode([]models.AppTask{})
+	} else {
+		json.NewEncoder(rw).Encode(tasks)
+	}
+}
+
+func (a *App) getSubTask(rw http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	taskId, err := uuid.Parse(vars["taskid"])
+	subTaskId, err := uuid.Parse(vars["subtask-id"])
+	if err != nil {
+		logger.Get().Error("Unable to Parse the Id:%s", err)
+		util.HandleHttpError(rw, err)
+		return
+	}
+	if err != nil {
+		logger.Get().Error("Unable to Parse the sub task Id:%s", err)
+		util.HandleHttpError(rw, err)
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	var task models.AppTask
+	if err := coll.Find(bson.M{"id": subTaskId, "parentid": *taskId}).One(&task); err != nil {
 		logger.Get().Error("Unable to get task: %v", err)
 		util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
 		return
