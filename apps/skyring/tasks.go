@@ -28,7 +28,6 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 	} else {
 		json.NewEncoder(rw).Encode(tasks)
 	}
-
 }
 
 func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
@@ -55,5 +54,30 @@ func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 		return
 	} else {
 		json.NewEncoder(rw).Encode(task)
+	}
+}
+
+func (a *App) getSubTasks(rw http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	taskId, err := uuid.Parse(vars["taskid"])
+	if err != nil {
+		logger.Get().Error("Unable to Parse the Id:%s", err)
+		util.HandleHttpError(rw, err)
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	var tasks []models.AppTask
+	if err := coll.Find(bson.M{"parentid": *taskId}).All(&tasks); err != nil {
+		logger.Get().Error("Unable to get tasks: %v", err)
+		util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if len(tasks) == 0 {
+		json.NewEncoder(rw).Encode([]models.AppTask{})
+	} else {
+		json.NewEncoder(rw).Encode(tasks)
 	}
 }

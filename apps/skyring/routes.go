@@ -168,6 +168,13 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.getTask,
 			Version:     1,
 		},
+		{
+			Name:        "GET_subtasks",
+			Method:      "GET",
+			Pattern:     "tasks/{taskid}/subtasks",
+			HandlerFunc: a.getSubTasks,
+			Version:     1,
+		},
 		//Routes for Cluster Management
 		{
 			Name:        "POST_Clusters",
