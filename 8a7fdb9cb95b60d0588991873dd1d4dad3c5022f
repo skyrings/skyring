@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_afccf236",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-27T05:16:30Z",
+      "side": 1,
+      "message": "All comments done for https://review.gerrithub.io/#/c/252583/5/apps/skyring/cluster.go applicable here",
+      "range": {
+        "startLine": 178,
+        "startChar": 1,
+        "endLine": 221,
+        "endChar": 2
+      },
+      "revId": "8a7fdb9cb95b60d0588991873dd1d4dad3c5022f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_cfd12ecf",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-27T05:16:30Z",
+      "side": 1,
+      "message": "All comments done for https://review.gerrithub.io/#/c/252583/5/apps/skyring/cluster.go applicable here",
+      "range": {
+        "startLine": 299,
+        "startChar": 1,
+        "endLine": 336,
+        "endChar": 2
+      },
+      "revId": "8a7fdb9cb95b60d0588991873dd1d4dad3c5022f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_efd6eac4",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-27T05:16:30Z",
+      "side": 1,
+      "message": "All comments done for https://review.gerrithub.io/#/c/252583/5/apps/skyring/cluster.go applicable here",
+      "range": {
+        "startLine": 368,
+        "startChar": 1,
+        "endLine": 405,
+        "endChar": 2
+      },
+      "revId": "8a7fdb9cb95b60d0588991873dd1d4dad3c5022f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
