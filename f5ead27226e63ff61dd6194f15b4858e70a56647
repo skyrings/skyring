@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_efbb4a70",
+        "filename": "glide.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-27T05:41:38Z",
+      "side": 1,
+      "message": "Typo?",
+      "range": {
+        "startLine": 2,
+        "startChar": 6,
+        "endLine": 2,
+        "endChar": 37
+      },
+      "revId": "f5ead27226e63ff61dd6194f15b4858e70a56647",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
