@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_efed0a8d",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-27T05:23:28Z",
+      "side": 1,
+      "message": "All comments done for https://review.gerrithub.io/#/c/252583/5/apps/skyring/cluster.go applicable here",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 2
+      },
+      "revId": "2e2716c11eaa6e1aaf7642d85425f091d896098f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_cfe84e7f",
+        "filename": "models/core_models.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-11-27T05:23:28Z",
+      "side": 1,
+      "message": "does all these new fields are applicable to other storage providers? if not we have to move those to options",
+      "range": {
+        "startLine": 119,
+        "startChar": 1,
+        "endLine": 123,
+        "endChar": 59
+      },
+      "revId": "2e2716c11eaa6e1aaf7642d85425f091d896098f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
