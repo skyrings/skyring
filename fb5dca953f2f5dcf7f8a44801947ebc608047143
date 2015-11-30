@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_f9e793e2",
+        "filename": "conf/skyring_salt_master.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-11-30T06:33:17Z",
+      "side": 1,
+      "message": "Please add the following 2 lines as well:\n\n  - \u0027dbus/node/*\u0027:\n    - /srv/salt/push_event.sls\n\nThis will add reactor config for node events.",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 6
+      },
+      "revId": "fb5dca953f2f5dcf7f8a44801947ebc608047143",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
