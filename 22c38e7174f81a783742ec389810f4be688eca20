@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_10617039",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-03T04:25:21Z",
+      "side": 1,
+      "message": "We should have a script for clean up of installed skyring on the machine say a command /usr/sbin/clean-skyring with script name as clean_skyring.sh.\n\nThis script should undo all the configurations required for skyring like, mongodb, influxdb, rpms etc. Finally remove all the rpms and its dependencies after confirmation from user..",
+      "revId": "22c38e7174f81a783742ec389810f4be688eca20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_b0235c04",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-03T04:25:21Z",
+      "side": 1,
+      "message": "List the below changes as numbered ones",
+      "revId": "22c38e7174f81a783742ec389810f4be688eca20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_7012a4b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-03T04:25:21Z",
+      "side": 1,
+      "message": "After rpm installation, all thats pending is setup..\nThe script should be named as setup_skyring.sh and link created in /usr/sbin as \n\n/usr/sbin/setup-skyring",
+      "revId": "22c38e7174f81a783742ec389810f4be688eca20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_107a50f1",
+        "filename": "Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-03T04:25:21Z",
+      "side": 1,
+      "message": "I feel we should have a target for clean and invoke the same here.",
+      "revId": "22c38e7174f81a783742ec389810f4be688eca20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_5084c8d3",
+        "filename": "install.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-03T04:25:21Z",
+      "side": 1,
+      "message": "This should be called setup_skyring.sh rather than install.sh as its doing more of post installation setup/configuration only",
+      "revId": "22c38e7174f81a783742ec389810f4be688eca20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_b06a7c18",
+        "filename": "skyring.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-03T04:25:21Z",
+      "side": 1,
+      "message": "Is it like after copying this file, salt master can automatically pick this file for reactor definitions?",
+      "revId": "22c38e7174f81a783742ec389810f4be688eca20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
