@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_9054a055",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-03T04:34:27Z",
+      "side": 1,
+      "message": "we could call the command as \u0027skyring-cleanup\u0027 to keep \u0027skyring-\u0027 prefix. Also this should just undo config changes, stop services, etc but should not remove packages.",
+      "parentUuid": "5ac4a560_10617039",
+      "revId": "22c38e7174f81a783742ec389810f4be688eca20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_b0235c04",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -47,6 +65,24 @@
       "writtenOn": "2015-12-03T04:25:21Z",
       "side": 1,
       "message": "After rpm installation, all thats pending is setup..\nThe script should be named as setup_skyring.sh and link created in /usr/sbin as \n\n/usr/sbin/setup-skyring",
+      "revId": "22c38e7174f81a783742ec389810f4be688eca20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_b0519c64",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-03T04:34:27Z",
+      "side": 1,
+      "message": "\u0027skyring-setup\u0027 looks better.",
+      "parentUuid": "5ac4a560_7012a4b2",
       "revId": "22c38e7174f81a783742ec389810f4be688eca20",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
