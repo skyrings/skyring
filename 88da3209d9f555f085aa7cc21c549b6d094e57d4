@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_3bcbada6",
+        "filename": "skyring.spec",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-12-03T07:28:13Z",
+      "side": 1,
+      "message": "you could change this to\n\npkg_name, pkg_version and pkg_release",
+      "revId": "88da3209d9f555f085aa7cc21c549b6d094e57d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_dbe4793d",
+        "filename": "skyring.spec",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-12-03T07:28:13Z",
+      "side": 1,
+      "message": "Why do you want to define this?",
+      "revId": "88da3209d9f555f085aa7cc21c549b6d094e57d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_7bc44592",
+        "filename": "skyring.spec",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-12-03T07:28:13Z",
+      "side": 1,
+      "message": "Why do you need git, golang, python-devel hg, openldap-devel for run time?  If they are required for BuildRequires, you should fix it accordingly.",
+      "revId": "88da3209d9f555f085aa7cc21c549b6d094e57d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_bbbeddfd",
+        "filename": "skyring.spec",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1006046
+      },
+      "writtenOn": "2015-12-03T07:28:13Z",
+      "side": 1,
+      "message": "Where is go build?",
+      "revId": "88da3209d9f555f085aa7cc21c549b6d094e57d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
