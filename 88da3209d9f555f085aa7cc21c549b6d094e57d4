@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_bb55fdc7",
+        "filename": "skyring.spec",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006883
+      },
+      "writtenOn": "2015-12-03T08:13:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_3bcbada6",
+      "revId": "88da3209d9f555f085aa7cc21c549b6d094e57d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_dbe4793d",
         "filename": "skyring.spec",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2015-12-03T07:28:13Z",
       "side": 1,
       "message": "Why do you want to define this?",
+      "revId": "88da3209d9f555f085aa7cc21c549b6d094e57d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_9bf681d6",
+        "filename": "skyring.spec",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1006883
+      },
+      "writtenOn": "2015-12-03T08:13:47Z",
+      "side": 1,
+      "message": "I will remove this",
+      "parentUuid": "5ac4a560_dbe4793d",
       "revId": "88da3209d9f555f085aa7cc21c549b6d094e57d4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_bb033db7",
+        "filename": "skyring.spec",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006883
+      },
+      "writtenOn": "2015-12-03T08:13:47Z",
+      "side": 1,
+      "message": "I will remove git and move others build package dependencies to BuildRequires",
+      "parentUuid": "5ac4a560_7bc44592",
+      "revId": "88da3209d9f555f085aa7cc21c549b6d094e57d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_bbbeddfd",
         "filename": "skyring.spec",
         "patchSetId": 5
@@ -64,6 +118,24 @@
       "writtenOn": "2015-12-03T07:28:13Z",
       "side": 1,
       "message": "Where is go build?",
+      "revId": "88da3209d9f555f085aa7cc21c549b6d094e57d4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_db00f9ac",
+        "filename": "skyring.spec",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1006883
+      },
+      "writtenOn": "2015-12-03T08:13:47Z",
+      "side": 1,
+      "message": "Sure i will add go build",
+      "parentUuid": "5ac4a560_bbbeddfd",
       "revId": "88da3209d9f555f085aa7cc21c549b6d094e57d4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
