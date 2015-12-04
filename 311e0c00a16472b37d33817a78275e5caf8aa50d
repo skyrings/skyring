@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_068e912e",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-04T07:30:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_4615e9ef",
+      "revId": "311e0c00a16472b37d33817a78275e5caf8aa50d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_66f905c8",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 7
@@ -42,6 +60,24 @@
         "endLine": 411,
         "endChar": 5
       },
+      "revId": "311e0c00a16472b37d33817a78275e5caf8aa50d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_26838d05",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-04T07:30:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_66f905c8",
       "revId": "311e0c00a16472b37d33817a78275e5caf8aa50d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
