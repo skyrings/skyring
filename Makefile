@@ -49,7 +49,7 @@ saltinstall:
 	@echo "Doing $@"
 	@if ! cp -f salt/* /srv/salt/ 2>/dev/null; then \
 		echo "ERROR: unable to install salt files. Install them manually by"; \
-		echo "sudo cp -f salt/* /srv/salt/"; \
+		echo "sudo cp -f backend/salt/sls/* /srv/salt/"; \
 	fi
 
 install: build pyinstall saltinstall
