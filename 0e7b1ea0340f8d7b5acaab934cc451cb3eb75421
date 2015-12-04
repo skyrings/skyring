@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_46ba49df",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-04T07:16:57Z",
+      "side": 1,
+      "message": "Why are you creating a subtask here? Are you any post ops after the provider task is completed?",
+      "range": {
+        "startLine": 110,
+        "startChar": 3,
+        "endLine": 130,
+        "endChar": 10
+      },
+      "revId": "0e7b1ea0340f8d7b5acaab934cc451cb3eb75421",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
