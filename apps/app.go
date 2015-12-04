@@ -27,4 +27,5 @@ type Application interface {
 	//Middleware to check the request is authenticated
 	LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
 	InitializeTaskManager() error
+	SyncClusterDetails()
 }

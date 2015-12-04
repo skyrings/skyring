@@ -135,6 +135,13 @@ func (s Salt) EnableService(node string, service string, start bool) (status boo
 	return
 }
 
+func (s Salt) NodeUp(node string) (status bool, err error) {
+	if pyobj, err := pyFuncs["NodeUp"].Call(node); err == nil {
+		err = gopy.Convert(pyobj, &status)
+	}
+	return
+}
+
 func New() backend.Backend {
 	return new(Salt)
 }

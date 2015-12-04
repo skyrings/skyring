@@ -332,3 +332,59 @@ func (a *App) InitializeTaskManager() error {
 func (a *App) GetTaskManager() *task.Manager {
 	return &TaskManager
 }
+
+func (a *App) SyncClusterDetails() {
+	// // Get the list of cluster
+	// sessionCopy = db.GetDatastore().Copy()
+	// defer sessionCopy.Close()
+	// coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	// var clusters models.Clusters
+	// if err := coll.Find(nil).All(&clusters); err != nil {
+	// 	logger.Get().Error("Error getting the clusters list. Unable to sync details. error: %v", err)
+	// 	return
+	// }
+	// for _, cluster := range clusters {
+	// 	// TODO:: Sync the nodes status
+	// 	if ok, err := sync_cluster_nodes(cluster); err != nil && !ok {
+	// 		logger.Get().Error("Error syncing node details for cluster: %s. error: %v", cluster.Name, err)
+	// 		return
+	// 	}
+	// 	// TODO:: Sync the storage entities of the cluster
+	// 	if ok, err := sync_cluster_storage_entities(cluster); err != nil && !ok {
+	// 		logger.Get().Error("Error syncing storage entities for cluster: %s. error: %v", cluster.Name, err)
+	// 		return
+	// 	}
+	// }
+	return
+}
+
+func sync_cluster_nodes(cluster models.Cluster) (bool, error) {
+	// // Fetch the nodes list
+	// sessionCopy = db.GetDatastore().Copy()
+	// defer sessionCopy.Close()
+	// coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	// var fetchedNodes models.Nodes
+	// if err := coll.Find(bson.M{"clusterid": clusterId}).All(&nodes); err != nil {
+	// 	logger.Get().Error("Error getting nodes for cluster: %s. error: %v", cluster.Name, err)
+	// 	return
+	// }
+
+	// // Get the list of nodes from backend
+	// if nodes, err := salt_backend.GetClusterNodes(cluster.Name); err != nil {
+	// 	logger.Get().Error("Error getting nodes for cluster: %s. error: %v", cluster.Name, err)
+	// 	return
+	// }
+
+	// // Loop through and sync the nodes list
+	// var deletedNodes, updatedNodes, newNodes []string
+	// for _, fetchedNode := range fetchedNodes {
+	// 	for _, node := range nodes {
+	// 		if fetchedNode.Hostname == node {}
+	// 	}
+	// }
+	return true, nil
+}
+
+func sync_cluster_storage_entities(cluster models.Cluster) (bool, error) {
+	return true, nil
+}
