@@ -40,6 +40,24 @@
       "revId": "0e7b1ea0340f8d7b5acaab934cc451cb3eb75421",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_e6043580",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-04T08:17:07Z",
+      "side": 1,
+      "message": "Does this mean calls going providers will always have subtasks?",
+      "parentUuid": "5ac4a560_8679c131",
+      "revId": "0e7b1ea0340f8d7b5acaab934cc451cb3eb75421",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
