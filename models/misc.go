@@ -52,17 +52,17 @@ type ClusterNodeDevice struct {
 }
 
 type AddStorageRequest struct {
-	Name             string            `json:"name"`
-	Type             string            `json:"type"`
-	Tags             []string          `json:"tags"`
-	Size             string            `json:"size"`
-	Replicas         int               `json:"replicas"`
-	Profile          string            `json:"profile"`
-	SnapshotsEnabled bool              `json:"snapshots_enabled"`
-	SnapshotSchedule SnapshotSchedule  `json:"snapshot_schedule"`
-	QuotaEnabled     bool              `json:"quota_enabled"`
-	QuotaParams      map[string]string `json:"quota_params"`
-	Options          map[string]string `json:"options"`
+	Name             string                  `json:"name"`
+	Type             string                  `json:"type"`
+	Tags             []string                `json:"tags"`
+	Size             string                  `json:"size"`
+	Replicas         int                     `json:"replicas"`
+	Profile          string                  `json:"profile"`
+	SnapshotsEnabled bool                    `json:"snapshots_enabled"`
+	SnapshotSchedule SnapshotScheduleRequest `json:"snapshot_schedule"`
+	QuotaEnabled     bool                    `json:"quota_enabled"`
+	QuotaParams      map[string]string       `json:"quota_params"`
+	Options          map[string]string       `json:"options"`
 }
 
 type SnapshotScheduleRequest struct {
@@ -123,20 +123,23 @@ type ClusterStatus int
 
 // Status values for the cluster
 const (
-	CLUSTER_STATUS_INACTIVE = 1 + iota
-	CLUSTER_STATUS_NOT_AVAILABLE
-	CLUSTER_STATUS_ACTIVE_AND_AVAILABLE
-	CLUSTER_STATUS_CREATING
-	CLUSTER_STATUS_FAILED
+	CLUSTER_STATUS_OK = iota
+	CLUSTER_STATUS_WARN
+	CLUSTER_STATUS_ERROR
 )
 
 var ClusterStatuses = [...]string{
-	"inactive",
-	"not available",
-	"active and available",
-	"creating",
-	"failed",
+	"ok",
+	"warning",
+	"error",
 }
+
+// State values for cluster
+const (
+	CLUSTER_STATE_CREATING = "creating"
+	CLUSTER_STATE_FAILED   = "failed"
+	CLUSTER_STATE_CREATED  = "created"
+)
 
 // Storage logical unit types
 const (
@@ -150,6 +153,9 @@ var StorageLogicalUnitTypes = [...]string{
 const (
 	STATUS_UP   = "up"
 	STATUS_DOWN = "down"
+	STATUS_OK   = "ok"
+	STATUS_WARN = "warning"
+	STATUS_ERR  = "error"
 )
 
 func (c ClusterStatus) String() string { return ClusterStatuses[c-1] }
