@@ -22,6 +22,24 @@
       "revId": "0e7b1ea0340f8d7b5acaab934cc451cb3eb75421",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_8679c131",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-04T07:32:59Z",
+      "side": 1,
+      "message": "Here it calls ceph provider api for pool creation. The ceph pool creation api itself is async so created as sub task.",
+      "parentUuid": "5ac4a560_46ba49df",
+      "revId": "0e7b1ea0340f8d7b5acaab934cc451cb3eb75421",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
