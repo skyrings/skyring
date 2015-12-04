@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_4615e9ef",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-04T07:04:17Z",
+      "side": 1,
+      "message": "Use a.GetTaskManager().IsDone() instead",
+      "range": {
+        "startLine": 111,
+        "startChar": 4,
+        "endLine": 114,
+        "endChar": 5
+      },
+      "revId": "311e0c00a16472b37d33817a78275e5caf8aa50d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_66f905c8",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-04T07:04:17Z",
+      "side": 1,
+      "message": "Use a.GetTaskManager().IsDone() instead",
+      "range": {
+        "startLine": 408,
+        "startChar": 4,
+        "endLine": 411,
+        "endChar": 5
+      },
+      "revId": "311e0c00a16472b37d33817a78275e5caf8aa50d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
