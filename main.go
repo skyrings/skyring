@@ -193,6 +193,9 @@ func start() {
 
 	n.UseHandler(router)
 
+	logger.Get().Info("Starting clusters syncing")
+	go application.SyncClusterDetails()
+
 	logger.Get().Info("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
 
 	logger.Get().Critical("Error: %s", http.ListenAndServe(conf.SystemConfig.Config.Host+":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), n))
