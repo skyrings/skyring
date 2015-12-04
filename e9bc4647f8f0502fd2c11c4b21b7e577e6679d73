@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_e688b524",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-04T07:30:34Z",
+      "side": 1,
+      "message": "I don\u0027t think, this is required. We can remove this",
+      "range": {
+        "startLine": 178,
+        "startChar": 2,
+        "endLine": 184,
+        "endChar": 4
+      },
+      "revId": "e9bc4647f8f0502fd2c11c4b21b7e577e6679d73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
