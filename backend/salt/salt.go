@@ -35,6 +35,7 @@ var funcNames = [...]string{
 	"IgnoreNode",
 	"DisableService",
 	"EnableService",
+	"NodeUp",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -130,6 +131,13 @@ func (s Salt) DisableService(node string, service string, stop bool) (status boo
 
 func (s Salt) EnableService(node string, service string, start bool) (status bool, error error) {
 	if pyobj, err := pyFuncs["EnableService"].Call(node, service, start); err == nil {
+		err = gopy.Convert(pyobj, &status)
+	}
+	return
+}
+
+func (s Salt) NodeUp(node string) (status bool, err error) {
+	if pyobj, err := pyFuncs["NodeUp"].Call(node); err == nil {
 		err = gopy.Convert(pyobj, &status)
 	}
 	return

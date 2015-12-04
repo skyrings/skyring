@@ -112,6 +112,16 @@ func populateStorageNodeInstance(node string) (*models.Node, bool) {
 		return nil, false
 	}
 	storage_node.ManagementIP4 = addrs[0]
+	ok, err := salt_backend.NodeUp(node)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting status of node: %s", node))
+		return nil, false
+	}
+	if ok {
+		storage_node.Status = models.STATUS_UP
+	} else {
+		storage_node.Status = models.STATUS_DOWN
+	}
 	disks, err := salt_backend.GetNodeDisk(node)
 	if err != nil {
 		logger.Get().Error(fmt.Sprintf("Error getting disk details for node: %s", node))
