@@ -129,8 +129,8 @@ func (a *App) StartProviders(configDir string, binDir string) {
 				config.Provider.ProviderBinary = path.Join(providerBinaryPath, config.Provider.ProviderBinary)
 			}
 
-			dbConfStr, _ := json.Marshal(conf.SystemConfig.DBConfig)
-			client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, config.Provider.ProviderBinary, string(dbConfStr))
+			confStr, _ := json.Marshal(conf.SystemConfig)
+			client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, config.Provider.ProviderBinary, string(confStr))
 			if err != nil {
 				logger.Get().Error("Error running plugin:%s", err)
 				continue
