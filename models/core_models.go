@@ -67,13 +67,16 @@ type OperatingSystem struct {
 }
 
 type User struct {
-	Username string   `bson:"Username"`
-	Email    string   `bson:"Email"`
-	Hash     []byte   `bson:"Hash"`
-	Role     string   `bson:"Role"`
-	Groups   []string `bson:"Groups"`
-	Type     int      `bson:"Type"`
-	Status   bool     `bson:"Status"`
+	Username            string   `json:"username"`
+	Email               string   `json:"email"`
+	Hash                []byte   `json:"hash"`
+	Role                string   `json:"role"`
+	Groups              []string `json:"groups"`
+	Type                int      `json:"type"`
+	Status              bool     `json:"status"`
+	FirstName           string   `json:"firstname"`
+	LastName            string   `json:"lastname"`
+	NotificationEnabled bool     `json:"notificationenabled"`
 }
 
 type Cluster struct {

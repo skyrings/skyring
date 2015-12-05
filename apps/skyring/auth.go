@@ -86,13 +86,21 @@ func (a *App) getUsers(rw http.ResponseWriter, req *http.Request) {
 	//hide the hash field for users in the list
 	type PublicUser struct {
 		*models.User
-		Hash bool `json:"Hash,omitempty"`
+		Hash bool `json:"hash,omitempty"`
 	}
 	var pUsers []PublicUser
 	for _, user := range users {
 
 		pUsers = append(pUsers, PublicUser{
-			User: &models.User{Username: user.Username, Email: user.Email, Role: user.Role, Groups: user.Groups, Type: user.Type, Status: user.Status},
+			User: &models.User{Username: user.Username,
+				Email:               user.Email,
+				Role:                user.Role,
+				Groups:              user.Groups,
+				Type:                user.Type,
+				Status:              user.Status,
+				FirstName:           user.FirstName,
+				LastName:            user.LastName,
+				NotificationEnabled: user.NotificationEnabled},
 		})
 	}
 	//marshal and send it across
@@ -110,7 +118,7 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 
 	vars := mux.Vars(req)
 
-	user, err := GetAuthProvider().GetUser(vars["username"])
+	user, err := GetAuthProvider().GetUser(vars["username"], req)
 	if err != nil {
 		logger.Get().Error("Unable to Get the user:%s", err)
 		util.HandleHttpError(rw, err)
@@ -120,7 +128,7 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 	//hide the hash field
 	bytes, err := json.Marshal(struct {
 		*models.User
-		Hash bool `json:"Hash,omitempty"`
+		Hash bool `json:"hash,omitempty"`
 	}{
 		User: &user,
 	})
@@ -144,13 +152,22 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 	//hide the hash field for users in the list
 	type PublicUser struct {
 		*models.User
-		Hash bool `json:"Hash,omitempty"`
+		Hash         bool `json:"hash,omitempty"`
+		Notification bool `json:"notification,omitempty"`
 	}
 	var pUsers []PublicUser
 	for _, user := range users {
 
 		pUsers = append(pUsers, PublicUser{
-			User: &models.User{Username: user.Username, Email: user.Email, Role: user.Role, Groups: user.Groups, Type: user.Type, Status: user.Status},
+			User: &models.User{Username: user.Username,
+				Email:               user.Email,
+				Role:                user.Role,
+				Groups:              user.Groups,
+				Type:                user.Type,
+				Status:              user.Status,
+				FirstName:           user.FirstName,
+				LastName:            user.LastName,
+				NotificationEnabled: user.NotificationEnabled},
 		})
 	}
 	//marshal and send it across
@@ -190,7 +207,16 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 		user.Role = val.(string)
 	}
 	if val, ok := m["type"]; ok {
-		user.Type = val.(int)
+		user.Type = int(val.(float64))
+	}
+	if val, ok := m["firstname"]; ok {
+		user.FirstName = val.(string)
+	}
+	if val, ok := m["lastname"]; ok {
+		user.LastName = val.(string)
+	}
+	if val, ok := m["notificationenabled"]; ok {
+		user.NotificationEnabled = val.(bool)
 	}
 
 	if err := GetAuthProvider().AddUser(user, m["password"].(string)); err != nil {
@@ -201,11 +227,6 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 }
 
 func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
-
-	var (
-		user     models.User
-		password string
-	)
 
 	vars := mux.Vars(req)
 
@@ -222,17 +243,8 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 		util.HandleHttpError(rw, err)
 		return
 	}
-	if val, ok := vars["username"]; ok {
-		user.Username = val
-	}
-	if val, ok := m["email"]; ok {
-		user.Email = val.(string)
-	}
-	if val, ok := m["password"]; ok {
-		password = val.(string)
-	}
 
-	if err := GetAuthProvider().UpdateUser(user.Username, password, user.Email); err != nil {
+	if err := GetAuthProvider().UpdateUser(vars["username"], m); err != nil {
 		logger.Get().Error("Unable to update User:%s", err)
 		util.HandleHttpError(rw, err)
 		return

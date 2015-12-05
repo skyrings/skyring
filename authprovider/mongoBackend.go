@@ -50,7 +50,7 @@ func NewMongodbBackend() (b MongodbAuthBackend, e error) {
 
 	// Ensure that the Username field is unique
 	index := mgo.Index{
-		Key:    []string{"Username"},
+		Key:    []string{"username"},
 		Unique: true,
 	}
 
@@ -71,7 +71,7 @@ func (b MongodbAuthBackend) User(username string) (user models.User, e error) {
 	c := b.connect()
 	defer c.Database.Session.Close()
 
-	err := c.Find(bson.M{"Username": username}).One(&user)
+	err := c.Find(bson.M{"username": username}).One(&user)
 	if err != nil {
 		logger.Get().Error("Error getting record from DB:%s", err)
 		return user, ErrMissingUser
@@ -97,7 +97,7 @@ func (b MongodbAuthBackend) SaveUser(user models.User) error {
 	c := b.connect()
 	defer c.Database.Session.Close()
 
-	_, err := c.Upsert(bson.M{"Username": user.Username}, bson.M{"$set": user})
+	_, err := c.Upsert(bson.M{"username": user.Username}, bson.M{"$set": user})
 	return err
 }
 
@@ -107,7 +107,7 @@ func (b MongodbAuthBackend) DeleteUser(username string) error {
 	defer c.Database.Session.Close()
 
 	// raises error if "username" doesn't exist
-	err := c.Remove(bson.M{"Username": username})
+	err := c.Remove(bson.M{"username": username})
 	if err == mgo.ErrNotFound {
 		logger.Get().Error("Error deleting record from DB:%s", err)
 		return ErrDeleteNull
