@@ -58,6 +58,24 @@
       "revId": "0e7b1ea0340f8d7b5acaab934cc451cb3eb75421",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_355d7122",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-05T08:14:07Z",
+      "side": 1,
+      "message": "Not necessarily. In case of storage creation it was async. Other could be sync call as well.",
+      "parentUuid": "5ac4a560_e6043580",
+      "revId": "0e7b1ea0340f8d7b5acaab934cc451cb3eb75421",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
