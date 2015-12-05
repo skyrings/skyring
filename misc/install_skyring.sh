@@ -53,7 +53,7 @@ if [ $? -ne 0 ]; then
     error "Failed to update packages"
 fi
 
-yum -y install git golang salt-master python python-devel python-cpopen python-paramiko hg mongodb mongodb-server openldap-devel ceph http://influxdb.s3.amazonaws.com/influxdb-0.9.4.2-1.x86_64.rpm
+yum -y install git golang salt-master python python-devel python-cpopen python-paramiko python-netaddr hg mongodb mongodb-server openldap-devel ceph http://influxdb.s3.amazonaws.com/influxdb-0.9.4.2-1.x86_64.rpm
 if [ $? -ne 0 ]; then
     error "Package installation failed"
     exit 1
@@ -107,15 +107,15 @@ sed -i -e "s/\"host\": \"127.0.0.1\"/\"host\": \"${hostip}\"/g" /etc/skyring/sky
 
 # Build python modules
 info "Building python modules"
-mkdir -p ~/.skyring_build/skyring-provider-modules
-cd ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/backend/salt/python
-python setup.py install --root ~/.skyring_build/skyring-provider-modules
-cp -r ~/.skyring_build/skyring-provider-modules/usr/lib/python2.7/site-packages/skyring /usr/lib/python2.7/site-packages/
-
 mkdir -p ~/.skyring_build/ceph-provider-modules
 cd ~/.skyring_build/golang/gopath/src/github.com/skyrings/bigfin/backend/salt/python/
 python setup.py install --root ~/.skyring_build/ceph-provider-modules
 cp -r ~/.skyring_build/ceph-provider-modules/usr/lib/python2.7/site-packages/skyring /usr/lib/python2.7/site-packages/
+
+mkdir -p ~/.skyring_build/skyring-provider-modules
+cd ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/backend/salt/python
+python setup.py install --root ~/.skyring_build/skyring-provider-modules
+cp -r ~/.skyring_build/skyring-provider-modules/usr/lib/python2.7/site-packages/skyring /usr/lib/python2.7/site-packages/
 
 rm -fr /tmp/.skyring-event
 rm -fr /root/.local/lib/python2.7/site-packages/skyring*.egg
@@ -143,8 +143,7 @@ info "Starting services"
 # ~~~~~~~~~~~~~~~
 
 # Disabling firewalld
-systemctl stop firewalld
-systemctl disable firewalld
+systemctl stop firewalld && systemctl disable firewalld
 
 # Enable and start the salt-master:
 systemctl enable salt-master
