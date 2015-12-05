@@ -311,19 +311,18 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		}
 		return nil
 	}
-	if user.Type == authprovider.External {
-		user.Hash = nil
-
-		// Validate role
-		if user.Role == "" {
-			user.Role = a.defaultRole
-		} else {
-			if _, ok := a.roles[user.Role]; !ok {
-				logger.Get().Error("Non Existing Role")
-				return mkerror("non-existant role")
-			}
-		}
+	// Validate role
+	if user.Role == "" {
+		user.Role = a.defaultRole
 	} else {
+		if _, ok := a.roles[user.Role]; !ok {
+			logger.Get().Error("Non Existing Role")
+			return mkerror("non-existant role")
+		}
+	}
+	user.Hash = nil
+	if user.Type == authprovider.Internal {
+
 		if password == "" {
 			logger.Get().Error("no password given")
 			return mkerror("no password given")
@@ -336,15 +335,6 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		}
 		user.Hash = hash
 
-		// Validate role
-		if user.Role == "" {
-			user.Role = a.defaultRole
-		} else {
-			if _, ok := a.roles[user.Role]; !ok {
-				logger.Get().Error("Non Existing Role")
-				return mkerror("non-existant role")
-			}
-		}
 	}
 	err = a.backend.SaveUser(user)
 	if err != nil {
@@ -356,7 +346,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 
 // Update changes data for an existing user. Needs thought...
 //Just added for completeness. Will revisit later
-func (a Authorizer) UpdateUser(username string, p string, e string) error {
+func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error {
 
 	var (
 		hash    []byte
@@ -370,7 +360,8 @@ func (a Authorizer) UpdateUser(username string, p string, e string) error {
 	}
 
 	if user.Type == authprovider.Internal {
-		if p != "" {
+		if val, ok := m["password"]; ok {
+			p := val.(string)
 			hash, err = bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
 			if err != nil {
 				logger.Get().Error("Error saving the password:%s", err)
@@ -381,9 +372,15 @@ func (a Authorizer) UpdateUser(username string, p string, e string) error {
 		}
 
 	}
-	if e != "" {
+	if val, ok := m["email"]; ok {
+		e := val.(string)
 		user.Email = e
 		updated = true
+	}
+
+	if val, ok := m["notification"]; ok {
+		n := val.(bool)
+		user.Notification = n
 	}
 
 	if updated {
@@ -415,11 +412,22 @@ func (a Authorizer) AuthorizeRole(rw http.ResponseWriter, req *http.Request, rol
 
 // CurrentUser returns the currently logged in user and a boolean validating
 // the information.
-func (a Authorizer) GetUser(u string) (user models.User, e error) {
+func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e error) {
 
 	// This should search and fetch the user name based on the given value
 	// and can also check whether the available users are already imported
 	// into the database or not.
+
+	//if username is me, get the currently loggedin user
+	if u == "me" {
+		session := sessions.GetSession(req)
+		sessionVal := session.Get("username")
+		if sessionVal == nil {
+			logger.Get().Error("User not logged in")
+			return user, mkerror("user not logged in")
+		}
+		u = sessionVal.(string)
+	}
 	user, e = a.backend.User(u)
 	if e != nil {
 		logger.Get().Error("Error retrieving the user:%s", e)

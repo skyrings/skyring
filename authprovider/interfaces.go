@@ -39,8 +39,8 @@ type AuthInterface interface {
 	Authorize(rw http.ResponseWriter, req *http.Request) error
 	AuthorizeRole(rw http.ResponseWriter, req *http.Request, role string) error
 	AddUser(user models.User, password string) error
-	UpdateUser(username string, password string, email string) error
-	GetUser(username string) (models.User, error)
+	UpdateUser(username string, m map[string]interface{}) error
+	GetUser(username string, req *http.Request) (models.User, error)
 	ListUsers() ([]models.User, error)
 	DeleteUser(username string) error
 	ListExternalUsers() ([]models.User, error)
