@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "7ac7a964_eb6ecac8",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-07T13:03:53Z",
+      "side": 1,
+      "message": "Remove the commented line",
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_0b74e697",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-07T13:03:53Z",
+      "side": 1,
+      "message": "Do we need to explicitly initialize the pointer? Wouldnt it be nil by default?",
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_3d63d7b2",
         "filename": "python/skyring/salt_wrapper.py",
         "patchSetId": 3
