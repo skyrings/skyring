@@ -16,12 +16,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/codegangsta/negroni"
-	"github.com/goincremental/negroni-sessions"
-	"github.com/goincremental/negroni-sessions/cookiestore"
 	"github.com/gorilla/mux"
+	"github.com/kidstuff/mongostore"
 	"github.com/natefinch/pie"
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/nodemanager"
 	"github.com/skyrings/skyring/tools/logger"
@@ -38,6 +38,7 @@ const (
 	// ConfigFile default configuration file
 	ProviderConfDir   = "providers.d"
 	ProviderBinaryDir = "providers"
+	DefaultMaxAge     = 86400 * 7
 )
 
 type Provider struct {
@@ -58,6 +59,7 @@ var (
 	CoreNodeManager      nodemanager.NodeManagerInterface
 	AuthProviderInstance authprovider.AuthInterface
 	TaskManager          task.Manager
+	Store                *mongostore.MongoStore
 )
 
 func NewApp(configDir string, binDir string) *App {
@@ -204,8 +206,10 @@ func (a *App) InitializeAuth(authCfg conf.AuthConfig, n *negroni.Negroni) error 
 	//TODO - make this plugin based, we should be able
 	//to plug in based on the configuration - token, jwt token etc
 	//Right we are supporting only session based auth
-	store := cookiestore.New([]byte("SkyRing-secret"))
-	n.Use(sessions.Sessions("skyring_session_store", store))
+
+	session := db.GetDatastore().Copy()
+	c := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SESSION_STORE)
+	Store = mongostore.NewMongoStore(c, DefaultMaxAge, true, []byte("SkyRing-secret"))
 
 	//Initailize the backend auth provider based on the configuartion
 	if aaa, err := authprovider.InitAuthProvider(authCfg.ProviderName, authCfg.ConfigFile); err != nil {
@@ -313,12 +317,15 @@ func GetCoreNodeManager() nodemanager.NodeManagerInterface {
 //Middleware to check the request is authenticated
 func (a *App) LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 
-	session := sessions.GetSession(r)
-	sessionName := session.Get("username")
-
-	if sessionName == nil {
+	session, err := Store.Get(r, "session-key")
+	if err != nil {
+		logger.Get().Error("Error Getting the session: %v", err)
 		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	if session.IsNew {
 		logger.Get().Info("Not Authorized returning from here")
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 	next(w, r)
