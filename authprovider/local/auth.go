@@ -16,7 +16,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/goincremental/negroni-sessions"
+	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
@@ -131,12 +131,18 @@ func (a Authorizer) ProviderName() string {
 // message will be added to the session on failure with the reason.
 
 func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p string) error {
-	session := sessions.GetSession(req)
-	if sess := session.Get("username"); sess != nil {
+
+	session, err := skyring.Store.Get(req, "session-key")
+	if err != nil {
+		logger.Get().Error("Error Getting the: %v", err)
+		return err
+	}
+	if session.IsNew {
+		session.Values["username"] = u
+	} else {
 		logger.Get().Error("Already logged in")
 		return nil
 	}
-
 	if user, err := a.backend.User(u); err == nil {
 		if user.Type == authprovider.Internal && user.Status {
 			verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(p))
@@ -152,7 +158,11 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 		logger.Get().Error("User Not Found")
 		return mkerror("user not found")
 	}
-	session.Set("username", u)
+
+	if err = session.Save(req, rw); err != nil {
+		logger.Get().Error("Error Saving the session: %v", err)
+		return err
+	}
 
 	return nil
 }
@@ -278,8 +288,17 @@ func (a Authorizer) AuthorizeRole(rw http.ResponseWriter, req *http.Request, rol
 
 // Logout clears an authentication session and add a logged out message.
 func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
-	session := sessions.GetSession(req)
-	session.Delete("username")
+
+	session, err := skyring.Store.Get(req, "session-key")
+	if err != nil {
+		logger.Get().Error("Error Getting the: %v", err)
+		return err
+	}
+	session.Options.MaxAge = -1
+	if err = session.Save(req, rw); err != nil {
+		logger.Get().Error("Error Saving the session: %v", err)
+		return err
+	}
 	return nil
 }
 
@@ -288,13 +307,17 @@ func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
 func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e error) {
 	//if username is me, get the currently loggedin user
 	if u == authprovider.CurrentUser {
-		session := sessions.GetSession(req)
-		sessionVal := session.Get("username")
-		if sessionVal == nil {
-			logger.Get().Error("User not logged in")
-			return user, mkerror("user not logged in")
+		session, err := skyring.Store.Get(req, "session-key")
+		if err != nil {
+			logger.Get().Error("Error Getting the: %v", err)
+			return user, err
 		}
-		u = sessionVal.(string)
+		if val, ok := session.Values["username"]; ok {
+			u = val.(string)
+		} else {
+			logger.Get().Error("Unable to identify the user from session")
+			return user, mkerror("Unable to identify the user from session")
+		}
 	}
 	user, e = a.backend.User(u)
 	if e != nil {

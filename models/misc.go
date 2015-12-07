@@ -89,6 +89,7 @@ const (
 	COLL_NAME_STORAGE_NODES         = "storage_nodes"
 	COLL_NAME_STORAGE_CLUSTERS      = "storage_clusters"
 	COLL_NAME_STORAGE_LOGICAL_UNITS = "storage_logical_units"
+	COLL_NAME_SESSION_STORE         = "skyring_session_store"
 )
 
 type Clusters []Cluster
