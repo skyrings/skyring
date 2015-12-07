@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_86a538b7",
+        "filename": "Makefile",
+        "patchSetId": 7
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-07T12:58:25Z",
+      "side": 1,
+      "message": "Should we do clean and build as part of build target?",
+      "parentUuid": "5ac4a560_66e74513",
+      "revId": "8cef1d950440f66d009da242f9ddc5e0a970d8a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_a66cfd9d",
         "filename": "skyring.spec",
         "patchSetId": 7
