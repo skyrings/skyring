@@ -43,6 +43,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_26e8edb3",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-07T10:43:52Z",
+      "side": 1,
+      "message": "So in this case the sub task is in provider side and we dont have the refence to get IsDone called.\nAs discussed, we can have another patch where provider exposes an RPC call for getting the status of the task so that skyring can refer and update parent task accordingly.\nKets do that in separate patch.",
+      "parentUuid": "5ac4a560_068e912e",
+      "revId": "311e0c00a16472b37d33817a78275e5caf8aa50d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_66f905c8",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 7
@@ -78,6 +96,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "5ac4a560_66f905c8",
+      "revId": "311e0c00a16472b37d33817a78275e5caf8aa50d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_46ede9c2",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-07T10:43:52Z",
+      "side": 1,
+      "message": "Same as above",
+      "parentUuid": "5ac4a560_26838d05",
       "revId": "311e0c00a16472b37d33817a78275e5caf8aa50d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
