@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_061cc812",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-07T12:44:48Z",
+      "side": 1,
+      "message": "Bug-ID:  https://github.com/skyrings/skyring/issues/9 ??\n\nThis would make search for the patches easier",
+      "revId": "9af395f587406aea6950977515667dbb9c661290",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_66d49c20",
+        "filename": "authprovider/local/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-07T12:44:48Z",
+      "side": 1,
+      "message": "Define a constant for this special user name",
+      "revId": "9af395f587406aea6950977515667dbb9c661290",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_86d7f822",
+        "filename": "models/core_models.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-07T12:44:48Z",
+      "side": 1,
+      "message": "Notify or NotificationEnabled ??",
+      "revId": "9af395f587406aea6950977515667dbb9c661290",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
