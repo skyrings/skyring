@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_66065cd0",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-07T12:38:08Z",
+      "side": 1,
+      "message": "Define this table name in models/misc.go",
+      "revId": "c613224e85443c047319761e0c443f7991f50a03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_a6107402",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-07T12:38:08Z",
+      "side": 1,
+      "message": "What is the no above in call? Should be defined as a default in models/misc.go",
+      "revId": "c613224e85443c047319761e0c443f7991f50a03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_e6f98cc9",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-07T12:38:08Z",
+      "side": 1,
+      "message": "Does -1 mean infinite here?",
+      "revId": "c613224e85443c047319761e0c443f7991f50a03",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
