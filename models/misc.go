@@ -160,3 +160,19 @@ type AsyncResponse struct {
 func (s Status) String() string {
 	return fmt.Sprintf("%s %s", s.Timestamp, s.Message)
 }
+
+type TaskStatus int
+
+const (
+	TASK_STATUS_NONE = iota
+	TASK_STATUS_SUCCESS
+	TASK_STATUS_FAILURE
+)
+
+var TaskStatuses = [...]string{
+	"none",
+	"success",
+	"failed",
+}
+
+func (t TaskStatus) String() string { return TaskStatuses[t] }

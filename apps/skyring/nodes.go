@@ -77,12 +77,13 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 		// Process the request
 		if err := addAndAcceptNode(w, request, t); err != nil {
 			t.UpdateStatus("Failed")
+			t.Done(models.TASK_STATUS_SUCCESS)
 		} else {
 			t.UpdateStatus("Success")
+			t.Done(models.TASK_STATUS_FAILURE)
 		}
-		t.Done()
 	}
-	if taskId, err := a.GetTaskManager().Run("addAndAcceptNode", asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Add and Accept Node: %s", request.Hostname), asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for addAndAcceptNode", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
@@ -130,12 +131,13 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 		// Process the request
 		if err := acceptNode(w, hostname, request.SaltFingerprint, t); err != nil {
 			t.UpdateStatus("Failed")
+			t.Done(models.TASK_STATUS_FAILURE)
 		} else {
 			t.UpdateStatus("Success")
+			t.Done(models.TASK_STATUS_SUCCESS)
 		}
-		t.Done()
 	}
-	if taskId, err := a.GetTaskManager().Run("AcceptNode", asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Accept Node: %s", hostname), asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for AcceptNode", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 

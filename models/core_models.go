@@ -141,9 +141,13 @@ type Status struct {
 }
 
 type AppTask struct {
-	Id         uuid.UUID
-	ParentId   uuid.UUID
-	Started    bool
-	Completed  bool
-	StatusList []Status
+	Id         uuid.UUID         `json:"id"`
+	Name       string            `json:"name"`
+	ParentId   uuid.UUID         `json:"parentid"`
+	Started    bool              `json:"started"`
+	Completed  bool              `json:"completed"`
+	StatusList []Status          `json:"statuslist"`
+	Tag        map[string]string `json:"tag"`
+	SubTasks   []string          `json:"subtasks"`
+	Status     TaskStatus        `json:"status"`
 }

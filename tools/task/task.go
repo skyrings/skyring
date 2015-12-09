@@ -66,19 +66,19 @@ func (t *Task) Run() {
 	}
 }
 
-func (t *Task) Done() {
+func (t *Task) Done(status models.TaskStatus) {
 	t.DoneCh <- true
 	close(t.DoneCh)
 	t.Completed = true
-	t.UpdateTaskCompleted(t.Completed)
+	t.UpdateTaskCompleted(t.Completed, status)
 }
 
-func (t *Task) IsDone() bool {
+/*func (t *Task) IsDone() bool {
 	select {
 	case _, read := <-t.DoneCh:
 		if read == true {
 			t.Completed = true
-			t.UpdateTaskCompleted(t.Completed)
+			t.UpdateTaskCompleted(t.Completed, models.TASK_STATUS_FAILURE)
 			if t.CompletedCbkFunc != nil {
 				go t.CompletedCbkFunc(t)
 			}
@@ -90,7 +90,7 @@ func (t *Task) IsDone() bool {
 	default:
 		return false
 	}
-}
+}*/
 
 func (t *Task) Persist() (bool, error) {
 	sessionCopy := db.GetDatastore().Copy()
@@ -100,9 +100,11 @@ func (t *Task) Persist() (bool, error) {
 	// Populate the task details. The parent ID should always be updated by the parent task later.
 	var appTask models.AppTask
 	appTask.Id = t.ID
+	appTask.Name = t.Name
 	appTask.Started = t.Started
 	appTask.Completed = t.Completed
 	appTask.StatusList = t.StatusList
+	appTask.Tag = t.Tag
 
 	if err := coll.Insert(appTask); err != nil {
 		//logger.Get().Error("Error persisting task: %v. error: %v", t.ID, err)
@@ -124,11 +126,11 @@ func (t *Task) UpdateStatusList(status []models.Status) (bool, error) {
 	return true, nil
 }
 
-func (t *Task) UpdateTaskCompleted(b bool) (bool, error) {
+func (t *Task) UpdateTaskCompleted(b bool, status models.TaskStatus) (bool, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
-	if err := coll.Update(bson.M{"id": t.ID}, bson.M{"$set": bson.M{"completed": b}}); err != nil {
+	if err := coll.Update(bson.M{"id": t.ID}, bson.M{"$set": bson.M{"completed": b, "status": status.String()}}); err != nil {
 		//logger.Get().Error("Error updating status of task: %v. error: %v", t.ID, err)
 		return false, err
 	}
@@ -144,5 +146,17 @@ func (t *Task) AddSubTask(subTaskId uuid.UUID) (bool, error) {
 		//logger.Get().Error("Error updating sub task for task: %v. error: %v", t.ID, err)
 		return false, err
 	}
+	//Update the sutask id on the parent task
+	var task models.AppTask
+	if err := coll.Find(bson.M{"id": t.ID}).One(&task); err != nil {
+		//logger.Get().Error("Unable to get task: %v", err)
+		return false, err
+	}
+	task.SubTasks = append(task.SubTasks, subTaskId.String())
+	if err := coll.Update(bson.M{"id": t.ID}, task); err != nil {
+		//logger.Get().Error("Error updating sub task for task: %v. error: %v", t.ID, err)
+		return false, err
+	}
+
 	return true, nil
 }

@@ -113,20 +113,25 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				if providerTask.Completed {
-					t.UpdateStatus("Starting disk sync")
-					if err := syncStorageDisks(request.Nodes); err != nil {
+					if providerTask.Status == models.TASK_STATUS_SUCCESS {
+						t.UpdateStatus("Starting disk sync")
+						if err := syncStorageDisks(request.Nodes); err != nil {
+							t.UpdateStatus("Failed")
+							t.Done(models.TASK_STATUS_FAILURE)
+						} else {
+							t.UpdateStatus("Success")
+							t.Done(models.TASK_STATUS_SUCCESS)
+						}
+					} else if providerTask.Status == models.TASK_STATUS_FAILURE {
 						t.UpdateStatus("Failed")
-					} else {
-						t.UpdateStatus("Success")
+						t.Done(models.TASK_STATUS_FAILURE)
 					}
-					t.Done()
 					break
 				}
 			}
 		}
 	}
-
-	if taskId, err := a.GetTaskManager().Run("CreateCluster", asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for create cluster. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create cluster")
 		return
@@ -208,9 +213,9 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		t.UpdateStatus("Success")
-		t.Done()
+		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run("ForgetCluster", asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Forget Cluster: %s", cluster_id), asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for cluster forget. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster forget")
 		return
@@ -320,9 +325,9 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		t.UpdateStatus("Success")
-		t.Done()
+		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run("UnmanageCluster", asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Unmanage Cluster: %s", cluster_id_str), asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for cluster unmanage. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster unmanage")
 		return
@@ -386,9 +391,9 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		t.UpdateStatus("Success")
-		t.Done()
+		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run("ManageCluster", asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Manage Cluster: %s", cluster_id_str), asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for cluster manage. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster manage")
 		return
@@ -482,17 +487,18 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					t.UpdateStatus("Starting disk sync")
 					if err := syncStorageDisks(new_nodes); err != nil {
 						t.UpdateStatus("Failed")
+						t.Done(models.TASK_STATUS_FAILURE)
 					} else {
 						t.UpdateStatus("Success")
+						t.Done(models.TASK_STATUS_SUCCESS)
 					}
-					t.Done()
 					break
 				}
 			}
 		}
 	}
 
-	if taskId, err := a.GetTaskManager().Run("ExpandCluster", asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for cluster expansion. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster expansion")
 		return
@@ -635,6 +641,9 @@ func disks_used(nodes []models.ClusterNode) (bool, error) {
 		}
 		for _, disk := range storageNode.StorageDisks {
 			for _, device := range node.Devices {
+				fmt.Println(disk.DevName)
+				fmt.Println(device.Name)
+				fmt.Println(disk.Used)
 				if disk.DevName == device.Name && disk.Used {
 					return true, nil
 				}
