@@ -3,6 +3,7 @@ package util
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/task"
 	"net/http"
@@ -86,5 +87,5 @@ func HttpResponse(w http.ResponseWriter, status_code int, msg string) {
 func FailTask(msg string, err error, t *task.Task) {
 	logger.Get().Error("%s: %v", msg, err)
 	t.UpdateStatus("Failed. error: %v", err)
-	t.Done()
+	t.Done(models.TASK_STATUS_FAILURE)
 }
