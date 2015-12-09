@@ -85,6 +85,23 @@
       "revId": "8cef1d950440f66d009da242f9ddc5e0a970d8a1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_156947be",
+        "filename": "skyring.spec",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-09T06:13:01Z",
+      "side": 1,
+      "message": "for \n%build and %install\n\ntry to re-use the existing make targets.\nmake build\nmake install",
+      "revId": "8cef1d950440f66d009da242f9ddc5e0a970d8a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
