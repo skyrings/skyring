@@ -117,6 +117,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_6bb53830",
+        "filename": "skyring.spec",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "How we will set the go environment variable (GOROOT, GOPATH) inside this spec file and what will be the path. I thought that this will be set by the user based on their environment.\nIf you have anything specific in your mind please specify.",
+      "parentUuid": "5ac4a560_b58c1337",
+      "revId": "8cef1d950440f66d009da242f9ddc5e0a970d8a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_a66cfd9d",
         "filename": "skyring.spec",
         "patchSetId": 7
@@ -152,6 +170,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_8b837455",
+        "filename": "skyring.spec",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_f5868b12",
+      "revId": "8cef1d950440f66d009da242f9ddc5e0a970d8a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_c669f98c",
         "filename": "skyring.spec",
         "patchSetId": 7
@@ -181,6 +217,42 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "5ac4a560_c669f98c",
+      "revId": "8cef1d950440f66d009da242f9ddc5e0a970d8a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_ab867063",
+        "filename": "skyring.spec",
+        "patchSetId": 7
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_c669f98c",
+      "revId": "8cef1d950440f66d009da242f9ddc5e0a970d8a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_cb7d6c70",
+        "filename": "skyring.spec",
+        "patchSetId": 7
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_157dc71c",
       "revId": "8cef1d950440f66d009da242f9ddc5e0a970d8a1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
