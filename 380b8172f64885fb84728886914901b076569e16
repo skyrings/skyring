@@ -104,6 +104,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_ec1fdd07",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Sure i will define like go_version",
+      "parentUuid": "9ab29df4_54a9027a",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_74d44620",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -115,6 +133,24 @@
       "writtenOn": "2015-11-05T04:43:14Z",
       "side": 1,
       "message": "Remove the commented lines",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_0c1df90f",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_74d44620",
       "revId": "380b8172f64885fb84728886914901b076569e16",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -138,6 +174,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_2c1ab517",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Sure i will use the macro",
+      "parentUuid": "9ab29df4_74b7e6d8",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_14e30a06",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -149,6 +203,24 @@
       "writtenOn": "2015-11-05T05:00:55Z",
       "side": 1,
       "message": "Commented line",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_4c17f1ed",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_14e30a06",
       "revId": "380b8172f64885fb84728886914901b076569e16",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -172,6 +244,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_6cd3cd38",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_b4b17ee3",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_d4b432d3",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -183,6 +273,24 @@
       "writtenOn": "2015-11-05T06:28:18Z",
       "side": 1,
       "message": "1. Where is go build?\n2. You should set build requires",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_acdde544",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Sure i will add make and add the requires entries",
+      "parentUuid": "9ab29df4_d4b432d3",
       "revId": "380b8172f64885fb84728886914901b076569e16",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -206,6 +314,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_2cf1d5cd",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "These conf files will be used as a default conf files.\nCurrently skyring requires these files to be in /etc/skyring\ndirectory to start. Once this issue is fixed at code level\nwe can probably remove these files or we can just keep only a dummy files with minimum values so that user can make use of it.",
+      "parentUuid": "9ab29df4_14c6aa49",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_f4ca164e",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -223,6 +349,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_4cee11ee",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Sure i will add the dependency for salt-master",
+      "parentUuid": "9ab29df4_f4ca164e",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_34c56e3c",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -234,6 +378,24 @@
       "writtenOn": "2015-11-05T06:28:18Z",
       "side": 1,
       "message": "why do you hardcode python site package path?",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_ccb941eb",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "I will remove the hard coded and will use appropriate macros if available or use some script to obtain.",
+      "parentUuid": "9ab29df4_34c56e3c",
       "revId": "380b8172f64885fb84728886914901b076569e16",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -275,6 +437,42 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_0ccb3973",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_94d71a23",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_6ca10da9",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_f4e77610",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_54c0222a",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -286,6 +484,24 @@
       "writtenOn": "2015-11-05T06:28:18Z",
       "side": 1,
       "message": "You should not do this way",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_8ca669c0",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Sure, I will move this part out and work out in a way that Kanagaraj mentioned.",
+      "parentUuid": "9ab29df4_54c0222a",
       "revId": "380b8172f64885fb84728886914901b076569e16",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -309,6 +525,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_acab2588",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_74de0613",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_94e1dad2",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -320,6 +554,24 @@
       "writtenOn": "2015-11-05T06:28:18Z",
       "side": 1,
       "message": "You should not enable any service in the post. You should have your systemd unit file and have dependency there\n\n-2 for starting any service",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_ccb061f7",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_94e1dad2",
       "revId": "380b8172f64885fb84728886914901b076569e16",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -343,6 +595,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_ec943d46",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_b4e89eb5",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_d4eb52ae",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -354,6 +624,24 @@
       "writtenOn": "2015-11-05T06:28:18Z",
       "side": 1,
       "message": "you should use macros than path like /etc, /usr/lib etc",
+      "revId": "380b8172f64885fb84728886914901b076569e16",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_0c925957",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-09T14:17:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_d4eb52ae",
       "revId": "380b8172f64885fb84728886914901b076569e16",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
