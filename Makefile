@@ -37,7 +37,7 @@ pybuild:
 
 vendor-update:
 	@echo "Updating vendored packages"
-	@GO15VENDOREXPERIMENT=1 glide -q up
+	@GO15VENDOREXPERIMENT=1 glide -q up 2> /dev/null
 
 build: verifiers vendor-update pybuild test
 	@echo "Doing $@"
