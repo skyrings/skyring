@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_0ba68353",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-09T19:35:05Z",
+      "side": 1,
+      "message": "Remove the bug reference from here as its added below",
+      "revId": "c5f51307b00089dddbfb88aa26cafb4ff6eabdfc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_2b641f21",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-09T19:35:05Z",
+      "side": 1,
+      "message": "Remove the below blank line",
+      "revId": "c5f51307b00089dddbfb88aa26cafb4ff6eabdfc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
