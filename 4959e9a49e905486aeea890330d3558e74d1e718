@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "5ac4a560_1021554d",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-09T12:27:22Z",
+      "side": 1,
+      "message": "Remove the prints",
+      "revId": "4959e9a49e905486aeea890330d3558e74d1e718",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_90d48521",
+        "filename": "models/core_models.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-09T12:27:22Z",
+      "side": 1,
+      "message": "Sub tasks is the list of names? I feel it should be task ids.",
+      "revId": "4959e9a49e905486aeea890330d3558e74d1e718",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_b0ed0128",
         "filename": "tools/task/task.go",
         "patchSetId": 1
