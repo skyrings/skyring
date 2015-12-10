@@ -1,6 +1,7 @@
 package event
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
@@ -94,6 +95,12 @@ func RouteEvent(event models.NodeEvent) {
 					logger.Get().Error("Could not persist the event to DB: %s", err)
 					return
 				} else {
+					// For upcoming any new event , broadcasting to all connected clients
+					eventObj, err := json.Marshal(e)
+					if err != nil {
+						logger.Get().Error("Error while converting into json marshal: %s", err)
+					}
+					GetBroadcaster().chBroadcast <- string(eventObj)
 					return
 				}
 			}

@@ -47,6 +47,7 @@ var (
 	providersDir  string
 	eventSocket   string
 	staticFileDir string
+	websocketPort string
 )
 
 func main() {
@@ -95,6 +96,11 @@ func main() {
 			Usage:  "Override default static file serve directory",
 			EnvVar: "SKYRING_STATICFILEDIR",
 		},
+		cli.StringFlag{
+			Name:  "websocket-port",
+			Value: "8081",
+			Usage: "websocket http service address",
+		},
 	}
 
 	app.Before = func(c *cli.Context) error {
@@ -106,6 +112,7 @@ func main() {
 		logLevel = c.String("log-level")
 		providersDir = c.String("providers-dir")
 		staticFileDir = c.String("static-file-dir")
+		websocketPort = c.String("websocket-port")
 		return nil
 	}
 
@@ -207,6 +214,9 @@ func start() {
 
 	logger.Get().Info("Starting clusters syncing")
 	go application.SyncClusterDetails()
+
+	// Starting the WebSocket server
+	event.StartBroadcaster(websocketPort)
 
 	logger.Get().Info("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
 
