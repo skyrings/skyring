@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_11c07629",
+        "filename": "tools/task/task.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-10T10:15:22Z",
+      "side": 1,
+      "message": "I remember there is way to invoke only one update to achieve this.\n\nhttps://docs.mongodb.org/manual/reference/operator/update/push/",
+      "revId": "e019f62181478e379685b8afe70f17fd433365d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
