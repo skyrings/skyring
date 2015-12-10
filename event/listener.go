@@ -1,7 +1,9 @@
 package event
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/gorilla/websocket"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
@@ -9,6 +11,7 @@ import (
 	"github.com/skyrings/skyring/tools/uuid"
 	"gopkg.in/mgo.v2/bson"
 	"net"
+	"net/http"
 	"net/rpc"
 	"net/rpc/jsonrpc"
 	"path/filepath"
@@ -16,6 +19,154 @@ import (
 	"sync"
 	"time"
 )
+
+//centralized architecture: A central Hub is going to receive all ingoing events and to broadcast them to each connected Client
+type hub struct {
+	clients    map[*client]bool
+	broadcast  chan string
+	register   chan *client
+	unregister chan *client
+	content    string
+}
+
+var (
+	CenterHub hub
+)
+
+func New() *hub {
+	CenterHub = hub{
+		broadcast:  make(chan string),
+		register:   make(chan *client),
+		unregister: make(chan *client),
+		clients:    make(map[*client]bool),
+		content:    "",
+	}
+	return &CenterHub
+}
+
+//  At the end, we instantiate our hub
+func (CenterHub *hub) Run() {
+	for {
+		select {
+		case c := <-CenterHub.register:
+			CenterHub.clients[c] = true
+			c.send <- []byte(CenterHub.content)
+			break
+
+		case c := <-CenterHub.unregister:
+			_, ok := CenterHub.clients[c]
+			if ok {
+				delete(CenterHub.clients, c)
+				close(c.send)
+			}
+			break
+
+		case m := <-CenterHub.broadcast:
+			CenterHub.content = m
+			CenterHub.broadcastMessage()
+			break
+		}
+	}
+}
+
+// Broadcasting the message to all connected clients
+func (CenterHub *hub) broadcastMessage() {
+	for c := range CenterHub.clients {
+		select {
+		case c.send <- []byte(CenterHub.content):
+			break
+
+		// We can't reach the client
+		default:
+			close(c.send)
+			delete(CenterHub.clients, c)
+		}
+	}
+}
+
+//Let's focus on Client code now
+const (
+	writeWait      = 10 * time.Second
+	pongWait       = 60 * time.Second
+	pingPeriod     = (pongWait * 9) / 10
+	maxMessageSize = 1024 * 1024
+)
+
+type client struct {
+	ws   *websocket.Conn
+	send chan []byte
+}
+
+// Upgrading the websocket upgrader function
+var upgrader = websocket.Upgrader{CheckOrigin: func(r *http.Request) bool { return true }}
+
+// serveWs handles websocket requests from the peer.
+func ServeWs(w http.ResponseWriter, r *http.Request) {
+	ws, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		logger.Get().Error("Websocket upgrader function Failed: %s", err)
+		return
+	}
+	c := &client{
+		send: make(chan []byte, maxMessageSize),
+		ws:   ws,
+	}
+	CenterHub.register <- c
+	go c.writeEvents()
+	c.readEvents()
+}
+
+//Read events
+func (c *client) readEvents() {
+	defer func() {
+		CenterHub.unregister <- c
+		c.ws.Close()
+	}()
+	c.ws.SetReadLimit(maxMessageSize)
+	c.ws.SetReadDeadline(time.Now().Add(pongWait))
+	c.ws.SetPongHandler(func(string) error {
+		c.ws.SetReadDeadline(time.Now().Add(pongWait))
+		return nil
+	})
+	for {
+		_, message, err := c.ws.ReadMessage()
+		if err != nil {
+			logger.Get().Error("Not able to read message from client: %s", err)
+			break
+		}
+		fmt.Println("This is message recieved from client ", message)
+	}
+}
+
+// write events
+func (c *client) writeEvents() {
+	ticker := time.NewTicker(pingPeriod)
+	defer func() {
+		ticker.Stop()
+		c.ws.Close()
+	}()
+	for {
+		select {
+		case message, ok := <-c.send:
+			if !ok {
+				c.write(websocket.CloseMessage, []byte{})
+				return
+			}
+			if err := c.write(websocket.TextMessage, message); err != nil {
+				return
+			}
+		case <-ticker.C:
+			if err := c.write(websocket.PingMessage, []byte{}); err != nil {
+				return
+			}
+		}
+	}
+}
+
+func (c *client) write(mt int, message []byte) error {
+	c.ws.SetWriteDeadline(time.Now().Add(writeWait))
+	return c.ws.WriteMessage(mt, message)
+}
 
 var StartedNodes map[string]time.Time = make(map[string]time.Time)
 var StartedNodesLock sync.Mutex
@@ -81,6 +232,13 @@ func RouteEvent(event models.NodeEvent) {
 	}
 	e.ClusterId = node[0].ClusterId
 	e.NodeId = node[0].NodeId
+
+	// For upcoming any new event ,adding it into CenterHub.broadcast
+	eventObj, err := json.Marshal(e)
+	if err != nil {
+		logger.Get().Error("Error while converting into json marshal: %s", err)
+	}
+	CenterHub.broadcast <- string(eventObj)
 
 	// Invoking the event handler
 	for tag, handler := range handlermap {
