@@ -1,6 +1,7 @@
 package event
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
@@ -81,6 +82,13 @@ func RouteEvent(event models.NodeEvent) {
 	}
 	e.ClusterId = node[0].ClusterId
 	e.NodeId = node[0].NodeId
+
+	// For upcoming any new event ,adding it into CenterHub.broadcast
+	eventObj, err := json.Marshal(e)
+	if err != nil {
+		logger.Get().Error("Error while converting into json marshal: %s", err)
+	}
+	Broadcast.broadcast <- string(eventObj)
 
 	// Invoking the event handler
 	for tag, handler := range handlermap {

@@ -14,6 +14,7 @@ limitations under the License.
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/codegangsta/negroni"
@@ -38,6 +39,9 @@ const (
 	// DefaultLogLevel default log level
 	DefaultLogLevel = logging.DEBUG
 )
+
+// Defined Port for web socket at 8081
+var addr = flag.String("addr", ":8081", "http service address")
 
 var (
 	configDir    string
@@ -192,6 +196,13 @@ func start() {
 	}
 
 	n.UseHandler(router)
+
+	// Starting the WebSocket server at port : 8081
+	flag.Parse()
+	broadcaster := event.New()
+	go broadcaster.Run()
+	http.HandleFunc("/ws", event.ServeWs)
+	go http.ListenAndServe(*addr, nil)
 
 	logger.Get().Info("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
 
