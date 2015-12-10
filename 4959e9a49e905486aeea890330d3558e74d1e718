@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_0e7db1b1",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-10T06:07:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_1021554d",
+      "revId": "4959e9a49e905486aeea890330d3558e74d1e718",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_90d48521",
         "filename": "models/core_models.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-12-09T12:27:22Z",
       "side": 1,
       "message": "Sub tasks is the list of names? I feel it should be task ids.",
+      "revId": "4959e9a49e905486aeea890330d3558e74d1e718",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_4e4ec997",
+        "filename": "models/core_models.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-10T06:07:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_90d48521",
       "revId": "4959e9a49e905486aeea890330d3558e74d1e718",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_ae775dd3",
+        "filename": "tools/task/task.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-10T06:07:19Z",
+      "side": 1,
+      "message": "This is going to be used. I will going post another patch which handles the unexpected exits/crashes of tasks",
+      "parentUuid": "5ac4a560_b0ed0128",
+      "revId": "4959e9a49e905486aeea890330d3558e74d1e718",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_708c4980",
         "filename": "tools/task/task.go",
         "patchSetId": 1
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_ce72d9e2",
+        "filename": "tools/task/task.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-10T06:07:19Z",
+      "side": 1,
+      "message": "Will be enabled once logging patch merged for bigFin",
+      "parentUuid": "5ac4a560_708c4980",
+      "revId": "4959e9a49e905486aeea890330d3558e74d1e718",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_90eac50d",
         "filename": "tools/task/task.go",
         "patchSetId": 1
@@ -81,6 +153,24 @@
       "writtenOn": "2015-12-09T11:51:27Z",
       "side": 1,
       "message": "Same here",
+      "revId": "4959e9a49e905486aeea890330d3558e74d1e718",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_ee815590",
+        "filename": "tools/task/task.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-10T06:07:19Z",
+      "side": 1,
+      "message": "Will be enabled once logging patch merged for bigFin",
+      "parentUuid": "5ac4a560_90eac50d",
       "revId": "4959e9a49e905486aeea890330d3558e74d1e718",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
