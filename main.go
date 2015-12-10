@@ -40,12 +40,13 @@ const (
 )
 
 var (
-	configDir    string
-	logFile      string
-	logToStderr  bool
-	logLevel     string
-	providersDir string
-	eventSocket  string
+	configDir     string
+	logFile       string
+	logToStderr   bool
+	logLevel      string
+	providersDir  string
+	eventSocket   string
+	websocketPort string
 )
 
 func main() {
@@ -88,6 +89,11 @@ func main() {
 			Value: DefaultLogLevel.String(),
 			Usage: "Set log level",
 		},
+		cli.StringFlag{
+			Name:  "websocket-port",
+			Value: "8081",
+			Usage: "websocket http service address",
+		},
 	}
 
 	app.Before = func(c *cli.Context) error {
@@ -98,6 +104,7 @@ func main() {
 		logFile = c.String("log-file")
 		logLevel = c.String("log-level")
 		providersDir = c.String("providers-dir")
+		websocketPort = c.String("websocket-port")
 		return nil
 	}
 
@@ -192,6 +199,13 @@ func start() {
 	}
 
 	n.UseHandler(router)
+
+	// Starting the WebSocket server
+	event.InitBroadcaster()
+	broadcaster := event.GetBroadcaster()
+	go broadcaster.Run()
+	http.HandleFunc("/ws", event.ServeWs)
+	go http.ListenAndServe(":"+websocketPort, nil)
 
 	logger.Get().Info("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
 
