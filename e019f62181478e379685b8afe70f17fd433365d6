@@ -16,6 +16,24 @@
       "revId": "e019f62181478e379685b8afe70f17fd433365d6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_45c064e0",
+        "filename": "tools/task/task.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-11T10:43:03Z",
+      "side": 1,
+      "message": "You may do in another patch.",
+      "parentUuid": "5ac4a560_11c07629",
+      "revId": "e019f62181478e379685b8afe70f17fd433365d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
