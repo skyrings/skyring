@@ -288,6 +288,28 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: GetEvents,
 			Version:     1,
 		},
+		//Storage Profiles
+		{
+			Name:        "POST_StorageProfiles",
+			Method:      "POST",
+			Pattern:     "storageprofiles",
+			HandlerFunc: a.POST_StorageProfiles,
+			Version:     1,
+		},
+		{
+			Name:        "GET_StorageProfiles",
+			Method:      "GET",
+			Pattern:     "storageprofiles",
+			HandlerFunc: a.GET_StorageProfiles,
+			Version:     1,
+		},
+		{
+			Name:        "GET_StorageProfiles",
+			Method:      "GET",
+			Pattern:     "storageprofiles/{storage-profile-id}",
+			HandlerFunc: a.GET_StorageProfile,
+			Version:     1,
+		},
 	}
 	for _, route := range routes {
 		CORE_ROUTES = append(CORE_ROUTES, route)
