@@ -109,6 +109,7 @@ type StorageLogicalUnit struct {
 	StorageDeviceSize uint64            `json:"storagedevicesize"`
 	Status            string            `json:"status"`
 	Options           map[string]string `json:"options"`
+	StorageProfile    string            `json:"storageprofile"`
 }
 
 type Storage struct {
@@ -153,4 +154,15 @@ type AppTask struct {
 	Tag        map[string]string `json:"tag"`
 	SubTasks   []uuid.UUID       `json:"subtasks"`
 	Status     TaskStatus        `json:"status"`
+}
+
+type DiskProfile struct {
+	Type  DiskType `json:"disktype"`
+	Speed int      `json:"speed"`
+}
+
+type StorageProfile struct {
+	Name     string      `json:"name"`
+	Rule     DiskProfile `json:"rule"`
+	Priority int         `json:"priority"`
 }

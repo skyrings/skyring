@@ -27,16 +27,6 @@ const (
 	CurrentUser = "me"
 )
 
-// The AuthBackend interface defines a set of methods an AuthBackend must
-// implement.
-type AuthBackend interface {
-	SaveUser(u models.User) error
-	User(username string) (user models.User, e error)
-	Users() (users []models.User, e error)
-	DeleteUser(username string) error
-	Close()
-}
-
 type AuthInterface interface {
 	Login(rw http.ResponseWriter, req *http.Request, username string, password string) error
 	Logout(rw http.ResponseWriter, req *http.Request) error
