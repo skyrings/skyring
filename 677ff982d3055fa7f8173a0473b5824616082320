@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_25644821",
+        "filename": "event/listener.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-11T10:59:22Z",
+      "side": 0,
+      "message": "I feel We should introduce a struct with name EventBroadcaster in a separate source say broadcaster.go.\nHere we should just say EventBroadcaster.New() and then add the event to the channel \"broadcast\"",
+      "revId": "677ff982d3055fa7f8173a0473b5824616082320",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}

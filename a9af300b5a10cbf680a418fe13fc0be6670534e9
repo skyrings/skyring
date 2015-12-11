@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_65a00044",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-11T10:59:22Z",
+      "side": 1,
+      "message": "skyring: websocket integration to push events to UI??",
+      "revId": "a9af300b5a10cbf680a418fe13fc0be6670534e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_a58938cc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-11T10:59:22Z",
+      "side": 1,
+      "message": "As part skyring startup a master sync would sync all the entities for the cluster with their changes in status etc.\nPost start, the state change and any alert/notifications would be percolated to UI using the websocket push for the events to UI.",
+      "revId": "a9af300b5a10cbf680a418fe13fc0be6670534e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_c5ab941c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-11T10:59:22Z",
+      "side": 1,
+      "message": "Websocket starts on port 8081. Make sure the port is open and available.",
+      "revId": "a9af300b5a10cbf680a418fe13fc0be6670534e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_a5b0588c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-11T10:59:22Z",
+      "side": 1,
+      "message": "No need to explain the whole logic here. May be you can remove this para",
+      "revId": "a9af300b5a10cbf680a418fe13fc0be6670534e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_05a66c53",
+        "filename": "event/listener.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-11T10:59:22Z",
+      "side": 1,
+      "message": "Break the comment in two lines ;))",
+      "revId": "a9af300b5a10cbf680a418fe13fc0be6670534e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_45678425",
+        "filename": "event/listener.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-11T10:59:22Z",
+      "side": 1,
+      "message": "Rename as in above comment",
+      "revId": "a9af300b5a10cbf680a418fe13fc0be6670534e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_656e4003",
+        "filename": "event/listener.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-11T10:59:22Z",
+      "side": 1,
+      "message": "Mostly const names try to keep all caps",
+      "revId": "a9af300b5a10cbf680a418fe13fc0be6670534e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_c572b4e2",
+        "filename": "main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-11T10:59:22Z",
+      "side": 1,
+      "message": "Looks like you are expecting the value from command line and if not passed default tot 8081.\nAdd an entry into app.Flags for the same",
+      "revId": "a9af300b5a10cbf680a418fe13fc0be6670534e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_e5817090",
+        "filename": "main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-11T10:59:22Z",
+      "side": 1,
+      "message": "This confuses with event listener. It would be better having a EventBroadcaster as below\n\nbroadcaster :\u003d EventBroadcaster.New()\ngo broadcaster.Run()\n.....",
+      "revId": "a9af300b5a10cbf680a418fe13fc0be6670534e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
