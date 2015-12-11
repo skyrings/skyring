@@ -107,6 +107,9 @@ const (
 	COLL_NAME_STORAGE_LOGICAL_UNITS = "storage_logical_units"
 	COLL_NAME_TASKS                 = "tasks"
 	COLL_NAME_SESSION_STORE         = "skyring_session_store"
+	COLL_NAME_STORAGE_PROFILE       = "storage_profile"
+	COLL_NAME_SESSION_STORE         = "skyring_session_store"
+	COLL_NAME_USER                  = "skyringusers"
 )
 
 type Clusters []Cluster
@@ -167,6 +170,37 @@ type AsyncResponse struct {
 func (s Status) String() string {
 	return fmt.Sprintf("%s %s", s.Timestamp, s.Message)
 }
+
+type TaskStatus int
+
+const (
+	TASK_STATUS_NONE = iota
+	TASK_STATUS_SUCCESS
+	TASK_STATUS_FAILURE
+)
+
+var TaskStatuses = [...]string{
+	"none",
+	"success",
+	"failed",
+}
+
+func (t TaskStatus) String() string { return TaskStatuses[t] }
+type DiskType int
+
+const (
+	NONE = iota
+	SAS
+	SSD
+)
+
+var DiskTypes = [...]string{
+	"none",
+	"sas",
+	"ssd",
+}
+
+func (d DiskType) String() string { return DiskTypes[d] }
 
 type TaskStatus int
 

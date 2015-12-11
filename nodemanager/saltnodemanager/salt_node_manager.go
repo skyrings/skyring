@@ -61,6 +61,7 @@ func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.No
 			for _, nodeName := range startedNodes {
 				if nodeName == node {
 					if retVal, ok := populateStorageNodeInstance(node); ok {
+						fmt.Println(retVal)
 						return retVal, nil
 					}
 				}
