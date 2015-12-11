@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/authprovider"
+	"github.com/skyrings/skyring/dao"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
 	"golang.org/x/crypto/bcrypt"
@@ -45,7 +46,7 @@ type Role int
 // Authorizer structures contain the store of user session cookies a reference
 // to a backend storage system.
 type Authorizer struct {
-	backend     authprovider.AuthBackend
+	userDao     dao.UserInterface
 	defaultRole string
 	roles       map[string]Role
 }
@@ -83,13 +84,10 @@ func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 		return nil, err
 	}
 	//Create DB Backend
-	backend, err := authprovider.NewMongodbBackend()
-	if err != nil {
-		logger.Get().Error("Unable to initialize the DB backend for localauthprovider:%s", err)
-		panic(err)
-	}
+	userDao := skyring.GetDbProvider().UserInterface()
+
 	//Create the Provider
-	if provider, err := NewAuthorizer(backend, providerCfg.DefaultRole, providerCfg.Roles); err != nil {
+	if provider, err := NewAuthorizer(userDao, providerCfg.DefaultRole, providerCfg.Roles); err != nil {
 		logger.Get().Error("Unable to initialize the authorizer for localauthprovider:%s", err)
 		panic(err)
 	} else {
@@ -109,9 +107,9 @@ func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 //     roles["admin"] = 4
 //     roles["moderator"] = 3
 
-func NewAuthorizer(backend authprovider.AuthBackend, defaultRole string, roles map[string]Role) (Authorizer, error) {
+func NewAuthorizer(userDao dao.UserInterface, defaultRole string, roles map[string]Role) (Authorizer, error) {
 	var a Authorizer
-	a.backend = backend
+	a.userDao = userDao
 	a.roles = roles
 	a.defaultRole = defaultRole
 	if _, ok := roles[defaultRole]; !ok {
@@ -143,7 +141,7 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 		logger.Get().Error("Already logged in")
 		return nil
 	}
-	if user, err := a.backend.User(u); err == nil {
+	if user, err := a.userDao.User(u); err == nil {
 		if user.Type == authprovider.Internal && user.Status {
 			verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(p))
 			if verify != nil {
@@ -192,7 +190,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 	user.Status = true
 
 	// Validate username
-	_, err := a.backend.User(user.Username)
+	_, err := a.userDao.User(user.Username)
 	if err == nil {
 		logger.Get().Error("Username already exists")
 		return mkerror("user already exists")
@@ -222,7 +220,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		}
 	}
 
-	err = a.backend.SaveUser(user)
+	err = a.userDao.SaveUser(user)
 	if err != nil {
 		logger.Get().Error("Erro Saving the User:%s", err)
 		return mkerror(err.Error())
@@ -237,7 +235,7 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 		hash []byte
 	)
 
-	user, err := a.backend.User(username)
+	user, err := a.userDao.User(username)
 	if err != nil {
 		logger.Get().Error("Error retrieving the user:%s", err)
 		return err
@@ -261,7 +259,7 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 		user.NotificationEnabled = n
 	}
 
-	err = a.backend.SaveUser(user)
+	err = a.userDao.SaveUser(user)
 	if err != nil {
 		logger.Get().Error("Error saving the user to DB:%s", err)
 		return err
@@ -319,7 +317,7 @@ func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e er
 			return user, mkerror("Unable to identify the user from session")
 		}
 	}
-	user, e = a.backend.User(u)
+	user, e = a.userDao.User(u)
 	if e != nil {
 		logger.Get().Error("Error retrieving the user:%s", e)
 		return user, e
@@ -329,7 +327,7 @@ func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e er
 
 func (a Authorizer) ListUsers() (users []models.User, err error) {
 
-	if users, err = a.backend.Users(); err != nil {
+	if users, err = a.userDao.Users(); err != nil {
 		logger.Get().Error("Unable get the list of Users: %v", err)
 		return users, err
 	}
@@ -343,7 +341,7 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 // DeleteUser removes a user from the Authorize. ErrMissingUser is returned if
 // the user to be deleted isn't found.
 func (a Authorizer) DeleteUser(username string) error {
-	err := a.backend.DeleteUser(username)
+	err := a.userDao.DeleteUser(username)
 	if err != nil {
 		logger.Get().Error("Unable delete the user: %v", err)
 		return err

@@ -22,6 +22,7 @@ import (
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/dbprovider"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/nodemanager"
 	"github.com/skyrings/skyring/tools/logger"
@@ -61,6 +62,7 @@ var (
 	AuthProviderInstance authprovider.AuthInterface
 	TaskManager          task.Manager
 	Store                *mongostore.MongoStore
+	DbManager            dbprovider.DbInterface
 )
 
 func NewApp(configDir string, binDir string) *App {
@@ -201,7 +203,7 @@ func (a *App) SetRoutes(router *mux.Router) error {
 	return nil
 }
 
-func (a *App) InitializeAuth(authCfg conf.AuthConfig, n *negroni.Negroni) error {
+func (a *App) InitializeAuth(authCfg conf.AuthConfig) error {
 
 	//Load authorization middleware for session
 	//TODO - make this plugin based, we should be able
@@ -225,6 +227,26 @@ func (a *App) InitializeAuth(authCfg conf.AuthConfig, n *negroni.Negroni) error 
 
 func GetAuthProvider() authprovider.AuthInterface {
 	return AuthProviderInstance
+}
+
+func (a *App) InitializeDb(authCfg conf.AppDBConfig) error {
+
+	if mgr, err := dbprovider.InitDbProvider("mongodbprovider", ""); err != nil {
+		logger.Get().Error("Error Initializing the Db Provider: %s", err)
+		return err
+	} else {
+		DbManager = mgr
+	}
+
+	if err := DbManager.InitDb(); err != nil {
+		logger.Get().Error("Error Initializing the Collections: %s", err)
+		return err
+	}
+	return nil
+}
+
+func GetDbProvider() dbprovider.DbInterface {
+	return DbManager
 }
 
 /*
@@ -339,4 +361,11 @@ func (a *App) InitializeTaskManager() error {
 
 func (a *App) GetTaskManager() *task.Manager {
 	return &TaskManager
+}
+
+/*
+Initialize the defaults during app startup
+*/
+func (a *App) InitializeDefaults() error {
+	return nil
 }
