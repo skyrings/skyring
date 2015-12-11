@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_e5589058",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-11T11:11:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_51e10ecf",
+      "revId": "e018d004a6effa20f8cba6fc70a02d0fd6b83998",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_91eba6af",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2015-12-10T10:19:24Z",
       "side": 1,
       "message": "A week?? May be add a comment.\nI feel we should make this configurable as well in skyring.conf",
+      "revId": "e018d004a6effa20f8cba6fc70a02d0fd6b83998",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_c559d45c",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-11T11:11:29Z",
+      "side": 1,
+      "message": "As discuused, this is not required to be provided as an external configuration",
+      "parentUuid": "5ac4a560_91eba6af",
       "revId": "e018d004a6effa20f8cba6fc70a02d0fd6b83998",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
