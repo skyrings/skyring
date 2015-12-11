@@ -154,3 +154,15 @@ type AppTask struct {
 	SubTasks   []uuid.UUID       `json:"subtasks"`
 	Status     TaskStatus        `json:"status"`
 }
+
+type DiskProfile struct {
+	Type  DiskType `json:"disktype"`
+	Speed int      `json:"speed"`
+}
+
+type StorageProfile struct {
+	Id       uuid.UUID   `json:"id"`
+	Name     string      `json:"name"`
+	Rule     DiskProfile `json:"rule"`
+	Priority string      `json:"priority"`
+}

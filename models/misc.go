@@ -107,6 +107,7 @@ const (
 	COLL_NAME_STORAGE_LOGICAL_UNITS = "storage_logical_units"
 	COLL_NAME_TASKS                 = "tasks"
 	COLL_NAME_SESSION_STORE         = "skyring_session_store"
+	COLL_NAME_STORAGE_PROFILE       = "storage_profile"
 )
 
 type Clusters []Cluster
@@ -183,3 +184,18 @@ var TaskStatuses = [...]string{
 }
 
 func (t TaskStatus) String() string { return TaskStatuses[t] }
+type DiskType int
+
+const (
+	NONE = iota
+	SAS
+	SSD
+)
+
+var DiskTypes = [...]string{
+	"none",
+	"sas",
+	"ssd",
+}
+
+func (d DiskType) String() string { return DiskTypes[d] }
