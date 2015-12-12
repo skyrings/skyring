@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_6a860867",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-12T10:20:45Z",
+      "side": 1,
+      "message": "Why commenting this out?if firewalld is running external access would be a problem. I agree that we need to fix this by adding firewall rules. For the time being check whether the firewalld is running then do this",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 28
+      },
+      "revId": "6070c561780e0dd085b9b84e88da347c9dd828fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
