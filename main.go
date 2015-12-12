@@ -40,12 +40,13 @@ const (
 )
 
 var (
-	configDir    string
-	logFile      string
-	logToStderr  bool
-	logLevel     string
-	providersDir string
-	eventSocket  string
+	configDir     string
+	logFile       string
+	logToStderr   bool
+	logLevel      string
+	providersDir  string
+	eventSocket   string
+	staticFileDir string
 )
 
 func main() {
@@ -88,6 +89,12 @@ func main() {
 			Value: DefaultLogLevel.String(),
 			Usage: "Set log level",
 		},
+		cli.StringFlag{
+			Name:   "static-file-dir, s",
+			Value:  "/usr/share/skyring/webapp",
+			Usage:  "Override default static file serve directory",
+			EnvVar: "SKYRING_STATICFILEDIR",
+		},
 	}
 
 	app.Before = func(c *cli.Context) error {
@@ -98,6 +105,7 @@ func main() {
 		logFile = c.String("log-file")
 		logLevel = c.String("log-level")
 		providersDir = c.String("providers-dir")
+		staticFileDir = c.String("static-file-dir")
 		return nil
 	}
 
@@ -158,7 +166,11 @@ func start() {
 	// Use negroni to add middleware.  Here we add the standard
 	// middlewares: Recovery, Logger and static file serve which come with
 	// Negroni
-	n := negroni.Classic()
+	n := negroni.New(
+		negroni.NewRecovery(),
+		negroni.NewLogger(),
+		negroni.NewStatic(http.Dir(staticFileDir)),
+	)
 
 	logger.Get().Info("Starting event listener")
 	go event.StartListener(eventSocket)
