@@ -26,7 +26,9 @@ import (
 	"net/http"
 )
 
-const ProviderName = "localauthprovider"
+const (
+	ProviderName = "localauthprovider"
+)
 
 // ErrDeleteNull is returned by DeleteUser when that user didn't exist at the
 // time of call.
@@ -220,7 +222,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 
 // Update changes data for an existing user. Needs thought...
 //Just added for completeness. Will revisit later
-func (a Authorizer) UpdateUser(username string, p string, e string) error {
+func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error {
 	var (
 		hash []byte
 	)
@@ -230,7 +232,8 @@ func (a Authorizer) UpdateUser(username string, p string, e string) error {
 		logger.Get().Error("Error retrieving the user:%s", err)
 		return err
 	}
-	if p != "" {
+	if val, ok := m["password"]; ok {
+		p := val.(string)
 		hash, err = bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
 		if err != nil {
 			logger.Get().Error("Error saving the password:%s", err)
@@ -238,8 +241,14 @@ func (a Authorizer) UpdateUser(username string, p string, e string) error {
 		}
 		user.Hash = hash
 	}
-	if e != "" {
+	if val, ok := m["email"]; ok {
+		e := val.(string)
 		user.Email = e
+	}
+
+	if val, ok := m["notificationenabled"]; ok {
+		n := val.(bool)
+		user.NotificationEnabled = n
 	}
 
 	err = a.backend.SaveUser(user)
@@ -276,8 +285,17 @@ func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
 
 // CurrentUser returns the currently logged in user and a boolean validating
 // the information.
-func (a Authorizer) GetUser(u string) (user models.User, e error) {
-
+func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e error) {
+	//if username is me, get the currently loggedin user
+	if u == authprovider.CurrentUser {
+		session := sessions.GetSession(req)
+		sessionVal := session.Get("username")
+		if sessionVal == nil {
+			logger.Get().Error("User not logged in")
+			return user, mkerror("user not logged in")
+		}
+		u = sessionVal.(string)
+	}
 	user, e = a.backend.User(u)
 	if e != nil {
 		logger.Get().Error("Error retrieving the user:%s", e)
