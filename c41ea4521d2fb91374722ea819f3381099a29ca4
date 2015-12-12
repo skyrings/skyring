@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_2ab5f030",
+        "filename": "utils/unit_converter.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-12T10:05:23Z",
+      "side": 1,
+      "message": "Add the file header/disclaimer",
+      "revId": "c41ea4521d2fb91374722ea819f3381099a29ca4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
