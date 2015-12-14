@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_e81b001a",
+        "filename": "Makefile",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:44:56Z",
+      "side": 1,
+      "message": "%s/SKYBUILD/SKYRING_BUILD/g",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_081bdc1b",
+        "filename": "Makefile",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:44:56Z",
+      "side": 1,
+      "message": "s/SKYTARBLDSRC/SKYRIN_TARBUILD_SRC/g",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_2816d8f1",
+        "filename": "Makefile",
+        "patchSetId": 9
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:44:56Z",
+      "side": 1,
+      "message": "%s/SKYBUILDSRC/SKYRING_BUILD_SRC/g",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_68d7f023",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:44:56Z",
+      "side": 1,
+      "message": "This check should go off now I feel",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_c8e72411",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:44:56Z",
+      "side": 1,
+      "message": "We can make it like \n\n\"systemctl stop firewalld \u0026\u0026 systemctl disable firewalld\"\n\nThis will make sure second command runs only if first is successful.",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_e8e22000",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:44:56Z",
+      "side": 1,
+      "message": "May be we should have a verification stage to make sure all the setup done is correct for influxdb and mongo etc..",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_48bb14e5",
+        "filename": "skyring.spec",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:44:56Z",
+      "side": 1,
+      "message": "python-netaddr??",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
