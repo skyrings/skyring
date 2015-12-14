@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_8810cc02",
+        "filename": "backend/salt/conf/collectd/python.conf",
+        "patchSetId": 13
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:24:59Z",
+      "side": 1,
+      "message": "Why hard coded values for user name and password?",
+      "revId": "1c2f18ccf76e047fccd434cac56a7e16db9e42d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_a813c80b",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:24:59Z",
+      "side": 1,
+      "message": "Why commented?",
+      "revId": "1c2f18ccf76e047fccd434cac56a7e16db9e42d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_c8f9e4c9",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:24:59Z",
+      "side": 1,
+      "message": "Is this change required?",
+      "revId": "1c2f18ccf76e047fccd434cac56a7e16db9e42d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
