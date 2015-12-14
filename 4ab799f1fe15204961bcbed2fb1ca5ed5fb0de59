@@ -16,6 +16,24 @@
       "revId": "4ab799f1fe15204961bcbed2fb1ca5ed5fb0de59",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_c872c47b",
+        "filename": "utils/unit_converter.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T06:14:40Z",
+      "side": 1,
+      "message": "Yes the order is implicit here because it is ordered.\n\n1. I want to be able to extend this to sort a random list of units and values in ascending and descending orders however, I am not able to think of its applicability in our case as of now. But I have the sort related interface methods like Len(), Less() and Swap() implemented.\n\n2. Actually I think its not good to enforce the user to have to order the units in the list.This is a comment that someone in ovirt community had given me when I had submitted my patch there.\n\n3. Unavoidably I need to do it only in case of line 66. I am thinking if its really required.",
+      "parentUuid": "5ac4a560_a8ce68b2",
+      "revId": "4ab799f1fe15204961bcbed2fb1ca5ed5fb0de59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
