@@ -34,6 +34,24 @@
       "revId": "4ab799f1fe15204961bcbed2fb1ca5ed5fb0de59",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_0804bcbe",
+        "filename": "utils/unit_converter.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:30:06Z",
+      "side": 1,
+      "message": "I can understand. Lets keep it for the time being.",
+      "parentUuid": "5ac4a560_c872c47b",
+      "revId": "4ab799f1fe15204961bcbed2fb1ca5ed5fb0de59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
