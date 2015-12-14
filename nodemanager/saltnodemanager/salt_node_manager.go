@@ -15,14 +15,14 @@ package saltnodemanager
 import (
 	"errors"
 	"fmt"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring/backend/salt"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/event"
-	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/nodemanager"
-	"github.com/skyrings/skyring/tools/logger"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"net"
@@ -232,7 +232,7 @@ func (a SaltNodeManager) SetUpMonitoring(node string, master string) (map[string
 	return failed_nodes, err
 }
 
-func (a SaltNodeManager) UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) ([]string, error) {
+func (a SaltNodeManager) UpdateMonitoringConfiguration(nodes []string, config []models.Plugin) ([]string, error) {
 	failed_nodes, err := salt_backend.UpdateMonitoringConfiguration(nodes, config)
 	return failed_nodes, err
 }
@@ -252,7 +252,7 @@ func (a SaltNodeManager) RemoveMonitoringPlugin(nodes []string, pluginName strin
 	return failed_nodes, err
 }
 
-func (a SaltNodeManager) AddMonitoringPlugin(nodes []string, master string, plugin monitoring.Plugin) (map[string]interface{}, error) {
-	failed_nodes, err := salt_backend.AddMonitoringPlugin([]string{plugin.Name}, nodes, "", monitoring.ToSaltPillarCompat([]monitoring.Plugin{plugin}))
+func (a SaltNodeManager) AddMonitoringPlugin(nodes []string, master string, plugin models.Plugin) (map[string]interface{}, error) {
+	failed_nodes, err := salt_backend.AddMonitoringPlugin([]string{plugin.Name}, nodes, "", monitoring.ToSaltPillarCompat([]models.Plugin{plugin}))
 	return failed_nodes, err
 }

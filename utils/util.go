@@ -3,9 +3,9 @@ package util
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/task"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/task"
 	"net/http"
 	"runtime"
 	"time"

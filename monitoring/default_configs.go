@@ -1,25 +1,29 @@
 package monitoring
 
-func GetDefaultThresholdValues() (plugins []Plugin) {
-	return []Plugin{
+import (
+	"github.com/skyrings/skyring-common/models"
+)
+
+func GetDefaultThresholdValues() (plugins []models.Plugin) {
+	return []models.Plugin{
 		{
 			Name:   "df",
 			Enable: true,
-			Configs: []PluginConfig{
+			Configs: []models.PluginConfig{
 				{Category: "threshold", Type: "critical", Value: "70"},
 			},
 		},
 		{
 			Name:   "memory",
 			Enable: true,
-			Configs: []PluginConfig{
+			Configs: []models.PluginConfig{
 				{Category: "threshold", Type: "critical", Value: "70"},
 			},
 		},
 		{
 			Name:   "cpu",
 			Enable: true,
-			Configs: []PluginConfig{
+			Configs: []models.PluginConfig{
 				{Category: "threshold", Type: "critical", Value: "70"},
 			},
 		},

@@ -17,13 +17,13 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/task"
+	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring/monitoring"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/task"
-	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"gopkg.in/mgo.v2/bson"
 	"io"
@@ -126,6 +126,13 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 									nodes = append(nodes, node.Hostname)
 								}
 								t.UpdateStatus("Updating the monitoring configuration on all nodes in the cluster")
+								// Validate the plugins
+								for _, plugin := range request.MonitoringPlugins {
+									if !monitoring.ValidPlugin(plugin) {
+										util.FailTask("", fmt.Errorf("Invalid plugin: %v", plugin), t)
+										return
+									}
+								}
 								if updateFailedNodes, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); updateError != nil || len(updateFailedNodes) != 0 {
 									monitoringConfigured = false
 									t.UpdateStatus("Failed to update the monitoring configuration")
@@ -184,7 +191,7 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error(cluster_id_parse_error.Error())
 		util.HttpResponse(w, http.StatusInternalServerError, cluster_id_parse_error.Error())
 	}
-	var request monitoring.Plugin
+	var request models.Plugin
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		logger.Get().Error("Unable to parse the request")
@@ -194,6 +201,12 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	if err := json.Unmarshal(body, &request); err != nil {
 		logger.Get().Error("Unable to unmarshal request")
 		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
+		return
+	}
+	// Validate the plugin details
+	if !monitoring.ValidPlugin(request) {
+		logger.Get().Error("Invalid plugin: %v", request)
+		util.HttpResponse(w, http.StatusBadRequest, "Invalid details for the plugin")
 		return
 	}
 	asyncTask := func(t *task.Task) {
@@ -235,7 +248,7 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func updatePluginsInDb(parameter bson.M, updatedPlugins []monitoring.Plugin) (err error) {
+func updatePluginsInDb(parameter bson.M, updatedPlugins []models.Plugin) (err error) {
 	logger.Get().Info("In updatePluginsInDb, the parameter is %v and plugins are %v", parameter, updatedPlugins)
 	sessionCopy := db.GetDatastore().Copy()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
@@ -244,7 +257,7 @@ func updatePluginsInDb(parameter bson.M, updatedPlugins []monitoring.Plugin) (er
 }
 
 func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
-	var request []monitoring.Plugin = make([]monitoring.Plugin, 0)
+	var request []models.Plugin = make([]models.Plugin, 0)
 	vars := mux.Vars(r)
 	cluster_id := vars["cluster-id"]
 
@@ -260,6 +273,14 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request"+err.Error())
 		return
 	}
+	// Validate the plugin details
+	for _, plugin := range request {
+		if !monitoring.ValidPlugin(plugin) {
+			logger.Get().Error("Invalid plugin: %v", plugin)
+			util.HttpResponse(w, http.StatusBadRequest, "Invalid details for the plugin")
+			return
+		}
+	}
 
 	if len(request) != 0 && err == nil {
 		cluster_id_uuid, cluster_id_parse_error := uuid.Parse(cluster_id)
@@ -268,7 +289,7 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 			if err == nil {
 				asyncTask := func(t *task.Task) {
 					t.UpdateStatus("Started task to update monitoring plugins configuration : %v", t.ID)
-					var updatedPlugins []monitoring.Plugin
+					var updatedPlugins []models.Plugin
 					var pluginUpdateError error
 					cluster, clusterFetchErr := getCluster(cluster_id_uuid)
 					if clusterFetchErr != nil {
@@ -384,8 +405,14 @@ func (a *App) POST_MonitoringPluginEnable(w http.ResponseWriter, r *http.Request
 	if cluster_id_parse_error != nil {
 		logger.Get().Error(cluster_id_parse_error.Error())
 		util.HttpResponse(w, http.StatusInternalServerError, cluster_id_parse_error.Error())
+		return
 	}
 	plugin_name := vars["plugin-name"]
+	if !monitoring.Contains(plugin_name, monitoring.SupportedMonitoringPlugins) {
+		logger.Get().Error("Unsupported plugin: %s", plugin_name)
+		util.HttpResponse(w, http.StatusBadRequest, "Unsupported plugin")
+		return
+	}
 	monitoringPluginActivationDeactivations(true, plugin_name, cluster_id, w, a)
 }
 
@@ -398,6 +425,11 @@ func (a *App) POST_MonitoringPluginDisable(w http.ResponseWriter, r *http.Reques
 		util.HttpResponse(w, http.StatusInternalServerError, cluster_id_parse_error.Error())
 	}
 	plugin_name := vars["plugin-name"]
+	if !monitoring.Contains(plugin_name, monitoring.SupportedMonitoringPlugins) {
+		logger.Get().Error("Unsupported plugin: %s", plugin_name)
+		util.HttpResponse(w, http.StatusBadRequest, "Unsupported plugin")
+		return
+	}
 	monitoringPluginActivationDeactivations(false, plugin_name, cluster_id, w, a)
 }
 
@@ -411,6 +443,11 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	plugin_name := vars["plugin-name"]
+	if !monitoring.Contains(plugin_name, monitoring.SupportedMonitoringPlugins) {
+		logger.Get().Error("Unsupported plugin: %s", plugin_name)
+		util.HttpResponse(w, http.StatusBadRequest, "Unsupported plugin")
+		return
+	}
 	nodes, nodesFetchError := getNodesInCluster(uuid)
 	if nodesFetchError == nil {
 		asyncTask := func(t *task.Task) {

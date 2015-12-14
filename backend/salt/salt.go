@@ -17,12 +17,13 @@ package salt
 import (
 	"bytes"
 	"github.com/sbinet/go-python"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/gopy"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/ssh"
+	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/monitoring"
-	"github.com/skyrings/skyring/tools/gopy"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/ssh"
-	"github.com/skyrings/skyring/tools/uuid"
 	"strings"
 	"sync"
 	"text/template"
@@ -81,7 +82,7 @@ func (s Salt) AcceptNode(node string, fingerprint string, ignored bool) (status 
 	return
 }
 
-func (s Salt) UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (failed_nodes []string, err error) {
+func (s Salt) UpdateMonitoringConfiguration(nodes []string, config []models.Plugin) (failed_nodes []string, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	var pyobj *python.PyObject
@@ -188,7 +189,7 @@ func (s Salt) GetNodeID(node string) (id uuid.UUID, err error) {
 	return uuid.UUID{}, loc_err
 }
 
-func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
+func (s Salt) GetNodeDisk(node string) (disks []models.Disk, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetNodeDisk"].Call(node); loc_err == nil {

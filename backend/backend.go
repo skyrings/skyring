@@ -15,8 +15,8 @@
 package backend
 
 import (
-	"github.com/skyrings/skyring/monitoring"
-	"github.com/skyrings/skyring/tools/uuid"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/uuid"
 )
 
 type Node struct {
@@ -36,34 +36,20 @@ type Network struct {
 	Subnet []string // TODO: use subnet type
 }
 
-type Disk struct {
-	DevName    string
-	FSType     string
-	FSUUID     uuid.UUID
-	Model      string
-	MountPoint []string
-	Name       string
-	Parent     string
-	Size       uint64
-	Type       string
-	Used       bool
-	Vendor     string
-}
-
 type Backend interface {
 	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error)
 	AcceptNode(node string, fingerprint string, ignored bool) (bool, error)
 	BootstrapNode(master string, node string, port uint, fingerprint string, username string, password string) (string, error)
 	GetNodes() (NodeList, error)
 	GetNodeID(node string) (uuid.UUID, error)
-	GetNodeDisk(node string) ([]Disk, error)
+	GetNodeDisk(node string) ([]models.Disk, error)
 	GetNodeNetwork(node string) (Network, error)
 	IgnoreNode(node string) (bool, error)
 	DisableService(node string, service string, stop bool) (bool, error)
 	EnableService(node string, service string, start bool) (bool, error)
 	NodeUp(node string) (bool, error)
 	AddMonitoringPlugin(pluginNames []string, nodes []string, master string, pluginMap map[string]map[string]string) (failed_nodes map[string]interface{}, err error)
-	UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (failed_nodes []string, err error)
+	UpdateMonitoringConfiguration(nodes []string, config []models.Plugin) (failed_nodes []string, err error)
 	RemoveMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	EnableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	DisableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)

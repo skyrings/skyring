@@ -1,21 +1,8 @@
 package monitoring
 
 import (
-	"encoding/json"
-	"fmt"
+	"github.com/skyrings/skyring-common/models"
 )
-
-type Plugin struct {
-	Name    string         `json:"name"`
-	Enable  bool           `json:"enable"`
-	Configs []PluginConfig `json:"configs"`
-}
-
-type PluginConfig struct {
-	Category string `json:"category"`
-	Type     string `json:"type"`
-	Value    string `json:"value"`
-}
 
 var (
 	SupportedConfigCategories = []string{
@@ -47,11 +34,11 @@ func Contains(key string, keys []string) bool {
 	return false
 }
 
-func (p Plugin) Valid() bool {
+func ValidPlugin(p models.Plugin) bool {
 	validPluginName := Contains(p.Name, SupportedMonitoringPlugins)
 	if validPluginName {
 		for _, config := range p.Configs {
-			if !config.Valid() {
+			if !ValidPluginConfig(config) {
 				return false
 			}
 		}
@@ -60,7 +47,7 @@ func (p Plugin) Valid() bool {
 	return false
 }
 
-func (c PluginConfig) ValidConfigType() bool {
+func ValidConfigType(c models.PluginConfig) bool {
 	switch c.Category {
 	case "threshold":
 		return c.Type != "" && Contains(c.Type, SupportedThresholdTypes)
@@ -68,15 +55,15 @@ func (c PluginConfig) ValidConfigType() bool {
 	return true
 }
 
-func (c PluginConfig) ValidConfigCategory() bool {
+func ValidConfigCategory(c models.PluginConfig) bool {
 	return Contains(c.Category, SupportedConfigCategories)
 }
 
-func (c PluginConfig) Valid() bool {
-	return c.ValidConfigCategory() && c.ValidConfigType()
+func ValidPluginConfig(c models.PluginConfig) bool {
+	return ValidConfigCategory(c) && ValidConfigType(c)
 }
 
-type collectd_config PluginConfig
+/*type collectd_config PluginConfig
 type collectd_plugin Plugin
 
 func (p *Plugin) UnmarshalJSON(data []byte) (err error) {
@@ -101,4 +88,4 @@ func (c *PluginConfig) UnmarshalJSON(data []byte) (err error) {
 	}
 	*c = PluginConfig(tConfig)
 	return nil
-}
+}*/

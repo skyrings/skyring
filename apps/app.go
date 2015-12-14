@@ -15,7 +15,7 @@ package app
 import (
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring-common/conf"
 	"net/http"
 )
 

@@ -1,8 +1,11 @@
 package monitoring
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/skyrings/skyring-common/models"
+)
 
-func UpdatePluginsConfigs(currentPlugins []Plugin, expectedPlugins []Plugin) ([]Plugin, error) {
+func UpdatePluginsConfigs(currentPlugins []models.Plugin, expectedPlugins []models.Plugin) ([]models.Plugin, error) {
 	var updated bool
 	newPluginExpected := true
 	for _, ePlugin := range expectedPlugins {
@@ -34,7 +37,7 @@ func UpdatePluginsConfigs(currentPlugins []Plugin, expectedPlugins []Plugin) ([]
 	return currentPlugins, nil
 }
 
-func GetPluginIndex(pluginName string, plugins []Plugin) int {
+func GetPluginIndex(pluginName string, plugins []models.Plugin) int {
 	for index, plugin := range plugins {
 		if plugin.Name == pluginName {
 			return index
@@ -43,7 +46,7 @@ func GetPluginIndex(pluginName string, plugins []Plugin) int {
 	return -1
 }
 
-func ToSaltPillarCompat(plugins []Plugin) (saltPillar map[string]map[string]string) {
+func ToSaltPillarCompat(plugins []models.Plugin) (saltPillar map[string]map[string]string) {
 	saltPillar = make(map[string]map[string]string)
 	var configMap map[string]string
 	for _, plugin := range plugins {

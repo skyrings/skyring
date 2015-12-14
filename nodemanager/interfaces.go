@@ -13,8 +13,7 @@ limitations under the License.
 package nodemanager
 
 import (
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/monitoring"
+	"github.com/skyrings/skyring-common/models"
 )
 
 type NodeManagerInterface interface {
@@ -26,10 +25,10 @@ type NodeManagerInterface interface {
 	SyncStorageDisks(node string) (bool, error)
 	RemoveNode(node string) (bool, error)
 	IgnoreNode(node string) (bool, error)
-	AddMonitoringPlugin(nodes []string, master string, plugin monitoring.Plugin) (failed_nodes map[string]interface{}, err error)
+	AddMonitoringPlugin(nodes []string, master string, plugin models.Plugin) (failed_nodes map[string]interface{}, err error)
 	RemoveMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	DisableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	EnableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
-	UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (failed_nodes []string, err error)
+	UpdateMonitoringConfiguration(nodes []string, config []models.Plugin) (failed_nodes []string, err error)
 	SetUpMonitoring(node string, master string) (map[string]interface{}, error)
 }
