@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_ed46b220",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_17c4263f",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_97abd688",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-26T10:51:58Z",
       "side": 1,
       "message": "Task integration?",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_634e3398",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_97abd688",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_018ad61a",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_77e2bad6",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_f7cdea5e",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2015-11-26T10:51:58Z",
       "side": 1,
       "message": "clusters/{cluster-id}/mon_plugins",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_e1c4fa60",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_f7cdea5e",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_01a3b6b2",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_17db461c",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_5704de7d",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2015-11-26T10:51:58Z",
       "side": 1,
       "message": "clusters/{cluster-id}/mon_plugins/{plugin-name}/disable",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_21a6f2c1",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_5704de7d",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_8196e64a",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "All changes on plugins are cluster-wide.\n\nDid you mean an option for setting one plugin at a time and another for multiple at once but why? I mean 1 is a case of many right? why 2 apis then?",
+      "parentUuid": "5ac4a560_97359648",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_b73a9234",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 1
@@ -132,6 +258,24 @@
       "writtenOn": "2015-11-26T10:51:58Z",
       "side": 1,
       "message": "clusters/{cluster-id}/mon_plugins/{plugin-name}\n\nAnothere DELETE required for deleting all the mon plugins for the cluster as\n\nDELETE\nclusters/{cluster-id}/mon_plugins",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_e19b1a70",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "May be in a follow up patch? Please...",
+      "parentUuid": "5ac4a560_b73a9234",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_c1a0dea1",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_d73e2e29",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_f73b2a36",
         "filename": "backend/backend.go",
         "patchSetId": 1
@@ -166,6 +328,24 @@
       "writtenOn": "2015-11-26T10:51:58Z",
       "side": 1,
       "message": "Remove \"collectd\" word from names. Rather call MonitoringPlugin(s)",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_41df6e3b",
+        "filename": "backend/backend.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_f73b2a36",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_4d3886a0",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_b711b2ae",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_371da2be",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 1
@@ -200,6 +398,24 @@
       "writtenOn": "2015-11-26T10:51:58Z",
       "side": 1,
       "message": "\"if master\" is sufficient I feel",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_6d3b829c",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_371da2be",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_cd4bb629",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_d76c6e39",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_57605e35",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 1
@@ -234,6 +468,24 @@
       "writtenOn": "2015-11-26T10:51:58Z",
       "side": 1,
       "message": "How do we know for which node it failed?",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_8f31f60d",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "From logs as in line 289",
+      "parentUuid": "5ac4a560_57605e35",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -257,6 +509,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_cf3beee9",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "From logs as in line 304",
+      "parentUuid": "5ac4a560_374be2b1",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_57c77e12",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 1
@@ -268,6 +538,24 @@
       "writtenOn": "2015-11-26T10:51:58Z",
       "side": 1,
       "message": "Same as above",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_0f25e6c1",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "From logs as in line 318",
+      "parentUuid": "5ac4a560_57c77e12",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -291,6 +579,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_2d518ad8",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_97d116d0",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_b7d612c4",
         "filename": "backend/salt/salt.go",
         "patchSetId": 1
@@ -302,6 +608,24 @@
       "writtenOn": "2015-11-26T10:51:58Z",
       "side": 1,
       "message": "Can we say something like []string{node} while calling the function?",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_e37243e2",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_b7d612c4",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -325,6 +649,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_237d1bb2",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_f7d7aabd",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_d7daaee8",
         "filename": "backend/salt/salt.go",
         "patchSetId": 1
@@ -336,6 +678,24 @@
       "writtenOn": "2015-11-26T10:51:58Z",
       "side": 1,
       "message": "Commented?",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_0382df93",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-14T17:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_d7daaee8",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
