@@ -40,12 +40,13 @@ const (
 )
 
 var (
-	configDir    string
-	logFile      string
-	logToStderr  bool
-	logLevel     string
-	providersDir string
-	eventSocket  string
+	configDir     string
+	logFile       string
+	logToStderr   bool
+	logLevel      string
+	providersDir  string
+	eventSocket   string
+	staticFileDir string
 )
 
 func main() {
@@ -88,6 +89,12 @@ func main() {
 			Value: DefaultLogLevel.String(),
 			Usage: "Set log level",
 		},
+		cli.StringFlag{
+			Name:   "static-file-dir, s",
+			Value:  "/usr/share/skyring/webapp",
+			Usage:  "Override default static file serve directory",
+			EnvVar: "SKYRING_STATICFILEDIR",
+		},
 	}
 
 	app.Before = func(c *cli.Context) error {
@@ -98,6 +105,7 @@ func main() {
 		logFile = c.String("log-file")
 		logLevel = c.String("log-level")
 		providersDir = c.String("providers-dir")
+		staticFileDir = c.String("static-file-dir")
 		return nil
 	}
 
@@ -158,7 +166,11 @@ func start() {
 	// Use negroni to add middleware.  Here we add the standard
 	// middlewares: Recovery, Logger and static file serve which come with
 	// Negroni
-	n := negroni.Classic()
+	n := negroni.New(
+		negroni.NewRecovery(),
+		negroni.NewLogger(),
+		negroni.NewStatic(http.Dir(staticFileDir)),
+	)
 
 	logger.Get().Info("Starting event listener")
 	go event.StartListener(eventSocket)
@@ -169,6 +181,9 @@ func start() {
 		conf.SystemConfig.Config.HttpPort = 8080
 	}
 
+	/*
+		TODO : This will be removed after porting all the existing things into newer scheme
+	*/
 	// Create DB session
 	if err := db.InitDBSession(conf.SystemConfig.DBConfig); err != nil {
 		logger.Get().Error("Unable to initialize DB")
@@ -179,8 +194,14 @@ func start() {
 		os.Exit(1)
 	}
 
+	//Initialize the DB provider
+	if err := application.InitializeDb(conf.SystemConfig.DBConfig); err != nil {
+		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
+		os.Exit(1)
+	}
+
 	//Initialize the auth provider
-	if err := application.InitializeAuth(conf.SystemConfig.Authentication, n); err != nil {
+	if err := application.InitializeAuth(conf.SystemConfig.Authentication); err != nil {
 		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
 		os.Exit(1)
 	}
@@ -188,6 +209,12 @@ func start() {
 	//Initialize the task manager
 	if err := application.InitializeTaskManager(); err != nil {
 		logger.Get().Error("Unable to initialize the task manager: %s", err)
+		os.Exit(1)
+	}
+
+	//Initialize the Defaults
+	if err := application.InitializeDefaults(); err != nil {
+		logger.Get().Error("Unable to initialize the Defaults: %s", err)
 		os.Exit(1)
 	}
 

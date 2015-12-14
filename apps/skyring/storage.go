@@ -83,7 +83,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 
 	// Validate storage target size info
 	if ok, err := valid_storage_size(request.Size); !ok || err != nil {
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid storage size: %s", request.Size))
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid storage size: %v", request.Size))
 		return
 	}
 
@@ -98,7 +98,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
 			&result)
 		if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
-			util.FailTask("Error creating pool", err, t)
+			util.FailTask("Error creating Storage", err, t)
 			return
 		} else {
 			// Update the master task id
@@ -125,14 +125,19 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				if providerTask.Completed {
-					t.UpdateStatus("Success")
-					t.Done()
+					if providerTask.Status == models.TASK_STATUS_SUCCESS {
+						t.UpdateStatus("Success")
+						t.Done(models.TASK_STATUS_SUCCESS)
+					} else if providerTask.Status == models.TASK_STATUS_FAILURE {
+						t.UpdateStatus("Failed")
+						t.Done(models.TASK_STATUS_FAILURE)
+					}
 					break
 				}
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run("CreateStorage", asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Storage: %s", request.Name), asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for create storage. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create storage")
 		return

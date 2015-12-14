@@ -16,9 +16,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/goincremental/negroni-sessions"
 	"github.com/mqu/openldap"
+	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/authprovider"
+	"github.com/skyrings/skyring/dbprovider"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
 	"golang.org/x/crypto/bcrypt"
@@ -45,7 +46,7 @@ type Role int
 // Authorizer structures contain the store of user session cookies a reference
 // to a backend storage system.
 type Authorizer struct {
-	backend          authprovider.AuthBackend
+	backend          dbprovider.DbInterface
 	ldapServer       string
 	port             int
 	connectionString string
@@ -137,12 +138,7 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 		logger.Get().Error("Unable to Unmarshall the data:%s", err)
 		return nil, err
 	}
-	//Create DB Backend
-	backend, err := authprovider.NewMongodbBackend()
-	if err != nil {
-		logger.Get().Error("Unable to initialize the DB backend for Ldapauthprovider:%s", err)
-		panic(err)
-	}
+	backend := skyring.GetDbProvider()
 	//Create the Provider
 	if provider, err := NewAuthorizer(backend,
 		providerCfg.LdapServer.Address,
@@ -158,7 +154,7 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 
 }
 
-func NewAuthorizer(backend authprovider.AuthBackend, address string, port int, base string,
+func NewAuthorizer(backend dbprovider.DbInterface, address string, port int, base string,
 	defaultRole string, roles map[string]Role) (Authorizer, error) {
 	var a Authorizer
 	a.backend = backend
@@ -184,9 +180,15 @@ func (a Authorizer) ProviderName() string {
 // message will be added to the session on failure with the reason.
 
 func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p string) error {
-	session := sessions.GetSession(req)
-	if sess := session.Get("username"); sess != nil {
-		logger.Get().Info("Already logged in")
+	session, err := skyring.Store.Get(req, "session-key")
+	if err != nil {
+		logger.Get().Error("Error Getting the: %v", err)
+		return err
+	}
+	if session.IsNew {
+		session.Values["username"] = u
+	} else {
+		logger.Get().Error("Already logged in")
 		return nil
 	}
 	errStrNotAllowed := "This user is not allowed. Status Disabled"
@@ -216,15 +218,26 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 		logger.Get().Error("User Doesnot Exists:", user)
 		return mkerror("User Doesnot Exists")
 	}
-	session.Set("username", u)
+	if err = session.Save(req, rw); err != nil {
+		logger.Get().Error("Error Saving the session: %v", err)
+		return err
+	}
 
 	return nil
 }
 
 // Logout clears an authentication session and add a logged out message.
 func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
-	session := sessions.GetSession(req)
-	session.Delete("username")
+	session, err := skyring.Store.Get(req, "session-key")
+	if err != nil {
+		logger.Get().Error("Error Getting the: %v", err)
+		return err
+	}
+	session.Options.MaxAge = -1
+	if err = session.Save(req, rw); err != nil {
+		logger.Get().Error("Error Saving the session: %v", err)
+		return err
+	}
 	return nil
 }
 
@@ -311,19 +324,18 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		}
 		return nil
 	}
-	if user.Type == authprovider.External {
-		user.Hash = nil
-
-		// Validate role
-		if user.Role == "" {
-			user.Role = a.defaultRole
-		} else {
-			if _, ok := a.roles[user.Role]; !ok {
-				logger.Get().Error("Non Existing Role")
-				return mkerror("non-existant role")
-			}
-		}
+	// Validate role
+	if user.Role == "" {
+		user.Role = a.defaultRole
 	} else {
+		if _, ok := a.roles[user.Role]; !ok {
+			logger.Get().Error("Non Existing Role")
+			return mkerror("non-existant role")
+		}
+	}
+	user.Hash = nil
+	if user.Type == authprovider.Internal {
+
 		if password == "" {
 			logger.Get().Error("no password given")
 			return mkerror("no password given")
@@ -336,15 +348,6 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		}
 		user.Hash = hash
 
-		// Validate role
-		if user.Role == "" {
-			user.Role = a.defaultRole
-		} else {
-			if _, ok := a.roles[user.Role]; !ok {
-				logger.Get().Error("Non Existing Role")
-				return mkerror("non-existant role")
-			}
-		}
 	}
 	err = a.backend.SaveUser(user)
 	if err != nil {
@@ -356,7 +359,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 
 // Update changes data for an existing user. Needs thought...
 //Just added for completeness. Will revisit later
-func (a Authorizer) UpdateUser(username string, p string, e string) error {
+func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error {
 
 	var (
 		hash    []byte
@@ -370,7 +373,8 @@ func (a Authorizer) UpdateUser(username string, p string, e string) error {
 	}
 
 	if user.Type == authprovider.Internal {
-		if p != "" {
+		if val, ok := m["password"]; ok {
+			p := val.(string)
 			hash, err = bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
 			if err != nil {
 				logger.Get().Error("Error saving the password:%s", err)
@@ -381,9 +385,15 @@ func (a Authorizer) UpdateUser(username string, p string, e string) error {
 		}
 
 	}
-	if e != "" {
+	if val, ok := m["email"]; ok {
+		e := val.(string)
 		user.Email = e
 		updated = true
+	}
+
+	if val, ok := m["notificationenabled"]; ok {
+		n := val.(bool)
+		user.NotificationEnabled = n
 	}
 
 	if updated {
@@ -415,11 +425,26 @@ func (a Authorizer) AuthorizeRole(rw http.ResponseWriter, req *http.Request, rol
 
 // CurrentUser returns the currently logged in user and a boolean validating
 // the information.
-func (a Authorizer) GetUser(u string) (user models.User, e error) {
+func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e error) {
 
 	// This should search and fetch the user name based on the given value
 	// and can also check whether the available users are already imported
 	// into the database or not.
+
+	//if username is me, get the currently loggedin user
+	if u == authprovider.CurrentUser {
+		session, err := skyring.Store.Get(req, "session-key")
+		if err != nil {
+			logger.Get().Error("Error Getting the: %v", err)
+			return user, err
+		}
+		if val, ok := session.Values["username"]; ok {
+			u = val.(string)
+		} else {
+			logger.Get().Error("Unable to identify the user from session")
+			return user, mkerror("Unable to identify the user from session")
+		}
+	}
 	user, e = a.backend.User(u)
 	if e != nil {
 		logger.Get().Error("Error retrieving the user:%s", e)

@@ -306,7 +306,7 @@ func (a *App) LoadRoutes() {
 		{
 			Name:        "GET_StorageProfiles",
 			Method:      "GET",
-			Pattern:     "storageprofiles/{storage-profile-id}",
+			Pattern:     "storageprofiles/{name}",
 			HandlerFunc: a.GET_StorageProfile,
 			Version:     1,
 		},

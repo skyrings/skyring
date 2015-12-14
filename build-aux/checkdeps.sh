@@ -2,10 +2,10 @@
 
 function check_golang_env()
 {
-    if [ -z "$GOROOT" ]; then
-        echo "ERROR: GOROOT environment variable is not set"
-        exit 1
-    fi
+    #if [ -z "$GOROOT" ]; then
+    #    echo "ERROR: GOROOT environment variable is not set"
+    #    exit 1
+    #fi
 
     if [ -z "$GOPATH" ]; then
         echo "ERROR: GOPATH environment variable is not set"

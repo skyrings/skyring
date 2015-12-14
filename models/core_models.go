@@ -67,13 +67,16 @@ type OperatingSystem struct {
 }
 
 type User struct {
-	Username string   `bson:"Username"`
-	Email    string   `bson:"Email"`
-	Hash     []byte   `bson:"Hash"`
-	Role     string   `bson:"Role"`
-	Groups   []string `bson:"Groups"`
-	Type     int      `bson:"Type"`
-	Status   bool     `bson:"Status"`
+	Username            string   `json:"username"`
+	Email               string   `json:"email"`
+	Hash                []byte   `json:"hash"`
+	Role                string   `json:"role"`
+	Groups              []string `json:"groups"`
+	Type                int      `json:"type"`
+	Status              bool     `json:"status"`
+	FirstName           string   `json:"firstname"`
+	LastName            string   `json:"lastname"`
+	NotificationEnabled bool     `json:"notificationenabled"`
 }
 
 type Cluster struct {
@@ -106,6 +109,7 @@ type StorageLogicalUnit struct {
 	StorageDeviceSize uint64            `json:"storagedevicesize"`
 	Status            string            `json:"status"`
 	Options           map[string]string `json:"options"`
+	StorageProfile    string            `json:"storageprofile"`
 }
 
 type Storage struct {
@@ -141,11 +145,15 @@ type Status struct {
 }
 
 type AppTask struct {
-	Id         uuid.UUID
-	ParentId   uuid.UUID
-	Started    bool
-	Completed  bool
-	StatusList []Status
+	Id         uuid.UUID         `json:"id"`
+	Name       string            `json:"name"`
+	ParentId   uuid.UUID         `json:"parentid"`
+	Started    bool              `json:"started"`
+	Completed  bool              `json:"completed"`
+	StatusList []Status          `json:"statuslist"`
+	Tag        map[string]string `json:"tag"`
+	SubTasks   []uuid.UUID       `json:"subtasks"`
+	Status     TaskStatus        `json:"status"`
 }
 
 type DiskProfile struct {
@@ -154,8 +162,7 @@ type DiskProfile struct {
 }
 
 type StorageProfile struct {
-	Id       uuid.UUID   `json:"id"`
 	Name     string      `json:"name"`
 	Rule     DiskProfile `json:"rule"`
-	Priority string      `json:"priority"`
+	Priority int         `json:"priority"`
 }

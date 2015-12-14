@@ -34,17 +34,18 @@ type Network struct {
 }
 
 type Disk struct {
-	DevName    string
-	FSType     string
-	FSUUID     uuid.UUID
-	Model      string
-	MountPoint []string
-	Name       string
-	Parent     string
-	Size       uint64
-	Type       string
-	Used       bool
-	Vendor     string
+	DevName        string
+	FSType         string
+	FSUUID         uuid.UUID
+	Model          string
+	MountPoint     []string
+	Name           string
+	Parent         string
+	Size           uint64
+	Type           string
+	Used           bool
+	Vendor         string
+	StorageProfile string
 }
 
 type Backend interface {

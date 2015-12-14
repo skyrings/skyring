@@ -13,7 +13,6 @@ limitations under the License.
 package app
 
 import (
-	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"net/http"
@@ -23,8 +22,10 @@ type Application interface {
 	SetRoutes(container *mux.Router) error
 	InitializeNodeManager(config conf.NodeManagerConfig) error
 	//Initialize the auth module
-	InitializeAuth(authCfg conf.AuthConfig, n *negroni.Negroni) error
+	InitializeAuth(authCfg conf.AuthConfig) error
 	//Middleware to check the request is authenticated
 	LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
 	InitializeTaskManager() error
+	InitializeDb(authCfg conf.AppDBConfig) error
+	InitializeDefaults() error
 }

@@ -17,6 +17,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
@@ -77,12 +78,13 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 		// Process the request
 		if err := addAndAcceptNode(w, request, t); err != nil {
 			t.UpdateStatus("Failed")
+			t.Done(models.TASK_STATUS_SUCCESS)
 		} else {
 			t.UpdateStatus("Success")
+			t.Done(models.TASK_STATUS_FAILURE)
 		}
-		t.Done()
 	}
-	if taskId, err := a.GetTaskManager().Run("addAndAcceptNode", asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Add and Accept Node: %s", request.Hostname), asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for addAndAcceptNode", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
@@ -130,12 +132,13 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 		// Process the request
 		if err := acceptNode(w, hostname, request.SaltFingerprint, t); err != nil {
 			t.UpdateStatus("Failed")
+			t.Done(models.TASK_STATUS_FAILURE)
 		} else {
 			t.UpdateStatus("Success")
+			t.Done(models.TASK_STATUS_SUCCESS)
 		}
-		t.Done()
 	}
-	if taskId, err := a.GetTaskManager().Run("AcceptNode", asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Accept Node: %s", hostname), asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for AcceptNode", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
@@ -151,6 +154,11 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task) error {
 
 	if node, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint); err == nil {
+		//Mark the storage profiles
+		t.UpdateStatus("Applying the storage profiles: %s", hostname)
+		if err := applyStorageProfiles(node); err != nil {
+			logger.Get().Error(fmt.Sprintf("Error applying storage profiles %v", err))
+		}
 		t.UpdateStatus("Adding the node to DB: %s", hostname)
 		if err = addStorageNodeToDB(w, *node); err != nil {
 			t.UpdateStatus("Unable to add the node to DB: %s", hostname)
@@ -175,6 +183,11 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 		request.SshFingerprint,
 		request.User,
 		request.Password); err == nil {
+		//Mark the storage profiles
+		t.UpdateStatus("Applying the storage profiles: %s", request.Hostname)
+		if err := applyStorageProfiles(node); err != nil {
+			logger.Get().Error(fmt.Sprintf("Error applying storage profiles %v", err))
+		}
 		t.UpdateStatus("Adding the node to DB: %s", request.Hostname)
 		if err = addStorageNodeToDB(w, *node); err != nil {
 			t.UpdateStatus("Unable to add the node to DB: %s", request.Hostname)
@@ -424,4 +437,18 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+}
+
+func applyStorageProfiles(node *models.Node) error {
+
+	/*
+		For the time being, puting it to the general bucket
+	*/
+	var disks []backend.Disk
+	for _, disk := range node.StorageDisks {
+		disk.StorageProfile = "general"
+		disks = append(disks, disk)
+	}
+	node.StorageDisks = disks
+	return nil
 }

@@ -28,7 +28,7 @@ var (
 	influxdbClient *influxdb.Client
 )
 
-func InitDBSession(dbconf conf.MongoDBConfig) error {
+func InitDBSession(dbconf conf.AppDBConfig) error {
 	var err error
 	session, err = mgo.DialWithInfo(&mgo.DialInfo{
 		Addrs:    []string{fmt.Sprintf("%s:%d", dbconf.Hostname, dbconf.Port)},

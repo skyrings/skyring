@@ -11,8 +11,6 @@ import:
   version: e95799a481bbcc3d01c2ad5178524cb8bec9f370
 - package: github.com/influxdb/influxdb
   version: 8fe2469c75edce4909c71f931332c7e74d3f08ea
-- package: github.com/goincremental/negroni-sessions
-  version: b07e2d18b97e3f627edaa67876c21fa23eba6a08
 - package: github.com/mqu/openldap
   version: 91bfc2150f6c4991335de476c800caf26a990324
 - package: github.com/natefinch/pie
@@ -29,3 +27,5 @@ import:
   version: beef0f4390813b96e8e68fd78570396d0f4751fc
 - package: gopkg.in/mgo.v2
   version: 4d04138ffef2791c479c0c8bbffc30b34081b8d9
+- package: github.com/kidstuff/mongostore
+  version: 256d65ac5b0e35e7c5ebb3f175c0bed1e5c2b253
