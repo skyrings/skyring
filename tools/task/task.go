@@ -130,7 +130,7 @@ func (t *Task) UpdateTaskCompleted(b bool, status models.TaskStatus) (bool, erro
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
-	if err := coll.Update(bson.M{"id": t.ID}, bson.M{"$set": bson.M{"completed": b, "status": status.String()}}); err != nil {
+	if err := coll.Update(bson.M{"id": t.ID}, bson.M{"$set": bson.M{"completed": b, "status": status}}); err != nil {
 		//logger.Get().Error("Error updating status of task: %v. error: %v", t.ID, err)
 		return false, err
 	}
