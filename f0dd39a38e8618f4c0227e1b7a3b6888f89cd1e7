@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_28e33834",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T06:31:19Z",
+      "side": 1,
+      "message": "This makes sure that the second command is executed only if the first one is successful.",
+      "revId": "f0dd39a38e8618f4c0227e1b7a3b6888f89cd1e7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
