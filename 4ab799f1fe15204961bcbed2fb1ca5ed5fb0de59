@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_a8ce68b2",
+        "filename": "utils/unit_converter.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T05:05:57Z",
+      "side": 1,
+      "message": "Do we really need a field for order as this is something which is going to be fixed for a UNIT. Say for MibiBytes its alway going to be 3 compared to Bytes.",
+      "revId": "4ab799f1fe15204961bcbed2fb1ca5ed5fb0de59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
