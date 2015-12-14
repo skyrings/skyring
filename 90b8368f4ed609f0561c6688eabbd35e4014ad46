@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_48d15456",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T04:41:29Z",
+      "side": 1,
+      "message": "%s/websocket integration to push events to UI/skyring: websocket integration to push events to UI/g",
+      "revId": "90b8368f4ed609f0561c6688eabbd35e4014ad46",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
