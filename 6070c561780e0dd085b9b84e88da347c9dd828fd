@@ -22,6 +22,24 @@
       "revId": "6070c561780e0dd085b9b84e88da347c9dd828fd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_a8f748f4",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-14T04:12:01Z",
+      "side": 1,
+      "message": "Will add the check and then stop the service.",
+      "parentUuid": "5ac4a560_6a860867",
+      "revId": "6070c561780e0dd085b9b84e88da347c9dd828fd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
