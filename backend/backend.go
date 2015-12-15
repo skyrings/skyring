@@ -159,4 +159,9 @@ type Backend interface {
 	IgnoreNode(node string) (bool, error)
 	DisableService(node string, service string, stop bool) (bool, error)
 	EnableService(node string, service string, start bool) (bool, error)
+	AddMonitoringPlugin(pluginNames []string, nodes []string, master string, pluginMap map[string]map[string]string) (success bool, err error)
+	RemoveMonitoringPlugin(nodes []string, pluginName string) (success bool, err error)
+	UpdateMonitoringConfiguration(nodes []string, config []Plugin) (status bool, err error)
+	EnableMonitoringPlugin(nodes []string, pluginName string) (success bool, err error)
+	DisableMonitoringPlugin(nodes []string, pluginName string) (success bool, err error)
 }

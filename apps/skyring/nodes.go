@@ -158,6 +158,11 @@ func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *t
 			t.UpdateStatus("Unable to add the node to DB: %s", hostname)
 			return err
 		}
+		t.UpdateStatus("Setting up collectd on node: %s", hostname)
+		if _, configureError := GetCoreNodeManager().SetUpMonitoring(hostname, curr_hostname); configureError != nil {
+			t.UpdateStatus("Unable to setup collectd on node: %s", hostname)
+			return configureError
+		}
 	} else {
 		logger.Get().Critical("Accepting the node failed: ", hostname)
 		t.UpdateStatus("Unable to Accept the node: %s", hostname)
@@ -181,6 +186,11 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 		if err = addStorageNodeToDB(w, *node); err != nil {
 			t.UpdateStatus("Unable to add the node to DB: %s", request.Hostname)
 			return err
+		}
+		t.UpdateStatus("Setting up collectd on node: %s", request.Hostname)
+		if _, configureError := GetCoreNodeManager().SetUpMonitoring(request.Hostname, curr_hostname); configureError != nil {
+			t.UpdateStatus("Unable to setup collectd on node: %s", request.Hostname)
+			return configureError
 		}
 	} else {
 		logger.Get().Critical("Bootstrapping the node failed: ", request.Hostname)

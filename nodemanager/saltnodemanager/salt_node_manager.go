@@ -15,6 +15,7 @@ package saltnodemanager
 import (
 	"errors"
 	"fmt"
+	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/backend/salt"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
@@ -212,5 +213,47 @@ func (a SaltNodeManager) IgnoreNode(node string) (bool, error) {
 		return false, err
 	}
 
+	return true, nil
+}
+
+func (a SaltNodeManager) SetUpMonitoring(node string, master string) (success bool, err error) {
+	if ok, err := salt_backend.AddMonitoringPlugin(backend.SupportedMonitoringPlugins, []string{node}, master, backend.ToSaltPillarCompat(backend.GetDefaultThresholdValues())); err != nil || !ok {
+		return false, err
+	}
+	return true, nil
+}
+
+func (a SaltNodeManager) UpdateMonitoringConfiguration(nodes []string, config []backend.Plugin) (bool, error) {
+	if ok, err := salt_backend.UpdateMonitoringConfiguration(nodes, config); err != nil || !ok {
+		return false, err
+	}
+	return true, nil
+}
+
+func (a SaltNodeManager) EnableMonitoringPlugin(nodes []string, pluginName string) (success bool, err error) {
+	if ok, err := salt_backend.EnableMonitoringPlugin(nodes, pluginName); err != nil || !ok {
+		return false, err
+	}
+	return true, nil
+}
+
+func (a SaltNodeManager) DisableMonitoringPlugin(nodes []string, pluginName string) (success bool, err error) {
+	if ok, err := salt_backend.DisableMonitoringPlugin(nodes, pluginName); err != nil || !ok {
+		return false, err
+	}
+	return true, nil
+}
+
+func (a SaltNodeManager) RemoveMonitoringPlugin(nodes []string, pluginName string) (success bool, err error) {
+	if ok, err := salt_backend.RemoveMonitoringPlugin(nodes, pluginName); err != nil || !ok {
+		return false, err
+	}
+	return true, nil
+}
+
+func (a SaltNodeManager) AddMonitoringPlugin(nodes []string, master string, plugin backend.Plugin) (success bool, err error) {
+	if ok, err := salt_backend.AddMonitoringPlugin([]string{plugin.Name}, nodes, "", backend.ToSaltPillarCompat([]backend.Plugin{plugin})); err != nil || !ok {
+		return false, err
+	}
 	return true, nil
 }
