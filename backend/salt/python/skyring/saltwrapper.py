@@ -16,7 +16,7 @@
 import logging
 from functools import wraps
 import uuid
-
+from sets import Set
 import salt
 from salt import wheel, client, key, states, modules
 import salt.config
@@ -113,7 +113,7 @@ def GetNodeID(node):
     returns structure
     {"nodename": "uuidstring", ...}
     '''
-    if type(node) is list:
+    if isinstance(node, list):
         minions = node
     else:
         minions = [node]
@@ -132,7 +132,7 @@ def GetNodeNetwork(node):
                   "IPv6": ["ipv6address", ...],
                   "Subnet": ["subnet", ...]}, ...}
     '''
-    if type(node) is list:
+    if isinstance(node, list):
         minions = node
     else:
         minions = [node]
@@ -168,7 +168,7 @@ def GetNodeDisk(node):
                   "Vendor":     "string"}, ...], ...}
     '''
 
-    if type(node) is list:
+    if isinstance(node, list):
         minions = node
     else:
         minions = [node]
@@ -221,16 +221,16 @@ def GetNodeDisk(node):
                 # TODO: log the error
                 u = [0] * 16
             rv[node].append({"DevName": disk["KNAME"],
-                              "FSType": disk["FSTYPE"],
-                              "FSUUID": u,
-                              "Model": disk["MODEL"],
-                              "MountPoint": [disk["MOUNTPOINT"]],
-                              "Name": disk["NAME"],
-                              "Parent": disk["PKNAME"],
-                              "Size": long(disk["SIZE"]),
-                              "Type": disk["TYPE"],
-                              "Used": disk["INUSE"],
-                              "Vendor": disk.get("VENDOR", "")})
+                             "FSType": disk["FSTYPE"],
+                             "FSUUID": u,
+                             "Model": disk["MODEL"],
+                             "MountPoint": [disk["MOUNTPOINT"]],
+                             "Name": disk["NAME"],
+                             "Parent": disk["PKNAME"],
+                             "Size": long(disk["SIZE"]),
+                             "Type": disk["TYPE"],
+                             "Used": disk["INUSE"],
+                             "Vendor": disk.get("VENDOR", "")})
     return rv
 
 
@@ -253,3 +253,145 @@ def EnableService(node, service, start=False):
 def NodeUp(node):
     out = local.cmd(node, 'cmd.run', ['pwd'])
     return True if out else False
+
+
+def _get_state_result(out):
+    failed_minions = {}
+    for minion, v in out.iteritems():
+        failed_results = {}
+        for id, res in v.iteritems():
+            if not res['result']:
+                failed_results.update({id: res})
+        if not v:
+            failed_minions[minion] = {}
+        if failed_results:
+            failed_minions[minion] = failed_results
+    return failed_minions
+
+
+def run_state(tgts, state, *args, **kwargs):
+    out = local.cmd(
+        tgts,
+        'state.sls',
+        [state],
+        expr_form='list',
+        *args,
+        **kwargs)
+    return _get_state_result(out)
+
+
+# Monitoring Section
+monitoring_root_path = '/etc/collectd.d/'
+monitoring_disabled_root_path = '/etc/disabled_collectd.d/'
+
+
+threshold_type_map = {"warning": "WarningMax", "critical": "FailureMax"}
+
+
+def AddMonitoringPlugin(plugin_list, nodes, master=None, configs=None):
+    state_list = ''
+    no_of_plugins = len(plugin_list)
+    for index in range(no_of_plugins):
+        state_list += ('collectd.' + plugin_list[index])
+        if index < no_of_plugins - 1:
+            state_list += ","
+    plugin_thresholds = {}
+    for plugin, value in configs.iteritems():
+        thresholds = {}
+        for threshold_type, threshold in value.iteritems():
+            thresholds[threshold_type_map.get(threshold_type)] = threshold
+        plugin_thresholds[plugin] = thresholds
+    dict = {}
+    if master:
+        dict["master_name"] = master
+    if thresholds:
+        dict["thresholds"] = plugin_thresholds
+    pillar = {"collectd": dict}
+    return run_state(nodes, state_list, kwarg={'pillar': pillar})
+
+
+def DisableMonitoringPlugin(nodes, pluginName):
+    failed_minions = {}
+    source_file = monitoring_root_path + pluginName + "*"
+    destination = monitoring_disabled_root_path
+    local.cmd(nodes, "cmd.run", ["mkdir -p " + destination], expr_form='list')
+    out = local.cmd(
+        nodes, "cmd.run", [
+            "mv " + source_file + " " + destination], expr_form='list')
+    for nodeName, message in out.iteritems():
+        if out.get(nodeName) != '':
+            log.error(
+                'Failed to disable collectd plugin %s because %s on %s' %
+                (pluginName, out.get(nodeName), nodeName))
+            failed_minions[nodeName] = out.get(nodeName)
+    if failed_minions:
+        return failed_minions
+    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+    for node, restartStatus in out.iteritems():
+        if not restartStatus:
+            log.error("Failed to restart collectd on node %s after disabling the plugin %s" %(node, pluginName))
+            failed_minions[node] = "Failed to restart collectd"
+    return failed_minions
+
+
+def EnableMonitoringPlugin(nodes, pluginName):
+    failed_minions = {}
+    source_file = monitoring_disabled_root_path + pluginName + '.conf'
+    destination = monitoring_root_path
+    out = local.cmd(
+        nodes, "cmd.run", [
+            "mv " + source_file + " " + destination], expr_form='list')
+    for nodeName, message in out.iteritems():
+        if out.get(nodeName) != '':
+            log.error(
+                'Failed to enable collectd plugin %s because %s on %s' %
+                (pluginName, out.get(nodeName), nodeName))
+            failed_minions[nodeName] = out.get(nodeName)
+    if failed_minions:
+        return failed_minions
+    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+    for node, restartStatus in out.iteritems():
+        if not restartStatus:
+            log.error("Failed to restart collectd on node %s after enabling the plugin %s" %(node, pluginName))
+            failed_minions[node] = "Failed to restart collectd"
+    return failed_minions
+
+
+def RemoveMonitoringPlugin(nodes, pluginName):
+    failed_minions = {}
+    source_file = monitoring_root_path + pluginName + "*"
+    out = local.cmd(
+        nodes, "cmd.run", [
+            "rm -fr " + source_file], expr_form='list')
+    for nodeName, message in out.iteritems():
+        if out.get(nodeName) != '':
+            log.error(
+                'Failed to remove collectd plugin %s because %s on %s' %
+                (pluginName, out.get(nodeName), nodeName))
+            failed_minions[nodeName] = out.get(nodeName)
+    if failed_minions :
+        return failed_minions
+    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+    for node, restartStatus in out.iteritems():
+        if not restartStatus:
+            log.error("Failed to restart collectd on node %s after removing the plugin %s" %(node, pluginName))
+            failed_minions[node] = "Failed to restart collectd"
+    return failed_minions
+
+
+def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict):
+    failed_minions = []
+    for key, value in plugin_threshold_dict.iteritems():
+        path = monitoring_root_path + key + '.conf'
+        for threshold_type, threshold in value.iteritems():
+            pattern_type = threshold_type_map.get(threshold_type)
+            pattern = pattern_type + " " + "[0-9]*"
+            repl = pattern_type + " " + str(threshold)
+            out = local.cmd(nodes, "file.replace", expr_form='list', kwarg={'path': path, 'pattern': pattern, 'repl': repl})
+    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+    for node, restartStatus in out.iteritems():
+        if not restartStatus:
+            log.error("Failed to restart collectd on node %s" %(node))
+            failed_minions.append(node)
+    return failed_minions
+
