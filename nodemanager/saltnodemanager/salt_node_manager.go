@@ -20,6 +20,7 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/nodemanager"
 	"github.com/skyrings/skyring/tools/logger"
 	"gopkg.in/mgo.v2/bson"
@@ -222,5 +223,48 @@ func (a SaltNodeManager) IgnoreNode(node string) (bool, error) {
 		return false, err
 	}
 
+	return true, nil
+}
+
+func (a SaltNodeManager) SetUpMonitoring(node string, master string) (success bool, err error) {
+	// The plugins to be setup includes the editable plugins and also the write plugin
+	if ok, err := salt_backend.AddMonitoringPlugin(append(monitoring.SupportedMonitoringPlugins, monitoring.MonitoringWritePlugin), []string{node}, master, monitoring.ToSaltPillarCompat(monitoring.GetDefaultThresholdValues())); err != nil || !ok {
+		return false, err
+	}
+	return true, nil
+}
+
+func (a SaltNodeManager) UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (bool, error) {
+	if ok, err := salt_backend.UpdateMonitoringConfiguration(nodes, config); err != nil || !ok {
+		return false, err
+	}
+	return true, nil
+}
+
+func (a SaltNodeManager) EnableMonitoringPlugin(nodes []string, pluginName string) (success bool, err error) {
+	if ok, err := salt_backend.EnableMonitoringPlugin(nodes, pluginName); err != nil || !ok {
+		return false, err
+	}
+	return true, nil
+}
+
+func (a SaltNodeManager) DisableMonitoringPlugin(nodes []string, pluginName string) (success bool, err error) {
+	if ok, err := salt_backend.DisableMonitoringPlugin(nodes, pluginName); err != nil || !ok {
+		return false, err
+	}
+	return true, nil
+}
+
+func (a SaltNodeManager) RemoveMonitoringPlugin(nodes []string, pluginName string) (success bool, err error) {
+	if ok, err := salt_backend.RemoveMonitoringPlugin(nodes, pluginName); err != nil || !ok {
+		return false, err
+	}
+	return true, nil
+}
+
+func (a SaltNodeManager) AddMonitoringPlugin(nodes []string, master string, plugin monitoring.Plugin) (success bool, err error) {
+	if ok, err := salt_backend.AddMonitoringPlugin([]string{plugin.Name}, nodes, "", monitoring.ToSaltPillarCompat([]monitoring.Plugin{plugin})); err != nil || !ok {
+		return false, err
+	}
 	return true, nil
 }

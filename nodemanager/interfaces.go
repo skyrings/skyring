@@ -14,6 +14,7 @@ package nodemanager
 
 import (
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/monitoring"
 )
 
 type NodeManagerInterface interface {
@@ -25,4 +26,10 @@ type NodeManagerInterface interface {
 	SyncStorageDisks(node string) (bool, error)
 	RemoveNode(node string) (bool, error)
 	IgnoreNode(node string) (bool, error)
+	AddMonitoringPlugin(nodes []string, master string, plugin monitoring.Plugin) (success bool, err error)
+	RemoveMonitoringPlugin(nodes []string, pluginName string) (success bool, err error)
+	DisableMonitoringPlugin(nodes []string, pluginName string) (success bool, err error)
+	EnableMonitoringPlugin(nodes []string, pluginName string) (success bool, err error)
+	UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (bool, error)
+	SetUpMonitoring(node string, master string) (success bool, err error)
 }
