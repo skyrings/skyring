@@ -16,6 +16,7 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/tools/task"
 	"net/http"
 )
 
@@ -28,4 +29,5 @@ type Application interface {
 	LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
 	InitializeTaskManager() error
 	SyncClusterDetails()
+	GetTaskManager() *task.Manager
 }
