@@ -189,12 +189,14 @@ type TaskStatus int
 const (
 	TASK_STATUS_NONE = iota
 	TASK_STATUS_SUCCESS
+	TASK_STATUS_TIMED_OUT
 	TASK_STATUS_FAILURE
 )
 
 var TaskStatuses = [...]string{
 	"none",
 	"success",
+	"timedout",
 	"failed",
 }
 

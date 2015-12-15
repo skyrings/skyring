@@ -84,113 +84,128 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("Started the task for cluster creation: %v", t.ID)
-
-		nodes, err := getClusterNodesFromRequest(request.Nodes)
-		if err != nil {
-			util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %s", request.Name), err, t)
-			return
-		}
-		appLock, err := lockNodes(nodes, "POST_Clusters")
-		if err != nil {
-			util.FailTask("Failed to acquire lock", err, t)
-			return
-		}
-		defer a.GetLockManager().ReleaseLock(*appLock)
-		// Get the specific provider and invoke the method
-		provider := a.getProviderFromClusterType(request.Type)
-		if provider == nil {
-			util.FailTask("", errors.New(fmt.Sprintf("Error getting provider for cluster: %s", request.Name)), t)
-			return
-		}
-		err = provider.Client.Call(fmt.Sprintf("%s.%s",
-			provider.Name, cluster_post_functions["create"]),
-			models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body},
-			&result)
-		if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
-			util.FailTask(fmt.Sprintf("Error creating cluster: %s", request.Name), err, t)
-			return
-		} else {
-			// Update the master task id
-			providerTaskId, err = uuid.Parse(result.Data.RequestId)
-			if err != nil {
-				util.FailTask(fmt.Sprintf("Error parsing provider task id while creating cluster: %s", request.Name), err, t)
+		for {
+			select {
+			case <-t.StopCh:
 				return
-			}
-			t.UpdateStatus("Adding sub task")
-			if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
-				util.FailTask(fmt.Sprintf("Error adding sub task while creating cluster: %s", request.Name), err, t)
-				return
-			}
+			default:
+				t.UpdateStatus("Started the task for cluster creation: %v", t.ID)
 
-			// Check for provider task to complete and update the disk info
-			for {
-				time.Sleep(2 * time.Second)
-				sessionCopy := db.GetDatastore().Copy()
-				defer sessionCopy.Close()
-				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
-				var providerTask models.AppTask
-				if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
-					util.FailTask(fmt.Sprintf("Error getting sub task status while creating cluster: %s", request.Name), err, t)
+				nodes, err := getClusterNodesFromRequest(request.Nodes)
+				if err != nil {
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %s", request.Name), err, t)
 					return
 				}
-				if providerTask.Completed {
-					var monitoringConfigured bool = true
-					if providerTask.Status == models.TASK_STATUS_SUCCESS {
-						// Check if monitoring configuration passed and update them accordingly
-						if reflect.ValueOf(request.MonitoringPlugins).IsValid() && len(request.MonitoringPlugins) != 0 {
-							var nodes []string
-							nodesMap, nodesFetchError := getNodes(request.Nodes)
-							if nodesFetchError == nil {
-								for _, node := range nodesMap {
-									nodes = append(nodes, node.Hostname)
-								}
-								t.UpdateStatus("Updating the monitoring configuration on all nodes in the cluster")
-								if updateFailedNodes, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); updateError != nil || len(updateFailedNodes) != 0 {
-									monitoringConfigured = false
-									t.UpdateStatus("Failed to update the monitoring configuration")
-									logger.Get().Error("Failed to update the monitoring configuration on: %v for cluster: %s", updateFailedNodes, request.Name)
-								}
-							} else {
-								t.UpdateStatus("Error getting node details")
-								logger.Get().Error("Error getting node details while update monitoring configuration for cluster: %s. error: %v", request.Name, nodesFetchError)
-							}
-						}
-						if request.MonitoringPlugins == nil || len(request.MonitoringPlugins) == 0 {
-							request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
-						}
-						if !monitoringConfigured {
-							// If configuring the new thresholds failed update to db, the default thresholds created during accept node
-							request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
-						}
-						// Udate the thresholds to db
-						t.UpdateStatus("Updating configuration to db")
-						if dbError := updatePluginsInDb(bson.M{"name": request.Name}, request.MonitoringPlugins); dbError != nil {
-							t.UpdateStatus("Failed with error %s", dbError.Error())
-							logger.Get().Error("Failed to update plugins to db: %v for cluster: %s", dbError, request.Name)
-						} else {
-							t.UpdateStatus("Updated monitoring configuration to db")
-						}
-						t.UpdateStatus("Starting disk sync")
-						if err := syncStorageDisks(request.Nodes); err != nil {
-							t.UpdateStatus("Failed")
-							t.Done(models.TASK_STATUS_FAILURE)
-						} else {
-							t.UpdateStatus("Success")
-							t.Done(models.TASK_STATUS_SUCCESS)
-						}
-					} else if providerTask.Status == models.TASK_STATUS_FAILURE {
-						t.UpdateStatus("Failed")
-						t.Done(models.TASK_STATUS_FAILURE)
+				appLock, err := lockNodes(nodes, "POST_Clusters")
+				if err != nil {
+					util.FailTask("Failed to acquire lock", err, t)
+					return
+				}
+				defer a.GetLockManager().ReleaseLock(*appLock)
+				// Get the specific provider and invoke the method
+				provider := a.getProviderFromClusterType(request.Type)
+				if provider == nil {
+					util.FailTask("", errors.New(fmt.Sprintf("Error getting provider for cluster: %s", request.Name)), t)
+					return
+				}
+				err = provider.Client.Call(fmt.Sprintf("%s.%s",
+					provider.Name, cluster_post_functions["create"]),
+					models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body},
+					&result)
+				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+					util.FailTask(fmt.Sprintf("Error creating cluster: %s", request.Name), err, t)
+					return
+				} else {
+					// Update the master task id
+					providerTaskId, err = uuid.Parse(result.Data.RequestId)
+					if err != nil {
+						util.FailTask(fmt.Sprintf("Error parsing provider task id while creating cluster: %s", request.Name), err, t)
+						return
 					}
-					cluster, _ = cluster_exists("name", request.Name)
-					ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
-					break
+					t.UpdateStatus("Adding sub task")
+					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+						util.FailTask(fmt.Sprintf("Error adding sub task while creating cluster: %s", request.Name), err, t)
+						return
+					}
+
+					// Check for provider task to complete and update the disk info
+					for {
+						if <-t.StopCh {
+							return
+						}
+						time.Sleep(2 * time.Second)
+						sessionCopy := db.GetDatastore().Copy()
+						defer sessionCopy.Close()
+						coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+						var providerTask models.AppTask
+						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+							util.FailTask(fmt.Sprintf("Error getting sub task status while creating cluster: %s", request.Name), err, t)
+							return
+						}
+						if providerTask.Completed {
+							var monitoringConfigured bool = true
+							if providerTask.Status == models.TASK_STATUS_SUCCESS {
+								// Check if monitoring configuration passed and update them accordingly
+								if reflect.ValueOf(request.MonitoringPlugins).IsValid() && len(request.MonitoringPlugins) != 0 {
+									var nodes []string
+									nodesMap, nodesFetchError := getNodes(request.Nodes)
+									if nodesFetchError == nil {
+										for _, node := range nodesMap {
+											nodes = append(nodes, node.Hostname)
+										}
+										t.UpdateStatus("Updating the monitoring configuration on all nodes in the cluster")
+										if updateFailedNodes, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); updateError != nil || len(updateFailedNodes) != 0 {
+											monitoringConfigured = false
+											t.UpdateStatus("Failed to update the monitoring configuration")
+											logger.Get().Error("Failed to update the monitoring configuration on: %v for cluster: %s", updateFailedNodes, request.Name)
+										}
+									} else {
+										t.UpdateStatus("Error getting node details")
+										logger.Get().Error("Error getting node details while update monitoring configuration for cluster: %s. error: %v", request.Name, nodesFetchError)
+									}
+								}
+								if request.MonitoringPlugins == nil || len(request.MonitoringPlugins) == 0 {
+									request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
+								}
+								if !monitoringConfigured {
+									// If configuring the new thresholds failed update to db, the default thresholds created during accept node
+									request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
+								}
+								// Udate the thresholds to db
+								t.UpdateStatus("Updating configuration to db")
+								if dbError := updatePluginsInDb(bson.M{"name": request.Name}, request.MonitoringPlugins); dbError != nil {
+									t.UpdateStatus("Failed with error %s", dbError.Error())
+									logger.Get().Error("Failed to update plugins to db: %v for cluster: %s", dbError, request.Name)
+								} else {
+									t.UpdateStatus("Updated monitoring configuration to db")
+								}
+								if providerTask.Completed {
+									if providerTask.Status == models.TASK_STATUS_SUCCESS {
+										t.UpdateStatus("Starting disk sync")
+										if err := syncStorageDisks(request.Nodes); err != nil {
+											t.UpdateStatus("Failed")
+											t.Done(models.TASK_STATUS_FAILURE)
+										} else {
+											t.UpdateStatus("Success")
+											t.Done(models.TASK_STATUS_SUCCESS)
+										}
+									} else if providerTask.Status == models.TASK_STATUS_FAILURE {
+										t.UpdateStatus("Failed")
+										t.Done(models.TASK_STATUS_FAILURE)
+									}
+									break
+								}
+							}
+							cluster, _ = cluster_exists("name", request.Name)
+							ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
+							break
+						}
+					}
 				}
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for creating cluster: %s. error: %v", request.Name, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create cluster")
 		return
@@ -222,46 +237,53 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	asyncTask := func(t *task.Task) {
-		cluster_node_names, nodesFetchError := getNodesInCluster(cluster_id)
-		t.UpdateStatus("Started task to add the monitoring plugin : %v", t.ID)
-
-		nodes, err := getClusterNodesById(cluster_id)
-		if err != nil {
-			util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
-			return
-		}
-		appLock, err := lockNodes(nodes, "POST_AddMonitoringPlugin")
-		if err != nil {
-			util.FailTask("Failed to acquire lock", err, t)
-			return
-		}
-		defer a.GetLockManager().ReleaseLock(*appLock)
-
-		if nodesFetchError == nil {
-			if addNodeWiseErrors, addError := GetCoreNodeManager().AddMonitoringPlugin(cluster_node_names, "", request); addError != nil || len(addNodeWiseErrors) != 0 {
-				util.FailTask(fmt.Sprintf("Failed to add monitoring configuration for cluster: %v", *cluster_id), fmt.Errorf("%v", addNodeWiseErrors), t)
+		for {
+			select {
+			case <-t.StopCh:
 				return
+			default:
+				cluster_node_names, nodesFetchError := getNodesInCluster(cluster_id)
+				t.UpdateStatus("Started task to add the monitoring plugin : %v", t.ID)
+
+				nodes, err := getClusterNodesById(cluster_id)
+				if err != nil {
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
+					return
+				}
+				appLock, err := lockNodes(nodes, "POST_AddMonitoringPlugin")
+				if err != nil {
+					util.FailTask("Failed to acquire lock", err, t)
+					return
+				}
+				defer a.GetLockManager().ReleaseLock(*appLock)
+
+				if nodesFetchError == nil {
+					if addNodeWiseErrors, addError := GetCoreNodeManager().AddMonitoringPlugin(cluster_node_names, "", request); addError != nil || len(addNodeWiseErrors) != 0 {
+						util.FailTask(fmt.Sprintf("Failed to add monitoring configuration for cluster: %v", *cluster_id), fmt.Errorf("%v", addNodeWiseErrors), t)
+						return
+					}
+				} else {
+					util.FailTask(fmt.Sprintf("Failed to add monitoring configuration for cluster: %v", *cluster_id), nodesFetchError, t)
+					return
+				}
+				cluster, clusterFetchErr := getCluster(cluster_id)
+				if clusterFetchErr != nil {
+					util.FailTask(fmt.Sprintf("Failed to add monitoring configuration for cluster: %v", *cluster_id), clusterFetchErr, t)
+					return
+				}
+				request.Enable = true
+				updatedPlugins := append(cluster.MonitoringPlugins, request)
+				t.UpdateStatus("Updating the plugins to db")
+				if dbError := updatePluginsInDb(bson.M{"clusterid": cluster_id}, updatedPlugins); dbError != nil {
+					util.FailTask(fmt.Sprintf("Failed to add monitoring configuration for cluster: %v", *cluster_id), dbError, t)
+					return
+				}
+				t.UpdateStatus("Success")
+				t.Done(models.TASK_STATUS_SUCCESS)
 			}
-		} else {
-			util.FailTask(fmt.Sprintf("Failed to add monitoring configuration for cluster: %v", *cluster_id), nodesFetchError, t)
-			return
 		}
-		cluster, clusterFetchErr := getCluster(cluster_id)
-		if clusterFetchErr != nil {
-			util.FailTask(fmt.Sprintf("Failed to add monitoring configuration for cluster: %v", *cluster_id), clusterFetchErr, t)
-			return
-		}
-		request.Enable = true
-		updatedPlugins := append(cluster.MonitoringPlugins, request)
-		t.UpdateStatus("Updating the plugins to db")
-		if dbError := updatePluginsInDb(bson.M{"clusterid": cluster_id}, updatedPlugins); dbError != nil {
-			util.FailTask(fmt.Sprintf("Failed to add monitoring configuration for cluster: %v", *cluster_id), dbError, t)
-			return
-		}
-		t.UpdateStatus("Success")
-		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for adding monitoring plugin for cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for add monitoring plugin")
 		return
@@ -305,43 +327,51 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 			cluster_node_names, err := getNodesInCluster(cluster_id_uuid)
 			if err == nil {
 				asyncTask := func(t *task.Task) {
-					t.UpdateStatus("Started task to update monitoring plugins configuration : %v", t.ID)
-					var updatedPlugins []monitoring.Plugin
-					var pluginUpdateError error
-					cluster, clusterFetchErr := getCluster(cluster_id_uuid)
-					if clusterFetchErr != nil {
-						util.FailTask(fmt.Sprintf("Failed to update thresholds for cluster: %v", *cluster_id_uuid), clusterFetchErr, t)
-						return
-					}
-					if updatedPlugins, pluginUpdateError = monitoring.UpdatePluginsConfigs(cluster.MonitoringPlugins, request); pluginUpdateError != nil {
-						util.FailTask(fmt.Sprintf("Failed to update thresholds for cluster: %v", *cluster_id_uuid), pluginUpdateError, t)
-						return
-					}
-					nodes, err := getClusterNodesById(cluster_id_uuid)
-					if err != nil {
-						util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id_uuid), err, t)
-						return
-					}
-					appLock, err := lockNodes(nodes, "PUT_Thresholds")
-					if err != nil {
-						util.FailTask("Failed to acquire lock", err, t)
-						return
-					}
-					defer a.GetLockManager().ReleaseLock(*appLock)
+					for {
+						select {
+						case <-t.StopCh:
+							return
+						default:
+							t.UpdateStatus("Started task to update monitoring plugins configuration : %v", t.ID)
+							var updatedPlugins []monitoring.Plugin
+							var pluginUpdateError error
+							cluster, clusterFetchErr := getCluster(cluster_id_uuid)
+							if clusterFetchErr != nil {
+								util.FailTask(fmt.Sprintf("Failed to update thresholds for cluster: %v", *cluster_id_uuid), clusterFetchErr, t)
+								return
+							}
+							if updatedPlugins, pluginUpdateError = monitoring.UpdatePluginsConfigs(cluster.MonitoringPlugins, request); pluginUpdateError != nil {
+								util.FailTask(fmt.Sprintf("Failed to update thresholds for cluster: %v", *cluster_id_uuid), pluginUpdateError, t)
+								return
+							}
+							nodes, err := getClusterNodesById(cluster_id_uuid)
+							if err != nil {
+								util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id_uuid), err, t)
+								return
+							}
+							appLock, err := lockNodes(nodes, "PUT_Thresholds")
+							if err != nil {
+								util.FailTask("Failed to acquire lock", err, t)
+								return
+							}
+							defer a.GetLockManager().ReleaseLock(*appLock)
 
-					if updateFailedNodes, updateErr := GetCoreNodeManager().UpdateMonitoringConfiguration(cluster_node_names, request); updateErr != nil || len(updateFailedNodes) != 0 {
-						util.FailTask(fmt.Sprintf("Failed to update thresholds for cluster: %v", *cluster_id_uuid), fmt.Errorf("%v", updateFailedNodes), t)
-						return
+							if updateFailedNodes, updateErr := GetCoreNodeManager().UpdateMonitoringConfiguration(cluster_node_names, request); updateErr != nil || len(updateFailedNodes) != 0 {
+								util.FailTask(fmt.Sprintf("Failed to update thresholds for cluster: %v", *cluster_id_uuid), fmt.Errorf("%v", updateFailedNodes), t)
+								return
+							}
+							t.UpdateStatus("Updating new configuration to db")
+							if dbError := updatePluginsInDb(bson.M{"clusterid": cluster_id_uuid}, updatedPlugins); dbError != nil {
+								util.FailTask(fmt.Sprintf("Failed to update thresholds for cluster: %v", *cluster_id_uuid), dbError, t)
+								return
+							}
+							t.UpdateStatus("Success")
+							t.Done(models.TASK_STATUS_SUCCESS)
+							return
+						}
 					}
-					t.UpdateStatus("Updating new configuration to db")
-					if dbError := updatePluginsInDb(bson.M{"clusterid": cluster_id_uuid}, updatedPlugins); dbError != nil {
-						util.FailTask(fmt.Sprintf("Failed to update thresholds for cluster: %v", *cluster_id_uuid), dbError, t)
-						return
-					}
-					t.UpdateStatus("Success")
-					t.Done(models.TASK_STATUS_SUCCESS)
 				}
-				if taskId, err := a.GetTaskManager().Run("Update monitoring plugins configuration", asyncTask, nil, nil, nil); err != nil {
+				if taskId, err := a.GetTaskManager().Run("Update monitoring plugins configuration", asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 					logger.Get().Error("Unable to create task for update monitoring plugin configuration for cluster: %v. error: %v", *cluster_id_uuid, err)
 					util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for update monitoring plugin configuration")
 					return
@@ -384,45 +414,53 @@ func monitoringPluginActivationDeactivations(enable bool, plugin_name string, cl
 			nodes, nodesFetchError := getNodesInCluster(cluster_id)
 			if nodesFetchError == nil {
 				asyncTask := func(t *task.Task) {
-					t.UpdateStatus("Started task to enable monitoring plugin : %v", t.ID)
-					var actionNodeWiseFailure map[string]string
-					var actionErr error
+					for {
+						select {
+						case <-t.StopCh:
+							return
+						default:
+							t.UpdateStatus("Started task to enable monitoring plugin : %v", t.ID)
+							var actionNodeWiseFailure map[string]string
+							var actionErr error
 
-					cnodes, err := getClusterNodesById(cluster_id)
-					if err != nil {
-						util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
-						return
-					}
-					appLock, err := lockNodes(cnodes, "monitoringPluginActivationDeactivations")
-					if err != nil {
-						util.FailTask("Failed to acquire lock", err, t)
-						return
-					}
-					defer a.GetLockManager().ReleaseLock(*appLock)
+							cnodes, err := getClusterNodesById(cluster_id)
+							if err != nil {
+								util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
+								return
+							}
+							appLock, err := lockNodes(cnodes, "monitoringPluginActivationDeactivations")
+							if err != nil {
+								util.FailTask("Failed to acquire lock", err, t)
+								return
+							}
+							defer a.GetLockManager().ReleaseLock(*appLock)
 
-					if enable {
-						action = "enable"
-						actionNodeWiseFailure, actionErr = GetCoreNodeManager().EnableMonitoringPlugin(nodes, plugin_name)
-					} else {
-						action = "disable"
-						actionNodeWiseFailure, actionErr = GetCoreNodeManager().DisableMonitoringPlugin(nodes, plugin_name)
+							if enable {
+								action = "enable"
+								actionNodeWiseFailure, actionErr = GetCoreNodeManager().EnableMonitoringPlugin(nodes, plugin_name)
+							} else {
+								action = "disable"
+								actionNodeWiseFailure, actionErr = GetCoreNodeManager().DisableMonitoringPlugin(nodes, plugin_name)
+							}
+							if len(actionNodeWiseFailure) != 0 || actionErr != nil {
+								util.FailTask(fmt.Sprintf("Failed to %s plugin %s on cluster: %s", action, plugin_name, cluster.Name), fmt.Errorf("%v", actionNodeWiseFailure), t)
+								return
+							}
+							index := monitoring.GetPluginIndex(plugin_name, cluster.MonitoringPlugins)
+							cluster.MonitoringPlugins[index].Enable = enable
+							logger.Get().Info("The updated cluster is: %s", cluster.Name)
+							t.UpdateStatus("Updating changes to db")
+							if dbError := updatePluginsInDb(bson.M{"clusterid": cluster_id}, cluster.MonitoringPlugins); dbError != nil {
+								util.FailTask(fmt.Sprintf("Failed to %s plugin %s on cluster: %s", action, plugin_name, cluster.Name), dbError, t)
+								return
+							}
+							t.UpdateStatus("Success")
+							t.Done(models.TASK_STATUS_SUCCESS)
+							return
+						}
 					}
-					if len(actionNodeWiseFailure) != 0 || actionErr != nil {
-						util.FailTask(fmt.Sprintf("Failed to %s plugin %s on cluster: %s", action, plugin_name, cluster.Name), fmt.Errorf("%v", actionNodeWiseFailure), t)
-						return
-					}
-					index := monitoring.GetPluginIndex(plugin_name, cluster.MonitoringPlugins)
-					cluster.MonitoringPlugins[index].Enable = enable
-					logger.Get().Info("The updated cluster is: %s", cluster.Name)
-					t.UpdateStatus("Updating changes to db")
-					if dbError := updatePluginsInDb(bson.M{"clusterid": cluster_id}, cluster.MonitoringPlugins); dbError != nil {
-						util.FailTask(fmt.Sprintf("Failed to %s plugin %s on cluster: %s", action, plugin_name, cluster.Name), dbError, t)
-						return
-					}
-					t.UpdateStatus("Success")
-					t.Done(models.TASK_STATUS_SUCCESS)
 				}
-				if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("%s monitoring plugin: %s", action, plugin_name), asyncTask, nil, nil, nil); err != nil {
+				if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("%s monitoring plugin: %s", action, plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 					logger.Get().Error("Unable to create task for %s monitoring plugin on cluster: %s. error: %v", action, cluster.Name, err)
 					util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for"+action+"monitoring plugin")
 					return
@@ -480,40 +518,48 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	nodes, nodesFetchError := getNodesInCluster(uuid)
 	if nodesFetchError == nil {
 		asyncTask := func(t *task.Task) {
-			t.UpdateStatus("Task created to remove monitoring plugin %v", plugin_name)
+			for {
+				select {
+				case <-t.StopCh:
+					return
+				default:
+					t.UpdateStatus("Task created to remove monitoring plugin %v", plugin_name)
 
-			cnodes, err := getClusterNodesById(uuid)
-			if err != nil {
-				util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *uuid), err, t)
-				return
-			}
-			appLock, err := lockNodes(cnodes, "REMOVE_MonitoringPlugin")
-			if err != nil {
-				util.FailTask("Failed to acquire lock", err, t)
-				return
-			}
-			defer a.GetLockManager().ReleaseLock(*appLock)
+					cnodes, err := getClusterNodesById(uuid)
+					if err != nil {
+						util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *uuid), err, t)
+						return
+					}
+					appLock, err := lockNodes(cnodes, "REMOVE_MonitoringPlugin")
+					if err != nil {
+						util.FailTask("Failed to acquire lock", err, t)
+						return
+					}
+					defer a.GetLockManager().ReleaseLock(*appLock)
 
-			if removeNodeWiseFailure, removeErr := GetCoreNodeManager().RemoveMonitoringPlugin(nodes, plugin_name); len(removeNodeWiseFailure) != 0 || removeErr != nil {
-				util.FailTask(fmt.Sprintf("Failed to remove plugin %s for cluster: %v", *uuid, plugin_name), fmt.Errorf("%v", removeNodeWiseFailure), t)
-				return
+					if removeNodeWiseFailure, removeErr := GetCoreNodeManager().RemoveMonitoringPlugin(nodes, plugin_name); len(removeNodeWiseFailure) != 0 || removeErr != nil {
+						util.FailTask(fmt.Sprintf("Failed to remove plugin %s for cluster: %v", *uuid, plugin_name), fmt.Errorf("%v", removeNodeWiseFailure), t)
+						return
+					}
+					cluster, clusterFetchErr := getCluster(uuid)
+					if clusterFetchErr != nil {
+						util.FailTask(fmt.Sprintf("Failed to remove plugin %s for cluster: %v", *uuid, plugin_name), clusterFetchErr, t)
+						return
+					}
+					index := monitoring.GetPluginIndex(plugin_name, cluster.MonitoringPlugins)
+					updatedPlugins := append(cluster.MonitoringPlugins[:index], cluster.MonitoringPlugins[index+1:]...)
+					t.UpdateStatus("Updating the plugin %s removal to db", plugin_name)
+					if dbError := updatePluginsInDb(bson.M{"clusterid": uuid}, updatedPlugins); dbError != nil {
+						util.FailTask(fmt.Sprintf("Failed to remove plugin %s for cluster: %v", *uuid, plugin_name), dbError, t)
+						return
+					}
+					t.UpdateStatus("Success")
+					t.Done(models.TASK_STATUS_SUCCESS)
+					return
+				}
 			}
-			cluster, clusterFetchErr := getCluster(uuid)
-			if clusterFetchErr != nil {
-				util.FailTask(fmt.Sprintf("Failed to remove plugin %s for cluster: %v", *uuid, plugin_name), clusterFetchErr, t)
-				return
-			}
-			index := monitoring.GetPluginIndex(plugin_name, cluster.MonitoringPlugins)
-			updatedPlugins := append(cluster.MonitoringPlugins[:index], cluster.MonitoringPlugins[index+1:]...)
-			t.UpdateStatus("Updating the plugin %s removal to db", plugin_name)
-			if dbError := updatePluginsInDb(bson.M{"clusterid": uuid}, updatedPlugins); dbError != nil {
-				util.FailTask(fmt.Sprintf("Failed to remove plugin %s for cluster: %v", *uuid, plugin_name), dbError, t)
-				return
-			}
-			t.UpdateStatus("Success")
-			t.Done(models.TASK_STATUS_SUCCESS)
 		}
-		if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove monitoring plugin : %s", plugin_name), asyncTask, nil, nil, nil); err != nil {
+		if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove monitoring plugin : %s", plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 			logger.Get().Error("Unable to create task for remove monitoring plugin for cluster: %v. error: %v", *uuid, err)
 			util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for remove monitoring plugin")
 			return
@@ -634,58 +680,65 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("Started the task for cluster forget: %v", t.ID)
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("Started the task for cluster forget: %v", t.ID)
 
-		cnodes, err := getClusterNodesById(uuid)
-		if err != nil {
-			util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *uuid), err, t)
-			return
-		}
-		appLock, err := lockNodes(cnodes, "Forget_Cluster")
-		if err != nil {
-			util.FailTask("Failed to acquire lock", err, t)
-			return
-		}
-		defer a.GetLockManager().ReleaseLock(*appLock)
-		// TODO: Remove the sync jobs if any for the cluster
-		// TODO: Remove the performance monitoring details for the cluster
-		// TODO: Remove the collectd, salt etc configurations from the nodes
+				cnodes, err := getClusterNodesById(uuid)
+				if err != nil {
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *uuid), err, t)
+					return
+				}
+				appLock, err := lockNodes(cnodes, "Forget_Cluster")
+				if err != nil {
+					util.FailTask("Failed to acquire lock", err, t)
+					return
+				}
+				defer a.GetLockManager().ReleaseLock(*appLock)
+				// TODO: Remove the sync jobs if any for the cluster
+				// TODO: Remove the performance monitoring details for the cluster
+				// TODO: Remove the collectd, salt etc configurations from the nodes
 
-		// Ignore the cluster nodes
-		if ok, err := ignoreClusterNodes(*uuid); err != nil || !ok {
-			util.FailTask(fmt.Sprintf("Error ignoring nodes for cluster: %v", *uuid), err, t)
-			return
-		}
+				// Ignore the cluster nodes
+				if ok, err := ignoreClusterNodes(*uuid); err != nil || !ok {
+					util.FailTask(fmt.Sprintf("Error ignoring nodes for cluster: %v", *uuid), err, t)
+					return
+				}
 
-		// Remove storage entities for cluster
-		t.UpdateStatus("Removing storage entities for cluster")
-		if err := removeStorageEntities(*uuid); err != nil {
-			util.FailTask(fmt.Sprintf("Error removing storage entities for cluster: %v", *uuid), err, t)
-			return
-		}
+				// Remove storage entities for cluster
+				t.UpdateStatus("Removing storage entities for cluster")
+				if err := removeStorageEntities(*uuid); err != nil {
+					util.FailTask(fmt.Sprintf("Error removing storage entities for cluster: %v", *uuid), err, t)
+					return
+				}
 
-		// Delete the participating nodes from DB
-		t.UpdateStatus("Deleting cluster nodes")
-		sessionCopy := db.GetDatastore().Copy()
-		defer sessionCopy.Close()
-		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-		if changeInfo, err := collection.RemoveAll(bson.M{"clusterid": *uuid}); err != nil || changeInfo == nil {
-			util.FailTask(fmt.Sprintf("Error deleting cluster nodes for cluster: %v", *uuid), err, t)
-			return
-		}
+				// Delete the participating nodes from DB
+				t.UpdateStatus("Deleting cluster nodes")
+				sessionCopy := db.GetDatastore().Copy()
+				defer sessionCopy.Close()
+				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+				if changeInfo, err := collection.RemoveAll(bson.M{"clusterid": *uuid}); err != nil || changeInfo == nil {
+					util.FailTask(fmt.Sprintf("Error deleting cluster nodes for cluster: %v", *uuid), err, t)
+					return
+				}
 
-		// Delete the cluster from DB
-		t.UpdateStatus("removing the cluster")
-		collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-		if err := collection.Remove(bson.M{"clusterid": *uuid}); err != nil {
-			util.FailTask(fmt.Sprintf("Error removing the cluster: %v", *uuid), err, t)
-			return
+				// Delete the cluster from DB
+				t.UpdateStatus("removing the cluster")
+				collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+				if err := collection.Remove(bson.M{"clusterid": *uuid}); err != nil {
+					util.FailTask(fmt.Sprintf("Error removing the cluster: %v", *uuid), err, t)
+					return
+				}
+				DeleteClusterSchedule(*uuid)
+				t.UpdateStatus("Success")
+				t.Done(models.TASK_STATUS_SUCCESS)
+			}
 		}
-		DeleteClusterSchedule(*uuid)
-		t.UpdateStatus("Success")
-		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Forget Cluster: %s", cluster_id), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Forget Cluster: %s", cluster_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to forget cluster: %v. error: %v", *uuid, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster forget")
 		return
@@ -763,54 +816,62 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("Started the task for cluster unmanage: %v", t.ID)
-		sessionCopy := db.GetDatastore().Copy()
-		defer sessionCopy.Close()
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("Started the task for cluster unmanage: %v", t.ID)
+				sessionCopy := db.GetDatastore().Copy()
+				defer sessionCopy.Close()
 
-		// TODO: Disable sync jobs for the cluster
-		// TODO: Disable performance monitoring for the cluster
+				// TODO: Disable sync jobs for the cluster
+				// TODO: Disable performance monitoring for the cluster
 
-		t.UpdateStatus("Getting nodes of the cluster for unmanage")
-		// Disable collectd, salt configurations on the nodes participating in the cluster
-		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-		var nodes models.Nodes
-		if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-			util.FailTask(fmt.Sprintf("Error getting nodes to un-manage for cluster: %v", *cluster_id), err, t)
-			return
-		}
+				t.UpdateStatus("Getting nodes of the cluster for unmanage")
+				// Disable collectd, salt configurations on the nodes participating in the cluster
+				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+				var nodes models.Nodes
+				if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+					util.FailTask(fmt.Sprintf("Error getting nodes to un-manage for cluster: %v", *cluster_id), err, t)
+					return
+				}
 
-		nodes, err := getClusterNodesById(cluster_id)
-		if err != nil {
-			util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
-			return
-		}
-		appLock, err := lockNodes(nodes, "Unmanage_Cluster")
-		if err != nil {
-			util.FailTask("Failed to acquire lock", err, t)
-			return
-		}
-		defer a.GetLockManager().ReleaseLock(*appLock)
+				nodes, err := getClusterNodesById(cluster_id)
+				if err != nil {
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
+					return
+				}
+				appLock, err := lockNodes(nodes, "Unmanage_Cluster")
+				if err != nil {
+					util.FailTask("Failed to acquire lock", err, t)
+					return
+				}
+				defer a.GetLockManager().ReleaseLock(*appLock)
 
-		for _, node := range nodes {
-			t.UpdateStatus("Disabling node: %s", node.Hostname)
-			ok, err := GetCoreNodeManager().DisableNode(node.Hostname)
-			if err != nil || !ok {
-				util.FailTask(fmt.Sprintf("Error disabling node: %s on cluster: %v", node.Hostname, *cluster_id), err, t)
+				for _, node := range nodes {
+					t.UpdateStatus("Disabling node: %s", node.Hostname)
+					ok, err := GetCoreNodeManager().DisableNode(node.Hostname)
+					if err != nil || !ok {
+						util.FailTask(fmt.Sprintf("Error disabling node: %s on cluster: %v", node.Hostname, *cluster_id), err, t)
+						return
+					}
+				}
+
+				t.UpdateStatus("Disabling post actions on the cluster")
+				// Disable any POST actions on cluster
+				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
+					util.FailTask(fmt.Sprintf("Error disabling post actions on cluster: %v", *cluster_id), err, t)
+					return
+				}
+				t.UpdateStatus("Success")
+				t.Done(models.TASK_STATUS_SUCCESS)
 				return
 			}
 		}
-
-		t.UpdateStatus("Disabling post actions on the cluster")
-		// Disable any POST actions on cluster
-		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-		if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
-			util.FailTask(fmt.Sprintf("Error disabling post actions on cluster: %v", *cluster_id), err, t)
-			return
-		}
-		t.UpdateStatus("Success")
-		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Unmanage Cluster: %s", cluster_id_str), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Unmanage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to unmanage cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster unmanage")
 		return
@@ -845,54 +906,61 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("Started the task for cluster manage: %v", t.ID)
-		sessionCopy := db.GetDatastore().Copy()
-		defer sessionCopy.Close()
-
-		// TODO: Enable sync jobs for the cluster
-		// TODO: Enable performance monitoring for the cluster
-
-		t.UpdateStatus("Getting nodes of cluster for manage back")
-		// Enable collectd, salt configurations on the nodes participating in the cluster
-		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-		var nodes models.Nodes
-		if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-			util.FailTask(fmt.Sprintf("Error getting nodes to manage on cluster: %v", *cluster_id), err, t)
-			return
-		}
-
-		nodes, err := getClusterNodesById(cluster_id)
-		if err != nil {
-			util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
-			return
-		}
-		appLock, err := lockNodes(nodes, "Manage_Cluster")
-		if err != nil {
-			util.FailTask("Failed to acquire lock", err, t)
-			return
-		}
-		defer a.GetLockManager().ReleaseLock(*appLock)
-
-		for _, node := range nodes {
-			t.UpdateStatus("Enabling node")
-			ok, err := GetCoreNodeManager().EnableNode(node.Hostname)
-			if err != nil || !ok {
-				util.FailTask(fmt.Sprintf("Error enabling node: %s on cluster: %v", node.Hostname, *cluster_id), err, t)
+		for {
+			select {
+			case <-t.StopCh:
 				return
+			default:
+				t.UpdateStatus("Started the task for cluster manage: %v", t.ID)
+				sessionCopy := db.GetDatastore().Copy()
+				defer sessionCopy.Close()
+
+				// TODO: Enable sync jobs for the cluster
+				// TODO: Enable performance monitoring for the cluster
+
+				t.UpdateStatus("Getting nodes of cluster for manage back")
+				// Enable collectd, salt configurations on the nodes participating in the cluster
+				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+				var nodes models.Nodes
+				if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+					util.FailTask(fmt.Sprintf("Error getting nodes to manage on cluster: %v", *cluster_id), err, t)
+					return
+				}
+
+				nodes, err := getClusterNodesById(cluster_id)
+				if err != nil {
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
+					return
+				}
+				appLock, err := lockNodes(nodes, "Manage_Cluster")
+				if err != nil {
+					util.FailTask("Failed to acquire lock", err, t)
+					return
+				}
+				defer a.GetLockManager().ReleaseLock(*appLock)
+
+				for _, node := range nodes {
+					t.UpdateStatus("Enabling node")
+					ok, err := GetCoreNodeManager().EnableNode(node.Hostname)
+					if err != nil || !ok {
+						util.FailTask(fmt.Sprintf("Error enabling node: %s on cluster: %v", node.Hostname, *cluster_id), err, t)
+						return
+					}
+				}
+
+				t.UpdateStatus("Enabling post actions on the cluster")
+				// Enable any POST actions on cluster
+				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
+					util.FailTask(fmt.Sprintf("Error enabling post actions on cluster: %v", *cluster_id), err, t)
+					return
+				}
+				t.UpdateStatus("Success")
+				t.Done(models.TASK_STATUS_SUCCESS)
 			}
 		}
-
-		t.UpdateStatus("Enabling post actions on the cluster")
-		// Enable any POST actions on cluster
-		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-		if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
-			util.FailTask(fmt.Sprintf("Error enabling post actions on cluster: %v", *cluster_id), err, t)
-			return
-		}
-		t.UpdateStatus("Success")
-		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Manage Cluster: %s", cluster_id_str), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Manage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to manage cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster manage")
 		return
@@ -955,75 +1023,86 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("Started task for cluster expansion: %v", t.ID)
-		nodes, err := getClusterNodesFromRequest(new_nodes)
-		if err != nil {
-			util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
-			return
-		}
-		appLock, err := lockNodes(nodes, "Expand_Cluster")
-		if err != nil {
-			util.FailTask("Failed to acquire lock", err, t)
-			return
-		}
-		defer a.GetLockManager().ReleaseLock(*appLock)
-		provider := a.getProviderFromClusterId(*cluster_id)
-		if provider == nil {
-			util.FailTask("", errors.New(fmt.Sprintf("Error etting provider for cluster: %v", *cluster_id)), t)
-			return
-		}
-		err = provider.Client.Call(fmt.Sprintf("%s.%s",
-			provider.Name, cluster_post_functions["expand_cluster"]),
-			models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
-			&result)
-		if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
-			util.FailTask(fmt.Sprintf("Error expanding cluster: %v", *cluster_id), err, t)
-			return
-		} else {
-			// Update the master task id
-			providerTaskId, err = uuid.Parse(result.Data.RequestId)
-			if err != nil {
-				util.FailTask(fmt.Sprintf("Error parsing provider task id while expand cluster: %v", *cluster_id), err, t)
+		for {
+			select {
+			case <-t.StopCh:
 				return
-			}
-			t.UpdateStatus("Adding sub task")
-			if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
-				util.FailTask(fmt.Sprintf("Error adding sub task while expand cluster: %v", *cluster_id), err, t)
-				return
-			}
-
-			// Check for provider task to complete and update the disk info
-			for {
-				time.Sleep(2 * time.Second)
-				sessionCopy := db.GetDatastore().Copy()
-				defer sessionCopy.Close()
-				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
-				var providerTask models.AppTask
-				if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
-					util.FailTask(fmt.Sprintf("Error getting sub task status while expand cluster: %v", *cluster_id), err, t)
+			default:
+				t.UpdateStatus("Started task for cluster expansion: %v", t.ID)
+				nodes, err := getClusterNodesFromRequest(new_nodes)
+				if err != nil {
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
 					return
 				}
-				if providerTask.Completed {
-					if providerTask.Status == models.TASK_STATUS_SUCCESS {
-						t.UpdateStatus("Starting disk sync")
-						if err := syncStorageDisks(new_nodes); err != nil {
-							t.UpdateStatus("Failed")
-							t.Done(models.TASK_STATUS_FAILURE)
-						} else {
-							t.UpdateStatus("Success")
-							t.Done(models.TASK_STATUS_SUCCESS)
-						}
-					} else {
-						t.UpdateStatus("Failed")
-						t.Done(models.TASK_STATUS_FAILURE)
-					}
-					break
+				appLock, err := lockNodes(nodes, "Expand_Cluster")
+				if err != nil {
+					util.FailTask("Failed to acquire lock", err, t)
+					return
 				}
+				defer a.GetLockManager().ReleaseLock(*appLock)
+				provider := a.getProviderFromClusterId(*cluster_id)
+				if provider == nil {
+					util.FailTask("", errors.New(fmt.Sprintf("Error etting provider for cluster: %v", *cluster_id)), t)
+					return
+				}
+				err = provider.Client.Call(fmt.Sprintf("%s.%s",
+					provider.Name, cluster_post_functions["expand_cluster"]),
+					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+					&result)
+				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+					util.FailTask(fmt.Sprintf("Error expanding cluster: %v", *cluster_id), err, t)
+					return
+				} else {
+					// Update the master task id
+					providerTaskId, err = uuid.Parse(result.Data.RequestId)
+					if err != nil {
+						util.FailTask(fmt.Sprintf("Error parsing provider task id while expand cluster: %v", *cluster_id), err, t)
+						return
+					}
+					t.UpdateStatus("Adding sub task")
+					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+						util.FailTask(fmt.Sprintf("Error adding sub task while expand cluster: %v", *cluster_id), err, t)
+						return
+					}
+
+					// Check for provider task to complete and update the disk info
+					for {
+						if <-t.StopCh {
+							return
+						}
+						time.Sleep(2 * time.Second)
+						sessionCopy := db.GetDatastore().Copy()
+						defer sessionCopy.Close()
+						coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+						var providerTask models.AppTask
+						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+							util.FailTask(fmt.Sprintf("Error getting sub task status while expand cluster: %v", *cluster_id), err, t)
+							return
+						}
+						if providerTask.Completed {
+							if providerTask.Status == models.TASK_STATUS_SUCCESS {
+								t.UpdateStatus("Starting disk sync")
+								if err := syncStorageDisks(new_nodes); err != nil {
+									t.UpdateStatus("Failed")
+									t.Done(models.TASK_STATUS_FAILURE)
+								} else {
+									t.UpdateStatus("Success")
+									t.Done(models.TASK_STATUS_SUCCESS)
+								}
+							} else {
+								t.UpdateStatus("Failed")
+								t.Done(models.TASK_STATUS_FAILURE)
+							}
+							break
+						}
+					}
+				}
+				return
 			}
 		}
 	}
 
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to expand cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster expansion")
 		return

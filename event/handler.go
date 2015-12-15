@@ -23,6 +23,7 @@ import (
 	"github.com/skyrings/skyring/tools/task"
 	"gopkg.in/mgo.v2/bson"
 	"os"
+	"time"
 )
 
 var (
@@ -138,7 +139,7 @@ func handle_node_start_event(node string) error {
 			t.Done(models.TASK_STATUS_SUCCESS)
 		}
 	}
-	if taskId, err := skyring.GetApp().GetTaskManager().Run(fmt.Sprintf("Initialize Node: %s", node), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetApp().GetTaskManager().Run(fmt.Sprintf("Initialize Node: %s", node), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for Initialize Node: %s. error: %v", node, err)
 	} else {
 		logger.Get().Debug("Task created for initialize node. Task id: %s", taskId.String())

@@ -97,70 +97,88 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	var providerTaskId *uuid.UUID
 	// Get the specific provider and invoke the method
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("Started the task for pool creation: %v", t.ID)
-
-		nodes, err := getClusterNodesById(cluster_id)
-		if err != nil {
-			util.FailTask("Failed to get nodes", err, t)
-			return
-		}
-		appLock, err := lockNodes(nodes, "Manage_Cluster")
-		if err != nil {
-			util.FailTask("Failed to acquire lock", err, t)
-			return
-		}
-		defer a.GetLockManager().ReleaseLock(*appLock)
-
-		provider := a.getProviderFromClusterId(*cluster_id)
-		if provider == nil {
-			util.FailTask("", errors.New(fmt.Sprintf("Error getting provider for cluster: %v", *cluster_id)), t)
-			return
-		}
-		err = provider.Client.Call(fmt.Sprintf("%s.%s",
-			provider.Name, storage_post_functions["create"]),
-			models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
-			&result)
-		if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
-			util.FailTask(fmt.Sprintf("Error creating storage: %s on cluster: %v", request.Name, *cluster_id), err, t)
-			return
-		} else {
-			// Update the master task id
-			providerTaskId, err = uuid.Parse(result.Data.RequestId)
-			if err != nil {
-				util.FailTask(fmt.Sprintf("Error parsing provider task id while creating storage: %s for cluster: %v", request.Name, *cluster_id), err, t)
+		for {
+			select {
+			case <-t.StopCh:
 				return
-			}
-			t.UpdateStatus("Adding sub task")
-			if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
-				util.FailTask(fmt.Sprintf("Error adding sub task while creating storage: %s on cluster: %v", request.Name, *cluster_id), err, t)
-				return
-			}
+			default:
+				t.UpdateStatus("Started the task for pool creation: %v", t.ID)
 
-			// Check for provider task to complete and update the parent task
-			for {
-				time.Sleep(2 * time.Second)
-				sessionCopy := db.GetDatastore().Copy()
-				defer sessionCopy.Close()
-				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
-				var providerTask models.AppTask
-				if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
-					util.FailTask(fmt.Sprintf("Error getting sub task status while creating storage: %s on cluster: %v", request.Name, *cluster_id), err, t)
+				nodes, err := getClusterNodesById(cluster_id)
+				if err != nil {
+					util.FailTask("Failed to get nodes", err, t)
 					return
 				}
-				if providerTask.Completed {
-					if providerTask.Status == models.TASK_STATUS_SUCCESS {
-						t.UpdateStatus("Success")
-						t.Done(models.TASK_STATUS_SUCCESS)
-					} else if providerTask.Status == models.TASK_STATUS_FAILURE {
-						t.UpdateStatus("Failed")
-						t.Done(models.TASK_STATUS_FAILURE)
+				appLock, err := lockNodes(nodes, "Manage_Cluster")
+				if err != nil {
+					util.FailTask("Failed to acquire lock", err, t)
+					return
+				}
+				defer a.GetLockManager().ReleaseLock(*appLock)
+
+				provider := a.getProviderFromClusterId(*cluster_id)
+				if provider == nil {
+					util.FailTask("", errors.New(fmt.Sprintf("Error getting provider for cluster: %v", *cluster_id)), t)
+					return
+				}
+				err = provider.Client.Call(fmt.Sprintf("%s.%s",
+					provider.Name, storage_post_functions["create"]),
+					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+					&result)
+				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+					util.FailTask(fmt.Sprintf("Error creating storage: %s on cluster: %v", request.Name, *cluster_id), err, t)
+					return
+				} else {
+					// Update the master task id
+					providerTaskId, err = uuid.Parse(result.Data.RequestId)
+					if err != nil {
+						util.FailTask(fmt.Sprintf("Error parsing provider task id while creating storage: %s for cluster: %v", request.Name, *cluster_id), err, t)
+						return
 					}
-					break
+					t.UpdateStatus("Adding sub task")
+					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+						util.FailTask(fmt.Sprintf("Error adding sub task while creating storage: %s on cluster: %v", request.Name, *cluster_id), err, t)
+						return
+					}
+
+					// Check for provider task to complete and update the parent task
+					done := false
+					for {
+						if <-t.StopCh {
+							break
+						}
+						time.Sleep(2 * time.Second)
+						sessionCopy := db.GetDatastore().Copy()
+						defer sessionCopy.Close()
+						coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+						var providerTask models.AppTask
+						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+							util.FailTask(fmt.Sprintf("Error getting sub task status while creating storage: %s on cluster: %v", request.Name, *cluster_id), err, t)
+							return
+						}
+						if providerTask.Completed {
+							if providerTask.Status == models.TASK_STATUS_SUCCESS {
+								t.UpdateStatus("Success")
+								t.Done(models.TASK_STATUS_SUCCESS)
+							} else if providerTask.Status == models.TASK_STATUS_FAILURE {
+								t.UpdateStatus("Failed")
+								t.Done(models.TASK_STATUS_FAILURE)
+							}
+							done = true
+							break
+						}
+					}
+					if !done {
+						util.FailTask(
+							"Sub task timed out",
+							errors.New("Could not get sub task status after 5 minutes"),
+							t)
+					}
 				}
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Storage: %s", request.Name), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Storage: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for create storage:%s on cluster: %v. error: %v", request.Name, *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create storage")
 		return
