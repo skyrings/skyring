@@ -17,6 +17,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
@@ -28,6 +29,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"reflect"
 	"time"
 )
 
@@ -119,8 +121,24 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 							t.UpdateStatus("Failed")
 							t.Done(models.TASK_STATUS_FAILURE)
 						} else {
-							t.UpdateStatus("Success")
-							t.Done(models.TASK_STATUS_SUCCESS)
+							// Check if monitoring configuration passed and update them accordingly
+							if reflect.ValueOf(request.MonitoringPlugins).IsValid() && len(request.MonitoringPlugins) != 0 {
+								var nodes []string
+								nodesMap, nodesFetchError := getNodes(request.Nodes)
+								if nodesFetchError == nil {
+									for _, node := range nodesMap {
+										nodes = append(nodes, node.Hostname)
+									}
+									t.UpdateStatus("Updating the monitoring configuration on all nodes in the cluster")
+									if updateSuceeded, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); updateError != nil || !updateSuceeded {
+										t.UpdateStatus("Failed")
+										t.Done(models.TASK_STATUS_FAILURE)
+									} else {
+										t.UpdateStatus("Success")
+										t.Done(models.TASK_STATUS_SUCCESS)
+									}
+								}
+							}
 						}
 					} else if providerTask.Status == models.TASK_STATUS_FAILURE {
 						t.UpdateStatus("Failed")
@@ -141,6 +159,379 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
 	}
+}
+
+func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id, cluster_id_parse_error := uuid.Parse(vars["cluster-id"])
+	if cluster_id_parse_error != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, cluster_id_parse_error.Error())
+	}
+	var request backend.Plugin
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
+		return
+	}
+	if err := json.Unmarshal(body, &request); err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
+		return
+	}
+	asyncTask := func(t *task.Task) {
+		cluster_node_names, nodesFetchError := getNodesInCluster(cluster_id)
+		t.UpdateStatus("Started task to add the monitoring plugin : %v", t.ID)
+		if nodesFetchError == nil {
+			if addSucceeded, addError := GetCoreNodeManager().AddMonitoringPlugin(cluster_node_names, "", request); addError != nil || !addSucceeded {
+				t.UpdateStatus("Failed")
+				t.Done(models.TASK_STATUS_FAILURE)
+				return
+			}
+		} else {
+			t.UpdateStatus("Failed with error %v", nodesFetchError.Error())
+			t.Done(models.TASK_STATUS_FAILURE)
+			return
+		}
+		cluster, clusterFetchErr := getCluster(cluster_id)
+		if clusterFetchErr != nil {
+			t.UpdateStatus("Failed with error %s", clusterFetchErr.Error())
+			t.Done(models.TASK_STATUS_FAILURE)
+			return
+		}
+		request.Enable = true
+		updatedPlugins := append(cluster.MonitoringPlugins, request)
+		t.UpdateStatus("Updating the plugins to db")
+		if dbError := updatePluginsInDb(cluster_id, updatedPlugins); dbError != nil {
+			t.UpdateStatus("Failed with error %s", clusterFetchErr.Error())
+			t.Done(models.TASK_STATUS_FAILURE)
+			return
+		} else {
+			t.UpdateStatus("Success")
+			t.Done(models.TASK_STATUS_SUCCESS)
+		}
+	}
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("Unable to create task for add monitoring plugin. error: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for add monitoring plugin")
+		return
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
+	}
+}
+
+func updatePluginsInDb(cluster_id *uuid.UUID, updatedPlugins []backend.Plugin) (err error) {
+	sessionCopy := db.GetDatastore().Copy()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	dbUpdateError := coll.Update(
+		bson.M{"clusterid": *cluster_id},
+		bson.M{"$set": bson.M{"monitoringplugins": updatedPlugins}})
+	return dbUpdateError
+}
+
+func (a *App) POST_Thresholds(w http.ResponseWriter, r *http.Request) {
+	var request []backend.Plugin
+
+	vars := mux.Vars(r)
+	cluster_id := vars["cluster-id"]
+
+	// Unmarshal the request body
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to parse the request")
+		return
+	}
+	if err := json.Unmarshal(body, &request); err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, "Unable to unmarshal request")
+		return
+	}
+
+	if len(request) != 0 && err == nil {
+		cluster_id_uuid, cluster_id_parse_error := uuid.Parse(cluster_id)
+		if cluster_id_parse_error == nil {
+			cluster_node_names, err := getNodesInCluster(cluster_id_uuid)
+			if err == nil {
+				asyncTask := func(t *task.Task) {
+					t.UpdateStatus("Started task to update monitoring plugins configuration : %v", t.ID)
+					if updateSucceeded, updateErr := GetCoreNodeManager().UpdateMonitoringConfiguration(cluster_node_names, request); !updateSucceeded || updateErr != nil {
+						t.UpdateStatus("Failed")
+						t.Done(models.TASK_STATUS_FAILURE)
+						return
+					}
+					cluster, clusterFetchErr := getCluster(cluster_id_uuid)
+					if clusterFetchErr != nil {
+						t.UpdateStatus("Failed")
+						t.Done(models.TASK_STATUS_FAILURE)
+						return
+					} else {
+						t.UpdateStatus("Updating new configuration to db")
+						updatedPlugins := backend.UpdatePlugins(cluster.MonitoringPlugins, request)
+						if dbError := updatePluginsInDb(cluster_id_uuid, updatedPlugins); dbError != nil {
+							t.UpdateStatus("Failed")
+							t.Done(models.TASK_STATUS_FAILURE)
+							return
+						} else {
+							t.UpdateStatus("Success")
+							t.Done(models.TASK_STATUS_SUCCESS)
+						}
+					}
+				}
+				if taskId, err := a.GetTaskManager().Run("Update monitoring plugins configuration", asyncTask, nil, nil, nil); err != nil {
+					logger.Get().Error("Unable to create task for update monitoring plugin configuration. error: %v", err)
+					util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for update monitoring plugin configuration")
+					return
+				} else {
+					logger.Get().Debug("Task Created: ", taskId.String())
+					bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+					w.WriteHeader(http.StatusAccepted)
+					w.Write(bytes)
+				}
+			} else {
+				util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+			}
+		}
+	}
+}
+
+func (a *App) POST_EnableMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id, cluster_id_parse_error := uuid.Parse(vars["cluster-id"])
+	if cluster_id_parse_error != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, cluster_id_parse_error.Error())
+	}
+	plugin_name := vars["plugin-name"]
+	cluster, err := getCluster(cluster_id)
+	if err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+	} else {
+		plugin_index := -1
+		for index, plugin := range cluster.MonitoringPlugins {
+			if plugin.Name == plugin_name {
+				if plugin.Enable == false {
+					plugin_index = index
+					break
+				}
+			}
+		}
+		if plugin_index == -1 {
+			util.HttpResponse(w, http.StatusInternalServerError, "Plugin is either already enabled or not configured")
+		}
+		if backend.Contains(plugin_name, backend.SupportedMonitoringPlugins) {
+			nodes, nodesFetchError := getNodesInCluster(cluster_id)
+			if nodesFetchError == nil {
+				asyncTask := func(t *task.Task) {
+					t.UpdateStatus("Started task to enable monitoring plugin : %v", t.ID)
+					if enableSucceeded, enableErr := GetCoreNodeManager().EnableMonitoringPlugin(nodes, plugin_name); !enableSucceeded || enableErr != nil {
+						t.UpdateStatus("Failed")
+						t.Done(models.TASK_STATUS_FAILURE)
+						return
+					}
+					index := backend.GetPluginIndex(plugin_name, cluster.MonitoringPlugins)
+					cluster.MonitoringPlugins[index].Enable = true
+					t.UpdateStatus("Updating changes to db")
+					if dbError := updatePluginsInDb(cluster_id, cluster.MonitoringPlugins); dbError != nil {
+						t.UpdateStatus("Failed")
+						t.Done(models.TASK_STATUS_FAILURE)
+						return
+					} else {
+						t.UpdateStatus("Success")
+						t.Done(models.TASK_STATUS_SUCCESS)
+					}
+				}
+				if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Enable monitoring plugin: %s", plugin_name), asyncTask, nil, nil, nil); err != nil {
+					logger.Get().Error("Unable to create task for enable monitoring plugin. error: %v", err)
+					util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for enable monitoring plugin")
+					return
+				} else {
+					logger.Get().Debug("Task Created: ", taskId.String())
+					bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+					w.WriteHeader(http.StatusAccepted)
+					w.Write(bytes)
+				}
+			} else {
+				util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+			}
+		} else {
+			util.HttpResponse(w, http.StatusInternalServerError, "Unsupported plugin")
+		}
+	}
+}
+
+func (a *App) POST_DisableMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id, cluster_id_parse_error := uuid.Parse(vars["cluster-id"])
+	if cluster_id_parse_error != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, cluster_id_parse_error.Error())
+	}
+	plugin_name := vars["plugin-name"]
+	cluster, err := getCluster(cluster_id)
+	if err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+	} else {
+		plugin_index := -1
+		for index, plugin := range cluster.MonitoringPlugins {
+			if plugin.Name == plugin_name {
+				if plugin.Enable == true {
+					plugin_index = index
+					break
+				}
+			}
+		}
+		if plugin_index == -1 {
+			util.HttpResponse(w, http.StatusInternalServerError, "Plugin is either already disabled or not configured")
+		}
+		nodes, nodesFetchError := getNodesInCluster(cluster_id)
+		if nodesFetchError == nil {
+			asyncTask := func(t *task.Task) {
+				t.UpdateStatus("Starting the task to disable the monitoring plugin %v", t.ID)
+				if disableSucceeded, disableErr := GetCoreNodeManager().DisableMonitoringPlugin(nodes, plugin_name); disableErr != nil || !disableSucceeded {
+					t.UpdateStatus("Failed")
+					t.Done(models.TASK_STATUS_FAILURE)
+					return
+				}
+				index := backend.GetPluginIndex(plugin_name, cluster.MonitoringPlugins)
+				cluster.MonitoringPlugins[index].Enable = false
+				if dbError := updatePluginsInDb(cluster_id, cluster.MonitoringPlugins); dbError != nil {
+					t.UpdateStatus("Failed")
+					t.Done(models.TASK_STATUS_FAILURE)
+					return
+				} else {
+					t.UpdateStatus("Success")
+					t.Done(models.TASK_STATUS_SUCCESS)
+				}
+			}
+			if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Disable monitoring plugin : %s", plugin_name), asyncTask, nil, nil, nil); err != nil {
+				logger.Get().Error("Unable to create task for disable monitoring plugin. error: %v", err)
+				util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for disable monitoring plugin")
+				return
+			} else {
+				logger.Get().Debug("Task Created: ", taskId.String())
+				bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+				w.WriteHeader(http.StatusAccepted)
+				w.Write(bytes)
+			}
+		} else {
+			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		}
+	}
+}
+
+func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id := vars["cluster-id"]
+	uuid, err := uuid.Parse(cluster_id)
+	if err != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing cluster id: %s", cluster_id))
+		return
+	}
+	plugin_name := vars["plugin-name"]
+	nodes, nodesFetchError := getNodesInCluster(uuid)
+	if nodesFetchError == nil {
+		asyncTask := func(t *task.Task) {
+			t.UpdateStatus("Task created to remove monitoring plugin %v", plugin_name)
+			if removeSucceeded, removeErr := GetCoreNodeManager().RemoveMonitoringPlugin(nodes, plugin_name); !removeSucceeded || removeErr != nil {
+				t.UpdateStatus("Failed")
+				t.Done(models.TASK_STATUS_FAILURE)
+				return
+			}
+			cluster, clusterFetchErr := getCluster(uuid)
+			if clusterFetchErr != nil {
+				t.UpdateStatus("Failed")
+				t.Done(models.TASK_STATUS_FAILURE)
+				return
+			}
+			index := backend.GetPluginIndex(plugin_name, cluster.MonitoringPlugins)
+			updatedPlugins := append(cluster.MonitoringPlugins[:index], cluster.MonitoringPlugins[index+1:]...)
+			t.UpdateStatus("Updating the plugin %s removal to db", plugin_name)
+			if dbError := updatePluginsInDb(uuid, updatedPlugins); dbError != nil {
+				t.UpdateStatus("Failed")
+				t.Done(models.TASK_STATUS_FAILURE)
+				return
+			} else {
+				t.UpdateStatus("Success")
+				t.Done(models.TASK_STATUS_SUCCESS)
+			}
+		}
+		if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove monitoring plugin : %s", plugin_name), asyncTask, nil, nil, nil); err != nil {
+			logger.Get().Error("Unable to create task for remove monitoring plugin. error: %v", err)
+			util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for remove monitoring plugin")
+			return
+		} else {
+			logger.Get().Debug("Task Created: ", taskId.String())
+			bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+			w.WriteHeader(http.StatusAccepted)
+			w.Write(bytes)
+		}
+	} else {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+	}
+}
+
+func (a *App) GET_MonitoringPlugins(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+	cluster, err := getCluster(cluster_id)
+	if err != nil {
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if cluster.Name == "" {
+		util.HttpResponse(w, http.StatusBadRequest, "Cluster not found")
+		return
+	} else {
+		json.NewEncoder(w).Encode(cluster.MonitoringPlugins)
+	}
+}
+
+func getCluster(cluster_id *uuid.UUID) (cluster models.Cluster, err error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	if err := collection.Find(bson.M{"clusterid": *cluster_id}).One(&cluster); err != nil {
+		return cluster, err
+	}
+	return cluster, nil
+}
+
+func getNodesInCluster(cluster_id *uuid.UUID) (cluster_node_names []string, err error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var nodes models.Nodes
+	if err := collection.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+		//util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return nil, err
+	}
+	for _, node := range nodes {
+		cluster_node_names = append(cluster_node_names, node.Hostname)
+	}
+	return cluster_node_names, nil
+}
+
+func getNodes(clusterNodes []models.ClusterNode) (map[uuid.UUID]models.Node, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var nodes = make(map[uuid.UUID]models.Node)
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	for _, clusterNode := range clusterNodes {
+		uuid, err := uuid.Parse(clusterNode.NodeId)
+		if err != nil {
+			return nodes, errors.New(fmt.Sprintf("Error parsing node id: %v", clusterNode.NodeId))
+		}
+		var node models.Node
+		if err := coll.Find(bson.M{"nodeid": *uuid}).One(&node); err != nil {
+			return nodes, err
+		}
+		nodes[node.NodeId] = node
+	}
+	return nodes, nil
 }
 
 func cluster_exists(key string, value string) (*models.Cluster, error) {
@@ -254,12 +645,8 @@ func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	var cluster models.Cluster
-	if err := collection.Find(bson.M{"clusterid": *cluster_id}).One(&cluster); err != nil {
+	cluster, err := getCluster(cluster_id)
+	if err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 		logger.Get().Error("Error getting the cluster: %v", err)
 		return
