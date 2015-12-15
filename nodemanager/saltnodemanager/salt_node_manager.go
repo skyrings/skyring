@@ -25,6 +25,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"net"
+	"sync"
 	"time"
 )
 
@@ -33,7 +34,8 @@ const (
 )
 
 var (
-	salt_backend = salt.New()
+	salt_backend      = salt.New()
+	node_manage_mutex sync.Mutex
 )
 
 type SaltNodeManager struct {
@@ -50,6 +52,8 @@ func NewSaltNodeManager(config io.Reader) (*SaltNodeManager, error) {
 }
 
 func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.Node, error) {
+	node_manage_mutex.Lock()
+	defer node_manage_mutex.Unlock()
 	if status, err := salt_backend.AcceptNode(node, fingerprint, false); err != nil {
 		return nil, err
 	} else if !status {
@@ -72,6 +76,8 @@ func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.No
 }
 
 func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.Node, error) {
+	node_manage_mutex.Lock()
+	defer node_manage_mutex.Unlock()
 	if status, err := salt_backend.AddNode(master, node, port, fingerprint, username, password); err != nil {
 		return nil, err
 	} else if !status {
@@ -129,6 +135,8 @@ func populateStorageNodeInstance(node string) (*models.Node, bool) {
 }
 
 func (a SaltNodeManager) GetUnmanagedNodes() (*models.UnmanagedNodes, error) {
+	node_manage_mutex.Lock()
+	defer node_manage_mutex.Unlock()
 	if nodes, err := salt_backend.GetNodes(); err != nil {
 		return nil, err
 	} else {
@@ -144,6 +152,8 @@ func (a SaltNodeManager) GetUnmanagedNodes() (*models.UnmanagedNodes, error) {
 }
 
 func (a SaltNodeManager) SyncStorageDisks(node string) (bool, error) {
+	node_manage_mutex.Lock()
+	defer node_manage_mutex.Unlock()
 	disks, err := salt_backend.GetNodeDisk(node)
 	if err != nil {
 		return false, err
@@ -160,6 +170,8 @@ func (a SaltNodeManager) SyncStorageDisks(node string) (bool, error) {
 }
 
 func (a SaltNodeManager) DisableNode(node string) (bool, error) {
+	node_manage_mutex.Lock()
+	defer node_manage_mutex.Unlock()
 	if ok, err := salt_backend.DisableService(node, "collectd", true); err != nil || !ok {
 		logger.Get().Error(fmt.Sprintf("Error disabling services on node: %s, error: %v", node, err))
 		return false, err
@@ -177,6 +189,8 @@ func (a SaltNodeManager) DisableNode(node string) (bool, error) {
 }
 
 func (a SaltNodeManager) EnableNode(node string) (bool, error) {
+	node_manage_mutex.Lock()
+	defer node_manage_mutex.Unlock()
 	if ok, err := salt_backend.EnableService(node, "collectd", true); err != nil || !ok {
 		logger.Get().Error("Error enabling services on node: %s. error: %v", node, err)
 		return false, err
@@ -195,6 +209,8 @@ func (a SaltNodeManager) EnableNode(node string) (bool, error) {
 }
 
 func (a SaltNodeManager) RemoveNode(node string) (bool, error) {
+	node_manage_mutex.Lock()
+	defer node_manage_mutex.Unlock()
 	if ok, err := salt_backend.DisableService(node, "collectd", true); err != nil || !ok {
 		return false, err
 	}
@@ -207,6 +223,8 @@ func (a SaltNodeManager) RemoveNode(node string) (bool, error) {
 }
 
 func (a SaltNodeManager) IgnoreNode(node string) (bool, error) {
+	node_manage_mutex.Lock()
+	defer node_manage_mutex.Unlock()
 	if ok, err := salt_backend.IgnoreNode(node); err != nil || !ok {
 		logger.Get().Error(fmt.Sprintf("Error rejecting node: %s, error: %v", node, err))
 		return false, err
