@@ -78,60 +78,68 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("Started the task for cluster creation: %v", t.ID)
-		// Get the specific provider and invoke the method
-		provider := a.getProviderFromClusterType(request.Type)
-		err = provider.Client.Call(fmt.Sprintf("%s.%s",
-			provider.Name, cluster_post_functions["create"]),
-			models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body},
-			&result)
-		if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
-			util.FailTask("Error creating cluster", err, t)
-			return
-		} else {
-			// Update the master task id
-			providerTaskId, err = uuid.Parse(result.Data.RequestId)
-			if err != nil {
-				util.FailTask("Error parsing provider task id", err, t)
+		for {
+			select {
+			case <-t.StopCh:
 				return
-			}
-			t.UpdateStatus("Adding sub task")
-			if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
-				util.FailTask("Error adding sub task", err, t)
-				return
-			}
-
-			// Check for provider task to complete and update the disk info
-			for {
-				time.Sleep(2 * time.Second)
-				sessionCopy := db.GetDatastore().Copy()
-				defer sessionCopy.Close()
-				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
-				var providerTask models.AppTask
-				if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
-					util.FailTask("Error getting sub task status", err, t)
+			default:
+				t.UpdateStatus("Started the task for cluster creation: %v", t.ID)
+				// Get the specific provider and invoke the method
+				provider := a.getProviderFromClusterType(request.Type)
+				err = provider.Client.Call(fmt.Sprintf("%s.%s",
+					provider.Name, cluster_post_functions["create"]),
+					models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body},
+					&result)
+				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+					util.FailTask("Error creating cluster", err, t)
 					return
-				}
-				if providerTask.Completed {
-					if providerTask.Status == models.TASK_STATUS_SUCCESS {
-						t.UpdateStatus("Starting disk sync")
-						if err := syncStorageDisks(request.Nodes); err != nil {
-							t.UpdateStatus("Failed")
-							t.Done(models.TASK_STATUS_FAILURE)
-						} else {
-							t.UpdateStatus("Success")
-							t.Done(models.TASK_STATUS_SUCCESS)
-						}
-					} else if providerTask.Status == models.TASK_STATUS_FAILURE {
-						t.UpdateStatus("Failed")
-						t.Done(models.TASK_STATUS_FAILURE)
+				} else {
+					// Update the master task id
+					providerTaskId, err = uuid.Parse(result.Data.RequestId)
+					if err != nil {
+						util.FailTask("Error parsing provider task id", err, t)
+						return
 					}
-					break
+					t.UpdateStatus("Adding sub task")
+					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+						util.FailTask("Error adding sub task", err, t)
+						return
+					}
+
+					// Check for provider task to complete and update the disk info
+					for {
+						time.Sleep(2 * time.Second)
+						sessionCopy := db.GetDatastore().Copy()
+						defer sessionCopy.Close()
+						coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+						var providerTask models.AppTask
+						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+							util.FailTask("Error getting sub task status", err, t)
+							return
+						}
+						if providerTask.Completed {
+							if providerTask.Status == models.TASK_STATUS_SUCCESS {
+								t.UpdateStatus("Starting disk sync")
+								if err := syncStorageDisks(request.Nodes); err != nil {
+									t.UpdateStatus("Failed")
+									t.Done(models.TASK_STATUS_FAILURE)
+								} else {
+									t.UpdateStatus("Success")
+									t.Done(models.TASK_STATUS_SUCCESS)
+								}
+							} else if providerTask.Status == models.TASK_STATUS_FAILURE {
+								t.UpdateStatus("Failed")
+								t.Done(models.TASK_STATUS_FAILURE)
+							}
+							break
+						}
+					}
 				}
+				return
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for create cluster. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create cluster")
 		return
@@ -177,45 +185,53 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("Started the task for cluster forget: %v", t.ID)
-		// TODO: Remove the sync jobs if any for the cluster
-		// TODO: Remove the performance monitoring details for the cluster
-		// TODO: Remove the collectd, salt etc configurations from the nodes
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("Started the task for cluster forget: %v", t.ID)
+				// TODO: Remove the sync jobs if any for the cluster
+				// TODO: Remove the performance monitoring details for the cluster
+				// TODO: Remove the collectd, salt etc configurations from the nodes
 
-		// Ignore the cluster nodes
-		if ok, err := ignoreClusterNodes(*uuid); err != nil || !ok {
-			util.FailTask("Error ignoring nodes", err, t)
-			return
-		}
+				// Ignore the cluster nodes
+				if ok, err := ignoreClusterNodes(*uuid); err != nil || !ok {
+					util.FailTask("Error ignoring nodes", err, t)
+					return
+				}
 
-		// Remove storage entities for cluster
-		t.UpdateStatus("Removing storage entities for cluster")
-		if err := removeStorageEntities(*uuid); err != nil {
-			util.FailTask("Error removing storage entities", err, t)
-			return
-		}
+				// Remove storage entities for cluster
+				t.UpdateStatus("Removing storage entities for cluster")
+				if err := removeStorageEntities(*uuid); err != nil {
+					util.FailTask("Error removing storage entities", err, t)
+					return
+				}
 
-		// Delete the participating nodes from DB
-		t.UpdateStatus("Deleting cluster nodes")
-		sessionCopy := db.GetDatastore().Copy()
-		defer sessionCopy.Close()
-		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-		if changeInfo, err := collection.RemoveAll(bson.M{"clusterid": *uuid}); err != nil || changeInfo == nil {
-			util.FailTask("Error deleting cluster nodes", err, t)
-			return
-		}
+				// Delete the participating nodes from DB
+				t.UpdateStatus("Deleting cluster nodes")
+				sessionCopy := db.GetDatastore().Copy()
+				defer sessionCopy.Close()
+				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+				if changeInfo, err := collection.RemoveAll(bson.M{"clusterid": *uuid}); err != nil || changeInfo == nil {
+					util.FailTask("Error deleting cluster nodes", err, t)
+					return
+				}
 
-		// Delete the cluster from DB
-		t.UpdateStatus("removing the cluster")
-		collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-		if err := collection.Remove(bson.M{"clusterid": *uuid}); err != nil {
-			util.FailTask("Error removing the cluster", err, t)
-			return
+				// Delete the cluster from DB
+				t.UpdateStatus("removing the cluster")
+				collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+				if err := collection.Remove(bson.M{"clusterid": *uuid}); err != nil {
+					util.FailTask("Error removing the cluster", err, t)
+					return
+				}
+				t.UpdateStatus("Success")
+				t.Done(models.TASK_STATUS_SUCCESS)
+				return
+			}
 		}
-		t.UpdateStatus("Success")
-		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Forget Cluster: %s", cluster_id), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Forget Cluster: %s", cluster_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for cluster forget. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster forget")
 		return
@@ -293,41 +309,49 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("Started the task for cluster unmanage: %v", t.ID)
-		sessionCopy := db.GetDatastore().Copy()
-		defer sessionCopy.Close()
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("Started the task for cluster unmanage: %v", t.ID)
+				sessionCopy := db.GetDatastore().Copy()
+				defer sessionCopy.Close()
 
-		// TODO: Disable sync jobs for the cluster
-		// TODO: Disable performance monitoring for the cluster
+				// TODO: Disable sync jobs for the cluster
+				// TODO: Disable performance monitoring for the cluster
 
-		t.UpdateStatus("Getting nodes of the cluster for unmanage")
-		// Disable collectd, salt configurations on the nodes participating in the cluster
-		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-		var nodes models.Nodes
-		if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-			util.FailTask("Error getting nodes for un-manage", err, t)
-			return
-		}
-		for _, node := range nodes {
-			t.UpdateStatus("Disabling node: %s", node.Hostname)
-			ok, err := GetCoreNodeManager().DisableNode(node.Hostname)
-			if err != nil || !ok {
-				util.FailTask("Error disabling node", err, t)
+				t.UpdateStatus("Getting nodes of the cluster for unmanage")
+				// Disable collectd, salt configurations on the nodes participating in the cluster
+				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+				var nodes models.Nodes
+				if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+					util.FailTask("Error getting nodes for un-manage", err, t)
+					return
+				}
+				for _, node := range nodes {
+					t.UpdateStatus("Disabling node: %s", node.Hostname)
+					ok, err := GetCoreNodeManager().DisableNode(node.Hostname)
+					if err != nil || !ok {
+						util.FailTask("Error disabling node", err, t)
+						return
+					}
+				}
+
+				t.UpdateStatus("Disabling post actions on the cluster")
+				// Disable any POST actions on cluster
+				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
+					util.FailTask("Error disabling post actions on cluster", err, t)
+					return
+				}
+				t.UpdateStatus("Success")
+				t.Done(models.TASK_STATUS_SUCCESS)
 				return
 			}
 		}
-
-		t.UpdateStatus("Disabling post actions on the cluster")
-		// Disable any POST actions on cluster
-		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-		if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
-			util.FailTask("Error disabling post actions on cluster", err, t)
-			return
-		}
-		t.UpdateStatus("Success")
-		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Unmanage Cluster: %s", cluster_id_str), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Unmanage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for cluster unmanage. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster unmanage")
 		return
@@ -359,41 +383,49 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("Started the task for cluster manage: %v", t.ID)
-		sessionCopy := db.GetDatastore().Copy()
-		defer sessionCopy.Close()
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("Started the task for cluster manage: %v", t.ID)
+				sessionCopy := db.GetDatastore().Copy()
+				defer sessionCopy.Close()
 
-		// TODO: Enable sync jobs for the cluster
-		// TODO: Enable performance monitoring for the cluster
+				// TODO: Enable sync jobs for the cluster
+				// TODO: Enable performance monitoring for the cluster
 
-		t.UpdateStatus("Getting nodes of cluster for manage back")
-		// Enable collectd, salt configurations on the nodes participating in the cluster
-		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-		var nodes models.Nodes
-		if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-			util.FailTask("Error getting nodes for manage", err, t)
-			return
-		}
-		for _, node := range nodes {
-			t.UpdateStatus("Enabling node")
-			ok, err := GetCoreNodeManager().EnableNode(node.Hostname)
-			if err != nil || !ok {
-				util.FailTask("Error enabling node", err, t)
+				t.UpdateStatus("Getting nodes of cluster for manage back")
+				// Enable collectd, salt configurations on the nodes participating in the cluster
+				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+				var nodes models.Nodes
+				if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+					util.FailTask("Error getting nodes for manage", err, t)
+					return
+				}
+				for _, node := range nodes {
+					t.UpdateStatus("Enabling node")
+					ok, err := GetCoreNodeManager().EnableNode(node.Hostname)
+					if err != nil || !ok {
+						util.FailTask("Error enabling node", err, t)
+						return
+					}
+				}
+
+				t.UpdateStatus("Enabling post actions on the cluster")
+				// Enable any POST actions on cluster
+				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
+					util.FailTask("Error enabling post actions on cluster", err, t)
+					return
+				}
+				t.UpdateStatus("Success")
+				t.Done(models.TASK_STATUS_SUCCESS)
 				return
 			}
 		}
-
-		t.UpdateStatus("Enabling post actions on the cluster")
-		// Enable any POST actions on cluster
-		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-		if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
-			util.FailTask("Error enabling post actions on cluster", err, t)
-			return
-		}
-		t.UpdateStatus("Success")
-		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Manage Cluster: %s", cluster_id_str), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Manage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for cluster manage. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster manage")
 		return
@@ -450,55 +482,63 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("Started task for cluster expansion: %v", t.ID)
-		provider := a.getProviderFromClusterId(*cluster_id)
-		err = provider.Client.Call(fmt.Sprintf("%s.%s",
-			provider.Name, cluster_post_functions["expand_cluster"]),
-			models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
-			&result)
-		if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
-			util.FailTask("Error expanding cluster", err, t)
-			return
-		} else {
-			// Update the master task id
-			providerTaskId, err = uuid.Parse(result.Data.RequestId)
-			if err != nil {
-				util.FailTask("Error parsing provider task id", err, t)
+		for {
+			select {
+			case <-t.StopCh:
 				return
-			}
-			t.UpdateStatus("Adding sub task")
-			if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
-				util.FailTask("Error adding sub task", err, t)
-				return
-			}
-
-			// Check for provider task to complete and update the disk info
-			for {
-				time.Sleep(2 * time.Second)
-				sessionCopy := db.GetDatastore().Copy()
-				defer sessionCopy.Close()
-				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
-				var providerTask models.AppTask
-				if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
-					util.FailTask("Error getting sub task status", err, t)
+			default:
+				t.UpdateStatus("Started task for cluster expansion: %v", t.ID)
+				provider := a.getProviderFromClusterId(*cluster_id)
+				err = provider.Client.Call(fmt.Sprintf("%s.%s",
+					provider.Name, cluster_post_functions["expand_cluster"]),
+					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+					&result)
+				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+					util.FailTask("Error expanding cluster", err, t)
 					return
-				}
-				if providerTask.Completed {
-					t.UpdateStatus("Starting disk sync")
-					if err := syncStorageDisks(new_nodes); err != nil {
-						t.UpdateStatus("Failed")
-						t.Done(models.TASK_STATUS_FAILURE)
-					} else {
-						t.UpdateStatus("Success")
-						t.Done(models.TASK_STATUS_SUCCESS)
+				} else {
+					// Update the master task id
+					providerTaskId, err = uuid.Parse(result.Data.RequestId)
+					if err != nil {
+						util.FailTask("Error parsing provider task id", err, t)
+						return
 					}
-					break
+					t.UpdateStatus("Adding sub task")
+					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+						util.FailTask("Error adding sub task", err, t)
+						return
+					}
+
+					// Check for provider task to complete and update the disk info
+					for {
+						time.Sleep(2 * time.Second)
+						sessionCopy := db.GetDatastore().Copy()
+						defer sessionCopy.Close()
+						coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+						var providerTask models.AppTask
+						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+							util.FailTask("Error getting sub task status", err, t)
+							return
+						}
+						if providerTask.Completed {
+							t.UpdateStatus("Starting disk sync")
+							if err := syncStorageDisks(new_nodes); err != nil {
+								t.UpdateStatus("Failed")
+								t.Done(models.TASK_STATUS_FAILURE)
+							} else {
+								t.UpdateStatus("Success")
+								t.Done(models.TASK_STATUS_SUCCESS)
+							}
+							break
+						}
+					}
 				}
+				return
 			}
 		}
 	}
 
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for cluster expansion. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster expansion")
 		return

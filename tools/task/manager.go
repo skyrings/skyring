@@ -24,17 +24,19 @@ import (
 	"github.com/skyrings/skyring/tools/uuid"
 	"gopkg.in/mgo.v2/bson"
 	"sync"
+	"time"
 )
 
 type Manager struct {
 }
 
-func (manager *Manager) Run(name string, f func(t *Task), startedFunc func(t *Task), completedFunc func(t *Task), statusFunc func(t *Task, s *models.Status)) (uuid.UUID, error) {
+func (manager *Manager) Run(name string, f func(t *Task), tOut time.Duration, startedFunc func(t *Task), completedFunc func(t *Task), statusFunc func(t *Task, s *models.Status)) (uuid.UUID, error) {
 	if id, err := uuid.New(); err == nil {
 		task := Task{
 			Mutex:            &sync.Mutex{},
 			ID:               *id,
 			Name:             name,
+			Timeout:          tOut,
 			DoneCh:           make(chan bool, 1),
 			StatusList:       []models.Status{},
 			StopCh:           make(chan bool, 1),
@@ -44,6 +46,19 @@ func (manager *Manager) Run(name string, f func(t *Task), startedFunc func(t *Ta
 			StatusCbkFunc:    statusFunc,
 		}
 		task.Run()
+		fmt.Println(task.Timeout)
+		go func() {
+			select {
+			case <-task.DoneCh:
+				return
+			case <-time.After(task.Timeout):
+				logger.Get().Error("task id %v timed out", task.ID)
+				task.UpdateStatus("Timeout. Task: %v timed out.", task.ID)
+				task.Done(models.TASK_STATUS_TIMED_OUT)
+				task.StopCh <- true
+				return
+			}
+		}()
 		return *id, nil
 	} else {
 		return uuid.UUID{}, err

@@ -29,6 +29,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"time"
 )
 
 var (
@@ -73,17 +74,25 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("started the task for addAndAcceptNode: %s", t.ID)
-		// Process the request
-		if err := addAndAcceptNode(w, request, t); err != nil {
-			t.UpdateStatus("Failed")
-			t.Done(models.TASK_STATUS_SUCCESS)
-		} else {
-			t.UpdateStatus("Success")
-			t.Done(models.TASK_STATUS_FAILURE)
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("started the task for addAndAcceptNode: %s", t.ID)
+				// Process the request
+				if err := addAndAcceptNode(w, request, t); err != nil {
+					t.UpdateStatus("Failed")
+					t.Done(models.TASK_STATUS_SUCCESS)
+				} else {
+					t.UpdateStatus("Success")
+					t.Done(models.TASK_STATUS_FAILURE)
+				}
+				return
+			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Add and Accept Node: %s", request.Hostname), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Add and Accept Node: %s", request.Hostname), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for addAndAcceptNode", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
@@ -127,17 +136,25 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("started the task for AcceptNode: %s", t.ID)
-		// Process the request
-		if err := acceptNode(w, hostname, request.SaltFingerprint, t); err != nil {
-			t.UpdateStatus("Failed")
-			t.Done(models.TASK_STATUS_FAILURE)
-		} else {
-			t.UpdateStatus("Success")
-			t.Done(models.TASK_STATUS_SUCCESS)
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("started the task for AcceptNode: %s", t.ID)
+				// Process the request
+				if err := acceptNode(w, hostname, request.SaltFingerprint, t); err != nil {
+					t.UpdateStatus("Failed")
+					t.Done(models.TASK_STATUS_FAILURE)
+				} else {
+					t.UpdateStatus("Success")
+					t.Done(models.TASK_STATUS_SUCCESS)
+				}
+				return
+			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Accept Node: %s", hostname), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Accept Node: %s", hostname), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for AcceptNode", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
