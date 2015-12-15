@@ -30,6 +30,7 @@ type Task struct {
 	Mutex            *sync.Mutex
 	ID               uuid.UUID
 	Name             string
+	Timeout          time.Duration
 	Tag              map[string]string
 	Started          bool
 	Completed        bool

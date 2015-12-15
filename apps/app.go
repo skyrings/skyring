@@ -15,7 +15,6 @@ package app
 import (
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
-	//"net/http"
 )
 
 type Application interface {
