@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"github.com/sbinet/go-python"
 	"github.com/skyrings/skyring/backend"
+	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/tools/gopy"
 	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/ssh"
@@ -37,6 +38,11 @@ var funcNames = [...]string{
 	"DisableService",
 	"EnableService",
 	"NodeUp",
+	"AddMonitoringPlugin",
+	"UpdateMonitoringConfiguration",
+	"EnableMonitoringPlugin",
+	"DisableMonitoringPlugin",
+	"RemoveMonitoringPlugin",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -66,6 +72,60 @@ func (s Salt) AcceptNode(node string, fingerprint string, ignored bool) (status 
 	if pyobj, err := pyFuncs["AcceptNode"].Call(node, fingerprint, ignored); err == nil {
 		err = gopy.Convert(pyobj, &status)
 	}
+	return
+}
+
+func (s Salt) UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (failed_nodes []string, err error) {
+	var pyobj *python.PyObject
+	if pyobj, err = pyFuncs["UpdateMonitoringConfiguration"].Call(nodes, monitoring.ToSaltPillarCompat(config)); err == nil {
+		logger.Get().Info("The python object is %v", pyobj)
+		err = gopy.Convert(pyobj, &failed_nodes)
+		logger.Get().Info("UpdateMonitoringConfiguration return from saltwrapper.py %v and error %v", failed_nodes, err)
+	}
+	return
+}
+
+func (s Salt) EnableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error) {
+	failed_nodes = make(map[string]string)
+	pyobj, err := pyFuncs["EnableMonitoringPlugin"].Call(nodes, pluginName)
+	if err == nil {
+		err = gopy.Convert(pyobj, &failed_nodes)
+		logger.Get().Info("In salt.go, parsed value is %v", failed_nodes)
+	}
+	logger.Get().Info("In salt.go, error value is %v", err)
+	return
+}
+
+func (s Salt) DisableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error) {
+	failed_nodes = make(map[string]string)
+	pyobj, err := pyFuncs["DisableMonitoringPlugin"].Call(nodes, pluginName)
+	if err == nil {
+		err = gopy.Convert(pyobj, &failed_nodes)
+		logger.Get().Info("In salt.go, parsed value is %v", failed_nodes)
+	}
+	logger.Get().Info("In salt.go, error value is %v", err)
+	return
+}
+
+func (s Salt) RemoveMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error) {
+	failed_nodes = make(map[string]string)
+	pyobj, err := pyFuncs["RemoveMonitoringPlugin"].Call(nodes, pluginName)
+	if err == nil {
+		err = gopy.Convert(pyobj, &failed_nodes)
+		logger.Get().Info("In salt.go, parsed value is %v", failed_nodes)
+	}
+	logger.Get().Info("In salt.go, error value is %v", err)
+	return
+}
+
+func (s Salt) AddMonitoringPlugin(pluginNames []string, nodes []string, master string, pluginMap map[string]map[string]string) (failed_nodes map[string]interface{}, err error) {
+	failed_nodes = make(map[string]interface{})
+	pyobj, err := pyFuncs["AddMonitoringPlugin"].Call(pluginNames, nodes, master, pluginMap)
+	if err == nil {
+		err = gopy.Convert(pyobj, &failed_nodes)
+		logger.Get().Info("In salt.go, parsed value is %v", failed_nodes)
+	}
+	logger.Get().Info("In salt.go, error value is %v", err)
 	return
 }
 
