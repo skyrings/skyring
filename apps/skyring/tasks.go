@@ -83,11 +83,11 @@ func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 	var task models.AppTask
 	if err := coll.Find(bson.M{"id": *taskId}).One(&task); err != nil {
 		logger.Get().Error("Unable to get task: %v", err)
-		util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
+		util.HttpResponse(rw, http.StatusNotFound, err.Error())
 		return
 	}
 	if task.Id.IsZero() {
-		util.HttpResponse(rw, http.StatusBadRequest, "Task not found")
+		util.HttpResponse(rw, http.StatusNotFound, "Task not found")
 		logger.Get().Error("Task not found: %v", err)
 		return
 	} else {
