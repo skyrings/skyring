@@ -23,6 +23,7 @@ import (
 	"github.com/skyrings/skyring/tools/task"
 	"gopkg.in/mgo.v2/bson"
 	"os"
+	"time"
 )
 
 var (
@@ -127,17 +128,25 @@ func handle_node_start_event(node string) error {
 		return nil
 	}
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("started the task for InitializeNode: %s", t.ID)
-		// Process the request
-		if err := initializeStorageNode(node, t); err != nil {
-			t.UpdateStatus("Failed")
-			t.Done(models.TASK_STATUS_FAILURE)
-		} else {
-			t.UpdateStatus("Success")
-			t.Done(models.TASK_STATUS_SUCCESS)
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("started the task for InitializeNode: %s", t.ID)
+				// Process the request
+				if err := initializeStorageNode(node, t); err != nil {
+					t.UpdateStatus("Failed")
+					t.Done(models.TASK_STATUS_FAILURE)
+				} else {
+					t.UpdateStatus("Success")
+					t.Done(models.TASK_STATUS_SUCCESS)
+				}
+				return
+			}
 		}
 	}
-	if taskId, err := skyring.GetApp().GetTaskManager().Run(fmt.Sprintf("Initialize Node: %s", node), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetApp().GetTaskManager().Run(fmt.Sprintf("Initialize Node: %s", node), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for Initialize Node: %s. error: %v", node, err)
 	} else {
 		logger.Get().Debug("Task created for initialize node. Task id: %s", taskId.String())

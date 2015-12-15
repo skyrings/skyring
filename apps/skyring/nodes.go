@@ -30,6 +30,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"time"
 )
 
 var (
@@ -72,27 +73,34 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("started the task for addAndAcceptNode: %s", t.ID)
-		var nodeId uuid.UUID
-		appLock, err := lockNode(nodeId, request.Hostname, "addAndAcceptNode")
-		if err != nil {
-			util.FailTask("Failed to acquire lock", err, t)
-			return
-		}
-		defer a.GetLockManager().ReleaseLock(*appLock)
-		// Process the request
-		if err := addAndAcceptNode(w, request, t); err != nil {
-			t.UpdateStatus("Failed")
-			t.Done(models.TASK_STATUS_FAILURE)
-		} else {
-			t.UpdateStatus("Success")
-			t.Done(models.TASK_STATUS_SUCCESS)
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("started the task for addAndAcceptNode: %s", t.ID)
+				var nodeId uuid.UUID
+				appLock, err := lockNode(nodeId, request.Hostname, "addAndAcceptNode")
+				if err != nil {
+					util.FailTask("Failed to acquire lock", err, t)
+					return
+				}
+				defer a.GetLockManager().ReleaseLock(*appLock)
+				// Process the request
+				if err := addAndAcceptNode(w, request, t); err != nil {
+					t.UpdateStatus("Failed")
+					t.Done(models.TASK_STATUS_FAILURE)
+				} else {
+					t.UpdateStatus("Success")
+					t.Done(models.TASK_STATUS_SUCCESS)
+				}
+				return
+			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Add and Accept Node: %s", request.Hostname), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Add and Accept Node: %s", request.Hostname), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for Add and Accept Node: %s. error: %v", request.Hostname, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
-
 	} else {
 		logger.Get().Debug("Task Created: ", taskId.String())
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
@@ -136,24 +144,32 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
-		t.UpdateStatus("started the task for AcceptNode: %s", t.ID)
-		var nodeId uuid.UUID
-		appLock, err := lockNode(nodeId, hostname, "AcceptNode")
-		if err != nil {
-			util.FailTask("Failed to acquire lock", err, t)
-			return
-		}
-		defer a.GetLockManager().ReleaseLock(*appLock)
-		// Process the request
-		if err := acceptNode(w, hostname, request.SaltFingerprint, t); err != nil {
-			t.UpdateStatus("Failed")
-			t.Done(models.TASK_STATUS_FAILURE)
-		} else {
-			t.UpdateStatus("Success")
-			t.Done(models.TASK_STATUS_SUCCESS)
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("started the task for AcceptNode: %s", t.ID)
+				var nodeId uuid.UUID
+				appLock, err := lockNode(nodeId, hostname, "AcceptNode")
+				if err != nil {
+					util.FailTask("Failed to acquire lock", err, t)
+					return
+				}
+				defer a.GetLockManager().ReleaseLock(*appLock)
+				// Process the request
+				if err := acceptNode(w, hostname, request.SaltFingerprint, t); err != nil {
+					t.UpdateStatus("Failed")
+					t.Done(models.TASK_STATUS_FAILURE)
+				} else {
+					t.UpdateStatus("Success")
+					t.Done(models.TASK_STATUS_SUCCESS)
+				}
+				return
+			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Accept Node: %s", hostname), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Accept Node: %s", hostname), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for Accept Node: %s. error: %v", hostname, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 	} else {
@@ -162,7 +178,6 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
 	}
-
 }
 
 func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task) error {
