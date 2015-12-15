@@ -158,6 +158,16 @@ func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *t
 			t.UpdateStatus("Unable to add the node to DB: %s", hostname)
 			return err
 		}
+		t.UpdateStatus("Setting up collectd on node: %s", hostname)
+		if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(hostname, curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
+			t.UpdateStatus("Unable to setup collectd on node: %s", hostname)
+			logger.Get().Error("Unable to setup collectd on %s because of %v", hostname, nodeErrorMap)
+			if len(nodeErrorMap) != 0 {
+				return fmt.Errorf("Unable to setup collectd on %s because of %v", hostname, nodeErrorMap)
+			} else {
+				return configureError
+			}
+		}
 	} else {
 		logger.Get().Critical("Accepting the node failed: ", hostname)
 		t.UpdateStatus("Unable to Accept the node: %s", hostname)
@@ -181,6 +191,16 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 		if err = addStorageNodeToDB(w, *node); err != nil {
 			t.UpdateStatus("Unable to add the node to DB: %s", request.Hostname)
 			return err
+		}
+		t.UpdateStatus("Setting up collectd on node: %s", request.Hostname)
+		if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(request.Hostname, curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
+			t.UpdateStatus("Unable to setup collectd on node: %s", request.Hostname)
+			logger.Get().Error("Unable to setup collectd on %s because of %v", request.Hostname, nodeErrorMap)
+			if len(nodeErrorMap) != 0 {
+				return fmt.Errorf("Unable to setup collectd on %s because of %v", request.Hostname, nodeErrorMap)
+			} else {
+				return configureError
+			}
 		}
 	} else {
 		logger.Get().Critical("Bootstrapping the node failed: ", request.Hostname)
