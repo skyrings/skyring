@@ -5,14 +5,11 @@ import (
 	"fmt"
 	"github.com/sbinet/go-python"
 	"reflect"
-	"sync"
 )
 
 type PyFunction struct {
 	*python.PyObject
 }
-
-var mutex sync.Mutex
 
 func (f *PyFunction) Call(args ...interface{}) (r *python.PyObject, err error) {
 	var pyargs *python.PyObject
@@ -22,8 +19,6 @@ func (f *PyFunction) Call(args ...interface{}) (r *python.PyObject, err error) {
 	}
 
 	name := python.PyString_AsString(f.GetAttrString("__name__"))
-	mutex.Lock()
-	defer mutex.Unlock()
 	if r = f.CallObject(pyargs); r == nil {
 		err = errors.New(fmt.Sprintf("%s(): function failed at python side", name))
 	}

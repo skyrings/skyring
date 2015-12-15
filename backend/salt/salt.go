@@ -23,6 +23,7 @@ import (
 	"github.com/skyrings/skyring/tools/ssh"
 	"github.com/skyrings/skyring/tools/uuid"
 	"strings"
+	"sync"
 	"text/template"
 )
 
@@ -39,6 +40,8 @@ var funcNames = [...]string{
 }
 
 var pyFuncs map[string]*gopy.PyFunction
+
+var mutex sync.Mutex
 
 func init() {
 	var err error
@@ -58,6 +61,8 @@ func (s Salt) AddNode(master string, node string, port uint, fingerprint string,
 }
 
 func (s Salt) AcceptNode(node string, fingerprint string, ignored bool) (status bool, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	if pyobj, err := pyFuncs["AcceptNode"].Call(node, fingerprint, ignored); err == nil {
 		err = gopy.Convert(pyobj, &status)
 	}
@@ -83,6 +88,8 @@ func (s Salt) BootstrapNode(master string, node string, port uint, fingerprint s
 }
 
 func (s Salt) GetNodes() (nodes backend.NodeList, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	if pyobj, err := pyFuncs["GetNodes"].Call(); err == nil {
 		err = gopy.Convert(pyobj, &nodes)
 	}
@@ -90,6 +97,8 @@ func (s Salt) GetNodes() (nodes backend.NodeList, err error) {
 }
 
 func (s Salt) GetNodeID(node string) (id uuid.UUID, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	if pyobj, err := pyFuncs["GetNodeID"].Call(node); err == nil {
 		var s string
 		if err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &s); err == nil {
@@ -102,6 +111,8 @@ func (s Salt) GetNodeID(node string) (id uuid.UUID, err error) {
 }
 
 func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	if pyobj, err := pyFuncs["GetNodeDisk"].Call(node); err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &disks)
 	}
@@ -109,6 +120,8 @@ func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
 }
 
 func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	if pyobj, err := pyFuncs["GetNodeNetwork"].Call(node); err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &n)
 	}
@@ -116,6 +129,8 @@ func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
 }
 
 func (s Salt) IgnoreNode(node string) (status bool, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	if pyobj, err := pyFuncs["IgnoreNode"].Call(node); err == nil {
 		err = gopy.Convert(pyobj, &status)
 	}
@@ -123,6 +138,8 @@ func (s Salt) IgnoreNode(node string) (status bool, err error) {
 }
 
 func (s Salt) DisableService(node string, service string, stop bool) (status bool, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	if pyobj, err := pyFuncs["DisableService"].Call(node, service, stop); err == nil {
 		err = gopy.Convert(pyobj, &status)
 	}
@@ -130,6 +147,8 @@ func (s Salt) DisableService(node string, service string, stop bool) (status boo
 }
 
 func (s Salt) EnableService(node string, service string, start bool) (status bool, error error) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	if pyobj, err := pyFuncs["EnableService"].Call(node, service, start); err == nil {
 		err = gopy.Convert(pyobj, &status)
 	}
@@ -137,6 +156,8 @@ func (s Salt) EnableService(node string, service string, start bool) (status boo
 }
 
 func (s Salt) NodeUp(node string) (status bool, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	if pyobj, err := pyFuncs["NodeUp"].Call(node); err == nil {
 		err = gopy.Convert(pyobj, &status)
 	}
