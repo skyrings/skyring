@@ -87,7 +87,7 @@ func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	if task.Id.IsZero() {
-		util.HttpResponse(rw, http.StatusBadRequest, "Task not found")
+		util.HttpResponse(rw, http.StatusNotFound, "Task not found")
 		logger.Get().Error("Task not found: %v", err)
 		return
 	} else {
