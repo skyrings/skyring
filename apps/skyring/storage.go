@@ -114,7 +114,8 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			}
 
 			// Check for provider task to complete and update the parent task
-			for {
+			done := false
+			for count := 0; count < 150; count++ {
 				time.Sleep(2 * time.Second)
 				sessionCopy := db.GetDatastore().Copy()
 				defer sessionCopy.Close()
@@ -132,8 +133,15 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 						t.UpdateStatus("Failed")
 						t.Done(models.TASK_STATUS_FAILURE)
 					}
+					done = true
 					break
 				}
+			}
+			if !done {
+				util.FailTask(
+					"Sub task timed out",
+					errors.New("Could not get sub task status after 5 minutes"),
+					t)
 			}
 		}
 	}
