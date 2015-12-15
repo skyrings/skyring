@@ -20,6 +20,7 @@ import (
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/task"
 	"github.com/skyrings/skyring/tools/uuid"
@@ -28,6 +29,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"reflect"
 	"time"
 )
 
@@ -113,7 +115,39 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				if providerTask.Completed {
+					var monitoringConfigured bool = true
 					if providerTask.Status == models.TASK_STATUS_SUCCESS {
+						// Check if monitoring configuration passed and update them accordingly
+						if reflect.ValueOf(request.MonitoringPlugins).IsValid() && len(request.MonitoringPlugins) != 0 {
+							var nodes []string
+							nodesMap, nodesFetchError := getNodes(request.Nodes)
+							if nodesFetchError == nil {
+								for _, node := range nodesMap {
+									nodes = append(nodes, node.Hostname)
+								}
+								t.UpdateStatus("Updating the monitoring configuration on all nodes in the cluster")
+								if updateFailedNodes, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); updateError != nil || len(updateFailedNodes) != 0 {
+									monitoringConfigured = false
+									t.UpdateStatus("Failed to update the monitoring configuration")
+									logger.Get().Error("Failed to update the monitoring configuration on : %v", updateFailedNodes)
+								}
+							}
+						}
+						if request.MonitoringPlugins == nil || len(request.MonitoringPlugins) == 0 {
+							request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
+						}
+						if !monitoringConfigured {
+						// If configuring the new thresholds failed update to db, the default thresholds created during accept node
+							request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
+						}
+						// Udate the thresholds to db
+						t.UpdateStatus("Updating configuration to db")
+						if dbError := updatePluginsInDb(bson.M{"name": request.Name}, request.MonitoringPlugins); dbError != nil {
+							t.UpdateStatus("Failed with error %s", dbError.Error())
+							logger.Get().Error("Failed to update plugins to db: %v", dbError)
+						} else {
+							t.UpdateStatus("Updated monitoring configuration to db")
+						}
 						t.UpdateStatus("Starting disk sync")
 						if err := syncStorageDisks(request.Nodes); err != nil {
 							t.UpdateStatus("Failed")
@@ -126,7 +160,6 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 						t.UpdateStatus("Failed")
 						t.Done(models.TASK_STATUS_FAILURE)
 					}
-					break
 				}
 			}
 		}
@@ -141,6 +174,33 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
 	}
+}
+
+func updatePluginsInDb(parameter bson.M, updatedPlugins []monitoring.Plugin) (err error) {
+	logger.Get().Info("In updatePluginsInDb, the parameter is %v and plugins are %v", parameter, updatedPlugins)
+	sessionCopy := db.GetDatastore().Copy()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	dbUpdateError := coll.Update(parameter, bson.M{"$set": bson.M{"monitoringplugins": updatedPlugins}})
+	return dbUpdateError
+}
+
+func getNodes(clusterNodes []models.ClusterNode) (map[uuid.UUID]models.Node, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var nodes = make(map[uuid.UUID]models.Node)
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	for _, clusterNode := range clusterNodes {
+		uuid, err := uuid.Parse(clusterNode.NodeId)
+		if err != nil {
+			return nodes, errors.New(fmt.Sprintf("Error parsing node id: %v", clusterNode.NodeId))
+		}
+		var node models.Node
+		if err := coll.Find(bson.M{"nodeid": *uuid}).One(&node); err != nil {
+			return nodes, err
+		}
+		nodes[node.NodeId] = node
+	}
+	return nodes, nil
 }
 
 func cluster_exists(key string, value string) (*models.Cluster, error) {

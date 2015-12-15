@@ -16,7 +16,7 @@
 import logging
 from functools import wraps
 import uuid
-
+from sets import Set
 import salt
 from salt import wheel, client, key, states, modules
 import salt.config
@@ -253,3 +253,76 @@ def EnableService(node, service, start=False):
 def NodeUp(node):
     out = local.cmd(node, 'cmd.run', ['pwd'])
     return True if out else False
+
+
+def _get_state_result(out):
+    failed_minions = {}
+    for minion, v in out.iteritems():
+        failed_results = {}
+        for id, res in v.iteritems():
+            if not res['result']:
+                failed_results.update({id: res})
+        if not v:
+            failed_minions[minion] = {}
+        if failed_results:
+            failed_minions[minion] = failed_results
+    return failed_minions
+
+
+def run_state(tgts, state, *args, **kwargs):
+    out = local.cmd(
+        tgts,
+        'state.sls',
+        [state],
+        expr_form='list',
+        *args,
+        **kwargs)
+    return _get_state_result(out)
+
+
+# Monitoring Section
+monitoring_root_path = '/etc/collectd.d/'
+monitoring_disabled_root_path = '/etc/disabled_collectd.d/'
+
+
+threshold_type_map = {"warning": "WarningMax", "critical": "FailureMax"}
+
+
+def AddMonitoringPlugin(plugin_list, nodes, master=None, configs=None):
+    state_list = ''
+    no_of_plugins = len(plugin_list)
+    for index in range(no_of_plugins):
+        state_list += ('collectd.' + plugin_list[index])
+        if index < no_of_plugins - 1:
+            state_list += ","
+    plugin_thresholds = {}
+    for plugin, value in configs.iteritems():
+        thresholds = {}
+        for threshold_type, threshold in value.iteritems():
+            thresholds[threshold_type_map.get(threshold_type)] = threshold
+        plugin_thresholds[plugin] = thresholds
+    dict = {}
+    if master:
+        dict["master_name"] = master
+    if thresholds:
+        dict["thresholds"] = plugin_thresholds
+    pillar = {"collectd": dict}
+    return run_state(nodes, state_list, kwarg={'pillar': pillar})
+
+
+def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict):
+    failed_minions = []
+    for key, value in plugin_threshold_dict.iteritems():
+        path = monitoring_root_path + key + '.conf'
+        for threshold_type, threshold in value.iteritems():
+            pattern_type = threshold_type_map.get(threshold_type)
+            pattern = pattern_type + " " + "[0-9]*"
+            repl = pattern_type + " " + str(threshold)
+            out = local.cmd(nodes, "file.replace", expr_form='list', kwarg={'path': path, 'pattern': pattern, 'repl': repl})
+    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+    for node, restartStatus in out.iteritems():
+        if not restartStatus:
+            log.error("Failed to restart collectd on node %s" %(node))
+            failed_minions.append(node)
+    return failed_minions
+

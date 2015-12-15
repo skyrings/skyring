@@ -20,6 +20,7 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/nodemanager"
 	"github.com/skyrings/skyring/tools/logger"
 	"gopkg.in/mgo.v2/bson"
@@ -223,4 +224,15 @@ func (a SaltNodeManager) IgnoreNode(node string) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func (a SaltNodeManager) SetUpMonitoring(node string, master string) (map[string]interface{}, error) {
+	// The plugins to be setup includes the editable plugins and also the write plugin
+	failed_nodes, err := salt_backend.AddMonitoringPlugin(append(monitoring.SupportedMonitoringPlugins, monitoring.MonitoringWritePlugin), []string{node}, master, monitoring.ToSaltPillarCompat(monitoring.GetDefaultThresholdValues()))
+	return failed_nodes, err
+}
+
+func (a SaltNodeManager) UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) ([]string, error) {
+	failed_nodes, err := salt_backend.UpdateMonitoringConfiguration(nodes, config)
+	return failed_nodes, err
 }
