@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_2a0ec28d",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-16T07:01:46Z",
+      "side": 1,
+      "message": "Tasks details should have the information on the timeout. Its like the task is failed because its timedout.",
+      "revId": "0e8c492efe5cfe85a09248dd5add17dfff458172",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
