@@ -16,6 +16,24 @@
       "revId": "588169f20f60d1312361a64feb54c62f3c685eca",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_ea13eab5",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-16T07:03:17Z",
+      "side": 1,
+      "message": "Actually if the record does not exist, then also there is error returned. So we need to return 404 here otherwise, it says 500 if the table exists and record does not.\n\nActually below code could safely say (without any check) \n\njson.NewEncode(rw).Encode(task)",
+      "parentUuid": "5ac4a560_6a40baa5",
+      "revId": "588169f20f60d1312361a64feb54c62f3c685eca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
