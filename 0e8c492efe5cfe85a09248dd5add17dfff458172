@@ -16,6 +16,24 @@
       "revId": "0e8c492efe5cfe85a09248dd5add17dfff458172",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_ca738e13",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-16T07:08:27Z",
+      "side": 1,
+      "message": "May be we can use util.FailTask() here. Would change.",
+      "parentUuid": "5ac4a560_2a0ec28d",
+      "revId": "0e8c492efe5cfe85a09248dd5add17dfff458172",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
