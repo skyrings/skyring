@@ -247,6 +247,24 @@
     },
     {
       "key": {
+        "uuid": "5ac4a560_2ae962b8",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-16T06:54:31Z",
+      "side": 1,
+      "message": "If they are always at cluster level I feel below should be apis\n\nGET /clusters/{cluster-id}/mon_plugin_thresholds   to get the threshold values\n\nPOST /clusters/{cluster-id}/mon_plugin_thresholds   to set the threshold values",
+      "parentUuid": "5ac4a560_8196e64a",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_b73a9234",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 1
@@ -276,6 +294,24 @@
       "side": 1,
       "message": "May be in a follow up patch? Please...",
       "parentUuid": "5ac4a560_b73a9234",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_4aecdec7",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-16T06:54:31Z",
+      "side": 1,
+      "message": "Thats fine.\n\nYou can new patch to add mass deletion of mon plugins",
+      "parentUuid": "5ac4a560_e19b1a70",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -486,6 +522,24 @@
       "side": 1,
       "message": "From logs as in line 289",
       "parentUuid": "5ac4a560_57605e35",
+      "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_2a37a24f",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-16T06:54:31Z",
+      "side": 1,
+      "message": "How reliable is to depend on log parsing?",
+      "parentUuid": "5ac4a560_8f31f60d",
       "revId": "48234811f3e15a5f6473073c7370d3854ef9024f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
