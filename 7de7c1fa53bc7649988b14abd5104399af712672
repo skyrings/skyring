@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac1b152_1426f4ba",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-16T19:34:45Z",
+      "side": 1,
+      "message": "Should it be configurable and applicable for all the tasks?. I think this is not the right way to this. The task itself should have a expiry timer and should time out automatically",
+      "range": {
+        "startLine": 118,
+        "startChar": 27,
+        "endLine": 118,
+        "endChar": 30
+      },
+      "revId": "7de7c1fa53bc7649988b14abd5104399af712672",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
