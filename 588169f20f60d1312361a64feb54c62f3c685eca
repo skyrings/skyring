@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_6a40baa5",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-16T06:57:50Z",
+      "side": 1,
+      "message": "This should remain as internal server error",
+      "revId": "588169f20f60d1312361a64feb54c62f3c685eca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
