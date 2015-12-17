@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac1b152_d4e47cae",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-17T03:28:15Z",
+      "side": 1,
+      "message": "We are aquiring a lock in gopy - Call function. If we are locking here, do we need to lock again at in \u0027Call\u0027?",
+      "revId": "7984c75e28d4518522b8c2c4025558034307db56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
