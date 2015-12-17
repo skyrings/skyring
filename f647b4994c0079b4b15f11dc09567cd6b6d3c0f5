@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "3ac1b152_d42e3ca5",
+        "filename": "apps/app.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-17T05:09:37Z",
+      "side": 1,
+      "message": "Actually it would go through each of the cluster and would sync all the related entities like nodes, storage logical units, storages and what not.\n\nMay be we can call this as SyncClusters()",
+      "parentUuid": "3ac1b152_b48540af",
+      "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ac1b152_f4541823",
         "filename": "apps/skyring/sync.go",
         "patchSetId": 2
@@ -48,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "3ac1b152_f42b3892",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-17T05:09:37Z",
+      "side": 1,
+      "message": "We need to add this in spec",
+      "parentUuid": "3ac1b152_f4541823",
+      "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ac1b152_d4571c25",
         "filename": "apps/skyring/sync.go",
         "patchSetId": 2
@@ -65,6 +101,24 @@
         "endLine": 167,
         "endChar": 5
       },
+      "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac1b152_1418b483",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-17T05:09:37Z",
+      "side": 1,
+      "message": "Actually loop order is reverse from the previous one.\n\nInsert/Update Case:\n  Outer loop - on storages list from cluster\n  Inner loop - on fetched list from DB\n\nDelete Case:\n  Outer loop - on fetched list from DB\n  Inner loop - on storages list from cluster\n\nCould be achieved in the previous case but code might look bit messy so did it this way.",
+      "parentUuid": "3ac1b152_d4571c25",
       "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
