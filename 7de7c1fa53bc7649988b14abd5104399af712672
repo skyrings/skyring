@@ -22,6 +22,24 @@
       "revId": "7de7c1fa53bc7649988b14abd5104399af712672",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac1b152_144a7483",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-17T04:22:36Z",
+      "side": 1,
+      "message": "It could be configurable value.\nEvery parent task would wait for a defined time period only for sub-tsk to complete else would report a timeout.\n\nIntroducing a timeout mechanism at task level itself would be an infra change which makes sure any task if its taking more than defined time, would time out automatically and would be marked and Done with Status failed.\nThis may be we should do as a separate patch.",
+      "parentUuid": "3ac1b152_1426f4ba",
+      "revId": "7de7c1fa53bc7649988b14abd5104399af712672",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
