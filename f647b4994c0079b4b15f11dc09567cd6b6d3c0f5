@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac1b152_b48540af",
+        "filename": "apps/app.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-17T04:49:36Z",
+      "side": 1,
+      "message": "Better to have a generic name, as this will sync not only the cluster details",
+      "range": {
+        "startLine": 30,
+        "startChar": 12,
+        "endLine": 30,
+        "endChar": 17
+      },
+      "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac1b152_f4541823",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-17T04:49:36Z",
+      "side": 1,
+      "message": "Do we have this defined in the provider spec?",
+      "range": {
+        "startLine": 62,
+        "startChar": 44,
+        "endLine": 62,
+        "endChar": 59
+      },
+      "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac1b152_d4571c25",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-17T04:49:36Z",
+      "side": 1,
+      "message": "Why to run the loop again? Mark the ones which is deleted in the previous loops itself and delete it here",
+      "range": {
+        "startLine": 160,
+        "startChar": 2,
+        "endLine": 167,
+        "endChar": 5
+      },
+      "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
