@@ -70,6 +70,24 @@
       "revId": "588169f20f60d1312361a64feb54c62f3c685eca",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ac1b152_346850f5",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-17T04:13:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ac1b152_3404d014",
+      "revId": "588169f20f60d1312361a64feb54c62f3c685eca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
