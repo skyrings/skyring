@@ -106,7 +106,7 @@ func RouteEvent(event models.NodeEvent) {
 	return
 }
 
-func (l *Listener) PersistNodeDbusEvent(args *models.NodeEvent, ack *bool) error {
+func (l *Listener) PersistNodeEvent(args *models.NodeEvent, ack *bool) error {
 	if args.Timestamp.IsZero() || args.Node == "" || args.Tag == "" || args.Message == "" || args.Severity == "" {
 		logger.Get().Error("Incomplete details in the event", *args)
 		*ack = false
