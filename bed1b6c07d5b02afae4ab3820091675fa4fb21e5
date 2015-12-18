@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac1b152_280553c2",
+        "filename": "event/listener.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-12-18T06:54:30Z",
+      "side": 1,
+      "message": "Can you Place this part inside the else block of below persist_event function. As we will have to push events to clients only after its being persisted.",
+      "revId": "bed1b6c07d5b02afae4ab3820091675fa4fb21e5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
