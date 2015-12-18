@@ -20,14 +20,15 @@ import (
 )
 
 var handlermap = map[string]interface{}{
-	"dbus/node/*/generic/storage/block/added":           block_add_handler,
-	"dbus/node/*/generic/storage/block/removed":         block_remove_handler,
-	"dbus/node/*/generic/storage/block/changed":         block_change_handler,
-	"dbus/node/*/generic/storage/mount/changed":         mount_change_handler,
-	"dbus/node/*/generic/storage/drive/added":           drive_add_handler,
-	"dbus/node/*/generic/storage/drive/removed":         drive_remove_handler,
-	"dbus/node/*/generic/storage/drive/possibleFailure": drive_remove_handler,
-	"dbus/node/*/glusterfs/service/glusterd":            glusterd_status_handler,
+	"skyring/dbus/node/*/generic/storage/block/added":           block_add_handler,
+	"skyring/dbus/node/*/generic/storage/block/removed":         block_remove_handler,
+	"skyring/dbus/node/*/generic/storage/block/changed":         block_change_handler,
+	"skyring/dbus/node/*/generic/storage/mount/changed":         mount_change_handler,
+	"skyring/dbus/node/*/generic/storage/drive/added":           drive_add_handler,
+	"skyring/dbus/node/*/generic/storage/drive/removed":         drive_remove_handler,
+	"skyring/dbus/node/*/generic/storage/drive/possibleFailure": drive_remove_handler,
+	"skyring/dbus/node/*/glusterfs/service/glusterd":            glusterd_status_handler,
+	"skyring/dbus/node/*/generic/service/collectd":              collectd_status_handler,
 }
 
 func persist_event(event models.Event) error {
@@ -69,5 +70,9 @@ func drive_add_handler(event models.Event) error {
 }
 
 func drive_remove_handler(event models.Event) error {
+	return nil
+}
+
+func collectd_status_handler(event models.Event) error {
 	return nil
 }

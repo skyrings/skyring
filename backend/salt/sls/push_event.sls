@@ -112,7 +112,7 @@ def PushNodeStartEvent(data):
     except (socket.error, JSONRPCError) as e:
         log.error(e, exc_info=True)
 
-def PushNodeDbusEvent(data):
+def PushNodeEvent(data):
     timestamp = getTimestamp(data['_stamp'])
     node = data['id']
     tag = data['tag']
@@ -121,7 +121,7 @@ def PushNodeDbusEvent(data):
     severity = data['data']['severity']
     try:
         with JsonRpcClient() as c:
-            c.call("Listener.PersistNodeDbusEvent",
+            c.call("Listener.PersistNodeEvent",
                    {'timestamp': timestamp, 'node': node, 'tag': tag, 'message': message,
                     'severity': severity, 'tags': tags})
     except (socket.error, JSONRPCError) as e:
@@ -140,8 +140,8 @@ def run():
     # tag and data variables are from salt
     if data.get('tag') and fnmatch.fnmatch(data['tag'], 'salt/minion/*/start'):
         PushNodeStartEvent(data)
-    elif data.get('tag') and fnmatch.fnmatch(data['tag'], 'dbus/node/*'):
-        PushNodeDbusEvent(data)
+    elif data.get('tag') and fnmatch.fnmatch(data['tag'], 'skyring/*'):
+        PushNodeEvent(data)
     else:
         PushEvent(data)
     return {}
