@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_d2f1e496",
+        "filename": "Makefile",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-21T04:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_e81b001a",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_081bdc1b",
         "filename": "Makefile",
         "patchSetId": 9
@@ -30,6 +48,24 @@
       "writtenOn": "2015-12-14T06:44:56Z",
       "side": 1,
       "message": "s/SKYTARBLDSRC/SKYRIN_TARBUILD_SRC/g",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_f2eee8b3",
+        "filename": "Makefile",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-21T04:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_081bdc1b",
       "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_122b6cec",
+        "filename": "Makefile",
+        "patchSetId": 9
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-21T04:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_2816d8f1",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_68d7f023",
         "filename": "skyring-setup.sh",
         "patchSetId": 9
@@ -64,6 +118,24 @@
       "writtenOn": "2015-12-14T06:44:56Z",
       "side": 1,
       "message": "This check should go off now I feel",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_32307056",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-21T04:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_68d7f023",
       "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_5235f444",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-21T04:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_c8e72411",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_e8e22000",
         "filename": "skyring-setup.sh",
         "patchSetId": 9
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "fa98f980_723af837",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-21T04:49:50Z",
+      "side": 1,
+      "message": "Will incorporate this in a follow-up patch",
+      "parentUuid": "5ac4a560_e8e22000",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac4a560_48bb14e5",
         "filename": "skyring.spec",
         "patchSetId": 9
@@ -115,6 +223,24 @@
       "writtenOn": "2015-12-14T06:44:56Z",
       "side": 1,
       "message": "python-netaddr??",
+      "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa98f980_923e7c28",
+        "filename": "skyring.spec",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-21T04:49:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac4a560_48bb14e5",
       "revId": "82444269a7a7b1e0a8334b9276a832f2e1eedfd3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
