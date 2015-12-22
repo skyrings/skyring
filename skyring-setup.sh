@@ -3,8 +3,6 @@
 # This is a single script which will install required packages,
 # Configure and setting up the system to use skyring
 
-set -e
-
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -55,6 +53,7 @@ info "Creating time series database"
 
 info "Creating skyring database"
 # Configuring MongoDB
+
 mongo <<EOF
 use skyring
 db.leads.findOne()

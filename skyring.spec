@@ -19,13 +19,11 @@ BuildRequires: hg
 BuildRequires: git
 BuildRequires: openldap-devel
 
-Requires: salt-master
+Requires: salt-master >= 2015.5.5
 Requires: python-cpopen
-Requires: python-paramiko
 Requires: python-netaddr
 Requires: mongodb
 Requires: mongodb-server
-Requires: ceph
 
 %description
 SkyRing is a modern, extensible web-based storage management platform
