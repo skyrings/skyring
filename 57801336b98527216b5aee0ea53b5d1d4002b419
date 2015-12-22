@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_b050d85f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T13:57:54Z",
+      "side": 1,
+      "message": "Log the errors which is missing is most of the places",
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_10dd2415",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T13:57:54Z",
+      "side": 1,
+      "message": "You can do this regardless whether disk sync is successful or not. Failure in disk sync in not a big deal because the cluster is already created successfully",
+      "range": {
+        "startLine": 123,
+        "startChar": 6,
+        "endLine": 123,
+        "endChar": 13
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_3065c845",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T13:57:54Z",
+      "side": 1,
+      "message": "Do not fail the task here. Introduce a new state called partial failure or something and set that",
+      "range": {
+        "startLine": 133,
+        "startChar": 24,
+        "endLine": 134,
+        "endChar": 31
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_9001143c",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T13:57:54Z",
+      "side": 1,
+      "message": "How are you handling the partial failures? suppose one of the node fails? Or this step succeeds and db update fails?\nSame applicable for all other funcs POST_thresholds,POST_EnableMonitoringPlugin, POST_DisableMonitoringPlugin, REMOVE_MonitoringPlugin etc\n\ndo we rollback the changes?",
+      "range": {
+        "startLine": 183,
+        "startChar": 2,
+        "endLine": 185,
+        "endChar": 17
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_2f09e995",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T13:57:54Z",
+      "side": 1,
+      "message": "Remove commented line. Add logs too",
+      "range": {
+        "startLine": 509,
+        "startChar": 2,
+        "endLine": 509,
+        "endChar": 13
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_ef1c41c4",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T13:57:54Z",
+      "side": 1,
+      "message": "As per the guidelines, we are not supposed to have actions as REST URL. You can have it as a as a field \u0027enabled\u0027 and operate on that\nRef - http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful\nhttp://restful-api-design.readthedocs.org/en/latest/methods.html",
+      "range": {
+        "startLine": 208,
+        "startChar": 15,
+        "endLine": 218,
+        "endChar": 47
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_0f7985fc",
+        "filename": "backend/backend.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T13:57:54Z",
+      "side": 1,
+      "message": "Why you are having both success and err?\nI think err is good enough as in other APIs. No need to send the redundant info",
+      "range": {
+        "startLine": 162,
+        "startChar": 60,
+        "endLine": 166,
+        "endChar": 85
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_0fc7c513",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T13:57:54Z",
+      "side": 1,
+      "message": "Instead of sending the status, can we send the failed minions too? it will be helpful if we want to do a rollback\n\nApplicable to all the funcs",
+      "range": {
+        "startLine": 310,
+        "startChar": 9,
+        "endLine": 310,
+        "endChar": 18
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_4fb62d8c",
+        "filename": "nodemanager/interfaces.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T13:57:54Z",
+      "side": 1,
+      "message": "As in the backend, do we really need success and err as return values?",
+      "range": {
+        "startLine": 29,
+        "startChar": 2,
+        "endLine": 35,
+        "endChar": 1
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_8faf352b",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T13:57:54Z",
+      "side": 1,
+      "message": "Need to return the failed nodes and the failed plugins as well",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 1
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
