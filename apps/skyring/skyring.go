@@ -57,6 +57,7 @@ const (
 )
 
 var (
+	application          *App
 	CoreNodeManager      nodemanager.NodeManagerInterface
 	AuthProviderInstance authprovider.AuthInterface
 	TaskManager          task.Manager
@@ -80,7 +81,7 @@ func NewApp(configDir string, binDir string) *App {
 		panic(fmt.Sprintf("None of the providers are initialized successfully"))
 	}
 	logger.Get().Info("Loaded URLs:", app.routes)*/
-
+	application = app
 	return app
 }
 
@@ -313,6 +314,10 @@ func validApiVersion(version int) bool {
 
 func GetCoreNodeManager() nodemanager.NodeManagerInterface {
 	return CoreNodeManager
+}
+
+func GetApp() *App {
+	return application
 }
 
 //Middleware to check the request is authenticated
