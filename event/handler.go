@@ -34,7 +34,7 @@ var handlermap = map[string]interface{}{
 	"skyring/collectd/node/*/threshold/*/*":                     collectd_threshold_handler,
 }
 
-func persist_event(event models.Event) error {
+func Persist_event(event models.Event) error {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_NODE_EVENTS)
