@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9aa7fdbe_52125263",
+        "filename": "main.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T18:43:21Z",
+      "side": 1,
+      "message": "What this function is supposed to do. Looks like it is commented out?\n1.The function should return err and needs to handle that\n2. Better define this func as part of App interface and invoke that as with other funcs in main",
+      "range": {
+        "startLine": 170,
+        "startChar": 1,
+        "endLine": 170,
+        "endChar": 20
+      },
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_eb6ecac8",
         "filename": "monitoring/monitor_base.go",
         "patchSetId": 3
@@ -30,6 +53,98 @@
       "writtenOn": "2015-12-07T13:03:53Z",
       "side": 1,
       "message": "Do we need to explicitly initialize the pointer? Wouldnt it be nil by default?",
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_f202660a",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T18:43:21Z",
+      "side": 1,
+      "message": "Why these things are commented out? Looks like this func is not doing anything?",
+      "range": {
+        "startLine": 32,
+        "startChar": 10,
+        "endLine": 41,
+        "endChar": 20
+      },
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_920bda2a",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T18:43:21Z",
+      "side": 1,
+      "message": "specific to influx?",
+      "range": {
+        "startLine": 56,
+        "startChar": 14,
+        "endLine": 57,
+        "endChar": 22
+      },
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_72175652",
+        "filename": "monitoring/monitor_base.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T18:43:21Z",
+      "side": 1,
+      "message": "Specific to influx?",
+      "range": {
+        "startLine": 65,
+        "startChar": 6,
+        "endLine": 67,
+        "endChar": 3
+      },
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_15ffd402",
+        "filename": "monitoring/monitor_gluster_cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T18:43:21Z",
+      "side": 1,
+      "message": "Commented out? if not required , remove the file",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 2
+      },
       "revId": "183872f99f5796a470e61cda069410282356eece",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -83,6 +198,30 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_3504d814",
+        "filename": "python/skyring/salt_wrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T18:43:21Z",
+      "side": 1,
+      "message": "+1\nThis needs to be moved to provider or should be removed",
+      "parentUuid": "9ab29df4_60e8487d",
+      "range": {
+        "startLine": 112,
+        "startChar": 17,
+        "endLine": 112,
+        "endChar": 20
+      },
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_5d588bfa",
         "filename": "utils/salt_bindings.go",
         "patchSetId": 3
@@ -112,6 +251,52 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "9ab29df4_5d588bfa",
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_55095c2b",
+        "filename": "utils/salt_bindings.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T18:43:21Z",
+      "side": 1,
+      "message": "As specified in the other file, this should be moved to provider or to be removed",
+      "range": {
+        "startLine": 24,
+        "startChar": 2,
+        "endLine": 24,
+        "endChar": 25
+      },
+      "revId": "183872f99f5796a470e61cda069410282356eece",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_750e6036",
+        "filename": "utils/salt_bindings.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T18:43:21Z",
+      "side": 1,
+      "message": "As specified in the other file, this should be moved to provider or to be removed",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 184,
+        "endChar": 1
+      },
       "revId": "183872f99f5796a470e61cda069410282356eece",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
