@@ -3,8 +3,6 @@
 # This is a single script which will install required packages,
 # Configure and setting up the system to use skyring
 
-set -e
-
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -13,6 +11,14 @@ CWD=`pwd`
 
 function info {
     printf "${GREEN}$1${NC}\n"
+}
+
+function isrhel() {
+    if grep -q '^Red Hat Enterprise Linux Server release' /etc/redhat-release ; then
+	return 0
+    else
+	return 1
+    fi
 }
 
 function createUser {
@@ -40,8 +46,13 @@ systemctl enable influxdb
 systemctl start influxdb
 
 # Enable and start MongoDB
-systemctl enable mongod
-systemctl start mongod
+if isrhel; then
+    systemctl enable rh-mongodb26-mongod.service
+    systemctl start rh-mongodb26-mongod.service
+else
+    systemctl enable mongod
+    systemctl start mongod
+fi
 
 # Need to wait for 3 to 5 sec for the services to comes up
 sleep 5
@@ -55,6 +66,16 @@ info "Creating time series database"
 
 info "Creating skyring database"
 # Configuring MongoDB
+
+if isrhel; then
+scl enable rh-mongodb26 'mongo' <<EOF
+use skyring
+db.leads.findOne()
+show collections
+db.createUser( { "user" : "admin", "pwd": "admin", "roles" : ["readWrite", "dbAdmin", "userAdmin"] })
+show users
+EOF
+else
 mongo <<EOF
 use skyring
 db.leads.findOne()
@@ -62,6 +83,7 @@ show collections
 db.createUser( { "user" : "admin", "pwd": "admin", "roles" : ["readWrite", "dbAdmin", "userAdmin"] })
 show users
 EOF
+fi
 
 info "\n\n\n-------------------------------------------------------"
 info "Now the host setup is ready!"
