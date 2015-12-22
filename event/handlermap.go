@@ -28,6 +28,17 @@ var handlermap = map[string]interface{}{
 	"dbus/node/*/generic/storage/drive/removed":         drive_remove_handler,
 	"dbus/node/*/generic/storage/drive/possibleFailure": drive_remove_handler,
 	"dbus/node/*/glusterfs/service/glusterd":            glusterd_status_handler,
+	"skyring/calamari/ceph/calamari/started":            calamari_server_start_handler,
+	"skyring/calamari/ceph/server/added":                ceph_server_add_handler,
+	"skyring/calamari/ceph/server/reboot":               ceph_server_reboot_handler,
+	"skyring/calamari/ceph/server/package/changed":      ceph_server_package_change_handler,
+	"skyring/calamari/ceph/server/lateReporting":        ceph_server_late_reporting_handler,
+	"skyring/calamari/ceph/server/regainedContact":      ceph_server_contact_regained_handler,
+	"skyring/calamari/ceph/cluster/lateReporting":       ceph_cluster_late_reporting_handler,
+	"skyring/calamari/ceph/cluster/regainedContact":     ceph_cluster_contact_regained_handler,
+	"skyring/calamari/ceph/osd/propertyChanged":         ceph_osd_property_changed_handler,
+	"skyring/calamari/ceph/mon/propertyChanged":         ceph_mon_property_changed_handler,
+	"skyring/calamari/ceph/cluster/health/changed":      ceph_cluster_health_changed,
 }
 
 func persist_event(event models.Event) error {
@@ -69,5 +80,49 @@ func drive_add_handler(event models.Event) error {
 }
 
 func drive_remove_handler(event models.Event) error {
+	return nil
+}
+
+func calamari_server_start_handler(event models.Event) error {
+	return nil
+}
+
+func ceph_server_add_handler(event models.Event) error {
+	return nil
+}
+
+func ceph_server_reboot_handler(event models.Event) error {
+	return nil
+}
+
+func ceph_server_package_change_handler(event models.Event) error {
+	return nil
+}
+
+func ceph_server_late_reporting_handler(event models.Event) error {
+	return nil
+}
+
+func ceph_server_contact_regained_handler(event models.Event) error {
+	return nil
+}
+
+func ceph_cluster_late_reporting_handler(event models.Event) error {
+	return nil
+}
+
+func ceph_cluster_contact_regained_handler(event models.Event) error {
+	return nil
+}
+
+func ceph_osd_property_changed_handler(event models.Event) error {
+	return nil
+}
+
+func ceph_mon_property_changed_handler(event models.Event) error {
+	return nil
+}
+
+func ceph_cluster_health_changed(event models.Event) error {
 	return nil
 }
