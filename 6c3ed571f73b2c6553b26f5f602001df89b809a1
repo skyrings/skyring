@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_528332cc",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-22T17:21:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa7fdbe_d2f1e296",
+      "revId": "6c3ed571f73b2c6553b26f5f602001df89b809a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_f2eee6b3",
         "filename": "skyring-setup.sh",
         "patchSetId": 1
@@ -98,6 +116,24 @@
       "writtenOn": "2015-12-22T16:34:16Z",
       "side": 1,
       "message": "This change is applicable only on rhel platform. For fedora, it remains the same",
+      "revId": "6c3ed571f73b2c6553b26f5f602001df89b809a1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_327eaee5",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2015-12-22T17:21:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa7fdbe_b2f45e88",
       "revId": "6c3ed571f73b2c6553b26f5f602001df89b809a1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
