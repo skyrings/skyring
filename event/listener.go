@@ -3,6 +3,7 @@ package event
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
@@ -91,7 +92,7 @@ func RouteEvent(event models.NodeEvent) {
 					logger.Get().Error("Event Handling Failed for event: %s", err)
 					return
 				}
-				if err := persist_event(e); err != nil {
+				if err := Persist_event(e); err != nil {
 					logger.Get().Error("Could not persist the event to DB: %s", err)
 					return
 				} else {
@@ -109,7 +110,14 @@ func RouteEvent(event models.NodeEvent) {
 			return
 		}
 	}
-	logger.Get().Warning("Handler not defined for event %s", e.Tag)
+
+	// Handle Provider specific events
+	var app *skyring.App
+	app = skyring.GetApp()
+	if err := app.HandleProviderEvents(e); err != nil {
+		logger.Get().Error("Event could not be handled for event:%s", e.Tag)
+	}
+
 	return
 }
 

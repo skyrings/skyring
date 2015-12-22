@@ -13,12 +13,15 @@ limitations under the License.
 package skyring
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/uuid"
 	"gopkg.in/mgo.v2/bson"
+	"net/http"
 	"regexp"
 )
 
@@ -69,4 +72,23 @@ func (a *App) getProviderFromClusterId(cluster_id uuid.UUID) *Provider {
 	} else {
 		return nil
 	}
+}
+
+func (a *App) HandleProviderEvents(event models.Event) error {
+	provider := a.getProviderFromClusterId(event.ClusterId)
+	body, err := json.Marshal(event)
+	if err != nil {
+		logger.Get().Error("Marshalling of event failed: %s", err)
+		return err
+	}
+	var result models.RpcResponse
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, "ProcessEvent"),
+		models.RpcRequest{RpcRequestVars: map[string]string{}, RpcRequestData: body},
+		&result)
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		logger.Get().Error("Process evnet by Provider: %s failed. Reason :%s", provider.Name, err)
+		return err
+	}
+	return nil
 }
