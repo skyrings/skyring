@@ -3,8 +3,6 @@
 # This is a single script which will install required packages,
 # Configure and setting up the system to use skyring
 
-set -e
-
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -40,8 +38,8 @@ systemctl enable influxdb
 systemctl start influxdb
 
 # Enable and start MongoDB
-systemctl enable mongod
-systemctl start mongod
+systemctl enable rh-mongodb26-mongod.service
+systemctl start rh-mongodb26-mongod.service
 
 # Need to wait for 3 to 5 sec for the services to comes up
 sleep 5
@@ -55,7 +53,7 @@ info "Creating time series database"
 
 info "Creating skyring database"
 # Configuring MongoDB
-mongo <<EOF
+scl enable rh-mongodb26 'mongo' <<EOF
 use skyring
 db.leads.findOne()
 show collections
