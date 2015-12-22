@@ -13,10 +13,15 @@ limitations under the License.
 package event
 
 import (
+	"encoding/json"
+	"fmt"
+	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
+	"gopkg.in/mgo.v2/bson"
+	"net/http"
 )
 
 var handlermap = map[string]interface{}{
@@ -30,7 +35,7 @@ var handlermap = map[string]interface{}{
 	"skyring/dbus/node/*/generic/service/collectd":              collectd_status_handler,
 }
 
-func persist_event(event models.Event) error {
+func Persist_event(event models.Event) error {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_NODE_EVENTS)
@@ -69,5 +74,34 @@ func drive_remove_handler(event models.Event) error {
 }
 
 func collectd_status_handler(event models.Event) error {
+	return nil
+}
+
+func handle_events(event models.Event) error {
+	var cluster models.Cluster
+	var provider skyring.Provider
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	if err := coll.Find(bson.M{"clusterid": event.ClusterId}).One(&cluster); err != nil {
+		logger.Get().Error("Cluster information read from DB failed: %s", err)
+		return err
+	}
+
+	provider = skyring.GetProviderFromName(cluster.Type)
+	body, err := json.Marshal(event)
+	if err != nil {
+		logger.Get().Error("Marshalling of event failed: %s", err)
+		return err
+	}
+	var result models.RpcResponse
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, "ProcessEvent"),
+		models.RpcRequest{RpcRequestVars: map[string]string{}, RpcRequestData: body},
+		&result)
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		logger.Get().Error("Process evnet by Provider: %s failed. Reason :%s", provider.Name, err)
+		return err
+	}
 	return nil
 }
