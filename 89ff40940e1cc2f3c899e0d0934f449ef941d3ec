@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_d2572225",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-22T17:52:33Z",
+      "side": 1,
+      "message": "i hope salt-master automatically pulls salt.\n\nIsn\u0027t the case here?",
+      "revId": "89ff40940e1cc2f3c899e0d0934f449ef941d3ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
