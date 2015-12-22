@@ -52,7 +52,6 @@ func (l *Listener) PushNodeStartEvent(args *NodeStartEventArgs, ack *bool) error
 }
 
 func RouteEvent(event models.NodeEvent) {
-
 	var e models.Event
 	e.Timestamp = event.Timestamp
 	e.Tag = event.Tag
@@ -69,18 +68,19 @@ func RouteEvent(event models.NodeEvent) {
 	// querying DB to get node ID and Cluster ID for the event
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
-	var node []models.Node
+	var node models.Node
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	if err := coll.Find(bson.M{"hostname": event.Node}).All(&node); err != nil {
+	if err := coll.Find(bson.M{"hostname": event.Node}).One(&node); err != nil {
 		logger.Get().Error("Node information read from DB failed for node: %s", err)
+		return
 	}
 
 	// Push the event to DB only if the node is managed
-	if !node[0].Enabled {
+	if node.Hostname == "" || !node.Enabled {
 		return
 	}
-	e.ClusterId = node[0].ClusterId
-	e.NodeId = node[0].NodeId
+	e.ClusterId = node.ClusterId
+	e.NodeId = node.NodeId
 
 	// Invoking the event handler
 	for tag, handler := range handlermap {
@@ -90,7 +90,7 @@ func RouteEvent(event models.NodeEvent) {
 					logger.Get().Error("Event Handling Failed for event: %s", err)
 					return
 				}
-				if err := persist_event(e); err != nil {
+				if err := Persist_event(e); err != nil {
 					logger.Get().Error("Could not persist the event to DB: %s", err)
 					return
 				} else {
@@ -102,7 +102,13 @@ func RouteEvent(event models.NodeEvent) {
 			return
 		}
 	}
-	logger.Get().Warning("Handler not defined for event %s", e.Tag)
+
+	// Handle Provider specific events
+
+	if err := provider_events(e); err != nil {
+		logger.Get().Error("Event could not be handled for event:%s", e.Tag)
+	}
+
 	return
 }
 

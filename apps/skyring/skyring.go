@@ -57,6 +57,7 @@ const (
 )
 
 var (
+	PublicProviders      map[string]Provider
 	CoreNodeManager      nodemanager.NodeManagerInterface
 	AuthProviderInstance authprovider.AuthInterface
 	TaskManager          task.Manager
@@ -68,6 +69,7 @@ func NewApp(configDir string, binDir string) *App {
 
 	//initialize the maps
 	app.providers = make(map[string]Provider)
+	PublicProviders = make(map[string]Provider)
 	app.routes = make(map[string]conf.Route)
 
 	//Load providers and routes
@@ -143,6 +145,7 @@ func (a *App) StartProviders(configDir string, binDir string) {
 			}
 			//add the provider to the map
 			a.providers[config.Provider.Name] = Provider{Name: config.Provider.Name, Client: client}
+			PublicProviders[config.Provider.Name] = Provider{Name: config.Provider.Name, Client: client}
 		}
 	}
 }
@@ -313,6 +316,10 @@ func validApiVersion(version int) bool {
 
 func GetCoreNodeManager() nodemanager.NodeManagerInterface {
 	return CoreNodeManager
+}
+
+func GetProviderFromName(name string) Provider {
+	return PublicProviders[name]
 }
 
 //Middleware to check the request is authenticated
