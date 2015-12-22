@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa201ad_30bf88d2",
+        "filename": "backend/backend.go",
+        "patchSetId": 15
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-22T05:31:00Z",
+      "side": 1,
+      "message": "Regarding the first part, we are going with influxdb for our alpha right? W/o this and the other 3 patches, there\u0027s no monitoring configuration at all.There\u0027s only the querying part.",
+      "parentUuid": "baa201ad_105e04ea",
+      "range": {
+        "startLine": 82,
+        "startChar": 3,
+        "endLine": 82,
+        "endChar": 9
+      },
+      "revId": "f405fe59f35670062d5eef146a42b57e3a15aedc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa201ad_f068a089",
         "filename": "backend/backend.go",
         "patchSetId": 15
