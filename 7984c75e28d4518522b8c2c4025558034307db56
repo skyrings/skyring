@@ -34,6 +34,24 @@
       "revId": "7984c75e28d4518522b8c2c4025558034307db56",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_951f4409",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T19:59:41Z",
+      "side": 1,
+      "message": "Let us discuss this",
+      "parentUuid": "3ac1b152_b47380e6",
+      "revId": "7984c75e28d4518522b8c2c4025558034307db56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
