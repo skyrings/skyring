@@ -40,6 +40,24 @@
       "revId": "7de7c1fa53bc7649988b14abd5104399af712672",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_5526bc69",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T19:56:57Z",
+      "side": 1,
+      "message": "Can you create a trello card to track this?",
+      "parentUuid": "3ac1b152_144a7483",
+      "revId": "7de7c1fa53bc7649988b14abd5104399af712672",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
