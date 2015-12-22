@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa201ad_105e04ea",
+        "filename": "backend/backend.go",
+        "patchSetId": 15
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T04:07:36Z",
+      "side": 1,
+      "message": "I guess this is the plugin which pushes data from collectd to influxdb. Do we need it now as we are moving to graphite?\nIf required, then we should not expose this to the user. User should not able to enable/diable this as this is a mandatory plugin",
+      "range": {
+        "startLine": 82,
+        "startChar": 3,
+        "endLine": 82,
+        "endChar": 9
+      },
+      "revId": "f405fe59f35670062d5eef146a42b57e3a15aedc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa201ad_f068a089",
+        "filename": "backend/backend.go",
+        "patchSetId": 15
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T04:07:36Z",
+      "side": 1,
+      "message": "These should not be there in backend.\nbackend should contain only those interface function which is executed by backend. All others should be part of business logic. Similar case with files plugin_utils and default_config etc. You can create a \u0027monitoring\u0027 folder under \u0027skyring\u0027 and move all there\n\nI hope none of the backend functions uses these helpers?",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 1
+      },
+      "revId": "f405fe59f35670062d5eef146a42b57e3a15aedc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
