@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_557cfc72",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T19:26:07Z",
+      "side": 1,
+      "message": "Let us have a generic name like GetClusterParams or something which can be used to retrieve any number of params?",
+      "parentUuid": "3ac1b152_f42b3892",
+      "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ac1b152_d4571c25",
         "filename": "apps/skyring/sync.go",
         "patchSetId": 2
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "Actually loop order is reverse from the previous one.\n\nInsert/Update Case:\n  Outer loop - on storages list from cluster\n  Inner loop - on fetched list from DB\n\nDelete Case:\n  Outer loop - on fetched list from DB\n  Inner loop - on storages list from cluster\n\nCould be achieved in the previous case but code might look bit messy so did it this way.",
       "parentUuid": "3ac1b152_d4571c25",
+      "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_f5ba5009",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-22T19:26:07Z",
+      "side": 1,
+      "message": "dint get it right. Let us discuss and close it",
+      "parentUuid": "3ac1b152_1418b483",
       "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
