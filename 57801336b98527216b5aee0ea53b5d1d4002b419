@@ -157,6 +157,23 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_be3b4537",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-23T16:53:19Z",
+      "side": 1,
+      "message": "Is this passing fmt? I feel some alignment issue",
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_0fc7c513",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 4
@@ -174,6 +191,24 @@
         "endLine": 310,
         "endChar": 18
       },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_de4809cf",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-23T16:53:19Z",
+      "side": 1,
+      "message": "Thats a good idea. we get better hold of it.",
+      "parentUuid": "9aa7fdbe_0fc7c513",
       "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
