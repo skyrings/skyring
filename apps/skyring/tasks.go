@@ -10,6 +10,7 @@ import (
 	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"strings"
@@ -83,16 +84,15 @@ func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 	var task models.AppTask
 	if err := coll.Find(bson.M{"id": *taskId}).One(&task); err != nil {
 		logger.Get().Error("Unable to get task: %v", err)
-		util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
-		return
+		if err == mgo.ErrNotFound {
+			util.HttpResponse(rw, http.StatusNotFound, err.Error())
+			return
+		} else {
+			util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
+			return
+		}
 	}
-	if task.Id.IsZero() {
-		util.HttpResponse(rw, http.StatusBadRequest, "Task not found")
-		logger.Get().Error("Task not found: %v", err)
-		return
-	} else {
-		json.NewEncoder(rw).Encode(task)
-	}
+	json.NewEncoder(rw).Encode(task)
 }
 
 func (a *App) getSubTasks(rw http.ResponseWriter, req *http.Request) {
