@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_63094a2c",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-23T10:08:37Z",
+      "side": 1,
+      "message": "the above lines can be removed",
+      "revId": "6a8ea4c68bbbd22102c60684d829052f19c28083",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
