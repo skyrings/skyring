@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_e3e61a44",
+        "filename": "event/handlermap.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-23T11:14:48Z",
+      "side": 1,
+      "message": "This needs to be handled in ceph provider not in core",
+      "range": {
+        "startLine": 31,
+        "startChar": 1,
+        "endLine": 41,
+        "endChar": 82
+      },
+      "revId": "fd31177b36eba462710f8341c430c47c246582c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
