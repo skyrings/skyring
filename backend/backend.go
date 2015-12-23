@@ -58,4 +58,5 @@ type Backend interface {
 	IgnoreNode(node string) (bool, error)
 	DisableService(node string, service string, stop bool) (bool, error)
 	EnableService(node string, service string, start bool) (bool, error)
+	NodeUp(node string) (bool, error)
 }

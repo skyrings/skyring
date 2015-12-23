@@ -248,3 +248,8 @@ def EnableService(node, service, start=False):
         out = local.cmd(node, 'service.start', [service])
 
     return out[node]
+
+
+def NodeUp(node):
+    out = local.cmd(node, 'cmd.run', ['pwd'])
+    return True if out else False
