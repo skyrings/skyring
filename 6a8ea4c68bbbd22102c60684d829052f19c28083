@@ -16,6 +16,24 @@
       "revId": "6a8ea4c68bbbd22102c60684d829052f19c28083",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_5e9fb903",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-23T18:19:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa7fdbe_63094a2c",
+      "revId": "6a8ea4c68bbbd22102c60684d829052f19c28083",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
