@@ -102,6 +102,24 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_78465525",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-23T05:28:38Z",
+      "side": 1,
+      "message": "We may call this GetClusterDetails only, may be. What you say?",
+      "parentUuid": "9aa7fdbe_557cfc72",
+      "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ac1b152_d4571c25",
         "filename": "apps/skyring/sync.go",
         "patchSetId": 2
@@ -155,6 +173,24 @@
       "side": 1,
       "message": "dint get it right. Let us discuss and close it",
       "parentUuid": "3ac1b152_1418b483",
+      "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_f85165d9",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-23T05:28:38Z",
+      "side": 1,
+      "message": "Suppose there are two lists X and Y\n\n1. to get the item which are there in X but not in Y, we can say something like\n\nfor entry in X\n  for value in Y\n    if entry \u003d\u003d value\n      found \u003d true\n  if not found\n    extras in X \u003d extras in X + entry\n\n2. But to find what is there in Y but not in X, we need reverse the order of for loops as below\n\nfor value in Y\n  for entry in X\n    if value \u003d\u003d entry\n      found \u003d true\n  if not found\n    extras in Y \u003d extras in Y + value\n\n\nHere we can think of X as values from DB, and Y as values retrieved from backend cluster.\n\nso effectively\n  \u0027extras in X\u0027 means, values which are there in DB but not in values retrieved from backend cluster, so they should be deleted\n\n  \u0027extras in Y\u0027 means, values which are there in retrieved values from backend but not present in DB, so they should be added newly to DB.\n\nHope this clarifies, why we need two different loopings.",
+      "parentUuid": "9aa7fdbe_f5ba5009",
       "revId": "f647b4994c0079b4b15f11dc09567cd6b6d3c0f5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
