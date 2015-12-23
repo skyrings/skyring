@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_5e57b902",
+        "filename": "event/broadcaster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-23T15:14:55Z",
+      "side": 1,
+      "message": "what these two functions does?",
+      "range": {
+        "startLine": 114,
+        "startChar": 3,
+        "endLine": 145,
+        "endChar": 11
+      },
+      "revId": "38e0c72ad570617aa14d30e2047e22c500b065e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_3e2bd583",
+        "filename": "main.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-23T15:14:55Z",
+      "side": 1,
+      "message": "1. You should not bind to all the IPs.you can bind to same Ip configured for the std server. if not available bind to all the IPs.\n\nhttp.ListenAndServe(conf.SystemConfig.Config.Host+\":\"+strconv.Itoa(conf.SystemConfig.Config.HttpPort)\n\n2. Try to do this initilaztion of websocket server in a different function. You are doing lot of things here !",
+      "range": {
+        "startLine": 208,
+        "startChar": 24,
+        "endLine": 208,
+        "endChar": 29
+      },
+      "revId": "38e0c72ad570617aa14d30e2047e22c500b065e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
