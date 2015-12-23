@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9aa7fdbe_785d75e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-23T05:50:57Z",
+      "side": 1,
+      "message": "It should be\n3) removed ceph package dependency. Its only required for bigfin",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 10
+      },
+      "revId": "89ff40940e1cc2f3c899e0d0934f449ef941d3ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_58a51103",
         "filename": "skyring-setup.sh",
         "patchSetId": 2
