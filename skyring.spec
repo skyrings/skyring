@@ -15,11 +15,10 @@ Url: github.com/skyrings/skyring
 BuildRequires: golang
 BuildRequires: python-devel
 BuildRequires: python-setuptools
-BuildRequires: hg
-BuildRequires: git
 BuildRequires: openldap-devel
 
 Requires: salt-master >= 2015.5.5
+Requires: pytz
 Requires: python-cpopen
 Requires: python-netaddr
 Requires: mongodb
