@@ -45,6 +45,24 @@
       "revId": "38e0c72ad570617aa14d30e2047e22c500b065e1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_5e99796d",
+        "filename": "main.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-23T16:29:17Z",
+      "side": 1,
+      "message": "I feel this whole thing can be done InitBroadcaster() function itself as below\n\necent.InitBroadcaster()\ngo http.ListenAndServe(\":\"+websocketPort, nil)",
+      "parentUuid": "9aa7fdbe_3e2bd583",
+      "revId": "38e0c72ad570617aa14d30e2047e22c500b065e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
