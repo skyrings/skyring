@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9aa7fdbe_58a51103",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-23T03:14:17Z",
+      "side": 1,
+      "message": "Only the first line different right? rest are common. why you want to repeat the whole stuff?",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 2
+      },
+      "revId": "89ff40940e1cc2f3c899e0d0934f449ef941d3ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_d2572225",
         "filename": "skyring.spec",
         "patchSetId": 2
@@ -13,6 +36,24 @@
       "writtenOn": "2015-12-22T17:52:33Z",
       "side": 1,
       "message": "i hope salt-master automatically pulls salt.\n\nIsn\u0027t the case here?",
+      "revId": "89ff40940e1cc2f3c899e0d0934f449ef941d3ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_38a04df4",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-23T03:14:17Z",
+      "side": 1,
+      "message": "yes it is, we don\u0027t need to specify here. sal-master will pull the salt",
+      "parentUuid": "9aa7fdbe_d2572225",
       "revId": "89ff40940e1cc2f3c899e0d0934f449ef941d3ec",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
