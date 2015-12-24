@@ -71,7 +71,7 @@ func (s Salt) AcceptNode(node string, fingerprint string, ignored bool) (status 
 
 func (s Salt) BootstrapNode(master string, node string, port uint, fingerprint string, username string, password string) (finger string, err error) {
 	var buf bytes.Buffer
-	t, loc_err := template.ParseFiles("setup-node.sh.template")
+	t, loc_err := template.ParseFiles("/srv/salt/template/setup-node.sh.template")
 	if loc_err != nil {
 		logger.Get().Critical("Error Parsing the setup-node.sh.template", err)
 		return "", loc_err

@@ -50,8 +50,10 @@ install -D conf/sample/skyring.conf.sample $RPM_BUILD_ROOT/etc/skyring/skyring.c
 install -D conf/sample/authentication.conf.sample $RPM_BUILD_ROOT/etc/skyring/authentication.conf
 install -D conf/skyring_salt_master.conf $RPM_BUILD_ROOT/etc/salt/master.d/skyring.conf
 install -m 755 -d $RPM_BUILD_ROOT/srv/salt
+install -m 755 -d $RPM_BUILD_ROOT/srv/salt/template
 install -m 755 -d $RPM_BUILD_ROOT/var/log/skyring
 install -D backend/salt/sls/* $RPM_BUILD_ROOT/srv/salt/
+install -D backend/salt/template/* $RPM_BUILD_ROOT/srv/salt/template
 install -d $RPM_BUILD_ROOT/%{python2_sitelib}/skyring
 install -D backend/salt/python/skyring/* $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/
 
