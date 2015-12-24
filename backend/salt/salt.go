@@ -60,8 +60,11 @@ type Salt struct {
 }
 
 func (s Salt) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (status bool, err error) {
-	if finger, err := s.BootstrapNode(master, node, port, fingerprint, username, password); err == nil {
+	if finger, loc_err := s.BootstrapNode(master, node, port, fingerprint, username, password); loc_err == nil {
 		status, err = s.AcceptNode(node, finger, false)
+	} else {
+		status = false
+		err = loc_err
 	}
 	return
 }
@@ -69,8 +72,11 @@ func (s Salt) AddNode(master string, node string, port uint, fingerprint string,
 func (s Salt) AcceptNode(node string, fingerprint string, ignored bool) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, err := pyFuncs["AcceptNode"].Call(node, fingerprint, ignored); err == nil {
+	if pyobj, loc_err := pyFuncs["AcceptNode"].Call(node, fingerprint, ignored); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
+	} else {
+		status = false
+		err = loc_err
 	}
 	return
 }
@@ -89,9 +95,11 @@ func (s Salt) EnableMonitoringPlugin(nodes []string, pluginName string) (failed_
 	failed_nodes = make(map[string]string)
 	mutex.Lock()
 	defer mutex.Unlock()
-	pyobj, err := pyFuncs["EnableMonitoringPlugin"].Call(nodes, pluginName)
-	if err == nil {
+	pyobj, loc_err := pyFuncs["EnableMonitoringPlugin"].Call(nodes, pluginName)
+	if loc_err == nil {
 		err = gopy.Convert(pyobj, &failed_nodes)
+	} else {
+		err = loc_err
 	}
 	return
 }
@@ -100,9 +108,11 @@ func (s Salt) DisableMonitoringPlugin(nodes []string, pluginName string) (failed
 	failed_nodes = make(map[string]string)
 	mutex.Lock()
 	defer mutex.Unlock()
-	pyobj, err := pyFuncs["DisableMonitoringPlugin"].Call(nodes, pluginName)
-	if err == nil {
+	pyobj, loc_err := pyFuncs["DisableMonitoringPlugin"].Call(nodes, pluginName)
+	if loc_err == nil {
 		err = gopy.Convert(pyobj, &failed_nodes)
+	} else {
+		err = loc_err
 	}
 	return
 }
@@ -111,9 +121,11 @@ func (s Salt) RemoveMonitoringPlugin(nodes []string, pluginName string) (failed_
 	failed_nodes = make(map[string]string)
 	mutex.Lock()
 	defer mutex.Unlock()
-	pyobj, err := pyFuncs["RemoveMonitoringPlugin"].Call(nodes, pluginName)
-	if err == nil {
+	pyobj, loc_err := pyFuncs["RemoveMonitoringPlugin"].Call(nodes, pluginName)
+	if loc_err == nil {
 		err = gopy.Convert(pyobj, &failed_nodes)
+	} else {
+		err = loc_err
 	}
 	return
 }
@@ -122,36 +134,40 @@ func (s Salt) AddMonitoringPlugin(pluginNames []string, nodes []string, master s
 	mutex.Lock()
 	defer mutex.Unlock()
 	failed_nodes = make(map[string]interface{})
-	pyobj, err := pyFuncs["AddMonitoringPlugin"].Call(pluginNames, nodes, master, pluginMap)
-	if err == nil {
+	pyobj, loc_err := pyFuncs["AddMonitoringPlugin"].Call(pluginNames, nodes, master, pluginMap)
+	if loc_err == nil {
 		err = gopy.Convert(pyobj, &failed_nodes)
+	} else {
+		err = loc_err
 	}
 	return
 }
 
 func (s Salt) BootstrapNode(master string, node string, port uint, fingerprint string, username string, password string) (finger string, err error) {
 	var buf bytes.Buffer
-	t, err := template.ParseFiles("/srv/salt/template/setup-node.sh.template")
-	if err != nil {
+	t, loc_err := template.ParseFiles("/srv/salt/template/setup-node.sh.template")
+	if loc_err != nil {
 		logger.Get().Critical("Error Parsing the setup-node.sh.template", err)
-		return
+		return "", loc_err
 	}
-	if err = t.Execute(&buf, struct{ Master string }{Master: master}); err != nil {
+	if loc_err = t.Execute(&buf, struct{ Master string }{Master: master}); err != nil {
 		logger.Get().Critical("Error Executing the setup-node.sh.template", err)
-		return
+		return "", loc_err
 	}
 
-	if sout, _, err := ssh.Run(buf.String(), node, port, fingerprint, username, password); err == nil {
-		finger = strings.TrimSpace(sout)
+	if sout, _, loc_err := ssh.Run(buf.String(), node, port, fingerprint, username, password); loc_err == nil {
+		return strings.TrimSpace(sout), nil
 	}
-	return
+	return "", loc_err
 }
 
 func (s Salt) GetNodes() (nodes backend.NodeList, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, err := pyFuncs["GetNodes"].Call(); err == nil {
+	if pyobj, loc_err := pyFuncs["GetNodes"].Call(); loc_err == nil {
 		err = gopy.Convert(pyobj, &nodes)
+	} else {
+		err = loc_err
 	}
 	return
 }
@@ -159,22 +175,26 @@ func (s Salt) GetNodes() (nodes backend.NodeList, err error) {
 func (s Salt) GetNodeID(node string) (id uuid.UUID, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, err := pyFuncs["GetNodeID"].Call(node); err == nil {
+	pyobj, loc_err := pyFuncs["GetNodeID"].Call(node)
+	if loc_err == nil {
 		var s string
-		if err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &s); err == nil {
-			if i, err := uuid.Parse(s); err == nil {
-				id = *i
+		loc_err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &s)
+		if loc_err == nil {
+			if i, loc_err := uuid.Parse(s); loc_err == nil {
+				return *i, nil
 			}
 		}
 	}
-	return
+	return uuid.UUID{}, loc_err
 }
 
 func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, err := pyFuncs["GetNodeDisk"].Call(node); err == nil {
+	if pyobj, loc_err := pyFuncs["GetNodeDisk"].Call(node); loc_err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &disks)
+	} else {
+		err = loc_err
 	}
 	return
 }
@@ -182,8 +202,10 @@ func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
 func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, err := pyFuncs["GetNodeNetwork"].Call(node); err == nil {
+	if pyobj, loc_err := pyFuncs["GetNodeNetwork"].Call(node); loc_err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &n)
+	} else {
+		err = loc_err
 	}
 	return
 }
@@ -191,8 +213,10 @@ func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
 func (s Salt) IgnoreNode(node string) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, err := pyFuncs["IgnoreNode"].Call(node); err == nil {
+	if pyobj, loc_err := pyFuncs["IgnoreNode"].Call(node); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
+	} else {
+		err = loc_err
 	}
 	return
 }
@@ -200,17 +224,23 @@ func (s Salt) IgnoreNode(node string) (status bool, err error) {
 func (s Salt) DisableService(node string, service string, stop bool) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, err := pyFuncs["DisableService"].Call(node, service, stop); err == nil {
+	if pyobj, loc_err := pyFuncs["DisableService"].Call(node, service, stop); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
+	} else {
+		status = false
+		err = loc_err
 	}
 	return
 }
 
-func (s Salt) EnableService(node string, service string, start bool) (status bool, error error) {
+func (s Salt) EnableService(node string, service string, start bool) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, err := pyFuncs["EnableService"].Call(node, service, start); err == nil {
+	if pyobj, loc_err := pyFuncs["EnableService"].Call(node, service, start); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
+	} else {
+		status = false
+		err = loc_err
 	}
 	return
 }
@@ -218,8 +248,11 @@ func (s Salt) EnableService(node string, service string, start bool) (status boo
 func (s Salt) NodeUp(node string) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, err := pyFuncs["NodeUp"].Call(node); err == nil {
+	if pyobj, loc_err := pyFuncs["NodeUp"].Call(node); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
+	} else {
+		status = false
+		err = loc_err
 	}
 	return
 }
