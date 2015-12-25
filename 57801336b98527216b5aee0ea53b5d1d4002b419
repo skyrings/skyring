@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_a325f20b",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-25T16:53:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa201ad_b050d85f",
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa201ad_10dd2415",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 4
@@ -30,6 +48,30 @@
       "writtenOn": "2015-12-22T13:57:54Z",
       "side": 1,
       "message": "You can do this regardless whether disk sync is successful or not. Failure in disk sync in not a big deal because the cluster is already created successfully",
+      "range": {
+        "startLine": 123,
+        "startChar": 6,
+        "endLine": 123,
+        "endChar": 13
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_e3bd3a04",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-25T16:53:49Z",
+      "side": 1,
+      "message": "I\u0027ll make monitoring configuration precede the disk sync. I can make it a go routine but I am worried about the possibility of interleaved task status update if I make it a concurrent go routine",
+      "parentUuid": "baa201ad_10dd2415",
       "range": {
         "startLine": 123,
         "startChar": 6,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_c3c0367f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-25T16:53:49Z",
+      "side": 1,
+      "message": "I\u0027ll just update status to the failure and continue",
+      "parentUuid": "baa201ad_3065c845",
+      "range": {
+        "startLine": 133,
+        "startChar": 24,
+        "endLine": 134,
+        "endChar": 31
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa201ad_9001143c",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 4
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_83cf0eb0",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-25T16:53:49Z",
+      "side": 1,
+      "message": "I\u0027ll handle them as part of subsequent patch",
+      "parentUuid": "baa201ad_9001143c",
+      "range": {
+        "startLine": 183,
+        "startChar": 2,
+        "endLine": 185,
+        "endChar": 17
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_2f09e995",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 4
@@ -99,6 +189,30 @@
       "writtenOn": "2015-12-22T13:57:54Z",
       "side": 1,
       "message": "Remove commented line. Add logs too",
+      "range": {
+        "startLine": 509,
+        "startChar": 2,
+        "endLine": 509,
+        "endChar": 13
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa7fdbe_03bb1e0f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-25T16:53:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa7fdbe_2f09e995",
       "range": {
         "startLine": 509,
         "startChar": 2,
