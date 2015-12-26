@@ -248,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_18c1c42e",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-26T16:22:44Z",
+      "side": 1,
+      "message": "In accordance with, \nhttp://stackoverflow.com/questions/17245587/modelling-operations-in-rest-service\n\nI am creating 2 links enabled_plugins and disabled_plugins",
+      "parentUuid": "9aa7fdbe_ef1c41c4",
+      "range": {
+        "startLine": 208,
+        "startChar": 15,
+        "endLine": 218,
+        "endChar": 47
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_0f7985fc",
         "filename": "backend/backend.go",
         "patchSetId": 4
