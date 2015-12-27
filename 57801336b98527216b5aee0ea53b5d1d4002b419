@@ -295,6 +295,30 @@
     },
     {
       "key": {
+        "uuid": "3a961159_2ca013f4",
+        "filename": "backend/backend.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-27T13:30:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa7fdbe_0f7985fc",
+      "range": {
+        "startLine": 162,
+        "startChar": 60,
+        "endLine": 166,
+        "endChar": 85
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_be3b4537",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 4
@@ -306,6 +330,24 @@
       "writtenOn": "2015-12-23T16:53:19Z",
       "side": 1,
       "message": "Is this passing fmt? I feel some alignment issue",
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_4ca55f03",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-27T13:30:28Z",
+      "side": 1,
+      "message": "Actually I had a comment to format in accordance with pep so I used some pep tool to format this and it made these changes",
+      "parentUuid": "9aa7fdbe_be3b4537",
       "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -353,6 +395,24 @@
     },
     {
       "key": {
+        "uuid": "3a961159_6caa1bd6",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-27T13:30:28Z",
+      "side": 1,
+      "message": "@Shubhendu, @Nishsnth,\nSending the minions along with the respective error(map) in most cases and only failed minions in case of UpdateMonitoringConfiguration.\n\nIn case of UpdateMonitoringConfiguration, it actually performs file edit and the salt file edit api doesn\u0027t provide any means of even detecting a failure in edit so the only way to detect an error in such a case is to see if restart collectd passes through (I don\u0027t see why the edit should fail but not the collectd restart, not a reliable assumption though)",
+      "parentUuid": "9aa7fdbe_de4809cf",
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_4fb62d8c",
         "filename": "nodemanager/interfaces.go",
         "patchSetId": 4
@@ -376,6 +436,30 @@
     },
     {
       "key": {
+        "uuid": "3a961159_8cae67e6",
+        "filename": "nodemanager/interfaces.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-27T13:30:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa7fdbe_4fb62d8c",
+      "range": {
+        "startLine": 29,
+        "startChar": 2,
+        "endLine": 35,
+        "endChar": 1
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_8faf352b",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 4
@@ -387,6 +471,30 @@
       "writtenOn": "2015-12-22T13:57:54Z",
       "side": 1,
       "message": "Need to return the failed nodes and the failed plugins as well",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 1
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_acab23d5",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-27T13:30:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa7fdbe_8faf352b",
       "range": {
         "startLine": 218,
         "startChar": 0,
