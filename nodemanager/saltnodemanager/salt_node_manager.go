@@ -236,3 +236,23 @@ func (a SaltNodeManager) UpdateMonitoringConfiguration(nodes []string, config []
 	failed_nodes, err := salt_backend.UpdateMonitoringConfiguration(nodes, config)
 	return failed_nodes, err
 }
+
+func (a SaltNodeManager) EnableMonitoringPlugin(nodes []string, pluginName string) (map[string]string, error) {
+	failed_nodes, err := salt_backend.EnableMonitoringPlugin(nodes, pluginName)
+	return failed_nodes, err
+}
+
+func (a SaltNodeManager) DisableMonitoringPlugin(nodes []string, pluginName string) (map[string]string, error) {
+	failed_nodes, err := salt_backend.DisableMonitoringPlugin(nodes, pluginName)
+	return failed_nodes, err
+}
+
+func (a SaltNodeManager) RemoveMonitoringPlugin(nodes []string, pluginName string) (map[string]string, error) {
+	failed_nodes, err := salt_backend.RemoveMonitoringPlugin(nodes, pluginName)
+	return failed_nodes, err
+}
+
+func (a SaltNodeManager) AddMonitoringPlugin(nodes []string, master string, plugin monitoring.Plugin) (map[string]interface{}, error) {
+	failed_nodes, err := salt_backend.AddMonitoringPlugin([]string{plugin.Name}, nodes, "", monitoring.ToSaltPillarCompat([]monitoring.Plugin{plugin}))
+	return failed_nodes, err
+}

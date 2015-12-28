@@ -310,6 +310,75 @@ def AddMonitoringPlugin(plugin_list, nodes, master=None, configs=None):
     return run_state(nodes, state_list, kwarg={'pillar': pillar})
 
 
+def DisableMonitoringPlugin(nodes, pluginName):
+    failed_minions = {}
+    source_file = monitoring_root_path + pluginName + "*"
+    destination = monitoring_disabled_root_path
+    local.cmd(nodes, "cmd.run", ["mkdir -p " + destination], expr_form='list')
+    out = local.cmd(
+        nodes, "cmd.run", [
+            "mv " + source_file + " " + destination], expr_form='list')
+    for nodeName, message in out.iteritems():
+        if out.get(nodeName) != '':
+            log.error(
+                'Failed to disable collectd plugin %s because %s on %s' %
+                (pluginName, out.get(nodeName), nodeName))
+            failed_minions[nodeName] = out.get(nodeName)
+    if failed_minions:
+        return failed_minions
+    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+    for node, restartStatus in out.iteritems():
+        if not restartStatus:
+            log.error("Failed to restart collectd on node %s after disabling the plugin %s" %(node, pluginName))
+            failed_minions[node] = "Failed to restart collectd"
+    return failed_minions
+
+
+def EnableMonitoringPlugin(nodes, pluginName):
+    failed_minions = {}
+    source_file = monitoring_disabled_root_path + pluginName + '.conf'
+    destination = monitoring_root_path
+    out = local.cmd(
+        nodes, "cmd.run", [
+            "mv " + source_file + " " + destination], expr_form='list')
+    for nodeName, message in out.iteritems():
+        if out.get(nodeName) != '':
+            log.error(
+                'Failed to enable collectd plugin %s because %s on %s' %
+                (pluginName, out.get(nodeName), nodeName))
+            failed_minions[nodeName] = out.get(nodeName)
+    if failed_minions:
+        return failed_minions
+    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+    for node, restartStatus in out.iteritems():
+        if not restartStatus:
+            log.error("Failed to restart collectd on node %s after enabling the plugin %s" %(node, pluginName))
+            failed_minions[node] = "Failed to restart collectd"
+    return failed_minions
+
+
+def RemoveMonitoringPlugin(nodes, pluginName):
+    failed_minions = {}
+    source_file = monitoring_root_path + pluginName + "*"
+    out = local.cmd(
+        nodes, "cmd.run", [
+            "rm -fr " + source_file], expr_form='list')
+    for nodeName, message in out.iteritems():
+        if out.get(nodeName) != '':
+            log.error(
+                'Failed to remove collectd plugin %s because %s on %s' %
+                (pluginName, out.get(nodeName), nodeName))
+            failed_minions[nodeName] = out.get(nodeName)
+    if failed_minions :
+        return failed_minions
+    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+    for node, restartStatus in out.iteritems():
+        if not restartStatus:
+            log.error("Failed to restart collectd on node %s after removing the plugin %s" %(node, pluginName))
+            failed_minions[node] = "Failed to restart collectd"
+    return failed_minions
+
+
 def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict):
     failed_minions = []
     for key, value in plugin_threshold_dict.iteritems():
