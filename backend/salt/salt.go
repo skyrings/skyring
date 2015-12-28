@@ -40,6 +40,9 @@ var funcNames = [...]string{
 	"NodeUp",
 	"AddMonitoringPlugin",
 	"UpdateMonitoringConfiguration",
+	"EnableMonitoringPlugin",
+	"DisableMonitoringPlugin",
+	"RemoveMonitoringPlugin",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -77,6 +80,39 @@ func (s Salt) UpdateMonitoringConfiguration(nodes []string, config []monitoring.
 	defer mutex.Unlock()
 	var pyobj *python.PyObject
 	if pyobj, err = pyFuncs["UpdateMonitoringConfiguration"].Call(nodes, monitoring.ToSaltPillarCompat(config)); err == nil {
+		err = gopy.Convert(pyobj, &failed_nodes)
+	}
+	return
+}
+
+func (s Salt) EnableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error) {
+	failed_nodes = make(map[string]string)
+	mutex.Lock()
+	defer mutex.Unlock()
+	pyobj, err := pyFuncs["EnableMonitoringPlugin"].Call(nodes, pluginName)
+	if err == nil {
+		err = gopy.Convert(pyobj, &failed_nodes)
+	}
+	return
+}
+
+func (s Salt) DisableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error) {
+	failed_nodes = make(map[string]string)
+	mutex.Lock()
+	defer mutex.Unlock()
+	pyobj, err := pyFuncs["DisableMonitoringPlugin"].Call(nodes, pluginName)
+	if err == nil {
+		err = gopy.Convert(pyobj, &failed_nodes)
+	}
+	return
+}
+
+func (s Salt) RemoveMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error) {
+	failed_nodes = make(map[string]string)
+	mutex.Lock()
+	defer mutex.Unlock()
+	pyobj, err := pyFuncs["RemoveMonitoringPlugin"].Call(nodes, pluginName)
+	if err == nil {
 		err = gopy.Convert(pyobj, &failed_nodes)
 	}
 	return
