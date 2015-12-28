@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_8c25870c",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-28T05:41:53Z",
+      "side": 1,
+      "message": "You can use utils.FailTask() here.\nIt does logging, update status and marks the task as Done",
+      "revId": "2505c91cd1d08d744a7f5461afb7fff0a8d54fa4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_ac2243ff",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-28T05:41:53Z",
+      "side": 1,
+      "message": "Same as above for this and for all the cases where failure",
+      "revId": "2505c91cd1d08d744a7f5461afb7fff0a8d54fa4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_cc1f8fb6",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-28T05:41:53Z",
+      "side": 1,
+      "message": "utils.FailTask()",
+      "revId": "2505c91cd1d08d744a7f5461afb7fff0a8d54fa4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_cc76af06",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-28T05:41:53Z",
+      "side": 1,
+      "message": "%s/monitoringPluginActivationDeactivations/activateDeactivateMonitoringPlugins/g",
+      "revId": "2505c91cd1d08d744a7f5461afb7fff0a8d54fa4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_ec736b13",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-28T05:41:53Z",
+      "side": 1,
+      "message": "utils.FailTask()",
+      "revId": "2505c91cd1d08d744a7f5461afb7fff0a8d54fa4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
