@@ -110,7 +110,7 @@ info "Building python modules"
 mkdir -p ~/.skyring_build/ceph-provider-modules
 cd ~/.skyring_build/golang/gopath/src/github.com/skyrings/bigfin/backend/salt/python/
 python setup.py install --root ~/.skyring_build/ceph-provider-modules
-cp -r ~/.skyring_build/ceph-provider-modules/usr/lib/python2.7/site-packages/skyring /usr/lib/python2.7/site-packages/
+cp -r ~/.skyring_build/ceph-provider-modules/usr/lib/python2.7/site-packages/bigfin /usr/lib/python2.7/site-packages/
 
 mkdir -p ~/.skyring_build/skyring-provider-modules
 cd ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/backend/salt/python
