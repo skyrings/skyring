@@ -14,62 +14,62 @@ limitations under the License.
 package utils
 
 type Unit struct {
-	Name string
+	Name             string
 	NoOfPrevUnitEqui int
-	Order int
+	Order            int
 }
 
 type Units []Unit
 
 func (slice Units) Len() int {
-    return len(slice)
+	return len(slice)
 }
 
 func (slice Units) Less(i, j int) bool {
-    return slice[i].Order < slice[j].Order;
+	return slice[i].Order < slice[j].Order
 }
 
 func (slice Units) Swap(i, j int) {
-    slice[i], slice[j] = slice[j], slice[i]
+	slice[i], slice[j] = slice[j], slice[i]
 }
 
-func GetSizeUnits() (Units) {
-	return Units {
+func GetSizeUnits() Units {
+	return Units{
 		{
-			Name: "Bytes",
+			Name:             "Bytes",
 			NoOfPrevUnitEqui: 1,
-			Order: 1,
+			Order:            1,
 		},
 		{
-			Name: "KibiBytes",
+			Name:             "KibiBytes",
 			NoOfPrevUnitEqui: 1024,
-			Order: 2,
+			Order:            2,
 		},
 		{
-			Name: "MibiBytes",
+			Name:             "MibiBytes",
 			NoOfPrevUnitEqui: 1024,
-			Order: 3,
+			Order:            3,
 		},
 		{
-			Name: "GibiBytes",
+			Name:             "GibiBytes",
 			NoOfPrevUnitEqui: 1024,
-			Order: 4,
+			Order:            4,
 		},
 		{
-			Name: "TibiBytes",
+			Name:             "TibiBytes",
 			NoOfPrevUnitEqui: 1024,
-			Order: 5,
+			Order:            5,
 		},
 	}
 }
 
-func MakeUnits(orderedUnitNames []string, commonScale int) (units Units){
+func MakeUnits(orderedUnitNames []string, commonScale int) (units Units) {
 	for index, unitName := range orderedUnitNames {
 		noOfPrevUnitEqui := commonScale
 		if index == 0 {
 			noOfPrevUnitEqui = 1
 		}
-		units = append(units, Unit{Name : unitName, NoOfPrevUnitEqui : noOfPrevUnitEqui, Order: index + 1 })
+		units = append(units, Unit{Name: unitName, NoOfPrevUnitEqui: noOfPrevUnitEqui, Order: index + 1})
 	}
 	return units
 }
@@ -80,9 +80,9 @@ func (fromUnit Unit) Convert(fromValue float64, toUnit Unit, unitSet Units) (siz
 	size = fromValue
 	loopOk := fromUnit.Order != toUnit.Order
 	index := fromUnit.Order
-	for ;loopOk; {
+	for loopOk {
 		if fromUnit.Order < toUnit.Order {
-			size = size/(float64(unitSet[index].NoOfPrevUnitEqui))
+			size = size / (float64(unitSet[index].NoOfPrevUnitEqui))
 			index++
 		} else {
 			index--
@@ -99,12 +99,12 @@ func (fromUnit Unit) AutoConvert(fromValue float64, unitSet Units) (size float64
 	size = fromValue
 	index := fromUnit.Order - 1
 	currentUnit := fromUnit
-	if index != len(unitSet) - 1 {
-		for ;; {
+	if index != len(unitSet)-1 {
+		for {
 			index = index + 1
 			size = currentUnit.Convert(size, unitSet[index], unitSet)
 			currentUnit = unitSet[index]
-			if index == len(unitSet) - 1  || size < float64(unitSet[index+1].NoOfPrevUnitEqui) {
+			if index == len(unitSet)-1 || size < float64(unitSet[index+1].NoOfPrevUnitEqui) {
 				return size, unitSet[index]
 			}
 		}
