@@ -65,7 +65,7 @@ func (a *App) getProviderFromClusterId(cluster_id uuid.UUID) *Provider {
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 	var cluster models.Cluster
 	if err := collection.Find(bson.M{"clusterid": cluster_id}).One(&cluster); err != nil {
-		logger.Get().Error("Error getting the cluster details: %v", err)
+		logger.Get().Error("Error getting details for cluster: %v. error: %v", cluster_id, err)
 		return nil
 	}
 	if provider, ok := a.providers[cluster.Type]; ok {

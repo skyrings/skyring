@@ -104,7 +104,7 @@ func (a *App) StartProviders(configDir string, binDir string) {
 		var found bool
 		for _, element := range config.Routes {
 			if _, ok := a.routes[element.Name]; ok {
-				logger.Get().Error("Error in Route configuration, Duplicate routes")
+				logger.Get().Error("Error in Route configuration, Duplicate route: %s", element.Name)
 				//Dont proceed further
 				found = true
 				break
@@ -135,7 +135,7 @@ func (a *App) StartProviders(configDir string, binDir string) {
 			confStr, _ := json.Marshal(conf.SystemConfig)
 			client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, config.Provider.ProviderBinary, string(confStr))
 			if err != nil {
-				logger.Get().Error("Error running plugin:%s", err)
+				logger.Get().Error("Error starting provider for %s. error: %v", config.Provider.Name, err)
 				continue
 			}
 			//Load the routes
@@ -169,7 +169,7 @@ func (a *App) SetRoutes(router *mux.Router) error {
 			urlPattern := fmt.Sprintf("%s/v%d/%s", DEFAULT_API_PREFIX, route.Version, route.Pattern)
 			router.Methods(route.Method).Path(urlPattern).Name(route.Name).Handler(http.HandlerFunc(route.HandlerFunc))
 		} else {
-			logger.Get().Info("Skipped the route: %s as version is un spported", route.Name)
+			logger.Get().Info("Skipped the route: %s as version: %d is un spported", route.Name, route.Version)
 		}
 	}
 
@@ -180,7 +180,7 @@ func (a *App) SetRoutes(router *mux.Router) error {
 			authReqdRouter.Methods(route.Method).Path(urlPattern).Name(route.Name).Handler(http.HandlerFunc(route.HandlerFunc))
 			router.Handle(urlPattern, n)
 		} else {
-			logger.Get().Info("Skipped the route: %s as version is un spported", route.Name)
+			logger.Get().Info("Skipped the route: %s as version: %d is un spported", route.Name, route.Version)
 		}
 	}
 
@@ -197,7 +197,7 @@ func (a *App) SetRoutes(router *mux.Router) error {
 				Handler(http.HandlerFunc(a.ProviderHandler))
 			router.Handle(urlPattern, n)
 		} else {
-			logger.Get().Info("Skipped the route: %s as version is un spported", route.Name)
+			logger.Get().Info("Skipped the route: %s as version: %d is un spported", route.Name, route.Version)
 		}
 	}
 
@@ -217,7 +217,7 @@ func (a *App) InitializeAuth(authCfg conf.AuthConfig) error {
 
 	//Initailize the backend auth provider based on the configuartion
 	if aaa, err := authprovider.InitAuthProvider(authCfg.ProviderName, authCfg.ConfigFile); err != nil {
-		logger.Get().Error("Error Initializing the Authentication: %s", err)
+		logger.Get().Error("Error Initializing the Authentication Provider. error: %v", err)
 		return err
 	} else {
 		AuthProviderInstance = aaa
@@ -287,21 +287,25 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 	//Get the request details from requestbody
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		logger.Get().Error("Error parsing http request body: %s", err)
+		logger.Get().Error("Error parsing http request body: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Error parsing the http request body"))
 	}
 
 	//Find out the provider to process this request and send the request
 	//After getting the response, pass it on to the client
 	provider := a.getProviderFromRoute(routeCfg)
 	if provider != nil {
-		logger.Get().Info("Sending the request to provider:", provider.Name)
+		logger.Get().Info("Sending the request to provider: %s", provider.Name)
 		provider.Client.Call(provider.Name+"."+routeCfg.PluginFunc, models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body}, &result)
 		//Parse the result to see if a different status needs to set
 		//By default it sets http.StatusOK(200)
-		logger.Get().Info("Got response from provider")
+		logger.Get().Info("Got response from provider: %s", provider.Name)
 		var m models.RpcResponse
 		if err = json.Unmarshal(result, &m); err != nil {
-			logger.Get().Error("Unable to Unmarshall the result from provider : %s", err)
+			logger.Get().Error("Unable to Unmarshall the result from provider: %s. error: %v", provider.Name, err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Unable to unmarshall the result from provider"))
 		}
 		status := m.Status.StatusCode
 		if status != http.StatusOK {
@@ -317,7 +321,7 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) InitializeNodeManager(config conf.NodeManagerConfig) error {
 	if manager, err := nodemanager.InitNodeManager(config.ManagerName, config.ConfigFilePath); err != nil {
-		logger.Get().Error("Error initializing the node manager: %v", err)
+		logger.Get().Error("Error initializing the node manager. error: %v", err)
 		return err
 	} else {
 		CoreNodeManager = manager
@@ -347,12 +351,12 @@ func (a *App) LoginRequired(w http.ResponseWriter, r *http.Request, next http.Ha
 
 	session, err := Store.Get(r, "session-key")
 	if err != nil {
-		logger.Get().Error("Error Getting the session: %v", err)
+		logger.Get().Error("Error Getting the session. error: %v", err)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 	if session.IsNew {
-		logger.Get().Info("Not Authorized returning from here")
+		logger.Get().Info("Not Authorized")
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}

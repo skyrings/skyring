@@ -101,7 +101,7 @@ func populateStorageNodeInstance(node string) (*models.Node, bool) {
 	storage_node.NodeId, _ = salt_backend.GetNodeID(node)
 	networkInfo, err := salt_backend.GetNodeNetwork(node)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting network details for node: %s", node))
+		logger.Get().Error(fmt.Sprintf("Error getting network details for node: %s. error: %v", node, err))
 		return nil, false
 	}
 	storage_node.NetworkInfo.Subnet = networkInfo.Subnet
@@ -109,13 +109,13 @@ func populateStorageNodeInstance(node string) (*models.Node, bool) {
 	storage_node.NetworkInfo.Ipv6 = networkInfo.IPv6
 	addrs, err := net.LookupHost(node)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error looking up node IP for: %s", node))
+		logger.Get().Error(fmt.Sprintf("Error looking up node IP for: %s. error: %v", node, err))
 		return nil, false
 	}
 	storage_node.ManagementIP4 = addrs[0]
 	ok, err := salt_backend.NodeUp(node)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting status of node: %s", node))
+		logger.Get().Error(fmt.Sprintf("Error getting status of node: %s. error: %v", node, err))
 		return nil, false
 	}
 	if ok {
@@ -125,7 +125,7 @@ func populateStorageNodeInstance(node string) (*models.Node, bool) {
 	}
 	disks, err := salt_backend.GetNodeDisk(node)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting disk details for node: %s", node))
+		logger.Get().Error(fmt.Sprintf("Error getting disk details for node: %s. error: %v", node, err))
 		return nil, false
 	}
 	for _, disk := range disks {
@@ -164,6 +164,7 @@ func (a SaltNodeManager) SyncStorageDisks(node string) (bool, error) {
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if len(disks) != 0 {
 		if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"storagedisks": disks}}); err != nil {
+			logger.Get().Error("Error updating the disk details for node: %s. error: %v", node, err)
 			return false, err
 		}
 	}
@@ -172,7 +173,7 @@ func (a SaltNodeManager) SyncStorageDisks(node string) (bool, error) {
 
 func (a SaltNodeManager) DisableNode(node string) (bool, error) {
 	if ok, err := salt_backend.DisableService(node, "collectd", true); err != nil || !ok {
-		logger.Get().Error(fmt.Sprintf("Error disabling services on node: %s, error: %v", node, err))
+		logger.Get().Error(fmt.Sprintf("Error disabling services on node: %s. error: %v", node, err))
 		return false, err
 	}
 
@@ -181,6 +182,7 @@ func (a SaltNodeManager) DisableNode(node string) (bool, error) {
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
+		logger.Get().Error("Error updating managed state of node: %s. error: %v", node, err)
 		return false, err
 	}
 
@@ -198,7 +200,7 @@ func (a SaltNodeManager) EnableNode(node string) (bool, error) {
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
-		logger.Get().Error("Error updating manage state of node: %s", node)
+		logger.Get().Error("Error updating manage state of node: %s. error: %v", node, err)
 		return false, err
 	}
 
@@ -219,7 +221,7 @@ func (a SaltNodeManager) RemoveNode(node string) (bool, error) {
 
 func (a SaltNodeManager) IgnoreNode(node string) (bool, error) {
 	if ok, err := salt_backend.IgnoreNode(node); err != nil || !ok {
-		logger.Get().Error(fmt.Sprintf("Error rejecting node: %s, error: %v", node, err))
+		logger.Get().Error(fmt.Sprintf("Error rejecting node: %s. error: %v", node, err))
 		return false, err
 	}
 

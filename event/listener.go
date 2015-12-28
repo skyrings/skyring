@@ -62,7 +62,8 @@ func RouteEvent(event models.NodeEvent) {
 	e.Severity = event.Severity
 	eventId, err := uuid.New()
 	if err != nil {
-		logger.Get().Error("Uuid generation for the event failed: ", err)
+		logger.Get().Error("Uuid generation for the event failed for node: %s. error: %v", event.Node, err)
+		return
 	}
 
 	e.EventId = *eventId
@@ -73,7 +74,7 @@ func RouteEvent(event models.NodeEvent) {
 	var node models.Node
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Find(bson.M{"hostname": event.Node}).One(&node); err != nil {
-		logger.Get().Error("Node information read from DB failed for node: %s", err)
+		logger.Get().Error("Node information read from DB failed for node: %s. error: %v", event.Node, err)
 		return
 	}
 
@@ -89,24 +90,24 @@ func RouteEvent(event models.NodeEvent) {
 		if match, err := filepath.Match(tag, e.Tag); err == nil {
 			if match {
 				if err := handler.(func(models.Event) error)(e); err != nil {
-					logger.Get().Error("Event Handling Failed for event: %s", err)
+					logger.Get().Error("Event Handling Failed for event for node: %s. error: %v", node.Hostname, err)
 					return
 				}
 				if err := Persist_event(e); err != nil {
-					logger.Get().Error("Could not persist the event to DB: %s", err)
+					logger.Get().Error("Could not persist the event to DB for node: %s. error: %v", node.Hostname, err)
 					return
 				} else {
 					// For upcoming any new event , broadcasting to all connected clients
 					eventObj, err := json.Marshal(e)
 					if err != nil {
-						logger.Get().Error("Error marshalling the event data. error: %v", err)
+						logger.Get().Error("Error marshalling the event data for node: %s. error: %v", node.Hostname, err)
 					}
 					GetBroadcaster().chBroadcast <- string(eventObj)
 					return
 				}
 			}
 		} else {
-			logger.Get().Error("Error while maping handler:", err)
+			logger.Get().Error("Error while maping handler for event for node: %s. error: %v", node.Hostname, err)
 			return
 		}
 	}
@@ -114,7 +115,7 @@ func RouteEvent(event models.NodeEvent) {
 	// Handle Provider specific events
 	app := skyring.GetApp()
 	if err := app.RouteProviderEvents(e); err != nil {
-		logger.Get().Error("Event could not be handled for event:%s", e.Tag)
+		logger.Get().Error("Event:%s could not be handled for node: %s. error: %v", e.Tag, node.Hostname, err)
 	}
 
 	return
@@ -122,7 +123,7 @@ func RouteEvent(event models.NodeEvent) {
 
 func (l *Listener) PersistNodeEvent(args *models.NodeEvent, ack *bool) error {
 	if args.Timestamp.IsZero() || args.Node == "" || args.Tag == "" || args.Message == "" || args.Severity == "" {
-		logger.Get().Error("Incomplete details in the event", *args)
+		logger.Get().Error("Incomplete details in the event %v", *args)
 		*ack = false
 		return nil
 	}

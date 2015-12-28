@@ -52,14 +52,13 @@ func (manager *Manager) AcquireLock(appLock AppLock) error {
 		if val, ok := manager.locks[k]; ok {
 			//Lock already aquired return from here
 			err := fmt.Sprintf("Unable to Acquire the lock for %v Message %s ", k, val.GetMessages())
-			logger.Get().Error("Unable to Acquire the lock for: ", k)
+			logger.Get().Error("Unable to Acquire the lock for: %v", k)
 			return errors.New(err)
 		}
-		logger.Get().Error("Lock Acquired for: ", k)
+		logger.Get().Error("Lock Acquired for: %v", k)
 		manager.locks[k] = NewLockInternal(v)
 	}
 	return nil
-
 }
 
 func (manager *Manager) ReleaseLock(appLock AppLock) error {
@@ -70,10 +69,10 @@ func (manager *Manager) ReleaseLock(appLock AppLock) error {
 		if _, ok := manager.locks[k]; !ok {
 			//No lock exits log and do nothing
 			err := fmt.Sprintf("No Lock found for unlocking %v", k)
-			logger.Get().Error("No Lock found for unlocking: ", k)
+			logger.Get().Error("No Lock found for unlocking: %v", k)
 			return errors.New(err)
 		}
-		logger.Get().Error("Lock Released: ", k)
+		logger.Get().Error("Lock Released for: %v", k)
 		delete(manager.locks, k)
 	}
 	return nil

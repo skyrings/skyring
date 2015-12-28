@@ -35,7 +35,7 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	if len(node_id_str) != 0 {
 		node_id, err := uuid.Parse(node_id_str)
 		if err != nil {
-			logger.Get().Error("Error parsing node id :%s", err)
+			logger.Get().Error("Error parsing node id: %s. error: %v", node_id_str, err)
 			util.HandleHttpError(rw, err)
 			return
 		}
@@ -43,7 +43,7 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	} else if len(cluster_id_str) != 0 {
 		cluster_id, err := uuid.Parse(cluster_id_str)
 		if err != nil {
-			logger.Get().Error("Error parsing cluster id :%s", err)
+			logger.Get().Error("Error parsing cluster id: %s. error: %v", cluster_id_str, err)
 			util.HandleHttpError(rw, err)
 			return
 		}
@@ -53,7 +53,7 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	if err != nil {
-		logger.Get().Error("Error getting record from DB:%s", err)
+		logger.Get().Error("Error getting record from DB: %v", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
