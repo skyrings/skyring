@@ -16,6 +16,24 @@
       "revId": "18c79a9c6d493e1143811b26e1cbdd683473c63c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_cce4efae",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-28T06:02:23Z",
+      "side": 1,
+      "message": "Looks like its followed as a convention in the salt community I see most salt-formulae on github having the convention of naming it as files. The consequence of renaming it would not be much but just path edits in all sls files",
+      "parentUuid": "3a961159_cc4dcfc6",
+      "revId": "18c79a9c6d493e1143811b26e1cbdd683473c63c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
