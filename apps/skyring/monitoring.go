@@ -56,7 +56,7 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	storage_node := GetNode(*node_id)
 	if storage_node.Hostname == "" {
 		util.HttpResponse(w, http.StatusBadRequest, "Node not found")
-		logger.Get().Error("Node not found: %v", err)
+		logger.Get().Error("Node: %v not found. error: %v", *node_id, err)
 		return
 	}
 
@@ -71,11 +71,13 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(duration, ",") {
 			splt := strings.Split(duration, ",")
 			if _, err := time.Parse("2006-01-02T15:04:05.000Z", splt[0]); err != nil {
+				logger.Get().Error("Error parsing start time: %s. error: %v", splt[0], err)
 				util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error parsing start time: %s", splt[0]))
 				return
 			}
 			start_time := splt[0]
 			if _, err := time.Parse("2006-01-02T15:04:05.000Z", splt[1]); err != nil {
+				logger.Get().Error("Error parsing end time: %s. error: %v", splt[1], err)
 				util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error parsing end time: %s", splt[1]))
 				return
 			}
@@ -83,6 +85,7 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 			query_cmd += " WHERE time > '" + start_time + "' and time < '" + end_time + "'"
 		} else {
 			if matched, _ := regexp.Match("^([0-5]?[0-9])?s$|^([0-5]?[0-9])?m$|^([0-2]?[0-3])?h$|^([0-9])*d$|^([0-9])*w$", []byte(duration)); !matched {
+				logger.Get().Error("Invalid duration passed: %s", duration)
 				util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Invalid duration passed: %s", duration))
 				return
 			}
@@ -94,6 +97,7 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		json.NewEncoder(w).Encode(res[0].Series)
 	} else {
+		logger.Get().Error("Error fetching monitoring data for node: %s. error: %v", storage_node.Hostname, err)
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
 }

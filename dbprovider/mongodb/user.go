@@ -30,7 +30,7 @@ func (m MongoDb) User(username string) (user models.User, e error) {
 	defer m.Close(c)
 	err := c.Find(bson.M{"username": username}).One(&user)
 	if err != nil {
-		logger.Get().Error("Error getting record from DB:%s", err)
+		logger.Get().Error("Error getting record from DB for user: %s. error: %v", username, err)
 		return user, ErrMissingUser
 	}
 	return user, nil
@@ -43,7 +43,7 @@ func (m MongoDb) Users() (us []models.User, e error) {
 
 	err := c.Find(bson.M{}).All(&us)
 	if err != nil {
-		logger.Get().Error("Error getting record from DB:%s", err)
+		logger.Get().Error("Error getting record from DB. error: %v", err)
 		return us, mkmgoerror(err.Error())
 	}
 	return us, nil
@@ -56,7 +56,7 @@ func (m MongoDb) SaveUser(user models.User) error {
 
 	_, err := c.Upsert(bson.M{"username": user.Username}, bson.M{"$set": user})
 	if err != nil {
-		logger.Get().Error("Error deleting record from DB:%s", err)
+		logger.Get().Error("Error deleting record from DB for user: %s. error: %v", user.Username, err)
 		return mkmgoerror(err.Error())
 	}
 	return nil
@@ -70,7 +70,7 @@ func (m MongoDb) DeleteUser(username string) error {
 	// raises error if "username" doesn't exist
 	err := c.Remove(bson.M{"username": username})
 	if err != nil {
-		logger.Get().Error("Error deleting record from DB:%s", err)
+		logger.Get().Error("Error deleting record from DB for user: %s. error: %v", username, err)
 		return mkmgoerror(err.Error())
 	}
 	return err
@@ -87,7 +87,7 @@ func (m MongoDb) InitUser() error {
 	}
 	err := c.EnsureIndex(index)
 	if err != nil {
-		logger.Get().Error("Error Setting the Index:%s", err)
+		logger.Get().Error("Error setting the index for: %s. error: %v", models.COLL_NAME_USER, err)
 		return mkmgoerror(err.Error())
 	}
 	return nil

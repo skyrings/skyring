@@ -161,12 +161,12 @@ func start() {
 
 	//Load the autheticated routes
 	if err := application.SetRoutes(router); err != nil {
-		logger.Get().Error("Unable to create http server endpoints: %s", err)
+		logger.Get().Error("Unable to create http server endpoints. error: %v", err)
 		os.Exit(1)
 	}
 
 	if err := application.InitializeNodeManager(conf.SystemConfig.NodeManagementConfig); err != nil {
-		logger.Get().Error("Unable to create node manager")
+		logger.Get().Error("Unable to create node manager. error: %v", err)
 		os.Exit(1)
 	}
 
@@ -193,11 +193,11 @@ func start() {
 	*/
 	// Create DB session
 	if err := db.InitDBSession(conf.SystemConfig.DBConfig); err != nil {
-		logger.Get().Error("Unable to initialize DB")
+		logger.Get().Error("Unable to initialize DB. error: %v", err)
 		os.Exit(1)
 	}
 	if err := db.InitMonitoringDB(conf.SystemConfig.TimeSeriesDBConfig); err != nil {
-		logger.Get().Error("Unable to initialize monitoring DB")
+		logger.Get().Error("Unable to initialize monitoring DB. error: %v", err)
 		os.Exit(1)
 	}
 
@@ -209,13 +209,13 @@ func start() {
 
 	//Initialize the auth provider
 	if err := application.InitializeAuth(conf.SystemConfig.Authentication); err != nil {
-		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
+		logger.Get().Error("Unable to initialize the authentication provider. error: %v", err)
 		os.Exit(1)
 	}
 
 	//Initialize the task manager
 	if err := application.InitializeTaskManager(); err != nil {
-		logger.Get().Error("Unable to initialize the task manager: %s", err)
+		logger.Get().Error("Unable to initialize the task manager. error: %v", err)
 		os.Exit(1)
 	}
 
@@ -235,5 +235,7 @@ func start() {
 
 	logger.Get().Info("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
 
-	logger.Get().Critical("Error: %s", http.ListenAndServe(conf.SystemConfig.Config.Host+":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), n))
+	if err := http.ListenAndServe(conf.SystemConfig.Config.Host+":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), n); err != nil {
+		logger.Get().Critical("Error: %v", err)
+	}
 }
