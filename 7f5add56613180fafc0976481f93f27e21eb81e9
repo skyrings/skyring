@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a961159_4fe8f17c",
+        "filename": "backend/salt/sls/push_event.sls",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-12-28T13:36:26Z",
+      "side": 1,
+      "message": "This else is not needed I guess. As control does not enter the else block in any case, we call this file only when the tag is either \"salt/minion/*/start\" or \"skyring/*\" which are the first 2 blocks. If you feel the same, I will send another patch to remove this. Please provide your inputs.",
+      "parentUuid": "9aa7fdbe_43ee0624",
+      "range": {
+        "startLine": 146,
+        "startChar": 8,
+        "endLine": 146,
+        "endChar": 17
+      },
+      "revId": "7f5add56613180fafc0976481f93f27e21eb81e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_23e9021b",
         "filename": "event/handlermap.go",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2015-12-23T11:12:53Z",
       "side": 1,
       "message": "I think we can remove this for time being as we are not supporting the gluster. Also anything specific to file systems needs to be handled in providers",
+      "range": {
+        "startLine": 30,
+        "startChar": 1,
+        "endLine": 30,
+        "endChar": 86
+      },
+      "revId": "7f5add56613180fafc0976481f93f27e21eb81e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_6fedad8b",
+        "filename": "event/handlermap.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2015-12-28T13:36:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa7fdbe_23e9021b",
       "range": {
         "startLine": 30,
         "startChar": 1,
