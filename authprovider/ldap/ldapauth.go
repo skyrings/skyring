@@ -77,7 +77,7 @@ func Authenticate(url string, base string,
 	defer ldap.Close()
 
 	if err != nil {
-		logger.Get().Error("Failed to connect the server!")
+		logger.Get().Error("Failed to connect the server. error: %v", err)
 		return err
 	}
 
@@ -86,7 +86,7 @@ func Authenticate(url string, base string,
 
 	err = ldap.Bind(userConnStr, passwd)
 	if err != nil {
-		logger.Get().Error("Error binding to LDAP Server:%v", err)
+		logger.Get().Error("Error binding to LDAP Server. error: %v", err)
 		return err
 	}
 	return nil
@@ -102,10 +102,10 @@ func LdapAuth(a Authorizer, user, passwd string) bool {
 	// Authenticating user
 	err := Authenticate(url, a.connectionString, user, passwd)
 	if err != nil {
-		logger.Get().Error("Authentication failed: %s", err)
+		logger.Get().Error("Authentication failed for user: %s. error: %v", user, err)
 		return false
 	} else {
-		logger.Get().Info("Ldap user login success!")
+		logger.Get().Info("Ldap user login success for user: %s", user)
 		return true
 	}
 }
@@ -131,11 +131,11 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 
 	bytes, err := ioutil.ReadAll(config)
 	if err != nil {
-		logger.Get().Error("Error reading Configuration file:%s", err)
+		logger.Get().Error("Error reading Configuration file. error: %v", err)
 		return nil, err
 	}
 	if err = json.Unmarshal(bytes, &providerCfg); err != nil {
-		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		logger.Get().Error("Unable to Unmarshall the data. error: %v", err)
 		return nil, err
 	}
 	userDao := skyring.GetDbProvider().UserInterface()
@@ -146,7 +146,7 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 		providerCfg.LdapServer.Base,
 		providerCfg.UserRoles.DefaultRole,
 		providerCfg.UserRoles.Roles); err != nil {
-		logger.Get().Error("Unable to initialize the authorizer for Ldapauthprovider:%s", err)
+		logger.Get().Error("Unable to initialize the authorizer for Ldapauthprovider. error: %v", err)
 		panic(err)
 	} else {
 		return &provider, nil
@@ -182,19 +182,19 @@ func (a Authorizer) ProviderName() string {
 func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p string) error {
 	session, err := skyring.Store.Get(req, "session-key")
 	if err != nil {
-		logger.Get().Error("Error Getting the: %v", err)
+		logger.Get().Error("Error Getting the session. error: %v", err)
 		return err
 	}
 	if session.IsNew {
 		session.Values["username"] = u
 	} else {
-		logger.Get().Error("Already logged in")
+		logger.Get().Info("User %s already logged in", u)
 		return nil
 	}
 	errStrNotAllowed := "This user is not allowed. Status Disabled"
 	// Verify user allowed to user usm with group privilage in the db
 	if user, err := a.userDao.User(u); err == nil {
-		errStr := "Passwords Doesnot match"
+		errStr := fmt.Sprintf("Password does not match for user: %s", u)
 		if user.Status {
 			if user.Type == authprovider.External {
 				if LdapAuth(a, u, p) {
@@ -215,11 +215,11 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 			return mkerror(errStrNotAllowed)
 		}
 	} else {
-		logger.Get().Error("User Doesnot Exists:", user)
-		return mkerror("User Doesnot Exists")
+		logger.Get().Error("User does not exist: %s", user)
+		return mkerror("User does not exist")
 	}
 	if err = session.Save(req, rw); err != nil {
-		logger.Get().Error("Error Saving the session: %v", err)
+		logger.Get().Error("Error saving the session for user: %s. error: %v", u, err)
 		return err
 	}
 
@@ -230,12 +230,12 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
 	session, err := skyring.Store.Get(req, "session-key")
 	if err != nil {
-		logger.Get().Error("Error Getting the: %v", err)
+		logger.Get().Error("Error getting the session. error: %v", err)
 		return err
 	}
 	session.Options.MaxAge = -1
 	if err = session.Save(req, rw); err != nil {
-		logger.Get().Error("Error Saving the session: %v", err)
+		logger.Get().Error("Error saving the session. error: %v", err)
 		return err
 	}
 	return nil
@@ -243,12 +243,11 @@ func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
 
 // List the LDAP users
 func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
-
 	url := GetUrl(a.ldapServer, a.port)
 
 	ldap, err := openldap.Initialize(url)
 	if err != nil {
-		logger.Get().Error("failed to connect the LDAP/AD server:%s", err)
+		logger.Get().Error("failed to connect the LDAP/AD server. error: %v", err)
 		return nil, err
 	}
 
@@ -261,7 +260,7 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 	rv, err := ldap.SearchAll(a.connectionString, scope, filter, attributes)
 
 	if err != nil {
-		logger.Get().Error("failed to search LDAP/AD server:%s", err)
+		logger.Get().Error("Failed to search LDAP/AD server. error: %v", err)
 		return nil, err
 	}
 
@@ -274,7 +273,7 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 			case "Mail":
 				user.Email = strings.Join(attr.Values(), ", ")
 			default:
-				logger.Get().Error("This property is not supported:%s", attr.Name())
+				logger.Get().Error("This property is not supported: %s", attr.Name())
 			}
 		}
 		// find the user role and group from the db and assign it
@@ -286,9 +285,8 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 
 // List the users in DB
 func (a Authorizer) ListUsers() (users []models.User, err error) {
-
 	if users, err = a.userDao.Users(); err != nil {
-		logger.Get().Error("Unable get the list of Users: %v", err)
+		logger.Get().Error("Unable get the list of users. error: %v", err)
 		return users, err
 	}
 	return users, nil
@@ -315,11 +313,11 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 	// Validate username
 	_, err := a.userDao.User(user.Username)
 	if err == nil {
-		logger.Get().Error("Username already exists")
+		logger.Get().Error("User %s already exists", user.Username)
 		return mkerror("user already exists")
 	} else if err.Error() != ErrMissingUser.Error() {
 		if err != nil {
-			logger.Get().Error("Error retrieving user:%s", err)
+			logger.Get().Error("Error retrieving details of user: %s. error: %v", user.Username, err)
 			return mkerror(err.Error())
 		}
 		return nil
@@ -329,7 +327,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		user.Role = a.defaultRole
 	} else {
 		if _, ok := a.roles[user.Role]; !ok {
-			logger.Get().Error("Non Existing Role")
+			logger.Get().Error("Non Existing Role: %s", user.Role)
 			return mkerror("non-existant role")
 		}
 	}
@@ -337,13 +335,13 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 	if user.Type == authprovider.Internal {
 
 		if password == "" {
-			logger.Get().Error("no password given")
+			logger.Get().Error("no password given for user: %s", user.Username)
 			return mkerror("no password given")
 		}
 		// Generate and save hash
 		hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		if err != nil {
-			logger.Get().Error("couldn't save password:%s", err)
+			logger.Get().Error("couldn't save password for user: %s. error: %v", user.Username, err)
 			return mkerror("couldn't save password: " + err.Error())
 		}
 		user.Hash = hash
@@ -351,7 +349,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 	}
 	err = a.userDao.SaveUser(user)
 	if err != nil {
-		logger.Get().Error("Erro Saving the User:%s", err)
+		logger.Get().Error("Error saving the user: %s. error: %v", user.Username, err)
 		return mkerror(err.Error())
 	}
 	return nil
@@ -360,7 +358,6 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 // Update changes data for an existing user. Needs thought...
 //Just added for completeness. Will revisit later
 func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error {
-
 	var (
 		hash    []byte
 		updated bool
@@ -368,7 +365,7 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 
 	user, err := a.userDao.User(username)
 	if err != nil {
-		logger.Get().Error("Error retrieving the user:%s", err)
+		logger.Get().Error("Error retrieving the user: %s. error: %v", username, err)
 		return err
 	}
 
@@ -377,7 +374,7 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 			p := val.(string)
 			hash, err = bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
 			if err != nil {
-				logger.Get().Error("Error saving the password:%s", err)
+				logger.Get().Error("Error saving the password for user: %s. error: %v", username, err)
 				return mkerror("couldn't save password: " + err.Error())
 			}
 			user.Hash = hash
@@ -399,12 +396,11 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 	if updated {
 		err = a.userDao.SaveUser(user)
 		if err != nil {
-			logger.Get().Error("Error saving the user to DB:%s", err)
+			logger.Get().Error("Error saving details for the user: %s to DB. error: %v", username, err)
 			return err
 		}
 	}
 	return nil
-
 }
 
 // Authorize checks if a user is logged in and returns an error on failed
@@ -413,7 +409,6 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 // messages list. The next time the user logs in, they will be redirected back
 // to the saved page.
 func (a Authorizer) Authorize(rw http.ResponseWriter, req *http.Request) error {
-
 	return nil
 }
 
@@ -426,7 +421,6 @@ func (a Authorizer) AuthorizeRole(rw http.ResponseWriter, req *http.Request, rol
 // CurrentUser returns the currently logged in user and a boolean validating
 // the information.
 func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e error) {
-
 	// This should search and fetch the user name based on the given value
 	// and can also check whether the available users are already imported
 	// into the database or not.
@@ -435,19 +429,19 @@ func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e er
 	if u == authprovider.CurrentUser {
 		session, err := skyring.Store.Get(req, "session-key")
 		if err != nil {
-			logger.Get().Error("Error Getting the: %v", err)
+			logger.Get().Error("Error getting the session for user: %s. error: %v", u, err)
 			return user, err
 		}
 		if val, ok := session.Values["username"]; ok {
 			u = val.(string)
 		} else {
-			logger.Get().Error("Unable to identify the user from session")
+			logger.Get().Error("Unable to identify the user: %s from session", u)
 			return user, mkerror("Unable to identify the user from session")
 		}
 	}
 	user, e = a.userDao.User(u)
 	if e != nil {
-		logger.Get().Error("Error retrieving the user:%s", e)
+		logger.Get().Error("Error retrieving the user: %s. error: %v", user, e)
 		return user, e
 	}
 	return user, nil
@@ -460,7 +454,7 @@ func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e er
 func (a Authorizer) DeleteUser(username string) error {
 	err := a.userDao.DeleteUser(username)
 	if err != nil {
-		logger.Get().Error("Unable delete the user: %s", err)
+		logger.Get().Error("Unable to delete the user: %s. error: %v", username, err)
 		return err
 	}
 	return nil

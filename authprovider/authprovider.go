@@ -43,7 +43,7 @@ func RegisterAuthProvider(name string, factory ProvidersFactory) {
 	providersMutex.Lock()
 	defer providersMutex.Unlock()
 	if _, found := providers[name]; found {
-		logger.Get().Critical("Auth provider %q was registered twice", name)
+		logger.Get().Critical("Auth provider %s was registered twice", name)
 	}
 	providers[name] = factory
 }
@@ -72,7 +72,7 @@ func InitAuthProvider(name string, configFilePath string) (AuthInterface, error)
 	if configFilePath != "" {
 		config, err := os.Open(configFilePath)
 		if err != nil {
-			logger.Get().Critical("Couldn't open auth provider configuration %s: %#v",
+			logger.Get().Critical("Couldn't open auth provider configuration %s. error: %v",
 				configFilePath, err)
 		}
 
@@ -85,10 +85,10 @@ func InitAuthProvider(name string, configFilePath string) (AuthInterface, error)
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("could not init plugin %q: %v", name, err)
+		return nil, fmt.Errorf("could not init plugin %s. error: %v", name, err)
 	}
 	if authprovider == nil {
-		return nil, fmt.Errorf("unknown plugin %q", name)
+		return nil, fmt.Errorf("unknown plugin %s", name)
 	}
 
 	return authprovider, nil

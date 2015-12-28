@@ -50,7 +50,7 @@ func GetNodeManager(name string, config io.Reader) (NodeManagerInterface, error)
 
 	factory_func, found := nodeManagers[name]
 	if !found {
-		logger.Get().Info("Node manager not found", name)
+		logger.Get().Info("Node manager: %s not found", name)
 		return nil, nil
 	}
 
@@ -68,7 +68,7 @@ func InitNodeManager(name string, configPath string) (NodeManagerInterface, erro
 	if configPath != "" {
 		config, err := os.Open(configPath)
 		if err != nil {
-			logger.Get().Info("Couldnt open node manager config file", configPath)
+			logger.Get().Info("Couldnt open node manager config file: %s", configPath)
 			return nil, nil
 		}
 
@@ -79,7 +79,7 @@ func InitNodeManager(name string, configPath string) (NodeManagerInterface, erro
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("Could not initialize node manager %s: %v", name, err)
+		return nil, fmt.Errorf("Could not initialize node manager %s. error: %v", name, err)
 	}
 	if manager == nil {
 		return nil, fmt.Errorf("Unknown node manager %s", name)

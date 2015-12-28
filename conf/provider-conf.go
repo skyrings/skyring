@@ -45,21 +45,21 @@ func LoadProviderConfig(providerConfigDir string) []ProviderInfo {
 
 	files, err := ioutil.ReadDir(providerConfigDir)
 	if err != nil {
-		logger.Get().Error("Unable to read directory: %s", err)
+		logger.Get().Error("Unable to read directory. error: %v", err)
 		logger.Get().Error("Failed to Initialize")
 		return collection
 	}
 	for _, f := range files {
-		logger.Get().Debug("File Name:", f.Name())
+		logger.Get().Debug("File Name: %s", f.Name())
 
 		file, err := ioutil.ReadFile(path.Join(providerConfigDir, f.Name()))
 		if err != nil {
-			logger.Get().Critical("Error Reading Config: %s", err)
+			logger.Get().Critical("Error Reading Config. error: %v", err)
 			continue
 		}
 		err = json.Unmarshal(file, &data)
 		if err != nil {
-			logger.Get().Critical("Error Unmarshalling Config: %s", err)
+			logger.Get().Critical("Error Unmarshalling Config. error: %v", err)
 			continue
 		}
 		collection = append(collection, data)
