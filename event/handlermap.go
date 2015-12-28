@@ -35,7 +35,7 @@ func persist_event(event models.Event) error {
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_NODE_EVENTS)
 	if err := coll.Insert(event); err != nil {
-		logger.Get().Error("Error adding the node event: %v", err)
+		logger.Get().Error("Error adding the node event. error: %v", err)
 		return err
 	}
 	return nil

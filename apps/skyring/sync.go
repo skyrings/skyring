@@ -100,7 +100,7 @@ func sync_cluster_storage_entities(cluster models.Cluster, provider *Provider) (
 	// Get the list of storage entities from DB
 	var fetchedStorages models.Storages
 	if err := coll.Find(bson.M{"clusterid": cluster.ClusterId}).All(&fetchedStorages); err != nil {
-		logger.Get().Error("Error getting the storages from DB: %v", err)
+		logger.Get().Error("Error getting the storage entities for cluster: %v from DB. error: %v", cluster.ClusterId, err)
 		return false, err
 	}
 
@@ -115,7 +115,7 @@ func sync_cluster_storage_entities(cluster models.Cluster, provider *Provider) (
 	} else {
 		var storages []models.AddStorageRequest
 		if err := json.Unmarshal(result.Data.Result, &storages); err != nil {
-			logger.Get().Error("Error parsing result from provider: %v", err)
+			logger.Get().Error("Error parsing result from provider. error: %v", err)
 			return false, err
 		}
 		// Insert/update storages
@@ -134,12 +134,12 @@ func sync_cluster_storage_entities(cluster models.Cluster, provider *Provider) (
 				}
 				uuid, err := uuid.New()
 				if err != nil {
-					logger.Get().Error("Error creating id for the new storage entity: %s", storage.Name)
+					logger.Get().Error("Error creating id for the new storage entity: %s. error: %v", storage.Name, err)
 					return false, err
 				}
 				entity.StorageId = *uuid
 				if err := coll.Insert(entity); err != nil {
-					logger.Get().Error("Error adding storage:%s to DB", storage.Name)
+					logger.Get().Error("Error adding storage:%s to DB. error: %v", storage.Name, err)
 					return false, err
 				}
 				logger.Get().Info("Added the new storage entity: %s", storage.Name)
@@ -152,7 +152,7 @@ func sync_cluster_storage_entities(cluster models.Cluster, provider *Provider) (
 						"quota_enabled": storage.QuotaEnabled,
 						"quota_params":  storage.QuotaParams,
 					}}); err != nil {
-					logger.Get().Error("Error updating the storage entity: %s", storage.Name)
+					logger.Get().Error("Error updating the storage entity: %s. error: %v", storage.Name, err)
 					return false, err
 				}
 				logger.Get().Info("Updated details of storage entity: %s", storage.Name)
@@ -169,7 +169,7 @@ func sync_cluster_storage_entities(cluster models.Cluster, provider *Provider) (
 			}
 			if !found {
 				if err := coll.Remove(bson.M{"storageid": fetchedStorage.StorageId}); err != nil {
-					logger.Get().Error("Error removing the storage: %s", fetchedStorage.Name)
+					logger.Get().Error("Error removing the storage: %s. error: %v", fetchedStorage.Name, err)
 				}
 			}
 		}

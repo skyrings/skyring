@@ -47,7 +47,6 @@ func mkmgoerror(msg string) error {
 //     backend = httpauth.MongodbAuthBackend("mongodb://127.0.0.1/", "auth")
 //     defer backend.Close()
 func NewMongodbBackend() (b MongodbAuthBackend, e error) {
-
 	// Ensure that the Username field is unique
 	index := mgo.Index{
 		Key:    []string{"username"},
@@ -59,7 +58,7 @@ func NewMongodbBackend() (b MongodbAuthBackend, e error) {
 
 	err := c.EnsureIndex(index)
 	if err != nil {
-		logger.Get().Error("Error Setting goauth collection:%s", err)
+		logger.Get().Error("Error Setting goauth collection. error: %v", err)
 		return b, mkmgoerror(err.Error())
 	}
 	return
@@ -73,7 +72,7 @@ func (b MongodbAuthBackend) User(username string) (user models.User, e error) {
 
 	err := c.Find(bson.M{"username": username}).One(&user)
 	if err != nil {
-		logger.Get().Error("Error getting record from DB:%s", err)
+		logger.Get().Error("Error getting record from DB. error: %v", err)
 		return user, ErrMissingUser
 	}
 	return user, nil
@@ -86,7 +85,7 @@ func (b MongodbAuthBackend) Users() (us []models.User, e error) {
 
 	err := c.Find(bson.M{}).All(&us)
 	if err != nil {
-		logger.Get().Error("Error getting record from DB:%s", err)
+		logger.Get().Error("Error getting record from DB. error: %v", err)
 		return us, mkmgoerror(err.Error())
 	}
 	return
@@ -109,7 +108,7 @@ func (b MongodbAuthBackend) DeleteUser(username string) error {
 	// raises error if "username" doesn't exist
 	err := c.Remove(bson.M{"username": username})
 	if err == mgo.ErrNotFound {
-		logger.Get().Error("Error deleting record from DB:%s", err)
+		logger.Get().Error("Error deleting record from DB. error: %v", err)
 		return ErrDeleteNull
 	}
 	return err

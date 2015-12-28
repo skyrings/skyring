@@ -75,27 +75,26 @@ func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 
 	bytes, err := ioutil.ReadAll(config)
 	if err != nil {
-		logger.Get().Error("Error reading Configuration file:%s", err)
+		logger.Get().Error("Error reading configuration file. error: %v", err)
 		return nil, err
 	}
 	if err = json.Unmarshal(bytes, &providerCfg); err != nil {
-		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		logger.Get().Error("Unable to Unmarshall the data. error: %v", err)
 		return nil, err
 	}
 	//Create DB Backend
 	backend, err := authprovider.NewMongodbBackend()
 	if err != nil {
-		logger.Get().Error("Unable to initialize the DB backend for localauthprovider:%s", err)
+		logger.Get().Error("Unable to initialize the DB backend for localauthprovider. error: %v", err)
 		panic(err)
 	}
 	//Create the Provider
 	if provider, err := NewAuthorizer(backend, providerCfg.DefaultRole, providerCfg.Roles); err != nil {
-		logger.Get().Error("Unable to initialize the authorizer for localauthprovider:%s", err)
+		logger.Get().Error("Unable to initialize the authorizer for localauthprovider. error: %v", err)
 		panic(err)
 	} else {
 		return &provider, nil
 	}
-
 }
 
 // NewAuthorizer returns a new Authorizer given an AuthBackend
@@ -131,23 +130,22 @@ func (a Authorizer) ProviderName() string {
 // message will be added to the session on failure with the reason.
 
 func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p string) error {
-
 	session, err := skyring.Store.Get(req, "session-key")
 	if err != nil {
-		logger.Get().Error("Error Getting the: %v", err)
+		logger.Get().Error("Error getting the session. error: %v", err)
 		return err
 	}
 	if session.IsNew {
 		session.Values["username"] = u
 	} else {
-		logger.Get().Error("Already logged in")
+		logger.Get().Info("Already logged in")
 		return nil
 	}
 	if user, err := a.backend.User(u); err == nil {
 		if user.Type == authprovider.Internal && user.Status {
 			verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(p))
 			if verify != nil {
-				logger.Get().Error("Passwords Doesnot match")
+				logger.Get().Error("Password does not match")
 				return mkerror("password doesn't match")
 			}
 		} else {
@@ -160,7 +158,7 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 	}
 
 	if err = session.Save(req, rw); err != nil {
-		logger.Get().Error("Error Saving the session: %v", err)
+		logger.Get().Error("Error Saving the session. error: %v", err)
 		return err
 	}
 
@@ -198,7 +196,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		return mkerror("user already exists")
 	} else if err.Error() != ErrMissingUser.Error() {
 		if err != nil {
-			logger.Get().Error("Error retrieving user:%s", err)
+			logger.Get().Error("Error retrieving user. error: %v", err)
 			return mkerror(err.Error())
 		}
 		return nil
@@ -207,7 +205,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 	// Generate and save hash
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		logger.Get().Error("couldn't save password:%s", err)
+		logger.Get().Error("couldn't save password. error: %v", err)
 		return mkerror("couldn't save password: " + err.Error())
 	}
 	user.Hash = hash
@@ -224,7 +222,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 
 	err = a.backend.SaveUser(user)
 	if err != nil {
-		logger.Get().Error("Erro Saving the User:%s", err)
+		logger.Get().Error("Erro Saving the User: %s. error: %v", user, err)
 		return mkerror(err.Error())
 	}
 	return nil
@@ -239,14 +237,14 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 
 	user, err := a.backend.User(username)
 	if err != nil {
-		logger.Get().Error("Error retrieving the user:%s", err)
+		logger.Get().Error("Error retrieving the user: %s. error: %v", username, err)
 		return err
 	}
 	if val, ok := m["password"]; ok {
 		p := val.(string)
 		hash, err = bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
 		if err != nil {
-			logger.Get().Error("Error saving the password:%s", err)
+			logger.Get().Error("Error saving the password. error: %v", err)
 			return mkerror("couldn't save password: " + err.Error())
 		}
 		user.Hash = hash
@@ -263,7 +261,7 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 
 	err = a.backend.SaveUser(user)
 	if err != nil {
-		logger.Get().Error("Error saving the user to DB:%s", err)
+		logger.Get().Error("Error saving the user to DB. error: %v", err)
 		return err
 	}
 
@@ -276,7 +274,6 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 // messages list. The next time the user logs in, they will be redirected back
 // to the saved page.
 func (a Authorizer) Authorize(rw http.ResponseWriter, req *http.Request) error {
-
 	return nil
 }
 
@@ -288,15 +285,14 @@ func (a Authorizer) AuthorizeRole(rw http.ResponseWriter, req *http.Request, rol
 
 // Logout clears an authentication session and add a logged out message.
 func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
-
 	session, err := skyring.Store.Get(req, "session-key")
 	if err != nil {
-		logger.Get().Error("Error Getting the: %v", err)
+		logger.Get().Error("Error getting the session. error: %v", err)
 		return err
 	}
 	session.Options.MaxAge = -1
 	if err = session.Save(req, rw); err != nil {
-		logger.Get().Error("Error Saving the session: %v", err)
+		logger.Get().Error("Error saving the session. error: %v", err)
 		return err
 	}
 	return nil
@@ -309,7 +305,7 @@ func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e er
 	if u == authprovider.CurrentUser {
 		session, err := skyring.Store.Get(req, "session-key")
 		if err != nil {
-			logger.Get().Error("Error Getting the: %v", err)
+			logger.Get().Error("Error getting the session. error: %v", err)
 			return user, err
 		}
 		if val, ok := session.Values["username"]; ok {
@@ -321,16 +317,15 @@ func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e er
 	}
 	user, e = a.backend.User(u)
 	if e != nil {
-		logger.Get().Error("Error retrieving the user:%s", e)
+		logger.Get().Error("Error retrieving the user: %s. error: %v", u, e)
 		return user, e
 	}
 	return user, nil
 }
 
 func (a Authorizer) ListUsers() (users []models.User, err error) {
-
 	if users, err = a.backend.Users(); err != nil {
-		logger.Get().Error("Unable get the list of Users: %v", err)
+		logger.Get().Error("Unable get the list of users. error: %v", err)
 		return users, err
 	}
 	return users, nil
@@ -345,7 +340,7 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 func (a Authorizer) DeleteUser(username string) error {
 	err := a.backend.DeleteUser(username)
 	if err != nil {
-		logger.Get().Error("Unable delete the user: %v", err)
+		logger.Get().Error("Unable delete the user: %s. error: %v", username, err)
 		return err
 	}
 	return nil

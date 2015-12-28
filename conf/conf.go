@@ -73,10 +73,10 @@ var (
 func LoadAppConfiguration(configFilePath string) {
 	file, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
-		logger.Get().Critical("Error Reading SkyRing Config: %s", err)
+		logger.Get().Critical("Error Reading SkyRing Config. error: %v", err)
 	}
 	err = json.Unmarshal(file, &SystemConfig)
 	if err != nil {
-		logger.Get().Critical("Error Unmarshalling SkyRing Config: %s", err)
+		logger.Get().Critical("Error Unmarshalling SkyRing Config. error: %v", err)
 	}
 }

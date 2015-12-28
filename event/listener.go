@@ -52,7 +52,6 @@ func (l *Listener) PushNodeStartEvent(args *NodeStartEventArgs, ack *bool) error
 }
 
 func RouteEvent(event models.NodeEvent) {
-
 	var e models.Event
 	e.Timestamp = event.Timestamp
 	e.Tag = event.Tag
@@ -61,7 +60,8 @@ func RouteEvent(event models.NodeEvent) {
 	e.Severity = event.Severity
 	eventId, err := uuid.New()
 	if err != nil {
-		logger.Get().Error("Uuid generation for the event failed: ", err)
+		logger.Get().Error("Uuid generation for the event failed. error: %v", err)
+		return
 	}
 
 	e.EventId = *eventId
@@ -72,7 +72,8 @@ func RouteEvent(event models.NodeEvent) {
 	var node []models.Node
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Find(bson.M{"hostname": event.Node}).All(&node); err != nil {
-		logger.Get().Error("Node information read from DB failed for node: %s", err)
+		logger.Get().Error("Node information read from DB failed for node: %s. error: %v", event.Node, err)
+		return
 	}
 
 	// Push the event to DB only if the node is managed
@@ -87,18 +88,18 @@ func RouteEvent(event models.NodeEvent) {
 		if match, err := filepath.Match(tag, e.Tag); err == nil {
 			if match {
 				if err := handler.(func(models.Event) error)(e); err != nil {
-					logger.Get().Error("Event Handling Failed for event: %s", err)
+					logger.Get().Error("Event Handling Failed for event. error: %v", err)
 					return
 				}
 				if err := persist_event(e); err != nil {
-					logger.Get().Error("Could not persist the event to DB: %s", err)
+					logger.Get().Error("Could not persist the event to DB. error: %v", err)
 					return
 				} else {
 					return
 				}
 			}
 		} else {
-			logger.Get().Error("Error while maping handler:", err)
+			logger.Get().Error("Error while maping handler. error: %v", err)
 			return
 		}
 	}
@@ -108,7 +109,7 @@ func RouteEvent(event models.NodeEvent) {
 
 func (l *Listener) PersistNodeDbusEvent(args *models.NodeEvent, ack *bool) error {
 	if args.Timestamp.IsZero() || args.Node == "" || args.Tag == "" || args.Message == "" || args.Severity == "" {
-		logger.Get().Error("Incomplete details in the event", *args)
+		logger.Get().Error("Incomplete details in the event %v", *args)
 		*ack = false
 		return nil
 	}
