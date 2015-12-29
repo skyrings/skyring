@@ -178,6 +178,30 @@
     },
     {
       "key": {
+        "uuid": "3a961159_52fed46c",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-29T05:28:41Z",
+      "side": 1,
+      "message": "Do we have a card to track?",
+      "parentUuid": "9aa7fdbe_83cf0eb0",
+      "range": {
+        "startLine": 183,
+        "startChar": 2,
+        "endLine": 185,
+        "endChar": 17
+      },
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_2f09e995",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 4
@@ -407,6 +431,24 @@
       "side": 1,
       "message": "@Shubhendu, @Nishsnth,\nSending the minions along with the respective error(map) in most cases and only failed minions in case of UpdateMonitoringConfiguration.\n\nIn case of UpdateMonitoringConfiguration, it actually performs file edit and the salt file edit api doesn\u0027t provide any means of even detecting a failure in edit so the only way to detect an error in such a case is to see if restart collectd passes through (I don\u0027t see why the edit should fail but not the collectd restart, not a reliable assumption though)",
       "parentUuid": "9aa7fdbe_de4809cf",
+      "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_32094896",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-29T05:28:41Z",
+      "side": 1,
+      "message": "This is fine",
+      "parentUuid": "3a961159_6caa1bd6",
       "revId": "57801336b98527216b5aee0ea53b5d1d4002b419",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
