@@ -70,6 +70,30 @@
       "revId": "1131cb535cc097ca6b97adecaabaa493f68785be",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_55207e9b",
+        "filename": "nodemanager/interfaces.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-29T07:05:32Z",
+      "side": 1,
+      "message": "I am not sure whether the salt-apis used in other cases also provide this amount of detail but I will check them again and raise a follow up patch accordingly",
+      "parentUuid": "3a961159_72175052",
+      "range": {
+        "startLine": 29,
+        "startChar": 92,
+        "endLine": 29,
+        "endChar": 114
+      },
+      "revId": "1131cb535cc097ca6b97adecaabaa493f68785be",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
