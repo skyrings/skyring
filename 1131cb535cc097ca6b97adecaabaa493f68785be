@@ -22,6 +22,30 @@
       "revId": "1131cb535cc097ca6b97adecaabaa493f68785be",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_9224bcc7",
+        "filename": "nodemanager/interfaces.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-29T06:35:39Z",
+      "side": 1,
+      "message": "so I just copied bala\u0027s code from bigfin saltwrapper.py\nthe 2 functions as in https://review.gerrithub.io/#/c/253035/11/backend/salt/python/skyring/saltwrapper.py\nrun_state and _get_state_result\n he is actually doing a map from minion_id to map from some other id to some other value probably again map from boolean to error msg\nSo, I did it this way",
+      "parentUuid": "3a961159_9253dc6b",
+      "range": {
+        "startLine": 29,
+        "startChar": 92,
+        "endLine": 29,
+        "endChar": 114
+      },
+      "revId": "1131cb535cc097ca6b97adecaabaa493f68785be",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
