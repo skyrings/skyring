@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a961159_55579e02",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-29T07:14:36Z",
+      "side": 1,
+      "message": "As discussed,We are not handling the loc_err in any cases. N eed to handle that. Applicable to all the changed funcs",
+      "range": {
+        "startLine": 57,
+        "startChar": 11,
+        "endLine": 57,
+        "endChar": 21
+      },
+      "revId": "22070fbfcd0363424c19dcd4e6c6ff4479ed605f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
