@@ -46,6 +46,30 @@
       "revId": "1131cb535cc097ca6b97adecaabaa493f68785be",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_72175052",
+        "filename": "nodemanager/interfaces.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-29T06:45:47Z",
+      "side": 1,
+      "message": "Ok, so if you feel that is right do it that way for all so that it is uniform and you will have more info on failure. cant it be done for other funcs as well? you could do it as a different patch as well",
+      "parentUuid": "3a961159_9224bcc7",
+      "range": {
+        "startLine": 29,
+        "startChar": 92,
+        "endLine": 29,
+        "endChar": 114
+      },
+      "revId": "1131cb535cc097ca6b97adecaabaa493f68785be",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
