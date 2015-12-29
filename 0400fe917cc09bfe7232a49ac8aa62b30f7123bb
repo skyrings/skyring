@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "3a961159_7203d073",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-29T05:28:41Z",
+      "side": 1,
+      "message": "This is wrong. Dont do anything after the task is set to done",
+      "range": {
+        "startLine": 151,
+        "startChar": 4,
+        "endLine": 161,
+        "endChar": 62
+      },
+      "revId": "0400fe917cc09bfe7232a49ac8aa62b30f7123bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_92f75c8c",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-29T05:28:41Z",
+      "side": 1,
+      "message": "log the errors",
+      "range": {
+        "startLine": 195,
+        "startChar": 2,
+        "endLine": 201,
+        "endChar": 3
+      },
+      "revId": "0400fe917cc09bfe7232a49ac8aa62b30f7123bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_b2f45888",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-29T05:28:41Z",
+      "side": 1,
+      "message": "Is this success case? In the error case configureError is not set? if that is the case why you are doing len(nodeErrorMap)?",
+      "range": {
+        "startLine": 168,
+        "startChar": 11,
+        "endLine": 168,
+        "endChar": 25
+      },
+      "revId": "0400fe917cc09bfe7232a49ac8aa62b30f7123bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_d2f1e496",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-29T05:28:41Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 199,
+        "startChar": 3,
+        "endLine": 203,
+        "endChar": 4
+      },
+      "revId": "0400fe917cc09bfe7232a49ac8aa62b30f7123bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a961159_3294e836",
         "filename": "backend/salt/salt.go",
         "patchSetId": 10
@@ -66,6 +158,29 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "3a961159_5299746d",
+      "revId": "0400fe917cc09bfe7232a49ac8aa62b30f7123bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_b22298ff",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-29T05:28:41Z",
+      "side": 1,
+      "message": "both cases you are returning failed_nodes. Why there is a difference in the signature of func ? []string vs map[string]interface{}",
+      "range": {
+        "startLine": 229,
+        "startChar": 3,
+        "endLine": 237,
+        "endChar": 25
+      },
       "revId": "0400fe917cc09bfe7232a49ac8aa62b30f7123bb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
