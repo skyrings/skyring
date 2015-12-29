@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "3a961159_525a5484",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-29T06:10:38Z",
+      "side": 1,
+      "message": "The error will be logged by the method invoking this",
+      "parentUuid": "3a961159_92f75c8c",
+      "range": {
+        "startLine": 195,
+        "startChar": 2,
+        "endLine": 201,
+        "endChar": 3
+      },
+      "revId": "0400fe917cc09bfe7232a49ac8aa62b30f7123bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a961159_b2f45888",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 10
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "3a961159_12c7ec13",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-29T06:10:38Z",
+      "side": 1,
+      "message": "So, basically I have 2 kinds of errors in here,\n\n1. The actual error coming from salt-wrapper.py\n             -- nodeErrorMap\n2. The error coming from gopy(by any chance if it fails). Although I currently can\u0027t think of why gopy might error out, I don\u0027t think its worth ignoring either.\n    -- configureError\n\nSo with 1 and 2, the logic here is, \n1. if salt-wrapper error out return its error\n2. else return error from gopy which is nil if there is no error or !nil if it is error",
+      "parentUuid": "3a961159_b2f45888",
+      "range": {
+        "startLine": 168,
+        "startChar": 11,
+        "endLine": 168,
+        "endChar": 25
+      },
+      "revId": "0400fe917cc09bfe7232a49ac8aa62b30f7123bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a961159_d2f1e496",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 10
@@ -82,6 +130,30 @@
       "writtenOn": "2015-12-29T05:28:41Z",
       "side": 1,
       "message": "same as above",
+      "range": {
+        "startLine": 199,
+        "startChar": 3,
+        "endLine": 203,
+        "endChar": 4
+      },
+      "revId": "0400fe917cc09bfe7232a49ac8aa62b30f7123bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_32f30875",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-29T06:10:38Z",
+      "side": 1,
+      "message": "Same as above :)",
+      "parentUuid": "3a961159_d2f1e496",
       "range": {
         "startLine": 199,
         "startChar": 3,
@@ -175,6 +247,30 @@
       "writtenOn": "2015-12-29T05:28:41Z",
       "side": 1,
       "message": "both cases you are returning failed_nodes. Why there is a difference in the signature of func ? []string vs map[string]interface{}",
+      "range": {
+        "startLine": 229,
+        "startChar": 3,
+        "endLine": 237,
+        "endChar": 25
+      },
+      "revId": "0400fe917cc09bfe7232a49ac8aa62b30f7123bb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a961159_725f5073",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-29T06:10:38Z",
+      "side": 1,
+      "message": "In the case of SetUpMonitoring, it is not actually only failed_nodes array it is a map from failed_nodes to some id to error_msg. I have the corresponding salt-wrapper code copied from bigfin.\n\nIn the latter case however it is only an array of failed nodes",
+      "parentUuid": "3a961159_b22298ff",
       "range": {
         "startLine": 229,
         "startChar": 3,
