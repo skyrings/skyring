@@ -25,4 +25,10 @@ type DbInterface interface {
 	Users() (users []models.User, e error)
 	SaveUser(u models.User) error
 	DeleteUser(username string) error
+
+	//StorageProfile
+	StorageProfile(name string) (sProfile models.StorageProfile, e error)
+	StorageProfiles(query interface{}, ops models.QueryOps) (sProfiles []models.StorageProfile, e error)
+	SaveStorageProfile(s models.StorageProfile) error
+	DeleteStorageProfile(name string) error
 }
