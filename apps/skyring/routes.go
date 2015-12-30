@@ -198,6 +198,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "GET_Cluster",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/storageprofiles/{name}",
+			HandlerFunc: a.GET_Cluster_Storageprofiles,
+			Version:     1,
+		},
+		{
 			Name:        "GET_MonitoringPlugins",
 			Method:      "GET",
 			Pattern:     "clusters/{cluster-id}/mon_plugins",
@@ -328,6 +335,42 @@ func (a *App) LoadRoutes() {
 			Method:      "GET",
 			Pattern:     "events",
 			HandlerFunc: GetEvents,
+			Version:     1,
+		},
+		//Storage Profiles
+		{
+			Name:        "POST_StorageProfiles",
+			Method:      "POST",
+			Pattern:     "storageprofiles",
+			HandlerFunc: a.POST_StorageProfiles,
+			Version:     1,
+		},
+		{
+			Name:        "GET_StorageProfiles",
+			Method:      "GET",
+			Pattern:     "storageprofiles",
+			HandlerFunc: a.GET_StorageProfiles,
+			Version:     1,
+		},
+		{
+			Name:        "GET_StorageProfiles",
+			Method:      "GET",
+			Pattern:     "storageprofiles/{name}",
+			HandlerFunc: a.GET_StorageProfile,
+			Version:     1,
+		},
+		{
+			Name:        "PATCH_StorageProfiles",
+			Method:      "PATCH",
+			Pattern:     "storageprofiles/{name}",
+			HandlerFunc: a.PATCH_StorageProfile,
+			Version:     1,
+		},
+		{
+			Name:        "DELETE_StorageProfiles",
+			Method:      "DELETE",
+			Pattern:     "storageprofiles/{name}",
+			HandlerFunc: a.DELETE_StorageProfile,
 			Version:     1,
 		},
 	}
