@@ -98,6 +98,17 @@ type Event struct {
 	Severity  string            `json:"severity"`
 }
 
+type QueryOps struct {
+	Sort     bool
+	Batch    int
+	Iter     bool
+	Limit    int
+	Prefetch float64
+	Select   interface{}
+	Skip     bool
+	Distinct bool
+}
+
 const (
 	DEFAULT_SSH_PORT                = 22
 	DEFAULT_FS_TYPE                 = "xfs"
@@ -110,6 +121,7 @@ const (
 	COLL_NAME_TASKS                 = "tasks"
 	COLL_NAME_SESSION_STORE         = "skyring_session_store"
 	COLL_NAME_USER                  = "skyringusers"
+	COLL_NAME_STORAGE_PROFILE       = "storage_profile"
 )
 
 type Clusters []Cluster
@@ -186,3 +198,26 @@ var TaskStatuses = [...]string{
 }
 
 func (t TaskStatus) String() string { return TaskStatuses[t] }
+
+type DiskType int
+
+const (
+	NONE = iota
+	SAS
+	SSD
+)
+
+var DiskTypes = [...]string{
+	"none",
+	"sas",
+	"ssd",
+}
+
+func (d DiskType) String() string { return DiskTypes[d] }
+
+const (
+	DefaultProfile1 = "sas"
+	DefaultProfile2 = "ssd"
+	DefaultProfile3 = "general"
+	DefaultPriority = 100
+)
