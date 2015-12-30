@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a930d6b_2e79e793",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2015-12-30T05:00:14Z",
+      "side": 1,
+      "message": "packaging:",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 5
+      },
+      "revId": "5ac69896461391ba47f2081af14d8596cdc4cd69",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_ce4a2355",
         "filename": "skyring.spec",
         "patchSetId": 1
