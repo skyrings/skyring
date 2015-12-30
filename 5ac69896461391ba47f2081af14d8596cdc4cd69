@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_6e73efb1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T05:07:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_2e79e793",
+      "revId": "5ac69896461391ba47f2081af14d8596cdc4cd69",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_ce4a2355",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -42,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_8e673bea",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T05:07:48Z",
+      "side": 1,
+      "message": "I remember Anmol saying that, this is kind of convention others use.\nWe would have to change all the referred locations as well, if we change the deploy path here.\n\n@Anmol, can you explain more?",
+      "parentUuid": "1a930d6b_ce4a2355",
+      "revId": "5ac69896461391ba47f2081af14d8596cdc4cd69",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_ee47df49",
         "filename": "skyring.spec",
         "patchSetId": 1
@@ -53,6 +89,24 @@
       "writtenOn": "2015-12-30T04:58:58Z",
       "side": 1,
       "message": "same here",
+      "revId": "5ac69896461391ba47f2081af14d8596cdc4cd69",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_ee5eff11",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T05:07:48Z",
+      "side": 1,
+      "message": "As above",
+      "parentUuid": "1a930d6b_ee47df49",
       "revId": "5ac69896461391ba47f2081af14d8596cdc4cd69",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
