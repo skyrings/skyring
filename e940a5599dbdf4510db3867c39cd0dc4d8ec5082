@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_6e492f8b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T12:13:22Z",
+      "side": 1,
+      "message": "Take out the DB driver part in a separate patch",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_0e950be4",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T12:13:22Z",
+      "side": 1,
+      "message": "Declare a constant for storage profile",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_2e9ac714",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T12:13:22Z",
+      "side": 1,
+      "message": "This can be moved to models/misc.go may be so that can e used from other locations as well.",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_ce9223f6",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T12:13:22Z",
+      "side": 1,
+      "message": "May be we can check for individual required field values in request and report an error saying required fields not available in request. This looks bit confusing ..",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_4eb6338c",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T12:13:22Z",
+      "side": 1,
+      "message": "I feel we should rather check for fetched instance and its values as condition",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_ee7d1fb3",
+        "filename": "dbprovider/interface.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T12:13:22Z",
+      "side": 1,
+      "message": "I would rather call this as DBDriver interface in package dbdriver with below methods\n\nFetch(coll string, query_params map[string]interface{...}) (interface{...}, error)\n\nInsert(coll string, object interface{...}) error\n\nUpdate(coll string, update_fields map[string]interface{...}) (interface{...}, error)\n\nRemove(coll string, query_params map[string]interface{...}) error\n\nRemoveAll(coll string)\n\nThis makes sure, we dont need to keep adding methods to driver for each entity we introduce in system",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_0e4a6b83",
+        "filename": "dbprovider/mongodb/storageprofile.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T12:13:22Z",
+      "side": 1,
+      "message": "If we go with driver way, these kind of sources wont be required to written again and again for newer entities I feel",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_2e4f2794",
+        "filename": "dbprovider/mongodb/user.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T12:13:22Z",
+      "side": 1,
+      "message": "Same as previous source",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
