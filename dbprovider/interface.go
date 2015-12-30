@@ -23,4 +23,5 @@ type DbInterface interface {
 	Close(c *mgo.Collection)
 
 	UserInterface() dao.UserInterface
+	StorageProfileInterface() dao.StorageProfileInterface
 }

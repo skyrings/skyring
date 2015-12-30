@@ -17,6 +17,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
@@ -153,6 +154,11 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task) error {
 
 	if node, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint); err == nil {
+		//Mark the storage profiles
+		t.UpdateStatus("Applying the storage profiles: %s", hostname)
+		if err := applyStorageProfiles(node); err != nil {
+			logger.Get().Error(fmt.Sprintf("Error applying storage profiles %v", err))
+		}
 		t.UpdateStatus("Adding the node to DB: %s", hostname)
 		if err = addStorageNodeToDB(w, *node); err != nil {
 			t.UpdateStatus("Unable to add the node to DB: %s", hostname)
@@ -187,6 +193,11 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 		request.SshFingerprint,
 		request.User,
 		request.Password); err == nil {
+		//Mark the storage profiles
+		t.UpdateStatus("Applying the storage profiles: %s", request.Hostname)
+		if err := applyStorageProfiles(node); err != nil {
+			logger.Get().Error(fmt.Sprintf("Error applying storage profiles %v", err))
+		}
 		t.UpdateStatus("Adding the node to DB: %s", request.Hostname)
 		if err = addStorageNodeToDB(w, *node); err != nil {
 			t.UpdateStatus("Unable to add the node to DB: %s", request.Hostname)
@@ -446,4 +457,20 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+}
+
+func applyStorageProfiles(node *models.Node) error {
+
+	/*
+		For the time being, puting it to the general bucket
+	*/
+	var disks []backend.Disk
+	for _, disk := range node.StorageDisks {
+		if !disk.Used {
+			disk.StorageProfile = models.DefaultProfile3
+		}
+		disks = append(disks, disk)
+	}
+	node.StorageDisks = disks
+	return nil
 }

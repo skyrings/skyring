@@ -367,5 +367,9 @@ func (a *App) GetTaskManager() *task.Manager {
 Initialize the defaults during app startup
 */
 func (a *App) InitializeDefaults() error {
+	if err := AddDefaultProfiles(); err != nil {
+		logger.Get().Error("Default Storage profiles create failed: %v", err)
+		return err
+	}
 	return nil
 }
