@@ -18,7 +18,6 @@ import (
 	"fmt"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/authprovider"
-	"github.com/skyrings/skyring/dbprovider"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
 	"golang.org/x/crypto/bcrypt"
@@ -46,7 +45,7 @@ type Role int
 // Authorizer structures contain the store of user session cookies a reference
 // to a backend storage system.
 type Authorizer struct {
-	backend     dbprovider.DbInterface
+	backend     authprovider.AuthBackend
 	defaultRole string
 	roles       map[string]Role
 }
@@ -84,8 +83,11 @@ func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 		return nil, err
 	}
 	//Create DB Backend
-	backend := skyring.GetDbProvider()
-
+	backend, err := authprovider.NewMongodbBackend()
+	if err != nil {
+		logger.Get().Error("Unable to initialize the DB backend for localauthprovider:%s", err)
+		panic(err)
+	}
 	//Create the Provider
 	if provider, err := NewAuthorizer(backend, providerCfg.DefaultRole, providerCfg.Roles); err != nil {
 		logger.Get().Error("Unable to initialize the authorizer for localauthprovider:%s", err)
@@ -107,7 +109,7 @@ func NewLocalAuthProvider(config io.Reader) (*Authorizer, error) {
 //     roles["admin"] = 4
 //     roles["moderator"] = 3
 
-func NewAuthorizer(backend dbprovider.DbInterface, defaultRole string, roles map[string]Role) (Authorizer, error) {
+func NewAuthorizer(backend authprovider.AuthBackend, defaultRole string, roles map[string]Role) (Authorizer, error) {
 	var a Authorizer
 	a.backend = backend
 	a.roles = roles

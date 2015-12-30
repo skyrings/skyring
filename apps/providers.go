@@ -19,6 +19,5 @@ package app
 import (
 	_ "github.com/skyrings/skyring/authprovider/ldap"
 	_ "github.com/skyrings/skyring/authprovider/local"
-	_ "github.com/skyrings/skyring/dbprovider/mongodb"
 	_ "github.com/skyrings/skyring/nodemanager/saltnodemanager"
 )

@@ -108,7 +108,6 @@ const (
 	COLL_NAME_TASKS                 = "tasks"
 	COLL_NAME_SESSION_STORE         = "skyring_session_store"
 	COLL_NAME_STORAGE_PROFILE       = "storage_profile"
-	COLL_NAME_USER                  = "skyringusers"
 )
 
 type Clusters []Cluster

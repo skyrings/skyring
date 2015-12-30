@@ -40,12 +40,12 @@ type SkyringCollection struct {
 	Config               SkyringConfig     `json:"config"`
 	Logging              SkyringLogging    `json:"logging"`
 	NodeManagementConfig NodeManagerConfig `json:"nodemanagementconfig"`
-	DBConfig             AppDBConfig       `json:"dbconfig"`
+	DBConfig             MongoDBConfig     `json:"dbconfig"`
 	TimeSeriesDBConfig   InfluxDBconfig    `json:"timeseriesdbconfig"`
 	Authentication       AuthConfig        `json:"authentication"`
 }
 
-type AppDBConfig struct {
+type MongoDBConfig struct {
 	Hostname string `json:"hostname"`
 	Port     int    `json:"port"`
 	Database string `json:"database"`

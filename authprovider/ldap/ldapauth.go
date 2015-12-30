@@ -19,7 +19,6 @@ import (
 	"github.com/mqu/openldap"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/authprovider"
-	"github.com/skyrings/skyring/dbprovider"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
 	"golang.org/x/crypto/bcrypt"
@@ -46,7 +45,7 @@ type Role int
 // Authorizer structures contain the store of user session cookies a reference
 // to a backend storage system.
 type Authorizer struct {
-	backend          dbprovider.DbInterface
+	backend          authprovider.AuthBackend
 	ldapServer       string
 	port             int
 	connectionString string
@@ -138,7 +137,12 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 		logger.Get().Error("Unable to Unmarshall the data:%s", err)
 		return nil, err
 	}
-	backend := skyring.GetDbProvider()
+	//Create DB Backend
+	backend, err := authprovider.NewMongodbBackend()
+	if err != nil {
+		logger.Get().Error("Unable to initialize the DB backend for Ldapauthprovider:%s", err)
+		panic(err)
+	}
 	//Create the Provider
 	if provider, err := NewAuthorizer(backend,
 		providerCfg.LdapServer.Address,
@@ -154,7 +158,7 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 
 }
 
-func NewAuthorizer(backend dbprovider.DbInterface, address string, port int, base string,
+func NewAuthorizer(backend authprovider.AuthBackend, address string, port int, base string,
 	defaultRole string, roles map[string]Role) (Authorizer, error) {
 	var a Authorizer
 	a.backend = backend
