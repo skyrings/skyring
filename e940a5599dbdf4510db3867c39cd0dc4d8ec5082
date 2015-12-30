@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_ea19877a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-30T18:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_6e492f8b",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_0e950be4",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2015-12-30T12:13:22Z",
       "side": 1,
       "message": "Declare a constant for storage profile",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_2a2b9f83",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-30T18:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_0e950be4",
       "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_4a20d39b",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-30T18:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_2e9ac714",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_ce9223f6",
         "filename": "apps/skyring/storage-profile.go",
         "patchSetId": 4
@@ -64,6 +118,24 @@
       "writtenOn": "2015-12-30T12:13:22Z",
       "side": 1,
       "message": "May be we can check for individual required field values in request and report an error saying required fields not available in request. This looks bit confusing ..",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_aa36afe5",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-30T18:50:27Z",
+      "side": 1,
+      "message": "Here I am checking whether I got a empty struct(struct initialized with default values) This will happen when we receive different payload altogether. The only mandatory parameter for storage profile is name which will be checked when saving the profile.Do we really need to check each parameter coming in?",
+      "parentUuid": "1a930d6b_ce9223f6",
       "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_4a57f302",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-30T18:50:27Z",
+      "side": 1,
+      "message": "Why? I just want to check whether any storage profile with given name existing in DB. Thats all. If existing the request is failed",
+      "parentUuid": "1a930d6b_4eb6338c",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_ee7d1fb3",
         "filename": "dbprovider/interface.go",
         "patchSetId": 4
@@ -98,6 +188,24 @@
       "writtenOn": "2015-12-30T12:13:22Z",
       "side": 1,
       "message": "I would rather call this as DBDriver interface in package dbdriver with below methods\n\nFetch(coll string, query_params map[string]interface{...}) (interface{...}, error)\n\nInsert(coll string, object interface{...}) error\n\nUpdate(coll string, update_fields map[string]interface{...}) (interface{...}, error)\n\nRemove(coll string, query_params map[string]interface{...}) error\n\nRemoveAll(coll string)\n\nThis makes sure, we dont need to keep adding methods to driver for each entity we introduce in system",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8a400b37",
+        "filename": "dbprovider/interface.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-30T18:50:27Z",
+      "side": 1,
+      "message": "Discussion is on, will defer till we are finalized on this",
+      "parentUuid": "1a930d6b_ee7d1fb3",
       "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_aa3dcfbd",
+        "filename": "dbprovider/mongodb/storageprofile.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-30T18:50:27Z",
+      "side": 1,
+      "message": "Discussion is on, will defer till we are finalized on this",
+      "parentUuid": "1a930d6b_0e4a6b83",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_2e4f2794",
         "filename": "dbprovider/mongodb/user.go",
         "patchSetId": 4
@@ -132,6 +258,24 @@
       "writtenOn": "2015-12-30T12:13:22Z",
       "side": 1,
       "message": "Same as previous source",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ca4a0355",
+        "filename": "dbprovider/mongodb/user.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-30T18:50:27Z",
+      "side": 1,
+      "message": "Discussion is on, will defer till we are finalized on this",
+      "parentUuid": "1a930d6b_2e4f2794",
       "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
