@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_2e7e47e5",
+        "filename": "event/broadcaster.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T11:15:26Z",
+      "side": 1,
+      "message": "Remove the prints",
+      "revId": "eada53e171fe40b1dc539e7e3eda8d4fb844dab9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_6e884fe8",
+        "filename": "event/listener.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T11:15:26Z",
+      "side": 1,
+      "message": "logger.Get().Error(\"Error marshalling the event data. error: %v\", err)",
+      "revId": "eada53e171fe40b1dc539e7e3eda8d4fb844dab9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_ee735f13",
+        "filename": "main.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-30T11:15:26Z",
+      "side": 1,
+      "message": "%s/websocket http service address/websocket http port/g",
+      "revId": "eada53e171fe40b1dc539e7e3eda8d4fb844dab9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
