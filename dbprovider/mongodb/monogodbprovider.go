@@ -76,6 +76,19 @@ func mkmgoerror(msg string) error {
 func (m MongoDb) InitDb() error {
 
 	//Set the indexes for storage profiles
+	s := m.Connect(models.COLL_NAME_STORAGE_PROFILE)
+	defer s.Database.Session.Close()
+
+	profileIndex := mgo.Index{
+		Key:    []string{"name"},
+		Unique: true,
+	}
+	err := s.EnsureIndex(profileIndex)
+	if err != nil {
+		logger.Get().Error("Error Setting goauth collection:%s", err)
+		return mkmgoerror(err.Error())
+	}
+
 	c := m.Connect(models.COLL_NAME_USER)
 	defer c.Database.Session.Close()
 
@@ -83,7 +96,7 @@ func (m MongoDb) InitDb() error {
 		Key:    []string{"username"},
 		Unique: true,
 	}
-	err := c.EnsureIndex(index)
+	err = c.EnsureIndex(index)
 	if err != nil {
 		logger.Get().Error("Error Setting goauth collection:%s", err)
 		return mkmgoerror(err.Error())
