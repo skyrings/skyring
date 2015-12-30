@@ -78,6 +78,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_6e812f4a",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2015-12-30T05:59:17Z",
+      "side": 1,
+      "message": "@Shubhendu, @Kanagaraj :\nYes it is followed as a convention in the salt community to have it named as files but yeah it is no where documented so if we want I think we can refactor the path. And the change that would be required is :\nTo modify the path in sls files.\n\nFor example:\nIn https://review.gerrithub.io/#/c/250293/20/backend/salt/sls/collectd/df.sls\n\nWe will need to change the line no 8 to the desired path.\n\nLet me know if its required and I can raise a patch to correct them",
+      "parentUuid": "1a930d6b_8e673bea",
+      "revId": "5ac69896461391ba47f2081af14d8596cdc4cd69",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_ee47df49",
         "filename": "skyring.spec",
         "patchSetId": 1
