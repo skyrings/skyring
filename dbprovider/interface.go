@@ -14,6 +14,7 @@ package dbprovider
 
 import (
 	"github.com/skyrings/skyring/dao"
+	"github.com/skyrings/skyring/models"
 	"gopkg.in/mgo.v2"
 )
 
@@ -23,4 +24,10 @@ type DbInterface interface {
 	Close(c *mgo.Collection)
 
 	UserInterface() dao.UserInterface
+
+	//StorageProfile
+	StorageProfile(name string) (sProfile models.StorageProfile, e error)
+	StorageProfiles(query interface{}, ops models.QueryOps) (sProfiles []models.StorageProfile, e error)
+	SaveStorageProfile(s models.StorageProfile) error
+	DeleteStorageProfile(name string) error
 }
