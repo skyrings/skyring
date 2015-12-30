@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9aa7fdbe_69ca09a3",
+        "filename": "event/broadcaster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2015-12-30T10:18:28Z",
+      "side": 1,
+      "message": "*readEvents Function \u003d We set some properties on our websocket to ensure it won\u0027t hang indefinitely. \nWebsocket first waits for a message during maximum pongWait seconds. If socket is still available when pinging it, we increase read limit duration by pongWait seconds. So, if Client is no more connected, websocket is going to throw an error, which will break the for loop below. We should then unregister.\n\n*writeEvents \u003d Code is pretty similar to the readEvents. We just introduced a ticker. Regularly, we are going to ping the websocket. If it doesn\u0027t respond, we close the websocket.\notherwise we will broadcast the message to all connected clients",
+      "parentUuid": "9aa7fdbe_5e57b902",
+      "range": {
+        "startLine": 114,
+        "startChar": 3,
+        "endLine": 145,
+        "endChar": 11
+      },
+      "revId": "38e0c72ad570617aa14d30e2047e22c500b065e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9aa7fdbe_3e2bd583",
         "filename": "main.go",
         "patchSetId": 5
@@ -60,6 +84,24 @@
       "side": 1,
       "message": "I feel this whole thing can be done InitBroadcaster() function itself as below\n\necent.InitBroadcaster()\ngo http.ListenAndServe(\":\"+websocketPort, nil)",
       "parentUuid": "9aa7fdbe_3e2bd583",
+      "revId": "38e0c72ad570617aa14d30e2047e22c500b065e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_0eb6ebdc",
+        "filename": "main.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2015-12-30T10:18:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa7fdbe_5e99796d",
       "revId": "38e0c72ad570617aa14d30e2047e22c500b065e1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
