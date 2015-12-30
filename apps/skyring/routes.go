@@ -330,6 +330,42 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: GetEvents,
 			Version:     1,
 		},
+		//Storage Profiles
+		{
+			Name:        "POST_StorageProfiles",
+			Method:      "POST",
+			Pattern:     "storageprofiles",
+			HandlerFunc: a.POST_StorageProfiles,
+			Version:     1,
+		},
+		{
+			Name:        "GET_StorageProfiles",
+			Method:      "GET",
+			Pattern:     "storageprofiles",
+			HandlerFunc: a.GET_StorageProfiles,
+			Version:     1,
+		},
+		{
+			Name:        "GET_StorageProfile",
+			Method:      "GET",
+			Pattern:     "storageprofiles/{name}",
+			HandlerFunc: a.GET_StorageProfile,
+			Version:     1,
+		},
+		{
+			Name:        "PATCH_StorageProfiles",
+			Method:      "PATCH",
+			Pattern:     "storageprofiles/{name}",
+			HandlerFunc: a.PATCH_StorageProfile,
+			Version:     1,
+		},
+		{
+			Name:        "DELETE_StorageProfiles",
+			Method:      "DELETE",
+			Pattern:     "storageprofiles/{name}",
+			HandlerFunc: a.DELETE_StorageProfile,
+			Version:     1,
+		},
 	}
 	for _, route := range routes {
 		CORE_ROUTES = append(CORE_ROUTES, route)

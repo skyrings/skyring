@@ -230,7 +230,8 @@ def GetNodeDisk(node):
                               "Size": long(disk["SIZE"]),
                               "Type": disk["TYPE"],
                               "Used": disk["INUSE"],
-                              "Vendor": disk.get("VENDOR", "")})
+                              "Vendor": disk.get("VENDOR", ""),
+                              "StorageProfile": ""})
     return rv
 
 
