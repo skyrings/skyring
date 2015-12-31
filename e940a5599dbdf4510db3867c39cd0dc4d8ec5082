@@ -196,6 +196,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_2abf1fd2",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-31T03:59:55Z",
+      "side": 1,
+      "message": "If its done later, its fine",
+      "parentUuid": "fa81d914_aa36afe5",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_4eb6338c",
         "filename": "apps/skyring/storage-profile.go",
         "patchSetId": 4
@@ -225,6 +243,24 @@
       "side": 1,
       "message": "Why? I just want to check whether any storage profile with given name existing in DB. Thats all. If existing the request is failed",
       "parentUuid": "1a930d6b_4eb6338c",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_4ab453f2",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-31T03:59:55Z",
+      "side": 1,
+      "message": "Not sure. Mostly I do negative checking and if a proper object returned then only say exists already.\n\nAs long it serves our purpose, its fine I feel",
+      "parentUuid": "fa81d914_4a57f302",
       "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -330,6 +366,23 @@
       "side": 1,
       "message": "Discussion is on, will defer till we are finalized on this",
       "parentUuid": "1a930d6b_2e4f2794",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_6ab917e9",
+        "filename": "main.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2015-12-31T03:59:55Z",
+      "side": 1,
+      "message": "Dont we need negroni instance to be passed here?",
       "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
