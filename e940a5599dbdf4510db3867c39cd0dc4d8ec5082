@@ -302,6 +302,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_ed47e149",
+        "filename": "dbprovider/interface.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-31T08:59:24Z",
+      "side": 1,
+      "message": "As discussed, will continue with DAOs. Will re-organize packages",
+      "parentUuid": "fa81d914_8a400b37",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_0e4a6b83",
         "filename": "dbprovider/mongodb/storageprofile.go",
         "patchSetId": 4
@@ -331,6 +349,24 @@
       "side": 1,
       "message": "Discussion is on, will defer till we are finalized on this",
       "parentUuid": "1a930d6b_0e4a6b83",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_0d74359b",
+        "filename": "dbprovider/mongodb/storageprofile.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-31T08:59:24Z",
+      "side": 1,
+      "message": "As discussed, will continue with DAOs. Will re-organize packages",
+      "parentUuid": "fa81d914_aa3dcfbd",
       "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -372,6 +408,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_2d79f993",
+        "filename": "dbprovider/mongodb/user.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-31T08:59:24Z",
+      "side": 1,
+      "message": "As discussed, will continue with DAOs. Will re-organize packages",
+      "parentUuid": "fa81d914_ca4a0355",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_6ab917e9",
         "filename": "main.go",
         "patchSetId": 4
@@ -383,6 +437,24 @@
       "writtenOn": "2015-12-31T03:59:55Z",
       "side": 1,
       "message": "Dont we need negroni instance to be passed here?",
+      "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_eae1879b",
+        "filename": "main.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2015-12-31T08:59:24Z",
+      "side": 1,
+      "message": "Its no more required. I forgot to remove this in one of the earlier patches",
+      "parentUuid": "fa81d914_6ab917e9",
       "revId": "e940a5599dbdf4510db3867c39cd0dc4d8ec5082",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
