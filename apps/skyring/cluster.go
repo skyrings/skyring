@@ -129,7 +129,16 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 								if updateFailedNodes, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); updateError != nil || len(updateFailedNodes) != 0 {
 									monitoringConfigured = false
 									t.UpdateStatus("Failed to update the monitoring configuration")
-									logger.Get().Error("Failed to update the monitoring configuration on : %v", updateFailedNodes)
+									logger.Get().Error("Failed to update the monitoring configuration on : %v Try to update monitoring configurations after some time ", updateFailedNodes)
+									nodesWithSuccess := util.StringSetDiff(nodes, updateFailedNodes)
+									t.UpdateStatus("Rolling back the changes on %v", nodesWithSuccess)
+									if updateFailedNodes, updateError = GetCoreNodeManager().UpdateMonitoringConfiguration(nodesWithSuccess, monitoring.GetDefaultThresholdValues()); updateError != nil || len(updateFailedNodes) != 0 {
+										logger.Get().Error("Roll back failed on %v Try to update monitoring configurations after some time", updateFailedNodes)
+										t.UpdateStatus("Roll back failed on" + fmt.Sprintf("%v", updateFailedNodes))
+									} else {
+										logger.Get().Error("Rolled back")
+										t.UpdateStatus("Rolled back")
+									}
 								}
 							}
 						}
@@ -201,6 +210,18 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 		t.UpdateStatus("Started task to add the monitoring plugin : %v", t.ID)
 		if nodesFetchError == nil {
 			if addNodeWiseErrors, addError := GetCoreNodeManager().AddMonitoringPlugin(cluster_node_names, "", request); addError != nil || len(addNodeWiseErrors) != 0 {
+				if len(addNodeWiseErrors) != 0 {
+					t.UpdateStatus("Adding monitoring plugin failed on some nodes. Rolling back the addition on failed nodes for consistency.")
+					nodesInError, _ := util.GetMapKeys(addNodeWiseErrors)
+					deleteNodesInError, _ := GetCoreNodeManager().RemoveMonitoringPlugin(util.StringSetDiff(cluster_node_names, util.Stringify(nodesInError)), request.Name)
+					if len(deleteNodesInError) != 0 {
+						logger.Get().Error("Roll back failed: %v", deleteNodesInError)
+						t.UpdateStatus(fmt.Sprintf("Roll back failed: %v", deleteNodesInError))
+					} else {
+						logger.Get().Error("Rolled back")
+						t.UpdateStatus("Rolled back")
+					}
+				}
 				util.FailTask("Failed to add monitoring configuration", fmt.Errorf("%v", addNodeWiseErrors), t)
 				return
 			}
@@ -280,6 +301,18 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 					if updateFailedNodes, updateErr := GetCoreNodeManager().UpdateMonitoringConfiguration(cluster_node_names, request); updateErr != nil || len(updateFailedNodes) != 0 {
+						if len(updateFailedNodes) != 0 {
+							logger.Get().Error("Failed to update thresholds: %v", updateFailedNodes)
+							t.UpdateStatus(fmt.Sprintf("Failed to update thresholds: %v", updateFailedNodes))
+							cluster, _ := getCluster(cluster_id_uuid)
+							nodesInSuccess := util.StringSetDiff(cluster_node_names, updateFailedNodes)
+							logger.Get().Error("Rolling back changes on %v", nodesInSuccess)
+							t.UpdateStatus("Rolling back changes on %v", nodesInSuccess)
+							if updateFailedNodes, updateErr = GetCoreNodeManager().UpdateMonitoringConfiguration(nodesInSuccess, cluster.MonitoringPlugins); updateErr != nil || len(updateFailedNodes) != 0 {
+								logger.Get().Error("Rolling back failed on %v", updateFailedNodes)
+								t.UpdateStatus(fmt.Sprintf("Rolling back failed on %v", updateFailedNodes))
+							}
+						}
 						util.FailTask("Failed to update thresholds", fmt.Errorf("%v", updateFailedNodes), t)
 						return
 					}
@@ -333,17 +366,39 @@ func monitoringPluginActivationDeactivations(enable bool, plugin_name string, cl
 			nodes, nodesFetchError := getNodesInCluster(cluster_id)
 			if nodesFetchError == nil {
 				asyncTask := func(t *task.Task) {
-					t.UpdateStatus("Started task to enable monitoring plugin : %v", t.ID)
 					var actionNodeWiseFailure map[string]string
 					var actionErr error
 					if enable {
 						action = "enable"
+						t.UpdateStatus("Started task to enable monitoring plugin : %v", t.ID)
 						actionNodeWiseFailure, actionErr = GetCoreNodeManager().EnableMonitoringPlugin(nodes, plugin_name)
 					} else {
 						action = "disable"
+						t.UpdateStatus("Started task to disable monitoring plugin : %v", t.ID)
 						actionNodeWiseFailure, actionErr = GetCoreNodeManager().DisableMonitoringPlugin(nodes, plugin_name)
 					}
 					if len(actionNodeWiseFailure) != 0 || actionErr != nil {
+						if len(actionNodeWiseFailure) != 0 {
+							logger.Get().Error("Failed to %v plugin %v: %v", action, plugin_name, actionNodeWiseFailure)
+							t.UpdateStatus("Rolling back changes")
+							nodesInError, _ := util.GetMapKeys(actionNodeWiseFailure)
+							nodesSucceeded := util.StringSetDiff(nodes, util.Stringify(nodesInError))
+							if enable {
+								action = "disable"
+								actionNodeWiseFailure, actionErr = GetCoreNodeManager().DisableMonitoringPlugin(nodesSucceeded, plugin_name)
+								if len(actionNodeWiseFailure) != 0 || actionErr != nil {
+									logger.Get().Error("Failed to rollback")
+									t.UpdateStatus("Rolling back failed")
+								}
+							} else {
+								action = "enable"
+								actionNodeWiseFailure, actionErr = GetCoreNodeManager().EnableMonitoringPlugin(nodesSucceeded, plugin_name)
+								if len(actionNodeWiseFailure) != 0 || actionErr != nil {
+									logger.Get().Error("Failed to rollback")
+									t.UpdateStatus("Rolling back failed")
+								}
+							}
+						}
 						util.FailTask(fmt.Sprintf("Failed to %s plugin %s", action, plugin_name), fmt.Errorf("%v", actionNodeWiseFailure), t)
 						return
 					}
@@ -416,6 +471,22 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 		asyncTask := func(t *task.Task) {
 			t.UpdateStatus("Task created to remove monitoring plugin %v", plugin_name)
 			if removeNodeWiseFailure, removeErr := GetCoreNodeManager().RemoveMonitoringPlugin(nodes, plugin_name); len(removeNodeWiseFailure) != 0 || removeErr != nil {
+				if len(removeNodeWiseFailure) != 0 {
+					nodesInError, _ := util.GetMapKeys(removeNodeWiseFailure)
+					cluster, _ := getCluster(uuid)
+					if len(removeNodeWiseFailure) != 0 {
+						t.UpdateStatus("Failed to remove the plugin on some nodes and hence rolling back..")
+						index := monitoring.GetPluginIndex(plugin_name, cluster.MonitoringPlugins)
+						pluginToAdd := cluster.MonitoringPlugins[index]
+						if addNodeWiseErrors, _ := GetCoreNodeManager().AddMonitoringPlugin(util.StringSetDiff(nodes, util.Stringify(nodesInError)), "", pluginToAdd); len(addNodeWiseErrors) != 0 {
+							t.UpdateStatus("Roll back failed %v", addNodeWiseErrors)
+							logger.Get().Error("Roll back failed %v", addNodeWiseErrors)
+						} else {
+							t.UpdateStatus("Rolled back")
+							logger.Get().Error("Rolled back")
+						}
+					}
+				}
 				util.FailTask(fmt.Sprintf("Failed to remove plugin %s", plugin_name), fmt.Errorf("%v", removeNodeWiseFailure), t)
 				return
 			}
