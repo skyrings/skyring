@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_a05c0327",
+        "filename": "event/handlermap.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-04T04:55:00Z",
+      "side": 0,
+      "message": "Should we still call it handlermap.go??",
+      "revId": "b40a85623887013bcc5d2868b04d0260f91b85c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}

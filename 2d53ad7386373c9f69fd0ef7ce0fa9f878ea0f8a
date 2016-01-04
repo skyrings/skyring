@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_c0401738",
+        "filename": "event/handlermap.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-04T04:55:00Z",
+      "side": 1,
+      "message": "%s/provider_events/handle_events/g",
+      "revId": "2d53ad7386373c9f69fd0ef7ce0fa9f878ea0f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
