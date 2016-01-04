@@ -5,6 +5,8 @@ import:
   version: 1c83b3eabd45b6d76072b66b746c20815fb2872d
 - package: github.com/gorilla/mux
   version: 9c068cf16d982f8bd444b8c352acbeec34c4fe5b
+- package: github.com/gorilla/websocket
+  version: 3986be78bf859e01f01af631ad76da5b269d270c
 - package: github.com/gorilla/sessions
   version: f7261893ca3ea922c30eabe742c036d2c1de6e0a
 - package: github.com/gorilla/securecookie
