@@ -251,8 +251,8 @@ def EnableService(node, service, start=False):
 
 
 def NodeUp(node):
-    out = local.cmd(node, 'cmd.run', ['pwd'])
-    return True if out else False
+    out = local.cmd(node, 'test.ping')
+    return True if out.has_key(node) and out[node] else False
 
 
 def _get_state_result(out):
