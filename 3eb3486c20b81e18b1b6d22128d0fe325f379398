@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_80a53f06",
+        "filename": "misc/etc.init/skyring.initd",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-04T05:44:02Z",
+      "side": 1,
+      "message": "isn\u0027t this same as above condition ?",
+      "range": {
+        "startLine": 42,
+        "startChar": 2,
+        "endLine": 44,
+        "endChar": 10
+      },
+      "revId": "3eb3486c20b81e18b1b6d22128d0fe325f379398",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a0aa43d2",
+        "filename": "misc/etc.init/skyring.initd",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-04T05:44:02Z",
+      "side": 1,
+      "message": "is this needed ?",
+      "range": {
+        "startLine": 50,
+        "startChar": 1,
+        "endLine": 50,
+        "endChar": 16
+      },
+      "revId": "3eb3486c20b81e18b1b6d22128d0fe325f379398",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_e0ab5bd4",
+        "filename": "misc/etc.init/skyring.initd",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-04T05:44:02Z",
+      "side": 1,
+      "message": "This is not exactly related to this patch. Isn\u0027t it better to have the socket file paced somewhere in /var/run as the tmp directory is open to world and user might mistakenly delete this file. Please provide your thoughts.",
+      "range": {
+        "startLine": 66,
+        "startChar": 11,
+        "endLine": 66,
+        "endChar": 30
+      },
+      "revId": "3eb3486c20b81e18b1b6d22128d0fe325f379398",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_00b94f2e",
+        "filename": "misc/etc.init/skyring.initd",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-04T05:44:02Z",
+      "side": 1,
+      "message": "Do we need reload as this is not relevant in case of skyring ?",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 1
+      },
+      "revId": "3eb3486c20b81e18b1b6d22128d0fe325f379398",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
