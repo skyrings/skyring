@@ -1,0 +1,8 @@
+[Unit]
+Description=skyring server
+
+[Service]
+Type=forking
+KillMode=process
+ExecStart=/etc/init.d/skyringd start
+ExecStop=/etc/init.d/skyringd stop

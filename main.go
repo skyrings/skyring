@@ -27,9 +27,11 @@ import (
 	"github.com/skyrings/skyring/tools/logger"
 	"net/http"
 	"os"
+	"os/signal"
 	"path"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 const (
@@ -73,7 +75,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "event-socket",
-			Value: "/tmp/.skyring-event",
+			Value: "/var/run/.skyring-event",
 			Usage: "Override default event unix socket",
 		},
 		cli.BoolFlag{
@@ -235,5 +237,16 @@ func start() {
 
 	logger.Get().Info("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
 
-	logger.Get().Critical("Error: %s", http.ListenAndServe(conf.SystemConfig.Config.Host+":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), n))
+	go http.ListenAndServe(conf.SystemConfig.Config.Host+":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), n)
+
+	sigs := make(chan os.Signal, 1)
+	done := make(chan bool, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGHUP)
+	go func() {
+		sig := <-sigs
+		fmt.Println(sig)
+		done <- true
+	}()
+	<-done
+	os.Remove(eventSocket)
 }

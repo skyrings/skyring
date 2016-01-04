@@ -60,6 +60,10 @@ db.createUser( { "user" : "admin", "pwd": "admin", "roles" : ["readWrite", "dbAd
 show users
 EOF
 
+# Start the skyring server
+systemctl enable skyringd
+systemctl start skyringd
+
 info "\n\n\n-------------------------------------------------------"
 info "Now the host setup is ready!"
 info "You can start the server by executing 'skyring'"
