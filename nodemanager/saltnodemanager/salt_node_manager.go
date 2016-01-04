@@ -170,6 +170,28 @@ func (a SaltNodeManager) SyncStorageDisks(node string) (bool, error) {
 	return true, nil
 }
 
+func (a SaltNodeManager) SyncNodeStatus(node string) (bool, error) {
+	ok, err := salt_backend.NodeUp(node)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting status of node: %s", node))
+		return false, err
+	}
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var nodeStatus string
+	if ok {
+		nodeStatus = models.STATUS_UP
+	} else {
+		nodeStatus = models.STATUS_DOWN
+	}
+	if err = coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"status": nodeStatus}}); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
 func (a SaltNodeManager) DisableNode(node string) (bool, error) {
 	if ok, err := salt_backend.DisableService(node, "collectd", true); err != nil || !ok {
 		logger.Get().Error(fmt.Sprintf("Error disabling services on node: %s, error: %v", node, err))

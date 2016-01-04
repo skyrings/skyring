@@ -89,6 +89,20 @@ func sync_cluster_status(cluster models.Cluster, provider *Provider) (bool, erro
 func sync_cluster_nodes(cluster models.Cluster, provider *Provider) (bool, error) {
 	// TODO: Get the list of nodes from provider and add the new nodes to DB after comparison
 	// with fetched nodes from DB
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var nodes models.Nodes
+	if err := coll.Find(bson.M{"clusterid": cluster.ClusterId}).All(&nodes); err != nil {
+		logger.Get().Error("Error getting the nodes for the cluster: %v. error: %v", cluster.ClusterId, err)
+		return false, err
+	}
+	for _, node := range nodes {
+		if GetCoreNodeManager().SyncNodeStatus(node.Hostname); err != nil {
+			logger.Get().Error("Error syncing the status for node: %s. error: %v", node.Hostname, err)
+		}
+	}
+
 	return true, nil
 }
 

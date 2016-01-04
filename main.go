@@ -25,11 +25,13 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/task"
 	"net/http"
 	"os"
 	"path"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -196,6 +198,10 @@ func start() {
 		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
 		os.Exit(1)
 	}
+
+	// Initialize the scheduler
+	// TODO: This is a stop gap arrangement. Ideally should be taken care by eventing framework
+	go task.GetScheduler(*(application.GetTaskManager())).Schedule(30*time.Second, application.SyncClusterDetails)
 
 	//Initialize the task manager
 	if err := application.InitializeTaskManager(); err != nil {
