@@ -72,7 +72,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "event-socket",
-			Value: "/tmp/.skyring-event",
+			Value: "/var/run/.skyring-event",
 			Usage: "Override default event unix socket",
 		},
 		cli.BoolFlag{

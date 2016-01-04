@@ -1,3 +1,8 @@
+# Determine if systemd will be used
+%if ( 0%{?fedora} && 0%{?fedora} > 16 ) || ( 0%{?rhel} && 0%{?rhel} > 6 )
+%global with_systemd 1
+%endif
+
 %define pkg_name skyring
 %define pkg_version 0.0.1
 %define pkg_release 1
@@ -11,6 +16,18 @@ License: Apache-2.0
 Group: Applications/Storage
 BuildRoot: %{_tmppath}/%{pkg_name}-%{pkg_version}-%{pkg_release}-buildroot
 Url: github.com/skyrings/skyring
+
+%if 0%{?with_systemd}
+BuildRequires:  systemd
+Requires(post): systemd
+Requires(preun): systemd
+Requires(postun): systemd
+%else
+Requires(post):   /sbin/chkconfig
+Requires(preun):  /sbin/service
+Requires(preun):  /sbin/chkconfig
+Requires(postun): /sbin/service
+%endif
 
 BuildRequires: golang
 BuildRequires: python-devel
@@ -57,6 +74,8 @@ install -D backend/salt/conf/collectd/* $RPM_BUILD_ROOT/srv/salt/collectd/files
 install -D backend/salt/template/* $RPM_BUILD_ROOT/srv/salt/template
 install -d $RPM_BUILD_ROOT/%{python2_sitelib}/skyring
 install -D backend/salt/python/skyring/* $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/
+install -D -p -m 0644 misc/systemd/%{name}d.service %{buildroot}%{_unitdir}/%{name}d.service
+install -D -p -m 0755 misc/etc.init/%{name}.initd %{buildroot}%{_sysconfdir}/init.d/%{name}d
 
 %post
 
@@ -73,7 +92,14 @@ rm -rf "$RPM_BUILD_ROOT"
 %{python2_sitelib}/skyring/*
 %{_var}/log/skyring
 /srv/salt/*
+%{_unitdir}/%{name}d.service
+%{_sysconfdir}/init.d/%{name}d
+
+
 
 %changelog
+* Tue Dec 29 2015 <shtripat@redhat.com>
+- Added daemonizing mechanism
+
 * Thu Dec 03 2015 <tjeyasin@redhat.com>
 - Initial build.
