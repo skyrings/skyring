@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_60876b62",
+        "filename": "misc/etc.init/skyring.initd",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-04T05:49:09Z",
+      "side": 1,
+      "message": "oh sorry. will change this.",
+      "parentUuid": "fa81d914_80a53f06",
+      "revId": "3eb3486c20b81e18b1b6d22128d0fe325f379398",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_a0aa43d2",
         "filename": "misc/etc.init/skyring.initd",
         "patchSetId": 1
@@ -42,6 +60,24 @@
         "endLine": 50,
         "endChar": 16
       },
+      "revId": "3eb3486c20b81e18b1b6d22128d0fe325f379398",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_807c5f74",
+        "filename": "misc/etc.init/skyring.initd",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-04T05:49:09Z",
+      "side": 1,
+      "message": "You mean echo or lockfile creation?",
+      "parentUuid": "fa81d914_a0aa43d2",
       "revId": "3eb3486c20b81e18b1b6d22128d0fe325f379398",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_a081634c",
+        "filename": "misc/etc.init/skyring.initd",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-04T05:49:09Z",
+      "side": 1,
+      "message": "Thats a valid point. Will check and modify the location where it gets created.",
+      "parentUuid": "fa81d914_e0ab5bd4",
+      "revId": "3eb3486c20b81e18b1b6d22128d0fe325f379398",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_00b94f2e",
         "filename": "misc/etc.init/skyring.initd",
         "patchSetId": 1
@@ -88,6 +142,24 @@
         "endLine": 85,
         "endChar": 1
       },
+      "revId": "3eb3486c20b81e18b1b6d22128d0fe325f379398",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_c0957789",
+        "filename": "misc/etc.init/skyring.initd",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-04T05:49:09Z",
+      "side": 1,
+      "message": "Will remove and we would add as and when required in future.",
+      "parentUuid": "fa81d914_00b94f2e",
       "revId": "3eb3486c20b81e18b1b6d22128d0fe325f379398",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
