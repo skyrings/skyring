@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_ded0f7f9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-05T11:57:12Z",
+      "side": 1,
+      "message": "Currently salt checks this every 60 seconds(default). We can configure it to check more frequently, by altering the config value \"LOOP_INTERVAL\" (The loop_interval option controls the seconds for the master\u0027s maintenance process check cycle. This process updates file server backends, cleans the job cache and executes the scheduler). But it has its disadvantages, as other routine tasks are also executed with the altered interval. Please provide your thoughts.",
+      "range": {
+        "startLine": 10,
+        "startChar": 50,
+        "endLine": 10,
+        "endChar": 62
+      },
+      "revId": "d110f34d8747a76ab48c56d4144bac703b02303d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
