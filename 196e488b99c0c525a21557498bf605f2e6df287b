@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_dedc7777",
+        "filename": "tools/task/scheduler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-05T09:15:54Z",
+      "side": 1,
+      "message": "Are we really using this? We could remove it?\nIf you feel its risky, I am fine to do all the clean-up on master",
+      "range": {
+        "startLine": 24,
+        "startChar": 1,
+        "endLine": 24,
+        "endChar": 20
+      },
+      "revId": "196e488b99c0c525a21557498bf605f2e6df287b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_9ef3df09",
+        "filename": "tools/task/scheduler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-05T09:15:54Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 40,
+        "startChar": 1,
+        "endLine": 40,
+        "endChar": 13
+      },
+      "revId": "196e488b99c0c525a21557498bf605f2e6df287b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_5ee96719",
+        "filename": "tools/task/scheduler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-05T09:15:54Z",
+      "side": 1,
+      "message": "pls remove commented line and fmt.Println",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 50
+      },
+      "revId": "196e488b99c0c525a21557498bf605f2e6df287b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
