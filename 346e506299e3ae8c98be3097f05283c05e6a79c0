@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_9b6db107",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-05T06:14:36Z",
+      "side": 1,
+      "message": "So, basically as we discussed yesterday, we don\u0027t really know what to do in the case of second failure bcoz the second failure is a failure on the node on which it the update had previously failed so we don\u0027t really have a control on this situation as the failure may be one or combination of the following:\n\n1. Breakdown of Communication with node where there is no way \n   to handle\n\n2. Some collectd failure -- possible to handle\n\nSo, if we handle it here, we have no one general solution So, in my opinion I feel the best solution to error handling here, is to\n\n1. Be partially tolerant to failures here i.e, We\u0027ll update the db in accordance with user request provided some initial validations on our side pass(in case the action PARTIAL FAILED)\n\n2. Provide a way by which user can enforce the states as in db(User can be warned about triggering this action that it is a heavy weight action and should ideally be used only in case of being suggested by our errors or any such message as might be appropriate)\n\n3. Allow user to initiate a corrective measure. Allow him to choose b/w a new update operation vs the forced application of values in db.\n\nPlease let me know your opinion and I will raise a patch accordingly",
+      "parentUuid": "fa81d914_7b171da4",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_9b0cd196",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-01-05T04:27:59Z",
       "side": 1,
       "message": "Error handling?",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_db7649d8",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-05T06:14:36Z",
+      "side": 1,
+      "message": "I don\u0027t see a reason why it should fail here bcoz we have already obtained the cluster related other specific details above. Line no: 288",
+      "parentUuid": "fa81d914_9b0cd196",
       "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_fb730de5",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-05T06:14:36Z",
+      "side": 1,
+      "message": "I don\u0027t think this would ever error out HERE. Bcoz I am sure that the parameter passed here is a map(It is the only type of error that\u0027s being returned by the util) as otherwise it would fail at gopy stage itself and wouldn\u0027t come till here",
+      "parentUuid": "fa81d914_bb1195ae",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_db25690b",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2016-01-05T04:27:59Z",
       "side": 1,
       "message": "Define constants for \"enable\" and \"disable\"",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_1b81c18f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-05T06:14:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_db25690b",
       "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_3b7e85af",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-05T06:14:36Z",
+      "side": 1,
+      "message": "Same as above",
+      "parentUuid": "fa81d914_fb222d00",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_fb694d26",
         "filename": "utils/go_type_utils.go",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2016-01-05T04:27:59Z",
       "side": 1,
       "message": "I feel its doing keys1 minus keys2.\nWe can rename the variable unique as found and if not found in second list, append to the return array.",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_5b4a5984",
+        "filename": "utils/go_type_utils.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-05T06:14:36Z",
+      "side": 1,
+      "message": "Yes its a set diff of 1st param - 2nd param.\nSorry I didn\u0027t get the second part...",
+      "parentUuid": "fa81d914_fb694d26",
       "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
