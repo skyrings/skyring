@@ -22,6 +22,23 @@
       "revId": "d110f34d8747a76ab48c56d4144bac703b02303d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_5e188784",
+        "filename": "event/handlermap.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-05T13:53:18Z",
+      "side": 1,
+      "message": "I feel these handlers can be implemented to update the node status in DB",
+      "revId": "d110f34d8747a76ab48c56d4144bac703b02303d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
