@@ -31,6 +31,7 @@ var handlermap = map[string]interface{}{
 	"skyring/dbus/node/*/generic/service/collectd":              collectd_status_handler,
 	"salt/node/appeared":                                        node_appeared_handler,
 	"salt/node/lost":                                            node_lost_handler,
+	"skyring/collectd/node/*/threshold/*/*":                     collectd_threshold_handler,
 }
 
 func persist_event(event models.Event) error {
@@ -99,3 +100,8 @@ func node_lost_handler(event models.Event) error {
 	}
 	return nil
 }
+
+func collectd_threshold_handler(event models.Event) error {
+	return nil
+}
+
