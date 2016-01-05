@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_5b1259b5",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-05T04:27:59Z",
+      "side": 0,
+      "message": "Break the error messages in multiple lines for readability purpose.",
+      "revId": "994964318f1d93de8d5c7cb76c2d6ad277a8e5a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}

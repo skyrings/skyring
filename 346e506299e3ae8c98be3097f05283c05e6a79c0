@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_7b171da4",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-05T04:27:59Z",
+      "side": 1,
+      "message": "Not taking care of error here?",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_9b0cd196",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-05T04:27:59Z",
+      "side": 1,
+      "message": "Error handling?",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_bb1195ae",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-05T04:27:59Z",
+      "side": 1,
+      "message": "Error handling?",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_db25690b",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-05T04:27:59Z",
+      "side": 1,
+      "message": "Define constants for \"enable\" and \"disable\"",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_fb222d00",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-05T04:27:59Z",
+      "side": 1,
+      "message": "Error handling?",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_fb694d26",
+        "filename": "utils/go_type_utils.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-05T04:27:59Z",
+      "side": 1,
+      "message": "I feel its doing keys1 minus keys2.\nWe can rename the variable unique as found and if not found in second list, append to the return array.",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
