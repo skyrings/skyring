@@ -127,6 +127,27 @@ def PushNodeEvent(data):
     except (socket.error, JSONRPCError) as e:
         log.error(e, exc_info=True)
 
+def PushNodeStatusEvent(data):
+    for n in data['new']:
+        try:
+	    with JsonRpcClient() as c:
+                c.call("Listener.PersistNodeEvent",
+                       {'timestamp': getTimestamp(data['_stamp']), 'node': n, 'tag':  'salt/node/appeared',
+		        'message': "Node: {} is accessable now".format(n),
+                        'severity': 'Info', 'tags': {}})
+        except (socket.error, JSONRPCError) as e:
+            log.error(e, exc_info=True)
+
+    for n in data['lost']:
+        try:
+	    with JsonRpcClient() as c:
+                c.call("Listener.PersistNodeEvent",
+                       {'timestamp': getTimestamp(data['_stamp']), 'node': n, 'tag':  'salt/node/lost',
+		        'message': "Node: {} is inaccessable now".format(n),
+                        'severity': 'Critical', 'tags': {}})
+        except (socket.error, JSONRPCError) as e:
+            log.error(e, exc_info=True)
+
 
 def PushEvent(data):
     try:
@@ -140,6 +161,8 @@ def run():
     # tag and data variables are from salt
     if data.get('tag') and fnmatch.fnmatch(data['tag'], 'salt/minion/*/start'):
         PushNodeStartEvent(data)
+    elif tag and fnmatch.fnmatch(tag, 'salt/presence/change'):
+        PushNodeStatusEvent(data)
     elif data.get('tag') and fnmatch.fnmatch(data['tag'], 'skyring/*'):
         PushNodeEvent(data)
     else:

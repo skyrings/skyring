@@ -17,6 +17,7 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
+	"gopkg.in/mgo.v2/bson"
 )
 
 var handlermap = map[string]interface{}{
@@ -28,6 +29,8 @@ var handlermap = map[string]interface{}{
 	"skyring/dbus/node/*/generic/storage/drive/removed":         drive_remove_handler,
 	"skyring/dbus/node/*/generic/storage/drive/possibleFailure": drive_remove_handler,
 	"skyring/dbus/node/*/generic/service/collectd":              collectd_status_handler,
+	"salt/node/appeared":                                        node_appeared_handler,
+	"salt/node/lost":                                            node_lost_handler,
 }
 
 func persist_event(event models.Event) error {
@@ -69,5 +72,30 @@ func drive_remove_handler(event models.Event) error {
 }
 
 func collectd_status_handler(event models.Event) error {
+	return nil
+}
+
+func update_node_status(nodeStatus string, event models.Event) error {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := coll.Update(bson.M{"nodeid": event.NodeId}, bson.M{"$set": bson.M{"status": nodeStatus}}); err != nil {
+		logger.Get().Error("Error updating the node status: %s", err)
+		return err
+	}
+	return nil
+}
+
+func node_appeared_handler(event models.Event) error {
+	if err := update_node_status(models.STATUS_UP, event); err != nil {
+		return err
+	}
+	return nil
+}
+
+func node_lost_handler(event models.Event) error {
+	if err := update_node_status(models.STATUS_DOWN, event); err != nil {
+		return err
+	}
 	return nil
 }
