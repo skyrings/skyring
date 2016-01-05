@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_9bb69189",
+        "filename": "apps/providers.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-05T05:56:38Z",
+      "side": 1,
+      "message": "Its a mongodb provider. I understand that driver/provider can be used interchangeably. I named it because others like auth has the same pattern",
+      "parentUuid": "fa81d914_2048135b",
+      "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_4074279c",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2016-01-04T05:24:06Z",
       "side": 1,
       "message": "What is this meant for?",
+      "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_5bbc196d",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-05T05:56:38Z",
+      "side": 1,
+      "message": "for initializing any default stuff. For example creating db indexes, default storage profiles etc",
+      "parentUuid": "fa81d914_4074279c",
       "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_bbbb5571",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-05T05:56:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_60792b93",
+      "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_806e1fc8",
         "filename": "daos/userdao.go",
         "patchSetId": 7
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_dbaf292a",
+        "filename": "daos/userdao.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-05T05:56:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_806e1fc8",
+      "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_e0643be7",
         "filename": "dbprovider/mongodb/user.go",
         "patchSetId": 7
@@ -81,6 +153,24 @@
       "writtenOn": "2016-01-04T05:24:06Z",
       "side": 1,
       "message": "Do the methods belong to struct MongoDb??",
+      "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7bc1dde3",
+        "filename": "dbprovider/mongodb/user.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-05T05:56:38Z",
+      "side": 1,
+      "message": "yes, MongoDb implements the User interface",
+      "parentUuid": "fa81d914_e0643be7",
       "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
