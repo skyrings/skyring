@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_7e638bb1",
+        "filename": "tools/task/scheduler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-05T09:51:59Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "fa81d914_dedc7777",
+      "revId": "196e488b99c0c525a21557498bf605f2e6df287b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_9ef3df09",
         "filename": "tools/task/scheduler.go",
         "patchSetId": 1
@@ -48,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_9e583ffc",
+        "filename": "tools/task/scheduler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-05T09:51:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_9ef3df09",
+      "revId": "196e488b99c0c525a21557498bf605f2e6df287b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_5ee96719",
         "filename": "tools/task/scheduler.go",
         "patchSetId": 1
@@ -65,6 +101,24 @@
         "endLine": 46,
         "endChar": 50
       },
+      "revId": "196e488b99c0c525a21557498bf605f2e6df287b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_be5d03ec",
+        "filename": "tools/task/scheduler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-05T09:51:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_5ee96719",
       "revId": "196e488b99c0c525a21557498bf605f2e6df287b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
