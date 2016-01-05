@@ -20,6 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 )
 
 // UUID is 128bits = 16bytes
@@ -80,6 +81,15 @@ func Parse(s string) (*UUID, error) {
 	// the string format should be either in
 	// xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (or)
 	// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+	// If the uuid is marshaled by us we add " " around the uuid.
+	// while parsing this, we have to remove the " " around the
+	// uuid. So we check if uuid has " " around it, if yes we remove
+	// it.
+
+	if strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"") {
+		s = s[1 : len(s)-1]
+	}
 
 	uuid := new(UUID)
 	if len(s) == 36 {
