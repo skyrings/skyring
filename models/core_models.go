@@ -81,18 +81,25 @@ type User struct {
 }
 
 type Cluster struct {
-	ClusterId         uuid.UUID           `json:"clusterid"`
-	Name              string              `json:"name"`
-	CompatVersion     string              `json:"compat_version"`
-	Type              string              `json:"type"`
-	WorkLoad          string              `json:"workload"`
-	Status            int                 `json:"status"`
-	Tags              []string            `json:"tags"`
-	Options           map[string]string   `json:"options"`
-	OpenStackServices []string            `json:"openstack_services"`
-	Networks          ClusterNetworks     `json:"networks"`
-	Enabled           bool                `json:"enabled"`
-	MonitoringPlugins []monitoring.Plugin `json:"monitoringplugins"`
+	ClusterId         uuid.UUID         `json:"clusterid"`
+	Name              string            `json:"name"`
+	CompatVersion     string            `json:"compat_version"`
+	Type              string            `json:"type"`
+	WorkLoad          string            `json:"workload"`
+	Status            int               `json:"status"`
+	Tags              []string          `json:"tags"`
+	Options           map[string]string `json:"options"`
+	OpenStackServices []string          `json:"openstack_services"`
+	Networks          ClusterNetworks   `json:"networks"`
+	Enabled           bool              `json:"enabled"`
+	Monitoring        MonitoringState   `json:"monitoring"`
+}
+
+type NodesWithStaleMonitoringConfig []string
+
+type MonitoringState struct {
+	Plugins    []monitoring.Plugin            `json:"plugins"`
+	StaleNodes NodesWithStaleMonitoringConfig `json:"stalenodes"`
 }
 
 type ClusterNetworks struct {

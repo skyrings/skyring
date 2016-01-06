@@ -64,7 +64,7 @@ type Backend interface {
 	EnableService(node string, service string, start bool) (bool, error)
 	NodeUp(node string) (bool, error)
 	AddMonitoringPlugin(pluginNames []string, nodes []string, master string, pluginMap map[string]map[string]string) (failed_nodes map[string]interface{}, err error)
-	UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (failed_nodes []string, err error)
+	UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (failed_nodes map[string]string, err error)
 	RemoveMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	EnableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	DisableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)

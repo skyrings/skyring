@@ -205,6 +205,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "PUT_MonitoringPluginsInPlace",
+			Method:      "PUT",
+			Pattern:     "clusters/{cluster-id}/mon_plugins/enforce",
+			HandlerFunc: a.PUT_MonitoringPluginsInPlace,
+			Version:     1,
+		},
+		{
 			Name:        "POST_MonitoringPluginEnable",
 			Method:      "POST",
 			Pattern:     "clusters/{cluster-id}/mon_plugins/activations/{plugin-name}",
