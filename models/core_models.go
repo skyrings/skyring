@@ -94,7 +94,15 @@ type Cluster struct {
 	Networks           ClusterNetworks     `json:"networks"`
 	Enabled            bool                `json:"enabled"`
 	MonitoringPlugins  []monitoring.Plugin `json:"monitoringplugins"`
+	Monitoring         MonitoringState     `json:"monitoring"`
 	MonitoringInterval int                 `json:"monitoringinterval"`
+}
+
+type NodesWithStaleMonitoringConfig []string
+
+type MonitoringState struct {
+	Plugins    []monitoring.Plugin            `json:"plugins"`
+	StaleNodes NodesWithStaleMonitoringConfig `json:"stalenodes"`
 }
 
 type ClusterNetworks struct {
