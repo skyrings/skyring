@@ -307,7 +307,15 @@ def AddMonitoringPlugin(plugin_list, nodes, master=None, configs=None):
     if thresholds:
         dict["thresholds"] = plugin_thresholds
     pillar = {"collectd": dict}
-    return run_state(nodes, state_list, kwarg={'pillar': pillar})
+    state_load_result = run_state(nodes, state_list, kwarg={'pillar': pillar})
+    if not state_load_result:
+        for plugin_name, config in configs.iteritems():
+            if config["Enable"] == "false":
+                nodesInFailure = DisableMonitoringPlugin(nodes, plugin_name).keys()
+                retVal[plugin_name] = nodesInFailure
+        return retVal
+    else:
+        return state_load_result
 
 
 def DisableMonitoringPlugin(nodes, pluginName):
