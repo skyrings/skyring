@@ -127,9 +127,17 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 								}
 								t.UpdateStatus("Updating the monitoring configuration on all nodes in the cluster")
 								if updateFailedNodes, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); updateError != nil || len(updateFailedNodes) != 0 {
-									monitoringConfigured = false
-									t.UpdateStatus("Failed to update the monitoring configuration")
+									nodesWithSuccess := util.StringSetDiff(nodes, updateFailedNodes)
+									if len(nodesWithSuccess) == 0 {
+										//Partial failure is not treated as failure.
+										//The new values are persisted into the db and user can enforce them after ensuring connectivity of node to the Server
+										monitoringConfigured = false
+									}
 									logger.Get().Error("Failed to update the monitoring configuration on : %v", updateFailedNodes)
+									logger.Get().Error("Please ensure the %v node(s) are up", updateFailedNodes)
+									logger.Get().Error("And try force updating after some time")
+									t.UpdateStatus("Failed to update the monitoring configuration")
+									t.UpdateStatus("Try force updating after some time")
 								}
 							}
 						}
@@ -137,7 +145,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 							request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
 						}
 						if !monitoringConfigured {
-							// If configuring the new thresholds failed update to db, the default thresholds created during accept node
+							// If configuring the new thresholds completely failed update to db, the default thresholds created during accept node
 							request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
 						}
 						// Udate the thresholds to db
@@ -201,8 +209,17 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 		t.UpdateStatus("Started task to add the monitoring plugin : %v", t.ID)
 		if nodesFetchError == nil {
 			if addNodeWiseErrors, addError := GetCoreNodeManager().AddMonitoringPlugin(cluster_node_names, "", request); addError != nil || len(addNodeWiseErrors) != 0 {
-				util.FailTask("Failed to add monitoring configuration", fmt.Errorf("%v", addNodeWiseErrors), t)
-				return
+				nodesInErrorValues, _ := util.GetMapKeys(addNodeWiseErrors)
+				nodesInError = util.Stringify(nodesInErrorValues)
+				if len(nodesInError) == len(cluster_node_names) {
+					//Only complete failure is a failure.
+					util.FailTask("Failed to add monitoring configuration", fmt.Errorf("%v", addNodeWiseErrors), t)
+					return
+				}
+				logger.Get().Error("Failed to add monitoring configuration. Error :%v", addNodeWiseErrors)
+				t.UpdateStatus("Failed to add monitoring configuration. Error :%v", addNodeWiseErrors)
+				t.UpdateStatus("Please ensure %v are up", nodesInError)
+				t.UpdateStatus("Try enforcing the plugins after some time")
 			}
 		} else {
 			util.FailTask("Failed to add monitoring configuration", nodesFetchError, t)
@@ -280,8 +297,14 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 					if updateFailedNodes, updateErr := GetCoreNodeManager().UpdateMonitoringConfiguration(cluster_node_names, request); updateErr != nil || len(updateFailedNodes) != 0 {
-						util.FailTask("Failed to update thresholds", fmt.Errorf("%v", updateFailedNodes), t)
-						return
+						if len(updateFailedNodes) == len(cluster_node_names) {
+							util.FailTask("Failed to update thresholds", fmt.Errorf("%v", updateFailedNodes), t)
+							return
+						}
+						logger.Get().Error("Failed to update monitoring configuration on %v", updateFailedNodes)
+						t.UpdateStatus("Failed to update monitoring configuration on %v", updateFailedNodes)
+						t.UpdateStatus("Please ensure %v are up", updateFailedNodes)
+						t.UpdateStatus("Try enforcing the plugins after some time")
 					}
 					t.UpdateStatus("Updating new configuration to db")
 					if dbError := updatePluginsInDb(bson.M{"clusterid": cluster_id_uuid}, updatedPlugins); dbError != nil {
@@ -343,10 +366,16 @@ func monitoringPluginActivationDeactivations(enable bool, plugin_name string, cl
 						action = "disable"
 						actionNodeWiseFailure, actionErr = GetCoreNodeManager().DisableMonitoringPlugin(nodes, plugin_name)
 					}
-					if len(actionNodeWiseFailure) != 0 || actionErr != nil {
+					if len(actionNodeWiseFailure) == len(nodes) || actionErr != nil {
 						util.FailTask(fmt.Sprintf("Failed to %s plugin %s", action, plugin_name), fmt.Errorf("%v", actionNodeWiseFailure), t)
 						return
 					}
+					nodesInError, _ := util.GetMapKeys(actionNodeWiseFailure)
+					updateFailedNodes := util.Stringify(nodesInError)
+					logger.Get().Error("Failed to %v plugin on %v", action, updateFailedNodes)
+					t.UpdateStatus("Failed to %v plugin on %v", action, updateFailedNodes)
+					t.UpdateStatus("Please ensure %v are up", updateFailedNodes)
+					t.UpdateStatus("Try enforcing the plugins after some time")
 					index := monitoring.GetPluginIndex(plugin_name, cluster.MonitoringPlugins)
 					cluster.MonitoringPlugins[index].Enable = enable
 					logger.Get().Info("The updated cluster is : %v", cluster)
@@ -401,6 +430,54 @@ func (a *App) POST_MonitoringPluginDisable(w http.ResponseWriter, r *http.Reques
 	monitoringPluginActivationDeactivations(false, plugin_name, cluster_id, w, a)
 }
 
+func (a *App) PUT_MonitoringPluginsInPlace(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	var cluster models.Cluster
+	var cluster_node_names []string
+	var err error
+	cluster_id, err := uuid.Parse(vars["cluster-id"])
+	if cluster_id_parse_error != nil {
+		logger.Get().Error(err.Error())
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if cluster, err := getCluster(cluster_id); clusterFetchErr != nil {
+		logger.Get().Error(err.Error())
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if cluster_node_names, err = getNodesInCluster(cluster_id); err != nil {
+		logger.Get().Error(err.Error())
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	asyncTask := func(t *task.Task) {
+		plugin_names = make([]string, len(cluster.MonitoringPlugins))
+		for index, plugin := range cluster.MonitoringPlugins {
+			plugin_names[index] = plugin.Name
+		}
+		if forUpdateErrors, forceUpdatePythonError := GetCoreNodeManager().EnforceMonitoring(plugin_names, cluster_node_names, "", cluster.MonitoringPlugins); forceUpdatePythonError != nil || len(forUpdateErrors) != 0 {
+			if forUpdateErrors != nil {
+				err = fmt.Errorf("%v", forUpdateErrors)
+			} else {
+				err = forceUpdatePythonError
+			}
+			util.FailTask("Failed to enforce monitoring plugins update", err, t)
+			return
+		}
+	}
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("Unable to create task for enforcing monitoring plugin update. error: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for enforcing monitoring plugin update")
+		return
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
+	}
+}
+
 func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	cluster_id := vars["cluster-id"]
@@ -416,8 +493,16 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 		asyncTask := func(t *task.Task) {
 			t.UpdateStatus("Task created to remove monitoring plugin %v", plugin_name)
 			if removeNodeWiseFailure, removeErr := GetCoreNodeManager().RemoveMonitoringPlugin(nodes, plugin_name); len(removeNodeWiseFailure) != 0 || removeErr != nil {
-				util.FailTask(fmt.Sprintf("Failed to remove plugin %s", plugin_name), fmt.Errorf("%v", removeNodeWiseFailure), t)
-				return
+				nodesInErrorValues, _ := util.GetMapKeys(removeNodeWiseFailure)
+				nodesInError := util.Stringify(nodesInError)
+				if len(removeNodeWiseFailure) == len(nodes) {
+					util.FailTask(fmt.Sprintf("Failed to remove plugin %s", plugin_name), fmt.Errorf("%v", removeNodeWiseFailure), t)
+					return
+				}
+				logger.Get().Error("Failed to remove plugin %v with error %v", plugin_name, removeNodeWiseFailure)
+				t.UpdateStatus("Failed to remove plugin %v with error %v", plugin_name, removeNodeWiseFailure)
+				t.UpdateStatus("Please ensure %v are up", nodesInError)
+				t.UpdateStatus("Try enforcing the plugins after some time")
 			}
 			cluster, clusterFetchErr := getCluster(uuid)
 			if clusterFetchErr != nil {
