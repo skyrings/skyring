@@ -31,5 +31,6 @@ type NodeManagerInterface interface {
 	DisableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	EnableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (failed_nodes []string, err error)
+	EnforceMonitoring(plugin_names []string, nodes []string, master string, plugins []monitoring.Plugin) (map[string]interface{}, error)
 	SetUpMonitoring(node string, master string) (map[string]interface{}, error)
 }

@@ -1,6 +1,9 @@
 package monitoring
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 func UpdatePluginsConfigs(currentPlugins []Plugin, expectedPlugins []Plugin) ([]Plugin, error) {
 	var updated bool
@@ -52,6 +55,7 @@ func ToSaltPillarCompat(plugins []Plugin) (saltPillar map[string]map[string]stri
 			configMap[config.Type] = config.Value
 		}
 		saltPillar[plugin.Name] = configMap
+		saltPillar[plugin.Name]["Enable"] = strconv.FormatBool(plugin.Enable)
 	}
 	return saltPillar
 }
