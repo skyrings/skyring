@@ -294,6 +294,7 @@ threshold_type_map = {"warning": "WarningMax", "critical": "FailureMax"}
 
 
 def AddMonitoringPlugin(plugin_list, nodes, master=None, configs=None):
+    retVal = {}
     state_list = ''
     no_of_plugins = len(plugin_list)
     for index in range(no_of_plugins):
@@ -304,6 +305,8 @@ def AddMonitoringPlugin(plugin_list, nodes, master=None, configs=None):
     for plugin, value in configs.iteritems():
         thresholds = {}
         for threshold_type, threshold in value.iteritems():
+            if not threshold_type_map.get(threshold_type):
+                continue
             thresholds[threshold_type_map.get(threshold_type)] = threshold
         plugin_thresholds[plugin] = thresholds
     dict = {}
@@ -312,7 +315,15 @@ def AddMonitoringPlugin(plugin_list, nodes, master=None, configs=None):
     if thresholds:
         dict["thresholds"] = plugin_thresholds
     pillar = {"collectd": dict}
-    return run_state(nodes, state_list, kwarg={'pillar': pillar})
+    state_load_result = run_state(nodes, state_list, kwarg={'pillar': pillar})
+    if not state_load_result:
+        for plugin_name, config in configs.iteritems():
+            if config["Enable"] == "false":
+                nodesInFailure = DisableMonitoringPlugin(nodes, plugin_name).keys()
+                retVal[plugin_name] = nodesInFailure
+        return retVal
+    else:
+        return state_load_result
 
 
 def DisableMonitoringPlugin(nodes, pluginName):
@@ -332,8 +343,8 @@ def DisableMonitoringPlugin(nodes, pluginName):
     if failed_minions:
         return failed_minions
     out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
-    for node, restartStatus in out.iteritems():
-        if not restartStatus:
+    for node in nodes:
+        if (node in out) or (out[node]):
             log.error("Failed to restart collectd on node %s after disabling the plugin %s" %(node, pluginName))
             failed_minions[node] = "Failed to restart collectd"
     return failed_minions
@@ -355,8 +366,8 @@ def EnableMonitoringPlugin(nodes, pluginName):
     if failed_minions:
         return failed_minions
     out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
-    for node, restartStatus in out.iteritems():
-        if not restartStatus:
+    for node in nodes:
+        if (node in out) or (out[node]):
             log.error("Failed to restart collectd on node %s after enabling the plugin %s" %(node, pluginName))
             failed_minions[node] = "Failed to restart collectd"
     return failed_minions
@@ -391,26 +402,29 @@ def RemoveMonitoringPlugin(nodes, pluginName):
     if failed_minions :
         return failed_minions
     out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
-    for node, restartStatus in out.iteritems():
-        if not restartStatus:
+    for node in nodes:
+        if (node in out) or (out[node]):
             log.error("Failed to restart collectd on node %s after removing the plugin %s" %(node, pluginName))
             failed_minions[node] = "Failed to restart collectd"
     return failed_minions
 
 
 def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict):
-    failed_minions = []
+    failed_minions = {}
+    log.error("The plugins in UpdateMonitoringConfiguration : %s" %(str(plugin_threshold_dict)))
     for key, value in plugin_threshold_dict.iteritems():
         path = monitoring_root_path + key + '.conf'
         for threshold_type, threshold in value.iteritems():
             pattern_type = threshold_type_map.get(threshold_type)
+            if not pattern_type:
+                continue
             pattern = pattern_type + " " + "[0-9]*"
             repl = pattern_type + " " + str(threshold)
             out = local.cmd(nodes, "file.replace", expr_form='list', kwarg={'path': path, 'pattern': pattern, 'repl': repl})
     out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
-    for node, restartStatus in out.iteritems():
-        if not restartStatus:
+    for node in nodes:
+        if (node in out) or (out[node]):
             log.error("Failed to restart collectd on node %s" %(node))
-            failed_minions.append(node)
+            failed_minions[node] = "Failed to restart collectd"
     return failed_minions
 
