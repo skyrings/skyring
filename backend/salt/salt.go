@@ -81,13 +81,17 @@ func (s Salt) AcceptNode(node string, fingerprint string, ignored bool) (status 
 	return
 }
 
-func (s Salt) UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (failed_nodes []string, err error) {
+func (s Salt) UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (failed_nodes map[string]string, err error) {
+	failed_nodes = make(map[string]string)
 	mutex.Lock()
 	defer mutex.Unlock()
 	var pyobj *python.PyObject
-	if pyobj, err = pyFuncs["UpdateMonitoringConfiguration"].Call(nodes, monitoring.ToSaltPillarCompat(config)); err == nil {
+	pyobj, err = pyFuncs["UpdateMonitoringConfiguration"].Call(nodes, monitoring.ToSaltPillarCompat(config))
+	if err == nil {
 		err = gopy.Convert(pyobj, &failed_nodes)
+		logger.Get().Error("Update failed nodes are %v and error is %v", failed_nodes, err)
 	}
+	logger.Get().Error("Updating Monitoring Configuration failed with Error %v and the pyobj is %v", err, pyobj)
 	return
 }
 
