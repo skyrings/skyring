@@ -16,6 +16,24 @@
       "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a2523d11",
+        "filename": "dbprovider/mongodb/monogodbprovider.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:42:56Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "fa81d914_dfaaaed3",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }

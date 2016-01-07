@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_824d3975",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:42:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_7f74629c",
+      "revId": "5d4dfcb9a7b57cdc63537ff267c0790bc3de1f4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_ff6772e8",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2016-01-07T13:10:01Z",
       "side": 1,
       "message": "Duplicate name with previous one",
+      "revId": "5d4dfcb9a7b57cdc63537ff267c0790bc3de1f4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7fe9c219",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:42:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_ff6772e8",
       "revId": "5d4dfcb9a7b57cdc63537ff267c0790bc3de1f4b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_5f8dde7a",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:42:56Z",
+      "side": 1,
+      "message": "Not required at the moment. Will implement if required",
+      "parentUuid": "fa81d914_1f6526e1",
+      "revId": "5d4dfcb9a7b57cdc63537ff267c0790bc3de1f4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_3f62ead8",
         "filename": "apps/skyring/storage-profile.go",
         "patchSetId": 7
@@ -64,6 +118,24 @@
       "writtenOn": "2016-01-07T13:10:01Z",
       "side": 1,
       "message": "Are we using this?",
+      "revId": "5d4dfcb9a7b57cdc63537ff267c0790bc3de1f4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_9fee7621",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:42:56Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "fa81d914_3f62ead8",
       "revId": "5d4dfcb9a7b57cdc63537ff267c0790bc3de1f4b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
