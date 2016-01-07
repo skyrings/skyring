@@ -16,33 +16,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
-	"net/http"
 	"regexp"
 	"strings"
 	"time"
-
-	influxdb "github.com/influxdb/influxdb/client"
 )
-
-func queryDB(cmd string) (res []influxdb.Result, err error) {
-	q := influxdb.Query{
-		Command:  cmd,
-		Database: conf.SystemConfig.TimeSeriesDBConfig.Database,
-	}
-
-	if response, err := db.GetMonitoringDBClient().Query(q); err == nil {
-		if response.Error() != nil {
-			return res, response.Error()
-		}
-		res = response.Results
-	}
-	return
-}
 
 func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -60,12 +40,12 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var query_cmd string
-	if resource_name != "" {
-		query_cmd = fmt.Sprintf("SELECT * FROM /(%s.%s).*/", storage_node.Hostname, resource_name)
-	} else {
-		query_cmd = fmt.Sprintf("SELECT * FROM /(%s).*/", storage_node.Hostname)
-	}
+	//	var query_cmd string
+	//	if resource_name != "" {
+	//		query_cmd = fmt.Sprintf("SELECT * FROM /(%s.%s).*/", storage_node.Hostname, resource_name)
+	//	} else {
+	//		query_cmd = fmt.Sprintf("SELECT * FROM /(%s).*/", storage_node.Hostname)
+	//	}
 
 	if duration != "" {
 		if strings.Contains(duration, ",") {
@@ -80,19 +60,20 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			end_time := splt[1]
-			query_cmd += " WHERE time > '" + start_time + "' and time < '" + end_time + "'"
+			//query_cmd += " WHERE time > '" + start_time + "' and time < '" + end_time + "'"
 		} else {
 			if matched, _ := regexp.Match("^([0-5]?[0-9])?s$|^([0-5]?[0-9])?m$|^([0-2]?[0-3])?h$|^([0-9])*d$|^([0-9])*w$", []byte(duration)); !matched {
 				util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Invalid duration passed: %s", duration))
 				return
 			}
-			query_cmd += " WHERE time > now() - " + duration
+			//query_cmd += " WHERE time > now() - " + duration
 		}
 	}
 
-	res, err := queryDB(query_cmd)
+	//res, err := queryDB(query_cmd)
+	res, err := GetMonitoringManager(QueryDB(map[string]interface{}{"nodename": storage_node.Hostname, "resource": resource_name}))
 	if err == nil {
-		json.NewEncoder(w).Encode(res[0].Series)
+		json.NewEncoder(w).Encode(res)
 	} else {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}

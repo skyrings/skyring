@@ -37,12 +37,12 @@ type AuthConfig struct {
 }
 
 type SkyringCollection struct {
-	Config               SkyringConfig     `json:"config"`
-	Logging              SkyringLogging    `json:"logging"`
-	NodeManagementConfig NodeManagerConfig `json:"nodemanagementconfig"`
-	DBConfig             AppDBConfig       `json:"dbconfig"`
-	TimeSeriesDBConfig   InfluxDBconfig    `json:"timeseriesdbconfig"`
-	Authentication       AuthConfig        `json:"authentication"`
+	Config               SkyringConfig      `json:"config"`
+	Logging              SkyringLogging     `json:"logging"`
+	NodeManagementConfig NodeManagerConfig  `json:"nodemanagementconfig"`
+	DBConfig             AppDBConfig        `json:"dbconfig"`
+	TimeSeriesDBConfig   MonitoringDBconfig `json:"timeseriesdbconfig"`
+	Authentication       AuthConfig         `json:"authentication"`
 }
 
 type AppDBConfig struct {
@@ -53,12 +53,12 @@ type AppDBConfig struct {
 	Password string `json:"password"`
 }
 
-type InfluxDBconfig struct {
-	Hostname string `json:"hostname"`
-	Port     int    `json:"port"`
-	Database string `json:"database"`
-	User     string `json:"user"`
-	Password string `json:"password"`
+type MonitoringDBconfig struct {
+	Hostname       string `json:"hostname"`
+	Port           int    `json:"port"`
+	CollectionName string `json:"collection_name"`
+	User           string `json:"user"`
+	Password       string `json:"password"`
 }
 
 type NodeManagerConfig struct {
