@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_dfaaaed3",
+        "filename": "dbprovider/mongodb/monogodbprovider.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:10:01Z",
+      "side": 0,
+      "message": "Some how can we de-reference the individual interfaces registered with DB provider and call their indexing logic generically here? I see a maintainability issue here as we need to keep adding indexing logic here.",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}

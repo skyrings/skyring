@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_7f74629c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:10:01Z",
+      "side": 1,
+      "message": "Remove WIP now",
+      "revId": "5d4dfcb9a7b57cdc63537ff267c0790bc3de1f4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ff6772e8",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:10:01Z",
+      "side": 1,
+      "message": "Duplicate name with previous one",
+      "revId": "5d4dfcb9a7b57cdc63537ff267c0790bc3de1f4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_1f6526e1",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:10:01Z",
+      "side": 1,
+      "message": "There could be delete all and delete specific",
+      "revId": "5d4dfcb9a7b57cdc63537ff267c0790bc3de1f4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_3f62ead8",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:10:01Z",
+      "side": 1,
+      "message": "Are we using this?",
+      "revId": "5d4dfcb9a7b57cdc63537ff267c0790bc3de1f4b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
