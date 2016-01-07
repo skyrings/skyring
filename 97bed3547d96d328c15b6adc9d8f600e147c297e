@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_1f48c62c",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:44:48Z",
+      "side": 1,
+      "message": "I will do this as a different patch is that fine?",
+      "parentUuid": "fa81d914_9f2bd681",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_bf209a9c",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2016-01-07T13:01:05Z",
       "side": 1,
       "message": "May be we can %s/backend/userDao/g",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_df5d4eeb",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_bf209a9c",
       "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_ff713278",
+        "filename": "authprovider/local/auth.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_df254eac",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_ff3932d9",
         "filename": "dbprovider/dbprovider.go",
         "patchSetId": 8
@@ -64,6 +118,24 @@
       "writtenOn": "2016-01-07T13:01:05Z",
       "side": 1,
       "message": "%#v ??",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7f5e22eb",
+        "filename": "dbprovider/dbprovider.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_ff3932d9",
       "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_9f63d6b0",
+        "filename": "dbprovider/dbprovider.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_1f37e6e4",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_5f315eeb",
         "filename": "dbprovider/dbprovider.go",
         "patchSetId": 8
@@ -98,6 +188,24 @@
       "writtenOn": "2016-01-07T13:01:05Z",
       "side": 1,
       "message": "%s/plugin/db provider/g",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_bf589afb",
+        "filename": "dbprovider/dbprovider.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_5f315eeb",
       "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_3f6caa9c",
+        "filename": "dbprovider/mongodb/monogodbprovider.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_7f4d4272",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_bf57ba01",
         "filename": "dbprovider/mongodb/monogodbprovider.go",
         "patchSetId": 8
@@ -132,6 +258,24 @@
       "writtenOn": "2016-01-07T13:01:05Z",
       "side": 1,
       "message": "May be this could be place for entity specific indexing.",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_1f6fe693",
+        "filename": "dbprovider/mongodb/monogodbprovider.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:44:48Z",
+      "side": 1,
+      "message": "This is not for indexing. This function expose the entity specific interface implemented by MongoDb",
+      "parentUuid": "fa81d914_bf57ba01",
       "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
