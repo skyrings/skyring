@@ -24,6 +24,7 @@ import (
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/dbprovider"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/nodemanager"
 	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/task"
@@ -60,6 +61,7 @@ const (
 var (
 	application          *App
 	CoreNodeManager      nodemanager.NodeManagerInterface
+	MonitoringManager    monitoring.MonitoringManagerInterface
 	AuthProviderInstance authprovider.AuthInterface
 	TaskManager          task.Manager
 	Store                *mongostore.MongoStore
@@ -325,6 +327,16 @@ func (a *App) InitializeNodeManager(config conf.NodeManagerConfig) error {
 	}
 }
 
+func (a *App) InitializeMonitoringManager(config conf.MonitoringDBconfig) error {
+	if manager, err := monitoring.InitMonitoringManager(config.ManagerName, config.ConfigFilePath); err != nil {
+		logger.Get().Error("Error initializing the monitoring manager: %v", err)
+		return err
+	} else {
+		MonitoringManager = manager
+		return nil
+	}
+}
+
 func validApiVersion(version int) bool {
 	for _, ver := range conf.SystemConfig.Config.SupportedVersions {
 		if ver == version {
@@ -340,6 +352,13 @@ func GetCoreNodeManager() nodemanager.NodeManagerInterface {
 
 func GetApp() *App {
 	return application
+}
+
+func GetMonitoringManager() monitoring.MonitoringManagerInterface {
+	if MonitoringManager == nil {
+		logger.Get().Error("MonitoringManager is nil")
+	}
+	return MonitoringManager
 }
 
 //Middleware to check the request is authenticated
