@@ -55,6 +55,34 @@ func (a *App) SyncClusterDetails() {
 	}
 }
 
+func (a *App) SyncClusterStatusDetails() {
+	// Get the list of cluster
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var clusters models.Clusters
+	if err := coll.Find(nil).All(&clusters); err != nil {
+		logger.Get().Error("Error getting the clusters list. Unable to sync details. error: %v", err)
+		return
+	}
+	for _, cluster := range clusters {
+		provider := a.getProviderFromClusterId(cluster.ClusterId)
+		if provider == nil {
+			logger.Get().Error("Error getting provider for the cluster: %s", cluster.Name)
+			continue
+		}
+
+		// Sync the cluster status
+		if ok, err := sync_cluster_status(cluster, provider); err != nil || !ok {
+			logger.Get().Error("Error updating status for cluster: %s", cluster.Name)
+		}
+		// TODO:: Sync the nodes status
+		if ok, err := sync_cluster_nodes(cluster, provider); err != nil && !ok {
+			logger.Get().Error("Error syncing node details for cluster: %s. error: %v", cluster.Name, err)
+		}
+	}
+}
+
 func sync_cluster_status(cluster models.Cluster, provider *Provider) (bool, error) {
 	var result models.RpcResponse
 	vars := make(map[string]string)

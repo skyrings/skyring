@@ -201,7 +201,7 @@ func start() {
 
 	// Initialize the scheduler
 	// TODO: This is a stop gap arrangement. Ideally should be taken care by eventing framework
-	go task.GetScheduler().Schedule(30*time.Second, application.SyncClusterDetails)
+	go task.GetScheduler().Schedule(30*time.Second, application.SyncClusterStatusDetails)
 
 	//Initialize the task manager
 	if err := application.InitializeTaskManager(); err != nil {
