@@ -170,6 +170,10 @@ func start() {
 		os.Exit(1)
 	}
 
+	if err := application.InitializeMonitoringManager(conf.SystemConfig.MonitoringDBconfig); err != nil {
+		logger.Get().Error("Unable to create monitoring manager")
+		os.Exit(1)
+	} 
 	// Use negroni to add middleware.  Here we add the standard
 	// middlewares: Recovery, Logger and static file serve which come with
 	// Negroni

@@ -22,6 +22,7 @@ import (
 type Application interface {
 	SetRoutes(container *mux.Router) error
 	InitializeNodeManager(config conf.NodeManagerConfig) error
+	InitializeMonitoringManager(config conf.MonitoringDBconfig)
 	//Initialize the auth module
 	InitializeAuth(authCfg conf.AuthConfig, n *negroni.Negroni) error
 	//Middleware to check the request is authenticated

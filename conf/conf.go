@@ -41,7 +41,7 @@ type SkyringCollection struct {
 	Logging              SkyringLogging    `json:"logging"`
 	NodeManagementConfig NodeManagerConfig `json:"nodemanagementconfig"`
 	DBConfig             MongoDBConfig     `json:"dbconfig"`
-	TimeSeriesDBConfig   InfluxDBconfig    `json:"timeseriesdbconfig"`
+	TimeSeriesDBConfig   MonitoringDBconfig    `json:"timeseriesdbconfig"`
 	Authentication       AuthConfig        `json:"authentication"`
 }
 
@@ -53,10 +53,10 @@ type MongoDBConfig struct {
 	Password string `json:"password"`
 }
 
-type InfluxDBconfig struct {
+type MonitoringDBconfig struct {
 	Hostname string `json:"hostname"`
 	Port     int    `json:"port"`
-	Database string `json:"database"`
+	CollectionName string `json:"collection_name"`
 	User     string `json:"user"`
 	Password string `json:"password"`
 }

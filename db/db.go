@@ -48,7 +48,7 @@ func GetDatastore() *mgo.Session {
 	return session
 }
 
-func InitMonitoringDB(mondbconf conf.InfluxDBconfig) error {
+func InitMonitoringDB(mondbconf conf.MonitoringDBconfig) error {
 	u, err := url.Parse(fmt.Sprintf("http://%s:%d",
 		mondbconf.Hostname, mondbconf.Port))
 	if err != nil {
