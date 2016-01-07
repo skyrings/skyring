@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_1f3c462f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T16:17:51Z",
+      "side": 1,
+      "message": "I am kind of ok with Option-3.\n@Nishant, what is your thought on this?",
+      "parentUuid": "fa81d914_9b6db107",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_9b0cd196",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 1
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_df11cead",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T16:17:51Z",
+      "side": 1,
+      "message": "clusterFetchError as we are handling in other places? DB failure...",
+      "parentUuid": "fa81d914_db7649d8",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_bb1195ae",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 1
@@ -101,6 +137,24 @@
       "side": 1,
       "message": "I don\u0027t think this would ever error out HERE. Bcoz I am sure that the parameter passed here is a map(It is the only type of error that\u0027s being returned by the util) as otherwise it would fail at gopy stage itself and wouldn\u0027t come till here",
       "parentUuid": "fa81d914_bb1195ae",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ff25b20a",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T16:17:51Z",
+      "side": 1,
+      "message": "Can you comment accordingly if not handling the error.",
+      "parentUuid": "fa81d914_fb730de5",
       "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -206,6 +260,24 @@
       "side": 1,
       "message": "Yes its a set diff of 1st param - 2nd param.\nSorry I didn\u0027t get the second part...",
       "parentUuid": "fa81d914_fb694d26",
+      "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_3f202af7",
+        "filename": "utils/go_type_utils.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T16:17:51Z",
+      "side": 1,
+      "message": "%s/unique/found/g",
+      "parentUuid": "fa81d914_5b4a5984",
       "revId": "346e506299e3ae8c98be3097f05283c05e6a79c0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
