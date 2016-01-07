@@ -6,6 +6,7 @@ import (
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/task"
+	"io/ioutil"
 	"net/http"
 	"runtime"
 	"time"
@@ -88,4 +89,25 @@ func FailTask(msg string, err error, t *task.Task) {
 	logger.Get().Error("%s: %v", msg, err)
 	t.UpdateStatus("Failed. error: %v", err)
 	t.Done(models.TASK_STATUS_FAILURE)
+}
+
+func GetString(param interface{}) (string, error) {
+	if str, ok := param.(string); ok {
+		return str, nil
+	}
+	return "", fmt.Errorf("Not a string")
+}
+
+func HTTPGet(url string) ([]byte, error) {
+	response, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			return nil, err
+		}
+		return contents, nil
+	}
 }
