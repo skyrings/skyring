@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_9f2bd681",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:01:05Z",
+      "side": 1,
+      "message": "Should we take this value \"mongodbprovider\" from skyring.conf.\nThis will make sure later if we change to some other DB provider, no need to change code, rather a conf file only.",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_bf209a9c",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:01:05Z",
+      "side": 1,
+      "message": "May be we can %s/backend/userDao/g",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_df254eac",
+        "filename": "authprovider/local/auth.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:01:05Z",
+      "side": 1,
+      "message": "May be we can %s/backend/userDao/g",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ff3932d9",
+        "filename": "dbprovider/dbprovider.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:01:05Z",
+      "side": 1,
+      "message": "%#v ??",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_1f37e6e4",
+        "filename": "dbprovider/dbprovider.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:01:05Z",
+      "side": 1,
+      "message": "%s/init plugin/initialize db provider/g",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_5f315eeb",
+        "filename": "dbprovider/dbprovider.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:01:05Z",
+      "side": 1,
+      "message": "%s/plugin/db provider/g",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7f4d4272",
+        "filename": "dbprovider/mongodb/monogodbprovider.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:01:05Z",
+      "side": 1,
+      "message": "Should we create indexes specific to entities in here?",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_bf57ba01",
+        "filename": "dbprovider/mongodb/monogodbprovider.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T13:01:05Z",
+      "side": 1,
+      "message": "May be this could be place for entity specific indexing.",
+      "revId": "97bed3547d96d328c15b6adc9d8f600e147c297e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
