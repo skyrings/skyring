@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_1f10c64d",
+        "filename": "apps/providers.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T12:44:13Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "fa81d914_9bb69189",
+      "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_4074279c",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 7
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "for initializing any default stuff. For example creating db indexes, default storage profiles etc",
       "parentUuid": "fa81d914_4074279c",
+      "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_3f1d8a67",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T12:44:13Z",
+      "side": 1,
+      "message": "Ok. May be a comment would be useful.",
+      "parentUuid": "fa81d914_5bbc196d",
       "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -171,6 +207,24 @@
       "side": 1,
       "message": "yes, MongoDb implements the User interface",
       "parentUuid": "fa81d914_e0643be7",
+      "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_5f1a3e6f",
+        "filename": "dbprovider/mongodb/user.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-07T12:44:13Z",
+      "side": 1,
+      "message": "Ok.",
+      "parentUuid": "fa81d914_7bc1dde3",
       "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
