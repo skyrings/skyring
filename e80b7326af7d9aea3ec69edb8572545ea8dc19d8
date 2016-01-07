@@ -46,6 +46,30 @@
       "revId": "e80b7326af7d9aea3ec69edb8572545ea8dc19d8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ad81534c",
+        "filename": "event/handlermap.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T04:56:46Z",
+      "side": 1,
+      "message": "Okay",
+      "parentUuid": "fa81d914_4d9b77c9",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 1
+      },
+      "revId": "e80b7326af7d9aea3ec69edb8572545ea8dc19d8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
