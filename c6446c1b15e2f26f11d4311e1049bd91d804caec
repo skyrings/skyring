@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_2d48035b",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T03:06:25Z",
+      "side": 1,
+      "message": "Why you want to duplicate the data? You have keep updating both copies whenever you update the master copy like reloading. So better to expose the app itself\n\nApp.providers is accessible any functions which is tied to App struct. So I think the best way is to implement a function to get a function tied to App struct as in request-router.go. \nfunc (a *App) getProviderFromName(name string) Provider{}\n\nThen write a function which expose the app instance.\n\nAppInterface() app.Application - this will return the exposed App\n\n I think this should work\nLet us discuss if you need more clarity",
+      "range": {
+        "startLine": 60,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 41
+      },
+      "revId": "c6446c1b15e2f26f11d4311e1049bd91d804caec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
