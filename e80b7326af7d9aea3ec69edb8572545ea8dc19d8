@@ -22,6 +22,30 @@
       "revId": "e80b7326af7d9aea3ec69edb8572545ea8dc19d8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_4d9b77c9",
+        "filename": "event/handlermap.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-07T04:12:12Z",
+      "side": 1,
+      "message": "No I think this can be a common entry point from where I can feed the event to probably an event-analyser which would probably branch out accordingly I mean I don\u0027t want to segregate/handle events differently at this stage to me it looks like the analyser should be a generic separate package to which we could probably feed some form of dependedncy/impact rules for each event and the generic analyser would then probably choose from these impact/dependency rules based on event type and probably even severity.",
+      "parentUuid": "fa81d914_0d625fd8",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 1
+      },
+      "revId": "e80b7326af7d9aea3ec69edb8572545ea8dc19d8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
