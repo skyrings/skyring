@@ -29,5 +29,6 @@ type Application interface {
 	LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
 	InitializeTaskManager() error
 	SyncClusterDetails()
+	SyncClusterStatusDetails()
 	GetTaskManager() *task.Manager
 }
