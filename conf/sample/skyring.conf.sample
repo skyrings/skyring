@@ -25,10 +25,9 @@
     },
     "timeseriesdbconfig": {
         "hostname": "127.0.0.1",
-        "port": 8086,
-        "database": "collectd",
-        "user": "admin",
-        "password": "admin"
+        "port": 80,
+        "collection_name": "collectd",
+        "managername": "GraphiteManager"
     },
     "authentication": {
         "providerName": "localauthprovider",
