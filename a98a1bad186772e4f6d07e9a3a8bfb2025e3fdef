@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_1fc1a680",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-07T17:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_3f1d8a67",
+      "revId": "a98a1bad186772e4f6d07e9a3a8bfb2025e3fdef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_60792b93",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 7
