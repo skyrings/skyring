@@ -135,6 +135,11 @@ reactor:
 
   - 'skyring/*':
     - /srv/salt/push_event.sls
+
+  - 'salt/presence/change':
+    - /srv/salt/push_event.sls
+
+presence_events: True
 EOF
 fi
 
