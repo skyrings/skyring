@@ -90,5 +90,5 @@ func (m MongoDb) InitUser() error {
 		logger.Get().Error("Error Setting the Index:%s", err)
 		return mkmgoerror(err.Error())
 	}
-	return err
+	return nil
 }

@@ -79,9 +79,17 @@ func (m MongoDb) InitDb() error {
 		logger.Get().Error("Error Initilaizing User Table", err)
 		return err
 	}
+	if err := m.InitStorageProfile(); err != nil {
+		logger.Get().Error("Error Initilaizing storageprofile Table", err)
+		return err
+	}
 	return nil
 }
 
 func (m MongoDb) UserInterface() dao.UserInterface {
+	return m
+}
+
+func (m MongoDb) StorageProfileInterface() dao.StorageProfileInterface {
 	return m
 }
