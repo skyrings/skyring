@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_f56cf138",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-08T07:30:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_7f88e222",
+      "revId": "ed71d7e18401eedeb4fd730930dcc04e27007588",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_9f8d9634",
         "filename": "event/listener.go",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2016-01-07T15:47:59Z",
       "side": 1,
       "message": "Above two lines could as below\n\napp :\u003d skyring.GetApp()",
+      "revId": "ed71d7e18401eedeb4fd730930dcc04e27007588",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_156a651a",
+        "filename": "event/listener.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-08T07:30:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_9f8d9634",
       "revId": "ed71d7e18401eedeb4fd730930dcc04e27007588",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
