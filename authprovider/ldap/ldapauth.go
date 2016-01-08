@@ -19,6 +19,7 @@ import (
 	"github.com/mqu/openldap"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/authprovider"
+	"github.com/skyrings/skyring/dao"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
 	"golang.org/x/crypto/bcrypt"
@@ -45,7 +46,7 @@ type Role int
 // Authorizer structures contain the store of user session cookies a reference
 // to a backend storage system.
 type Authorizer struct {
-	backend          authprovider.AuthBackend
+	userDao          dao.UserInterface
 	ldapServer       string
 	port             int
 	connectionString string
@@ -137,14 +138,9 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 		logger.Get().Error("Unable to Unmarshall the data:%s", err)
 		return nil, err
 	}
-	//Create DB Backend
-	backend, err := authprovider.NewMongodbBackend()
-	if err != nil {
-		logger.Get().Error("Unable to initialize the DB backend for Ldapauthprovider:%s", err)
-		panic(err)
-	}
+	userDao := skyring.GetDbProvider().UserInterface()
 	//Create the Provider
-	if provider, err := NewAuthorizer(backend,
+	if provider, err := NewAuthorizer(userDao,
 		providerCfg.LdapServer.Address,
 		providerCfg.LdapServer.Port,
 		providerCfg.LdapServer.Base,
@@ -158,10 +154,10 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 
 }
 
-func NewAuthorizer(backend authprovider.AuthBackend, address string, port int, base string,
+func NewAuthorizer(userDao dao.UserInterface, address string, port int, base string,
 	defaultRole string, roles map[string]Role) (Authorizer, error) {
 	var a Authorizer
-	a.backend = backend
+	a.userDao = userDao
 	a.ldapServer = address
 	a.port = port
 	a.connectionString = base
@@ -197,7 +193,7 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 	}
 	errStrNotAllowed := "This user is not allowed. Status Disabled"
 	// Verify user allowed to user usm with group privilage in the db
-	if user, err := a.backend.User(u); err == nil {
+	if user, err := a.userDao.User(u); err == nil {
 		errStr := "Passwords Doesnot match"
 		if user.Status {
 			if user.Type == authprovider.External {
@@ -291,7 +287,7 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 // List the users in DB
 func (a Authorizer) ListUsers() (users []models.User, err error) {
 
-	if users, err = a.backend.Users(); err != nil {
+	if users, err = a.userDao.Users(); err != nil {
 		logger.Get().Error("Unable get the list of Users: %v", err)
 		return users, err
 	}
@@ -317,7 +313,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 	user.Status = true
 
 	// Validate username
-	_, err := a.backend.User(user.Username)
+	_, err := a.userDao.User(user.Username)
 	if err == nil {
 		logger.Get().Error("Username already exists")
 		return mkerror("user already exists")
@@ -353,7 +349,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		user.Hash = hash
 
 	}
-	err = a.backend.SaveUser(user)
+	err = a.userDao.SaveUser(user)
 	if err != nil {
 		logger.Get().Error("Erro Saving the User:%s", err)
 		return mkerror(err.Error())
@@ -370,7 +366,7 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 		updated bool
 	)
 
-	user, err := a.backend.User(username)
+	user, err := a.userDao.User(username)
 	if err != nil {
 		logger.Get().Error("Error retrieving the user:%s", err)
 		return err
@@ -401,7 +397,7 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 	}
 
 	if updated {
-		err = a.backend.SaveUser(user)
+		err = a.userDao.SaveUser(user)
 		if err != nil {
 			logger.Get().Error("Error saving the user to DB:%s", err)
 			return err
@@ -449,7 +445,7 @@ func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e er
 			return user, mkerror("Unable to identify the user from session")
 		}
 	}
-	user, e = a.backend.User(u)
+	user, e = a.userDao.User(u)
 	if e != nil {
 		logger.Get().Error("Error retrieving the user:%s", e)
 		return user, e
@@ -462,7 +458,7 @@ func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e er
 // This will delete the ldap user name from the db so that
 // he will be no longer available for login to use skyring
 func (a Authorizer) DeleteUser(username string) error {
-	err := a.backend.DeleteUser(username)
+	err := a.userDao.DeleteUser(username)
 	if err != nil {
 		logger.Get().Error("Unable delete the user: %s", err)
 		return err

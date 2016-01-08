@@ -188,6 +188,9 @@ func start() {
 		conf.SystemConfig.Config.HttpPort = 8080
 	}
 
+	/*
+		TODO : This will be removed after porting all the existing things into newer scheme
+	*/
 	// Create DB session
 	if err := db.InitDBSession(conf.SystemConfig.DBConfig); err != nil {
 		logger.Get().Error("Unable to initialize DB")
@@ -198,8 +201,14 @@ func start() {
 		os.Exit(1)
 	}
 
+	//Initialize the DB provider
+	if err := application.InitializeDb(conf.SystemConfig.DBConfig); err != nil {
+		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
+		os.Exit(1)
+	}
+
 	//Initialize the auth provider
-	if err := application.InitializeAuth(conf.SystemConfig.Authentication, n); err != nil {
+	if err := application.InitializeAuth(conf.SystemConfig.Authentication); err != nil {
 		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
 		os.Exit(1)
 	}
@@ -207,6 +216,12 @@ func start() {
 	//Initialize the task manager
 	if err := application.InitializeTaskManager(); err != nil {
 		logger.Get().Error("Unable to initialize the task manager: %s", err)
+		os.Exit(1)
+	}
+
+	//Initialize the Defaults
+	if err := application.InitializeDefaults(); err != nil {
+		logger.Get().Error("Unable to initialize the Defaults: %s", err)
 		os.Exit(1)
 	}
 
