@@ -35,8 +35,9 @@ import (
 
 var (
 	cluster_post_functions = map[string]string{
-		"create":         "CreateCluster",
-		"expand_cluster": "ExpandCluster",
+		"create":               "CreateCluster",
+		"expand_cluster":       "ExpandCluster",
+		"redistribute_cluster": "RedistributeCluster",
 	}
 
 	storage_types = map[string]string{
@@ -854,13 +855,18 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				if providerTask.Completed {
-					t.UpdateStatus("Starting disk sync")
-					if err := syncStorageDisks(new_nodes); err != nil {
+					if providerTask.Status == models.TASK_STATUS_SUCCESS {
+						t.UpdateStatus("Starting disk sync")
+						if err := syncStorageDisks(new_nodes); err != nil {
+							t.UpdateStatus("Failed")
+							t.Done(models.TASK_STATUS_FAILURE)
+						} else {
+							t.UpdateStatus("Success")
+							t.Done(models.TASK_STATUS_SUCCESS)
+						}
+					} else if providerTask.Status == models.TASK_STATUS_FAILURE {
 						t.UpdateStatus("Failed")
 						t.Done(models.TASK_STATUS_FAILURE)
-					} else {
-						t.UpdateStatus("Success")
-						t.Done(models.TASK_STATUS_SUCCESS)
 					}
 					break
 				}
@@ -871,6 +877,86 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for cluster expansion. error: %v", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster expansion")
+		return
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
+	}
+}
+
+func (a *App) Redistribute(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+
+	ok, err := ClusterDisabled(*cluster_id)
+	if err != nil {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking enabled state of cluster")
+		return
+	}
+	if !ok {
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is already in managed state")
+		return
+	}
+
+	var result models.RpcResponse
+	var providerTaskId *uuid.UUID
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started task for cluster re-distribute: %v", t.ID)
+		provider := a.getProviderFromClusterId(*cluster_id)
+		err = provider.Client.Call(fmt.Sprintf("%s.%s",
+			provider.Name, cluster_post_functions["redistribute_cluster"]),
+			models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}},
+			&result)
+		if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+			util.FailTask("Error redistributing cluster", err, t)
+			return
+		} else {
+			// Update the master task id
+			providerTaskId, err = uuid.Parse(result.Data.RequestId)
+			if err != nil {
+				util.FailTask("Error parsing provider task id", err, t)
+				return
+			}
+			t.UpdateStatus("Adding sub task")
+			if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+				util.FailTask("Error adding sub task", err, t)
+				return
+			}
+
+			// Check for provider task to complete and update the disk info
+			for {
+				time.Sleep(2 * time.Second)
+				sessionCopy := db.GetDatastore().Copy()
+				defer sessionCopy.Close()
+				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+				var providerTask models.AppTask
+				if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+					util.FailTask("Error getting sub task status", err, t)
+					return
+				}
+				if providerTask.Completed {
+					if providerTask.Status == models.TASK_STATUS_SUCCESS {
+						t.UpdateStatus("Success")
+						t.Done(models.TASK_STATUS_SUCCESS)
+					} else if providerTask.Status == models.TASK_STATUS_FAILURE {
+						t.UpdateStatus("Failed")
+						t.Done(models.TASK_STATUS_FAILURE)
+					}
+					break
+				}
+			}
+		}
+	}
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Redistribute Cluster: %s", cluster_id_str), asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("Unable to create task for cluster re-distribute. error: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster re-distribute")
 		return
 	} else {
 		logger.Get().Debug("Task Created: ", taskId.String())
