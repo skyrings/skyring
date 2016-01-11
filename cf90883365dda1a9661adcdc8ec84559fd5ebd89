@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_66069222",
+        "filename": "main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-11T05:32:58Z",
+      "side": 1,
+      "message": "https://review.gerrithub.io/#/c/247870/. We need to take in patch to cleanup socket",
+      "range": {
+        "startLine": 214,
+        "startChar": 1,
+        "endLine": 214,
+        "endChar": 1
+      },
+      "revId": "cf90883365dda1a9661adcdc8ec84559fd5ebd89",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a974dd9c",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-11T05:32:58Z",
+      "side": 1,
+      "message": "I think we need to start the service after installation. Need to add the code in skyring-setup.sh",
+      "revId": "cf90883365dda1a9661adcdc8ec84559fd5ebd89",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
