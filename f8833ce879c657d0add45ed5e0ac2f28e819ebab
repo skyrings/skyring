@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_c99af113",
+        "filename": "conf/sample/skyring.conf.sample",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-11T10:41:15Z",
+      "side": 1,
+      "message": "I was prompted to renaming it this way bcoz I feel it sounds generic b/w influxdb\u0027s database and graphite\u0027s tagging groups",
+      "parentUuid": "fa81d914_09eec988",
+      "revId": "f8833ce879c657d0add45ed5e0ac2f28e819ebab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_49ffe134",
         "filename": "monitoring/interfaces.go",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2016-01-11T10:23:07Z",
       "side": 1,
       "message": "I feel this api should take inputs like collectionName, queryParams",
+      "revId": "f8833ce879c657d0add45ed5e0ac2f28e819ebab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8990f9ed",
+        "filename": "monitoring/interfaces.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-11T10:41:15Z",
+      "side": 1,
+      "message": "All this comes as part of params map bcoz the arguements might be provider specific or may be even common across but this way any datatype parameter can be the value and it is mapped from a string that ideally indicates what the value is.",
+      "parentUuid": "fa81d914_49ffe134",
       "revId": "f8833ce879c657d0add45ed5e0ac2f28e819ebab",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
