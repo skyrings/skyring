@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_496521e0",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-11T07:28:52Z",
+      "side": 1,
+      "message": "Is there a way to update the monitoring configuration again if failed during create cluster?. Is there a way the user knows that monitoring update failed for few nodes so that he can retry?",
+      "range": {
+        "startLine": 140,
+        "startChar": 9,
+        "endLine": 143,
+        "endChar": 50
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a99bfdc7",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-11T07:28:52Z",
+      "side": 1,
+      "message": "if monitoringConfigured is \u0027false\u0027, is it a complete failure?",
+      "range": {
+        "startLine": 150,
+        "startChar": 8,
+        "endLine": 150,
+        "endChar": 32
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_e9a5f504",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-11T07:28:52Z",
+      "side": 1,
+      "message": "This is a complete failure case right? how you r handling this or based on what you determine whether its a complete failure or not?\n\nApplicable to all",
+      "range": {
+        "startLine": 227,
+        "startChar": 4,
+        "endLine": 228,
+        "endChar": 6
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_6962e5d9",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-11T07:28:52Z",
+      "side": 1,
+      "message": "Same as above, we should have a mechanism to indicate the user that monitoring config for these set of nodes is not in sync",
+      "range": {
+        "startLine": 235,
+        "startChar": 5,
+        "endLine": 237,
+        "endChar": 35
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_c9a031f7",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-11T07:28:52Z",
+      "side": 1,
+      "message": "Please don\u0027t put multiple t.updateStatus for same issue. This will messup the task status messages and user may be confused. Let us have single message for each case. Rest of the things should go into the logs\n\nApplicable to all cases",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 238,
+        "endChar": 12
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_69b9052e",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-11T07:28:52Z",
+      "side": 1,
+      "message": "Is it really a put?",
+      "range": {
+        "startLine": 209,
+        "startChar": 17,
+        "endLine": 209,
+        "endChar": 21
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_89b6393c",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-11T07:28:52Z",
+      "side": 1,
+      "message": "This is again a \u0027verb\u0027\ncan you have clusters/{cluster-id}/mon_plugins/actions -  and have have all these kind of stuff grouped in to this?",
+      "range": {
+        "startLine": 210,
+        "startChar": 50,
+        "endLine": 210,
+        "endChar": 57
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_e97c1575",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-11T07:28:52Z",
+      "side": 1,
+      "message": "what we are doing here if run_state fails. Can you pls explain logic?",
+      "range": {
+        "startLine": 311,
+        "startChar": 2,
+        "endLine": 315,
+        "endChar": 17
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_29962d95",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-11T07:28:52Z",
+      "side": 1,
+      "message": "Why another func? how does it differ from AssMonitoringPlugin?",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 36
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
