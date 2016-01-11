@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_09eec988",
+        "filename": "conf/sample/skyring.conf.sample",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-11T10:23:07Z",
+      "side": 1,
+      "message": "It should be called dbname rather. collection means one table as such.",
+      "revId": "f8833ce879c657d0add45ed5e0ac2f28e819ebab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_49ffe134",
+        "filename": "monitoring/interfaces.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-11T10:23:07Z",
+      "side": 1,
+      "message": "I feel this api should take inputs like collectionName, queryParams",
+      "revId": "f8833ce879c657d0add45ed5e0ac2f28e819ebab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
