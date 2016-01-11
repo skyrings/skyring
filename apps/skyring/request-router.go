@@ -76,6 +76,11 @@ func (a *App) getProviderFromClusterId(cluster_id uuid.UUID) *Provider {
 
 func (a *App) RouteProviderEvents(event models.Event) error {
 	provider := a.getProviderFromClusterId(event.ClusterId)
+	if provider == nil {
+		err := fmt.Errorf("Could not get the Provider from ClusterId: %s", event.ClusterId)
+		logger.Get().Error("Could not get the Provider from ClusterId: %s", event.ClusterId)
+		return err
+	}
 	body, err := json.Marshal(event)
 	if err != nil {
 		logger.Get().Error("Marshalling of event failed: %s", err)
