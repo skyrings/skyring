@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_49c1a17f",
+        "filename": "main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-11T07:37:46Z",
+      "side": 1,
+      "message": "We are removing the event lock file as part of stop command here. Bala\u0027s patch is useful fro Ctrl+C kind of case where user runs from command line.\n\nI feel that patch anyway can be merged as separate one. Does it overlap with this?",
+      "parentUuid": "fa81d914_66069222",
+      "revId": "cf90883365dda1a9661adcdc8ec84559fd5ebd89",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_a974dd9c",
         "filename": "skyring.spec",
         "patchSetId": 2
@@ -36,6 +54,24 @@
       "writtenOn": "2016-01-11T05:32:58Z",
       "side": 1,
       "message": "I think we need to start the service after installation. Need to add the code in skyring-setup.sh",
+      "revId": "cf90883365dda1a9661adcdc8ec84559fd5ebd89",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_09d0894f",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-11T07:37:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_a974dd9c",
       "revId": "cf90883365dda1a9661adcdc8ec84559fd5ebd89",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
