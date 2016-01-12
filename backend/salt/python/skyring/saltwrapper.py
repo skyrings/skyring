@@ -396,3 +396,48 @@ def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict):
             failed_minions.append(node)
     return failed_minions
 
+
+def GetOSDDetails(node):
+    '''
+    returns structure
+    {'devicename': {'Avail': 'available space in GB',
+               'Blocks': 'blocks',
+               'Cluster': 'cluster name',
+               'Device': 'device name',
+               'IFree': 'inode free',
+               'IUsePer': 'inode usage percentage',
+               'IUsed': 'inode used',
+               'Inodes': 'total available inodes',
+               'JournalDevice': 'related journal device name',
+               'MountPoint': 'mountpoint',
+               'OSDName': 'osd name',
+               'Status': 'osd status',
+               'Type': 'filesystem type',
+               'UsePer': 'usage percentage',
+               'Used': 'used size in GB'}, ... }
+    '''
+
+    dsk = {}
+    rv = {}
+    out = local.cmd('%s' % node, 'cmd.run', ['ceph-disk list'])
+    lines = [line.strip() for line in out[node].splitlines() if line.find('ceph data') != -1]
+    key='Device,Type,Content,Status,Group,Cluster,OSD,Journal,JournalDevice'
+    for line in lines:
+        dt = dict(zip(key.split(','), map(lambda x:x.strip(','),line.split())))
+        dsk[dt['Device']] = dt
+    columes = 'source,fstype,itotal,iused,iavail,ipcent,size,used,' \
+        'avail,pcent,target'
+    command = "df -BG %s --output=%s" % (" ".join(dsk.keys()), columes)
+    key = 'Device,Type,Inodes,IUsed,IFree,IUsePer,Blocks,Used,Avail,UsePer,MountPoint'
+    out = local.cmd(node, 'cmd.run', [command], expr_form='list')
+    for line in out.get(node).splitlines()[1:]:
+        dt = dict(zip(key.split(','), line.split()))
+        try:
+            dt['Cluster'] = dsk[dt['Device']]['Group']
+            dt['Status'] = dsk[dt['Device']]['Status']
+            dt['OSDName'] = dsk[dt['Device']]['OSD']
+            dt['JournalDevice'] = dsk[dt['Device']]['JournalDevice']
+        except KeyError as ke:
+            log.error("Failed get osd device details %s" %(ke))
+        rv[dt['Device']] = dt
+    return rv
