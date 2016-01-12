@@ -69,3 +69,21 @@ type Backend interface {
 	EnableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	DisableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 }
+
+type OSDDetails struct {
+	Available     string
+	Blocks        string
+	Cluster       string
+	Device        string
+	IFree         string
+	IUsePer       string
+	IUsed         string
+	Inodes        string
+	JournalDevice string
+	MountPoint    string
+	OSDName       string
+	Status        string
+	Type          string
+	UsePer        string
+	Used          string
+}

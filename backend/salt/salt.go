@@ -43,6 +43,7 @@ var funcNames = [...]string{
 	"EnableMonitoringPlugin",
 	"DisableMonitoringPlugin",
 	"RemoveMonitoringPlugin",
+	"GetOSDDetails",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -252,6 +253,17 @@ func (s Salt) NodeUp(node string) (status bool, err error) {
 		err = gopy.Convert(pyobj, &status)
 	} else {
 		status = false
+		err = loc_err
+	}
+	return
+}
+
+func (s Salt) GetOSDDetails(node string) (nodes backend.OSDDetails, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if pyobj, loc_err := pyFuncs["GetOSDDetails"].Call(node); loc_err == nil {
+		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &n)
+	} else {
 		err = loc_err
 	}
 	return
