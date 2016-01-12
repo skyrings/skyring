@@ -16,6 +16,7 @@ package salt
 
 import (
 	"bytes"
+	"errors"
 	"github.com/sbinet/go-python"
 	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/monitoring"
@@ -166,6 +167,9 @@ func (s Salt) GetNodes() (nodes backend.NodeList, err error) {
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetNodes"].Call(); loc_err == nil {
 		err = gopy.Convert(pyobj, &nodes)
+		if len(nodes.Manage) == 0 && len(nodes.Unmanage) == 0 && len(nodes.Ignore) == 0 {
+			err = errors.New("Error getting nodes list")
+		}
 	} else {
 		err = loc_err
 	}
@@ -193,6 +197,9 @@ func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetNodeDisk"].Call(node); loc_err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &disks)
+		if disks == nil {
+			err = errors.New("Error getting disks for the node")
+		}
 	} else {
 		err = loc_err
 	}
@@ -204,6 +211,9 @@ func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetNodeNetwork"].Call(node); loc_err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &n)
+		if len(n.IPv4) == 0 && len(n.IPv6) == 0 && len(n.Subnet) == 0 {
+			err = errors.New("Error getting network details of node")
+		}
 	} else {
 		err = loc_err
 	}

@@ -51,34 +51,42 @@ def _get_keys(match='*'):
 
 
 def AcceptNode(node, fingerprint, include_rejected=False):
-    d = _get_keys(node)
-    if d['accepted_nodes'].get(node):
-        log.info("node %s already in accepted node list" % node)
-        return True
+    try:
+        d = _get_keys(node)
+        if d['accepted_nodes'].get(node):
+            log.info("node %s already in accepted node list" % node)
+            return True
 
-    finger = d['unaccepted_nodes'].get(node)
-    if not finger:
-        if include_rejected:
-            finger = d['rejected_nodes'].get(node)
-    if not finger:
-        log.warn("node %s not in unaccepted/rejected node list" % node)
+        finger = d['unaccepted_nodes'].get(node)
+        if not finger:
+            if include_rejected:
+                finger = d['rejected_nodes'].get(node)
+        if not finger:
+            log.warn("node %s not in unaccepted/rejected node list" % node)
+            return False
+
+        if finger != fingerprint:
+            log.error(("node %s minion fingerprint does not match %s != %s" %
+                       (node, finger, fingerprint)))
+            return False
+
+        skey = salt.key.Key(opts)
+        out = skey.accept(match=node, include_rejected=include_rejected)
+
+        return (node in out['minions'])
+    except Exception as e:
+        log.error("exception during accepting node: %s. error: %s", node, str(e))
         return False
-
-    if finger != fingerprint:
-        log.error(("node %s minion fingerprint does not match %s != %s" %
-                   (node, finger, fingerprint)))
-        return False
-
-    skey = salt.key.Key(opts)
-    out = skey.accept(match=node, include_rejected=include_rejected)
-
-    return (node in out['minions'])
 
 
 def IgnoreNode(node):
-    skey = salt.key.Key(opts)
-    out = skey.delete_key(node)
-    return True
+    try:
+        skey = salt.key.Key(opts)
+        out = skey.delete_key(node)
+        return True
+    except Exception as e:
+        log.error("exception during ignoring node: %s. error: %s", node, str(e))
+        return False
 
 
 def GetNodes():
@@ -88,24 +96,28 @@ def GetNodes():
      "Unmanage": [{"Name": "nodename", "Fingerprint": "nodefinger"}, ...],
      "Ignore":   [{"Name": "nodename", "Fingerprint": "nodefinger"}, ...]}
     '''
-    keys = _get_keys()
+    try:
+        keys = _get_keys()
 
-    manage = []
-    for name, finger in keys.get("accepted_nodes", {}).iteritems():
-        manage.append({"Name": name, "Fingerprint": finger})
+        manage = []
+        for name, finger in keys.get("accepted_nodes", {}).iteritems():
+            manage.append({"Name": name, "Fingerprint": finger})
 
-    unmanage = []
-    ignore = []
-    for name, finger in keys.get("unaccepted_nodes", {}).iteritems():
-        unmanage.append({"Name": name, "Fingerprint": finger})
+        unmanage = []
+        ignore = []
+        for name, finger in keys.get("unaccepted_nodes", {}).iteritems():
+            unmanage.append({"Name": name, "Fingerprint": finger})
 
-    ignore = []
-    for name, finger in keys.get("rejected_nodes", {}).iteritems():
-        ignore.append({"Name": name, "Fingerprint": finger})
-    for name, finger in keys.get("denied_nodes", {}).iteritems():
-        ignore.append({"Name": name, "Fingerprint": finger})
+        ignore = []
+        for name, finger in keys.get("rejected_nodes", {}).iteritems():
+            ignore.append({"Name": name, "Fingerprint": finger})
+        for name, finger in keys.get("denied_nodes", {}).iteritems():
+            ignore.append({"Name": name, "Fingerprint": finger})
 
-    return {"Manage": manage, "Unmanage": unmanage, "Ignore": ignore}
+        return {"Manage": manage, "Unmanage": unmanage, "Ignore": ignore}
+    except Exception as e:
+        log.error("exeption during getting nodes: %s", str(e))
+        return {}
 
 
 def GetNodeID(node):
@@ -113,16 +125,20 @@ def GetNodeID(node):
     returns structure
     {"nodename": "uuidstring", ...}
     '''
-    if type(node) is list:
-        minions = node
-    else:
-        minions = [node]
+    try:
+        if type(node) is list:
+            minions = node
+        else:
+            minions = [node]
 
-    out = local.cmd(minions, 'grains.item', ['machine_id'], expr_form='list')
-    rv = {}
-    for minion in minions:
-        rv[minion] = out.get(minion, {}).get('machine_id')
-    return rv
+        out = local.cmd(minions, 'grains.item', ['machine_id'], expr_form='list')
+        rv = {}
+        for minion in minions:
+            rv[minion] = out.get(minion, {}).get('machine_id')
+        return rv
+    except Exception as e:
+        log.error("exception during getting id for node: %s. error: %s", node, str(e))
+        return ""
 
 
 def GetNodeNetwork(node):
@@ -132,24 +148,31 @@ def GetNodeNetwork(node):
                   "IPv6": ["ipv6address", ...],
                   "Subnet": ["subnet", ...]}, ...}
     '''
-    if type(node) is list:
-        minions = node
-    else:
-        minions = [node]
-
-    out = local.cmd(minions, ['grains.item', 'network.subnets'],
-                    [['ipv4', 'ipv6'], []], expr_form='list')
-    netinfo = {}
-    for minion in minions:
-        info = out.get(minion)
-        if info:
-            netinfo[minion] = {'IPv4': info['grains.item']['ipv4'],
-                               'IPv6': info['grains.item']['ipv6'],
-                               'Subnet': info['network.subnets']}
+    try:
+        if type(node) is list:
+            minions = node
         else:
-            netinfo[minion] = {'IPv4': [], 'IPv6': [], 'Subnet': []}
+            minions = [node]
 
-    return netinfo
+        out = local.cmd(minions, ['grains.item', 'network.subnets'],
+                        [['ipv4', 'ipv6'], []], expr_form='list')
+        netinfo = {}
+        for minion in minions:
+            info = out.get(minion)
+            if info:
+                netinfo[minion] = {'IPv4': info['grains.item']['ipv4'],
+                                   'IPv6': info['grains.item']['ipv6'],
+                                   'Subnet': info['network.subnets']}
+            else:
+                netinfo[minion] = {'IPv4': [], 'IPv6': [], 'Subnet': []}
+
+        return netinfo
+    except Exception as e:
+        log.error(
+            "exception during getting network details for node: %s. error: %s",
+            node,
+            str(e))
+        return {}
 
 
 def GetNodeDisk(node):
@@ -167,93 +190,116 @@ def GetNodeDisk(node):
                   "Used":       boolean,
                   "Vendor":     "string"}, ...], ...}
     '''
+    try:
+        if type(node) is list:
+            minions = node
+        else:
+            minions = [node]
 
-    if type(node) is list:
-        minions = node
-    else:
-        minions = [node]
+        columes = 'NAME,KNAME,FSTYPE,MOUNTPOINT,UUID,PARTUUID,MODEL,SIZE,TYPE,' \
+                  'PKNAME,VENDOR'
+        keys = columes.split(',')
+        lsblk = ("lsblk --all --bytes --noheadings --output='%s' --path --raw" %
+                 columes)
+        out = local.cmd(minions, 'cmd.run', [lsblk], expr_form='list')
 
-    columes = 'NAME,KNAME,FSTYPE,MOUNTPOINT,UUID,PARTUUID,MODEL,SIZE,TYPE,' \
-              'PKNAME,VENDOR'
-    keys = columes.split(',')
-    lsblk = ("lsblk --all --bytes --noheadings --output='%s' --path --raw" %
-             columes)
-    out = local.cmd(minions, 'cmd.run', [lsblk], expr_form='list')
+        minion_dev_info = {}
+        for minion in minions:
+            lsblk_out = out.get(minion)
 
-    minion_dev_info = {}
-    for minion in minions:
-        lsblk_out = out.get(minion)
+            if not lsblk_out:
+                minion_dev_info[minion] = {}
+                continue
 
-        if not lsblk_out:
-            minion_dev_info[minion] = {}
-            continue
+            devlist = map(lambda line: dict(zip(keys, line.split(' '))),
+                          lsblk_out.splitlines())
 
-        devlist = map(lambda line: dict(zip(keys, line.split(' '))),
-                      lsblk_out.splitlines())
+            parents = set([d['PKNAME'] for d in devlist])
 
-        parents = set([d['PKNAME'] for d in devlist])
+            dev_info = {}
+            for d in devlist:
+                in_use = True
 
-        dev_info = {}
-        for d in devlist:
-            in_use = True
-
-            if d['TYPE'] == 'disk':
-                if d['KNAME'] in parents:
-                    # skip it
-                    continue
-                else:
+                if d['TYPE'] == 'disk':
+                    if d['KNAME'] in parents:
+                        # skip it
+                        continue
+                    else:
+                        in_use = False
+                elif not d['FSTYPE']:
                     in_use = False
-            elif not d['FSTYPE']:
-                in_use = False
 
-            d.update({'INUSE': in_use})
-            dev_info.update({d['KNAME']: d})
+                d.update({'INUSE': in_use})
+                dev_info.update({d['KNAME']: d})
 
-        minion_dev_info[minion] = dev_info
+            minion_dev_info[minion] = dev_info
 
-    rv = {}
-    for node, ddict in minion_dev_info.iteritems():
-        rv[node] = []
-        for disk in ddict.values():
-            try:
-                u = list(bytearray(uuid.UUID(disk["UUID"]).get_bytes()))
-            except ValueError:
-                # TODO: log the error
-                u = [0] * 16
-            rv[node].append({"DevName": disk["KNAME"],
-                              "FSType": disk["FSTYPE"],
-                              "FSUUID": u,
-                              "Model": disk["MODEL"],
-                              "MountPoint": [disk["MOUNTPOINT"]],
-                              "Name": disk["NAME"],
-                              "Parent": disk["PKNAME"],
-                              "Size": long(disk["SIZE"]),
-                              "Type": disk["TYPE"],
-                              "Used": disk["INUSE"],
-                              "Vendor": disk.get("VENDOR", ""),
-                              "StorageProfile": ""})
-    return rv
+        rv = {}
+        for node, ddict in minion_dev_info.iteritems():
+            rv[node] = []
+            for disk in ddict.values():
+                try:
+                    u = list(bytearray(uuid.UUID(disk["UUID"]).get_bytes()))
+                except ValueError:
+                    # TODO: log the error
+                    u = [0] * 16
+                rv[node].append({"DevName": disk["KNAME"],
+                                  "FSType": disk["FSTYPE"],
+                                  "FSUUID": u,
+                                  "Model": disk["MODEL"],
+                                  "MountPoint": [disk["MOUNTPOINT"]],
+                                  "Name": disk["NAME"],
+                                  "Parent": disk["PKNAME"],
+                                  "Size": long(disk["SIZE"]),
+                                  "Type": disk["TYPE"],
+                                  "Used": disk["INUSE"],
+                                  "Vendor": disk.get("VENDOR", ""),
+                                  "StorageProfile": ""})
+        return rv
+    except Exception as e:
+        log.error("exception during getting disks for node: %s. error: %s", node, str(e))
+        return {}
 
 
 def DisableService(node, service, stop=False):
-    out = local.cmd(node, 'service.disable', [service])
-    if out[node] and stop:
-        out = local.cmd(node, 'service.stop', [service])
+    try:
+        out = local.cmd(node, 'service.disable', [service])
+        if out[node] and stop:
+            out = local.cmd(node, 'service.stop', [service])
 
-    return out[node]
+        return out[node]
+    except Exception as e:
+        log.error(
+            "exception during disabling service: %s on node: %s. error: %s",
+            service,
+            node,
+            str(e))
+        return False
 
 
 def EnableService(node, service, start=False):
-    out = local.cmd(node, 'service.enable', [service])
-    if out[node] and start:
-        out = local.cmd(node, 'service.start', [service])
+    try:
+        out = local.cmd(node, 'service.enable', [service])
+        if out[node] and start:
+            out = local.cmd(node, 'service.start', [service])
 
-    return out[node]
+        return out[node]
+    except Exception as e:
+        log.error(
+            "exception during enabling service: %s on node: %s. error: %s",
+            service,
+            node,
+            str(e))
+        return False
 
 
 def NodeUp(node):
-    out = local.cmd(node, 'test.ping')
-    return True if out.has_key(node) and out[node] else False
+    try:
+        out = local.cmd(node, 'test.ping')
+        return True if out.has_key(node) and out[node] else False
+    except Exception as e:
+        log.error("exception during getting up status of node: %s. error: %s", node, str(e))
+        return False
 
 
 def _get_state_result(out):
@@ -290,109 +336,129 @@ threshold_type_map = {"warning": "WarningMax", "critical": "FailureMax"}
 
 
 def AddMonitoringPlugin(plugin_list, nodes, master=None, configs=None):
-    state_list = ''
-    no_of_plugins = len(plugin_list)
-    for index in range(no_of_plugins):
-        state_list += ('collectd.' + plugin_list[index])
-        if index < no_of_plugins - 1:
-            state_list += ","
-    plugin_thresholds = {}
-    for plugin, value in configs.iteritems():
-        thresholds = {}
-        for threshold_type, threshold in value.iteritems():
-            thresholds[threshold_type_map.get(threshold_type)] = threshold
-        plugin_thresholds[plugin] = thresholds
-    dict = {}
-    if master:
-        dict["master_name"] = master
-    if thresholds:
-        dict["thresholds"] = plugin_thresholds
-    pillar = {"collectd": dict}
-    return run_state(nodes, state_list, kwarg={'pillar': pillar})
+    try:
+        state_list = ''
+        no_of_plugins = len(plugin_list)
+        for index in range(no_of_plugins):
+            state_list += ('collectd.' + plugin_list[index])
+            if index < no_of_plugins - 1:
+                state_list += ","
+        plugin_thresholds = {}
+        for plugin, value in configs.iteritems():
+            thresholds = {}
+            for threshold_type, threshold in value.iteritems():
+                thresholds[threshold_type_map.get(threshold_type)] = threshold
+            plugin_thresholds[plugin] = thresholds
+        dict = {}
+        if master:
+            dict["master_name"] = master
+        if thresholds:
+            dict["thresholds"] = plugin_thresholds
+        pillar = {"collectd": dict}
+        return run_state(nodes, state_list, kwarg={'pillar': pillar})
+    except Exception as e:
+        log.error("exception during adding monitoring plugins: %s", str(e))
+        return False
 
 
 def DisableMonitoringPlugin(nodes, pluginName):
     failed_minions = {}
-    source_file = monitoring_root_path + pluginName + "*"
-    destination = monitoring_disabled_root_path
-    local.cmd(nodes, "cmd.run", ["mkdir -p " + destination], expr_form='list')
-    out = local.cmd(
-        nodes, "cmd.run", [
-            "mv " + source_file + " " + destination], expr_form='list')
-    for nodeName, message in out.iteritems():
-        if out.get(nodeName) != '':
-            log.error(
-                'Failed to disable collectd plugin %s because %s on %s' %
-                (pluginName, out.get(nodeName), nodeName))
-            failed_minions[nodeName] = out.get(nodeName)
-    if failed_minions:
+    try:
+        source_file = monitoring_root_path + pluginName + "*"
+        destination = monitoring_disabled_root_path
+        local.cmd(nodes, "cmd.run", ["mkdir -p " + destination], expr_form='list')
+        out = local.cmd(
+            nodes, "cmd.run", [
+                "mv " + source_file + " " + destination], expr_form='list')
+        for nodeName, message in out.iteritems():
+            if out.get(nodeName) != '':
+                log.error(
+                    'Failed to disable collectd plugin %s because %s on %s' %
+                    (pluginName, out.get(nodeName), nodeName))
+                failed_minions[nodeName] = out.get(nodeName)
+        if failed_minions:
+            return failed_minions
+        out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+        for node, restartStatus in out.iteritems():
+            if not restartStatus:
+                log.error("Failed to restart collectd on node %s after disabling the plugin %s" %(node, pluginName))
+                failed_minions[node] = "Failed to restart collectd"
         return failed_minions
-    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
-    for node, restartStatus in out.iteritems():
-        if not restartStatus:
-            log.error("Failed to restart collectd on node %s after disabling the plugin %s" %(node, pluginName))
-            failed_minions[node] = "Failed to restart collectd"
-    return failed_minions
+    except Exception as e:
+        log.error("exception during disabling monitoring plugin: %s", str(e))
+        return failed_minions
 
 
 def EnableMonitoringPlugin(nodes, pluginName):
     failed_minions = {}
-    source_file = monitoring_disabled_root_path + pluginName + '.conf'
-    destination = monitoring_root_path
-    out = local.cmd(
-        nodes, "cmd.run", [
-            "mv " + source_file + " " + destination], expr_form='list')
-    for nodeName, message in out.iteritems():
-        if out.get(nodeName) != '':
-            log.error(
-                'Failed to enable collectd plugin %s because %s on %s' %
-                (pluginName, out.get(nodeName), nodeName))
-            failed_minions[nodeName] = out.get(nodeName)
-    if failed_minions:
+    try:
+        source_file = monitoring_disabled_root_path + pluginName + '.conf'
+        destination = monitoring_root_path
+        out = local.cmd(
+            nodes, "cmd.run", [
+                "mv " + source_file + " " + destination], expr_form='list')
+        for nodeName, message in out.iteritems():
+            if out.get(nodeName) != '':
+                log.error(
+                    'Failed to enable collectd plugin %s because %s on %s' %
+                    (pluginName, out.get(nodeName), nodeName))
+                failed_minions[nodeName] = out.get(nodeName)
+        if failed_minions:
+            return failed_minions
+        out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+        for node, restartStatus in out.iteritems():
+            if not restartStatus:
+                log.error("Failed to restart collectd on node %s after enabling the plugin %s" %(node, pluginName))
+                failed_minions[node] = "Failed to restart collectd"
         return failed_minions
-    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
-    for node, restartStatus in out.iteritems():
-        if not restartStatus:
-            log.error("Failed to restart collectd on node %s after enabling the plugin %s" %(node, pluginName))
-            failed_minions[node] = "Failed to restart collectd"
-    return failed_minions
+    except Exception as e:
+        log.error("exception during enabling monitoring plugin: %s", str(e))
+        return failed_minions
 
 
 def RemoveMonitoringPlugin(nodes, pluginName):
     failed_minions = {}
-    source_file = monitoring_root_path + pluginName + "*"
-    out = local.cmd(
-        nodes, "cmd.run", [
-            "rm -fr " + source_file], expr_form='list')
-    for nodeName, message in out.iteritems():
-        if out.get(nodeName) != '':
-            log.error(
-                'Failed to remove collectd plugin %s because %s on %s' %
-                (pluginName, out.get(nodeName), nodeName))
-            failed_minions[nodeName] = out.get(nodeName)
-    if failed_minions :
+    try:
+        source_file = monitoring_root_path + pluginName + "*"
+        out = local.cmd(
+            nodes, "cmd.run", [
+                "rm -fr " + source_file], expr_form='list')
+        for nodeName, message in out.iteritems():
+            if out.get(nodeName) != '':
+                log.error(
+                    'Failed to remove collectd plugin %s because %s on %s' %
+                    (pluginName, out.get(nodeName), nodeName))
+                failed_minions[nodeName] = out.get(nodeName)
+        if failed_minions :
+            return failed_minions
+        out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+        for node, restartStatus in out.iteritems():
+            if not restartStatus:
+                log.error("Failed to restart collectd on node %s after removing the plugin %s" %(node, pluginName))
+                failed_minions[node] = "Failed to restart collectd"
         return failed_minions
-    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
-    for node, restartStatus in out.iteritems():
-        if not restartStatus:
-            log.error("Failed to restart collectd on node %s after removing the plugin %s" %(node, pluginName))
-            failed_minions[node] = "Failed to restart collectd"
-    return failed_minions
+    except Exception as e:
+        log.error("exception during removing monitoring plugin: %s", str(e))
+        return failed_minions
 
 
 def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict):
     failed_minions = []
-    for key, value in plugin_threshold_dict.iteritems():
-        path = monitoring_root_path + key + '.conf'
-        for threshold_type, threshold in value.iteritems():
-            pattern_type = threshold_type_map.get(threshold_type)
-            pattern = pattern_type + " " + "[0-9]*"
-            repl = pattern_type + " " + str(threshold)
-            out = local.cmd(nodes, "file.replace", expr_form='list', kwarg={'path': path, 'pattern': pattern, 'repl': repl})
-    out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
-    for node, restartStatus in out.iteritems():
-        if not restartStatus:
-            log.error("Failed to restart collectd on node %s" %(node))
-            failed_minions.append(node)
-    return failed_minions
+    try:
+        for key, value in plugin_threshold_dict.iteritems():
+            path = monitoring_root_path + key + '.conf'
+            for threshold_type, threshold in value.iteritems():
+                pattern_type = threshold_type_map.get(threshold_type)
+                pattern = pattern_type + " " + "[0-9]*"
+                repl = pattern_type + " " + str(threshold)
+                out = local.cmd(nodes, "file.replace", expr_form='list', kwarg={'path': path, 'pattern': pattern, 'repl': repl})
+        out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
+        for node, restartStatus in out.iteritems():
+            if not restartStatus:
+                log.error("Failed to restart collectd on node %s" %(node))
+                failed_minions.append(node)
+        return failed_minions
+    except Exception as e:
+        log.error("exception during updating monitoring plugin: %s", str(e))
+        return failed_minions
 
