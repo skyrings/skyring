@@ -19,6 +19,7 @@ import (
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/utils"
+	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
 	"net/http"
 )
@@ -229,7 +230,6 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 
 	vars := mux.Vars(req)
-
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		logger.Get().Error("Error parsing http request body:%s", err)
@@ -237,17 +237,31 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	var m map[string]interface{}
-
 	if err = json.Unmarshal(body, &m); err != nil {
 		logger.Get().Error("Unable to Unmarshall the data:%s", err)
 		util.HandleHttpError(rw, err)
 		return
 	}
 
-	if err := GetAuthProvider().UpdateUser(vars["username"], m); err != nil {
-		logger.Get().Error("Unable to update User:%s", err)
+	user, err := GetAuthProvider().GetUser(vars["username"], req)
+	if err != nil {
+		logger.Get().Error("Unable to Get the user:%s", err)
 		util.HandleHttpError(rw, err)
 		return
+	}
+	verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(m["oldpassword"].(string)))
+	if verify != nil {
+		logger.Get().Error("Old password is incorrect")
+		bytes, _ := json.Marshal(`{'message': 'Old password is incorrect'}`)
+		rw.Write(bytes)
+	} else {
+		if err := GetAuthProvider().UpdateUser(vars["username"], m); err != nil {
+			logger.Get().Error("Unable to update User:%s", err)
+			util.HandleHttpError(rw, err)
+			return
+		}
+		bytes, _ := json.Marshal(`{'message': 'password-changed'}`)
+		rw.Write(bytes)
 	}
 }
 
