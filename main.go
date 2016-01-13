@@ -22,14 +22,12 @@ import (
 	"github.com/skyrings/skyring/apps"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/tools/logger"
 	"net/http"
 	"os"
 	"os/signal"
 	"path"
-	"strconv"
 	"strings"
 	"syscall"
 )
@@ -38,8 +36,9 @@ const (
 	// ConfigFile default configuration file
 	ConfigFile = "skyring.conf"
 	// DefaultLogLevel default log level
-	DefaultLogLevel           = logging.DEBUG
-	SKYRING_EVENT_SOCKET_FILE = "/var/run/.skyring-event"
+	DefaultLogLevel = logging.DEBUG
+	//SkyringEventSocketFile skyring event socket file
+	SkyringEventSocketFile = "/var/run/.skyring-event"
 )
 
 var (
@@ -50,6 +49,7 @@ var (
 	providersDir  string
 	staticFileDir string
 	websocketPort string
+	httpPort      int
 )
 
 func main() {
@@ -96,7 +96,12 @@ func main() {
 		cli.StringFlag{
 			Name:  "websocket-port",
 			Value: "8081",
-			Usage: "websocket http port",
+			Usage: "Websocket server port",
+		},
+		cli.IntFlag{
+			Name:  "http-port",
+			Value: 8080,
+			Usage: "Http server port",
 		},
 	}
 
@@ -109,6 +114,7 @@ func main() {
 		providersDir = c.String("providers-dir")
 		staticFileDir = c.String("static-file-dir")
 		websocketPort = c.String("websocket-port")
+		httpPort = c.Int("http-port")
 		return nil
 	}
 
@@ -144,6 +150,7 @@ func start() {
 	conf.SystemConfig.Logging.LogToStderr = logToStderr
 	conf.SystemConfig.Logging.Filename = logFile
 	conf.SystemConfig.Logging.Level = level
+	conf.SystemConfig.Config.HttpPort = httpPort
 
 	application = skyring.NewApp(configDir, providersDir)
 	if application == nil {
@@ -161,11 +168,6 @@ func start() {
 		os.Exit(1)
 	}
 
-	if err := application.InitializeNodeManager(conf.SystemConfig.NodeManagementConfig); err != nil {
-		logger.Get().Error("Unable to create node manager. error: %v", err)
-		os.Exit(1)
-	}
-
 	// Use negroni to add middleware.  Here we add the standard
 	// middlewares: Recovery, Logger and static file serve which come with
 	// Negroni
@@ -174,73 +176,35 @@ func start() {
 		negroni.NewLogger(),
 		negroni.NewStatic(http.Dir(staticFileDir)),
 	)
-
-	logger.Get().Info("Starting event listener")
-	go event.StartListener(SKYRING_EVENT_SOCKET_FILE)
-
-	//Check if Port is provided, otherwise use dafault 8080
-	//If host is not provided, it binds on all IPs
-	if conf.SystemConfig.Config.HttpPort == 0 {
-		conf.SystemConfig.Config.HttpPort = 8080
-	}
-
-	/*
-		TODO : This will be removed after porting all the existing things into newer scheme
-	*/
-	// Create DB session
-	if err := db.InitDBSession(conf.SystemConfig.DBConfig); err != nil {
-		logger.Get().Error("Unable to initialize DB. error: %v", err)
-		os.Exit(1)
-	}
-	if err := db.InitMonitoringDB(conf.SystemConfig.TimeSeriesDBConfig); err != nil {
-		logger.Get().Error("Unable to initialize monitoring DB. error: %v", err)
-		os.Exit(1)
-	}
-
-	//Initialize the DB provider
-	if err := application.InitializeDb(conf.SystemConfig.DBConfig); err != nil {
-		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
-		os.Exit(1)
-	}
-
-	//Initialize the auth provider
-	if err := application.InitializeAuth(conf.SystemConfig.Authentication); err != nil {
-		logger.Get().Error("Unable to initialize the authentication provider. error: %v", err)
-		os.Exit(1)
-	}
-
-	//Initialize the task manager
-	if err := application.InitializeTaskManager(); err != nil {
-		logger.Get().Error("Unable to initialize the task manager. error: %v", err)
-		os.Exit(1)
-	}
-
-	//Initialize the Defaults
-	if err := application.InitializeDefaults(); err != nil {
-		logger.Get().Error("Unable to initialize the Defaults: %s", err)
-		os.Exit(1)
-	}
-
 	n.UseHandler(router)
 
-	logger.Get().Info("Starting clusters syncing")
-	go application.SyncClusterDetails()
+	//Initialize the application, db, auth etc
+	if err := application.InitializeApplication(conf.SystemConfig); err != nil {
+		logger.Get().Error("Unable to initialize the application")
+		os.Exit(1)
+	}
+
+	logger.Get().Info("Starting event listener")
+	go event.StartListener(SkyringEventSocketFile)
 
 	// Starting the WebSocket server
 	event.StartBroadcaster(websocketPort)
 
-	logger.Get().Info("start listening on %s : %s", conf.SystemConfig.Config.Host, strconv.Itoa(conf.SystemConfig.Config.HttpPort))
-
-	go http.ListenAndServe(conf.SystemConfig.Config.Host+":"+strconv.Itoa(conf.SystemConfig.Config.HttpPort), n)
-
+	go func() {
+		logger.Get().Info("start listening on %s : %v", conf.SystemConfig.Config.Host, httpPort)
+		if err := http.ListenAndServe(fmt.Sprintf("%s:%v", conf.SystemConfig.Config.Host, httpPort), n); err != nil {
+			logger.Get().Critical("Unable to start the webserver", err)
+			os.Exit(1)
+		}
+	}()
 	sigs := make(chan os.Signal, 1)
 	done := make(chan bool, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGHUP)
 	go func() {
 		sig := <-sigs
-		fmt.Println(sig)
+		logger.Get().Info("Signal:", sig)
 		done <- true
 	}()
 	<-done
-	os.Remove(SKYRING_EVENT_SOCKET_FILE)
+	os.Remove(SkyringEventSocketFile)
 }

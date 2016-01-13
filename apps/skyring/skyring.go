@@ -204,7 +204,7 @@ func (a *App) SetRoutes(router *mux.Router) error {
 	return nil
 }
 
-func (a *App) InitializeAuth(authCfg conf.AuthConfig) error {
+func initializeAuth(authCfg conf.AuthConfig) error {
 
 	//Load authorization middleware for session
 	//TODO - make this plugin based, we should be able
@@ -230,7 +230,7 @@ func GetAuthProvider() authprovider.AuthInterface {
 	return AuthProviderInstance
 }
 
-func (a *App) InitializeDb(authCfg conf.AppDBConfig) error {
+func initializeDb(authCfg conf.AppDBConfig) error {
 
 	if mgr, err := dbprovider.InitDbProvider("mongodbprovider", ""); err != nil {
 		logger.Get().Error("Error Initializing the Db Provider: %s", err)
@@ -319,7 +319,7 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (a *App) InitializeNodeManager(config conf.NodeManagerConfig) error {
+func initializeNodeManager(config conf.NodeManagerConfig) error {
 	if manager, err := nodemanager.InitNodeManager(config.ManagerName, config.ConfigFilePath); err != nil {
 		logger.Get().Error("Error initializing the node manager. error: %v", err)
 		return err
@@ -363,7 +363,7 @@ func (a *App) LoginRequired(w http.ResponseWriter, r *http.Request, next http.Ha
 	next(w, r)
 }
 
-func (a *App) InitializeTaskManager() error {
+func initializeTaskManager() error {
 	TaskManager = task.NewManager()
 	return nil
 }
@@ -375,10 +375,62 @@ func (a *App) GetTaskManager() *task.Manager {
 /*
 Initialize the defaults during app startup
 */
-func (a *App) InitializeDefaults() error {
+func initializeDefaults() error {
 	if err := AddDefaultProfiles(); err != nil {
 		logger.Get().Error("Default Storage profiles create failed: %v", err)
 		return err
 	}
+	return nil
+}
+
+/*
+Initialize the application
+*/
+func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
+
+	if err := initializeNodeManager(sysConfig.NodeManagementConfig); err != nil {
+		logger.Get().Error("Unable to create node manager")
+		return err
+	}
+	/*
+		TODO : This will be removed after porting all the existing things into newer scheme
+	*/
+	// Create DB session
+	if err := db.InitDBSession(sysConfig.DBConfig); err != nil {
+		logger.Get().Error("Unable to initialize DB")
+		return err
+	}
+	if err := db.InitMonitoringDB(sysConfig.TimeSeriesDBConfig); err != nil {
+		logger.Get().Error("Unable to initialize monitoring DB")
+		return err
+	}
+
+	//Initialize the DB provider
+	if err := initializeDb(sysConfig.DBConfig); err != nil {
+		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
+		return err
+	}
+
+	//Initialize the auth provider
+	if err := initializeAuth(sysConfig.Authentication); err != nil {
+		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
+		return err
+	}
+
+	//Initialize the task manager
+	if err := initializeTaskManager(); err != nil {
+		logger.Get().Error("Unable to initialize the task manager: %s", err)
+		return err
+	}
+
+	//Initialize the Defaults
+	if err := initializeDefaults(); err != nil {
+		logger.Get().Error("Unable to initialize the Defaults: %s", err)
+		return err
+	}
+
+	logger.Get().Info("Starting clusters syncing")
+	go a.SyncClusterDetails()
+
 	return nil
 }
