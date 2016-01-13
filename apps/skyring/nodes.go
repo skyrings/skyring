@@ -162,7 +162,6 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
 	}
-
 }
 
 func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task) error {
@@ -381,11 +380,12 @@ func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error
 	}
 }
 
-func removeNode(w http.ResponseWriter, nodeId uuid.UUID) (bool, error) {
+func removeNode(w http.ResponseWriter, nodeId uuid.UUID, t *task.Task) (bool, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
 	// Check if the node is free. If so remove the node
+	t.UpdateStatus("Getting node details from DB")
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	var node models.Node
 	if err := collection.Find(bson.M{"nodeid": nodeId}).One(&node); err != nil {
@@ -399,14 +399,17 @@ func removeNode(w http.ResponseWriter, nodeId uuid.UUID) (bool, error) {
 		return false, err
 	}
 	defer GetApp().GetLockManager().ReleaseLock(*appLock)
+	t.UpdateStatus("Running backend removal of node")
 	ret_val, err := GetCoreNodeManager().RemoveNode(node.Hostname)
 	if ret_val {
+		t.UpdateStatus("Removing node from DB")
 		if err := collection.Remove(bson.M{"nodeid": nodeId}); err != nil {
 			return false, errors.New("Error deleting the node(s) from DB")
 		}
 	} else {
 		return false, err
 	}
+	t.UpdateStatus(fmt.Sprintf("Node: %v removed", nodeId))
 	return true, nil
 }
 
@@ -420,10 +423,24 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if ok, err := removeNode(w, *node_id); err != nil || !ok {
-		logger.Get().Error("Error removing the node: %v. error: %v", *node_id, err)
-		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error removing the node: %v", err))
-		return
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for remove node: %v", t.ID)
+		if ok, err := removeNode(w, *node_id, t); err != nil || !ok {
+			util.FailTask(fmt.Sprintf("Error removing the node: %v", *node_id), err, t)
+			return
+		}
+		t.UpdateStatus("Success")
+		t.Done(models.TASK_STATUS_SUCCESS)
+	}
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove Node: %v", *node_id), asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("Unable to create the task for remove node", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
+
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 
@@ -444,14 +461,36 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err))
 		return
 	}
-
-	for _, item := range nodeIds {
-		node_id, _ := uuid.Parse(item.NodeId)
-		if ok, err := removeNode(w, *node_id); err != nil || !ok {
-			logger.Get().Error("Error removing the node: %v. error: %v", *node_id, err)
-			util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error removing the node: %v. error: %v", *node_id, err))
-			return
+	var failedNodes []string
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for remove multiple nodes: %v", t.ID)
+		for _, item := range nodeIds {
+			node_id, err := uuid.Parse(item.NodeId)
+			if err != nil {
+				failedNodes = append(failedNodes, item.NodeId)
+				continue
+			}
+			t.UpdateStatus("Removing node: %v", *node_id)
+			if ok, err := removeNode(w, *node_id, t); err != nil || !ok {
+				util.FailTask(fmt.Sprintf("Error removing node: %v", *node_id), err, t)
+				failedNodes = append(failedNodes, item.NodeId)
+			}
 		}
+		if len(failedNodes) > 0 {
+			t.UpdateStatus("Failed to remove the node id(s): %v", failedNodes)
+		}
+		t.UpdateStatus("Success")
+		t.Done(models.TASK_STATUS_SUCCESS)
+	}
+	if taskId, err := a.GetTaskManager().Run("Remove Multiple Nodes", asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("Unable to create the task for remove multiple nodes", err)
+		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
+
+	} else {
+		logger.Get().Debug("Task Created: ", taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 
