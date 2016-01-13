@@ -22,6 +22,10 @@ func (f *PyFunction) Call(args ...interface{}) (r *python.PyObject, err error) {
 	if r = f.CallObject(pyargs); r == nil {
 		err = errors.New(fmt.Sprintf("%s(): function failed at python side", name))
 	}
+	if pyobj := python.PyErr_Occurred(); pyobj != nil {
+		err = errors.New(fmt.Sprintf("%s(): exception happened in python side", name))
+		python.PyErr_Clear()
+	}
 	return
 }
 
