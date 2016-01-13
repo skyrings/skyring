@@ -83,6 +83,10 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 		t.UpdateStatus("Started the task for cluster creation: %v", t.ID)
 		// Get the specific provider and invoke the method
 		provider := a.getProviderFromClusterType(request.Type)
+		if provider == nil {
+			util.FailTask("", errors.New("Error getting provider for cluster"), t)
+			return
+		}
 		err = provider.Client.Call(fmt.Sprintf("%s.%s",
 			provider.Name, cluster_post_functions["create"]),
 			models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body},
