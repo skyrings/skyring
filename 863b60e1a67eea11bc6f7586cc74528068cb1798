@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa81d914_a3307157",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-13T12:22:47Z",
+      "side": 1,
+      "message": "%s/than server send.../then raise an error/g",
+      "revId": "863b60e1a67eea11bc6f7586cc74528068cb1798",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_e33a6935",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-13T12:22:47Z",
+      "side": 1,
+      "message": "\"G\" small??",
+      "revId": "863b60e1a67eea11bc6f7586cc74528068cb1798",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_634679c1",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-13T12:22:47Z",
+      "side": 1,
+      "message": "%s/verify/match/g",
+      "revId": "863b60e1a67eea11bc6f7586cc74528068cb1798",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_233c812f",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-13T12:22:47Z",
+      "side": 1,
+      "message": "%s/Old password is incorrect/Old password doesnt match/g",
+      "revId": "863b60e1a67eea11bc6f7586cc74528068cb1798",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_839b6dc8",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 1
@@ -25,6 +93,23 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_434975cf",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-13T12:22:47Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "863b60e1a67eea11bc6f7586cc74528068cb1798",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_a3a071f5",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 1
@@ -42,6 +127,23 @@
         "endLine": 263,
         "endChar": 49
       },
+      "revId": "863b60e1a67eea11bc6f7586cc74528068cb1798",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_83128db2",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-13T12:22:47Z",
+      "side": 1,
+      "message": "%s/password-changed/password changed/g",
       "revId": "863b60e1a67eea11bc6f7586cc74528068cb1798",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
