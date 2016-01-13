@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_c35ac582",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-13T12:32:27Z",
+      "side": 1,
+      "message": "This whole thing should be part of bigfin project and not skyring.",
+      "revId": "6732b40100680a07890c40cc9453d417e9544519",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
