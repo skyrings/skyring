@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_434ed5c2",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-13T12:35:27Z",
+      "side": 1,
+      "message": "You can pass \"err\" to logger.Get().Error() call :))",
+      "revId": "5243bf1cafd49c8b4d32f599cc469bb90ac037fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
