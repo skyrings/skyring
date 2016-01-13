@@ -93,6 +93,10 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	asyncTask := func(t *task.Task) {
 		t.UpdateStatus("Started the task for pool creation: %v", t.ID)
 		provider := a.getProviderFromClusterId(*cluster_id)
+		if provider == nil {
+			util.FailTask("", errors.New(fmt.Sprintf("Error getting provider for cluster: %v", *cluster_id)), t)
+			return
+		}
 		err = provider.Client.Call(fmt.Sprintf("%s.%s",
 			provider.Name, storage_post_functions["create"]),
 			models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
