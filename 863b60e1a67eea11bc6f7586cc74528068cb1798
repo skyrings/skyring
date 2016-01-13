@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_839b6dc8",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-13T10:48:59Z",
+      "side": 1,
+      "message": "change into this - {\u0027message\u0027: \u0027Old password is incorrect\u0027}\nas string format.\nso that easily , access this object on client side",
+      "range": {
+        "startLine": 255,
+        "startChar": 45,
+        "endLine": 255,
+        "endChar": 53
+      },
+      "revId": "863b60e1a67eea11bc6f7586cc74528068cb1798",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a3a071f5",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-13T10:48:59Z",
+      "side": 1,
+      "message": "same as above comment",
+      "range": {
+        "startLine": 263,
+        "startChar": 41,
+        "endLine": 263,
+        "endChar": 49
+      },
+      "revId": "863b60e1a67eea11bc6f7586cc74528068cb1798",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
