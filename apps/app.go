@@ -15,18 +15,10 @@ package app
 import (
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
-	"net/http"
+	//"net/http"
 )
 
 type Application interface {
 	SetRoutes(container *mux.Router) error
-	InitializeNodeManager(config conf.NodeManagerConfig) error
-	//Initialize the auth module
-	InitializeAuth(authCfg conf.AuthConfig) error
-	//Middleware to check the request is authenticated
-	LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
-	InitializeTaskManager() error
-	SyncClusterDetails()
-	InitializeDb(authCfg conf.AppDBConfig) error
-	InitializeDefaults() error
+	InitializeApplication(sysConfig conf.SkyringCollection) error
 }

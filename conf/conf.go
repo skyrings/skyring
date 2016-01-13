@@ -21,7 +21,7 @@ import (
 
 type SkyringConfig struct {
 	Host              string `json:"host"`
-	HttpPort          int    `json:"httpPort"`
+	HttpPort          string `json:"httpPort"`
 	SupportedVersions []int  `json:"supportedversions"`
 }
 
