@@ -20,7 +20,7 @@ from sets import Set
 import salt
 from salt import wheel, client, key, states, modules
 import salt.config
-
+import string
 
 log = logging.getLogger(__name__)
 
@@ -165,6 +165,13 @@ def GetNodeDisk(node):
                   "Size":       uint64,
                   "Type":       "type",
                   "Used":       boolean,
+                  "DeviceModel":     "device model name",
+                  "SerialNumber":    "device serial number if HDD",
+                  "FirmwareVersion": "device firmware version",
+                  "SectorSize":      "sector size",
+                  "RotationRate":    "Solid State Device or not",
+                  "ATAVersionis":    "device ata version",
+                  "SATAVersionis":   "device sata version",
                   "Vendor":     "string"}, ...], ...}
     '''
 
@@ -220,7 +227,8 @@ def GetNodeDisk(node):
             except ValueError:
                 # TODO: log the error
                 u = [0] * 16
-            rv[node].append({"DevName": disk["KNAME"],
+            drv = getDevInfo(node, disk['NAME'])
+            devDist = {"DevName": disk["KNAME"],
                               "FSType": disk["FSTYPE"],
                               "FSUUID": u,
                               "Model": disk["MODEL"],
@@ -231,7 +239,9 @@ def GetNodeDisk(node):
                               "Type": disk["TYPE"],
                               "Used": disk["INUSE"],
                               "Vendor": disk.get("VENDOR", ""),
-                              "StorageProfile": ""})
+                              "StorageProfile": ""}
+            devDist.update(drv)
+            rv[node].append(devDist)
     return rv
 
 
@@ -357,6 +367,22 @@ def EnableMonitoringPlugin(nodes, pluginName):
             failed_minions[node] = "Failed to restart collectd"
     return failed_minions
 
+
+def getDevInfo(node, device):
+    rv = {}
+    infoStart = False
+    out = local.cmd('%s' % node, 'cmd.run', ['smartctl -i %s' % device], expr_form='list')
+    lines = [line.strip() for line in out[node].split('\n')]
+    for line in lines:
+        if not (infoStart and line):
+            if line.lower() == "=== start of information section ===":
+                infoStart = True
+            continue
+        field = string.split(line,":",1)
+        if len(field) < 2:
+            continue
+        rv["".join(field[0].split())] = field[1].strip()
+    return rv
 
 def RemoveMonitoringPlugin(nodes, pluginName):
     failed_minions = {}
