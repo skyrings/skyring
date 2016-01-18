@@ -47,6 +47,7 @@ type Disk struct {
 	Size           uint64
 	Type           string
 	Used           bool
+	SSD            bool
 	Vendor         string
 	StorageProfile string
 	DiskId         uuid.UUID
