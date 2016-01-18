@@ -165,6 +165,7 @@ def GetNodeDisk(node):
                   "Size":       uint64,
                   "Type":       "type",
                   "Used":       boolean,
+                  "SSD":        boolean,
                   "Vendor":     "string"}, ...], ...}
     '''
 
@@ -220,6 +221,7 @@ def GetNodeDisk(node):
             except ValueError:
                 # TODO: log the error
                 u = [0] * 16
+            ssdStat = isSSD(node, disk['KNAME'])
             rv[node].append({"DevName": disk["KNAME"],
                               "FSType": disk["FSTYPE"],
                               "FSUUID": u,
@@ -230,6 +232,7 @@ def GetNodeDisk(node):
                               "Size": long(disk["SIZE"]),
                               "Type": disk["TYPE"],
                               "Used": disk["INUSE"],
+                              "SSD": ssdStat,
                               "Vendor": disk.get("VENDOR", ""),
                               "StorageProfile": "",
                               "DiskId":u})
@@ -357,6 +360,14 @@ def EnableMonitoringPlugin(nodes, pluginName):
             log.error("Failed to restart collectd on node %s after enabling the plugin %s" %(node, pluginName))
             failed_minions[node] = "Failed to restart collectd"
     return failed_minions
+
+
+def isSSD(node, device):
+    cmd = 'cat /sys/block/%s/queue/rotational' % device.split("/")[-1]
+    out = local.cmd('%s' % node, 'cmd.run', [cmd], expr_form='list')[node].strip()
+    if out == '0':
+        return True
+    return False
 
 
 def RemoveMonitoringPlugin(nodes, pluginName):
