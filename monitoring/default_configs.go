@@ -25,3 +25,5 @@ func GetDefaultThresholdValues() (plugins []Plugin) {
 		},
 	}
 }
+
+var DefaultClusterMonitoringInterval = 10
