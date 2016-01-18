@@ -92,3 +92,22 @@ func (a *App) RouteProviderEvents(event models.Event) error {
 	}
 	return nil
 }
+
+func (a *App) RouteProviderBasedMonitoring(cluster_id uuid.UUID) (error, interface{}) {
+	provider := a.getProviderFromClusterId(cluster_id)
+	body, err := json.Marshal(cluster_id)
+	if err != nil {
+		logger.Get().Error("Marshalling of cluster id failed: %s", err)
+		return err, nil
+	}
+	var result models.RpcResponse
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, "MonitorCluster"),
+		models.RpcRequest{RpcRequestVars: map[string]string{}, RpcRequestData: body},
+		&result)
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		logger.Get().Error("Monitoring by Provider: %s failed. Reason :%s", provider.Name, err)
+		return err, nil
+	}
+	return nil, result
+}
