@@ -171,6 +171,8 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 						t.UpdateStatus("Failed")
 						t.Done(models.TASK_STATUS_FAILURE)
 					}
+					cluster, _ = cluster_exists("name", request.Name)
+					ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
 					break
 				}
 			}
@@ -604,6 +606,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 			util.FailTask(fmt.Sprintf("Error removing the cluster: %v", *uuid), err, t)
 			return
 		}
+		DeleteClusterSchedule(*uuid)
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
 	}

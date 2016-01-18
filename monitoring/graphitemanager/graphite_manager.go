@@ -4,11 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/marpaia/graphite-golang"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/monitoring"
+	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/utils"
 	"io"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -194,4 +197,28 @@ func (tsdbm GraphiteManager) QueryDB(params map[string]interface{}) (interface{}
 			return data, nil
 		}
 	}
+}
+
+func (tsdbm GraphiteManager) PushToDb(metrics []byte) error {
+	metricMap := make(map[string]map[string]string)
+	data := make([]graphite.Metric, 1)
+	if err := json.Unmarshal(metrics, &metricMap); err != nil {
+		logger.Get().Error("Unable to unmarshal data")
+		return err
+	}
+	for tableName, valueMap := range metricMap {
+		for timestamp, value := range valueMap {
+			timeInt, err := strconv.ParseInt(timestamp, 10, 64)
+			if err != nil {
+				return fmt.Errorf("Failed to parse timestamp %v of metric tableName %v.Error: %v", timestamp, tableName, err.Error())
+			}
+			data = append(data, graphite.Metric{Name: tableName, Value: value, Timestamp: timeInt})
+		}
+	}
+	Graphite, err := graphite.NewGraphite(conf.SystemConfig.TimeSeriesDBConfig.Hostname, conf.SystemConfig.TimeSeriesDBConfig.DataPushPort)
+	if err != nil {
+		return fmt.Errorf("%v", err)
+	}
+	Graphite.SendMetrics(data)
+	return nil
 }
