@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/marpaia/graphite-golang"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/utils"
 	"io"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -194,4 +196,24 @@ func (tsdbm GraphiteManager) QueryDB(params map[string]interface{}) (interface{}
 			return data, nil
 		}
 	}
+}
+
+//This method takes map[string]map[string]string ==> map[metric/table name]map[timestamp]value
+func (tsdbm GraphiteManager) PushToDb(metrics map[string]map[string]string) error {
+	data := make([]graphite.Metric, 1)
+	for tableName, valueMap := range metrics {
+		for timestamp, value := range valueMap {
+			timeInt, err := strconv.ParseInt(timestamp, 10, 64)
+			if err != nil {
+				return fmt.Errorf("Failed to parse timestamp %v of metric tableName %v.Error: %v", timestamp, tableName, err.Error())
+			}
+			data = append(data, graphite.Metric{Name: tableName, Value: value, Timestamp: timeInt})
+		}
+	}
+	Graphite, err := graphite.NewGraphite(conf.SystemConfig.TimeSeriesDBConfig.Hostname, conf.SystemConfig.TimeSeriesDBConfig.DataPushPort)
+	if err != nil {
+		return fmt.Errorf("%v", err)
+	}
+	Graphite.SendMetrics(data)
+	return nil
 }
