@@ -174,6 +174,7 @@ func start() {
 		logger.Get().Error("Unable to create monitoring manager")
 		os.Exit(1)
 	}
+
 	// Use negroni to add middleware.  Here we add the standard
 	// middlewares: Recovery, Logger and static file serve which come with
 	// Negroni
@@ -233,6 +234,8 @@ func start() {
 
 	logger.Get().Info("Starting clusters syncing")
 	go application.SyncClusterDetails()
+
+	go application.InitSchedules()
 
 	// Starting the WebSocket server
 	event.StartBroadcaster(websocketPort)

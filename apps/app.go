@@ -30,4 +30,5 @@ type Application interface {
 	SyncClusterDetails()
 	InitializeDb(authCfg conf.AppDBConfig) error
 	InitializeDefaults() error
+	InitSchedules()
 }
