@@ -95,3 +95,10 @@ func (idm InfluxdbManager) QueryDB(params map[string]interface{}) (interface{}, 
 	res, err := queryDB(query_cmd)
 	return res, err
 }
+
+func (idm InfluxdbManager) PushToDb(metrics []byte) error {
+	/*
+		TODO Implement
+	*/
+	return nil
+}

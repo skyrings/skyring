@@ -26,7 +26,8 @@
         "hostname": "127.0.0.1",
         "port": 80,
         "collection_name": "collectd",
-        "managername": "GraphiteManager"
+        "managername": "GraphiteManager",
+        "dataPushPort": 2003
     },
     "authentication": {
         "providerName": "localauthprovider",
