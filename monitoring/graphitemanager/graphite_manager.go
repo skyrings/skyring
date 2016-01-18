@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/marpaia/graphite-golang"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/monitoring"
+	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/utils"
 	"io"
 	"regexp"
@@ -194,4 +196,18 @@ func (tsdbm GraphiteManager) QueryDB(params map[string]interface{}) (interface{}
 			return data, nil
 		}
 	}
+}
+
+func (tsdbm GraphiteManager) PushToDb(metrics []byte) error {
+	var data []graphite.Metric
+	if err := json.Unmarshal(metrics, &data); err != nil {
+		logger.Get().Error("Unable to unmarshal data")
+		return err
+	}
+	Graphite, err := graphite.NewGraphite(conf.SystemConfig.TimeSeriesDBConfig.Hostname, conf.SystemConfig.TimeSeriesDBConfig.DataPushPort)
+	if err != nil {
+		return fmt.Errorf("%v", err)
+	}
+	Graphite.SendMetrics(data)
+	return nil
 }

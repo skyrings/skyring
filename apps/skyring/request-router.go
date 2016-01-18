@@ -92,3 +92,25 @@ func (a *App) RouteProviderEvents(event models.Event) error {
 	}
 	return nil
 }
+
+func (a *App) RouteProviderBasedMonitoring(cluster_id uuid.UUID) (error, []byte) {
+	provider := a.getProviderFromClusterId(cluster_id)
+	var result models.RpcResponse
+
+	vars := make(map[string]string)
+	vars["cluster-id"] = cluster_id.String()
+
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, "MonitorCluster"),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}},
+		&result)
+
+	logger.Get().Error("The response is %v", result)
+
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		logger.Get().Error("Monitoring by Provider: %s failed. Reason :%s", provider.Name, err)
+		return err, nil
+	}
+
+	return nil, result.Data.Result
+}

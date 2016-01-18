@@ -15,11 +15,16 @@ package skyring
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/schedule"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
@@ -59,4 +64,57 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	} else {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
+}
+
+//In memory ClusterId to ScheduleId map
+var ClusterMonitoringSchedules map[uuid.UUID]uuid.UUID
+
+func (a *App) InitSchedules() {
+	clusters, err := GetClusters()
+	if err != nil {
+		logger.Get().Error("Error getting the clusters list: %v", err)
+		return
+	}
+	for _, cluster := range clusters {
+		go ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
+	}
+}
+
+func ScheduleCluster(clusterId uuid.UUID, intervalInSecs int) {
+	scheduler, err := schedule.NewScheduler()
+	if err != nil {
+		logger.Get().Error(err.Error())
+		return
+	}
+	f := GetApp().MonitorCluster
+	scheduler.Schedule(time.Duration(60)*time.Second, f, map[string]interface{}{"clusterId": clusterId})
+}
+
+func (a *App) MonitorCluster(params map[string]interface{}) {
+	clusterId := params["clusterId"]
+	id, ok := clusterId.(uuid.UUID)
+	if !ok {
+		logger.Get().Error("Failed to parse uuid")
+		return
+	}
+	err, metrics := a.RouteProviderBasedMonitoring(id)
+	if err != nil {
+		logger.Get().Error("Could not initiate monitoring cluster with id :%v", id)
+		return
+	}
+	logger.Get().Error("The values are %v", metrics)
+	if err = GetMonitoringManager().PushToDb(metrics); err != nil {
+		logger.Get().Error(err.Error())
+	}
+	return
+}
+
+func GetClusters() (models.Clusters, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var clusters models.Clusters
+	err := collection.Find(nil).All(&clusters)
+	return clusters, err
 }
