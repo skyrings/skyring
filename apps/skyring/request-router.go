@@ -97,3 +97,28 @@ func (a *App) RouteProviderEvents(event models.Event) error {
 	}
 	return nil
 }
+
+func (a *App) RouteProviderBasedMonitoring(cluster_id uuid.UUID) (error, map[string]map[string]string) {
+	provider := a.getProviderFromClusterId(cluster_id)
+	var result models.RpcResponse
+
+	vars := make(map[string]string)
+	vars["cluster-id"] = cluster_id.String()
+
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, "MonitorCluster"),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}},
+		&result)
+
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		logger.Get().Error("Monitoring by Provider: %s failed. Reason :%s", provider.Name, err)
+		return err, nil
+	}
+
+	metricMap := make(map[string]map[string]string)
+	if err := json.Unmarshal(result.Data.Result, &metricMap); err != nil {
+		logger.Get().Error("Unable to unmarshal data")
+		return err, nil
+	}
+	return nil, metricMap
+}

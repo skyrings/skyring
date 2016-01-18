@@ -56,6 +56,7 @@ type AppDBConfig struct {
 type MonitoringDBconfig struct {
 	Hostname       string `json:"hostname"`
 	Port           int    `json:"port"`
+	DataPushPort   int    `json:"dataPushPort"`
 	CollectionName string `json:"collection_name"`
 	User           string `json:"user"`
 	Password       string `json:"password"`
