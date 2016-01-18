@@ -195,3 +195,16 @@ func (tsdbm GraphiteManager) QueryDB(params map[string]interface{}) (interface{}
 		}
 	}
 }
+
+func PushToDb(metrics interface{}) error {
+	Graphite, err := graphite.NewGraphite("dhcp43-112.lab.eng.blr.redhat.com", 2003)
+	if err != nil {
+		return fmt.Errorf("%v", err)
+	}
+	m, ok := metrics.([]graphite.Metric)
+	if ok {
+		Graphite.SendMetrics(m)
+		return nil
+	}
+	return fmt.Errorf("Invalid metrics %v", metrics)
+}
