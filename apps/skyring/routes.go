@@ -90,6 +90,27 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "GET_Disks",
+			Method:      "GET",
+			Pattern:     "nodes/{node-id}/disks",
+			HandlerFunc: a.GET_Disks,
+			Version:     1,
+		},
+		{
+			Name:        "GET_Disk",
+			Method:      "GET",
+			Pattern:     "nodes/{node-id}/disks/{disk-id}",
+			HandlerFunc: a.GET_Disk,
+			Version:     1,
+		},
+		{
+			Name:        "PATCH_Disk",
+			Method:      "PUT",
+			Pattern:     "nodes/{node-id}/disks/{disk-id}",
+			HandlerFunc: a.PATCH_Disk,
+			Version:     1,
+		},
+		{
 			Name:        "GET_UnmanagedNodes",
 			Method:      "GET",
 			Pattern:     "unmanaged_nodes",

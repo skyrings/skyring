@@ -231,7 +231,8 @@ def GetNodeDisk(node):
                               "Type": disk["TYPE"],
                               "Used": disk["INUSE"],
                               "Vendor": disk.get("VENDOR", ""),
-                              "StorageProfile": ""})
+                              "StorageProfile": "",
+                              "DiskId":u})
     return rv
 
 
