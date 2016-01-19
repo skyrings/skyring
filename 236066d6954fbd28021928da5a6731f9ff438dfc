@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_d8c45d94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T18:13:13Z",
+      "side": 1,
+      "message": "%s/Enhance device details to provide more details/skyring: Enhance device details to provide more details/g",
+      "revId": "236066d6954fbd28021928da5a6731f9ff438dfc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_f8bf61fa",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T18:13:13Z",
+      "side": 1,
+      "message": "%s/node/minion/g",
+      "revId": "236066d6954fbd28021928da5a6731f9ff438dfc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
