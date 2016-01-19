@@ -31,11 +31,11 @@ type Manager struct {
 
 type LockManager interface {
 	//The following method will try to acquire provided lock
-	AcquireLock(id uuid.UUID, lock *LockInternal) error
+	AcquireLock(appLock AppLock) error
 	// The following method will release a lock
-	ReleaseLock(id uuid.UUID) error
+	ReleaseLock(appLock AppLock)
 	//The following method will clear all inserted locks
-	Clear() error
+	Clear()
 }
 
 var lockMutex sync.Mutex
@@ -47,7 +47,9 @@ func NewLockManager() *Manager {
 func (manager *Manager) AcquireLock(appLock AppLock) error {
 	lockMutex.Lock()
 	defer lockMutex.Unlock()
-	for k, v := range appLock.GetAppLocks() {
+	//Check lock can be acquired for all the nodes. if not
+	//return error
+	for k := range appLock.GetAppLocks() {
 		//check if the lock exists
 		if val, ok := manager.locks[k]; ok {
 			//Lock already aquired return from here
@@ -55,34 +57,39 @@ func (manager *Manager) AcquireLock(appLock AppLock) error {
 			logger.Get().Error("Unable to Acquire the lock for: %v", k)
 			return errors.New(err)
 		}
-		logger.Get().Error("Lock Acquired for: %v", k)
+	}
+	//lock can be acquired, so lock the nodes
+	logger.Get().Debug("Currently Locked:", manager.locks)
+	logger.Get().Debug("Acquiring the locks for:", appLock.GetAppLocks())
+	for k, v := range appLock.GetAppLocks() {
+		logger.Get().Debug("Lock Acquired for: ", k)
 		manager.locks[k] = NewLockInternal(v)
 	}
+	logger.Get().Debug("Currently Locked:", manager.locks)
 	return nil
 }
 
-func (manager *Manager) ReleaseLock(appLock AppLock) error {
+func (manager *Manager) ReleaseLock(appLock AppLock) {
 	lockMutex.Lock()
 	defer lockMutex.Unlock()
+	logger.Get().Debug("Currently Locked:", manager.locks)
+	logger.Get().Debug("Releasing the locks for:", appLock.GetAppLocks())
 	for k := range appLock.GetAppLocks() {
 		//check if the lock exists
 		if _, ok := manager.locks[k]; !ok {
-			//No lock exits log and do nothing
-			err := fmt.Sprintf("No Lock found for unlocking %v", k)
-			logger.Get().Error("No Lock found for unlocking: %v", k)
-			return errors.New(err)
+			//No lock exists log and do nothing
+			logger.Get().Error("No Lock found for unlocking: ", k)
 		}
-		logger.Get().Error("Lock Released for: %v", k)
+		logger.Get().Debug("Lock Released: ", k)
 		delete(manager.locks, k)
 	}
-	return nil
+	logger.Get().Debug("Currently Locked:", manager.locks)
 }
 
-func (manager *Manager) Clear() error {
+func (manager *Manager) Clear() {
 	lockMutex.Lock()
 	defer lockMutex.Unlock()
 	for k := range manager.locks {
 		delete(manager.locks, k)
 	}
-	return nil
 }
