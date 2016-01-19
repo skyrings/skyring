@@ -81,6 +81,18 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
 		t.UpdateStatus("Started the task for cluster creation: %v", t.ID)
+
+		nodes, err := getClusterNodesFromRequest(request.Nodes)
+		if err != nil {
+			util.FailTask("Failed to get nodes for locking", err, t)
+			return
+		}
+		appLock, err := lockNodes(nodes, "POST_Clusters")
+		if err != nil {
+			util.FailTask("Failed to acquire lock", err, t)
+			return
+		}
+		defer a.GetLockManager().ReleaseLock(*appLock)
 		// Get the specific provider and invoke the method
 		provider := a.getProviderFromClusterType(request.Type)
 		err = provider.Client.Call(fmt.Sprintf("%s.%s",
@@ -199,6 +211,19 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	asyncTask := func(t *task.Task) {
 		cluster_node_names, nodesFetchError := getNodesInCluster(cluster_id)
 		t.UpdateStatus("Started task to add the monitoring plugin : %v", t.ID)
+
+		nodes, err := getClusterNodesById(cluster_id)
+		if err != nil {
+			util.FailTask("Failed to get nodes for locking", err, t)
+			return
+		}
+		appLock, err := lockNodes(nodes, "POST_AddMonitoringPlugin")
+		if err != nil {
+			util.FailTask("Failed to acquire lock", err, t)
+			return
+		}
+		defer a.GetLockManager().ReleaseLock(*appLock)
+
 		if nodesFetchError == nil {
 			if addNodeWiseErrors, addError := GetCoreNodeManager().AddMonitoringPlugin(cluster_node_names, "", request); addError != nil || len(addNodeWiseErrors) != 0 {
 				util.FailTask("Failed to add monitoring configuration", fmt.Errorf("%v", addNodeWiseErrors), t)
@@ -279,6 +304,18 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 						util.FailTask("Failed to update thresholds", pluginUpdateError, t)
 						return
 					}
+					nodes, err := getClusterNodesById(cluster_id_uuid)
+					if err != nil {
+						util.FailTask("Failed to get nodes for locking", err, t)
+						return
+					}
+					appLock, err := lockNodes(nodes, "PUT_Thresholds")
+					if err != nil {
+						util.FailTask("Failed to acquire lock", err, t)
+						return
+					}
+					defer a.GetLockManager().ReleaseLock(*appLock)
+
 					if updateFailedNodes, updateErr := GetCoreNodeManager().UpdateMonitoringConfiguration(cluster_node_names, request); updateErr != nil || len(updateFailedNodes) != 0 {
 						util.FailTask("Failed to update thresholds", fmt.Errorf("%v", updateFailedNodes), t)
 						return
@@ -336,6 +373,19 @@ func monitoringPluginActivationDeactivations(enable bool, plugin_name string, cl
 					t.UpdateStatus("Started task to enable monitoring plugin : %v", t.ID)
 					var actionNodeWiseFailure map[string]string
 					var actionErr error
+
+					cnodes, err := getClusterNodesById(cluster_id)
+					if err != nil {
+						util.FailTask("Failed to get nodes for locking", err, t)
+						return
+					}
+					appLock, err := lockNodes(cnodes, "monitoringPluginActivationDeactivations")
+					if err != nil {
+						util.FailTask("Failed to acquire lock", err, t)
+						return
+					}
+					defer a.GetLockManager().ReleaseLock(*appLock)
+
 					if enable {
 						action = "enable"
 						actionNodeWiseFailure, actionErr = GetCoreNodeManager().EnableMonitoringPlugin(nodes, plugin_name)
@@ -415,6 +465,19 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	if nodesFetchError == nil {
 		asyncTask := func(t *task.Task) {
 			t.UpdateStatus("Task created to remove monitoring plugin %v", plugin_name)
+
+			cnodes, err := getClusterNodesById(uuid)
+			if err != nil {
+				util.FailTask("Failed to get nodes for locking", err, t)
+				return
+			}
+			appLock, err := lockNodes(cnodes, "REMOVE_MonitoringPlugin")
+			if err != nil {
+				util.FailTask("Failed to acquire lock", err, t)
+				return
+			}
+			defer a.GetLockManager().ReleaseLock(*appLock)
+
 			if removeNodeWiseFailure, removeErr := GetCoreNodeManager().RemoveMonitoringPlugin(nodes, plugin_name); len(removeNodeWiseFailure) != 0 || removeErr != nil {
 				util.FailTask(fmt.Sprintf("Failed to remove plugin %s", plugin_name), fmt.Errorf("%v", removeNodeWiseFailure), t)
 				return
@@ -552,6 +615,18 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 
 	asyncTask := func(t *task.Task) {
 		t.UpdateStatus("Started the task for cluster forget: %v", t.ID)
+
+		cnodes, err := getClusterNodesById(uuid)
+		if err != nil {
+			util.FailTask("Failed to get nodes for locking", err, t)
+			return
+		}
+		appLock, err := lockNodes(cnodes, "Forget_Cluster")
+		if err != nil {
+			util.FailTask("Failed to acquire lock", err, t)
+			return
+		}
+		defer a.GetLockManager().ReleaseLock(*appLock)
 		// TODO: Remove the sync jobs if any for the cluster
 		// TODO: Remove the performance monitoring details for the cluster
 		// TODO: Remove the collectd, salt etc configurations from the nodes
@@ -672,12 +747,19 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 
 		t.UpdateStatus("Getting nodes of the cluster for unmanage")
 		// Disable collectd, salt configurations on the nodes participating in the cluster
-		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-		var nodes models.Nodes
-		if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-			util.FailTask("Error getting nodes for un-manage", err, t)
+
+		nodes, err := getClusterNodesById(cluster_id)
+		if err != nil {
+			util.FailTask("Failed to get nodes", err, t)
 			return
 		}
+		appLock, err := lockNodes(nodes, "Unmanage_Cluster")
+		if err != nil {
+			util.FailTask("Failed to acquire lock", err, t)
+			return
+		}
+		defer a.GetLockManager().ReleaseLock(*appLock)
+
 		for _, node := range nodes {
 			t.UpdateStatus("Disabling node: %s", node.Hostname)
 			ok, err := GetCoreNodeManager().DisableNode(node.Hostname)
@@ -738,12 +820,19 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 
 		t.UpdateStatus("Getting nodes of cluster for manage back")
 		// Enable collectd, salt configurations on the nodes participating in the cluster
-		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-		var nodes models.Nodes
-		if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-			util.FailTask("Error getting nodes for manage", err, t)
+
+		nodes, err := getClusterNodesById(cluster_id)
+		if err != nil {
+			util.FailTask("Failed to get nodes", err, t)
 			return
 		}
+		appLock, err := lockNodes(nodes, "Manage_Cluster")
+		if err != nil {
+			util.FailTask("Failed to acquire lock", err, t)
+			return
+		}
+		defer a.GetLockManager().ReleaseLock(*appLock)
+
 		for _, node := range nodes {
 			t.UpdateStatus("Enabling node")
 			ok, err := GetCoreNodeManager().EnableNode(node.Hostname)
@@ -821,6 +910,17 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
 		t.UpdateStatus("Started task for cluster expansion: %v", t.ID)
+		nodes, err := getClusterNodesFromRequest(new_nodes)
+		if err != nil {
+			util.FailTask("Failed to get nodes for locking", err, t)
+			return
+		}
+		appLock, err := lockNodes(nodes, "Expand_Cluster")
+		if err != nil {
+			util.FailTask("Failed to acquire lock", err, t)
+			return
+		}
+		defer a.GetLockManager().ReleaseLock(*appLock)
 		provider := a.getProviderFromClusterId(*cluster_id)
 		err = provider.Client.Call(fmt.Sprintf("%s.%s",
 			provider.Name, cluster_post_functions["expand_cluster"]),

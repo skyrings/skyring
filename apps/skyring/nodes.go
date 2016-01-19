@@ -75,13 +75,21 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 
 	asyncTask := func(t *task.Task) {
 		t.UpdateStatus("started the task for addAndAcceptNode: %s", t.ID)
+		var nodeId uuid.UUID
+		appLock, err := lockNode(nodeId, request.Hostname, "addAndAcceptNode")
+		if err != nil {
+			t.UpdateStatus("Failed")
+			t.Done(models.TASK_STATUS_FAILURE)
+			return
+		}
+		defer a.GetLockManager().ReleaseLock(*appLock)
 		// Process the request
 		if err := addAndAcceptNode(w, request, t); err != nil {
 			t.UpdateStatus("Failed")
-			t.Done(models.TASK_STATUS_SUCCESS)
+			t.Done(models.TASK_STATUS_FAILURE)
 		} else {
 			t.UpdateStatus("Success")
-			t.Done(models.TASK_STATUS_FAILURE)
+			t.Done(models.TASK_STATUS_SUCCESS)
 		}
 	}
 	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Add and Accept Node: %s", request.Hostname), asyncTask, nil, nil, nil); err != nil {
@@ -129,6 +137,14 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 
 	asyncTask := func(t *task.Task) {
 		t.UpdateStatus("started the task for AcceptNode: %s", t.ID)
+		var nodeId uuid.UUID
+		appLock, err := lockNode(nodeId, hostname, "AcceptNode")
+		if err != nil {
+			t.UpdateStatus("Failed")
+			t.Done(models.TASK_STATUS_FAILURE)
+			return
+		}
+		defer a.GetLockManager().ReleaseLock(*appLock)
 		// Process the request
 		if err := acceptNode(w, hostname, request.SaltFingerprint, t); err != nil {
 			t.UpdateStatus("Failed")
@@ -407,6 +423,11 @@ func removeNode(w http.ResponseWriter, nodeId uuid.UUID) (bool, error) {
 	if !node.ClusterId.IsZero() {
 		return false, errors.New("Node(s) participating in a cluster. Cannot be removed")
 	}
+	appLock, err := lockNode(node.NodeId, node.Hostname, "addAndAcceptNode")
+	if err != nil {
+		return false, err
+	}
+	defer GetApp().GetLockManager().ReleaseLock(*appLock)
 	ret_val, err := GetCoreNodeManager().RemoveNode(node.Hostname)
 	if ret_val {
 		if err := collection.Remove(bson.M{"nodeid": nodeId}); err != nil {

@@ -25,6 +25,7 @@ import (
 	"github.com/skyrings/skyring/dbprovider"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/nodemanager"
+	"github.com/skyrings/skyring/tools/lock"
 	"github.com/skyrings/skyring/tools/logger"
 	"github.com/skyrings/skyring/tools/task"
 	"io/ioutil"
@@ -64,6 +65,7 @@ var (
 	TaskManager          task.Manager
 	Store                *mongostore.MongoStore
 	DbManager            dbprovider.DbInterface
+	lockManager          lock.LockManager
 )
 
 func NewApp(configDir string, binDir string) *App {
@@ -368,6 +370,15 @@ func (a *App) GetTaskManager() *task.Manager {
 	return &TaskManager
 }
 
+func initializeLockManager() error {
+	lockManager = lock.NewLockManager()
+	return nil
+}
+
+func (a *App) GetLockManager() lock.LockManager {
+	return lockManager
+}
+
 /*
 Initialize the defaults during app startup
 */
@@ -416,6 +427,12 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
 	//Initialize the task manager
 	if err := initializeTaskManager(); err != nil {
 		logger.Get().Error("Unable to initialize the task manager: %s", err)
+		return err
+	}
+
+	//Initialize the lock manager
+	if err := initializeLockManager(); err != nil {
+		logger.Get().Error("Unable to initialize the lock manager: %s", err)
 		return err
 	}
 

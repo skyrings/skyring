@@ -1,6 +1,8 @@
 package util
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/skyrings/skyring/models"
@@ -88,4 +90,9 @@ func FailTask(msg string, err error, t *task.Task) {
 	logger.Get().Error("%s: %v", msg, err)
 	t.UpdateStatus("Failed. error: %v", err)
 	t.Done(models.TASK_STATUS_FAILURE)
+}
+
+func Md5FromString(name string) string {
+	hash := md5.Sum([]byte(name))
+	return hex.EncodeToString(hash[:])
 }
