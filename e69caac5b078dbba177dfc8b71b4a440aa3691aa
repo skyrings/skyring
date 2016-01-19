@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_a01db1bf",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T08:45:05Z",
+      "side": 1,
+      "message": "This we can keep as is. I feel in UI it check for Success/Failure as status message.",
+      "parentUuid": "fa81d914_40ceb584",
+      "revId": "e69caac5b078dbba177dfc8b71b4a440aa3691aa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_a0bbf10c",
         "filename": "apps/skyring/monitoring.go",
         "patchSetId": 2
