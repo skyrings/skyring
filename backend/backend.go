@@ -49,6 +49,7 @@ type Disk struct {
 	Used           bool
 	Vendor         string
 	StorageProfile string
+	DiskId         uuid.UUID
 }
 
 type Backend interface {
