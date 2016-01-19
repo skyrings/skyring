@@ -220,6 +220,7 @@ def GetNodeDisk(node):
             except ValueError:
                 # TODO: log the error
                 u = [0] * 16
+            print "Got evrything ...."
             rv[node].append({"DevName": disk["KNAME"],
                               "FSType": disk["FSTYPE"],
                               "FSUUID": u,
@@ -231,7 +232,9 @@ def GetNodeDisk(node):
                               "Type": disk["TYPE"],
                               "Used": disk["INUSE"],
                               "Vendor": disk.get("VENDOR", ""),
-                              "StorageProfile": ""})
+                              "StorageProfile": "",
+                              "DiskId":u})
+    print rv
     return rv
 
 
