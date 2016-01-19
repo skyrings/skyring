@@ -23,6 +23,7 @@ import (
 	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/nodemanager"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/uuid"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"net"
@@ -125,10 +126,17 @@ func populateStorageNodeInstance(node string) (*models.Node, bool) {
 	}
 	disks, err := salt_backend.GetNodeDisk(node)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting disk details for node: %s", node))
+		logger.Get().Error(fmt.Sprintf("Error getting disk details for node: %s. Error %v", node, err))
 		return nil, false
 	}
 	for _, disk := range disks {
+		dId, err := uuid.New()
+		if err != nil {
+			logger.Get().Error("Unable to generate uuid for disk", err)
+			return nil, false
+		}
+		disk.DiskId = *dId
+		disk.StorageProfile = models.DefaultProfile3
 		storage_node.StorageDisks = append(storage_node.StorageDisks, disk)
 	}
 
@@ -158,6 +166,15 @@ func (a SaltNodeManager) SyncStorageDisks(node string) (bool, error) {
 	disks, err := salt_backend.GetNodeDisk(node)
 	if err != nil {
 		return false, err
+	}
+	for _, disk := range disks {
+		dId, err := uuid.New()
+		if err != nil {
+			logger.Get().Error("Unable to generate uuid for disk", err)
+			return false, err
+		}
+		disk.DiskId = *dId
+		disk.StorageProfile = models.DefaultProfile3
 	}
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()

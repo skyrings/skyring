@@ -154,11 +154,6 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task) error {
 
 	if node, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint); err == nil {
-		//Mark the storage profiles
-		t.UpdateStatus("Applying the storage profiles: %s", hostname)
-		if err := applyStorageProfiles(node); err != nil {
-			logger.Get().Error(fmt.Sprintf("Error applying storage profiles %v", err))
-		}
 		t.UpdateStatus("Adding the node to DB: %s", hostname)
 		if err = addStorageNodeToDB(w, *node); err != nil {
 			t.UpdateStatus("Unable to add the node to DB: %s", hostname)
@@ -193,11 +188,6 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 		request.SshFingerprint,
 		request.User,
 		request.Password); err == nil {
-		//Mark the storage profiles
-		t.UpdateStatus("Applying the storage profiles: %s", request.Hostname)
-		if err := applyStorageProfiles(node); err != nil {
-			logger.Get().Error(fmt.Sprintf("Error applying storage profiles %v", err))
-		}
 		t.UpdateStatus("Adding the node to DB: %s", request.Hostname)
 		if err = addStorageNodeToDB(w, *node); err != nil {
 			t.UpdateStatus("Unable to add the node to DB: %s", request.Hostname)
@@ -459,18 +449,126 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func applyStorageProfiles(node *models.Node) error {
-
-	/*
-		For the time being, puting it to the general bucket
-	*/
-	var disks []backend.Disk
-	for _, disk := range node.StorageDisks {
-		if !disk.Used {
-			disk.StorageProfile = models.DefaultProfile3
-		}
-		disks = append(disks, disk)
+func (a *App) GET_Disks(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	node_id_str := vars["node-id"]
+	node_id, err := uuid.Parse(node_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", node_id_str, err))
+		return
 	}
-	node.StorageDisks = disks
-	return nil
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.Node
+	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
+		logger.Get().Error("Error getting the node detail: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if err := json.NewEncoder(w).Encode(node.StorageDisks); err != nil {
+		logger.Get().Error("Error encoding the data: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+	}
+}
+
+func (a *App) GET_Disk(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	node_id_str := vars["node-id"]
+	node_id, err := uuid.Parse(node_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", node_id_str, err))
+		return
+	}
+
+	disk_id_str := vars["disk-id"]
+	disk_id, err := uuid.Parse(disk_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing disk id: %s. Error: %v", disk_id_str, err))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.Node
+	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
+		logger.Get().Error("Error getting the node detail: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	var mdisk backend.Disk
+	for _, disk := range node.StorageDisks {
+		if disk.DiskId == *disk_id {
+			mdisk = disk
+			break
+		}
+	}
+	if err := json.NewEncoder(w).Encode(mdisk); err != nil {
+		logger.Get().Error("Error encoding data: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+	}
+
+}
+
+func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	node_id_str := vars["node-id"]
+	node_id, err := uuid.Parse(node_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", node_id_str, err))
+		return
+	}
+
+	disk_id_str := vars["disk-id"]
+	disk_id, err := uuid.Parse(disk_id_str)
+	if err != nil {
+		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", disk_id_str, err))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.Node
+	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
+		logger.Get().Error("Error getting the node detail: %v", err)
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		logger.Get().Error("Error parsing http request body:%s", err)
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	var m map[string]interface{}
+
+	if err = json.Unmarshal(body, &m); err != nil {
+		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	var disks []backend.Disk
+	if val, ok := m["storageprofile"]; ok {
+		//update the field
+		for _, disk := range node.StorageDisks {
+			if disk.DiskId == *disk_id {
+				disk.StorageProfile = val.(string)
+			}
+			disks = append(disks, disk)
+		}
+		node.StorageDisks = disks
+	}
+	//Save
+	err = collection.Update(bson.M{"nodeid": *node_id}, bson.M{"$set": node})
+	if err != nil {
+		logger.Get().Error("Error updating record in DB:%s", err)
+		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+	}
 }
