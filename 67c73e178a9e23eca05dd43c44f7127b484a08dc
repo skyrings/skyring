@@ -1,0 +1,242 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_d52506c3",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "This message gets logged as well, so add cluster name/id if available.",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_f5204ab2",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "%s/Failed to acquire lock/Another transaction in progress. Failed acquire lock on nodes for create cluster: \u003cname\u003e/g",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_15307e00",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_352bc295",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "As above",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_55191687",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "As above",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_751c5a78",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "As above",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_d50c2645",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "%s/Failed to get nodes/Failed to get nodes for cluster: \u003cid/name\u003e/g",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_f5076a1b",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "As above",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_3502e20b",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "Should we use util.FailTask()",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_980ae51f",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "a.GetLockManager().ReleaseLock(*appLock)",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_d8137d5a",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "Detailed log message?",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_181ef563",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "Should we call this source as node_utils.go",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_f80e8131",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "node name in error message",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_3819f979",
+        "filename": "tools/lock/lockmanager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 1,
+      "message": "More meaningful messages for logging with context of entity etc.",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}

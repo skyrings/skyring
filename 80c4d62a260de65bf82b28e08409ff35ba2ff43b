@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_15079e1d",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-19T17:44:46Z",
+      "side": 0,
+      "message": "Thanks for pointing out :))",
+      "revId": "80c4d62a260de65bf82b28e08409ff35ba2ff43b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
