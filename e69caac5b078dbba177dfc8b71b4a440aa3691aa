@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_2082a14f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-19T06:47:37Z",
+      "side": 1,
+      "message": "What if there is some error ? should we handle that case ?",
+      "range": {
+        "startLine": 128,
+        "startChar": 7,
+        "endLine": 128,
+        "endChar": 32
+      },
+      "revId": "e69caac5b078dbba177dfc8b71b4a440aa3691aa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_e0eec921",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-19T06:47:37Z",
+      "side": 1,
+      "message": "can we use FailTask here ?",
+      "range": {
+        "startLine": 883,
+        "startChar": 6,
+        "endLine": 884,
+        "endChar": 40
+      },
+      "revId": "e69caac5b078dbba177dfc8b71b4a440aa3691aa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a0bbf10c",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-19T06:47:37Z",
+      "side": 1,
+      "message": "shouldn\u0027t we handle the err condition here ?",
+      "range": {
+        "startLine": 38,
+        "startChar": 1,
+        "endLine": 38,
+        "endChar": 68
+      },
+      "revId": "e69caac5b078dbba177dfc8b71b4a440aa3691aa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_4072357d",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-19T06:47:37Z",
+      "side": 1,
+      "message": "may be user name would give additional info ? below as well.",
+      "range": {
+        "startLine": 105,
+        "startChar": 2,
+        "endLine": 105,
+        "endChar": 61
+      },
+      "revId": "e69caac5b078dbba177dfc8b71b4a440aa3691aa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_606f3993",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-19T06:47:37Z",
+      "side": 1,
+      "message": "will user name help ?",
+      "range": {
+        "startLine": 191,
+        "startChar": 20,
+        "endLine": 191,
+        "endChar": 40
+      },
+      "revId": "e69caac5b078dbba177dfc8b71b4a440aa3691aa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_806c2d9e",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-19T06:47:37Z",
+      "side": 1,
+      "message": "same as above.",
+      "range": {
+        "startLine": 316,
+        "startChar": 2,
+        "endLine": 317,
+        "endChar": 39
+      },
+      "revId": "e69caac5b078dbba177dfc8b71b4a440aa3691aa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
