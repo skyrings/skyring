@@ -1,6 +1,8 @@
 package util
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/skyrings/skyring/models"
@@ -110,4 +112,9 @@ func HTTPGet(url string) ([]byte, error) {
 		}
 		return contents, nil
 	}
+}
+
+func Md5FromString(name string) string {
+	hash := md5.Sum([]byte(name))
+	return hex.EncodeToString(hash[:])
 }
