@@ -240,15 +240,26 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 		logger.Get().Error("Error retrieving the user:%s", err)
 		return err
 	}
-	if val, ok := m["password"]; ok {
-		p := val.(string)
-		hash, err = bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
-		if err != nil {
-			logger.Get().Error("Error saving the password:%s", err)
-			return mkerror("couldn't save password: " + err.Error())
+
+	if val, ok := m["oldpassword"]; ok {
+		op := val.(string)
+		match := bcrypt.CompareHashAndPassword(user.Hash, []byte(op))
+		if match != nil {
+			logger.Get().Error("Old password doesnt match")
+			return mkerror("Old password doesnt match" + err.Error())
+		} else {
+			if val, ok := m["password"]; ok {
+				p := val.(string)
+				hash, err = bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
+				if err != nil {
+					logger.Get().Error("Error saving the password:%s", err)
+					return mkerror("couldn't save password: " + err.Error())
+				}
+				user.Hash = hash
+			}
 		}
-		user.Hash = hash
 	}
+
 	if val, ok := m["email"]; ok {
 		e := val.(string)
 		user.Email = e
