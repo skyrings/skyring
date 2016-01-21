@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_e7b0988d",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-21T09:01:00Z",
+      "side": 0,
+      "message": "Can you verify if the path is same in fedora, rhel etc",
+      "revId": "1c7feca24c2e3502575765ed4fcf7b5d0fca7d28",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
