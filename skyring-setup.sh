@@ -12,9 +12,9 @@ function info {
 }
 
 function createUser {
-    /opt/influxdb/influx  -execute "CREATE USER admin WITH PASSWORD 'admin'"
+    /usr/bin/influx  -execute "CREATE USER admin WITH PASSWORD 'admin'"
     # Grant the privileges
-    /opt/influxdb/influx  -execute "GRANT ALL ON collectdInfluxDB TO admin"
+    /usr/bin/influx  -execute "GRANT ALL ON collectdInfluxDB TO admin"
 }
 
 if [[ $EUID -ne 0 ]]; then
@@ -44,10 +44,10 @@ sleep 5
 
 info "Creating time series database"
 # Create influxdb Database
-/opt/influxdb/influx  -execute "CREATE DATABASE IF NOT EXISTS collectd"
+/usr/bin/influx  -execute "CREATE DATABASE IF NOT EXISTS collectd"
 
 # Create InfluxDB User
-/opt/influxdb/influx  -execute 'SHOW USERS' -format column | awk '{print $1}' | grep -Fxq 'admin' || createUser
+/usr/bin/influx  -execute 'SHOW USERS' -format column | awk '{print $1}' | grep -Fxq 'admin' || createUser
 
 info "Creating skyring database"
 # Configuring MongoDB
