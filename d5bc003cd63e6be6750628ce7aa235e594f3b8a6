@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_8730bc9f",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-21T03:24:55Z",
+      "side": 1,
+      "message": "You need to check whether \"oldpassword\" is present in the map. Same API is also used update other params of User like email",
+      "range": {
+        "startLine": 252,
+        "startChar": 39,
+        "endLine": 252,
+        "endChar": 71
+      },
+      "revId": "d5bc003cd63e6be6750628ce7aa235e594f3b8a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_87d7dc22",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-21T03:24:55Z",
+      "side": 1,
+      "message": "This should not be in the else. In this case, if the user send a request to modify email, the request itself will not be executed. In my opinion, the code for checking the \"oldpassword\" should be moved to the providers ie,\n\nauthprovider/local/auth.go\nauthprovider/ldap/ldapauth.go",
+      "range": {
+        "startLine": 256,
+        "startChar": 1,
+        "endLine": 261,
+        "endChar": 3
+      },
+      "revId": "d5bc003cd63e6be6750628ce7aa235e594f3b8a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
