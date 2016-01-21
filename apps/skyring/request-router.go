@@ -14,6 +14,7 @@ package skyring
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
@@ -76,6 +77,10 @@ func (a *App) getProviderFromClusterId(cluster_id uuid.UUID) *Provider {
 
 func (a *App) RouteProviderEvents(event models.Event) error {
 	provider := a.getProviderFromClusterId(event.ClusterId)
+	if provider == nil {
+		logger.Get().Error("Error getting provider for cluster: %v", event.ClusterId)
+		return errors.New(fmt.Sprintf("Error getting provider for cluster: %v", event.ClusterId))
+	}
 	body, err := json.Marshal(event)
 	if err != nil {
 		logger.Get().Error("Marshalling of event failed: %s", err)
