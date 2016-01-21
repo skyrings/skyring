@@ -43,6 +43,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_27f2b0d2",
+        "filename": "main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-21T03:32:38Z",
+      "side": 1,
+      "message": "That is fine but we need to take that patch in because if somebody kill the process, lock file remains there and next startup will be an issue",
+      "parentUuid": "fa81d914_49c1a17f",
+      "revId": "cf90883365dda1a9661adcdc8ec84559fd5ebd89",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_a974dd9c",
         "filename": "skyring.spec",
         "patchSetId": 2
