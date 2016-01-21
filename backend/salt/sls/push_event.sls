@@ -9,7 +9,7 @@ import fnmatch
 from datetime import datetime
 import pytz
 
-SKYRING_EVENT_SOCKET_FILE = "/tmp/.skyring-event"
+SKYRING_EVENT_SOCKET_FILE = "/var/run/.skyring-event"
 JSON_MAX_RECV_BYTES = 4096
 log = logging.getLogger(__name__)
 

@@ -38,7 +38,8 @@ const (
 	// ConfigFile default configuration file
 	ConfigFile = "skyring.conf"
 	// DefaultLogLevel default log level
-	DefaultLogLevel = logging.DEBUG
+	DefaultLogLevel      = logging.DEBUG
+	DEFAULT_EVENT_SOCKET = "/var/run/.skyring-event"
 )
 
 var (
@@ -47,7 +48,6 @@ var (
 	logToStderr   bool
 	logLevel      string
 	providersDir  string
-	eventSocket   string
 	staticFileDir string
 	websocketPort string
 )
@@ -72,11 +72,6 @@ func main() {
 			Value:  "/var/lib/skyring",
 			Usage:  "Override default bin directory",
 			EnvVar: "SKYRING_PROVIDERSDIR",
-		},
-		cli.StringFlag{
-			Name:  "event-socket",
-			Value: "/var/run/.skyring-event",
-			Usage: "Override default event unix socket",
 		},
 		cli.BoolFlag{
 			Name:  "log-to-stderr",
@@ -108,7 +103,6 @@ func main() {
 	app.Before = func(c *cli.Context) error {
 		// Set global configuration values
 		configDir = c.String("config-dir")
-		eventSocket = c.String("event-socket")
 		logToStderr = c.Bool("log-to-stderr")
 		logFile = c.String("log-file")
 		logLevel = c.String("log-level")
@@ -182,7 +176,7 @@ func start() {
 	)
 
 	logger.Get().Info("Starting event listener")
-	go event.StartListener(eventSocket)
+	go event.StartListener(DEFAULT_EVENT_SOCKET)
 
 	//Check if Port is provided, otherwise use dafault 8080
 	//If host is not provided, it binds on all IPs
@@ -248,5 +242,5 @@ func start() {
 		done <- true
 	}()
 	<-done
-	os.Remove(eventSocket)
+	os.Remove(DEFAULT_EVENT_SOCKET)
 }
