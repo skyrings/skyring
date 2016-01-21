@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_dc9d2a5b",
+        "filename": "monitoring/graphitemanager/graphite_manager.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-21T16:19:38Z",
+      "side": 1,
+      "message": "There might be some validations related to the provider lets say for example the types of the resources supported as here.So, for any validations specific to the provider I think we should be allowing the provider to do this for us.\nSo, I feel these should be in entirety handled by the provider or we can as well change it to delegate the validation part only to the provider and the remaining generic stuff we can have them done here itself.\n\nWhat would you suggest?",
+      "parentUuid": "fa81d914_7c38bea0",
+      "range": {
+        "startLine": 111,
+        "startChar": 10,
+        "endLine": 111,
+        "endChar": 72
+      },
+      "revId": "96601bb28853b17fe91068294621bbdb093945e2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_bc42360e",
         "filename": "monitoring/graphitemanager/graphite_manager.go",
         "patchSetId": 5
@@ -82,6 +106,30 @@
       "writtenOn": "2016-01-21T15:03:55Z",
       "side": 1,
       "message": "What this func does? what is the output?",
+      "range": {
+        "startLine": 155,
+        "startChar": 28,
+        "endLine": 155,
+        "endChar": 50
+      },
+      "revId": "96601bb28853b17fe91068294621bbdb093945e2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7cb7ded8",
+        "filename": "monitoring/graphitemanager/graphite_manager.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-21T16:19:38Z",
+      "side": 1,
+      "message": "So with this actually we can create a template kind of a string as in lines 41-45 with some place holders and then we parse the template with params(here it is map[string]interface{} bcoz, I am in need of a type independent datastructure but optionally it could be even a struct with a proper well defined structure) using the golang\u0027s built in template framework and we have ready to use dynamically created string",
+      "parentUuid": "fa81d914_bc42360e",
       "range": {
         "startLine": 155,
         "startChar": 28,
