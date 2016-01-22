@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_ada59eb6",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-22T12:14:58Z",
+      "side": 1,
+      "message": "I think this also is a candidate for best effort case. Proceed in case the deletion of a specific node fails. Report the failed nodes",
+      "range": {
+        "startLine": 476,
+        "startChar": 3,
+        "endLine": 480,
+        "endChar": 3
+      },
+      "revId": "dc8d3c3d48aee9b7152d3dce5adc56605245a54e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
