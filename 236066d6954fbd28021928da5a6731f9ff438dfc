@@ -33,6 +33,29 @@
       "revId": "236066d6954fbd28021928da5a6731f9ff438dfc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_6d72c64a",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-22T12:23:53Z",
+      "side": 1,
+      "message": "we are not supposed to use smart tools. smart is not supported by all the vendors",
+      "range": {
+        "startLine": 374,
+        "startChar": 46,
+        "endLine": 374,
+        "endChar": 56
+      },
+      "revId": "236066d6954fbd28021928da5a6731f9ff438dfc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
