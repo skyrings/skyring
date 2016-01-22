@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_cde9f281",
+        "filename": "apps/app.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-22T14:23:42Z",
+      "side": 1,
+      "message": "why this required?",
+      "range": {
+        "startLine": 32,
+        "startChar": 1,
+        "endLine": 32,
+        "endChar": 30
+      },
+      "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_2dfe0e39",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-22T14:23:42Z",
+      "side": 1,
+      "message": "Do we need to do any cleanup before returning?\n\nThis is applicable to all",
+      "range": {
+        "startLine": 84,
+        "startChar": 3,
+        "endLine": 84,
+        "endChar": 19
+      },
+      "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_6830f4e8",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-22T14:23:42Z",
+      "side": 1,
+      "message": "Are we really checking the provider task status here? \u0027t\u0027 is the parent task right?\n\nApplicable to all",
+      "range": {
+        "startLine": 112,
+        "startChar": 6,
+        "endLine": 115,
+        "endChar": 13
+      },
+      "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_0842183e",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-22T14:23:42Z",
+      "side": 1,
+      "message": "This needs to be adapted to new implementaion",
+      "range": {
+        "startLine": 117,
+        "startChar": 3,
+        "endLine": 118,
+        "endChar": 41
+      },
+      "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8deffa86",
+        "filename": "models/misc.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-22T14:23:42Z",
+      "side": 1,
+      "message": "Not sure we are using this anywhere. But for consistency can add an entry here.\nIf not required, can go ahead and remove this also",
+      "range": {
+        "startLine": 182,
+        "startChar": 4,
+        "endLine": 182,
+        "endChar": 16
+      },
+      "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
