@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_c89ac062",
+        "filename": "apps/app.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-22T16:28:21Z",
+      "side": 1,
+      "message": "I thought I did for some reason where it was not exposed for outside packages. Might not required now I feel. Will check that and remove that if not required.",
+      "parentUuid": "fa81d914_cde9f281",
+      "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_2dfe0e39",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 5
@@ -42,6 +60,24 @@
         "endLine": 84,
         "endChar": 19
       },
+      "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_08cbf853",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-22T16:28:21Z",
+      "side": 1,
+      "message": "We should not do any clean I feel as its timeout and it might be getting completed other side.\n\nWhat you say??",
+      "parentUuid": "fa81d914_2dfe0e39",
       "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_28c6fc49",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-22T16:28:21Z",
+      "side": 1,
+      "message": "Actually we are checking timeout for parent task only here. The parent might get timed out in this infinite for loop during subtask still getting executed. So we are timing out here.",
+      "parentUuid": "fa81d914_6830f4e8",
+      "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_0842183e",
         "filename": "apps/skyring/storage.go",
         "patchSetId": 5
@@ -94,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_48c5f03a",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-22T16:28:21Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "fa81d914_0842183e",
+      "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_8deffa86",
         "filename": "models/misc.go",
         "patchSetId": 5
@@ -111,6 +183,24 @@
         "endLine": 182,
         "endChar": 16
       },
+      "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_88de0810",
+        "filename": "models/misc.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-22T16:28:21Z",
+      "side": 1,
+      "message": "Will check and remove if not required.",
+      "parentUuid": "fa81d914_8deffa86",
       "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
