@@ -853,6 +853,10 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	asyncTask := func(t *task.Task) {
 		t.UpdateStatus("Started task for cluster expansion: %v", t.ID)
 		provider := a.getProviderFromClusterId(*cluster_id)
+		if provider == nil {
+			util.FailTask("", errors.New(fmt.Sprintf("Error etting provider for cluster: %v", *cluster_id)), t)
+			return
+		}
 		err = provider.Client.Call(fmt.Sprintf("%s.%s",
 			provider.Name, cluster_post_functions["expand_cluster"]),
 			models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
@@ -885,13 +889,18 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				if providerTask.Completed {
-					t.UpdateStatus("Starting disk sync")
-					if err := syncStorageDisks(new_nodes); err != nil {
+					if providerTask.Status == models.TASK_STATUS_SUCCESS {
+						t.UpdateStatus("Starting disk sync")
+						if err := syncStorageDisks(new_nodes); err != nil {
+							t.UpdateStatus("Failed")
+							t.Done(models.TASK_STATUS_FAILURE)
+						} else {
+							t.UpdateStatus("Success")
+							t.Done(models.TASK_STATUS_SUCCESS)
+						}
+					} else {
 						t.UpdateStatus("Failed")
 						t.Done(models.TASK_STATUS_FAILURE)
-					} else {
-						t.UpdateStatus("Success")
-						t.Done(models.TASK_STATUS_SUCCESS)
 					}
 					break
 				}
