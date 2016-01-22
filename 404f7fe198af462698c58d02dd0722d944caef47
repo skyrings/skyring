@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_72a2a5af",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-22T05:53:49Z",
+      "side": 1,
+      "message": "As we discussed, you are going to remove this API right?",
+      "range": {
+        "startLine": 40,
+        "startChar": 3,
+        "endLine": 40,
+        "endChar": 45
+      },
+      "revId": "404f7fe198af462698c58d02dd0722d944caef47",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
