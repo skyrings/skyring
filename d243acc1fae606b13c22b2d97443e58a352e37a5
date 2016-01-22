@@ -22,6 +22,30 @@
       "revId": "d243acc1fae606b13c22b2d97443e58a352e37a5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_12cde95d",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-22T06:43:19Z",
+      "side": 1,
+      "message": "OOps sorry I am myself confused :(",
+      "parentUuid": "fa81d914_9293994e",
+      "range": {
+        "startLine": 385,
+        "startChar": 51,
+        "endLine": 385,
+        "endChar": 68
+      },
+      "revId": "d243acc1fae606b13c22b2d97443e58a352e37a5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
