@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_2dc0ce7b",
+        "filename": "apps/app.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-22T10:55:12Z",
+      "side": 1,
+      "message": "Remove the commented line",
+      "revId": "f18b592f88d7b7c17ece305861e51999c4c7a86d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
