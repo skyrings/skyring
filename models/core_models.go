@@ -30,16 +30,37 @@ type Node struct {
 	Location      string             `json:"location"`
 	Status        string             `json:"status"`
 	Options       map[string]string  `json:"options"`
-	CPUs          []CPU              `json:"cpus"`
+	CpuInfo       CPU                `json:"cpu"`
 	NetworkInfo   StorageNodeNetwork `json:"network_info"`
 	StorageDisks  []backend.Disk     `json:"storage_disks"`
-	Memory        []Memory           `json:"memory"`
+	Memory        Memory             `json:"memory"`
 	OS            OperatingSystem    `json:"os"`
-	Enabled       bool               `json:"enabled"`
+	Enabled       bool
 }
 
 type CPU struct {
-	CPUId string `bson:"cpuid"`
+	CPUs                string `bson:"cpus"`
+	Byte_Order          string `bson:"byteorder"`
+	L1d_cache           string `bson:"l1dcache"`
+	CPU_op_modes        string `bson:"cpuopmodes"`
+	CPU_MHz             string `bson:"cpumhz"`
+	Model_name          string `bson:"modelname"`
+	NUMA_nodes          string `bson:"lumanodes"`
+	Vendor_ID           string `bson:"vendorid"`
+	On_line_CPUs_list   string `bson:"onlinecpuslist"`
+	CPU_family          string `bson:"cpufamily"`
+	Cores_per_socket    string `bson:"corespersocket"`
+	L1i_cache           string `bson:"l1icache"`
+	NUMA_node0_CPUs     string `bson:"numanode0cpus"`
+	L2_cache            string `bon:"l2cache"`
+	Architecture        string `bson:"architecture"`
+	Model               string `bson:"model"`
+	Virtualization_type string `bson:"virtualizationtype"`
+	Sockets             string `bson:"sockets"`
+	Hypervisor_vendor   string `bon:"hypervisorvendor"`
+	BogoMIPS            string `bson:"bogomips"`
+	Stepping            string `bson:"stepping"`
+	Threads_per_core    string `bson:"threadspercore"`
 }
 
 type StorageNodeNetwork struct {
@@ -49,22 +70,55 @@ type StorageNodeNetwork struct {
 }
 
 type Memory struct {
-	Name       string `bson:"name"`
-	Type       string `bson:"type"`
-	TotalSize  int    `bson:"totalsize"`
-	FreeSize   int    `bson:"freesize"`
-	Attributes string `bson:"attribute"`
+	WritebackTmp      string `bson:"writebacktmp"`
+	SwapTotal         string `bson:"swaptotal"`
+	Activeanon        string `bson:"activeanon"`
+	SwapFree          string `bson:"swapfree"`
+	DirectMap4k       string `bson:"directmap4k"`
+	KernelStack       string `bson:"kernelstack"`
+	MemFree           string `bson:"memfree"`
+	HugePages_Rsvd    string `bson:"hugepagesrsvd"`
+	Committed_AS      string `bson:"committedas"`
+	Activefile        string `bson:"activefile"`
+	NFS_Unstable      string `bson:"nfsunstable"`
+	VmallocChunk      string `bson:"vmallocchunk"`
+	Writeback         string `bson:"writeback"`
+	Inactivefile      string `bson:"inactivefile"`
+	MemTotal          string `bson:"memtotal"`
+	VmallocUsed       string `bson:"vmallocused"`
+	HugePages_Free    string `bson:"hugepagesfree"`
+	AnonHugePages     string `bson:"anonhugepages"`
+	AnonPages         string `bson:"anonpages"`
+	Active            string `bson:"active"`
+	Inactiveanon      string `bson:"inactiveanon"`
+	CommitLimit       string `bson:"commitlimit"`
+	Hugepagesize      string `bson:"hugepagesize"`
+	Cached            string `bson:"cached"`
+	SwapCached        string `bson:"swapcached"`
+	VmallocTotal      string `bson:"vmalloctotal"`
+	Shmem             string `bson:"shmem"`
+	Mapped            string `bson:"mapped"`
+	SUnreclaim        string `bson:"sunreclaim"`
+	Unevictable       string `bson:"nevictable"`
+	SReclaimable      string `bson:"sreclaimable"`
+	MemAvailable      string `bson:"memavailable"`
+	Mlocked           string `bson:"mlocked"`
+	DirectMap2M       string `bson:"directmap2m"`
+	HugePages_Surp    string `bson:"hugepagessurp"`
+	Bounce            string `bson:"bounce"`
+	Inactive          string `bson:"inactive"`
+	PageTables        string `bson:"pagetables"`
+	HardwareCorrupted string `bson:"hardwarecorrupted"`
+	HugePages_Total   string `bson:"hugepagestotal"`
+	Slab              string `bson:"slab"`
+	Buffers           string `bson:"buffers"`
+	Dirty             string `bson:"dirty"`
 }
 
 type OperatingSystem struct {
-	Name                string `bson:"name"`
-	OSVersion           string `bson:"osversion"`
-	KernelVersion       string `bson:"kernel_version"`
-	StorageSWVersion    string `bson:"storage_sw_version"`
-	KdumpStatus         string `bson:"kdump_status"`
-	MemPageShareStatus  string `bson:"mem_page_share_status"`
-	AutomaticLargePages bool   `bson:"automatic_large_pages"`
-	SELinuxMode         string `bson:"selinuxmode"`
+	Release        string `bson:"release"`
+	Distributor_ID string `bson:"distributorid"`
+	LSB_Version    string `bson:"lsbversion"`
 }
 
 type User struct {
