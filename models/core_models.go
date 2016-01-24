@@ -30,16 +30,12 @@ type Node struct {
 	Location      string             `json:"location"`
 	Status        string             `json:"status"`
 	Options       map[string]string  `json:"options"`
-	CPUs          []CPU              `json:"cpus"`
+	CPUs          []backend.Cpu      `json:"cpus"`
 	NetworkInfo   StorageNodeNetwork `json:"network_info"`
 	StorageDisks  []backend.Disk     `json:"storage_disks"`
-	Memory        []Memory           `json:"memory"`
+	Memory        Memory             `json:"memory"`
 	OS            OperatingSystem    `json:"os"`
 	Enabled       bool               `json:"enabled"`
-}
-
-type CPU struct {
-	CPUId string `bson:"cpuid"`
 }
 
 type StorageNodeNetwork struct {
@@ -49,22 +45,17 @@ type StorageNodeNetwork struct {
 }
 
 type Memory struct {
-	Name       string `bson:"name"`
-	Type       string `bson:"type"`
-	TotalSize  int    `bson:"totalsize"`
-	FreeSize   int    `bson:"freesize"`
-	Attributes string `bson:"attribute"`
+	TotalSize string `bson:"totalsize"`
+	SwapTotal string `bson:"swaptotal"`
+	Active    string `bson:"active"`
+	Type      string `bson:"type"`
 }
 
 type OperatingSystem struct {
-	Name                string `bson:"name"`
-	OSVersion           string `bson:"osversion"`
-	KernelVersion       string `bson:"kernel_version"`
-	StorageSWVersion    string `bson:"storage_sw_version"`
-	KdumpStatus         string `bson:"kdump_status"`
-	MemPageShareStatus  string `bson:"mem_page_share_status"`
-	AutomaticLargePages bool   `bson:"automatic_large_pages"`
-	SELinuxMode         string `bson:"selinuxmode"`
+	Name          string `bson:"name"`
+	OSVersion     string `bson:"osversion"`
+	KernelVersion string `bson:"kernelversion"`
+	SELinuxMode   string `bson:"selinuxmode"`
 }
 
 type User struct {
