@@ -51,6 +51,83 @@ type Disk struct {
 	StorageProfile string
 }
 
+type Cpu struct {
+	CPUs                string
+	Byte_Order          string
+	L1d_cache           string
+	CPU_op_modes        string
+	CPU_MHz             string
+	Model_name          string
+	NUMA_nodes          string
+	Vendor_ID           string
+	On_line_CPUs_list   string
+	CPU_family          string
+	Cores_per_socket    string
+	L1i_cache           string
+	NUMA_node0_CPUs     string
+	L2_cache            string
+	Architecture        string
+	Model               string
+	Virtualization_type string
+	Sockets             string
+	Hypervisor_vendor   string
+	BogoMIPS            string
+	Stepping            string
+	Threads_per_core    string
+}
+
+type OperationSystem struct {
+	Release        string
+	Distributor_ID string
+	LSB_Version    string
+}
+
+type Memory struct {
+	WritebackTmp      string
+	SwapTotal         string
+	Activeanon        string
+	SwapFree          string
+	DirectMap4k       string
+	KernelStack       string
+	MemFree           string
+	HugePages_Rsvd    string
+	Committed_AS      string
+	Activefile        string
+	NFS_Unstable      string
+	VmallocChunk      string
+	Writeback         string
+	Inactivefile      string
+	MemTotal          string
+	VmallocUsed       string
+	HugePages_Free    string
+	AnonHugePages     string
+	AnonPages         string
+	Active            string
+	Inactiveanon      string
+	CommitLimit       string
+	Hugepagesize      string
+	Cached            string
+	SwapCached        string
+	VmallocTotal      string
+	Shmem             string
+	Mapped            string
+	SUnreclaim        string
+	Unevictable       string
+	SReclaimable      string
+	MemAvailable      string
+	Mlocked           string
+	DirectMap2M       string
+	HugePages_Surp    string
+	Bounce            string
+	Inactive          string
+	PageTables        string
+	HardwareCorrupted string
+	HugePages_Total   string
+	Slab              string
+	Buffers           string
+	Dirty             string
+}
+
 type Backend interface {
 	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error)
 	AcceptNode(node string, fingerprint string, ignored bool) (bool, error)
@@ -58,6 +135,9 @@ type Backend interface {
 	GetNodes() (NodeList, error)
 	GetNodeID(node string) (uuid.UUID, error)
 	GetNodeDisk(node string) ([]Disk, error)
+	GetNodeCpu(node string) ([]Cpu, error)
+	GetNodeOs(node string) (OperationSystem, error)
+	GetNodeMemory(node string) (Memory, error)
 	GetNodeNetwork(node string) (Network, error)
 	IgnoreNode(node string) (bool, error)
 	DisableService(node string, service string, stop bool) (bool, error)

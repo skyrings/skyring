@@ -132,6 +132,36 @@ func populateStorageNodeInstance(node string) (*models.Node, bool) {
 		storage_node.StorageDisks = append(storage_node.StorageDisks, disk)
 	}
 
+	cpus, err := salt_backend.GetNodeCpu(node)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting cpu details for node: %s. error: %v", node, err))
+		return nil, false
+	}
+	for _, cpu := range cpus {
+		storage_node.CPUsInfo = append(storage_node.CPUsInfo, cpu)
+	}
+
+	osInfo, err := salt_backend.GetNodeOs(node)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting os details for node: %s", node))
+		return nil, false
+	}
+	storage_node.OS.Release = osInfo.Release
+	storage_node.OS.Distributor_ID = osInfo.Distributor_ID
+	storage_node.OS.LSB_Version = osInfo.LSB_Version
+
+	memoryInfo, err := salt_backend.GetNodeMemory(node)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting memory details for node: %s", node))
+		return nil, false
+	}
+	storage_node.Memory.SwapTotal = memoryInfo.SwapTotal
+	storage_node.Memory.SwapFree = memoryInfo.SwapFree
+	storage_node.Memory.MemFree = memoryInfo.MemFree
+	storage_node.Memory.MemTotal = memoryInfo.MemTotal
+	storage_node.Memory.Active = memoryInfo.Active
+	storage_node.Memory.MemAvailable = memoryInfo.MemAvailable
+
 	if !storage_node.NodeId.IsZero() && len(storage_node.NetworkInfo.Subnet) != 0 && len(storage_node.StorageDisks) != 0 {
 		return &storage_node, true
 	} else {
