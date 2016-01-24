@@ -34,6 +34,9 @@ var funcNames = [...]string{
 	"GetNodeID",
 	"GetNodeNetwork",
 	"GetNodeDisk",
+	"GetNodeCpu",
+	"GetNodeOs",
+	"GetNodeMemory",
 	"IgnoreNode",
 	"DisableService",
 	"EnableService",
@@ -193,6 +196,39 @@ func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetNodeDisk"].Call(node); loc_err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &disks)
+	} else {
+		err = loc_err
+	}
+	return
+}
+
+func (s Salt) GetNodeCpu(node string) (cpu backend.Cpu, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if pyobj, loc_err := pyFuncs["GetNodeCpu"].Call(node); loc_err == nil {
+		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &cpu)
+	} else {
+		err = loc_err
+	}
+	return
+}
+
+func (s Salt) GetNodeOs(node string) (os backend.OperationSystem, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if pyobj, loc_err := pyFuncs["GetNodeOs"].Call(node); loc_err == nil {
+		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &os)
+	} else {
+		err = loc_err
+	}
+	return
+}
+
+func (s Salt) GetNodeMemory(node string) (memory backend.Memory, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if pyobj, loc_err := pyFuncs["GetNodeMemory"].Call(node); loc_err == nil {
+		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &memory)
 	} else {
 		err = loc_err
 	}
