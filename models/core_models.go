@@ -30,16 +30,22 @@ type Node struct {
 	Location      string             `json:"location"`
 	Status        string             `json:"status"`
 	Options       map[string]string  `json:"options"`
-	CPUs          []CPU              `json:"cpus"`
+	CpuInfo       CPU                `json:"cpu"`
 	NetworkInfo   StorageNodeNetwork `json:"network_info"`
 	StorageDisks  []backend.Disk     `json:"storage_disks"`
-	Memory        []Memory           `json:"memory"`
+	Memory        Memory             `json:"memory"`
 	OS            OperatingSystem    `json:"os"`
-	Enabled       bool               `json:"enabled"`
+	Enabled       bool
 }
 
 type CPU struct {
-	CPUId string `bson:"cpuid"`
+	Architecture string `bson:"architecture"`
+	CpuOpMode    string `bson:"cpuopmode"`
+	CPUs         string `bson:"cpus"`
+	VendorID     string `bson:"vendorid"`
+	ModelName    string `bson:"modelname"`
+	L1Cache      string `bson:"l1cache"`
+	L2Cache      string `bson:"l2cache"`
 }
 
 type StorageNodeNetwork struct {
@@ -51,20 +57,17 @@ type StorageNodeNetwork struct {
 type Memory struct {
 	Name       string `bson:"name"`
 	Type       string `bson:"type"`
-	TotalSize  int    `bson:"totalsize"`
-	FreeSize   int    `bson:"freesize"`
+	TotalSize  string `bson:"totalsize"`
+	FreeSize   string `bson:"freesize"`
+	Buffers    string `bson:"buffers"`
+	Cached     string `bson:"cached"`
 	Attributes string `bson:"attribute"`
 }
 
 type OperatingSystem struct {
-	Name                string `bson:"name"`
-	OSVersion           string `bson:"osversion"`
-	KernelVersion       string `bson:"kernel_version"`
-	StorageSWVersion    string `bson:"storage_sw_version"`
-	KdumpStatus         string `bson:"kdump_status"`
-	MemPageShareStatus  string `bson:"mem_page_share_status"`
-	AutomaticLargePages bool   `bson:"automatic_large_pages"`
-	SELinuxMode         string `bson:"selinuxmode"`
+	Name          string `bson:"name"`
+	OSVersion     string `bson:"osversion"`
+	KernelVersion string `bson:"kernel_version"`
 }
 
 type User struct {

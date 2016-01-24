@@ -234,6 +234,123 @@ def GetNodeDisk(node):
                               "StorageProfile": ""})
     return rv
 
+def GetNodeCpu(node):
+    '''
+    returns structure
+    {"nodename": [{"Architecture":   "architecture",
+                  "CpuOpMode":       "cpuopmode",
+                  "CPUs":            "cpus",
+                  "VendorID":        "vendorid",
+                  "ModelName":       "modelname",
+                  "L1Cache":         "l1cache",
+                  "L2Cache":         "l2cache"}, ...], ...}
+    '''
+    if type(node) is list:
+        minions = node
+    else:
+        minions = [node]
+    
+    lscpu = ("lscpu")
+    out = local.cmd(minions, 'cmd.run', [lscpu], expr_form='list')
+    cpuinfo = {}
+    for minion in minions:
+	cpuinfo[minion] = {}
+        info = out.get(minion)
+        if info:
+	    info_list = info.split('\n')
+            for info in info_list:
+                if info.split(':')[0].replace(" ","" ) == 'Architecture':
+                  cpuinfo[minion]['Architecture'] =  info.split(':')[1].replace(" ","" )
+                elif info.split(':')[0].replace(" ","" ) == 'CPUop-mode(s)':
+                  cpuinfo[minion]['CpuOpMode'] = info.split(':')[1].replace(" ","" )
+                elif info.split(':')[0].replace(" ","" ) == 'CPU(s)':
+                  cpuinfo[minion]['CPUs'] = info.split(':')[1].replace(" ","" )
+                elif info.split(':')[0].replace(" ","" ) == 'VendorID':
+                  cpuinfo[minion]['VendorID'] = info.split(':')[1].replace(" ","" )
+		elif info.split(':')[0].replace(" ","" ) == 'Modelname':
+                  cpuinfo[minion]['ModelName'] = info.split(':')[1].replace(" ","" )
+		elif info.split(':')[0].replace(" ","" ) == 'L1icache':
+                  cpuinfo[minion]['L1Cache'] = info.split(':')[1].replace(" ","" )
+		elif info.split(':')[0].replace(" ","" ) == 'L2cache':
+                  cpuinfo[minion]['L2Cache'] = info.split(':')[1].replace(" ","" )
+        else:
+            cpuinfo[minion] = {'Architecture': '', 'CpuOpMode': '', 'CPUs': '', 'VendorID': '', 'ModelName': '', 'L1Cache': '', 'L2Cache': ''}
+
+    return cpuinfo
+
+def GetNodeOs(node):
+    '''
+    returns structure
+    {"nodename": [{"Name":            "osname",
+                   "OSVersion":       "osversion",
+                   "KernelVersion":   "oskernelversion"}, ...], ...}
+    '''
+
+    if type(node) is list:
+        minions = node
+    else:
+        minions = [node]
+
+    lsb = ("lsb_release -v -i -r")
+    out = local.cmd(minions, 'cmd.run', [lsb], expr_form='list')
+
+    uname = ("uname --all")
+    uname_out = local.cmd(minions, 'cmd.run', [uname], expr_form='list')
+
+    osinfo = {}
+    for minion in minions:
+        osinfo[minion] = {}
+        info = out.get(minion)
+	uname_info = uname_out.get(minion)
+        if info and uname_info:
+	    info_list = info.split('\n')
+            osinfo[minion]['KernelVersion'] = uname_info.split(' ')[2]
+            for info in info_list:
+                if info.split(':')[0].replace(" ","" ) == 'DistributorID':
+                  osinfo[minion]['Name'] =  info.split(':')[1].replace(" ","" ).replace("\t","")
+                elif info.split(':')[0].replace(" ","" ) == 'Release':
+                  osinfo[minion]['OSVersion'] = info.split(':')[1].replace(" ","" ).replace("\t","")
+        else:
+            osinfo[minion] = {'Name': '', 'OSVersion': '', 'KernelVersion': ''}
+
+    return osinfo
+
+def GetNodeMemory(node):
+    '''
+    returns structure
+    {"nodename": [{"TotalSize":     "totalsize",
+                   "FreeSize":      "freesize",
+		   "Buffers":       "buffers",
+                   "Cached":        "cached"}, ...], ...}
+    '''
+
+    if type(node) is list:
+        minions = node
+    else:
+        minions = [node]
+
+    vmstat = ("cat /proc/meminfo")
+    out = local.cmd(minions, 'cmd.run', [vmstat], expr_form='list')
+
+    memoinfo = {}
+    for minion in minions:
+        memoinfo[minion] = {}
+	info = out.get(minion)
+        if info:
+            info_list = info.split('\n')
+            for info in info_list:
+                if info.split(':')[0].replace(" ","" ) == 'MemTotal':            
+                  memoinfo[minion]['TotalSize'] =  info.split(':')[1].replace(" ","" )
+   		elif info.split(':')[0].replace(" ","" ) == 'MemFree':
+                  memoinfo[minion]['FreeSize'] = info.split(':')[1].replace(" ","" )
+                elif info.split(':')[0].replace(" ","" ) == 'Buffers':
+                  memoinfo[minion]['Buffers'] = info.split(':')[1].replace(" ","" )
+                elif info.split(':')[0].replace(" ","" ) == 'Cached':
+                  memoinfo[minion]['Cached'] = info.split(':')[1].replace(" ","" )
+        else:
+            memoinfo[minion] = {'TotalSize': '', 'FreeSize': '', 'Buffers': '', 'Cached': ''}
+
+    return memoinfo
 
 def DisableService(node, service, stop=False):
     out = local.cmd(node, 'service.disable', [service])

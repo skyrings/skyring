@@ -132,6 +132,44 @@ func populateStorageNodeInstance(node string) (*models.Node, bool) {
 		storage_node.StorageDisks = append(storage_node.StorageDisks, disk)
 	}
 
+	cpuInfo, err := salt_backend.GetNodeCpu(node)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting cpu details for node: %s. error: %v", node, err))
+		return nil, false
+	}
+
+	fmt.Println("This is the cpu details ========================> ", cpuInfo)
+	storage_node.CpuInfo.Architecture = cpuInfo.Architecture
+	storage_node.CpuInfo.CpuOpMode = cpuInfo.CpuOpMode
+	storage_node.CpuInfo.CPUs = cpuInfo.CPUs
+	storage_node.CpuInfo.VendorID = cpuInfo.VendorID
+	storage_node.CpuInfo.ModelName = cpuInfo.ModelName
+	storage_node.CpuInfo.L1Cache = cpuInfo.L1Cache
+	storage_node.CpuInfo.L2Cache = cpuInfo.L2Cache
+
+	osInfo, err := salt_backend.GetNodeOs(node)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting os details for node: %s", node))
+		return nil, false
+	}
+
+	fmt.Println("This is the os details ========================> ", osInfo)
+	storage_node.OS.Name = osInfo.Name
+	storage_node.OS.OSVersion = osInfo.OSVersion
+	storage_node.OS.KernelVersion = osInfo.KernelVersion
+
+	memoryInfo, err := salt_backend.GetNodeMemory(node)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting memory details for node: %s", node))
+		return nil, false
+	}
+
+	fmt.Println("This is the memory details ========================> ", memoryInfo)
+	storage_node.Memory.TotalSize = memoryInfo.TotalSize
+	storage_node.Memory.FreeSize = memoryInfo.FreeSize
+	storage_node.Memory.Buffers = memoryInfo.Buffers
+	storage_node.Memory.Cached = memoryInfo.Cached
+
 	if !storage_node.NodeId.IsZero() && len(storage_node.NetworkInfo.Subnet) != 0 && len(storage_node.StorageDisks) != 0 {
 		return &storage_node, true
 	} else {
