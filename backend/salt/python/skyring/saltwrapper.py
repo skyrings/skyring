@@ -234,6 +234,61 @@ def GetNodeDisk(node):
                               "StorageProfile": ""})
     return rv
 
+def StringTrim(str):
+   return str.replace(" ","_").replace("(","").replace(")","").replace("-","_")
+
+def GetNodeCpu(node):
+    if type(node) is list:
+        minions = node
+    else:
+        minions = [node]
+
+    lscpu = ("lscpu")
+    out = local.cmd(minions, 'cmd.run', [lscpu], expr_form='list')
+    cpuinfo = {}
+    for minion in minions:
+	cpuinfo[minion] = {}
+	for line in out.get(minion).split('\n'):
+            key_value_info = line.split(':')
+            cpuinfo[minion][StringTrim(key_value_info[0])] =  key_value_info[1].strip()
+
+    return cpuinfo
+
+def GetNodeOs(node):
+    if type(node) is list:
+        minions = node
+    else:
+        minions = [node]
+
+    lsb = ("lsb_release -v -i -r")
+    out = local.cmd(minions, 'cmd.run', [lsb], expr_form='list')
+
+    osinfo = {}
+    for minion in minions:
+	osinfo[minion] = {}
+        for line in out.get(minion).split('\n'):
+            key_value_info = line.split(':')
+            osinfo[minion][StringTrim(key_value_info[0])] =  key_value_info[1].strip()
+
+    return osinfo
+
+def GetNodeMemory(node):
+    if type(node) is list:
+        minions = node
+    else:
+        minions = [node]
+
+    vmstat = ("cat /proc/meminfo")
+    out = local.cmd(minions, 'cmd.run', [vmstat], expr_form='list')
+
+    memoinfo = {}
+    for minion in minions:
+	memoinfo[minion] = {}
+        for line in out.get(minion).split('\n'):
+            key_value_info = line.split(':')
+            memoinfo[minion][StringTrim(key_value_info[0])] =  key_value_info[1].strip()
+
+    return memoinfo
 
 def DisableService(node, service, stop=False):
     out = local.cmd(node, 'service.disable', [service])

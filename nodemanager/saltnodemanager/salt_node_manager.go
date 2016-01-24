@@ -132,6 +132,49 @@ func populateStorageNodeInstance(node string) (*models.Node, bool) {
 		storage_node.StorageDisks = append(storage_node.StorageDisks, disk)
 	}
 
+	cpuInfo, err := salt_backend.GetNodeCpu(node)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting cpu details for node: %s. error: %v", node, err))
+		return nil, false
+	}
+	storage_node.CpuInfo.CPUs = cpuInfo.CPUs
+	storage_node.CpuInfo.Model = cpuInfo.Model
+	storage_node.CpuInfo.CPU_op_modes = cpuInfo.CPU_op_modes
+	storage_node.CpuInfo.CPU_MHz = cpuInfo.CPU_MHz
+	storage_node.CpuInfo.Model_name = cpuInfo.Model_name
+	storage_node.CpuInfo.Vendor_ID = cpuInfo.Vendor_ID
+	storage_node.CpuInfo.CPU_family = cpuInfo.CPU_family
+	storage_node.CpuInfo.Architecture = cpuInfo.Architecture
+	storage_node.CpuInfo.Virtualization_type = cpuInfo.Virtualization_type
+	storage_node.CpuInfo.Sockets = cpuInfo.Sockets
+	storage_node.CpuInfo.L1i_cache = cpuInfo.L1i_cache
+	storage_node.CpuInfo.L2_cache = cpuInfo.L2_cache
+
+	osInfo, err := salt_backend.GetNodeOs(node)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting os details for node: %s", node))
+		return nil, false
+	}
+	storage_node.OS.Release = osInfo.Release
+	storage_node.OS.Distributor_ID = osInfo.Distributor_ID
+	storage_node.OS.LSB_Version = osInfo.LSB_Version
+
+	memoryInfo, err := salt_backend.GetNodeMemory(node)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting memory details for node: %s", node))
+		return nil, false
+	}
+	storage_node.Memory.MemFree = memoryInfo.MemFree
+	storage_node.Memory.KernelStack = memoryInfo.KernelStack
+	storage_node.Memory.MemTotal = memoryInfo.MemTotal
+	storage_node.Memory.Cached = memoryInfo.Cached
+	storage_node.Memory.SwapCached = memoryInfo.SwapCached
+	storage_node.Memory.VmallocTotal = memoryInfo.VmallocTotal
+	storage_node.Memory.Mapped = memoryInfo.Mapped
+	storage_node.Memory.MemAvailable = memoryInfo.MemAvailable
+	storage_node.Memory.PageTables = memoryInfo.PageTables
+	storage_node.Memory.Buffers = memoryInfo.Buffers
+
 	if !storage_node.NodeId.IsZero() && len(storage_node.NetworkInfo.Subnet) != 0 && len(storage_node.StorageDisks) != 0 {
 		return &storage_node, true
 	} else {
