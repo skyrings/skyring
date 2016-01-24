@@ -51,6 +51,32 @@ type Disk struct {
 	StorageProfile string
 }
 
+type Cpu struct {
+	Architecture     string
+	Cpu_op_mode      string
+	CPUs             string
+	Vendor_ID        string
+	Model_name       string
+	CPU_family       string
+	CPU_MHz          string
+	Model            string
+	Cores_per_socket string
+}
+
+type OperationSystem struct {
+	Name          string
+	OSVersion     string
+	KernelVersion string
+	SELinuxMode   string
+}
+
+type Memory struct {
+	Total_size string
+	Swap_total string
+	Active     string
+	Type       string
+}
+
 type Backend interface {
 	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error)
 	AcceptNode(node string, fingerprint string, ignored bool) (bool, error)
@@ -58,6 +84,9 @@ type Backend interface {
 	GetNodes() (NodeList, error)
 	GetNodeID(node string) (uuid.UUID, error)
 	GetNodeDisk(node string) ([]Disk, error)
+	GetNodeCpu(node string) ([]Cpu, error)
+	GetNodeOs(node string) (OperationSystem, error)
+	GetNodeMemory(node string) (Memory, error)
 	GetNodeNetwork(node string) (Network, error)
 	IgnoreNode(node string) (bool, error)
 	DisableService(node string, service string, stop bool) (bool, error)

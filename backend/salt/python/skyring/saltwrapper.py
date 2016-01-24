@@ -234,6 +234,131 @@ def GetNodeDisk(node):
                               "StorageProfile": ""})
     return rv
 
+def StringTrim(str):
+   return str.replace(" ","_").replace("(","").replace(")","").replace("-","_")
+
+def ParseCommandOutput(minions,out):
+    info = {}
+    for minion in minions:
+        info[minion] = {}
+        for line in out.get(minion).split('\n'):
+            key_value_info = line.split(':')
+            info[minion][StringTrim(key_value_info[0])] =  key_value_info[1].strip()
+
+    return info
+
+def GetNodeCpu(node):
+    '''
+    returns structure
+    {"nodename": [{"Architecture":        "architecture",
+                   "Cpu_op_mode":         "cpuopmode",
+                   "CPUs":                "cpus",
+                   "Vendor_ID":           "vendorid",
+                   "Model_name":          "modelname",
+                   "CPU_family":          "cpufamily",
+                   "CPU_MHz":             "cpumhz",
+		   "Model":               "Model",
+		   "Cores_per_socket":    "corespersocket"}, ...], ...}
+    '''
+    if type(node) is list:
+        minions = node
+    else:
+        minions = [node]
+    
+    lscpu = ("lscpu")
+    out = local.cmd(minions, 'cmd.run', [lscpu], expr_form='list')
+    cpuinfo = {}
+    for minion in minions:
+        info = out.get(minion)
+        if info:
+            info_list = info.split('\n')
+            cpuinfo[minion] = [{'Architecture': info_list[0].split(':')[1].strip(),
+                               'Cpu_op_mode': info_list[1].split(':')[1].strip(),
+                               'CPUs': info_list[3].split(':')[1].strip(),
+                               'Vendor_ID': info_list[9].split(':')[1].strip(),
+                               'Model_name': info_list[12].split(':')[1].strip(),
+                               'CPU_family': info_list[10].split(':')[1].strip(),
+                               'CPU_MHz': info_list[14].split(':')[1].strip(),
+			       'Model': info_list[11].split(':')[1].strip(),
+		               'Cores_per_socket': info_list[6].split(':')[1].strip()}]
+        else:
+            cpuinfo[minion] = [{'Architecture': '', 'Cpu_op_mode': '', 'CPUs': '', 'Vendor_ID': '', 'Model_name': '', 'CPU_family': '', 'CPU_MHz': '', 'Model': '', 'Cores_per_socket': ''}]
+
+    return cpuinfo
+
+
+
+def GetNodeOs(node):
+    '''
+    returns structure
+    {"nodename": [{"Name":            "osname",
+                   "OSVersion":       "osversion",
+		   "KernelVersion":   "oskernelversion",
+                   "SELinuxMode":     "selinuxmode"}, ...], ...}
+    '''
+
+    if type(node) is list:
+        minions = node
+    else:
+        minions = [node]
+
+    lsb = ("lsb_release -v -i -r --short")
+    lsb_out = local.cmd(minions, 'cmd.run', [lsb], expr_form='list')
+
+    uname = ("uname --all")
+    uname_out = local.cmd(minions, 'cmd.run', [uname], expr_form='list')
+
+    se = ("sestatus")
+    se_out = local.cmd(minions, 'cmd.run', [se], expr_form='list')
+
+    osinfo = {}
+    for minion in minions:
+        lsb_info = lsb_out.get(minion)
+	uname_info = uname_out.get(minion)
+        se_info = se_out.get(minion)
+        if lsb_info and uname_info and se_info:
+	    lsb_info_list = lsb_info.split(' ')
+            uname_info_list = uname_info.split(' ')
+            se_info_list = se_info.split('\n')
+            osinfo[minion] = {'Name': lsb_info_list[1],
+                              'OSVersion': lsb_info_list[2],
+			      'KernelVersion': uname_info_list[2],
+                              'SELinuxMode': se_info_list[4].split(':')[1].strip()}
+        else:
+            osinfo[minion] = {'Name': '', 'OSVersion': '', 'KernelVersion': '', 'SELinuxMode': ''}
+
+    return osinfo
+
+def GetNodeMemory(node):
+    '''
+    returns structure
+    {"nodename": [{"Total_size":     "totalsize",
+                   "Swap_total":     "swaptotal",
+                   "Active":         "active",
+                   "Type":           "type"}, ...], ...}
+    '''
+
+    if type(node) is list:
+        minions = node
+    else:
+        minions = [node]
+
+    vmstat = ("cat /proc/meminfo")
+    out = local.cmd(minions, 'cmd.run', [vmstat], expr_form='list')
+
+    memoinfo = {}
+    for minion in minions:
+        info = out.get(minion)
+        if info:
+            info_list = info.split('\n')
+            memoinfo[minion] = {'Total_size': info_list[0].split(':')[1].strip(),
+                                'Swap_total': info_list[14].split(':')[1].strip(),
+				'Active': info_list[6].split(':')[1].strip(),
+                                'Type': ''}
+        else:
+            memoinfo[minion] = {'Total_size': '', 'Swap_total': '', 'Active': '', 'Type': ''}
+
+    return memoinfo
 
 def DisableService(node, service, stop=False):
     out = local.cmd(node, 'service.disable', [service])
