@@ -30,16 +30,24 @@ type Node struct {
 	Location      string             `json:"location"`
 	Status        string             `json:"status"`
 	Options       map[string]string  `json:"options"`
-	CPUs          []CPU              `json:"cpus"`
+	CPUsInfo      []backend.Cpu      `json:"cpus"`
 	NetworkInfo   StorageNodeNetwork `json:"network_info"`
 	StorageDisks  []backend.Disk     `json:"storage_disks"`
-	Memory        []Memory           `json:"memory"`
+	Memory        Memory             `json:"memory"`
 	OS            OperatingSystem    `json:"os"`
-	Enabled       bool               `json:"enabled"`
+	Enabled       bool
 }
 
 type CPU struct {
-	CPUId string `bson:"cpuid"`
+	CPUs             string `bson:"cpus"`
+	CPU_op_modes     string `bson:"cpuopmodes"`
+	CPU_MHz          string `bson:"cpumhz"`
+	Model_name       string `bson:"modelname"`
+	Vendor_ID        string `bson:"vendorid"`
+	CPU_family       string `bson:"cpufamily"`
+	Cores_per_socket string `bson:"corespersocket"`
+	Architecture     string `bson:"architecture"`
+	Model            string `bson:"model"`
 }
 
 type StorageNodeNetwork struct {
@@ -49,22 +57,17 @@ type StorageNodeNetwork struct {
 }
 
 type Memory struct {
-	Name       string `bson:"name"`
-	Type       string `bson:"type"`
-	TotalSize  int    `bson:"totalsize"`
-	FreeSize   int    `bson:"freesize"`
-	Attributes string `bson:"attribute"`
+	SwapTotal    string `bson:"swaptotal"`
+	MemTotal     string `bson:"memtotal"`
+	Active       string `bson:"active"`
+	MemAvailable string `bson:"memavailable"`
 }
 
 type OperatingSystem struct {
-	Name                string `bson:"name"`
-	OSVersion           string `bson:"osversion"`
-	KernelVersion       string `bson:"kernel_version"`
-	StorageSWVersion    string `bson:"storage_sw_version"`
-	KdumpStatus         string `bson:"kdump_status"`
-	MemPageShareStatus  string `bson:"mem_page_share_status"`
-	AutomaticLargePages bool   `bson:"automatic_large_pages"`
-	SELinuxMode         string `bson:"selinuxmode"`
+	Name          string `bson:"name"`
+	OSVersion     string `bson:"osversion"`
+	KernelVersion string `bson:"kernel_version"`
+	SELinuxMode   string `bson:"selinuxmode"`
 }
 
 type User struct {
