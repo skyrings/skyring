@@ -29,6 +29,7 @@ type Node struct {
 	ClusterId     uuid.UUID          `json:"clusterid"`
 	Location      string             `json:"location"`
 	Status        string             `json:"status"`
+	State         int                `json:"state"`
 	Options       map[string]string  `json:"options"`
 	CPUs          []CPU              `json:"cpus"`
 	NetworkInfo   StorageNodeNetwork `json:"network_info"`

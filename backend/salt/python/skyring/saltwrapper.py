@@ -167,7 +167,6 @@ def GetNodeDisk(node):
                   "Used":       boolean,
                   "Vendor":     "string"}, ...], ...}
     '''
-
     if type(node) is list:
         minions = node
     else:
