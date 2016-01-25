@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_5a0a0f22",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T14:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_af774b3a",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_ef714345",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2016-01-25T13:18:52Z",
       "side": 1,
       "message": "Same as above",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7a0d1337",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T14:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_ef714345",
       "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_9a13a75b",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T14:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_2f935b50",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_8fa3679d",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 4
@@ -64,6 +118,24 @@
       "writtenOn": "2016-01-25T13:18:52Z",
       "side": 1,
       "message": "node_id as well in error",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ba0eab30",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T14:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_8fa3679d",
       "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_3a039b0e",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T14:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_2fba7bc0",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_8fca874d",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 4
@@ -98,6 +188,24 @@
       "writtenOn": "2016-01-25T13:18:52Z",
       "side": 1,
       "message": "Same as above",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_1a009700",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T14:01:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_8fca874d",
       "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
