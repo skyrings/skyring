@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_4f27af64",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-25T13:00:51Z",
+      "side": 1,
+      "message": "you will have to update this i guess? and in below functions as well.",
+      "range": {
+        "startLine": 240,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 56
+      },
+      "revId": "fbbfc69fa40b5ed388965e8efda0b72d4553b45c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_cf1abf16",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-25T13:00:51Z",
+      "side": 1,
+      "message": "can replace this with:\n\nfor line in out.get(minion).split(\u0027\\n\u0027):",
+      "range": {
+        "startLine": 258,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 30
+      },
+      "revId": "fbbfc69fa40b5ed388965e8efda0b72d4553b45c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8fe7e711",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-25T13:00:51Z",
+      "side": 1,
+      "message": "this looks repetitive in all three functions below, could you have a function to do that ?",
+      "range": {
+        "startLine": 256,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 141
+      },
+      "revId": "fbbfc69fa40b5ed388965e8efda0b72d4553b45c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
