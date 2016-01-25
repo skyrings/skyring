@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_4f36cf53",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-25T13:37:34Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "fa81d914_34bad2c0",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_15307e00",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 1
@@ -352,6 +370,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_8f3fe724",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-25T13:37:34Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "fa81d914_7487ead7",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_d8137d5a",
         "filename": "apps/skyring/storage.go",
         "patchSetId": 1
@@ -387,6 +423,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_cf49dfd1",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-25T13:37:34Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "fa81d914_745e0a78",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_181ef563",
         "filename": "apps/skyring/util.go",
         "patchSetId": 1
@@ -416,6 +470,24 @@
       "side": 1,
       "message": "Not specific to node alone, any utilities for skyring package?",
       "parentUuid": "fa81d914_181ef563",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_6f10f3a8",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-25T13:37:34Z",
+      "side": 1,
+      "message": "ok. the only this is it might be confusing with util package source.",
+      "parentUuid": "fa81d914_54e9067f",
       "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -486,6 +558,24 @@
       "side": 1,
       "message": "AppLocks has that information",
       "parentUuid": "fa81d914_3819f979",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8f260715",
+        "filename": "tools/lock/lockmanager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-25T13:37:34Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "fa81d914_74ec4a90",
       "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
