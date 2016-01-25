@@ -15,21 +15,8 @@ import (
 	"net/rpc/jsonrpc"
 	"path/filepath"
 	"strings"
-	"sync"
 	"time"
 )
-
-var StartedNodes map[string]time.Time = make(map[string]time.Time)
-var StartedNodesLock sync.Mutex
-
-func GetStartedNodes() []string {
-	nodes := make([]string, len(StartedNodes))
-	for n := range StartedNodes {
-		nodes = append(nodes, n)
-	}
-
-	return nodes
-}
 
 type Listener int
 
@@ -45,10 +32,7 @@ func (l *Listener) PushNodeStartEvent(args *NodeStartEventArgs, ack *bool) error
 		*ack = false
 		return nil
 	}
-
-	StartedNodesLock.Lock()
-	defer StartedNodesLock.Unlock()
-	StartedNodes[args.Node] = args.Timestamp
+	handle_node_start_event(node)
 	*ack = true
 	return nil
 }

@@ -222,3 +222,21 @@ const (
 	DefaultProfile3 = "general"
 	DefaultPriority = 100
 )
+
+type NodeState int
+
+const (
+	NODE_STATE_UNACCEPTED = iota
+	NODE_STATE_INITIALIZING
+	NODE_STATE_ACTIVE
+	NODE_STATE_FAILED
+)
+
+var NodeStates = [...]string{
+	"unaccepted",
+	"initializing",
+	"active",
+	"failed",
+}
+
+func (s NodeState) String() string { return NodeStates[s] }

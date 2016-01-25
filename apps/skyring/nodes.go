@@ -25,6 +25,7 @@ import (
 	"github.com/skyrings/skyring/tools/task"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
@@ -166,22 +167,12 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 }
 
 func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task) error {
-	if node, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint); err == nil {
+	if _, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint); err == nil {
 		t.UpdateStatus("Adding the node to DB: %s", hostname)
-		if err = addStorageNodeToDB(w, *node); err != nil {
+		if err = AddStorageNodeToDB(hostname, models.NODE_STATE_INITIALIZING, models.STATUS_UP); err != nil {
 			logger.Get().Error("Unable to add the node:%s to DB. error: %v", hostname, err)
 			t.UpdateStatus("Unable to add the node:%s to DB. error: %v", hostname, err)
 			return err
-		}
-		t.UpdateStatus("Setting up collectd on node: %s", hostname)
-		if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(hostname, curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
-			t.UpdateStatus("Unable to setup collectd on node: %s", hostname)
-			logger.Get().Error("Unable to setup collectd on %s because of %v", hostname, nodeErrorMap)
-			if len(nodeErrorMap) != 0 {
-				return fmt.Errorf("Unable to setup collectd on %s because of %v", hostname, nodeErrorMap)
-			} else {
-				return configureError
-			}
 		}
 	} else {
 		logger.Get().Critical("Accepting the node: %s failed. error: %v", hostname, err)
@@ -192,10 +183,9 @@ func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *t
 }
 
 func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeRequest, t *task.Task) error {
-
 	t.UpdateStatus("Bootstrapping the node")
 	// Add the node
-	if node, err := GetCoreNodeManager().AddNode(
+	if _, err := GetCoreNodeManager().AddNode(
 		curr_hostname,
 		request.Hostname,
 		uint(request.SshPort),
@@ -203,21 +193,12 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 		request.User,
 		request.Password); err == nil {
 		t.UpdateStatus("Adding the node to DB: %s", request.Hostname)
-		if err = addStorageNodeToDB(w, *node); err != nil {
-			logger.Get().Error("Unable to add the node: %s to DB. error: %v", request.Hostname, err)
-			t.UpdateStatus("Unable to add the node: %s to DB. error: %v", request.Hostname, err)
+		if err = AddStorageNodeToDB(request.Hostname, models.NODE_STATE_INITIALIZING, models.STATUS_UP); err != nil {
+			logger.Get().Error("Unable to add the node:%s to DB. error: %v", request.Hostname, err)
+			t.UpdateStatus("Unable to add the node:%s to DB. error: %v", request.Hostname, err)
 			return err
 		}
-		t.UpdateStatus("Setting up collectd on node: %s", request.Hostname)
-		if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(request.Hostname, curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
-			t.UpdateStatus("Unable to setup collectd on node: %s", request.Hostname)
-			logger.Get().Error("Unable to setup collectd on %s because of %v", request.Hostname, nodeErrorMap)
-			if len(nodeErrorMap) != 0 {
-				return fmt.Errorf("Unable to setup collectd on %s because of %v", request.Hostname, nodeErrorMap)
-			} else {
-				return configureError
-			}
-		}
+
 	} else {
 		logger.Get().Critical("Bootstrapping the node: %s failed. error: %v: ", request.Hostname, err)
 		t.UpdateStatus("Bootstrapping the node: %s failed. error: %v: ", request.Hostname, err)
@@ -226,21 +207,22 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 	return nil
 }
 
-func addStorageNodeToDB(w http.ResponseWriter, storage_node models.Node) error {
+func AddStorageNodeToDB(hostname string, node_state int, node_status string) error {
 	// Add the node details to the DB
+	var storage_node models.Node
+	storage_node.Hostname = hostname
+	storage_node.State = node_state
+	storage_node.Status = node_status
+
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 
-	// Before persisting the node check if node with same node_id already exists
-	// If so dont add the node to DB and reject the minion
 	var node models.Node
-	// No need to check for error as if node does not exist, that also returned as error
-	// As long as node details populated, its a valid node existing
-	_ = coll.Find(bson.M{"nodeid": storage_node.NodeId}).One(&node)
-	if node.Hostname != "" {
-		logger.Get().Critical(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
-		return errors.New(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
+	err = coll.Find(bson.M{"hostname": storage_node.Hostname}).One(&node)
+	if err != mgo.ErrNotFound {
+		logger.Get().Critical(fmt.Sprintf("Node with name: %v already exists", storage_node.Hostname))
+		return errors.New(fmt.Sprintf("Node with name: %v already exists", storage_node.Hostname))
 	}
 
 	// Persist the node details
