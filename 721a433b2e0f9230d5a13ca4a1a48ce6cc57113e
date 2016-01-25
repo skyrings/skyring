@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_49088f91",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-25T09:45:13Z",
+      "side": 1,
+      "message": "First i have tried with that only with column wise . But there we are not getting all main details of cpu . like -\nArchitecture , VendorID , ModelName etc.",
+      "parentUuid": "fa81d914_699ab364",
+      "range": {
+        "startLine": 253,
+        "startChar": 4,
+        "endLine": 253,
+        "endChar": 21
+      },
+      "revId": "721a433b2e0f9230d5a13ca4a1a48ce6cc57113e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_899d275c",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 1
@@ -82,6 +106,30 @@
       "writtenOn": "2016-01-25T05:47:15Z",
       "side": 1,
       "message": "same as above, if we can get output along with column names, that would be better.",
+      "range": {
+        "startLine": 285,
+        "startChar": 4,
+        "endLine": 285,
+        "endChar": 42
+      },
+      "revId": "721a433b2e0f9230d5a13ca4a1a48ce6cc57113e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_69ff1368",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-25T09:45:13Z",
+      "side": 1,
+      "message": "While using column name , we are not getting all main details regarding Os",
+      "parentUuid": "fa81d914_899d275c",
       "range": {
         "startLine": 285,
         "startChar": 4,
