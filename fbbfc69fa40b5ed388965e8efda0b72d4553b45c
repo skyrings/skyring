@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_6f5e3378",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-25T13:42:17Z",
+      "side": 1,
+      "message": "i think , now this one is not needed .\nbecause of , we are creating the key for dictionary based on lscpu command dynamically.",
+      "parentUuid": "fa81d914_4f27af64",
+      "range": {
+        "startLine": 240,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 56
+      },
+      "revId": "fbbfc69fa40b5ed388965e8efda0b72d4553b45c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_cf1abf16",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_8f544755",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-25T13:42:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_cf1abf16",
+      "range": {
+        "startLine": 258,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 30
+      },
+      "revId": "fbbfc69fa40b5ed388965e8efda0b72d4553b45c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_8fe7e711",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2016-01-25T13:00:51Z",
       "side": 1,
       "message": "this looks repetitive in all three functions below, could you have a function to do that ?",
+      "range": {
+        "startLine": 256,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 141
+      },
+      "revId": "fbbfc69fa40b5ed388965e8efda0b72d4553b45c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_af4f4bbd",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-25T13:42:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_8fe7e711",
       "range": {
         "startLine": 256,
         "startChar": 0,
