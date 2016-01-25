@@ -16,6 +16,24 @@
       "revId": "07f137a86087d46b80db835ec3a19c409a2ed9a0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_afabcb1c",
+        "filename": "tools/lock/lockmanager.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T13:46:41Z",
+      "side": 1,
+      "message": "This is valid to just iterate over the keys alone",
+      "parentUuid": "fa81d914_4f840fd4",
+      "revId": "07f137a86087d46b80db835ec3a19c409a2ed9a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
