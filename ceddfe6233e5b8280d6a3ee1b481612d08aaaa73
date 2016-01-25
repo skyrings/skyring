@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_149ceebf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_782a917f",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_982105a2",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-01-19T17:54:33Z",
       "side": 1,
       "message": "commented??",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_c972bfe2",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "fa81d914_982105a2",
       "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_097db7b1",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "fa81d914_b82409b0",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_d83a9dcc",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2016-01-19T17:54:33Z",
       "side": 1,
       "message": "Append the err as well at the end like\n\n\"\u003cMsg\u003e. error: %v\", err",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_294b5b88",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_d83a9dcc",
       "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_494ecf97",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_f835a1db",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_383019e8",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2016-01-19T17:54:33Z",
       "side": 1,
       "message": "As above",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_6945536f",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_383019e8",
       "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_8948c788",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_183515da",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_584ead70",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 1
@@ -132,6 +258,24 @@
       "writtenOn": "2016-01-19T17:54:33Z",
       "side": 1,
       "message": "Remove",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a95e6b43",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_584ead70",
       "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_c959df5c",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_7851b10d",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_98582534",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 1
@@ -166,6 +328,24 @@
       "writtenOn": "2016-01-19T17:54:33Z",
       "side": 1,
       "message": "Remove",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_e9586358",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_98582534",
       "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_0954d71f",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_b85b292d",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_3847394d",
         "filename": "backend/backend.go",
         "patchSetId": 1
@@ -200,6 +398,24 @@
       "writtenOn": "2016-01-19T17:54:33Z",
       "side": 1,
       "message": "I feel FSUUID was meant for that. Also I see DiskId getting populated with same data as if FSUUID in saltwrapper.py. How they are different??",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_e92f839f",
+        "filename": "backend/backend.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "you wont have fSUUID in all disks, FSUUID is the file system uuid, if you have a raw disk fsuuid is not present. \nDiskId is generated by USM. In saltwrapper.py, I am initializing this val with fsuuid as dafault. If look at saltnodemgr, I am generating a proper uuid for each disk before persisting in the db",
+      "parentUuid": "fa81d914_3847394d",
       "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_092bf794",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_986f45c5",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_b87249ab",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 1
@@ -234,6 +468,24 @@
       "writtenOn": "2016-01-19T17:54:33Z",
       "side": 1,
       "message": "Add node name as well err in the log message :))",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_9468debb",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_b87249ab",
       "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -257,6 +509,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_b46322dc",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_d868ddbc",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_f863e1da",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 1
@@ -268,6 +538,24 @@
       "writtenOn": "2016-01-19T17:54:33Z",
       "side": 1,
       "message": "Log the error and discontinue as I feel",
+      "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_d46256d7",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T09:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_f863e1da",
       "revId": "ceddfe6233e5b8280d6a3ee1b481612d08aaaa73",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
