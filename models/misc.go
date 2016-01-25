@@ -221,3 +221,21 @@ const (
 	DefaultProfile3 = "general"
 	DefaultPriority = 100
 )
+
+type NodeState int
+
+const (
+	NODE_STATE_ACCEPTING = iota
+	NODE_STATE_ACCEPT_FAILED
+	NODE_STATE_FREE
+	NODE_STATE_PARTICIPATING
+)
+
+var NodeStates = [...]string{
+	"accepting",
+	"accept failed",
+	"free",
+	"participating",
+}
+
+func (s NodeState) String() string { return NodeStates[s] }

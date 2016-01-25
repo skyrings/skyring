@@ -33,7 +33,7 @@ import (
 )
 
 var (
-	curr_hostname, err = os.Hostname()
+	Curr_hostname, err = os.Hostname()
 )
 
 func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
@@ -152,71 +152,122 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 }
 
 func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task) error {
-	if node, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint); err == nil {
+	if _, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint); err == nil {
 		//Mark the storage profiles
-		t.UpdateStatus("Applying the storage profiles: %s", hostname)
-		if err := applyStorageProfiles(node); err != nil {
-			logger.Get().Error(fmt.Sprintf("Error applying storage profiles %v", err))
-		}
-		t.UpdateStatus("Adding the node to DB: %s", hostname)
-		if err = addStorageNodeToDB(w, *node); err != nil {
-			logger.Get().Error("Unable to add the node:%s to DB. error: %v", hostname, err)
-			t.UpdateStatus("Unable to add the node:%s to DB. error: %v", hostname, err)
+		t.UpdateStatus("Initializing the node to DB: %s", hostname)
+		if err = InitializeStorageNodeToDB(hostname, models.NODE_STATE_ACCEPTING, models.STATUS_UP); err != nil {
+			logger.Get().Error("Unable to initialize the node:%s to DB. error: %v", hostname, err)
+			t.UpdateStatus("Unable to initialize the node:%s to DB. error: %v", hostname, err)
 			return err
 		}
-		t.UpdateStatus("Setting up collectd on node: %s", hostname)
-		if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(hostname, curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
-			t.UpdateStatus("Unable to setup collectd on node: %s", hostname)
-			logger.Get().Error("Unable to setup collectd on %s because of %v", hostname, nodeErrorMap)
-			if len(nodeErrorMap) != 0 {
-				return fmt.Errorf("Unable to setup collectd on %s because of %v", hostname, nodeErrorMap)
-			} else {
-				return configureError
+
+		/*
+			t.UpdateStatus("Applying the storage profiles: %s", hostname)
+			if err := applyStorageProfiles(node); err != nil {
+				logger.Get().Error(fmt.Sprintf("Error applying storage profiles %v", err))
 			}
-		}
+			t.UpdateStatus("Adding the node to DB: %s", hostname)
+			if err = addStorageNodeToDB(w, *node); err != nil {
+				logger.Get().Error("Unable to add the node:%s to DB. error: %v", hostname, err)
+				t.UpdateStatus("Unable to add the node:%s to DB. error: %v", hostname, err)
+				return err
+			}
+			t.UpdateStatus("Setting up collectd on node: %s", hostname)
+			if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(hostname, curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
+				t.UpdateStatus("Unable to setup collectd on node: %s", hostname)
+				logger.Get().Error("Unable to setup collectd on %s because of %v", hostname, nodeErrorMap)
+				if len(nodeErrorMap) != 0 {
+					return fmt.Errorf("Unable to setup collectd on %s because of %v", hostname, nodeErrorMap)
+				} else {
+					return configureError
+				}
+			}*/
 	} else {
 		logger.Get().Critical("Accepting the node: %s failed. error: %v", hostname, err)
 		t.UpdateStatus("Accepting the node: %s failed. error: %v", hostname, err)
+		if err = InitializeStorageNodeToDB(hostname, models.NODE_STATE_ACCEPT_FAILED, models.STATUS_DOWN); err != nil {
+			logger.Get().Error("Unable to initialize the node:%s to DB. error: %v", hostname, err)
+			t.UpdateStatus("Unable to initialize the node:%s to DB. error: %v", hostname, err)
+			return err
+		}
 		return err
 	}
 	return nil
 }
 
 func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeRequest, t *task.Task) error {
-
 	t.UpdateStatus("Bootstrapping the node")
 	// Add the node
-	if node, err := GetCoreNodeManager().AddNode(
-		curr_hostname,
+	if _, err := GetCoreNodeManager().AddNode(
+		Curr_hostname,
 		request.Hostname,
 		uint(request.SshPort),
 		request.SshFingerprint,
 		request.User,
 		request.Password); err == nil {
 		//Mark the storage profiles
-		t.UpdateStatus("Applying the storage profiles: %s", request.Hostname)
-		if err := applyStorageProfiles(node); err != nil {
-			logger.Get().Error(fmt.Sprintf("Error applying storage profiles %v", err))
-		}
-		t.UpdateStatus("Adding the node to DB: %s", request.Hostname)
-		if err = addStorageNodeToDB(w, *node); err != nil {
-			logger.Get().Error("Unable to add the node: %s to DB. error: %v", request.Hostname, err)
-			t.UpdateStatus("Unable to add the node: %s to DB. error: %v", request.Hostname, err)
+		t.UpdateStatus("Initializing the node to DB: %s", request.Hostname)
+		if err = InitializeStorageNodeToDB(request.Hostname, models.NODE_STATE_ACCEPTING, models.STATUS_UP); err != nil {
+			logger.Get().Error("Unable to initialize the node:%s to DB. error: %v", request.Hostname, err)
+			t.UpdateStatus("Unable to initialize the node:%s to DB. error: %v", request.Hostname, err)
 			return err
 		}
-		t.UpdateStatus("Setting up collectd on node: %s", request.Hostname)
-		if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(request.Hostname, curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
-			t.UpdateStatus("Unable to setup collectd on node: %s", request.Hostname)
-			logger.Get().Error("Unable to setup collectd on %s because of %v", request.Hostname, nodeErrorMap)
-			if len(nodeErrorMap) != 0 {
-				return fmt.Errorf("Unable to setup collectd on %s because of %v", request.Hostname, nodeErrorMap)
-			} else {
-				return configureError
+
+		/*
+			t.UpdateStatus("Applying the storage profiles: %s", request.Hostname)
+			if err := applyStorageProfiles(node); err != nil {
+				logger.Get().Error(fmt.Sprintf("Error applying storage profiles %v", err))
 			}
-		}
+			t.UpdateStatus("Adding the node to DB: %s", request.Hostname)
+			if err = addStorageNodeToDB(w, *node); err != nil {
+				logger.Get().Error("Unable to add the node: %s to DB. error: %v", request.Hostname, err)
+				t.UpdateStatus("Unable to add the node: %s to DB. error: %v", request.Hostname, err)
+				return err
+			}
+			t.UpdateStatus("Setting up collectd on node: %s", request.Hostname)
+			if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(request.Hostname, Curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
+				t.UpdateStatus("Unable to setup collectd on node: %s", request.Hostname)
+				logger.Get().Error("Unable to setup collectd on %s because of %v", request.Hostname, nodeErrorMap)
+				if len(nodeErrorMap) != 0 {
+					return fmt.Errorf("Unable to setup collectd on %s because of %v", request.Hostname, nodeErrorMap)
+				} else {
+					return configureError
+				}
+			}*/
 	} else {
 		logger.Get().Critical("Bootstrapping the node: %s failed. error: %v: ", request.Hostname, err)
 		t.UpdateStatus("Bootstrapping the node: %s failed. error: %v: ", request.Hostname, err)
+		if err = InitializeStorageNodeToDB(request.Hostname, models.NODE_STATE_ACCEPT_FAILED, models.STATUS_DOWN); err != nil {
+			logger.Get().Error("Unable to initialize the node:%s to DB. error: %v", request.Hostname, err)
+			t.UpdateStatus("Unable to initialize the node:%s to DB. error: %v", request.Hostname, err)
+			return err
+		}
+		return err
+	}
+	return nil
+}
+
+func InitializeStorageNodeToDB(hostname string, node_state int, node_status string) error {
+	// Add the node details to the DB
+	var storage_node models.Node
+	storage_node.Hostname = hostname
+	storage_node.State = node_state
+	storage_node.Status = node_status
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+
+	var node models.Node
+	_ = coll.Find(bson.M{"hostname": storage_node.Hostname}).One(&node)
+	if node.Hostname != "" {
+		logger.Get().Critical(fmt.Sprintf("Node with name: %v already exists", storage_node.Hostname))
+		return errors.New(fmt.Sprintf("Node with name: %v already exists", storage_node.Hostname))
+	}
+
+	// Persist the node details
+	if err := coll.Insert(storage_node); err != nil {
+		logger.Get().Critical("Error adding the node: %s. error: %v", storage_node.Hostname, err)
 		return err
 	}
 	return nil
@@ -465,7 +516,7 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func applyStorageProfiles(node *models.Node) error {
+func ApplyStorageProfiles(node *models.Node) error {
 
 	/*
 		For the time being, puting it to the general bucket
