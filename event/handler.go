@@ -13,11 +13,20 @@ limitations under the License.
 package event
 
 import (
+	"fmt"
+	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/nodemanager/saltnodemanager"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/task"
 	"gopkg.in/mgo.v2/bson"
+	"os"
+)
+
+var (
+	curr_hostname, err = os.Hostname()
 )
 
 var handlermap = map[string]interface{}{
@@ -102,5 +111,92 @@ func node_lost_handler(event models.Event) error {
 }
 
 func collectd_threshold_handler(event models.Event) error {
+	return nil
+}
+
+func handle_node_start_event(node string) error {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+
+	var storage_node models.Node
+
+	_ = coll.Find(bson.M{"hostname": node}).One(&storage_node)
+	if storage_node.State != models.NODE_STATE_INITIALIZING {
+		logger.Get().Warning(fmt.Sprintf("Node with name: %s not in activating state to update other details", node))
+		return nil
+	}
+
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("started the task for InitializeNode: %s", t.ID)
+		// Process the request
+		if err := initializeStorageNode(node, t); err != nil {
+			t.UpdateStatus("Failed")
+			t.Done(models.TASK_STATUS_FAILURE)
+		} else {
+			t.UpdateStatus("Success")
+			t.Done(models.TASK_STATUS_SUCCESS)
+		}
+	}
+	if taskId, err := skyring.GetApp().GetTaskManager().Run(fmt.Sprintf("Initialize Node: %s", node), asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("Unable to create the task for Initialize Node: %s. error: %v", node, err)
+	} else {
+		logger.Get().Debug("Task created for initialize node. Task id: %s", taskId.String())
+	}
+	return nil
+}
+
+func initializeStorageNode(node string, t *task.Task) error {
+	if storage_node, ok := saltnodemanager.GetStorageNodeInstance(node); ok {
+		if err := updateStorageNodeToDB(*storage_node); err != nil {
+			logger.Get().Error("Unable to add details of node: %s to DB. error: %v", node, err)
+			t.UpdateStatus("Unable to add details of node: %s to DB. error: %v", node, err)
+			updateNodeState(node, models.NODE_STATE_FAILED)
+			return err
+		}
+		if nodeErrorMap, configureError := skyring.GetCoreNodeManager().SetUpMonitoring(node, curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
+			if len(nodeErrorMap) != 0 {
+				logger.Get().Error("Unable to setup collectd on %s because of %v", node, nodeErrorMap)
+				t.UpdateStatus("Unable to setup collectd on %s because of %v", node, nodeErrorMap)
+				updateNodeState(node, models.NODE_STATE_FAILED)
+				return err
+			} else {
+				logger.Get().Error("Config Error during monitoring setup for node:%s Error:%v", node, configureError)
+				t.UpdateStatus("Config Error during monitoring setup for node:%s Error:%v", node, configureError)
+				updateNodeState(node, models.NODE_STATE_FAILED)
+				return err
+			}
+		}
+		return nil
+	} else {
+		logger.Get().Critical("Error getting the details for node: %s", node)
+		t.UpdateStatus("Error getting the details for node: %s", node)
+		updateNodeState(node, models.NODE_STATE_FAILED)
+		return fmt.Errorf("Error getting the details for node: %s", node)
+	}
+}
+
+func updateNodeState(node string, state int) error {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"state": state}}); err != nil {
+		logger.Get().Critical("Error updating the node state for node: %s. error: %v", node, err)
+		return err
+	}
+	return nil
+}
+
+func updateStorageNodeToDB(storage_node models.Node) error {
+	// Add the node details to the DB
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+
+	storage_node.State = models.NODE_STATE_ACTIVE
+	if err := coll.Update(bson.M{"hostname": storage_node.Hostname}, storage_node); err != nil {
+		logger.Get().Critical("Error Updating the node: %s. error: %v", storage_node.Hostname, err)
+		return err
+	}
 	return nil
 }
