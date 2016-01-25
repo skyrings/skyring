@@ -13,9 +13,12 @@ limitations under the License.
 package event
 
 import (
+	"fmt"
+	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/nodemanager/saltnodemanager"
 	"github.com/skyrings/skyring/tools/logger"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -102,5 +105,55 @@ func node_lost_handler(event models.Event) error {
 }
 
 func collectd_threshold_handler(event models.Event) error {
+	return nil
+}
+
+func handle_node_start_event(node string) error {
+	if storage_node, ok := saltnodemanager.PopulateStorageNodeInstance(node); ok {
+		if err := skyring.ApplyStorageProfiles(storage_node); err != nil {
+			logger.Get().Error(fmt.Sprintf("Error applying storage profiles %v", err))
+		}
+		if err := updateStorageNodeToDB(*storage_node); err != nil {
+			logger.Get().Error("Unable to add the node: %s to DB. error: %v", node, err)
+			return err
+		}
+		if nodeErrorMap, configureError := skyring.GetCoreNodeManager().SetUpMonitoring(node, skyring.Curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
+			if len(nodeErrorMap) != 0 {
+				logger.Get().Error("Unable to setup collectd on %s because of %v", node, nodeErrorMap)
+			} else {
+				logger.Get().Error("Config Error during monitoring setup for node:%s Error:%v", node, configureError)
+			}
+		}
+		return nil
+	} else {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"state": models.NODE_STATE_ACCEPT_FAILED}}); err != nil {
+			logger.Get().Critical("Error Updating the node: %s. error: %v", node, err)
+			return err
+		}
+	}
+	logger.Get().Error("Unable to handle start node event for node: %s", node)
+	return nil
+}
+
+func updateStorageNodeToDB(storage_node models.Node) error {
+	// Add the node details to the DB
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+
+	var node models.Node
+	_ = coll.Find(bson.M{"nodeid": storage_node.NodeId}).One(&node)
+	if node.Hostname != "" {
+		logger.Get().Critical(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
+		return fmt.Errorf("Node with id: %v already exists", storage_node.NodeId)
+	}
+	storage_node.State = models.NODE_STATE_FREE
+	if err := coll.Update(bson.M{"hostname": storage_node.Hostname}, storage_node); err != nil {
+		logger.Get().Critical("Error Updating the node: %s. error: %v", storage_node.Hostname, err)
+		return err
+	}
 	return nil
 }

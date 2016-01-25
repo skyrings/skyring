@@ -18,7 +18,6 @@ import (
 	"github.com/skyrings/skyring/backend/salt"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/nodemanager"
@@ -26,7 +25,6 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"net"
-	"time"
 )
 
 const (
@@ -50,51 +48,28 @@ func NewSaltNodeManager(config io.Reader) (*SaltNodeManager, error) {
 	return &SaltNodeManager{}, nil
 }
 
-func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.Node, error) {
+func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (bool, error) {
 	if status, err := salt_backend.AcceptNode(node, fingerprint, false); err != nil {
-		return nil, err
+		return false, err
 	} else if !status {
-		return nil, errors.New("Unable to accept the node")
+		return false, errors.New("Unable to accept the node")
 	} else {
-		for count := 0; count < 60; count++ {
-			time.Sleep(10 * time.Second)
-			startedNodes := event.GetStartedNodes()
-			for _, nodeName := range startedNodes {
-				if nodeName == node {
-					if retVal, ok := populateStorageNodeInstance(node); ok {
-						return retVal, nil
-					}
-				}
-			}
-		}
+		return true, nil
 
 	}
-	return nil, errors.New("Unable to accept the node")
 }
 
-func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.Node, error) {
+func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error) {
 	if status, err := salt_backend.AddNode(master, node, port, fingerprint, username, password); err != nil {
-		return nil, err
+		return false, err
 	} else if !status {
-		return nil, errors.New("Unable to add the node")
+		return false, errors.New("Unable to add the node")
 	} else {
-		for count := 0; count < 60; count++ {
-			time.Sleep(10 * time.Second)
-			startedNodes := event.GetStartedNodes()
-			for _, nodeName := range startedNodes {
-				if nodeName == node {
-					if retVal, ok := populateStorageNodeInstance(node); ok {
-						return retVal, nil
-					}
-				}
-			}
-		}
-
+		return true, nil
 	}
-	return nil, errors.New("Unable to add the node")
 }
 
-func populateStorageNodeInstance(node string) (*models.Node, bool) {
+func PopulateStorageNodeInstance(node string) (*models.Node, bool) {
 	var storage_node models.Node
 	storage_node.Hostname = node
 	storage_node.Enabled = true

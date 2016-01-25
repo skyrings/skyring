@@ -18,8 +18,8 @@ import (
 )
 
 type NodeManagerInterface interface {
-	AcceptNode(node string, fingerprint string) (*models.Node, error)
-	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.Node, error)
+	AcceptNode(node string, fingerprint string) (bool, error)
+	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error)
 	GetUnmanagedNodes() (*models.UnmanagedNodes, error)
 	DisableNode(node string) (bool, error)
 	EnableNode(node string) (bool, error)

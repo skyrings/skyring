@@ -15,21 +15,8 @@ import (
 	"net/rpc/jsonrpc"
 	"path/filepath"
 	"strings"
-	"sync"
 	"time"
 )
-
-var StartedNodes map[string]time.Time = make(map[string]time.Time)
-var StartedNodesLock sync.Mutex
-
-func GetStartedNodes() []string {
-	nodes := make([]string, len(StartedNodes))
-	for n := range StartedNodes {
-		nodes = append(nodes, n)
-	}
-
-	return nodes
-}
 
 type Listener int
 
@@ -46,9 +33,19 @@ func (l *Listener) PushNodeStartEvent(args *NodeStartEventArgs, ack *bool) error
 		return nil
 	}
 
-	StartedNodesLock.Lock()
-	defer StartedNodesLock.Unlock()
-	StartedNodes[args.Node] = args.Timestamp
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+
+	var storage_node models.Node
+
+	_ = coll.Find(bson.M{"hostname": node}).One(&storage_node)
+	if storage_node.State != models.NODE_STATE_ACCEPTING {
+		logger.Get().Warning(fmt.Sprintf("Node with name: %s not in activating state to update other details", node))
+		*ack = false
+		return nil
+	}
+	go handle_node_start_event(node)
 	*ack = true
 	return nil
 }
