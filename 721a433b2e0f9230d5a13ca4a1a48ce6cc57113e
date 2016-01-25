@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_a97cab21",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-25T05:47:15Z",
+      "side": 1,
+      "message": "include",
+      "range": {
+        "startLine": 10,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 18
+      },
+      "revId": "721a433b2e0f9230d5a13ca4a1a48ce6cc57113e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_c9771f3a",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-25T05:47:15Z",
+      "side": 1,
+      "message": "please remove the tab space ?",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 4
+      },
+      "revId": "721a433b2e0f9230d5a13ca4a1a48ce6cc57113e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_699ab364",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-25T05:47:15Z",
+      "side": 1,
+      "message": "doesn\u0027t the above command have an option where details are given along with the column name ? if yes its better to use that, than depending on the position as they may change.",
+      "range": {
+        "startLine": 253,
+        "startChar": 4,
+        "endLine": 253,
+        "endChar": 21
+      },
+      "revId": "721a433b2e0f9230d5a13ca4a1a48ce6cc57113e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_899d275c",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-25T05:47:15Z",
+      "side": 1,
+      "message": "same as above, if we can get output along with column names, that would be better.",
+      "range": {
+        "startLine": 285,
+        "startChar": 4,
+        "endLine": 285,
+        "endChar": 42
+      },
+      "revId": "721a433b2e0f9230d5a13ca4a1a48ce6cc57113e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a9a3cb9c",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-25T05:47:15Z",
+      "side": 1,
+      "message": "can you search for name and based on that get the info, instead of depending on the position.",
+      "range": {
+        "startLine": 328,
+        "startChar": 45,
+        "endLine": 328,
+        "endChar": 88
+      },
+      "revId": "721a433b2e0f9230d5a13ca4a1a48ce6cc57113e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
