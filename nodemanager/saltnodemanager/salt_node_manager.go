@@ -18,7 +18,6 @@ import (
 	"github.com/skyrings/skyring/backend/salt"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/event"
 	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/nodemanager"
@@ -26,7 +25,6 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"net"
-	"time"
 )
 
 const (
@@ -50,72 +48,49 @@ func NewSaltNodeManager(config io.Reader) (*SaltNodeManager, error) {
 	return &SaltNodeManager{}, nil
 }
 
-func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (*models.Node, error) {
+func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (bool, error) {
 	if status, err := salt_backend.AcceptNode(node, fingerprint, false); err != nil {
-		return nil, err
+		return false, err
 	} else if !status {
-		return nil, errors.New("Unable to accept the node")
+		return false, errors.New(fmt.Sprintf("Unable to accept the node: %s", node))
 	} else {
-		for count := 0; count < 60; count++ {
-			time.Sleep(10 * time.Second)
-			startedNodes := event.GetStartedNodes()
-			for _, nodeName := range startedNodes {
-				if nodeName == node {
-					if retVal, ok := populateStorageNodeInstance(node); ok {
-						return retVal, nil
-					}
-				}
-			}
-		}
+		return true, nil
 
 	}
-	return nil, errors.New("Unable to accept the node")
 }
 
-func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (*models.Node, error) {
+func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error) {
 	if status, err := salt_backend.AddNode(master, node, port, fingerprint, username, password); err != nil {
-		return nil, err
+		return false, err
 	} else if !status {
-		return nil, errors.New("Unable to add the node")
+		return false, errors.New(fmt.Sprintf("Unable to add the node: %s", node))
 	} else {
-		for count := 0; count < 60; count++ {
-			time.Sleep(10 * time.Second)
-			startedNodes := event.GetStartedNodes()
-			for _, nodeName := range startedNodes {
-				if nodeName == node {
-					if retVal, ok := populateStorageNodeInstance(node); ok {
-						return retVal, nil
-					}
-				}
-			}
-		}
-
+		return true, nil
 	}
-	return nil, errors.New("Unable to add the node")
 }
 
-func populateStorageNodeInstance(node string) (*models.Node, bool) {
+func GetStorageNodeInstance(hostname string) (*models.Node, bool) {
 	var storage_node models.Node
-	storage_node.Hostname = node
+	storage_node.Hostname = hostname
 	storage_node.Enabled = true
-	storage_node.NodeId, _ = salt_backend.GetNodeID(node)
-	networkInfo, err := salt_backend.GetNodeNetwork(node)
+	storage_node.NodeId, _ = salt_backend.GetNodeID(hostname)
+	networkInfo, err := salt_backend.GetNodeNetwork(hostname)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting network details for node: %s. error: %v", node, err))
+		logger.Get().Error(fmt.Sprintf("Error getting network details for node: %s. error: %v", hostname, err))
 		return nil, false
 	}
 	storage_node.NetworkInfo.Subnet = networkInfo.Subnet
 	storage_node.NetworkInfo.Ipv4 = networkInfo.IPv4
 	storage_node.NetworkInfo.Ipv6 = networkInfo.IPv6
-	addrs, err := net.LookupHost(node)
+	addrs, err := net.LookupHost(hostname)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error looking up node IP for: %s. error: %v", node, err))
+		logger.Get().Error(fmt.Sprintf("Error looking up node IP for: %s. error: %v", hostname, err))
 		return nil, false
 	}
 	storage_node.ManagementIP4 = addrs[0]
-	ok, err := salt_backend.NodeUp(node)
+	ok, err := salt_backend.NodeUp(hostname)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting status of node: %s. error: %v", node, err))
+		logger.Get().Error(fmt.Sprintf("Error getting status of node: %s. error: %v", hostname, err))
 		return nil, false
 	}
 	if ok {
@@ -123,9 +98,9 @@ func populateStorageNodeInstance(node string) (*models.Node, bool) {
 	} else {
 		storage_node.Status = models.STATUS_DOWN
 	}
-	disks, err := salt_backend.GetNodeDisk(node)
+	disks, err := salt_backend.GetNodeDisk(hostname)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting disk details for node: %s. error: %v", node, err))
+		logger.Get().Error(fmt.Sprintf("Error getting disk details for node: %s. error: %v", hostname, err))
 		return nil, false
 	}
 	for _, disk := range disks {
