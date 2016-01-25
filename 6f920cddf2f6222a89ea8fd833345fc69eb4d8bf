@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_af774b3a",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-25T13:18:52Z",
+      "side": 1,
+      "message": "Add the node_id as well to the error message",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ef714345",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-25T13:18:52Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_2f935b50",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-25T13:18:52Z",
+      "side": 1,
+      "message": "Node_id in error",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8fa3679d",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-25T13:18:52Z",
+      "side": 1,
+      "message": "node_id as well in error",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_2fba7bc0",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-25T13:18:52Z",
+      "side": 1,
+      "message": "Disk name in error",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8fca874d",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-25T13:18:52Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "6f920cddf2f6222a89ea8fd833345fc69eb4d8bf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
