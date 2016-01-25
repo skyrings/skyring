@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_b49ec252",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_d52506c3",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_f5204ab2",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-01-19T17:44:46Z",
       "side": 1,
       "message": "%s/Failed to acquire lock/Another transaction in progress. Failed acquire lock on nodes for create cluster: \u003cname\u003e/g",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_34bad2c0",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "err object has that information why failed acquire lock on which node",
+      "parentUuid": "fa81d914_f5204ab2",
       "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_b4cc0263",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_15307e00",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_352bc295",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2016-01-19T17:44:46Z",
       "side": 1,
       "message": "As above",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_d4db3619",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "As above",
+      "parentUuid": "fa81d914_352bc295",
       "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_1405ce79",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_55191687",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_751c5a78",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2016-01-19T17:44:46Z",
       "side": 1,
       "message": "As above",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_34081291",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "As above",
+      "parentUuid": "fa81d914_751c5a78",
       "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_7439aa40",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_d50c2645",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_f5076a1b",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 1
@@ -132,6 +258,24 @@
       "writtenOn": "2016-01-19T17:44:46Z",
       "side": 1,
       "message": "As above",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_943ffe24",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_f5076a1b",
       "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_5484a6d3",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_3502e20b",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_980ae51f",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 1
@@ -166,6 +328,24 @@
       "writtenOn": "2016-01-19T17:44:46Z",
       "side": 1,
       "message": "a.GetLockManager().ReleaseLock(*appLock)",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7487ead7",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "App instance is not passed into this function.\nAnyway this operates on the same App instance",
+      "parentUuid": "fa81d914_980ae51f",
       "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_745e0a78",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "Err object has detailed information",
+      "parentUuid": "fa81d914_d8137d5a",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_181ef563",
         "filename": "apps/skyring/util.go",
         "patchSetId": 1
@@ -200,6 +398,24 @@
       "writtenOn": "2016-01-19T17:44:46Z",
       "side": 1,
       "message": "Should we call this source as node_utils.go",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_54e9067f",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "Not specific to node alone, any utilities for skyring package?",
+      "parentUuid": "fa81d914_181ef563",
       "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_f4e03a98",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_f80e8131",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_3819f979",
         "filename": "tools/lock/lockmanager.go",
         "patchSetId": 1
@@ -234,6 +468,24 @@
       "writtenOn": "2016-01-19T17:44:46Z",
       "side": 1,
       "message": "More meaningful messages for logging with context of entity etc.",
+      "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_74ec4a90",
+        "filename": "tools/lock/lockmanager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-25T11:27:49Z",
+      "side": 1,
+      "message": "AppLocks has that information",
+      "parentUuid": "fa81d914_3819f979",
       "revId": "67c73e178a9e23eca05dd43c44f7127b484a08dc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
