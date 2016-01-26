@@ -261,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_bbc4ea92",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-26T21:09:42Z",
+      "side": 1,
+      "message": "So I now made the schedule creation part as go routines and synchronised the common data(map) section access",
+      "parentUuid": "fa81d914_40193987",
+      "range": {
+        "startLine": 120,
+        "startChar": 1,
+        "endLine": 124,
+        "endChar": 2
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_6abe1ed6",
         "filename": "monitoring/graphitemanager/graphite_manager.go",
         "patchSetId": 10
