@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_4aa23aaf",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:16:40Z",
+      "side": 1,
+      "message": "Should we mark the task as Failed? I think we need to update task that syncDisk failed but mark the task as successful. This is one of that partial failure case. Does this make sense?",
+      "range": {
+        "startLine": 895,
+        "startChar": 7,
+        "endLine": 896,
+        "endChar": 40
+      },
+      "revId": "85847b1d330309df182427ac640d5343f8f2a255",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
