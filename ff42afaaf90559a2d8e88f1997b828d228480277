@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_ca770ad3",
+        "filename": "models/core_models.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T11:48:09Z",
+      "side": 1,
+      "message": "Do we really want store all these info here. Lot of things seems irrelevant to me. Please have a look at MVP-014 in pRD",
+      "range": {
+        "startLine": 41,
+        "startChar": 1,
+        "endLine": 115,
+        "endChar": 37
+      },
+      "revId": "ff42afaaf90559a2d8e88f1997b828d228480277",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
