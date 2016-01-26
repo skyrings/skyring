@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_8a7d1271",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:08:10Z",
+      "side": 1,
+      "message": "Does this check really required? We just created the cluster :)",
+      "range": {
+        "startLine": 174,
+        "startChar": 5,
+        "endLine": 174,
+        "endChar": 54
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_0a5682d2",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:08:10Z",
+      "side": 1,
+      "message": "Why you want to maintain another map here? Can the NewShcduler takes a UUID where you can pass the clusterId sp that we are saved from doing all these?",
+      "range": {
+        "startLine": 71,
+        "startChar": 1,
+        "endLine": 71,
+        "endChar": 54
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8a599200",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:08:10Z",
+      "side": 1,
+      "message": "Do we need another go routine here? Initschedules itself is a goroutine right?",
+      "range": {
+        "startLine": 80,
+        "startChar": 2,
+        "endLine": 80,
+        "endChar": 22
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_2a16e6f1",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:08:10Z",
+      "side": 1,
+      "message": "Suppose I want reschedule the monitoring interval, how it is handled?",
+      "range": {
+        "startLine": 84,
+        "startChar": 6,
+        "endLine": 87,
+        "endChar": 2
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_2affc6ab",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:08:10Z",
+      "side": 1,
+      "message": "why we are waiting for the metric collection to complete and then pushing the metric to db?. Can the provider itself do that?. I think this process would take a bit of time. So you can have that collection as a go-routine which collects the data and update graphite",
+      "range": {
+        "startLine": 120,
+        "startChar": 1,
+        "endLine": 124,
+        "endChar": 2
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_6abe1ed6",
+        "filename": "monitoring/graphitemanager/graphite_manager.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:08:10Z",
+      "side": 1,
+      "message": "what is the expected format\nbetter to have some description",
+      "range": {
+        "startLine": 202,
+        "startChar": 39,
+        "endLine": 202,
+        "endChar": 52
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_4ad15a56",
+        "filename": "tools/schedule/schedule_manager.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:08:10Z",
+      "side": 1,
+      "message": "Log the error all the places",
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8acb52a4",
+        "filename": "tools/schedule/schedule_manager.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:08:10Z",
+      "side": 1,
+      "message": "I think you should have NewShechuleManager() func which does initilaization of the map or any other things. This should initialized during the app startup along with your initmonitoring stuff",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 18,
+        "endChar": 2
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_0ae8420f",
+        "filename": "tools/schedule/schedule_manager.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:08:10Z",
+      "side": 1,
+      "message": "log and handle the error",
+      "range": {
+        "startLine": 26,
+        "startChar": 2,
+        "endLine": 26,
+        "endChar": 12
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_2ae34634",
+        "filename": "tools/schedule/schedule_manager.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:08:10Z",
+      "side": 1,
+      "message": "Why this is a go-routine?",
+      "range": {
+        "startLine": 28,
+        "startChar": 1,
+        "endLine": 28,
+        "endChar": 11
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ead84e81",
+        "filename": "tools/schedule/schedule_manager.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-26T09:08:10Z",
+      "side": 1,
+      "message": "why this forloop is required? Check whether the id is existing in map, if yes return the schduler, otherwise error",
+      "range": {
+        "startLine": 36,
+        "startChar": 1,
+        "endLine": 40,
+        "endChar": 2
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
