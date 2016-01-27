@@ -22,6 +22,30 @@
       "revId": "ff42afaaf90559a2d8e88f1997b828d228480277",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_f603d7b5",
+        "filename": "models/core_models.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-27T09:52:06Z",
+      "side": 1,
+      "message": "for storage device profiles (speed, capacity, media type)\n. we can have only capacity . i did not see any other command for getting speed and media type.\n\nand in pRD it\u0027s not mention about fields for cpu,os,memory details .\n\nCan you also suggest me what are the field are relevant for OS, Cpu, Memory details ?",
+      "parentUuid": "fa81d914_ca770ad3",
+      "range": {
+        "startLine": 41,
+        "startChar": 1,
+        "endLine": 115,
+        "endChar": 37
+      },
+      "revId": "ff42afaaf90559a2d8e88f1997b828d228480277",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
