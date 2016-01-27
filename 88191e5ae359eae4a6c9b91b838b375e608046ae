@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_56866366",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-27T06:50:23Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "fa81d914_5d30469e",
+      "range": {
+        "startLine": 174,
+        "startChar": 5,
+        "endLine": 174,
+        "endChar": 54
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_0a5682d2",
         "filename": "apps/skyring/monitoring.go",
         "patchSetId": 10
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "I am thinking of this scenario: lets say a cluster has for some reason has a periodic sync running in conjunction to this monitoring schedule now the problem is to distinguish b/w them This might not be a precise example but in general I am concerned about coexistant more than 1 schedules attached with cluster.In this case we can handle it by having manager specific to the purpose maintaing a similar map.like for example a syncmanager mainintaining 1 map and the monitoring manager 1 map like we are doing here.and if we feel the need of a manager needing to maintain 2 schedules for 1 entity, for any reason we could do that as map from clusterId to map from purpose to scheduleId.w/o need of changes in the schedule structure",
       "parentUuid": "fa81d914_0a5682d2",
+      "range": {
+        "startLine": 71,
+        "startChar": 1,
+        "endLine": 71,
+        "endChar": 54
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_767d276e",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-27T06:50:23Z",
+      "side": 1,
+      "message": "ok,Make sense",
+      "parentUuid": "fa81d914_dd1b561a",
       "range": {
         "startLine": 71,
         "startChar": 1,
@@ -190,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_d691739b",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-27T06:50:23Z",
+      "side": 1,
+      "message": "ok, make sure you add a card in trello",
+      "parentUuid": "fa81d914_bdcea281",
+      "range": {
+        "startLine": 84,
+        "startChar": 6,
+        "endLine": 87,
+        "endChar": 2
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_2affc6ab",
         "filename": "apps/skyring/monitoring.go",
         "patchSetId": 10
@@ -273,6 +345,30 @@
       "side": 1,
       "message": "So I now made the schedule creation part as go routines and synchronised the common data(map) section access",
       "parentUuid": "fa81d914_40193987",
+      "range": {
+        "startLine": 120,
+        "startChar": 1,
+        "endLine": 124,
+        "endChar": 2
+      },
+      "revId": "88191e5ae359eae4a6c9b91b838b375e608046ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_56a583b3",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-27T06:50:23Z",
+      "side": 1,
+      "message": "I think we need to take other path -doing it in the provider.\nAs we discussed, RPC call will be blocking in this case. Push everything provider which is provider specific",
+      "parentUuid": "fa81d914_bbc4ea92",
       "range": {
         "startLine": 120,
         "startChar": 1,
