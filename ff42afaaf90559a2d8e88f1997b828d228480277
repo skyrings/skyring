@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_51f2ed6f",
+        "filename": "models/core_models.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-27T11:00:15Z",
+      "side": 1,
+      "message": "what i feel , Here we are storing overall CPU info , suppose we have cpu with 8 core . so all 8 have same info . but only we have to store this number of core .\n\nthat we are storing into CPUs inside CPU struct.",
+      "parentUuid": "fa81d914_915c65ef",
+      "range": {
+        "startLine": 33,
+        "startChar": 1,
+        "endLine": 33,
+        "endChar": 19
+      },
+      "revId": "ff42afaaf90559a2d8e88f1997b828d228480277",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_ca770ad3",
         "filename": "models/core_models.go",
         "patchSetId": 7
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "OS:\n\nName, version,kernel version,selinuxmode\n\nMemory:\nTotal, swap total,  active, type\n\nCPUs - \n\nno of cpus, no of cores per cpu, mhz,op modes, model, family, architecture, vendor-id",
       "parentUuid": "fa81d914_f603d7b5",
+      "range": {
+        "startLine": 41,
+        "startChar": 1,
+        "endLine": 115,
+        "endChar": 37
+      },
+      "revId": "ff42afaaf90559a2d8e88f1997b828d228480277",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_b102493c",
+        "filename": "models/core_models.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-27T11:00:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_f16cc19e",
       "range": {
         "startLine": 41,
         "startChar": 1,
