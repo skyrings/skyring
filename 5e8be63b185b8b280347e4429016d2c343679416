@@ -22,6 +22,30 @@
       "revId": "5e8be63b185b8b280347e4429016d2c343679416",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_51be6dd5",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 12
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-27T10:20:11Z",
+      "side": 1,
+      "message": "Its already done in request-router.go",
+      "parentUuid": "fa81d914_16022b0b",
+      "range": {
+        "startLine": 135,
+        "startChar": 1,
+        "endLine": 135,
+        "endChar": 35
+      },
+      "revId": "5e8be63b185b8b280347e4429016d2c343679416",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
