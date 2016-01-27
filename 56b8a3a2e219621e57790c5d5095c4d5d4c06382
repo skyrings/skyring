@@ -1,0 +1,226 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_acdd8e72",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "It should be \"Adding the node %s to DB\"",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ece7863e",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_6ccb96a5",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "The name should be changed to something like \"AddStorageNode()\"",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8cce0ab3",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "This condition should be performed before accepting the node as well.",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_2c38be9f",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "Is this being called from somewhere?",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_2cbb5ee6",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "If there is a failure here, how to fix the problem(or retry).\n\nThe node should be in ready to use state only if this succeeds.",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ec55c6c6",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "Lets say for some reason we fail here, the how are we going re-try automatically or based on user action?",
+      "range": {
+        "startLine": 128,
+        "startChar": 3,
+        "endLine": 128,
+        "endChar": 7
+      },
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ac4bce29",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "We might want to call this as NODE_STATE_INITIALIZATION_FAILED",
+      "range": {
+        "startLine": 132,
+        "startChar": 88,
+        "endLine": 132,
+        "endChar": 112
+      },
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_cc1ba21a",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "If this is true, the node is stuck in \u0027INITIALIZING\u0027 state. How does the user comes to know about the problem?",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ecf146ce",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "I would like to see the state transition as something like,\n\n\nUNACCEPTED \u003d\u003e ACCEPTING \u003d\u003e INITIALIZING \u003d\u003e ACTIVE/FAILED",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_acce6e81",
+        "filename": "event/listener.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "I would suggest to let the handler take care of all pre-conditions.",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_cc77223a",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-01-27T13:20:53Z",
+      "side": 1,
+      "message": "Since we are constructing a node instance an returning it, the function signature should be\n\nfunc getStorageNode(hostname string)\n\nor\n\nfunc getStroageNodeInstance(hostname string)",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 45
+      },
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
