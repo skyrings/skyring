@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_16022b0b",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 12
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-27T09:46:45Z",
+      "side": 1,
+      "message": "take the return value and check for error and log",
+      "range": {
+        "startLine": 135,
+        "startChar": 1,
+        "endLine": 135,
+        "endChar": 35
+      },
+      "revId": "5e8be63b185b8b280347e4429016d2c343679416",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
