@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_ccc9e27a",
+        "filename": "backend/backend.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-27T13:11:56Z",
+      "side": 1,
+      "message": "Is it applicable for a physical node?",
+      "revId": "89e5b91276f28250386e23fac3a9784b68b9d6f4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
