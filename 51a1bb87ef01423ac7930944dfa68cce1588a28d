@@ -22,6 +22,30 @@
       "revId": "51a1bb87ef01423ac7930944dfa68cce1588a28d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_fd5f2fe3",
+        "filename": "backend/backend.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-28T11:15:32Z",
+      "side": 1,
+      "message": "As i discussed with shubhendu , we should bring all fields whatever we are getting in output for later use.\n\nBut while populating in UI , we will bring specifics one.\nOr we can discusses about this what are the fields are relevant.",
+      "parentUuid": "fa81d914_3746467d",
+      "range": {
+        "startLine": 54,
+        "startChar": 5,
+        "endLine": 130,
+        "endChar": 1
+      },
+      "revId": "51a1bb87ef01423ac7930944dfa68cce1588a28d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
