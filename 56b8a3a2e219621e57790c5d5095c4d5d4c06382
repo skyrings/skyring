@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa81d914_f7058e7a",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-28T04:38:13Z",
+      "side": 1,
+      "message": "Any specific reason to make first letter caps?",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_acdd8e72",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 2
@@ -13,6 +30,23 @@
       "writtenOn": "2016-01-27T13:20:53Z",
       "side": 1,
       "message": "It should be \"Adding the node %s to DB\"",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_37000667",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-28T04:38:13Z",
+      "side": 1,
+      "message": "Event function name should be inline with adding storgage node I feel",
       "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -167,6 +201,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_77f99e7f",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-28T04:38:13Z",
+      "side": 1,
+      "message": "Somehow after sometime the state of the node should be marked as Failed if this does not succeed",
+      "parentUuid": "fa81d914_cc1ba21a",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_ecf146ce",
         "filename": "event/handler.go",
         "patchSetId": 2
@@ -195,6 +247,40 @@
       "writtenOn": "2016-01-27T13:20:53Z",
       "side": 1,
       "message": "I would suggest to let the handler take care of all pre-conditions.",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_97f45288",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-28T04:38:13Z",
+      "side": 1,
+      "message": "Add the node name as well to the error message",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_b7f3169d",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-28T04:38:13Z",
+      "side": 1,
+      "message": "Add the node name as well to error message",
       "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
