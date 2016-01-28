@@ -16,6 +16,52 @@
       "revId": "89e5b91276f28250386e23fac3a9784b68b9d6f4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_572bba2f",
+        "filename": "models/core_models.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-28T02:13:32Z",
+      "side": 1,
+      "message": "I think we need remove this Free part, otherwise this data become stale as the memory grows. Its not practical to update this every time we collect stats data. remove this, anyway these data is available from timeseries DB",
+      "range": {
+        "startLine": 61,
+        "startChar": 1,
+        "endLine": 62,
+        "endChar": 35
+      },
+      "revId": "89e5b91276f28250386e23fac3a9784b68b9d6f4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_b71b161a",
+        "filename": "models/core_models.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-28T02:13:32Z",
+      "side": 1,
+      "message": "We haven\u0027t taken care of the comments here. Please look at the previous comment for the requirement for Os",
+      "range": {
+        "startLine": 69,
+        "startChar": 1,
+        "endLine": 71,
+        "endChar": 42
+      },
+      "revId": "89e5b91276f28250386e23fac3a9784b68b9d6f4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
