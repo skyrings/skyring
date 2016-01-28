@@ -104,6 +104,29 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_5711faaa",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-28T07:23:43Z",
+      "side": 1,
+      "message": "Lot of places we are using this kind of check to find out document exists in DB, but this may not be the best. If document does not exists mgo will throw an error \u0027ErrNotFound. Handle that appropriately",
+      "range": {
+        "startLine": 218,
+        "startChar": 1,
+        "endLine": 221,
+        "endChar": 2
+      },
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_2c38be9f",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 2
@@ -149,6 +172,30 @@
       "writtenOn": "2016-01-27T13:20:53Z",
       "side": 1,
       "message": "Lets say for some reason we fail here, the how are we going re-try automatically or based on user action?",
+      "range": {
+        "startLine": 128,
+        "startChar": 3,
+        "endLine": 128,
+        "endChar": 7
+      },
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_77551e4f",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-28T07:23:43Z",
+      "side": 1,
+      "message": "I think https://review.gerrithub.io/#/c/258586/ should take care of this. Anmol has already done it for clusters etc",
+      "parentUuid": "fa81d914_ec55c6c6",
       "range": {
         "startLine": 128,
         "startChar": 3,
@@ -219,6 +266,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_d74a4aab",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-28T07:23:43Z",
+      "side": 1,
+      "message": "Why this check here? I expect the node to be present at this stage because we already added as part of accept flow",
+      "parentUuid": "fa81d914_77f99e7f",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_ecf146ce",
         "filename": "event/handler.go",
         "patchSetId": 2
@@ -230,6 +295,24 @@
       "writtenOn": "2016-01-27T13:20:53Z",
       "side": 1,
       "message": "I would like to see the state transition as something like,\n\n\nUNACCEPTED \u003d\u003e ACCEPTING \u003d\u003e INITIALIZING \u003d\u003e ACTIVE/FAILED",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_f77aeeef",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-28T07:23:43Z",
+      "side": 1,
+      "message": "+1\nYou should also have a state to indicate the node is participating in a cluster",
+      "parentUuid": "fa81d914_ecf146ce",
       "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
