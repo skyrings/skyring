@@ -22,6 +22,24 @@
       "revId": "85847b1d330309df182427ac640d5343f8f2a255",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_37372650",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-28T04:42:47Z",
+      "side": 1,
+      "message": "The only thing is post OSD creation disk structure changes on the node, and we should have the latest state of the same with us.\nWe can mark the task as succeeded but there should be a way to sync it again at later stage. May be we need a mechanism for it.",
+      "parentUuid": "fa81d914_4aa23aaf",
+      "revId": "85847b1d330309df182427ac640d5343f8f2a255",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
