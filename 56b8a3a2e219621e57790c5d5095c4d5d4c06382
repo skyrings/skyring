@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_7740bea5",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "was using it in another package, will have a diff variable there.",
+      "parentUuid": "fa81d914_f7058e7a",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_acdd8e72",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2016-01-27T13:20:53Z",
       "side": 1,
       "message": "It should be \"Adding the node %s to DB\"",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8cec4a91",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_acdd8e72",
       "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_973b7237",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "am changing this function name to addStorageNodeToDB",
+      "parentUuid": "fa81d914_37000667",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_ece7863e",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2016-01-27T13:20:53Z",
       "side": 1,
       "message": "same here",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ac02ee3b",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_ece7863e",
       "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_4cf25270",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_6ccb96a5",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_8cce0ab3",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 2
@@ -98,6 +188,24 @@
       "writtenOn": "2016-01-27T13:20:53Z",
       "side": 1,
       "message": "This condition should be performed before accepting the node as well.",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_4ccb321e",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "This check is done by the functions POST_Nodes and POST_AcceptUnmanagedNode before calling accept and addAndAcceptNode that should be sufficient I feel, Please provide your thoughts.",
+      "parentUuid": "fa81d914_8cce0ab3",
       "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -127,6 +235,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_c21b6619",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_5711faaa",
+      "range": {
+        "startLine": 218,
+        "startChar": 1,
+        "endLine": 221,
+        "endChar": 2
+      },
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_2c38be9f",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 2
@@ -144,6 +276,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_acdbceeb",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "will remove this, not called by anyone",
+      "parentUuid": "fa81d914_2c38be9f",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_2cbb5ee6",
         "filename": "event/handler.go",
         "patchSetId": 2
@@ -155,6 +305,24 @@
       "writtenOn": "2016-01-27T13:20:53Z",
       "side": 1,
       "message": "If there is a failure here, how to fix the problem(or retry).\n\nThe node should be in ready to use state only if this succeeds.",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_57d65ac6",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "will add task for this whole flow, so that user can be notified. and also will change the state to failed if anything fails.",
+      "parentUuid": "fa81d914_2cbb5ee6",
       "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -208,6 +376,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_77dc3ee5",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "same as above.",
+      "parentUuid": "fa81d914_ec55c6c6",
+      "range": {
+        "startLine": 128,
+        "startChar": 3,
+        "endLine": 128,
+        "endChar": 7
+      },
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_ac4bce29",
         "filename": "event/handler.go",
         "patchSetId": 2
@@ -219,6 +411,30 @@
       "writtenOn": "2016-01-27T13:20:53Z",
       "side": 1,
       "message": "We might want to call this as NODE_STATE_INITIALIZATION_FAILED",
+      "range": {
+        "startLine": 132,
+        "startChar": 88,
+        "endLine": 132,
+        "endChar": 112
+      },
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_97d7f2be",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_ac4bce29",
       "range": {
         "startLine": 132,
         "startChar": 88,
@@ -284,6 +500,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_82e88ee3",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_d74a4aab",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_ecf146ce",
         "filename": "event/handler.go",
         "patchSetId": 2
@@ -337,6 +571,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_17f30274",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_ecf146ce",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_acce6e81",
         "filename": "event/listener.go",
         "patchSetId": 2
@@ -348,6 +600,24 @@
       "writtenOn": "2016-01-27T13:20:53Z",
       "side": 1,
       "message": "I would suggest to let the handler take care of all pre-conditions.",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_2ef513ee",
+        "filename": "event/listener.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_acce6e81",
       "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -371,6 +641,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_b74a36c3",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_97f45288",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_b7f3169d",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 2
@@ -388,6 +676,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_d745eab3",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_b7f3169d",
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_cc77223a",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 2
@@ -399,6 +705,30 @@
       "writtenOn": "2016-01-27T13:20:53Z",
       "side": 1,
       "message": "Since we are constructing a node instance an returning it, the function signature should be\n\nfunc getStorageNode(hostname string)\n\nor\n\nfunc getStroageNodeInstance(hostname string)",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 45
+      },
+      "revId": "56b8a3a2e219621e57790c5d5095c4d5d4c06382",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_8c71aae2",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-01-28T09:21:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_cc77223a",
       "range": {
         "startLine": 72,
         "startChar": 0,
