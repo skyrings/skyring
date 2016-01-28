@@ -33,3 +33,5 @@ import:
   version: 4d04138ffef2791c479c0c8bbffc30b34081b8d9
 - package: github.com/kidstuff/mongostore
   version: 256d65ac5b0e35e7c5ebb3f175c0bed1e5c2b253
+- package: github.com/marpaia/graphite-golang
+  version: bea0c295debd84f9c80050cea3c6aeb3dd448f7c
