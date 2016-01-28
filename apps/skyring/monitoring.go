@@ -15,11 +15,18 @@ package skyring
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring/conf"
+	"github.com/skyrings/skyring/db"
+	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring/tools/schedule"
 	"github.com/skyrings/skyring/tools/uuid"
 	"github.com/skyrings/skyring/utils"
 	"net/http"
 	"strings"
+	"sync"
+	"time"
 )
 
 func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
@@ -59,4 +66,82 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	} else {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
+}
+
+//In memory ClusterId to ScheduleId map
+var ClusterMonitoringSchedules map[uuid.UUID]uuid.UUID
+
+func InitSchedules() {
+	schedule.InitShechuleManager()
+	if ClusterMonitoringSchedules == nil {
+		ClusterMonitoringSchedules = make(map[uuid.UUID]uuid.UUID)
+	}
+	clusters, err := GetClusters()
+	if err != nil {
+		logger.Get().Error("Error getting the clusters list: %v", err)
+		return
+	}
+	for _, cluster := range clusters {
+		go ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
+	}
+}
+
+var mutex sync.Mutex
+
+func SynchroniseScheduleMaintainers(clusterId uuid.UUID) (schedule.Scheduler, error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	scheduler, err := schedule.NewScheduler()
+	if err != nil {
+		return scheduler, err
+	}
+	ClusterMonitoringSchedules[clusterId] = scheduler.Id
+	return scheduler, nil
+}
+
+func ScheduleCluster(clusterId uuid.UUID, intervalInSecs int) {
+	if intervalInSecs == 0 {
+		intervalInSecs = monitoring.DefaultClusterMonitoringInterval
+	}
+	scheduler, err := SynchroniseScheduleMaintainers(clusterId)
+	if err != nil {
+		logger.Get().Error(err.Error())
+	}
+	f := GetApp().MonitorCluster
+	scheduler.Schedule(time.Duration(intervalInSecs)*time.Second, f, map[string]interface{}{"clusterId": clusterId})
+}
+
+func DeleteClusterSchedule(clusterId uuid.UUID) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	schedulerId, ok := ClusterMonitoringSchedules[clusterId]
+	if !ok {
+		logger.Get().Error("Cluster with id %v not scheduled", clusterId)
+		return
+	}
+	if err := schedule.DeleteScheduler(schedulerId); err != nil {
+		logger.Get().Error("Failed to delete schedule for cluster %v.Error %v", clusterId, err)
+	}
+	delete(ClusterMonitoringSchedules, clusterId)
+}
+
+func (a *App) MonitorCluster(params map[string]interface{}) {
+	clusterId := params["clusterId"]
+	id, ok := clusterId.(uuid.UUID)
+	if !ok {
+		logger.Get().Error("Failed to parse uuid")
+		return
+	}
+	a.RouteProviderBasedMonitoring(id)
+	return
+}
+
+func GetClusters() (models.Clusters, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var clusters models.Clusters
+	err := collection.Find(nil).All(&clusters)
+	return clusters, err
 }
