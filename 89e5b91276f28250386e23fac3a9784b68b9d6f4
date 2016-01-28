@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_f1003e03",
+        "filename": "backend/backend.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-28T06:04:55Z",
+      "side": 1,
+      "message": "actually i am bringing all details whatever return from command. Later might be some of them are useful.\n\nThis NUMA node is not applicable for physical node\n\neach CPU can access memory associated with the other groups Each group is called a NUMA node here.",
+      "parentUuid": "fa81d914_ccc9e27a",
+      "revId": "89e5b91276f28250386e23fac3a9784b68b9d6f4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_572bba2f",
         "filename": "models/core_models.go",
         "patchSetId": 9
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_b77876f3",
+        "filename": "models/core_models.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-28T06:04:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_572bba2f",
+      "range": {
+        "startLine": 61,
+        "startChar": 1,
+        "endLine": 62,
+        "endChar": 35
+      },
+      "revId": "89e5b91276f28250386e23fac3a9784b68b9d6f4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_b71b161a",
         "filename": "models/core_models.go",
         "patchSetId": 9
@@ -53,6 +95,30 @@
       "writtenOn": "2016-01-28T02:13:32Z",
       "side": 1,
       "message": "We haven\u0027t taken care of the comments here. Please look at the previous comment for the requirement for Os",
+      "range": {
+        "startLine": 69,
+        "startChar": 1,
+        "endLine": 71,
+        "endChar": 42
+      },
+      "revId": "89e5b91276f28250386e23fac3a9784b68b9d6f4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_d7732a13",
+        "filename": "models/core_models.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-28T06:04:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_b71b161a",
       "range": {
         "startLine": 69,
         "startChar": 1,
