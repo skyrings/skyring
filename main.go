@@ -184,6 +184,14 @@ func start() {
 		os.Exit(1)
 	}
 
+	logger.Get().Info("Starting the providers")
+	//Load providers and routes
+	//Load all the files present in the config path
+	if err := application.StartProviders(configDir, providersDir); err != nil {
+		logger.Get().Error("Unable to initialize the Providers")
+		os.Exit(1)
+	}
+
 	logger.Get().Info("Starting event listener")
 	go event.StartListener(SkyringEventSocketFile)
 
@@ -194,7 +202,6 @@ func start() {
 		logger.Get().Info("start listening on %s : %v", conf.SystemConfig.Config.Host, httpPort)
 		if err := http.ListenAndServe(fmt.Sprintf("%s:%v", conf.SystemConfig.Config.Host, httpPort), n); err != nil {
 			logger.Get().Critical("Unable to start the webserver", err)
-			os.Exit(1)
 		}
 	}()
 	sigs := make(chan os.Signal, 1)

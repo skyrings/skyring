@@ -20,5 +20,6 @@ import (
 
 type Application interface {
 	SetRoutes(container *mux.Router) error
+	StartProviders(configDir string, binDir string) error
 	InitializeApplication(sysConfig conf.SkyringCollection) error
 }
