@@ -46,6 +46,24 @@
       "revId": "51a1bb87ef01423ac7930944dfa68cce1588a28d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_83dc10e6",
+        "filename": "backend/backend.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-28T18:12:45Z",
+      "side": 1,
+      "message": "Yes. I feel we should capture most of the possible details and maintain with us. We can decide what to be displayed in UI.",
+      "parentUuid": "fa81d914_fd5f2fe3",
+      "revId": "51a1bb87ef01423ac7930944dfa68cce1588a28d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
