@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_3746467d",
+        "filename": "backend/backend.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-28T07:29:07Z",
+      "side": 1,
+      "message": "do you want to maintain this here as we removed most of the things? even the salt wrapper return the limited set now right?",
+      "range": {
+        "startLine": 54,
+        "startChar": 5,
+        "endLine": 130,
+        "endChar": 1
+      },
+      "revId": "51a1bb87ef01423ac7930944dfa68cce1588a28d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
