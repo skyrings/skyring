@@ -77,21 +77,11 @@ func NewApp(configDir string, binDir string) *App {
 	app.providers = make(map[string]Provider)
 	app.routes = make(map[string]conf.Route)
 
-	//Load providers and routes
-	//Load all the files present in the config path
-	app.StartProviders(configDir, binDir)
-
-	//Check if atleast one provider is initialized successfully
-	//otherwise panic
-	/*if len(app.providers) < 1 {
-		panic(fmt.Sprintf("None of the providers are initialized successfully"))
-	}
-	logger.Get().Info("Loaded URLs:", app.routes)*/
 	application = app
 	return app
 }
 
-func (a *App) StartProviders(configDir string, binDir string) {
+func (a *App) StartProviders(configDir string, binDir string) error {
 
 	providerBinaryPath := path.Join(binDir, ProviderBinaryDir)
 
@@ -116,17 +106,20 @@ func (a *App) StartProviders(configDir string, binDir string) {
 		}
 		//If duplicate routes are detected, dont proceed loading this provider
 		if found {
+			logger.Get().Error("Duplicate routes detected, skipping the provider", config)
 			continue
 		}
 		//Start the provider if configured
 		if config.Provider != (conf.ProviderConfig{}) {
 
 			if config.Provider.Name == "" {
+				logger.Get().Error("Provider Name Empty, skipping the provider", config)
 				continue
 			}
 			//check whether the plugin is initialized already
 			if _, ok := a.providers[config.Provider.Name]; ok {
 				//Provider already initialized
+				logger.Get().Error("Provider already initialized, skipping the provider", config)
 				continue
 			}
 			if config.Provider.ProviderBinary == "" {
@@ -152,6 +145,10 @@ func (a *App) StartProviders(configDir string, binDir string) {
 			a.providers[config.Provider.Name] = Provider{Name: config.Provider.Name, Client: client}
 		}
 	}
+	if len(a.providers) < 1 {
+		logger.Get().Error("None of the providers are initialized successfully")
+	}
+	return nil
 }
 
 func (a *App) SetRoutes(router *mux.Router) error {
