@@ -44,7 +44,12 @@ func StartBroadcaster(websocketPort string) {
 	broadcaster := GetBroadcaster()
 	go broadcaster.Run()
 	http.HandleFunc("/ws", ServeWs)
-	go http.ListenAndServe(conf.SystemConfig.Config.Host+":"+websocketPort, nil)
+	go func() {
+		logger.Get().Info("Websocket - start listening on %s : %v", conf.SystemConfig.Config.Host, websocketPort)
+		if err := http.ListenAndServe(conf.SystemConfig.Config.Host+":"+websocketPort, nil); err != nil {
+			logger.Get().Critical("Unable to start the websocket server", err)
+		}
+	}()
 }
 
 //  At the end, we instantiate our EventBroadcaster
