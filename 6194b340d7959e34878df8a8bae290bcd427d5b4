@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_78c0aa7c",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-29T04:05:30Z",
+      "side": 1,
+      "message": "Thats correct. We can mark as critical as further request to that provider would keep failing then onwards.",
+      "parentUuid": "fa81d914_d8ea760e",
+      "revId": "6194b340d7959e34878df8a8bae290bcd427d5b4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_03c90026",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 2
