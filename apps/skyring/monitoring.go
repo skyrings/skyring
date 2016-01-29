@@ -82,7 +82,7 @@ func InitSchedules() {
 		return
 	}
 	for _, cluster := range clusters {
-		go ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
+		ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
 	}
 }
 
@@ -108,7 +108,7 @@ func ScheduleCluster(clusterId uuid.UUID, intervalInSecs int) {
 		logger.Get().Error(err.Error())
 	}
 	f := GetApp().MonitorCluster
-	scheduler.Schedule(time.Duration(intervalInSecs)*time.Second, f, map[string]interface{}{"clusterId": clusterId})
+	go scheduler.Schedule(time.Duration(intervalInSecs)*time.Second, f, map[string]interface{}{"clusterId": clusterId})
 }
 
 func DeleteClusterSchedule(clusterId uuid.UUID) {
