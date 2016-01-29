@@ -100,6 +100,24 @@
       "revId": "51a1bb87ef01423ac7930944dfa68cce1588a28d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ab472a4a",
+        "filename": "backend/backend.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006436
+      },
+      "writtenOn": "2016-01-29T08:46:25Z",
+      "side": 1,
+      "message": "So what are the fields ,we should remove that going to update periodically.",
+      "parentUuid": "fa81d914_ab300ae9",
+      "revId": "51a1bb87ef01423ac7930944dfa68cce1588a28d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
