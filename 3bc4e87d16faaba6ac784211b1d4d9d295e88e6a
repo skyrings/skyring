@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_8950ae5f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-29T22:28:50Z",
+      "side": 1,
+      "message": "Yep we are providing a way to do that through this patch",
+      "parentUuid": "fa81d914_496521e0",
+      "range": {
+        "startLine": 140,
+        "startChar": 9,
+        "endLine": 143,
+        "endChar": 50
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_a99bfdc7",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2016-01-11T07:28:52Z",
       "side": 1,
       "message": "if monitoringConfigured is \u0027false\u0027, is it a complete failure?",
+      "range": {
+        "startLine": 150,
+        "startChar": 8,
+        "endLine": 150,
+        "endChar": 32
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a94f32bc",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-29T22:28:50Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "fa81d914_a99bfdc7",
       "range": {
         "startLine": 150,
         "startChar": 8,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_c94aa6ab",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-29T22:28:50Z",
+      "side": 1,
+      "message": "So basically the return value is a map with node name as key so we check length of nodes on which the operation was attempted and the length of error map if they happen to be the same, then we take it as a complete failure. And for a complete failure, we don\u0027t maintain the operation details into db and the user has to retry the operation himself if its partial failure we store the parameters/intended state into db and mark the cluster as having stale configuration by storing the list of nodes in failure and now the user can choose to do a force update and it should work w/o user having to enter again the config parameters",
+      "parentUuid": "fa81d914_e9a5f504",
+      "range": {
+        "startLine": 227,
+        "startChar": 4,
+        "endLine": 228,
+        "endChar": 6
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_6962e5d9",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 5
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_e9c84a24",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-29T22:28:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_6962e5d9",
+      "range": {
+        "startLine": 235,
+        "startChar": 5,
+        "endLine": 237,
+        "endChar": 35
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_c9a031f7",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 5
@@ -105,6 +201,30 @@
       "writtenOn": "2016-01-11T07:28:52Z",
       "side": 1,
       "message": "Please don\u0027t put multiple t.updateStatus for same issue. This will messup the task status messages and user may be confused. Let us have single message for each case. Rest of the things should go into the logs\n\nApplicable to all cases",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 238,
+        "endChar": 12
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_09ccbe34",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-29T22:28:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_c9a031f7",
       "range": {
         "startLine": 238,
         "startChar": 4,
@@ -163,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_29b8a275",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-29T22:28:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_89b6393c",
+      "range": {
+        "startLine": 210,
+        "startChar": 50,
+        "endLine": 210,
+        "endChar": 57
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_e97c1575",
         "filename": "backend/salt/python/skyring/saltwrapper.py",
         "patchSetId": 5
@@ -186,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_c9e1c69b",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-29T22:28:50Z",
+      "side": 1,
+      "message": "If run state fails, state_load_result is a map with failed minions so it would go into else and return the map.\n\nIf it succeeds the map does not contain any failed minions and hence is empty and so we then look into the enabled field of each plugin. So if user has opted to add the plugin but keep it disabled for some reason the section under the if will do the needful",
+      "parentUuid": "fa81d914_e97c1575",
+      "range": {
+        "startLine": 311,
+        "startChar": 2,
+        "endLine": 315,
+        "endChar": 17
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_29962d95",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 5
@@ -197,6 +365,30 @@
       "writtenOn": "2016-01-11T07:28:52Z",
       "side": 1,
       "message": "Why another func? how does it differ from AssMonitoringPlugin?",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 36
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_89850eaf",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-29T22:28:50Z",
+      "side": 1,
+      "message": "well I was looking for somethink java function overloading but the lack of it in golang prompted me to do this.\n\nSo, basically, SetupMonitoring is called at node accept time and then, the monitoring configs passed will be default values and hence this function need not accept it as an arguement however, at the time of updating the thresholds/adding after removal, we need to pass user requested configuration and hence the 2 functions.",
+      "parentUuid": "fa81d914_29962d95",
       "range": {
         "startLine": 234,
         "startChar": 0,
