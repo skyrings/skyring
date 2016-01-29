@@ -82,6 +82,24 @@
       "revId": "51a1bb87ef01423ac7930944dfa68cce1588a28d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ab300ae9",
+        "filename": "backend/backend.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-29T08:40:12Z",
+      "side": 1,
+      "message": "In that case values which are changing over time may be removed. But all other we can keep.",
+      "parentUuid": "fa81d914_58b1268e",
+      "revId": "51a1bb87ef01423ac7930944dfa68cce1588a28d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
