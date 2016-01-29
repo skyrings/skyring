@@ -31,7 +31,8 @@ func (uuid UUID) String() string {
 }
 
 func (uuid UUID) IsZero() bool {
-	return uuid[0] == 0
+	var zeroUuid UUID
+	return Equal(zeroUuid, uuid)
 }
 
 func (uuid UUID) MarshalJSON() ([]byte, error) {
