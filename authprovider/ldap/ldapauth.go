@@ -50,13 +50,19 @@ type Authorizer struct {
 	ldapServer       string
 	port             int
 	connectionString string
+	defaultGroup     string
 	defaultRole      string
 	roles            map[string]Role
 }
 
 type LdapProviderCfg struct {
-	LdapServer Directory `json:"ldapserver"`
-	UserRoles  RolesConf `joson:"userroles"`
+	LdapServer Directory  `json:"ldapserver"`
+	UserRoles  RolesConf  `json:"userroles"`
+	UserGroups GroupsConf `json:"usergroups"`
+}
+
+type GroupsConf struct {
+	DefaultGroup string
 }
 
 type RolesConf struct {
@@ -144,6 +150,7 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 		providerCfg.LdapServer.Address,
 		providerCfg.LdapServer.Port,
 		providerCfg.LdapServer.Base,
+		providerCfg.UserGroups.DefaultGroup,
 		providerCfg.UserRoles.DefaultRole,
 		providerCfg.UserRoles.Roles); err != nil {
 		logger.Get().Error("Unable to initialize the authorizer for Ldapauthprovider. error: %v", err)
@@ -155,7 +162,7 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 }
 
 func NewAuthorizer(userDao dao.UserInterface, address string, port int, base string,
-	defaultRole string, roles map[string]Role) (Authorizer, error) {
+	defaultGroup string, defaultRole string, roles map[string]Role) (Authorizer, error) {
 	var a Authorizer
 	a.userDao = userDao
 	a.ldapServer = address
@@ -163,6 +170,7 @@ func NewAuthorizer(userDao dao.UserInterface, address string, port int, base str
 	a.connectionString = base
 	a.roles = roles
 	a.defaultRole = defaultRole
+	a.defaultGroup = defaultGroup
 	if _, ok := roles[defaultRole]; !ok {
 		logger.Get().Error("Default role provided is not valid")
 		return a, mkerror("defaultRole missing")
@@ -254,8 +262,7 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 	scope := openldap.LDAP_SCOPE_SUBTREE
 
 	filter := "(objectclass=*)"
-	attributes := []string{"Uid", "UidNumber", "CN", "SN",
-		"Givenname", "Displayname", "Mail"}
+	attributes := []string{"Uid", "GivenName", "CN", "Mail"}
 
 	rv, err := ldap.SearchAll(a.connectionString, scope, filter, attributes)
 
@@ -266,19 +273,35 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 
 	for _, entry := range rv.Entries() {
 		user := models.User{}
+		fullName := ""
 		for _, attr := range entry.Attributes() {
 			switch attr.Name() {
 			case "Uid":
 				user.Username = strings.Join(attr.Values(), ", ")
 			case "Mail":
 				user.Email = strings.Join(attr.Values(), ", ")
+			case "GivenName":
+				user.FirstName = strings.Join(attr.Values(), ", ")
+			case "CN":
+				fullName = strings.Join(attr.Values(), ", ")
 			default:
 				logger.Get().Error("This property is not supported: %s", attr.Name())
 			}
-		}
-		// find the user role and group from the db and assign it
-		users = append(users, user)
+			if len(fullName) != 0 && len(user.FirstName) != 0 {
+				lastName := strings.Split(fullName, user.FirstName)
+				if len(lastName) > 1 {
+					user.LastName = strings.TrimSpace(lastName[1])
+				}
+			}
 
+		}
+		// Assiging the default roles
+		user.Role = a.defaultRole
+		user.Groups = append(user.Groups, a.defaultGroup)
+		user.Type = authprovider.External
+		if len(user.Username) != 0 {
+			users = append(users, user)
+		}
 	}
 	return users, nil
 }

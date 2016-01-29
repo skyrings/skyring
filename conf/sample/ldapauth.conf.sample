@@ -4,6 +4,9 @@
         "port": 389,
         "base": "cn=users,cn=accounts,dc=info,dc=com"
     },
+    "usergroups": {
+        "defaultGroup": "admin"
+    },
     "userroles": {
         "defaultRole": "admin",
         "roles": {
