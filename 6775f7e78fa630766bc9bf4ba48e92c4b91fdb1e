@@ -16,6 +16,24 @@
       "revId": "6775f7e78fa630766bc9bf4ba48e92c4b91fdb1e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_b8e30232",
+        "filename": "main.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-29T03:58:13Z",
+      "side": 0,
+      "message": "Because the skyring is partially functional, only the APIs are not functional, performance data collection, eventing still work. Moreover we are following the same with websockets, eventlisters, providers etc",
+      "parentUuid": "fa81d914_43d3f8d5",
+      "revId": "6775f7e78fa630766bc9bf4ba48e92c4b91fdb1e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }

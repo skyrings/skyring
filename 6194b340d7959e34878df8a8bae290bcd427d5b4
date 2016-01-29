@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_d8ea760e",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-29T03:58:13Z",
+      "side": 1,
+      "message": "I think this should be a critical error, because if duplicate routes are detected, we are not loading that specific provider. What you think?",
+      "parentUuid": "fa81d914_e34a2cab",
+      "revId": "6194b340d7959e34878df8a8bae290bcd427d5b4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_03c90026",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_f8ed7a26",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-29T03:58:13Z",
+      "side": 1,
+      "message": "Config is printed which will  have all the provider specific info including name. Is that sufficient?\nDone",
+      "parentUuid": "fa81d914_03c90026",
+      "revId": "6194b340d7959e34878df8a8bae290bcd427d5b4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_23cc4435",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2016-01-28T18:10:42Z",
       "side": 1,
       "message": "This can be marked as critical error, I feel",
+      "revId": "6194b340d7959e34878df8a8bae290bcd427d5b4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_18f5eeed",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-29T03:58:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_23cc4435",
       "revId": "6194b340d7959e34878df8a8bae290bcd427d5b4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
