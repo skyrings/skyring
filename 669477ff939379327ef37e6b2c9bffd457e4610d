@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_498876e7",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-29T21:43:34Z",
+      "side": 1,
+      "message": "Line number 85 already starts 1 goroutine for each cluster.\n\n+\n\nAs and when clusters are created, we should invoke this ScheduleCluter as a goroutine.(Here bcoz as soon as cluster is created we might choose to schedule the cluster along side disk syncing and optional physical resource monitoring configuration)\n\nSo I think it might not be required here to start as a go-routine.",
+      "revId": "669477ff939379327ef37e6b2c9bffd457e4610d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
