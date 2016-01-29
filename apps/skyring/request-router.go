@@ -100,6 +100,10 @@ func (a *App) RouteProviderEvents(event models.Event) error {
 
 func (a *App) RouteProviderBasedMonitoring(cluster_id uuid.UUID) {
 	provider := a.getProviderFromClusterId(cluster_id)
+	if provider == nil {
+		logger.Get().Warning("Faield to get provider for cluster: %v", cluster_id)
+		return
+	}
 	var result models.RpcResponse
 
 	vars := make(map[string]string)
