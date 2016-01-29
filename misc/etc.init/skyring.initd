@@ -20,7 +20,7 @@
 # Source function library.
 . /etc/rc.d/init.d/functions
 
-exec="/usr/sbin/skyring"
+exec="/usr/bin/skyring"
 prog="skyring"
 config="/etc/skyring/skyring.conf"
 pidfile="/var/run/$prog.pid"
