@@ -154,8 +154,7 @@ func start() {
 
 	application = skyring.NewApp(configDir, providersDir)
 	if application == nil {
-		logger.Get().Error("Unable to start application")
-		os.Exit(1)
+		logger.Get().Fatalf("Unable to start application")
 	}
 
 	// Create router for defining the routes.
@@ -164,8 +163,7 @@ func start() {
 
 	//Load the autheticated routes
 	if err := application.SetRoutes(router); err != nil {
-		logger.Get().Error("Unable to create http server endpoints. error: %v", err)
-		os.Exit(1)
+		logger.Get().Fatalf("Unable to create http server endpoints. error: %v", err)
 	}
 
 	// Use negroni to add middleware.  Here we add the standard
@@ -180,8 +178,14 @@ func start() {
 
 	//Initialize the application, db, auth etc
 	if err := application.InitializeApplication(conf.SystemConfig); err != nil {
-		logger.Get().Error("Unable to initialize the application")
-		os.Exit(1)
+		logger.Get().Fatalf("Unable to initialize the application. err: %v", err)
+	}
+
+	logger.Get().Info("Starting the providers")
+	//Load providers and routes
+	//Load all the files present in the config path
+	if err := application.StartProviders(configDir, providersDir); err != nil {
+		logger.Get().Fatalf("Unable to initialize the Providers. err: %v", err)
 	}
 
 	logger.Get().Info("Starting event listener")
@@ -193,8 +197,7 @@ func start() {
 	go func() {
 		logger.Get().Info("start listening on %s : %v", conf.SystemConfig.Config.Host, httpPort)
 		if err := http.ListenAndServe(fmt.Sprintf("%s:%v", conf.SystemConfig.Config.Host, httpPort), n); err != nil {
-			logger.Get().Critical("Unable to start the webserver", err)
-			os.Exit(1)
+			logger.Get().Fatalf("Unable to start the webserver. err: %v", err)
 		}
 	}()
 	sigs := make(chan os.Signal, 1)
