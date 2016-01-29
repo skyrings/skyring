@@ -260,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_c9a62653",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-29T22:34:21Z",
+      "side": 1,
+      "message": "Changing it to post as we discussed",
+      "parentUuid": "fa81d914_69b9052e",
+      "range": {
+        "startLine": 209,
+        "startChar": 17,
+        "endLine": 209,
+        "endChar": 21
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_89b6393c",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 5
@@ -295,6 +319,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "fa81d914_89b6393c",
+      "range": {
+        "startLine": 210,
+        "startChar": 50,
+        "endLine": 210,
+        "endChar": 57
+      },
+      "revId": "3bc4e87d16faaba6ac784211b1d4d9d295e88e6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a9abb21b",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-29T22:34:21Z",
+      "side": 1,
+      "message": "Any suggestions? :)",
+      "parentUuid": "fa81d914_29b8a275",
       "range": {
         "startLine": 210,
         "startChar": 50,
