@@ -64,6 +64,24 @@
       "revId": "51a1bb87ef01423ac7930944dfa68cce1588a28d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_58b1268e",
+        "filename": "backend/backend.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-29T07:48:09Z",
+      "side": 1,
+      "message": "If you look at this, most of these are low level configs which are not relevant for usm. Also the fields like memfree, used etc are not constant and changing over a period of time. If we store it we have to update it also periodically. Otherwise these values will be stale. In my opinion those are responsibility of the PM module\n\nIf you guys are still not convinced I am fine keeping this here too :)",
+      "parentUuid": "fa81d914_83dc10e6",
+      "revId": "51a1bb87ef01423ac7930944dfa68cce1588a28d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
