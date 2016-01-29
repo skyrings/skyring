@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_18a16e47",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-29T07:32:09Z",
+      "side": 1,
+      "message": "You need to do corresponding changes in the go code as well. Otherwise GetNodeDisk function starts failing during the gopy conversion",
+      "range": {
+        "startLine": 224,
+        "startChar": 9,
+        "endLine": 235,
+        "endChar": 44
+      },
+      "revId": "85d344fd529b57fc9125a2c37c8585e2e043ffb1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_38a47256",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-29T07:32:09Z",
+      "side": 1,
+      "message": "We need to do the error handling",
+      "range": {
+        "startLine": 367,
+        "startChar": 3,
+        "endLine": 368,
+        "endChar": 18
+      },
+      "revId": "85d344fd529b57fc9125a2c37c8585e2e043ffb1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
