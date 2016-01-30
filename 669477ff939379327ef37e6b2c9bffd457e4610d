@@ -16,6 +16,24 @@
       "revId": "669477ff939379327ef37e6b2c9bffd457e4610d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a44cb771",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-30T03:39:36Z",
+      "side": 1,
+      "message": "The function ScheduleCluster() is invoked from inside the task of CreateCluster from cluster.go.\n\nHere if we dont run scheduler.Schedule() as a go routine it used to keep running even if the cluster is created and thus lock held by POST_Clusters is never released.\n\nThis way cluster gets created but after that no operation like create storage etc succeed as the lock is held by POST_Clusters function.\n\nThis was a major issue post action of create cluster.",
+      "parentUuid": "fa81d914_498876e7",
+      "revId": "669477ff939379327ef37e6b2c9bffd457e4610d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
