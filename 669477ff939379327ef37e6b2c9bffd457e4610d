@@ -52,6 +52,24 @@
       "revId": "669477ff939379327ef37e6b2c9bffd457e4610d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_e4b78fd6",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-01-30T15:50:50Z",
+      "side": 1,
+      "message": "Let us keep this code here. Also remove calling ScheduleCluster as a goroutine from InitSchedules. This will be apt otherwise whoever invoking this should take care starting it as a goroutine",
+      "parentUuid": "fa81d914_a4baf720",
+      "revId": "669477ff939379327ef37e6b2c9bffd457e4610d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
