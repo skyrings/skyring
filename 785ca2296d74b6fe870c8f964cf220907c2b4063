@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_44813b49",
+        "filename": "models/core_models.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-30T06:47:42Z",
+      "side": 1,
+      "message": "Dummy field need to remove it",
+      "range": {
+        "startLine": 96,
+        "startChar": 1,
+        "endLine": 96,
+        "endChar": 18
+      },
+      "revId": "785ca2296d74b6fe870c8f964cf220907c2b4063",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
