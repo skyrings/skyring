@@ -34,6 +34,24 @@
       "revId": "669477ff939379327ef37e6b2c9bffd457e4610d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a4baf720",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-01-30T05:44:55Z",
+      "side": 1,
+      "message": "Ok.\n\nBut, will invoking this as a go routine from cluster.go\u0027s POST_Cluster suffice? I mean the only reason I am not in favour of putting here is we are already invoking ScheduleCluster as a goroutine from InitSchedules(typically across skyring restarts). Can you please change the call in InitSchedules to a normal call or make the call in POST_Cluster as a go routine instead of here?",
+      "parentUuid": "fa81d914_a44cb771",
+      "revId": "669477ff939379327ef37e6b2c9bffd457e4610d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
