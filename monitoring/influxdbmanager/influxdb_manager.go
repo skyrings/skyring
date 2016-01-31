@@ -96,7 +96,7 @@ func (idm InfluxdbManager) QueryDB(params map[string]interface{}) (interface{}, 
 	return res, err
 }
 
-func (idm InfluxdbManager) PushToDb(metrics map[string]map[string]string) error {
+func (idm InfluxdbManager) PushToDb(metrics map[string]map[string]string, hostName string, port int) error {
 	/*
 		TODO Implement
 	*/

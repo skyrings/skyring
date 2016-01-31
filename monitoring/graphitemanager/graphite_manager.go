@@ -199,7 +199,7 @@ func (tsdbm GraphiteManager) QueryDB(params map[string]interface{}) (interface{}
 }
 
 //This method takes map[string]map[string]string ==> map[metric/table name]map[timestamp]value
-func (tsdbm GraphiteManager) PushToDb(metrics map[string]map[string]string) error {
+func (tsdbm GraphiteManager) PushToDb(metrics map[string]map[string]string, hostName string, port int) error {
 	data := make([]graphite.Metric, 1)
 	for tableName, valueMap := range metrics {
 		for timestamp, value := range valueMap {
@@ -210,7 +210,7 @@ func (tsdbm GraphiteManager) PushToDb(metrics map[string]map[string]string) erro
 			data = append(data, graphite.Metric{Name: tableName, Value: value, Timestamp: timeInt})
 		}
 	}
-	Graphite, err := graphite.NewGraphite(conf.SystemConfig.TimeSeriesDBConfig.Hostname, conf.SystemConfig.TimeSeriesDBConfig.DataPushPort)
+	Graphite, err := graphite.NewGraphite(hostName, port)
 	if err != nil {
 		return fmt.Errorf("%v", err)
 	}
