@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_5f8ae8bf",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:39:40Z",
+      "side": 1,
+      "message": "Are we really doing trimming here? I feel its most of formatting the string. Should we use a regex for doing the same?",
+      "revId": "a29fd46fa30b277e758dc111b22ce130838bb7cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7f85ecab",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:39:40Z",
+      "side": 1,
+      "message": "Remove tabs",
+      "revId": "a29fd46fa30b277e758dc111b22ce130838bb7cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_9f9460e3",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:39:40Z",
+      "side": 1,
+      "message": "Remove tabs. This would fail pep8 and pyflakes I feel.",
+      "revId": "a29fd46fa30b277e758dc111b22ce130838bb7cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_bf8f64cb",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:39:40Z",
+      "side": 1,
+      "message": "Same as above for tabs",
+      "revId": "a29fd46fa30b277e758dc111b22ce130838bb7cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_dfbdf869",
+        "filename": "models/core_models.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:39:40Z",
+      "side": 1,
+      "message": "json tag??",
+      "revId": "a29fd46fa30b277e758dc111b22ce130838bb7cc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
