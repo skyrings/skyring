@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_1fb87075",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:42:15Z",
+      "side": 1,
+      "message": "Bug-URL: \u003cBugzilla url here\u003e\n\nMakes easy to track from patch..",
+      "revId": "c9ff95ca91d27f5d0efa07a67df56d718dd7640b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_3fbb7473",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:42:15Z",
+      "side": 1,
+      "message": "%s/joson/json/g",
+      "revId": "c9ff95ca91d27f5d0efa07a67df56d718dd7640b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
