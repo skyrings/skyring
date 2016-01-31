@@ -36,7 +36,7 @@ func (m MongoDb) StorageProfiles(filter interface{}, ops models.QueryOps) (sProf
 	c := m.Connect(models.COLL_NAME_STORAGE_PROFILE)
 	defer m.Close(c)
 
-	err := c.Find(filter).Select(ops.Select).All(&sProfiles)
+	err := c.Find(filter).Sort("priority").Select(ops.Select).All(&sProfiles)
 	if err != nil {
 		logger.Get().Error("Error getting record from DB:%s", err)
 		return sProfiles, mkmgoerror(err.Error())
