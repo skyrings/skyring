@@ -1221,6 +1221,10 @@ func syncStorageDisks(nodes []models.ClusterNode) error {
 	defer sessionCopy.Close()
 	var fetchedNode models.Node
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	sProfiles, err := GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
+	if err != nil {
+		logger.Get().Error("Unable to get the storage profiles. err:%v", err)
+	}
 	for _, node := range nodes {
 		nodeid, err := uuid.Parse(node.NodeId)
 		if err != nil {
@@ -1229,7 +1233,7 @@ func syncStorageDisks(nodes []models.ClusterNode) error {
 		if err := coll.Find(bson.M{"nodeid": *nodeid}).One(&fetchedNode); err != nil {
 			return err
 		}
-		ok, err := GetCoreNodeManager().SyncStorageDisks(fetchedNode.Hostname)
+		ok, err := GetCoreNodeManager().SyncStorageDisks(fetchedNode.Hostname, sProfiles)
 		if err != nil || !ok {
 			return errors.New(fmt.Sprintf("Error syncing storage disks for the node: %s. error: %v", fetchedNode.Hostname, err))
 		}
