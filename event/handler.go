@@ -126,7 +126,6 @@ func handle_node_start_event(node string) error {
 		logger.Get().Warning(fmt.Sprintf("Node with name: %s not in activating state to update other details", node))
 		return nil
 	}
-
 	asyncTask := func(t *task.Task) {
 		t.UpdateStatus("started the task for InitializeNode: %s", t.ID)
 		// Process the request
@@ -147,7 +146,11 @@ func handle_node_start_event(node string) error {
 }
 
 func initializeStorageNode(node string, t *task.Task) error {
-	if storage_node, ok := saltnodemanager.GetStorageNodeInstance(node); ok {
+	sProfiles, err := skyring.GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
+	if err != nil {
+		logger.Get().Error("Unable to get the storage profiles. May not be able to apply storage profiles for node: %v err:%v", node, err)
+	}
+	if storage_node, ok := saltnodemanager.GetStorageNodeInstance(node, sProfiles); ok {
 		if err := updateStorageNodeToDB(*storage_node); err != nil {
 			logger.Get().Error("Unable to add details of node: %s to DB. error: %v", node, err)
 			t.UpdateStatus("Unable to add details of node: %s to DB. error: %v", node, err)
