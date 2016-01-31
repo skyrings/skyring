@@ -142,12 +142,14 @@ const (
 	CLUSTER_STATUS_OK = iota
 	CLUSTER_STATUS_WARN
 	CLUSTER_STATUS_ERROR
+	CLUSTER_STATUS_UNKNOWN
 )
 
 var ClusterStatuses = [...]string{
 	"ok",
 	"warning",
 	"error",
+	"unknown",
 }
 
 // State values for cluster
