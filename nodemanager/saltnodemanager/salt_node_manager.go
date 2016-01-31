@@ -15,6 +15,7 @@ package saltnodemanager
 import (
 	"errors"
 	"fmt"
+	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/backend/salt"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
@@ -70,7 +71,7 @@ func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerpr
 	}
 }
 
-func GetStorageNodeInstance(hostname string) (*models.Node, bool) {
+func GetStorageNodeInstance(hostname string, sProfiles []models.StorageProfile) (*models.Node, bool) {
 	var storage_node models.Node
 	storage_node.Hostname = hostname
 	storage_node.Enabled = true
@@ -111,7 +112,7 @@ func GetStorageNodeInstance(hostname string) (*models.Node, bool) {
 			return nil, false
 		}
 		disk.DiskId = *dId
-		disk.StorageProfile = models.DefaultProfile3
+		applyStorageProfile(&disk, sProfiles)
 		storage_node.StorageDisks = append(storage_node.StorageDisks, disk)
 	}
 
@@ -137,7 +138,7 @@ func (a SaltNodeManager) GetUnmanagedNodes() (*models.UnmanagedNodes, error) {
 	}
 }
 
-func (a SaltNodeManager) SyncStorageDisks(node string) (bool, error) {
+func (a SaltNodeManager) SyncStorageDisks(node string, sProfiles []models.StorageProfile) (bool, error) {
 	disks, err := salt_backend.GetNodeDisk(node)
 	if err != nil {
 		return false, err
@@ -149,7 +150,7 @@ func (a SaltNodeManager) SyncStorageDisks(node string) (bool, error) {
 			return false, err
 		}
 		disk.DiskId = *dId
-		disk.StorageProfile = models.DefaultProfile3
+		applyStorageProfile(&disk, sProfiles)
 	}
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
@@ -249,4 +250,25 @@ func (a SaltNodeManager) RemoveMonitoringPlugin(nodes []string, pluginName strin
 func (a SaltNodeManager) AddMonitoringPlugin(nodes []string, master string, plugin monitoring.Plugin) (map[string]interface{}, error) {
 	failed_nodes, err := salt_backend.AddMonitoringPlugin([]string{plugin.Name}, nodes, "", monitoring.ToSaltPillarCompat([]monitoring.Plugin{plugin}))
 	return failed_nodes, err
+}
+
+func applyStorageProfile(disk *backend.Disk, sProfiles []models.StorageProfile) error {
+
+	for _, sProfile := range sProfiles {
+		//TODO check the disk type
+
+		//TODO check the speed
+
+		//Now only check whether the disk is SSD or not. REST are supported
+		//once the API is avaialable
+		if sProfile.Rule.Type == models.SSD {
+			if disk.SSD {
+				disk.StorageProfile = sProfile.Name
+				return nil
+			}
+		}
+	}
+	//Not Matched, so add to generic profile
+	disk.StorageProfile = models.DefaultProfile3
+	return nil
 }

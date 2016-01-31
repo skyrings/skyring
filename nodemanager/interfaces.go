@@ -23,7 +23,7 @@ type NodeManagerInterface interface {
 	GetUnmanagedNodes() (*models.UnmanagedNodes, error)
 	DisableNode(node string) (bool, error)
 	EnableNode(node string) (bool, error)
-	SyncStorageDisks(node string) (bool, error)
+	SyncStorageDisks(node string, sProfiles []models.StorageProfile) (bool, error)
 	RemoveNode(node string) (bool, error)
 	IgnoreNode(node string) (bool, error)
 	AddMonitoringPlugin(nodes []string, master string, plugin monitoring.Plugin) (failed_nodes map[string]interface{}, err error)
