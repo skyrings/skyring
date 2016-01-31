@@ -1,0 +1,310 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_5f55884e",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "Do we need mutiple lines of error messages here? I feel we should merge in a single error message.",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7f508c5e",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "We might need to add cluster reference as well  for which the plugin already exists.",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_9f4f00bd",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "Cluster reference in error message?",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_dfc89824",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "Cluster reference in error message?",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_3fd614c6",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "Do we need this info message? If so make the message more clear that \"The monitoring plugins are updated successfully on cluster: \u003cname\u003e\"",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_5fdca8e4",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "I dont get the name POST_MonitoringPluginsInPlace? What its meant for?",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7fd7acbf",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "I feel we should break once we find that plugins are available for the cluster",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_9fe620b3",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "Add the plugin name and cluster reference as well in the error message here",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_bfe1249c",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "Cluster name/id in the error message",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_dfefb885",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "Plug in name and cluster reference in error message",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_fff2bc6d",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "Is the called adding cluster reference to this error message?",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_3fed348c",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "enforce or enforceupdate",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_5f03c841",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "Why this error msg in the start only? Do you need this?",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7ffecc39",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "What if err !\u003d nil ?? Follow other functions..",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_9ffd403d",
+        "filename": "utils/go_type_utils.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "Why not in util.go only??",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_bff8444a",
+        "filename": "utils/sets.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "%s/typ/elementType/g",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_df96d8ef",
+        "filename": "utils/sets.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "Should we call these methods as AddAll() and Add() ?",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ff99dc1f",
+        "filename": "utils/sets.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-01-31T16:34:23Z",
+      "side": 1,
+      "message": "This one as Remove() ??",
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
