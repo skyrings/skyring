@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa81d914_bae1329c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-01T07:15:33Z",
+      "side": 1,
+      "message": "%s/anomious/anonymous/g",
+      "revId": "313716d48fa9fc569f5e4d52d08b8d2472438867",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_fc0ac71f",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-01T07:15:33Z",
+      "side": 1,
+      "message": "May be add LDAP server ip in error message",
+      "revId": "313716d48fa9fc569f5e4d52d08b8d2472438867",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_1c0ebb34",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-01T07:15:33Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "313716d48fa9fc569f5e4d52d08b8d2472438867",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_3c145f43",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-01T07:15:33Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "313716d48fa9fc569f5e4d52d08b8d2472438867",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_1aea3e75",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 1
