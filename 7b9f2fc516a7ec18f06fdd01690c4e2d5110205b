@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_3cdc5fe4",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-01T09:52:55Z",
+      "side": 1,
+      "message": "This should go into ldapauth.conf.sample so that its available in default config provided at install time",
+      "range": {
+        "startLine": 153,
+        "startChar": 14,
+        "endLine": 153,
+        "endChar": 37
+      },
+      "revId": "7b9f2fc516a7ec18f06fdd01690c4e2d5110205b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
