@@ -116,18 +116,18 @@ func GetStorageNodeInstance(hostname string, sProfiles []models.StorageProfile) 
 		storage_node.StorageDisks = append(storage_node.StorageDisks, disk)
 	}
 
-	cpus, err := salt_backend.GetNodeCpu(node)
+	cpus, err := salt_backend.GetNodeCpu(hostname)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting cpu details for node: %s. error: %v", node, err))
+		logger.Get().Error(fmt.Sprintf("Error getting cpu details for node: %s. error: %v", hostname, err))
 		return nil, false
 	}
 	for _, cpu := range cpus {
 		storage_node.CPUs = append(storage_node.CPUs, cpu)
 	}
 
-	osInfo, err := salt_backend.GetNodeOs(node)
+	osInfo, err := salt_backend.GetNodeOs(hostname)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting os details for node: %s", node))
+		logger.Get().Error(fmt.Sprintf("Error getting os details for node: %s", hostname))
 		return nil, false
 	}
 	storage_node.OS.Name = osInfo.Name
@@ -135,9 +135,9 @@ func GetStorageNodeInstance(hostname string, sProfiles []models.StorageProfile) 
 	storage_node.OS.KernelVersion = osInfo.KernelVersion
 	storage_node.OS.SELinuxMode = osInfo.SELinuxMode
 
-	memoryInfo, err := salt_backend.GetNodeMemory(node)
+	memoryInfo, err := salt_backend.GetNodeMemory(hostname)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting memory details for node: %s", node))
+		logger.Get().Error(fmt.Sprintf("Error getting memory details for node: %s", hostname))
 		return nil, false
 	}
 	storage_node.Memory.TotalSize = memoryInfo.TotalSize
