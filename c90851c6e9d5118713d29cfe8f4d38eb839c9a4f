@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_3a5f0274",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-01T07:13:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_df61783a",
+      "revId": "c90851c6e9d5118713d29cfe8f4d38eb839c9a4f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_ff647c4a",
         "filename": "event/handler.go",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_fa4e4a95",
+        "filename": "event/handler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-01T07:13:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_ff647c4a",
+      "revId": "c90851c6e9d5118713d29cfe8f4d38eb839c9a4f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_1f5cf07d",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2016-01-31T16:05:52Z",
       "side": 1,
       "message": "We can have this as swicth case as later it would be required anyway for other profile types.",
+      "revId": "c90851c6e9d5118713d29cfe8f4d38eb839c9a4f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ba2bf292",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-01T07:13:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_1f5cf07d",
       "revId": "c90851c6e9d5118713d29cfe8f4d38eb839c9a4f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
