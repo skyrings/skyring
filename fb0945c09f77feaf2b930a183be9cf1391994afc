@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_dcd42349",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-01T08:12:48Z",
+      "side": 1,
+      "message": "This line is not required now.",
+      "revId": "fb0945c09f77feaf2b930a183be9cf1391994afc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_fccba7a2",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-01T08:12:48Z",
+      "side": 1,
+      "message": "Above default setting can be part of default case in above swicth",
+      "revId": "fb0945c09f77feaf2b930a183be9cf1391994afc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
