@@ -50,13 +50,24 @@ type Authorizer struct {
 	ldapServer       string
 	port             int
 	connectionString string
+	domainAdmin      string
+	password         string
+	uid              string
+	fullName         string
+	displayName      string
+	defaultGroup     string
 	defaultRole      string
 	roles            map[string]Role
 }
 
 type LdapProviderCfg struct {
-	LdapServer Directory `json:"ldapserver"`
-	UserRoles  RolesConf `joson:"userroles"`
+	LdapServer Directory  `json:"ldapserver"`
+	UserRoles  RolesConf  `json:"userroles"`
+	UserGroups GroupsConf `json:"usergroups"`
+}
+
+type GroupsConf struct {
+	DefaultGroup string
 }
 
 type RolesConf struct {
@@ -65,14 +76,18 @@ type RolesConf struct {
 }
 
 type Directory struct {
-	Address string
-	Port    int
-	Base    string
+	Address     string
+	Port        int
+	Base        string
+	DomainAdmin string
+	Password    string
+	Uid         string
+	FullName    string
+	DisplayName string
 }
 
-func Authenticate(url string, base string,
-	user string, passwd string) error {
-
+func Authenticate(a Authorizer, url string, user string, passwd string) error {
+	base := a.connectionString
 	ldap, err := openldap.Initialize(url)
 	defer ldap.Close()
 
@@ -82,12 +97,20 @@ func Authenticate(url string, base string,
 	}
 
 	ldap.SetOption(openldap.LDAP_OPT_PROTOCOL_VERSION, openldap.LDAP_VERSION3)
-	userConnStr := fmt.Sprintf("uid=%s,%s", user, base)
-
-	err = ldap.Bind(userConnStr, passwd)
-	if err != nil {
-		logger.Get().Error("Error binding to LDAP Server. error: %v", err)
-		return err
+	if a.uid != "" {
+		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", a.uid, user, base), passwd)
+		if err != nil {
+			logger.Get().Error("Error binding to LDAP Server. error: %v", err)
+			return err
+		}
+	} else {
+		if ldap.Bind(fmt.Sprintf("uid=%s,%s", user, base), passwd) != nil {
+			err = ldap.Bind(fmt.Sprintf("cn=%s,%s", user, base), passwd)
+			if err != nil {
+				logger.Get().Error("Error binding to LDAP Server. error: %v", err)
+				return err
+			}
+		}
 	}
 	return nil
 }
@@ -100,7 +123,7 @@ func LdapAuth(a Authorizer, user, passwd string) bool {
 	url := GetUrl(a.ldapServer, a.port)
 	logger.Get().Debug("URL VALUE IS:%s", url)
 	// Authenticating user
-	err := Authenticate(url, a.connectionString, user, passwd)
+	err := Authenticate(a, url, user, passwd)
 	if err != nil {
 		logger.Get().Error("Authentication failed for user: %s. error: %v", user, err)
 		return false
@@ -144,6 +167,12 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 		providerCfg.LdapServer.Address,
 		providerCfg.LdapServer.Port,
 		providerCfg.LdapServer.Base,
+		providerCfg.LdapServer.DomainAdmin,
+		providerCfg.LdapServer.Password,
+		providerCfg.LdapServer.Uid,
+		providerCfg.LdapServer.FullName,
+		providerCfg.LdapServer.DisplayName,
+		providerCfg.UserGroups.DefaultGroup,
 		providerCfg.UserRoles.DefaultRole,
 		providerCfg.UserRoles.Roles); err != nil {
 		logger.Get().Error("Unable to initialize the authorizer for Ldapauthprovider. error: %v", err)
@@ -155,14 +184,21 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 }
 
 func NewAuthorizer(userDao dao.UserInterface, address string, port int, base string,
-	defaultRole string, roles map[string]Role) (Authorizer, error) {
+	domainAdmin string, password string, uid string, fullName string, displayName string,
+	defaultGroup string, defaultRole string, roles map[string]Role) (Authorizer, error) {
 	var a Authorizer
 	a.userDao = userDao
 	a.ldapServer = address
 	a.port = port
 	a.connectionString = base
+	a.domainAdmin = domainAdmin
+	a.password = password
+	a.uid = uid
+	a.fullName = fullName
+	a.displayName = displayName
 	a.roles = roles
 	a.defaultRole = defaultRole
+	a.defaultGroup = defaultGroup
 	if _, ok := roles[defaultRole]; !ok {
 		logger.Get().Error("Default role provided is not valid")
 		return a, mkerror("defaultRole missing")
@@ -244,6 +280,18 @@ func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
 // List the LDAP users
 func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 	url := GetUrl(a.ldapServer, a.port)
+	Uid := "Uid"
+	DisplayName := "DisplayName"
+	FullName := "CN"
+	if a.uid != "" {
+		Uid = a.uid
+	}
+	if a.displayName != "" {
+		DisplayName = a.displayName
+	}
+	if a.fullName != "" {
+		FullName = a.fullName
+	}
 
 	ldap, err := openldap.Initialize(url)
 	if err != nil {
@@ -251,11 +299,17 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 		return nil, err
 	}
 
-	scope := openldap.LDAP_SCOPE_SUBTREE
+	if a.domainAdmin != "" {
+		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", Uid, a.domainAdmin, a.connectionString), a.password)
+		if err != nil {
+			logger.Get().Error("Error binding to LDAP Server. error: %v", err)
+			return nil, err
+		}
+	}
 
+	scope := openldap.LDAP_SCOPE_SUBTREE
 	filter := "(objectclass=*)"
-	attributes := []string{"Uid", "UidNumber", "CN", "SN",
-		"Givenname", "Displayname", "Mail"}
+	attributes := []string{Uid, DisplayName, FullName, "Mail"}
 
 	rv, err := ldap.SearchAll(a.connectionString, scope, filter, attributes)
 
@@ -266,19 +320,35 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 
 	for _, entry := range rv.Entries() {
 		user := models.User{}
+		fullName := ""
 		for _, attr := range entry.Attributes() {
 			switch attr.Name() {
-			case "Uid":
+			case Uid:
 				user.Username = strings.Join(attr.Values(), ", ")
 			case "Mail":
 				user.Email = strings.Join(attr.Values(), ", ")
-			default:
-				logger.Get().Error("This property is not supported: %s", attr.Name())
+			case DisplayName:
+				user.FirstName = strings.Join(attr.Values(), ", ")
+			case FullName:
+				fullName = strings.Join(attr.Values(), ", ")
+				//default:
+				//	logger.Get().Error("This property is not supported: %s", attr.Name())
 			}
-		}
-		// find the user role and group from the db and assign it
-		users = append(users, user)
+			if len(fullName) != 0 && len(user.FirstName) != 0 {
+				lastName := strings.Split(fullName, user.FirstName)
+				if len(lastName) > 1 {
+					user.LastName = strings.TrimSpace(lastName[1])
+				}
+			}
 
+		}
+		// Assiging the default roles
+		user.Role = a.defaultRole
+		user.Groups = append(user.Groups, a.defaultGroup)
+		user.Type = authprovider.External
+		if len(user.Username) != 0 {
+			users = append(users, user)
+		}
 	}
 	return users, nil
 }

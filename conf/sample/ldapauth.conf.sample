@@ -2,7 +2,12 @@
     "ldapserver": {
         "address": "192.168.122.219",
         "port": 389,
-        "base": "cn=users,cn=accounts,dc=info,dc=com"
+        "base": "cn=users,cn=accounts,dc=info,dc=com",
+	"domainadmin": "",
+	"password": "",
+	"uid": "uid",
+	"displayname": "displayname",
+	"fullname": "cn"
     },
     "userroles": {
         "defaultRole": "admin",
