@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_bf75a199",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-01T10:11:22Z",
+      "side": 1,
+      "message": "Rather than duplicating the fields, please embed the Directory struct inside Authorizer",
+      "range": {
+        "startLine": 49,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 30
+      },
+      "revId": "0ec2af572e491ec9d4072154f80da2a1766c16f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_ff0ab91f",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-01T10:11:22Z",
+      "side": 1,
+      "message": "pass the providerCfg itself rather than passing each and every field as a parameter",
+      "range": {
+        "startLine": 167,
+        "startChar": 2,
+        "endLine": 178,
+        "endChar": 23
+      },
+      "revId": "0ec2af572e491ec9d4072154f80da2a1766c16f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
