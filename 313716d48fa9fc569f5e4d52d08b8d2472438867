@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_1aea3e75",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-01T05:57:28Z",
+      "side": 1,
+      "message": "Remove commented line",
+      "revId": "313716d48fa9fc569f5e4d52d08b8d2472438867",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_faf2ca6d",
+        "filename": "conf/sample/ldapauth.conf.sample",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-01T05:57:28Z",
+      "side": 1,
+      "message": "The hardcoded values should be removed from here. They should be put while setting up skyring.",
+      "revId": "313716d48fa9fc569f5e4d52d08b8d2472438867",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
