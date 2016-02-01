@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_5c22f301",
+        "filename": "backend/salt/salt.go",
+        "patchSetId": 13
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-01T09:31:33Z",
+      "side": 1,
+      "message": "What I meant was as below\n\nif pyobj, loc_err : \u003d pyFuncs[\"UpdateMonitoringConfiguration\"].Call(nodes, monitoring.ToSaltPillarCompat(config)); loc_err \u003d\u003d nil {\n    err \u003d gopy.Convert(pyobj, \u0026failed_nodes)\n} else {\n    err \u003d loc_err\n}\n\nAll other functions are doing the same.",
+      "revId": "70ee292bb3d1a2279d433c0af38c0d0877428f5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
