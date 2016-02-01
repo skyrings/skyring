@@ -197,6 +197,7 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 		util.HandleHttpError(rw, err)
 		return
 	}
+	var password string
 	if val, ok := m["username"]; ok {
 		user.Username = val.(string)
 	}
@@ -218,8 +219,11 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 	if val, ok := m["notificationenabled"]; ok {
 		user.NotificationEnabled = val.(bool)
 	}
+	if val, ok := m["password"]; ok {
+		password = val.(string)
+	}
 
-	if err := GetAuthProvider().AddUser(user, m["password"].(string)); err != nil {
+	if err := GetAuthProvider().AddUser(user, password); err != nil {
 		logger.Get().Error("Unable to create User:%s", err)
 		util.HandleHttpError(rw, err)
 		return
