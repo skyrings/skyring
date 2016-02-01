@@ -46,13 +46,11 @@ type Role int
 // Authorizer structures contain the store of user session cookies a reference
 // to a backend storage system.
 type Authorizer struct {
-	userDao          dao.UserInterface
-	ldapServer       string
-	port             int
-	connectionString string
-	defaultGroup     string
-	defaultRole      string
-	roles            map[string]Role
+	userDao      dao.UserInterface
+	directory    Directory
+	defaultGroup string
+	defaultRole  string
+	roles        map[string]Role
 }
 
 type LdapProviderCfg struct {
@@ -71,16 +69,18 @@ type RolesConf struct {
 }
 
 type Directory struct {
-	Address string
-	Port    int
-	Base    string
+	Address     string
+	Port        int
+	Base        string
+	DomainAdmin string
+	Password    string
+	Uid         string
+	FullName    string
+	DisplayName string
 }
 
-func Authenticate(url string, base string,
-	user string, passwd string) error {
-
+func Authenticate(a Authorizer, url string, user string, passwd string) error {
 	ldap, err := openldap.Initialize(url)
-	defer ldap.Close()
 
 	if err != nil {
 		logger.Get().Error("Failed to connect the server. error: %v", err)
@@ -88,12 +88,21 @@ func Authenticate(url string, base string,
 	}
 
 	ldap.SetOption(openldap.LDAP_OPT_PROTOCOL_VERSION, openldap.LDAP_VERSION3)
-	userConnStr := fmt.Sprintf("uid=%s,%s", user, base)
+	if a.directory.Uid != "" {
+		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", a.directory.Uid, user, a.directory.Base), passwd)
 
-	err = ldap.Bind(userConnStr, passwd)
-	if err != nil {
-		logger.Get().Error("Error binding to LDAP Server. error: %v", err)
-		return err
+		if err != nil {
+			logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
+			return err
+		}
+	} else {
+		if ldap.Bind(fmt.Sprintf("uid=%s,%s", user, a.directory.Base), passwd) != nil {
+			err = ldap.Bind(fmt.Sprintf("cn=%s,%s", user, a.directory.Base), passwd)
+			if err != nil {
+				logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
+				return err
+			}
+		}
 	}
 	return nil
 }
@@ -103,10 +112,9 @@ func GetUrl(ldapserver string, port int) string {
 }
 
 func LdapAuth(a Authorizer, user, passwd string) bool {
-	url := GetUrl(a.ldapServer, a.port)
-	logger.Get().Debug("URL VALUE IS:%s", url)
+	url := GetUrl(a.directory.Address, a.directory.Port)
 	// Authenticating user
-	err := Authenticate(url, a.connectionString, user, passwd)
+	err := Authenticate(a, url, user, passwd)
 	if err != nil {
 		logger.Get().Error("Authentication failed for user: %s. error: %v", user, err)
 		return false
@@ -146,13 +154,7 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 	}
 	userDao := skyring.GetDbProvider().UserInterface()
 	//Create the Provider
-	if provider, err := NewAuthorizer(userDao,
-		providerCfg.LdapServer.Address,
-		providerCfg.LdapServer.Port,
-		providerCfg.LdapServer.Base,
-		providerCfg.UserGroups.DefaultGroup,
-		providerCfg.UserRoles.DefaultRole,
-		providerCfg.UserRoles.Roles); err != nil {
+	if provider, err := NewAuthorizer(userDao, providerCfg); err != nil {
 		logger.Get().Error("Unable to initialize the authorizer for Ldapauthprovider. error: %v", err)
 		panic(err)
 	} else {
@@ -161,17 +163,21 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 
 }
 
-func NewAuthorizer(userDao dao.UserInterface, address string, port int, base string,
-	defaultGroup string, defaultRole string, roles map[string]Role) (Authorizer, error) {
+func NewAuthorizer(userDao dao.UserInterface, providerCfg LdapProviderCfg) (Authorizer, error) {
 	var a Authorizer
 	a.userDao = userDao
-	a.ldapServer = address
-	a.port = port
-	a.connectionString = base
-	a.roles = roles
-	a.defaultRole = defaultRole
-	a.defaultGroup = defaultGroup
-	if _, ok := roles[defaultRole]; !ok {
+	a.directory.Address = providerCfg.LdapServer.Address
+	a.directory.Port = providerCfg.LdapServer.Port
+	a.directory.Base = providerCfg.LdapServer.Base
+	a.directory.DomainAdmin = providerCfg.LdapServer.DomainAdmin
+	a.directory.Password = providerCfg.LdapServer.Password
+	a.directory.Uid = providerCfg.LdapServer.Uid
+	a.directory.FullName = providerCfg.LdapServer.FullName
+	a.directory.DisplayName = providerCfg.LdapServer.DisplayName
+	a.roles = providerCfg.UserRoles.Roles
+	a.defaultRole = providerCfg.UserRoles.DefaultRole
+	a.defaultGroup = providerCfg.UserGroups.DefaultGroup
+	if _, ok := a.roles[a.defaultRole]; !ok {
 		logger.Get().Error("Default role provided is not valid")
 		return a, mkerror("defaultRole missing")
 	}
@@ -251,7 +257,19 @@ func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
 
 // List the LDAP users
 func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
-	url := GetUrl(a.ldapServer, a.port)
+	url := GetUrl(a.directory.Address, a.directory.Port)
+	Uid := "Uid"
+	DisplayName := "DisplayName"
+	FullName := "CN"
+	if a.directory.Uid != "" {
+		Uid = a.directory.Uid
+	}
+	if a.directory.DisplayName != "" {
+		DisplayName = a.directory.DisplayName
+	}
+	if a.directory.FullName != "" {
+		FullName = a.directory.FullName
+	}
 
 	ldap, err := openldap.Initialize(url)
 	if err != nil {
@@ -259,12 +277,19 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 		return nil, err
 	}
 
+	if a.directory.DomainAdmin != "" {
+		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", Uid, a.directory.DomainAdmin, a.directory.Base), a.directory.Password)
+		if err != nil {
+			logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
+			return nil, err
+		}
+	}
+
 	scope := openldap.LDAP_SCOPE_SUBTREE
-
 	filter := "(objectclass=*)"
-	attributes := []string{"Uid", "GivenName", "CN", "Mail"}
+	attributes := []string{Uid, DisplayName, FullName, "Mail"}
 
-	rv, err := ldap.SearchAll(a.connectionString, scope, filter, attributes)
+	rv, err := ldap.SearchAll(a.directory.Base, scope, filter, attributes)
 
 	if err != nil {
 		logger.Get().Error("Failed to search LDAP/AD server. error: %v", err)
@@ -276,16 +301,14 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 		fullName := ""
 		for _, attr := range entry.Attributes() {
 			switch attr.Name() {
-			case "Uid":
+			case Uid:
 				user.Username = strings.Join(attr.Values(), ", ")
 			case "Mail":
 				user.Email = strings.Join(attr.Values(), ", ")
-			case "GivenName":
+			case DisplayName:
 				user.FirstName = strings.Join(attr.Values(), ", ")
-			case "CN":
+			case FullName:
 				fullName = strings.Join(attr.Values(), ", ")
-			default:
-				logger.Get().Error("This property is not supported: %s", attr.Name())
 			}
 			if len(fullName) != 0 && len(user.FirstName) != 0 {
 				lastName := strings.Split(fullName, user.FirstName)

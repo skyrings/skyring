@@ -1,8 +1,13 @@
 {
     "ldapserver": {
-        "address": "192.168.122.219",
+        "address": "",
         "port": 389,
-        "base": "cn=users,cn=accounts,dc=info,dc=com"
+        "base": "",
+	"domainadmin": "",
+	"password": "",
+	"uid": "",
+	"displayname": "",
+	"fullname": ""
     },
     "usergroups": {
         "defaultGroup": "admin"
