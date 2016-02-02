@@ -33,12 +33,6 @@ func NewGraphiteManager(config io.Reader) (*GraphiteManager, error) {
 	return &GraphiteManager{}, nil
 }
 
-var GeneralResources = []string{
-	"df",
-	"memory",
-	"cpu",
-}
-
 var (
 	templateUrl        = "http://{{.hostname}}:{{.port}}/render?target={{.collectionname}}.{{.nodename}}.{{.resourcename}}*.*&format=json"
 	templateFromTime   = "&from={{.start_time}}"
@@ -106,7 +100,7 @@ func (tsdbm GraphiteManager) QueryDB(params map[string]interface{}) (interface{}
 	if str, ok := params["resource"].(string); ok {
 		resource = str
 	}
-	if !Matches(resource, GeneralResources) {
+	if !Matches(resource, monitoring.GeneralResources) {
 		/*
 			1. Ideally fetch clusterId from nodeId
 			2. Fetch clustertype from clusterId

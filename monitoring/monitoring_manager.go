@@ -10,6 +10,13 @@ import (
 
 type MonitoringManagersFactory func(config io.Reader) (MonitoringManagerInterface, error)
 
+var GeneralResources = []string{
+	"df",
+	"memory",
+	"cpu",
+	"cluster_utilization",
+}
+
 var (
 	monitoringManagersMutex sync.Mutex
 	monitoringManagers      = make(map[string]MonitoringManagersFactory)
