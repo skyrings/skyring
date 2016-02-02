@@ -114,10 +114,13 @@ func (a *App) getUsers(rw http.ResponseWriter, req *http.Request) {
 
 }
 
+var Callvars = func(req *http.Request) map[string]string {
+	return (mux.Vars(req))
+}
+
 func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 
-	vars := mux.Vars(req)
-
+	vars := Callvars(req)
 	user, err := GetAuthProvider().GetUser(vars["username"], req)
 	if err != nil {
 		logger.Get().Error("Unable to Get the user:%s", err)
@@ -232,7 +235,7 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 
 func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 
-	vars := mux.Vars(req)
+	vars := Callvars(req)
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		logger.Get().Error("Error parsing http request body:%s", err)
@@ -256,7 +259,7 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 
 func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 
-	vars := mux.Vars(req)
+	vars := Callvars(req)
 
 	if err := GetAuthProvider().DeleteUser(vars["username"]); err != nil {
 		logger.Get().Error("Unable to delete User:%s", err)

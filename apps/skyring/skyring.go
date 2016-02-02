@@ -82,6 +82,10 @@ func NewApp(configDir string, binDir string) *App {
 	return app
 }
 
+var CallStartProviderCodec = func(path string, confStr []byte) (*rpc.Client, error) {
+        return (pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, path, string(confStr)))
+}
+
 func (a *App) StartProviders(configDir string, binDir string) error {
 
 	providerBinaryPath := path.Join(binDir, ProviderBinaryDir)
@@ -131,7 +135,7 @@ func (a *App) StartProviders(configDir string, binDir string) error {
 			}
 
 			confStr, _ := json.Marshal(conf.SystemConfig)
-			client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, config.Provider.ProviderBinary, string(confStr))
+			client, err := CallStartProviderCodec(config.Provider.ProviderBinary, confStr)
 			if err != nil {
 				logger.Get().Error("Error starting provider for %s. error: %v", config.Provider.Name, err)
 				continue
