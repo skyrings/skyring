@@ -246,7 +246,7 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 			util.FailTask(fmt.Sprintf("Failed to add monitoring configuration for cluster: %v", *cluster_id), nodesFetchError, t)
 			return
 		}
-		cluster, clusterFetchErr := getCluster(cluster_id)
+		cluster, clusterFetchErr := getCluster(*cluster_id)
 		if clusterFetchErr != nil {
 			util.FailTask(fmt.Sprintf("Failed to add monitoring configuration for cluster: %v", *cluster_id), clusterFetchErr, t)
 			return
@@ -308,7 +308,7 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 					t.UpdateStatus("Started task to update monitoring plugins configuration : %v", t.ID)
 					var updatedPlugins []monitoring.Plugin
 					var pluginUpdateError error
-					cluster, clusterFetchErr := getCluster(cluster_id_uuid)
+					cluster, clusterFetchErr := getCluster(*cluster_id_uuid)
 					if clusterFetchErr != nil {
 						util.FailTask(fmt.Sprintf("Failed to update thresholds for cluster: %v", *cluster_id_uuid), clusterFetchErr, t)
 						return
@@ -361,7 +361,7 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 
 func monitoringPluginActivationDeactivations(enable bool, plugin_name string, cluster_id *uuid.UUID, w http.ResponseWriter, a *App) {
 	var action string
-	cluster, err := getCluster(cluster_id)
+	cluster, err := getCluster(*cluster_id)
 	if err != nil {
 		logger.Get().Error("Error getting cluster with id: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
@@ -498,7 +498,7 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 				util.FailTask(fmt.Sprintf("Failed to remove plugin %s for cluster: %v", *uuid, plugin_name), fmt.Errorf("%v", removeNodeWiseFailure), t)
 				return
 			}
-			cluster, clusterFetchErr := getCluster(uuid)
+			cluster, clusterFetchErr := getCluster(*uuid)
 			if clusterFetchErr != nil {
 				util.FailTask(fmt.Sprintf("Failed to remove plugin %s for cluster: %v", *uuid, plugin_name), clusterFetchErr, t)
 				return
@@ -538,7 +538,7 @@ func (a *App) GET_MonitoringPlugins(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error(fmt.Sprintf("Failed to parse the cluster id with error %v", err))
 		return
 	}
-	cluster, err := getCluster(cluster_id)
+	cluster, err := getCluster(*cluster_id)
 	if err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting cluster with id: %v. error: %v", *cluster_id, err))
 		logger.Get().Error(fmt.Sprintf("Failed to fetch cluster with error %v", err))
@@ -553,14 +553,22 @@ func (a *App) GET_MonitoringPlugins(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getCluster(cluster_id *uuid.UUID) (cluster models.Cluster, err error) {
+func getCluster(cluster_id uuid.UUID) (cluster models.Cluster, err error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	if err := collection.Find(bson.M{"clusterid": *cluster_id}).One(&cluster); err != nil {
+	if err := collection.Find(bson.M{"clusterid": cluster_id}).One(&cluster); err != nil {
 		return cluster, err
 	}
 	return cluster, nil
+}
+
+func GetCluster(cluster_id uuid.UUID) interface{} {
+	cluster, err := getCluster(cluster_id)
+	if err != nil {
+		logger.Get().Error("Error finding cluster with id %v.Error %v", cluster_id, err)
+	}
+	return cluster
 }
 
 func getNodesInCluster(cluster_id *uuid.UUID) (cluster_node_names []string, err error) {
@@ -725,7 +733,7 @@ func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cluster, err := getCluster(cluster_id)
+	cluster, err := getCluster(*cluster_id)
 	if err != nil {
 		util.HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the cluster with id: %v. error: %v", *cluster_id, err))
 		logger.Get().Error("Error getting the cluster with id: %v. error: %v", *cluster_id, err)

@@ -317,7 +317,7 @@ func (a *App) GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetNode(node_id uuid.UUID) models.Node {
+func GetNode(node_id uuid.UUID) interface{} {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
