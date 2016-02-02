@@ -807,8 +807,16 @@ func getCluster(cluster_id *uuid.UUID) (cluster models.Cluster, err error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	if err := collection.Find(bson.M{"clusterid": *cluster_id}).One(&cluster); err != nil {
+	if err := collection.Find(bson.M{"clusterid": cluster_id}).One(&cluster); err != nil {
 		return cluster, err
+	}
+	return cluster, nil
+}
+
+func GetCluster(cluster_id uuid.UUID) (interface{}, error) {
+	cluster, err := getCluster(&cluster_id)
+	if err != nil {
+		return nil, fmt.Errorf("Error finding cluster with id %v.Error %v", cluster_id, err)
 	}
 	return cluster, nil
 }

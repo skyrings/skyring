@@ -83,9 +83,9 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
-			Name:        "GET_Utilization",
+			Name:        "Get_Utilization",
 			Method:      "GET",
-			Pattern:     "nodes/{node-id}/utilization",
+			Pattern:     "monitoring/{entity-type}/{entity-id}/utilization",
 			HandlerFunc: a.GET_Utilization,
 			Version:     1,
 		},
