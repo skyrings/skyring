@@ -14,6 +14,7 @@ package skyring
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
@@ -29,25 +30,51 @@ import (
 	"time"
 )
 
+var entityIdGetEntityMap = map[string]interface{}{
+	"node":    GetNode,
+	"cluster": GetCluster,
+}
+
+func getEntityName(entity_type string, entity_id uuid.UUID) (string, error) {
+	getEntityFunc, getEntityNameOk := entityIdGetEntityMap[entity_type].(func(uuid.UUID) interface{})
+	if !getEntityNameOk {
+		return "", fmt.Errorf("Unsupported type %v", entity_type)
+	}
+	entity := getEntityFunc(entity_id)
+	if entity == nil {
+		return "", fmt.Errorf("Unknown %v with id %v", entity_type, entity_id)
+	}
+	switch entity_type {
+	case "node":
+		entity, _ := entity.(models.Node)
+		return entity.Hostname, nil
+	case "cluster":
+		entity, _ := entity.(models.Cluster)
+		return entity.Name, nil
+	}
+	return "", fmt.Errorf("Unsupported entity type %v", entity_type)
+}
+
 func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	var start_time string
 	var end_time string
 	var interval string
 	vars := mux.Vars(r)
-	node_id_str := vars["node-id"]
-	node_id, _ := uuid.Parse(node_id_str)
+
+	entity_id_str := vars["entity-id"]
+	entity_id, _ := uuid.Parse(entity_id_str)
+
+	entity_type := vars["entity-type"]
+	entityName, entityNameError := getEntityName(entity_type, *entity_id)
+	if entityNameError != nil {
+		util.HttpResponse(w, http.StatusBadRequest, entityNameError.Error())
+		logger.Get().Error(entityNameError.Error())
+		return
+	}
 
 	params := r.URL.Query()
 	resource_name := params.Get("resource")
 	duration := params.Get("duration")
-	//	duration := params.Get("duration")
-
-	storage_node := GetNode(*node_id)
-	if storage_node.Hostname == "" {
-		util.HttpResponse(w, http.StatusBadRequest, "Node not found")
-		logger.Get().Error("Node: %v not found", *node_id)
-		return
-	}
 
 	if duration != "" {
 		if strings.Contains(duration, ",") {
@@ -59,8 +86,9 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	//res, err := queryDB(query_cmd)
-	res, err := GetMonitoringManager().QueryDB(map[string]interface{}{"nodename": storage_node.Hostname, "resource": resource_name, "start_time": start_time, "end_time": end_time, "interval": interval})
+	paramsToQuery := map[string]interface{}{"nodename": entityName, "resource": resource_name, "start_time": start_time, "end_time": end_time, "interval": interval}
+
+	res, err := GetMonitoringManager().QueryDB(paramsToQuery)
 	if err == nil {
 		json.NewEncoder(w).Encode(res)
 	} else {
