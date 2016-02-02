@@ -33,18 +33,17 @@ func NewGraphiteManager(config io.Reader) (*GraphiteManager, error) {
 	return &GraphiteManager{}, nil
 }
 
-var GeneralResources = []string{
-	"df",
-	"memory",
-	"cpu",
-}
-
 var (
-	templateUrl        = "http://{{.hostname}}:{{.port}}/render?target={{.collectionname}}.{{.nodename}}.{{.resourcename}}*.*&format=json"
-	templateFromTime   = "&from={{.start_time}}"
-	templateUntilTime  = "&until={{.end_time}}"
-	timeFormat         = "15:04_20060102"
-	standardTimeFormat = "2006-01-02T15:04:05.000Z"
+	templateUrl             = "http://{{.hostname}}:{{.port}}/render?target={{.target}}&format=json"
+	targetLatest            = "cactiStyle({{.targetGeneral}})"
+	targetGeneral           = "{{.collectionname}}.{{.nodename}}.{{.resourcename}}"
+	targetWildCard          = "*.*"
+	templateFromTime        = "&from={{.start_time}}"
+	templateUntilTime       = "&until={{.end_time}}"
+	timeFormat              = "15:04_20060102"
+	standardTimeFormat      = "2006-01-02T15:04:05.000Z"
+	latest                  = "latest"
+	fullQualifiedMetricName bool
 )
 
 var SupportedInputTimeFormats = []string{
@@ -52,6 +51,30 @@ var SupportedInputTimeFormats = []string{
 	"2006-01-02",
 	"20060102",
 }
+
+type GraphiteMetric struct {
+	Target string `json:"target"`
+	Stats  stats  `json:"datapoints"`
+}
+
+type stat []interface{}
+type stats []stat
+
+func (slice stats) Len() int {
+	return len(slice)
+}
+
+func (slice stats) Less(i, j int) bool {
+	s1, _ := slice[i][1].(int32)
+	s2, _ := slice[j][1].(int32)
+	return s1 < s2
+}
+
+func (slice stats) Swap(i, j int) {
+	slice[i], slice[j] = slice[j], slice[i]
+}
+
+type GraphiteMetrics []GraphiteMetric
 
 func formatDate(inDate string) (string, error) {
 	for _, currentFormat := range SupportedInputTimeFormats {
@@ -82,18 +105,39 @@ func getUrlBaseTemplateParams(params map[string]interface{}) (map[string]interfa
 		return nil, nodeNameError
 	}
 	nodename = strings.Replace(nodename, ".", "_", -1)
-	return map[string]interface{}{
-		"hostname":       conf.SystemConfig.TimeSeriesDBConfig.Hostname,
-		"port":           conf.SystemConfig.TimeSeriesDBConfig.Port,
+	target, targetErr := GetTemplateParsedString(map[string]interface{}{
 		"collectionname": conf.SystemConfig.TimeSeriesDBConfig.CollectionName,
 		"nodename":       nodename,
 		"resourcename":   params["resource"],
+	}, targetGeneral)
+	if targetErr != nil {
+		return nil, targetErr
+	}
+
+	if !fullQualifiedMetricName {
+		target = target + targetWildCard
+	}
+
+	if params["interval"] == latest {
+		target, targetErr = GetTemplateParsedString(map[string]interface{}{"targetGeneral": target}, targetLatest)
+		if targetErr != nil {
+			return nil, targetErr
+		}
+	}
+
+	return map[string]interface{}{
+		"hostname": conf.SystemConfig.TimeSeriesDBConfig.Hostname,
+		"port":     conf.SystemConfig.TimeSeriesDBConfig.Port,
+		"target":   target,
 	}, nil
 }
 
 func Matches(key string, keys []string) bool {
 	for _, permittedKey := range keys {
 		if strings.Index(key, permittedKey) == 0 {
+			if key != permittedKey {
+				fullQualifiedMetricName = true
+			}
 			return true
 		}
 	}
@@ -102,11 +146,10 @@ func Matches(key string, keys []string) bool {
 
 func (tsdbm GraphiteManager) QueryDB(params map[string]interface{}) (interface{}, error) {
 	var resource string
-	var data []interface{}
 	if str, ok := params["resource"].(string); ok {
 		resource = str
 	}
-	if !Matches(resource, GeneralResources) {
+	if !Matches(resource, monitoring.GeneralResources) {
 		/*
 			1. Ideally fetch clusterId from nodeId
 			2. Fetch clustertype from clusterId
@@ -161,7 +204,7 @@ func (tsdbm GraphiteManager) QueryDB(params map[string]interface{}) (interface{}
 			url = url + urlTime
 		}
 
-		if params["interval"] != "" {
+		if params["interval"] != "" && params["interval"] != latest {
 			timeString, timeStringError := util.GetString(params["interval"])
 			if timeStringError != nil {
 				return nil, fmt.Errorf("Start time %v. Error: %v", params["start_time"], timeStringError)
@@ -179,7 +222,7 @@ func (tsdbm GraphiteManager) QueryDB(params map[string]interface{}) (interface{}
 			} else {
 				return nil, fmt.Errorf("Not supported")
 			}
-			urlTime, urlTimeError := GetTemplateParsedString(params, templ)
+			urlTime, urlTimeError := GetTemplateParsedString(map[string]interface{}{"start_time": params["interval"]}, templ)
 			if urlTimeError != nil {
 				return nil, urlTimeError
 			}
@@ -190,10 +233,56 @@ func (tsdbm GraphiteManager) QueryDB(params map[string]interface{}) (interface{}
 		if getError != nil {
 			return nil, getError
 		} else {
-			if err := json.Unmarshal([]byte(results), &data); err != nil {
-				return nil, err
+			var metrics []GraphiteMetric
+			if mErr := json.Unmarshal(results, &metrics); mErr != nil {
+				return nil, fmt.Errorf("Error unmarshalling the metrics %v.Error:%v", metrics, mErr)
 			}
-			return data, nil
+			if params["interval"] == latest {
+				/*
+					The output of cactistyle graphite function(It gives summarised output including max value, min value and current non-nil value) is as under:
+					[{"target": "<metric_name>     Current:<current_val>      Max:<max>      Min:<min>      ", "datapoints": [[val1, timestamp1],...]}
+					....
+					]
+				*/
+
+				for metricIndex, metric := range metrics {
+					target := metric.Target
+					if !strings.Contains(target, "Current:") {
+						return nil, fmt.Errorf("Current non-nil value is not available")
+					}
+					targetContents := strings.Fields(target)
+
+					index := -1
+					for contentIndex, content := range targetContents {
+						if strings.Contains(content, "Current:") {
+							index = contentIndex
+							break
+						}
+					}
+
+					if index == -1 {
+						return nil, fmt.Errorf("Current non-nil value is not available")
+					}
+
+					statValues := strings.Split(targetContents[index], ":")
+					if len(statValues) != 2 {
+						return nil, fmt.Errorf("Current non-nil value is not available")
+					}
+
+					var statVar []interface{}
+					statVar = append(statVar, statValues[1])
+					/*
+						Effectively the current value returned by graphite is actually the last non-nil value in graphite for the metric
+						Since graphite doesn't return the time stamp of current value it is felt safe to insert a 0 for the field,
+						instead of meddling into looking at when actually the currentvalue appears in the possibly humongously huge set of data values
+					*/
+					statVar = append(statVar, 0)
+
+					metrics[metricIndex].Target = targetContents[0]
+					metrics[metricIndex].Stats = stats([]stat{statVar})
+				}
+			}
+			return metrics, nil
 		}
 	}
 }
