@@ -37,7 +37,7 @@ type ProviderInfo struct {
 	Routes   []Route        `json:"routes"`
 }
 
-func LoadProviderConfig(providerConfigDir string) []ProviderInfo {
+var LoadProviderConfig = func(providerConfigDir string) []ProviderInfo {
 	var (
 		data       ProviderInfo
 		collection []ProviderInfo
