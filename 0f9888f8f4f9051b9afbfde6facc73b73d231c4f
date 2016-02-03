@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_7768a587",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-03T18:02:20Z",
+      "side": 0,
+      "message": "Do we really need now?",
+      "revId": "0f9888f8f4f9051b9afbfde6facc73b73d231c4f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
