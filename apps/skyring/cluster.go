@@ -62,7 +62,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if cluster already added
-	// Node need for error check as cluster would be nil in case of error
+	// No need for error check as cluster would be nil in case of error
 	cluster, _ := cluster_exists("name", request.Name)
 	if cluster != nil {
 		logger.Get().Error("Cluster: %s already exists", request.Name)
@@ -176,16 +176,22 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 							t.UpdateStatus("Failed")
 							t.Done(models.TASK_STATUS_FAILURE)
 						} else {
+							t.UpdateStatus("Scheduling monitoring")
+							cluster, err = cluster_exists("name", request.Name)
+							if err != nil {
+								t.UpdateStatus("Failed with error: %v", err)
+								logger.Get().Error("Error getting cluster details for: %s. error: %v. Could not create monitoring schedules for it.", request.Name, err)
+								break
+							}
+							ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
 							t.UpdateStatus("Success")
 							t.Done(models.TASK_STATUS_SUCCESS)
+							break
 						}
 					} else if providerTask.Status == models.TASK_STATUS_FAILURE {
 						t.UpdateStatus("Failed")
 						t.Done(models.TASK_STATUS_FAILURE)
 					}
-					cluster, _ = cluster_exists("name", request.Name)
-					ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
-					break
 				}
 			}
 		}
