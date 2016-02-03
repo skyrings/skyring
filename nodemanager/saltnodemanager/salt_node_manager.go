@@ -15,7 +15,6 @@ package saltnodemanager
 import (
 	"errors"
 	"fmt"
-	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/backend/salt"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
@@ -81,9 +80,7 @@ func GetStorageNodeInstance(hostname string, sProfiles []models.StorageProfile) 
 		logger.Get().Error(fmt.Sprintf("Error getting network details for node: %s. error: %v", hostname, err))
 		return nil, false
 	}
-	storage_node.NetworkInfo.Subnet = networkInfo.Subnet
-	storage_node.NetworkInfo.Ipv4 = networkInfo.IPv4
-	storage_node.NetworkInfo.Ipv6 = networkInfo.IPv6
+	storage_node.NetworkInfo = networkInfo
 	addrs, err := net.LookupHost(hostname)
 	if err != nil {
 		logger.Get().Error(fmt.Sprintf("Error looking up node IP for: %s. error: %v", hostname, err))
@@ -130,20 +127,14 @@ func GetStorageNodeInstance(hostname string, sProfiles []models.StorageProfile) 
 		logger.Get().Error(fmt.Sprintf("Error getting os details for node: %s", hostname))
 		return nil, false
 	}
-	storage_node.OS.Name = osInfo.Name
-	storage_node.OS.OSVersion = osInfo.OSVersion
-	storage_node.OS.KernelVersion = osInfo.KernelVersion
-	storage_node.OS.SELinuxMode = osInfo.SELinuxMode
+	storage_node.OS = osInfo
 
 	memoryInfo, err := salt_backend.GetNodeMemory(hostname)
 	if err != nil {
 		logger.Get().Error(fmt.Sprintf("Error getting memory details for node: %s", hostname))
 		return nil, false
 	}
-	storage_node.Memory.TotalSize = memoryInfo.TotalSize
-	storage_node.Memory.SwapTotal = memoryInfo.SwapTotal
-	storage_node.Memory.Active = memoryInfo.Active
-	storage_node.Memory.Type = memoryInfo.Type
+	storage_node.Memory = memoryInfo
 
 	if !storage_node.NodeId.IsZero() && len(storage_node.NetworkInfo.Subnet) != 0 && len(storage_node.StorageDisks) != 0 {
 		return &storage_node, true
@@ -281,7 +272,7 @@ func (a SaltNodeManager) AddMonitoringPlugin(nodes []string, master string, plug
 	return failed_nodes, err
 }
 
-func applyStorageProfile(disk *backend.Disk, sProfiles []models.StorageProfile) error {
+func applyStorageProfile(disk *models.Disk, sProfiles []models.StorageProfile) error {
 
 	for _, sProfile := range sProfiles {
 

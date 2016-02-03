@@ -17,7 +17,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/backend"
 	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/db"
 	"github.com/skyrings/skyring/models"
@@ -506,7 +505,7 @@ func (a *App) GET_Disk(w http.ResponseWriter, r *http.Request) {
 		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	var mdisk backend.Disk
+	var mdisk models.Disk
 	for _, disk := range node.StorageDisks {
 		if disk.DiskId == *disk_id {
 			mdisk = disk
@@ -561,7 +560,7 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var disks []backend.Disk
+	var disks []models.Disk
 	if val, ok := m["storageprofile"]; ok {
 		//update the field
 		for _, disk := range node.StorageDisks {

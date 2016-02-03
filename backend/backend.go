@@ -15,6 +15,7 @@
 package backend
 
 import (
+	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/tools/uuid"
 )
@@ -30,66 +31,17 @@ type NodeList struct {
 	Ignore   []Node
 }
 
-type Network struct {
-	IPv4   []string // TODO: use ipv4 type
-	IPv6   []string // TODO: use ipv6 type
-	Subnet []string // TODO: use subnet type
-}
-
-type Disk struct {
-	DevName        string
-	FSType         string
-	FSUUID         uuid.UUID
-	Model          string
-	MountPoint     []string
-	Name           string
-	Parent         string
-	Size           uint64
-	Type           string
-	Used           bool
-	SSD            bool
-	Vendor         string
-	StorageProfile string
-	DiskId         uuid.UUID
-}
-
-type Cpu struct {
-	Architecture   string
-	CpuOpMode      string
-	CPUs           string
-	VendorId       string
-	ModelName      string
-	CPUFamily      string
-	CPUMHz         string
-	Model          string
-	CoresPerSocket string
-}
-
-type OperationSystem struct {
-	Name          string
-	OSVersion     string
-	KernelVersion string
-	SELinuxMode   string
-}
-
-type Memory struct {
-	TotalSize string
-	SwapTotal string
-	Active    string
-	Type      string
-}
-
 type Backend interface {
 	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error)
 	AcceptNode(node string, fingerprint string, ignored bool) (bool, error)
 	BootstrapNode(master string, node string, port uint, fingerprint string, username string, password string) (string, error)
 	GetNodes() (NodeList, error)
 	GetNodeID(node string) (uuid.UUID, error)
-	GetNodeDisk(node string) ([]Disk, error)
-	GetNodeCpu(node string) ([]Cpu, error)
-	GetNodeOs(node string) (OperationSystem, error)
-	GetNodeMemory(node string) (Memory, error)
-	GetNodeNetwork(node string) (Network, error)
+	GetNodeDisk(node string) ([]models.Disk, error)
+	GetNodeCpu(node string) ([]models.Cpu, error)
+	GetNodeOs(node string) (models.OperatingSystem, error)
+	GetNodeMemory(node string) (models.Memory, error)
+	GetNodeNetwork(node string) (models.Network, error)
 	IgnoreNode(node string) (bool, error)
 	DisableService(node string, service string, stop bool) (bool, error)
 	EnableService(node string, service string, start bool) (bool, error)
