@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_37f54dcb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-03T18:18:06Z",
+      "side": 1,
+      "message": "tests: Added test cases for auth.go and skyring.go",
+      "revId": "431def5efff8faf92079fca9c2c66f7d17de7d26",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_570481bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-03T18:18:06Z",
+      "side": 1,
+      "message": "This description is not required may be",
+      "revId": "431def5efff8faf92079fca9c2c66f7d17de7d26",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_77ffc5aa",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-03T18:18:06Z",
+      "side": 1,
+      "message": "%s/Callvars/RequestParams/g",
+      "revId": "431def5efff8faf92079fca9c2c66f7d17de7d26",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_b7305d9f",
+        "filename": "apps/skyring/auth_test.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-03T18:18:06Z",
+      "side": 1,
+      "message": "Is there a case where this can fail?\n\nIf so we should have a assert for the same.",
+      "revId": "431def5efff8faf92079fca9c2c66f7d17de7d26",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_f72ad52a",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-03T18:18:06Z",
+      "side": 1,
+      "message": "Post this change make sure skyring works fine..",
+      "revId": "431def5efff8faf92079fca9c2c66f7d17de7d26",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
