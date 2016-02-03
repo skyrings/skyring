@@ -31,52 +31,52 @@ type NodeList struct {
 }
 
 type Network struct {
-	IPv4   []string // TODO: use ipv4 type
-	IPv6   []string // TODO: use ipv6 type
-	Subnet []string // TODO: use subnet type
+	IPv4   []string `bson:"ipv4",json:"ipv4"`     // TODO: use ipv4 type
+	IPv6   []string `bson:"ipv6",json:"ipv6"`     // TODO: use ipv6 type
+	Subnet []string `bson:"subnet",json:"subnet"` // TODO: use subnet type
 }
 
 type Disk struct {
-	DevName        string
-	FSType         string
-	FSUUID         uuid.UUID
-	Model          string
-	MountPoint     []string
-	Name           string
-	Parent         string
-	Size           uint64
-	Type           string
-	Used           bool
-	SSD            bool
-	Vendor         string
-	StorageProfile string
-	DiskId         uuid.UUID
+	DevName        string    `bson:"devname",json:"devname"`
+	FSType         string    `bson:"fstype",json:"fstype"`
+	FSUUID         uuid.UUID `bson:"fsuuid",json:"fsuuid"`
+	Model          string    `bson:"model",json:"model"`
+	MountPoint     []string  `bson:"mountpoint",json:"mountpoint"`
+	Name           string    `bson:"name",json:"name"`
+	Parent         string    `bson:"parent",json:"parent"`
+	Size           uint64    `bson:"size",json:"size"`
+	Type           string    `bson:"type",json:"type"`
+	Used           bool      `bson:"used",json:"used"`
+	SSD            bool      `bson:"ssd",json:"ssd"`
+	Vendor         string    `bson:"vendor",json:"vendor"`
+	StorageProfile string    `bson:"storageprofile",json:"storageprofile"`
+	DiskId         uuid.UUID `bson:"diskid",json:"diskid"`
 }
 
 type Cpu struct {
-	Architecture   string
-	CpuOpMode      string
-	CPUs           string
-	VendorId       string
-	ModelName      string
-	CPUFamily      string
-	CPUMHz         string
-	Model          string
-	CoresPerSocket string
+	Architecture   string `bson:"architecture",json:"architecture"`
+	CpuOpMode      string `bson:"cpuopmode",json:"cpuopmode"`
+	CPUs           string `bson:"cpus",json:"cpus"`
+	VendorId       string `bson:"vendorid",json:"vendorid"`
+	ModelName      string `bson:"modelname",json:"modelname"`
+	CPUFamily      string `bson:"cpufamily",json:"cpufamily"`
+	CPUMHz         string `bson:"cpumhz",json:"cpumhz"`
+	Model          string `bson:"model",json:"model"`
+	CoresPerSocket string `bson:"corespersocket",json:"corespersocket"`
 }
 
-type OperationSystem struct {
-	Name          string
-	OSVersion     string
-	KernelVersion string
-	SELinuxMode   string
+type OperatingSystem struct {
+	Name          string `bson:"name",json:"name"`
+	OSVersion     string `bson:"osversion",json:"osversion"`
+	KernelVersion string `bson:"kernelversion",json:"kernelversion"`
+	SELinuxMode   string `bson:"selinuxmode",json:"selinuxmode"`
 }
 
 type Memory struct {
-	TotalSize string
-	SwapTotal string
-	Active    string
-	Type      string
+	TotalSize string `bson:"totalsize",json:"totalsize"`
+	SwapTotal string `bson:"swaptotal",json:"swaptotal"`
+	Active    string `bson:"active",json:"active"`
+	Type      string `bson:"type",json:"type"`
 }
 
 type Backend interface {
@@ -87,7 +87,7 @@ type Backend interface {
 	GetNodeID(node string) (uuid.UUID, error)
 	GetNodeDisk(node string) ([]Disk, error)
 	GetNodeCpu(node string) ([]Cpu, error)
-	GetNodeOs(node string) (OperationSystem, error)
+	GetNodeOs(node string) (OperatingSystem, error)
 	GetNodeMemory(node string) (Memory, error)
 	GetNodeNetwork(node string) (Network, error)
 	IgnoreNode(node string) (bool, error)

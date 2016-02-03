@@ -20,43 +20,23 @@ import (
 )
 
 type Node struct {
-	NodeId        uuid.UUID          `json:"nodeid"`
-	Hostname      string             `json:"hostname"`
-	Tags          []string           `json:"tags"`
-	ManagementIP4 string             `json:"management_ip4"`
-	ClusterIP4    string             `json:"cluster_ip4"`
-	PublicIP4     string             `json:"public_ip4"`
-	ClusterId     uuid.UUID          `json:"clusterid"`
-	Location      string             `json:"location"`
-	Status        string             `json:"status"`
-	State         int                `json:"state"`
-	Options       map[string]string  `json:"options"`
-	CPUs          []backend.Cpu      `json:"cpus"`
-	NetworkInfo   StorageNodeNetwork `json:"network_info"`
-	StorageDisks  []backend.Disk     `json:"storage_disks"`
-	Memory        Memory             `json:"memory"`
-	OS            OperatingSystem    `json:"os"`
-	Enabled       bool               `json:"enabled"`
-}
-
-type StorageNodeNetwork struct {
-	Subnet []string `bson:"subnet"`
-	Ipv4   []string `bson:"ipv4"`
-	Ipv6   []string `bson:"ipv6"`
-}
-
-type Memory struct {
-	TotalSize string `bson:"totalsize"`
-	SwapTotal string `bson:"swaptotal"`
-	Active    string `bson:"active"`
-	Type      string `bson:"type"`
-}
-
-type OperatingSystem struct {
-	Name          string `bson:"name"`
-	OSVersion     string `bson:"osversion"`
-	KernelVersion string `bson:"kernelversion"`
-	SELinuxMode   string `bson:"selinuxmode"`
+	NodeId        uuid.UUID               `json:"nodeid"`
+	Hostname      string                  `json:"hostname"`
+	Tags          []string                `json:"tags"`
+	ManagementIP4 string                  `json:"management_ip4"`
+	ClusterIP4    string                  `json:"cluster_ip4"`
+	PublicIP4     string                  `json:"public_ip4"`
+	ClusterId     uuid.UUID               `json:"clusterid"`
+	Location      string                  `json:"location"`
+	Status        string                  `json:"status"`
+	State         int                     `json:"state"`
+	Options       map[string]string       `json:"options"`
+	CPUs          []backend.Cpu           `json:"cpus"`
+	NetworkInfo   backend.Network         `json:"network_info"`
+	StorageDisks  []backend.Disk          `json:"storage_disks"`
+	Memory        backend.Memory          `json:"memory"`
+	OS            backend.OperatingSystem `json:"os"`
+	Enabled       bool                    `json:"enabled"`
 }
 
 type User struct {

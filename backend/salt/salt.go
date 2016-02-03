@@ -213,7 +213,7 @@ func (s Salt) GetNodeCpu(node string) (cpu []backend.Cpu, err error) {
 	return
 }
 
-func (s Salt) GetNodeOs(node string) (os backend.OperationSystem, err error) {
+func (s Salt) GetNodeOs(node string) (os backend.OperatingSystem, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetNodeOs"].Call(node); loc_err == nil {
