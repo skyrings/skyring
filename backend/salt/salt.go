@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"github.com/sbinet/go-python"
 	"github.com/skyrings/skyring/backend"
+	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/tools/gopy"
 	"github.com/skyrings/skyring/tools/logger"
@@ -191,7 +192,7 @@ func (s Salt) GetNodeID(node string) (id uuid.UUID, err error) {
 	return uuid.UUID{}, loc_err
 }
 
-func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
+func (s Salt) GetNodeDisk(node string) (disks []models.Disk, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetNodeDisk"].Call(node); loc_err == nil {
@@ -202,7 +203,7 @@ func (s Salt) GetNodeDisk(node string) (disks []backend.Disk, err error) {
 	return
 }
 
-func (s Salt) GetNodeCpu(node string) (cpu []backend.Cpu, err error) {
+func (s Salt) GetNodeCpu(node string) (cpu []models.Cpu, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetNodeCpu"].Call(node); loc_err == nil {
@@ -213,7 +214,7 @@ func (s Salt) GetNodeCpu(node string) (cpu []backend.Cpu, err error) {
 	return
 }
 
-func (s Salt) GetNodeOs(node string) (os backend.OperationSystem, err error) {
+func (s Salt) GetNodeOs(node string) (os models.OperatingSystem, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetNodeOs"].Call(node); loc_err == nil {
@@ -224,7 +225,7 @@ func (s Salt) GetNodeOs(node string) (os backend.OperationSystem, err error) {
 	return
 }
 
-func (s Salt) GetNodeMemory(node string) (memory backend.Memory, err error) {
+func (s Salt) GetNodeMemory(node string) (memory models.Memory, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetNodeMemory"].Call(node); loc_err == nil {
@@ -235,7 +236,7 @@ func (s Salt) GetNodeMemory(node string) (memory backend.Memory, err error) {
 	return
 }
 
-func (s Salt) GetNodeNetwork(node string) (n backend.Network, err error) {
+func (s Salt) GetNodeNetwork(node string) (n models.Network, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetNodeNetwork"].Call(node); loc_err == nil {
