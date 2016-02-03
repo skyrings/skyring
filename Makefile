@@ -51,7 +51,7 @@ vendor-update:
 	@echo "Updating vendored packages"
 	@GO15VENDOREXPERIMENT=1 glide -q up 2> /dev/null
 
-build: verifiers vendor-update pybuild test
+build: verifiers pybuild test
 	@echo "Doing $@"
 	@GO15VENDOREXPERIMENT=1 go build
 
@@ -69,15 +69,27 @@ build-special:
 
 pyinstall:
 	@echo "Doing $@"
-	@cd backend/salt/python; python setup.py --quiet install --user
-	@echo "INFO: You should set PYTHONPATH make it into effect"
-	@echo "INFO: or run skyring by \`PYTHONPATH=~/.local/lib/python2.7/site-packages skyring\`"
+	if [ "$$USER" == "root" ]; then \
+		cd backend/salt/python; python setup.py --quite install --root /; cd -; \
+	else \
+		cd backend/salt/python; python setup.py --quiet install --user; cd -; \
+		echo "    INFO: You should set PYTHONPATH make it into effect"; \
+		echo "    INFO: or run skyring by \`PYTHONPATH=~/.local/lib/python2.7/site-packages skyring\`"; \
+	fi
 
 saltinstall:
 	@echo "Doing $@"
-	@if ! cp -f salt/* /srv/salt/ 2>/dev/null; then \
+	if [ "$$USER" == "root" ]; then \
+		cp backend/salt/sls/*.* /srv/salt; \
+		cp backend/salt/sls/collectd/*.* /srv/salt/collectd; \
+		cp backend/salt/conf/collectd/* /srv/salt/collectd/files; \
+		cp backend/salt/template/* /srv/salt/template; \
+	else \
 		echo "ERROR: unable to install salt files. Install them manually by"; \
-		echo "sudo cp -f backend/salt/sls/* /srv/salt/"; \
+		echo "    sudo cp backend/salt/sls/*.* /srv/salt"; \
+		echo "    sudo cp backend/salt/sls/collectd/*.* /srv/salt/collectd"; \
+		echo "    sudo cp backend/salt/conf/collectd/* /srv/salt/collectd/files"; \
+		echo "    sudo cp backend/salt/template/* /srv/salt/template"; \
 	fi
 
 install: build pyinstall saltinstall
