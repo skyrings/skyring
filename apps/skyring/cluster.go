@@ -89,6 +89,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			case <-t.StopCh:
 				return
 			default:
+				var monitoringState models.MonitoringState
 				t.UpdateStatus("Started the task for cluster creation: %v", t.ID)
 
 				nodes, err := getClusterNodesFromRequest(request.Nodes)
@@ -140,7 +141,6 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 							return
 						}
 						if providerTask.Completed {
-							var monitoringConfigured bool = true
 							if providerTask.Status == models.TASK_STATUS_SUCCESS {
 								// Check if monitoring configuration passed and update them accordingly
 								if reflect.ValueOf(request.MonitoringPlugins).IsValid() && len(request.MonitoringPlugins) != 0 {
@@ -151,10 +151,16 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 											nodes = append(nodes, node.Hostname)
 										}
 										t.UpdateStatus("Updating the monitoring configuration on all nodes in the cluster")
-										if updateFailedNodes, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); updateError != nil || len(updateFailedNodes) != 0 {
-											monitoringConfigured = false
-											t.UpdateStatus("Failed to update the monitoring configuration")
-											logger.Get().Error("Failed to update the monitoring configuration on: %v for cluster: %s", updateFailedNodes, request.Name)
+
+										if updateFailedNodesError, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); len(updateFailedNodesError) != 0 {
+											updateFailedNodesErrorValues, _ := util.GetMapKeys(updateFailedNodesError)
+											updateFailedNodes := util.Stringify(updateFailedNodesErrorValues)
+											monitoringState.StaleNodes = updateFailedNodes
+											if updateError != nil {
+												logger.Get().Error(updateError.Error())
+											}
+											logger.Get().Error("Failed to update monitoring configuration on %v of cluster %v", updateFailedNodes, request.Name)
+											t.UpdateStatus(fmt.Sprintf("Failed to update the monitoring configuration on: %v for cluster: %s", updateFailedNodes, request.Name))
 										}
 									} else {
 										t.UpdateStatus("Error getting node details")
@@ -164,13 +170,10 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 								if request.MonitoringPlugins == nil || len(request.MonitoringPlugins) == 0 {
 									request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
 								}
-								if !monitoringConfigured {
-									// If configuring the new thresholds failed update to db, the default thresholds created during accept node
-									request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
-								}
 								// Udate the thresholds to db
 								t.UpdateStatus("Updating configuration to db")
-								if dbError := updatePluginsInDb(bson.M{"name": request.Name}, request.MonitoringPlugins); dbError != nil {
+								monitoringState.Plugins = request.MonitoringPlugins
+								if dbError := updatePluginsInDb(bson.M{"name": request.Name}, monitoringState); dbError != nil {
 									t.UpdateStatus("Failed with error %s", dbError.Error())
 									logger.Get().Error("Failed to update plugins to db: %v for cluster: %s", dbError, request.Name)
 								} else {
@@ -333,7 +336,6 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 }
 
 func updatePluginsInDb(parameter bson.M, monitoringState models.MonitoringState) (err error) {
-	logger.Get().Info("In updatePluginsInDb, the parameter is %v and plugins are %v", parameter, updatedPlugins)
 	sessionCopy := db.GetDatastore().Copy()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 	dbUpdateError := coll.Update(parameter, bson.M{"$set": bson.M{"monitoring": monitoringState}})
@@ -805,7 +807,7 @@ func (a *App) GET_MonitoringPlugins(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("Cluster not found")
 		return
 	} else {
-		json.NewEncoder(w).Encode(cluster.MonitoringPlugins)
+		json.NewEncoder(w).Encode(cluster.Monitoring.Plugins)
 	}
 }
 
