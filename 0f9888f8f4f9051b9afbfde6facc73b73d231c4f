@@ -16,6 +16,24 @@
       "revId": "0f9888f8f4f9051b9afbfde6facc73b73d231c4f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_f2eca391",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-04T06:52:09Z",
+      "side": 0,
+      "message": "Nope removing it in my follow up patch.",
+      "parentUuid": "fa81d914_7768a587",
+      "revId": "0f9888f8f4f9051b9afbfde6facc73b73d231c4f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
