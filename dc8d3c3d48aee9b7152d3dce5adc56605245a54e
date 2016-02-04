@@ -22,6 +22,24 @@
       "revId": "dc8d3c3d48aee9b7152d3dce5adc56605245a54e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_d2acffa2",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-04T03:50:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_ada59eb6",
+      "revId": "dc8d3c3d48aee9b7152d3dce5adc56605245a54e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
