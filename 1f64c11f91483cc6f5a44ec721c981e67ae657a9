@@ -22,6 +22,24 @@
       "revId": "1f64c11f91483cc6f5a44ec721c981e67ae657a9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_d20ddf91",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-04T05:33:07Z",
+      "side": 1,
+      "message": "Thats correct. Only if cluster creation was successful and cluster record exists, we should do this.\n\nThats why I added an error check while fetching the cluster. And if there is an error it does not start scheduling.",
+      "parentUuid": "fa81d914_32cd5b5e",
+      "revId": "1f64c11f91483cc6f5a44ec721c981e67ae657a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
