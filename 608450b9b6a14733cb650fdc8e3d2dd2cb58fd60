@@ -122,6 +122,24 @@
       "revId": "608450b9b6a14733cb650fdc8e3d2dd2cb58fd60",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_28e32a06",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-04T14:56:23Z",
+      "side": 1,
+      "message": "Shubhendu, as we discussed over chat if make it specific, the handling within monitoring.go can\u0027t be generic and it will case specific in https://review.gerrithub.io/#/c/261900/2/apps/skyring/monitoring.go@45",
+      "parentUuid": "fa81d914_127857c3",
+      "revId": "608450b9b6a14733cb650fdc8e3d2dd2cb58fd60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
