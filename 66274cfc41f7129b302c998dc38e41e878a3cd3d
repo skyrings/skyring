@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_0855864f",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-04T15:30:52Z",
+      "side": 1,
+      "message": "Why are you returning an empty string. Can\u0027t we just return nil?",
+      "revId": "66274cfc41f7129b302c998dc38e41e878a3cd3d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
