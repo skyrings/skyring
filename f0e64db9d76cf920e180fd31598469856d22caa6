@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_0dcf5880",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-04T12:12:17Z",
+      "side": 1,
+      "message": "Something like a rollback or terminating the child tasks if any. We will take a look at this later.",
+      "parentUuid": "fa81d914_08cbf853",
+      "revId": "f0e64db9d76cf920e180fd31598469856d22caa6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_6830f4e8",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 5
