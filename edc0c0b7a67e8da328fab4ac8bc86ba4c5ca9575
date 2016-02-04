@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_b2086b92",
+        "filename": "models/core_models.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-04T04:38:55Z",
+      "side": 0,
+      "message": "I have a feeling that all models should be defined in this package. Earlier we made a mistake to define disk at backend and using it from every where. This may introduce cyclic dep issues say something in backend want to refer models and vice versa",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 1
+      },
+      "revId": "edc0c0b7a67e8da328fab4ac8bc86ba4c5ca9575",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
