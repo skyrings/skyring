@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_32cd5b5e",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-04T04:27:28Z",
+      "side": 1,
+      "message": "This needs to be done before we set the task state to DONE. Also do we really need to do this if the task failed? In my opinion, this needs to be done only if the cluster created successfully. So if we add the cluster to DB successfully, we can start the cluster scheduler",
+      "range": {
+        "startLine": 191,
+        "startChar": 5,
+        "endLine": 192,
+        "endChar": 10
+      },
+      "revId": "1f64c11f91483cc6f5a44ec721c981e67ae657a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
