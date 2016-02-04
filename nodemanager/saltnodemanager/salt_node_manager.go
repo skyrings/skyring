@@ -243,7 +243,11 @@ func (a SaltNodeManager) IgnoreNode(node string) (bool, error) {
 
 func (a SaltNodeManager) SetUpMonitoring(node string, master string) (map[string]interface{}, error) {
 	// The plugins to be setup includes the editable plugins and also the write plugin
-	failed_nodes, err := salt_backend.AddMonitoringPlugin(append(monitoring.SupportedMonitoringPlugins, monitoring.MonitoringWritePlugin), []string{node}, master, monitoring.ToSaltPillarCompat(monitoring.GetDefaultThresholdValues()))
+	return a.EnforceMonitoring(append(monitoring.SupportedMonitoringPlugins, monitoring.MonitoringWritePlugin), []string{node}, master, monitoring.GetDefaultThresholdValues())
+}
+
+func (a SaltNodeManager) EnforceMonitoring(plugin_names []string, nodes []string, master string, plugins []monitoring.Plugin) (map[string]interface{}, error) {
+	failed_nodes, err := salt_backend.AddMonitoringPlugin(plugin_names, nodes, master, monitoring.ToSaltPillarCompat(plugins))
 	return failed_nodes, err
 }
 
