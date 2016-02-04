@@ -251,7 +251,7 @@ func (a SaltNodeManager) EnforceMonitoring(plugin_names []string, nodes []string
 	return failed_nodes, err
 }
 
-func (a SaltNodeManager) UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) ([]string, error) {
+func (a SaltNodeManager) UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (map[string]string, error) {
 	failed_nodes, err := salt_backend.UpdateMonitoringConfiguration(nodes, config)
 	return failed_nodes, err
 }
