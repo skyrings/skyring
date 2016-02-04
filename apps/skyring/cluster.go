@@ -89,6 +89,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			case <-t.StopCh:
 				return
 			default:
+				var monitoringState models.MonitoringState
 				t.UpdateStatus("Started the task for cluster creation: %v", t.ID)
 
 				nodes, err := getClusterNodesFromRequest(request.Nodes)
@@ -151,10 +152,24 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 											nodes = append(nodes, node.Hostname)
 										}
 										t.UpdateStatus("Updating the monitoring configuration on all nodes in the cluster")
-										if updateFailedNodes, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); updateError != nil || len(updateFailedNodes) != 0 {
-											monitoringConfigured = false
-											t.UpdateStatus("Failed to update the monitoring configuration")
-											logger.Get().Error("Failed to update the monitoring configuration on: %v for cluster: %s", updateFailedNodes, request.Name)
+
+										if updateFailedNodesError, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); len(updateFailedNodesError) != 0 {
+											updateFailedNodesErrorValues, _ := util.GetMapKeys(updateFailedNodesError)
+											updateFailedNodes := util.Stringify(updateFailedNodesErrorValues)
+											nodesWithSuccess := util.StringSetDiff(nodes, updateFailedNodes)
+											if len(nodesWithSuccess) == 0 {
+												//Partial failure is not treated as failure.
+												//The new values are persisted into the db and user can enforce them after ensuring connectivity of node to the Server
+												//But, complete failure is a failure
+												monitoringConfigured = false
+											} else {
+												monitoringState.StaleNodes = updateFailedNodes
+											}
+											if updateError != nil {
+												logger.Get().Error(updateError.Error())
+											}
+											logger.Get().Error("Failed to update monitoring configuration on %v of cluster %v", updateFailedNodes, request.Name)
+											t.UpdateStatus(fmt.Sprintf("Failed to update the monitoring configuration on: %v for cluster: %s", updateFailedNodes, request.Name))
 										}
 									} else {
 										t.UpdateStatus("Error getting node details")
@@ -165,12 +180,13 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 									request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
 								}
 								if !monitoringConfigured {
-									// If configuring the new thresholds failed update to db, the default thresholds created during accept node
+									// If configuring the new thresholds completely failed update to db, the default thresholds created during accept node
 									request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
 								}
 								// Udate the thresholds to db
 								t.UpdateStatus("Updating configuration to db")
-								if dbError := updatePluginsInDb(bson.M{"name": request.Name}, request.MonitoringPlugins); dbError != nil {
+								monitoringState.Plugins = request.MonitoringPlugins
+								if dbError := updatePluginsInDb(bson.M{"name": request.Name}, monitoringState); dbError != nil {
 									t.UpdateStatus("Failed with error %s", dbError.Error())
 									logger.Get().Error("Failed to update plugins to db: %v for cluster: %s", dbError, request.Name)
 								} else {
