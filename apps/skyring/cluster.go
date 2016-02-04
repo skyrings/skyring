@@ -181,21 +181,23 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 									t.UpdateStatus("Failed")
 									t.Done(models.TASK_STATUS_FAILURE)
 								} else {
+									t.UpdateStatus("Scheduling monitoring")
+									cluster, err = cluster_exists("name", request.Name)
+									if err != nil {
+										t.UpdateStatus("Failed with error: %v", err)
+										logger.Get().Error("Error getting cluster details for: %s. error: %v. Could not create monitoring schedules for it.", request.Name, err)
+										break
+									}
+									ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
 									t.UpdateStatus("Success")
 									t.Done(models.TASK_STATUS_SUCCESS)
+									break
 								}
 							} else if providerTask.Status == models.TASK_STATUS_FAILURE {
 								t.UpdateStatus("Failed")
 								t.Done(models.TASK_STATUS_FAILURE)
 								logger.Get().Debug("Task Status Failed###Breaking now")
 							}
-							cluster, err = cluster_exists("name", request.Name)
-							if err != nil {
-								logger.Get().Error("Error getting details of cluster: %s. Not scheduling monitoring. error: %v", request.Name, err)
-								break
-							}
-							ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
-							break
 						}
 					}
 					return

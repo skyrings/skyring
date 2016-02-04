@@ -448,7 +448,7 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove Node: %v", *node_id), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove Node: %v", *node_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for remove node", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
@@ -498,7 +498,7 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run("Remove Multiple Nodes", asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run("Remove Multiple Nodes", asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for remove multiple nodes", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
