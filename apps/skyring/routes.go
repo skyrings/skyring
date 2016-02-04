@@ -235,14 +235,14 @@ func (a *App) LoadRoutes() {
 		{
 			Name:        "POST_MonitoringPluginEnable",
 			Method:      "POST",
-			Pattern:     "clusters/{cluster-id}/mon_plugins/activations/{plugin-name}",
+			Pattern:     "clusters/{cluster-id}/mon_plugins/actions/activations/{plugin-name}",
 			HandlerFunc: a.POST_MonitoringPluginEnable,
 			Version:     1,
 		},
 		{
 			Name:        "POST_MonitoringPluginDisable",
 			Method:      "POST",
-			Pattern:     "clusters/{cluster-id}/mon_plugins/deactivations/{plugin-name}",
+			Pattern:     "clusters/{cluster-id}/mon_plugins/actions/deactivations/{plugin-name}",
 			HandlerFunc: a.POST_MonitoringPluginDisable,
 			Version:     1,
 		},
