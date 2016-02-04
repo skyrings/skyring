@@ -22,6 +22,24 @@
       "revId": "edc0c0b7a67e8da328fab4ac8bc86ba4c5ca9575",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_72eef3b5",
+        "filename": "models/core_models.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-04T04:49:46Z",
+      "side": 0,
+      "message": "Will try that. I remember to resolve some cyclic dependencies only we had done this.\n\nBut yes as you suggest if everything in core_models we have more control and no definitions anywhere else. \n\nI feel even monitoring has got some definitions in other package. Will check and correct.",
+      "parentUuid": "fa81d914_b2086b92",
+      "revId": "edc0c0b7a67e8da328fab4ac8bc86ba4c5ca9575",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
