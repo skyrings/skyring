@@ -104,6 +104,24 @@
       "revId": "608450b9b6a14733cb650fdc8e3d2dd2cb58fd60",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_127857c3",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-04T07:13:30Z",
+      "side": 1,
+      "message": "My point is, if the function names are GetNode() and GetCluster() then why return interface{}? why not specific struct types like models.Node and models.Cluster?\n\nCant we pass models.Node and models.Cluster to a function which accepts interface{}?? I feel we can. So why this odd looking change.",
+      "parentUuid": "fa81d914_d2e95f81",
+      "revId": "608450b9b6a14733cb650fdc8e3d2dd2cb58fd60",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
