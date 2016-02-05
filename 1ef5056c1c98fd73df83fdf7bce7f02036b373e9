@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_ce6a93ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-05T18:15:24Z",
+      "side": 1,
+      "message": "Handle errors in monitoring configuration during create cluster??",
+      "revId": "1ef5056c1c98fd73df83fdf7bce7f02036b373e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
