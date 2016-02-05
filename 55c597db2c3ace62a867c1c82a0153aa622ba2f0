@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa81d914_64a47fa6",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-05T03:53:28Z",
+      "side": 1,
+      "message": "I think there is some problem with logic. If it is a full failure you don\u0027t want to set the monitoring state?",
+      "range": {
+        "startLine": 154,
+        "startChar": 9,
+        "endLine": 161,
+        "endChar": 10
+      },
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_5f55884e",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 11
