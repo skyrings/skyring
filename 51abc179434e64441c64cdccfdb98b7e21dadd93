@@ -212,6 +212,30 @@
       "revId": "51abc179434e64441c64cdccfdb98b7e21dadd93",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_40403234",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-05T07:15:36Z",
+      "side": 1,
+      "message": "Force update is a costly affair I mean it loads all configs as if it were a new installation of configurations on these(error) nodes.\n\nUpdate Configuration on the other hand is just update thresholds.And it does only file modification operations which is better compared to state loads.\n\nSo if there aren\u0027t any errors it might not be appropriate to go with a fresh load of all configurations along with the update right?",
+      "parentUuid": "fa81d914_fd155349",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 614,
+        "endChar": 29
+      },
+      "revId": "51abc179434e64441c64cdccfdb98b7e21dadd93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
