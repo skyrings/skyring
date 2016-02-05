@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_431f5c08",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-05T11:44:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_03ce44b4",
+      "range": {
+        "startLine": 301,
+        "startChar": 5,
+        "endLine": 301,
+        "endChar": 24
+      },
+      "revId": "4e6a5476f6efbfc3c20ef9d889f0d8698f0335d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_23c6e89a",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
