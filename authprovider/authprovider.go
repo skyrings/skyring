@@ -15,7 +15,7 @@ package authprovider
 
 import (
 	"fmt"
-	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring-common/tools/logger"
 	"io"
 	"os"
 	"sync"

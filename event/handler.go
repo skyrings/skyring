@@ -14,13 +14,13 @@ package event
 
 import (
 	"fmt"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring/apps/skyring"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/nodemanager/saltnodemanager"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/task"
 	"gopkg.in/mgo.v2/bson"
 	"os"
 	"time"
@@ -42,17 +42,6 @@ var handlermap = map[string]interface{}{
 	"salt/node/appeared":                                        node_appeared_handler,
 	"salt/node/lost":                                            node_lost_handler,
 	"skyring/collectd/node/*/threshold/*/*":                     collectd_threshold_handler,
-}
-
-func Persist_event(event models.Event) error {
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_NODE_EVENTS)
-	if err := coll.Insert(event); err != nil {
-		logger.Get().Error("Error adding the node event: %v", err)
-		return err
-	}
-	return nil
 }
 
 // ALL HANDLERS ARE JUST WRITING THE EVENTS TO DB. OTHER HANDLING AND CORRELATION

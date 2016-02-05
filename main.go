@@ -19,11 +19,11 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/op/go-logging"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring/apps"
 	"github.com/skyrings/skyring/apps/skyring"
-	"github.com/skyrings/skyring/conf"
 	"github.com/skyrings/skyring/event"
-	"github.com/skyrings/skyring/tools/logger"
 	"net/http"
 	"os"
 	"os/signal"
@@ -142,7 +142,7 @@ func start() {
 		level = DefaultLogLevel
 	}
 	// TODO: use logToStderr when deamonizing.
-	if err := logger.Init(logFile, true, level); err != nil {
+	if err := logger.Init("skyring", logFile, true, level); err != nil {
 		panic(fmt.Sprintf("log init failed. %s", err))
 	}
 

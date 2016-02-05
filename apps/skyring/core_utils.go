@@ -15,8 +15,8 @@ package skyring
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/ssh"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/ssh"
 	"net"
 	"net/http"
 )
