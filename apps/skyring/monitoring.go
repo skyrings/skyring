@@ -15,14 +15,15 @@ package skyring
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/monitoring"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/schedule"
-	"github.com/skyrings/skyring/tools/uuid"
-	"github.com/skyrings/skyring/utils"
+	"github.com/skyrings/skyring-common/apps/skyring"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/monitoring"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/schedule"
+	"github.com/skyrings/skyring-common/tools/uuid"
+	"github.com/skyrings/skyring-common/utils"
 	"net/http"
 	"strings"
 	"sync"
@@ -60,7 +61,7 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//res, err := queryDB(query_cmd)
-	res, err := GetMonitoringManager().QueryDB(map[string]interface{}{"nodename": storage_node.Hostname, "resource": resource_name, "start_time": start_time, "end_time": end_time, "interval": interval})
+	res, err := skyring.GetMonitoringManager().QueryDB(map[string]interface{}{"nodename": storage_node.Hostname, "resource": resource_name, "start_time": start_time, "end_time": end_time, "interval": interval})
 	if err == nil {
 		json.NewEncoder(w).Encode(res)
 	} else {

@@ -16,9 +16,10 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/utils"
+	"github.com/skyrings/skyring-common/apps/skyring"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/utils"
 	"io/ioutil"
 	"net/http"
 )
@@ -34,7 +35,7 @@ func AddDefaultUser() error {
 
 	defaultUser := models.User{Username: DefaultUserName, Email: DefaultEmail, Role: DefaultRole}
 
-	if err := GetAuthProvider().AddUser(defaultUser, DefaultPassword); err != nil {
+	if err := skyring.GetAuthProvider().AddUser(defaultUser, DefaultPassword); err != nil {
 		logger.Get().Error("Unable to create default User:%s", err)
 		return err
 	}
@@ -56,7 +57,7 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 		util.HandleHttpError(rw, err)
 		return
 	}
-	if err := GetAuthProvider().Login(rw, req, m["username"].(string), m["password"].(string)); err != nil {
+	if err := skyring.GetAuthProvider().Login(rw, req, m["username"].(string), m["password"].(string)); err != nil {
 		logger.Get().Error("Unable to login User:%s", err)
 		util.HandleHttpError(rw, err)
 		return
@@ -66,7 +67,7 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 }
 
 func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
-	if err := GetAuthProvider().Logout(rw, req); err != nil {
+	if err := skyring.GetAuthProvider().Logout(rw, req); err != nil {
 		logger.Get().Error("Unable to logout User:%s", err)
 		util.HandleHttpError(rw, err)
 		return
@@ -77,7 +78,7 @@ func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
 
 func (a *App) getUsers(rw http.ResponseWriter, req *http.Request) {
 
-	users, err := GetAuthProvider().ListUsers()
+	users, err := skyring.GetAuthProvider().ListUsers()
 	if err != nil {
 		logger.Get().Error("Unable to List the users:%s", err)
 		util.HandleHttpError(rw, err)
@@ -118,7 +119,7 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 
 	vars := mux.Vars(req)
 
-	user, err := GetAuthProvider().GetUser(vars["username"], req)
+	user, err := skyring.GetAuthProvider().GetUser(vars["username"], req)
 	if err != nil {
 		logger.Get().Error("Unable to Get the user:%s", err)
 		util.HandleHttpError(rw, err)
@@ -143,7 +144,7 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 
 func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 
-	users, err := GetAuthProvider().ListExternalUsers()
+	users, err := skyring.GetAuthProvider().ListExternalUsers()
 	if err != nil {
 		logger.Get().Error("Unable to List the users:%s", err)
 		util.HandleHttpError(rw, err)
@@ -223,7 +224,7 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 		password = val.(string)
 	}
 
-	if err := GetAuthProvider().AddUser(user, password); err != nil {
+	if err := skyring.GetAuthProvider().AddUser(user, password); err != nil {
 		logger.Get().Error("Unable to create User:%s", err)
 		util.HandleHttpError(rw, err)
 		return
@@ -246,7 +247,7 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if err := GetAuthProvider().UpdateUser(vars["username"], m); err != nil {
+	if err := skyring.GetAuthProvider().UpdateUser(vars["username"], m); err != nil {
 		logger.Get().Error("Unable to update user:%s", err)
 		util.HandleHttpError(rw, err)
 		return
@@ -258,7 +259,7 @@ func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 
 	vars := mux.Vars(req)
 
-	if err := GetAuthProvider().DeleteUser(vars["username"]); err != nil {
+	if err := skyring.GetAuthProvider().DeleteUser(vars["username"]); err != nil {
 		logger.Get().Error("Unable to delete User:%s", err)
 		util.HandleHttpError(rw, err)
 		return

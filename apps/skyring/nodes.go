@@ -17,13 +17,14 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/task"
-	"github.com/skyrings/skyring/tools/uuid"
-	"github.com/skyrings/skyring/utils"
+	"github.com/skyrings/skyring-common/apps/skyring"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/task"
+	"github.com/skyrings/skyring-common/tools/uuid"
+	"github.com/skyrings/skyring-common/utils"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"io"
@@ -85,7 +86,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer skyring.GetLockManager().ReleaseLock(*appLock)
 				// Process the request
 				if err := addAndAcceptNode(w, request, t); err != nil {
 					t.UpdateStatus("Failed")
@@ -98,7 +99,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Add and Accept Node: %s", request.Hostname), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("Add and Accept Node: %s", request.Hostname), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for Add and Accept Node: %s. error: %v", request.Hostname, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 	} else {
@@ -156,7 +157,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer skyring.GetLockManager().ReleaseLock(*appLock)
 				// Process the request
 				if err := acceptNode(w, hostname, request.SaltFingerprint, t); err != nil {
 					t.UpdateStatus("Failed")
@@ -169,7 +170,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Accept Node: %s", hostname), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("Accept Node: %s", hostname), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for Accept Node: %s. error: %v", hostname, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 	} else {
@@ -414,7 +415,7 @@ func removeNode(w http.ResponseWriter, nodeId uuid.UUID, t *task.Task) (bool, er
 	if err != nil {
 		return false, err
 	}
-	defer GetApp().GetLockManager().ReleaseLock(*appLock)
+	defer skyring.GetLockManager().ReleaseLock(*appLock)
 	t.UpdateStatus("Running backend removal of node")
 	ret_val, err := GetCoreNodeManager().RemoveNode(node.Hostname)
 	if ret_val {
@@ -448,7 +449,7 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove Node: %v", *node_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("Remove Node: %v", *node_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for remove node", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
@@ -498,7 +499,7 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run("Remove Multiple Nodes", asyncTask, 300*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetTaskManager().Run("Remove Multiple Nodes", asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for remove multiple nodes", err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 

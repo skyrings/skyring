@@ -14,13 +14,14 @@ package event
 
 import (
 	"fmt"
+	skyring_common "github.com/skyrings/skyring-common/apps/skyring"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring/apps/skyring"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/models"
 	"github.com/skyrings/skyring/nodemanager/saltnodemanager"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/task"
 	"gopkg.in/mgo.v2/bson"
 	"os"
 	"time"
@@ -42,17 +43,6 @@ var handlermap = map[string]interface{}{
 	"salt/node/appeared":                                        node_appeared_handler,
 	"salt/node/lost":                                            node_lost_handler,
 	"skyring/collectd/node/*/threshold/*/*":                     collectd_threshold_handler,
-}
-
-func Persist_event(event models.Event) error {
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_NODE_EVENTS)
-	if err := coll.Insert(event); err != nil {
-		logger.Get().Error("Error adding the node event: %v", err)
-		return err
-	}
-	return nil
 }
 
 // ALL HANDLERS ARE JUST WRITING THE EVENTS TO DB. OTHER HANDLING AND CORRELATION
@@ -146,7 +136,7 @@ func handle_node_start_event(node string) error {
 			}
 		}
 	}
-	if taskId, err := skyring.GetApp().GetTaskManager().Run(fmt.Sprintf("Initialize Node: %s", node), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring_common.GetTaskManager().Run(fmt.Sprintf("Initialize Node: %s", node), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for Initialize Node: %s. error: %v", node, err)
 	} else {
 		logger.Get().Debug("Task created for initialize node. Task id: %s", taskId.String())
@@ -155,7 +145,7 @@ func handle_node_start_event(node string) error {
 }
 
 func initializeStorageNode(node string, t *task.Task) error {
-	sProfiles, err := skyring.GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
+	sProfiles, err := skyring_common.GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
 	if err != nil {
 		logger.Get().Error("Unable to get the storage profiles. May not be able to apply storage profiles for node: %v err:%v", node, err)
 	}

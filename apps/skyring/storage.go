@@ -17,13 +17,14 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/task"
-	"github.com/skyrings/skyring/tools/uuid"
-	"github.com/skyrings/skyring/utils"
+	"github.com/skyrings/skyring-common/apps/skyring"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/task"
+	"github.com/skyrings/skyring-common/tools/uuid"
+	"github.com/skyrings/skyring-common/utils"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
@@ -114,7 +115,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer skyring.GetLockManager().ReleaseLock(*appLock)
 
 				provider := a.getProviderFromClusterId(*cluster_id)
 				if provider == nil {
@@ -176,7 +177,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Storage: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("Create Storage: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for create storage:%s on cluster: %v. error: %v", request.Name, *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create storage")
 		return

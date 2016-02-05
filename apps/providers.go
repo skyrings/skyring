@@ -17,10 +17,10 @@ package app
 // This should probably be part of some configuration fed into the build for a
 // given binary target.
 import (
-	_ "github.com/skyrings/skyring/authprovider/ldap"
-	_ "github.com/skyrings/skyring/authprovider/local"
-	_ "github.com/skyrings/skyring/dbprovider/mongodb"
-	_ "github.com/skyrings/skyring/monitoring/graphitemanager"
-	_ "github.com/skyrings/skyring/monitoring/influxdbmanager"
+	_ "github.com/skyrings/skyring-common/authprovider/ldap"
+	_ "github.com/skyrings/skyring-common/authprovider/local"
+	_ "github.com/skyrings/skyring-common/dbprovider/mongodb"
+	_ "github.com/skyrings/skyring-common/monitoring/graphitemanager"
+	_ "github.com/skyrings/skyring-common/monitoring/influxdbmanager"
 	_ "github.com/skyrings/skyring/nodemanager/saltnodemanager"
 )

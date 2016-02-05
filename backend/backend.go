@@ -15,9 +15,9 @@
 package backend
 
 import (
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/monitoring"
-	"github.com/skyrings/skyring/tools/uuid"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/monitoring"
+	"github.com/skyrings/skyring-common/tools/uuid"
 )
 
 type Node struct {

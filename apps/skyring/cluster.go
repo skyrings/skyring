@@ -17,14 +17,15 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/monitoring"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/task"
-	"github.com/skyrings/skyring/tools/uuid"
-	"github.com/skyrings/skyring/utils"
+	"github.com/skyrings/skyring-common/apps/skyring"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/monitoring"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/task"
+	"github.com/skyrings/skyring-common/tools/uuid"
+	"github.com/skyrings/skyring-common/utils"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
@@ -101,7 +102,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer skyring.GetLockManager().ReleaseLock(*appLock)
 				// Get the specific provider and invoke the method
 				provider := a.getProviderFromClusterType(request.Type)
 				if provider == nil {
@@ -205,7 +206,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for creating cluster: %s. error: %v", request.Name, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create cluster")
 		return
@@ -255,7 +256,7 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer skyring.GetLockManager().ReleaseLock(*appLock)
 
 				if nodesFetchError == nil {
 					if addNodeWiseErrors, addError := GetCoreNodeManager().AddMonitoringPlugin(cluster_node_names, "", request); addError != nil || len(addNodeWiseErrors) != 0 {
@@ -284,7 +285,7 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for adding monitoring plugin for cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for add monitoring plugin")
 		return
@@ -355,7 +356,7 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 								util.FailTask("Failed to acquire lock", err, t)
 								return
 							}
-							defer a.GetLockManager().ReleaseLock(*appLock)
+							defer skyring.GetLockManager().ReleaseLock(*appLock)
 
 							if updateFailedNodes, updateErr := GetCoreNodeManager().UpdateMonitoringConfiguration(cluster_node_names, request); updateErr != nil || len(updateFailedNodes) != 0 {
 								util.FailTask(fmt.Sprintf("Failed to update thresholds for cluster: %v", *cluster_id_uuid), fmt.Errorf("%v", updateFailedNodes), t)
@@ -372,7 +373,7 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 				}
-				if taskId, err := a.GetTaskManager().Run("Update monitoring plugins configuration", asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+				if taskId, err := skyring.GetTaskManager().Run("Update monitoring plugins configuration", asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 					logger.Get().Error("Unable to create task for update monitoring plugin configuration for cluster: %v. error: %v", *cluster_id_uuid, err)
 					util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for update monitoring plugin configuration")
 					return
@@ -434,7 +435,7 @@ func monitoringPluginActivationDeactivations(enable bool, plugin_name string, cl
 								util.FailTask("Failed to acquire lock", err, t)
 								return
 							}
-							defer a.GetLockManager().ReleaseLock(*appLock)
+							defer skyring.GetLockManager().ReleaseLock(*appLock)
 
 							if enable {
 								action = "enable"
@@ -461,7 +462,7 @@ func monitoringPluginActivationDeactivations(enable bool, plugin_name string, cl
 						}
 					}
 				}
-				if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("%s monitoring plugin: %s", action, plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+				if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("%s monitoring plugin: %s", action, plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 					logger.Get().Error("Unable to create task for %s monitoring plugin on cluster: %s. error: %v", action, cluster.Name, err)
 					util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for"+action+"monitoring plugin")
 					return
@@ -536,7 +537,7 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 						util.FailTask("Failed to acquire lock", err, t)
 						return
 					}
-					defer a.GetLockManager().ReleaseLock(*appLock)
+					defer skyring.GetLockManager().ReleaseLock(*appLock)
 
 					if removeNodeWiseFailure, removeErr := GetCoreNodeManager().RemoveMonitoringPlugin(nodes, plugin_name); len(removeNodeWiseFailure) != 0 || removeErr != nil {
 						util.FailTask(fmt.Sprintf("Failed to remove plugin %s for cluster: %v", *uuid, plugin_name), fmt.Errorf("%v", removeNodeWiseFailure), t)
@@ -560,7 +561,7 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-		if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove monitoring plugin : %s", plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+		if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("Remove monitoring plugin : %s", plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 			logger.Get().Error("Unable to create task for remove monitoring plugin for cluster: %v. error: %v", *uuid, err)
 			util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for remove monitoring plugin")
 			return
@@ -698,7 +699,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer skyring.GetLockManager().ReleaseLock(*appLock)
 				// TODO: Remove the sync jobs if any for the cluster
 				// TODO: Remove the performance monitoring details for the cluster
 				// TODO: Remove the collectd, salt etc configurations from the nodes
@@ -740,7 +741,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Forget Cluster: %s", cluster_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("Forget Cluster: %s", cluster_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to forget cluster: %v. error: %v", *uuid, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster forget")
 		return
@@ -849,7 +850,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer skyring.GetLockManager().ReleaseLock(*appLock)
 
 				for _, node := range nodes {
 					t.UpdateStatus("Disabling node: %s", node.Hostname)
@@ -873,7 +874,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Unmanage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("Unmanage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to unmanage cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster unmanage")
 		return
@@ -939,7 +940,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer skyring.GetLockManager().ReleaseLock(*appLock)
 
 				for _, node := range nodes {
 					t.UpdateStatus("Enabling node %s", node.Hostname)
@@ -963,7 +964,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Manage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("Manage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to manage cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster manage")
 		return
@@ -1042,7 +1043,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer skyring.GetLockManager().ReleaseLock(*appLock)
 				provider := a.getProviderFromClusterId(*cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("Error etting provider for cluster: %v", *cluster_id)), t)
@@ -1102,7 +1103,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to expand cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster expansion")
 		return
@@ -1300,7 +1301,7 @@ func syncStorageDisks(nodes []models.ClusterNode) error {
 	defer sessionCopy.Close()
 	var fetchedNode models.Node
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	sProfiles, err := GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
+	sProfiles, err := skyring.GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
 	if err != nil {
 		logger.Get().Error("Unable to get the storage profiles. err:%v", err)
 	}

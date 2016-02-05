@@ -18,18 +18,13 @@ import (
 	"fmt"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
-	"github.com/kidstuff/mongostore"
 	"github.com/natefinch/pie"
-	"github.com/skyrings/skyring/authprovider"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/dbprovider"
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/monitoring"
+	"github.com/skyrings/skyring-common/apps/skyring"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring/nodemanager"
-	"github.com/skyrings/skyring/tools/lock"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/task"
 	"io/ioutil"
 	"net/http"
 	"net/rpc"
@@ -42,8 +37,6 @@ const (
 	// ConfigFile default configuration file
 	ProviderConfDir   = "providers.d"
 	ProviderBinaryDir = "providers"
-	//DefaultMaxAge set to a week
-	DefaultMaxAge = 86400 * 7
 )
 
 type Provider struct {
@@ -61,14 +54,8 @@ const (
 )
 
 var (
-	application          *App
-	CoreNodeManager      nodemanager.NodeManagerInterface
-	MonitoringManager    monitoring.MonitoringManagerInterface
-	AuthProviderInstance authprovider.AuthInterface
-	TaskManager          task.Manager
-	Store                *mongostore.MongoStore
-	DbManager            dbprovider.DbInterface
-	lockManager          lock.LockManager
+	application     *App
+	CoreNodeManager nodemanager.NodeManagerInterface
 )
 
 func NewApp(configDir string, binDir string) *App {
@@ -206,52 +193,6 @@ func (a *App) SetRoutes(router *mux.Router) error {
 	return nil
 }
 
-func initializeAuth(authCfg conf.AuthConfig) error {
-
-	//Load authorization middleware for session
-	//TODO - make this plugin based, we should be able
-	//to plug in based on the configuration - token, jwt token etc
-	//Right we are supporting only session based auth
-
-	session := db.GetDatastore().Copy()
-	c := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SESSION_STORE)
-	Store = mongostore.NewMongoStore(c, DefaultMaxAge, true, []byte("SkyRing-secret"))
-
-	//Initailize the backend auth provider based on the configuartion
-	if aaa, err := authprovider.InitAuthProvider(authCfg.ProviderName, authCfg.ConfigFile); err != nil {
-		logger.Get().Error("Error Initializing the Authentication Provider. error: %v", err)
-		return err
-	} else {
-		AuthProviderInstance = aaa
-	}
-	AddDefaultUser()
-	return nil
-}
-
-func GetAuthProvider() authprovider.AuthInterface {
-	return AuthProviderInstance
-}
-
-func initializeDb(authCfg conf.AppDBConfig) error {
-
-	if mgr, err := dbprovider.InitDbProvider("mongodbprovider", ""); err != nil {
-		logger.Get().Error("Error Initializing the Db Provider: %s", err)
-		return err
-	} else {
-		DbManager = mgr
-	}
-
-	if err := DbManager.InitDb(); err != nil {
-		logger.Get().Error("Error Initializing the Collections: %s", err)
-		return err
-	}
-	return nil
-}
-
-func GetDbProvider() dbprovider.DbInterface {
-	return DbManager
-}
-
 /*
 This is the handler where all the requests to providers will land in.
 Here the parameters are extracted and passed to the providers along with
@@ -331,16 +272,6 @@ func initializeNodeManager(config conf.NodeManagerConfig) error {
 	}
 }
 
-func (a *App) initializeMonitoringManager(config conf.MonitoringDBconfig) error {
-	if manager, err := monitoring.InitMonitoringManager(config.ManagerName, config.ConfigFilePath); err != nil {
-		logger.Get().Error("Error initializing the monitoring manager: %v", err)
-		return err
-	} else {
-		MonitoringManager = manager
-		return nil
-	}
-}
-
 func validApiVersion(version int) bool {
 	for _, ver := range conf.SystemConfig.Config.SupportedVersions {
 		if ver == version {
@@ -358,17 +289,9 @@ func GetApp() *App {
 	return application
 }
 
-func GetMonitoringManager() monitoring.MonitoringManagerInterface {
-	if MonitoringManager == nil {
-		logger.Get().Error("MonitoringManager is nil")
-	}
-	return MonitoringManager
-}
-
 //Middleware to check the request is authenticated
 func (a *App) LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-
-	session, err := Store.Get(r, "session-key")
+	session, err := skyring.GetMongostore().Get(r, "session-key")
 	if err != nil {
 		logger.Get().Error("Error Getting the session. error: %v", err)
 		w.WriteHeader(http.StatusUnauthorized)
@@ -380,24 +303,6 @@ func (a *App) LoginRequired(w http.ResponseWriter, r *http.Request, next http.Ha
 		return
 	}
 	next(w, r)
-}
-
-func initializeTaskManager() error {
-	TaskManager = task.NewManager()
-	return nil
-}
-
-func (a *App) GetTaskManager() *task.Manager {
-	return &TaskManager
-}
-
-func initializeLockManager() error {
-	lockManager = lock.NewLockManager()
-	return nil
-}
-
-func (a *App) GetLockManager() lock.LockManager {
-	return lockManager
 }
 
 /*
@@ -434,25 +339,25 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
 	}
 
 	//Initialize the DB provider
-	if err := initializeDb(sysConfig.DBConfig); err != nil {
+	if err := skyring.InitializeDb(sysConfig.DBConfig); err != nil {
 		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
 		return err
 	}
 
 	//Initialize the auth provider
-	if err := initializeAuth(sysConfig.Authentication); err != nil {
+	if err := skyring.InitializeAuth(sysConfig.Authentication); err != nil {
 		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
 		return err
 	}
 
 	//Initialize the task manager
-	if err := initializeTaskManager(); err != nil {
+	if err := skyring.InitializeTaskManager(); err != nil {
 		logger.Get().Error("Unable to initialize the task manager: %s", err)
 		return err
 	}
 
 	//Initialize the lock manager
-	if err := initializeLockManager(); err != nil {
+	if err := skyring.InitializeLockManager(); err != nil {
 		logger.Get().Error("Unable to initialize the lock manager: %s", err)
 		return err
 	}
@@ -463,7 +368,7 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
 		return err
 	}
 
-	if err := application.initializeMonitoringManager(sysConfig.TimeSeriesDBConfig); err != nil {
+	if err := skyring.InitializeMonitoringManager(sysConfig.TimeSeriesDBConfig); err != nil {
 		logger.Get().Error("Unable to create monitoring manager")
 		os.Exit(1)
 	}

@@ -14,13 +14,14 @@ package skyring
 
 import (
 	"fmt"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/tools/lock"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/uuid"
-	"github.com/skyrings/skyring/utils"
+	"github.com/skyrings/skyring-common/apps/skyring"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/lock"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/uuid"
+	"github.com/skyrings/skyring-common/utils"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -39,7 +40,7 @@ func lockNode(nodeId uuid.UUID, hostname string, operation string) (*lock.AppLoc
 	}
 	locks[nodeId] = fmt.Sprintf("%s : %s", operation, hostname)
 	appLock := lock.NewAppLock(locks)
-	if err := GetApp().GetLockManager().AcquireLock(*appLock); err != nil {
+	if err := skyring.GetLockManager().AcquireLock(*appLock); err != nil {
 		return nil, err
 	}
 	return appLock, nil
@@ -51,7 +52,7 @@ func lockNodes(nodes models.Nodes, operation string) (*lock.AppLock, error) {
 		locks[node.NodeId] = fmt.Sprintf("%s : %s", operation, node.Hostname)
 	}
 	appLock := lock.NewAppLock(locks)
-	if err := GetApp().GetLockManager().AcquireLock(*appLock); err != nil {
+	if err := skyring.GetLockManager().AcquireLock(*appLock); err != nil {
 		return nil, err
 	}
 	return appLock, nil
