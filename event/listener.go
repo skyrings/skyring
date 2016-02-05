@@ -3,12 +3,13 @@ package event
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	common_event "github.com/skyrings/skyring-common/event"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring/apps/skyring"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/uuid"
 	"gopkg.in/mgo.v2/bson"
 	"net"
 	"net/rpc"
@@ -77,7 +78,7 @@ func RouteEvent(event models.NodeEvent) {
 					logger.Get().Error("Event Handling Failed for event for node: %s. error: %v", node.Hostname, err)
 					return
 				}
-				if err := Persist_event(e); err != nil {
+				if err := common_event.Persist_event(e); err != nil {
 					logger.Get().Error("Could not persist the event to DB for node: %s. error: %v", node.Hostname, err)
 					return
 				} else {

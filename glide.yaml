@@ -1,6 +1,7 @@
 parent: null
 package: github.com/skyrings/skyring
 import:
+- package: github.com/skyrings/skyring-common
 - package: github.com/gorilla/context
   version: 1c83b3eabd45b6d76072b66b746c20815fb2872d
 - package: github.com/gorilla/mux

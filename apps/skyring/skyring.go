@@ -20,16 +20,16 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/kidstuff/mongostore"
 	"github.com/natefinch/pie"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/dbprovider"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/monitoring"
+	"github.com/skyrings/skyring-common/tools/lock"
+	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring/authprovider"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/db"
-	"github.com/skyrings/skyring/dbprovider"
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/nodemanager"
-	"github.com/skyrings/skyring/tools/lock"
-	"github.com/skyrings/skyring/tools/logger"
-	"github.com/skyrings/skyring/tools/task"
 	"io/ioutil"
 	"net/http"
 	"net/rpc"
@@ -207,7 +207,6 @@ func (a *App) SetRoutes(router *mux.Router) error {
 }
 
 func initializeAuth(authCfg conf.AuthConfig) error {
-
 	//Load authorization middleware for session
 	//TODO - make this plugin based, we should be able
 	//to plug in based on the configuration - token, jwt token etc
@@ -219,6 +218,7 @@ func initializeAuth(authCfg conf.AuthConfig) error {
 
 	//Initailize the backend auth provider based on the configuartion
 	if aaa, err := authprovider.InitAuthProvider(authCfg.ProviderName, authCfg.ConfigFile); err != nil {
+
 		logger.Get().Error("Error Initializing the Authentication Provider. error: %v", err)
 		return err
 	} else {
@@ -367,7 +367,6 @@ func GetMonitoringManager() monitoring.MonitoringManagerInterface {
 
 //Middleware to check the request is authenticated
 func (a *App) LoginRequired(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-
 	session, err := Store.Get(r, "session-key")
 	if err != nil {
 		logger.Get().Error("Error Getting the session. error: %v", err)

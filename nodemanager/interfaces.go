@@ -13,8 +13,8 @@ limitations under the License.
 package nodemanager
 
 import (
-	"github.com/skyrings/skyring/models"
-	"github.com/skyrings/skyring/monitoring"
+	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/monitoring"
 )
 
 type NodeManagerInterface interface {

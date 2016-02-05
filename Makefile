@@ -69,7 +69,7 @@ build-special:
 
 pyinstall:
 	@echo "Doing $@"
-	if [ "$$USER" == "root" ]; then \
+	@if [ "$$USER" == "root" ]; then \
 		cd backend/salt/python; python setup.py --quiet install --root /; cd -; \
 	else \
 		cd backend/salt/python; python setup.py --quiet install --user; cd -; \
@@ -79,7 +79,7 @@ pyinstall:
 
 saltinstall:
 	@echo "Doing $@"
-	if [ "$$USER" == "root" ]; then \
+	@if [ "$$USER" == "root" ]; then \
 		[ -d /srv/salt ] || mkdir -p /srv/salt; \
 		[ -d /srv/salt/collectd ] || mkdir -p /srv/salt/collectd; \
 		[ -d /srv/salt/collectd/files ] || mkdir -p /srv/salt/collectd/files; \

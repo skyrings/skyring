@@ -14,7 +14,7 @@ limitations under the License.
 package authprovider
 
 import (
-	"github.com/skyrings/skyring/models"
+	"github.com/skyrings/skyring-common/models"
 	"net/http"
 )
 

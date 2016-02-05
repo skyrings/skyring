@@ -2,8 +2,8 @@ package event
 
 import (
 	"github.com/gorilla/websocket"
-	"github.com/skyrings/skyring/conf"
-	"github.com/skyrings/skyring/tools/logger"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/tools/logger"
 	"net/http"
 	"time"
 )
