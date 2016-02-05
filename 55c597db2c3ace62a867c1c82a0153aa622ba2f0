@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_6049b65f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-05T07:15:36Z",
+      "side": 1,
+      "message": "We do maintain the nodes in failure as part of the cluster but not what failed. So user should typically get to know that the cluster has x nodes in failure and which x nodes in cluster are in failure but what we don\u0027t maintain is what operations failed on each of the x nodes",
+      "parentUuid": "fa81d914_bd1f5b6b",
+      "range": {
+        "startLine": 154,
+        "startChar": 9,
+        "endLine": 161,
+        "endChar": 10
+      },
+      "revId": "55c597db2c3ace62a867c1c82a0153aa622ba2f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_5f55884e",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 11
