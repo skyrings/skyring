@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_c3334ca9",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-05T11:43:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_23c6e89a",
+      "range": {
+        "startLine": 404,
+        "startChar": 4,
+        "endLine": 404,
+        "endChar": 75
+      },
+      "revId": "4e6a5476f6efbfc3c20ef9d889f0d8698f0335d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_63bc6007",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_e324d061",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-05T11:43:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_63bc6007",
+      "range": {
+        "startLine": 422,
+        "startChar": 5,
+        "endLine": 422,
+        "endChar": 13
+      },
+      "revId": "4e6a5476f6efbfc3c20ef9d889f0d8698f0335d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_234d083f",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -82,6 +130,30 @@
       "writtenOn": "2016-02-05T11:23:04Z",
       "side": 1,
       "message": "In this case as discussed, on complete failure, fail the task after setting the stale nodes",
+      "range": {
+        "startLine": 716,
+        "startChar": 5,
+        "endLine": 716,
+        "endChar": 23
+      },
+      "revId": "4e6a5476f6efbfc3c20ef9d889f0d8698f0335d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_032ac42b",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-05T11:43:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_234d083f",
       "range": {
         "startLine": 716,
         "startChar": 5,
