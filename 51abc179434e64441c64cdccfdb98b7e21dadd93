@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_dde6cfaf",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-05T03:53:28Z",
+      "side": 1,
+      "message": "How you are handling the stale nodes? Ideal case is that for stale nodes we need to add all the plugins(because it failed in the last go) and the other nodes only the delta. Are we doing the same way?\n\nSuppose I have 5 plugins active on the node and I added on more and it failed. So Ideally you have to mark this node as stale. So next when you want to update, are you updating all the plugins or only the one which is failed?",
+      "range": {
+        "startLine": 294,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 21
+      },
+      "revId": "51abc179434e64441c64cdccfdb98b7e21dadd93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_fda2b349",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-05T03:53:28Z",
+      "side": 1,
+      "message": "Do you really want to check this? if yes do it like \nif len(request) \u003d\u003d 0 {\n//log\n//return\n}\n//other code come here",
+      "range": {
+        "startLine": 406,
+        "startChar": 1,
+        "endLine": 406,
+        "endChar": 23
+      },
+      "revId": "51abc179434e64441c64cdccfdb98b7e21dadd93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_bd6afbeb",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-05T03:53:28Z",
+      "side": 1,
+      "message": "Is there a difference between force update and normal update?",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 614,
+        "endChar": 29
+      },
+      "revId": "51abc179434e64441c64cdccfdb98b7e21dadd93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
