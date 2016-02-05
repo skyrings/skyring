@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_7d532339",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-05T04:33:43Z",
+      "side": 1,
+      "message": "No as per the logic here, a failure is a failure we are not maintaining any state of failure.i.e, the recovery from failure is to load all plugin configurations freshly and hence the consistency is forcefully maintained. Its a salt state load operation of all states on all error nodes.",
+      "parentUuid": "fa81d914_dde6cfaf",
+      "range": {
+        "startLine": 294,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 21
+      },
+      "revId": "51abc179434e64441c64cdccfdb98b7e21dadd93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_fda2b349",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 16
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_9d337713",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-05T04:33:43Z",
+      "side": 1,
+      "message": "haha  I just didn\u0027t want to end up missing out any checks :)\n\nok I\u0027ll modify this in a follow up patch",
+      "parentUuid": "fa81d914_fda2b349",
+      "range": {
+        "startLine": 406,
+        "startChar": 1,
+        "endLine": 406,
+        "endChar": 23
+      },
+      "revId": "51abc179434e64441c64cdccfdb98b7e21dadd93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_bd6afbeb",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 16
@@ -59,6 +107,30 @@
       "writtenOn": "2016-02-05T03:53:28Z",
       "side": 1,
       "message": "Is there a difference between force update and normal update?",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 614,
+        "endChar": 29
+      },
+      "revId": "51abc179434e64441c64cdccfdb98b7e21dadd93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_bd383bf0",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-05T04:33:43Z",
+      "side": 1,
+      "message": "Yes a normal update is just a file change i.e, a modification of a line in an existing file.\n\nHowever, here it is a completely newly attempted state load so that all configs as in db are enforced on to the required destinations",
+      "parentUuid": "fa81d914_bd6afbeb",
       "range": {
         "startLine": 613,
         "startChar": 0,
