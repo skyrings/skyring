@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_1d606700",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 13
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-05T04:27:44Z",
+      "side": 1,
+      "message": "This error happens only if the updateFailedNodesError is not a map in which case the salt.go itself with error out so no need to handle this error. It turns out to be more of a function signature validation here",
+      "parentUuid": "fa81d914_6d1c54c2",
+      "range": {
+        "startLine": 151,
+        "startChar": 37,
+        "endLine": 151,
+        "endChar": 40
+      },
+      "revId": "70ee292bb3d1a2279d433c0af38c0d0877428f5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_4d4f90bd",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 13
@@ -36,6 +60,30 @@
       "writtenOn": "2016-02-05T03:53:28Z",
       "side": 1,
       "message": "check for error and log/handle",
+      "range": {
+        "startLine": 239,
+        "startChar": 10,
+        "endLine": 239,
+        "endChar": 25
+      },
+      "revId": "70ee292bb3d1a2279d433c0af38c0d0877428f5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_3d5d2b48",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 13
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-05T04:27:44Z",
+      "side": 1,
+      "message": "Handled in the follow up patch",
+      "parentUuid": "fa81d914_4d4f90bd",
       "range": {
         "startLine": 239,
         "startChar": 10,
