@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_dd108f5b",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-05T05:54:41Z",
+      "side": 1,
+      "message": "Same question here too. how you indicate to user that montoring configuration failed for this node",
+      "parentUuid": "fa81d914_7d532339",
+      "range": {
+        "startLine": 294,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 21
+      },
+      "revId": "51abc179434e64441c64cdccfdb98b7e21dadd93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_fda2b349",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 16
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "Yes a normal update is just a file change i.e, a modification of a line in an existing file.\n\nHowever, here it is a completely newly attempted state load so that all configs as in db are enforced on to the required destinations",
       "parentUuid": "fa81d914_bd6afbeb",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 614,
+        "endChar": 29
+      },
+      "revId": "51abc179434e64441c64cdccfdb98b7e21dadd93",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_fd155349",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 16
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-05T05:54:41Z",
+      "side": 1,
+      "message": "When you are doing normal vs force update?\nWhy dont you do force update all the time? Is it costly? I worried about too many option we are giving out which adds up the complexity. Also I dont think somebody keep playing around with these configs",
+      "parentUuid": "fa81d914_bd383bf0",
       "range": {
         "startLine": 613,
         "startChar": 0,
