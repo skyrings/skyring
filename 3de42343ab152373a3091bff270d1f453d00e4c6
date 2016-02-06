@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_09b4a5cf",
+        "filename": "glide.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-06T04:55:42Z",
+      "side": 1,
+      "message": "Why we are removing all these? who will handle these packages?",
+      "revId": "3de42343ab152373a3091bff270d1f453d00e4c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
