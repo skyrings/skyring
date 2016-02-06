@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_a9df190c",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-06T05:46:52Z",
+      "side": 1,
+      "message": "Done. But I thought I had a comment to change it to this name in the patch that was united and monolithic parent of this patch",
+      "parentUuid": "fa81d914_0e710be0",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_2e796fc8",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-05T18:26:39Z",
       "side": 1,
       "message": "I feel we should have more detailed error message logged.",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_c9e44de3",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-06T05:46:52Z",
+      "side": 1,
+      "message": "I see from uuid.go, that this already complains the error returned already contains the fact that it is not a valid uuid and the message also already contains the requested uuid as a string.\n\nThe message is as under:\nreturn nil, errors.New(\"unknown UUID string \" + s)",
+      "parentUuid": "fa81d914_2e796fc8",
       "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -104,6 +140,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_69c28135",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-06T05:46:52Z",
+      "side": 1,
+      "message": "Append is used if we are not sure of the array size bcoz it is a costly operation of allocating memory on demand(on each append call). But here I am aware of array size and so I do memory allocation in 1 shot in line no 552 and insert normally.",
+      "parentUuid": "fa81d914_ee42f766",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_0e482b86",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -115,6 +169,24 @@
       "writtenOn": "2016-02-05T18:26:39Z",
       "side": 1,
       "message": "err ??",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_89bfb5a9",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-06T05:46:52Z",
+      "side": 1,
+      "message": "No need to handle error here bcoz if the error would have happened it would have failed in salt.go itself.This util func GetMapKeys just gets the keys out of map and in the util the only error being returned by this util func is if the passed param is a map or not and the way its done this way is bcoz there\u0027s no way other than interface{} to indicate a map generically.So, here I am not handling the error bcoz if this were to ever happen, it would have happened much before in the salt.go itself.",
+      "parentUuid": "fa81d914_0e482b86",
       "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
