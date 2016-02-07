@@ -14,7 +14,7 @@ var GeneralResources = []string{
 	"df",
 	"memory",
 	"cpu",
-	"cluster_utilization",
+	CLUSTER_UTILIZATION,
 }
 
 var (

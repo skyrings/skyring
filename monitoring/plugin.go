@@ -17,6 +17,14 @@ type PluginConfig struct {
 	Value    string `json:"value"`
 }
 
+const (
+	CLUSTER_UTILIZATION = "cluster_utilization"
+	SLU_UTILIZATION     = "slu_utilization"
+	FREE_SPACE          = "free_bytes"
+	USED_SPACE          = "used_bytes"
+	PERCENT_USED        = "percent_bytes"
+)
+
 var (
 	SupportedConfigCategories = []string{
 		"threshold",
