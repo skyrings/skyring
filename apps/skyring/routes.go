@@ -226,6 +226,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "POST_froceUpdateMonitoringConfiguration",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}/mon_plugins/actions/enforceupdate",
+			HandlerFunc: a.POST_froceUpdateMonitoringConfiguration,
+			Version:     1,
+		},
+		{
 			Name:        "POST_MonitoringPluginEnable",
 			Method:      "POST",
 			Pattern:     "clusters/{cluster-id}/mon_plugins/activations/{plugin-name}",
