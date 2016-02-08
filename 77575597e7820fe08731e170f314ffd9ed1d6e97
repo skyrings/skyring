@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_8f189576",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-08T04:03:00Z",
+      "side": 1,
+      "message": "I feel I got a better name. Thats the only thing :))",
+      "parentUuid": "fa81d914_a9df190c",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_2e796fc8",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_af28f986",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-08T04:03:00Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "fa81d914_c9e44de3",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_4e76a3d8",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -83,6 +119,24 @@
       "writtenOn": "2016-02-05T18:26:39Z",
       "side": 1,
       "message": "Same as above",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_cf2d2d97",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-08T04:03:00Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "fa81d914_4e76a3d8",
       "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -158,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_ef1e715e",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-08T04:03:00Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "fa81d914_69c28135",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_0e482b86",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -187,6 +259,24 @@
       "side": 1,
       "message": "No need to handle error here bcoz if the error would have happened it would have failed in salt.go itself.This util func GetMapKeys just gets the keys out of map and in the util the only error being returned by this util func is if the passed param is a map or not and the way its done this way is bcoz there\u0027s no way other than interface{} to indicate a map generically.So, here I am not handling the error bcoz if this were to ever happen, it would have happened much before in the salt.go itself.",
       "parentUuid": "fa81d914_0e482b86",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_0f24a5ad",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-08T04:03:00Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "fa81d914_89bfb5a9",
       "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
