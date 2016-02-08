@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_046d67cc",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-08T14:49:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_8f189576",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_2e796fc8",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -160,6 +178,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_e47bf389",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-08T14:49:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_6e7fe7ab",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_ce51b337",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -171,6 +207,24 @@
       "writtenOn": "2016-02-05T18:26:39Z",
       "side": 1,
       "message": "FailTask below would update the status as Failed with error message passed. Dont do another one.",
+      "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_24726bad",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-08T14:49:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_ce51b337",
       "revId": "77575597e7820fe08731e170f314ffd9ed1d6e97",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
