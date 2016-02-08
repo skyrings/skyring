@@ -133,11 +133,13 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 		logger.Get().Error("Error getting the session for user: %s. error: %v", u, err)
 		return err
 	}
-	if session.IsNew {
-		session.Values["username"] = u
-	} else {
-		logger.Get().Info("User: %s already logged in", u)
-		return nil
+	if !session.IsNew {
+		if session.Values["username"] == u {
+			logger.Get().Info("User: %s already logged in", u)
+			return nil
+		} else {
+			return mkerror("user " + session.Values["username"].(string) + " is already logged in")
+		}
 	}
 	if user, err := a.userDao.User(u); err == nil {
 		if user.Type == authprovider.Internal && user.Status {
@@ -155,6 +157,8 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 		return mkerror("user not found")
 	}
 
+	// Update the new username in session before persisting to DB
+	session.Values["username"] = u
 	if err = session.Save(req, rw); err != nil {
 		logger.Get().Error("Error saving the session for user: %s. error: %v", u, err)
 		return err
