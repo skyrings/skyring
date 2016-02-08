@@ -199,11 +199,13 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 		logger.Get().Error("Error Getting the session. error: %v", err)
 		return err
 	}
-	if session.IsNew {
-		session.Values["username"] = u
-	} else {
-		logger.Get().Info("User %s already logged in", u)
-		return nil
+	if !session.IsNew {
+		if session.Values["username"] == u {
+			logger.Get().Info("User %s already logged in", u)
+			return nil
+		} else {
+			return mkerror("user " + session.Values["username"].(string) + " is already logged in")
+		}
 	}
 	errStrNotAllowed := "This user is not allowed. Status Disabled"
 	// Verify user allowed to user usm with group privilage in the db
@@ -232,6 +234,8 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 		logger.Get().Error("User does not exist: %s", user)
 		return mkerror("User does not exist")
 	}
+	// Update the new username in session before persisting to DB
+	session.Values["username"] = u
 	if err = session.Save(req, rw); err != nil {
 		logger.Get().Error("Error saving the session for user: %s. error: %v", u, err)
 		return err

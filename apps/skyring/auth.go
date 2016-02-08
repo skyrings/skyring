@@ -44,6 +44,7 @@ func AddDefaultUser() error {
 
 func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 
+	type apiError util.APIError
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		logger.Get().Error("Error parsing http request body:%s", err)
@@ -58,7 +59,9 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 	}
 	if err := GetAuthProvider().Login(rw, req, m["username"].(string), m["password"].(string)); err != nil {
 		logger.Get().Error("Unable to login User:%s", err)
-		util.HandleHttpError(rw, err)
+		bytes, _ := json.Marshal(apiError{Error: err.Error()})
+		rw.WriteHeader(http.StatusUnauthorized)
+		rw.Write(bytes)
 		return
 	}
 	bytes, _ := json.Marshal(`{'message': 'Logged in'}`)
