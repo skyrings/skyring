@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_170d9b37",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-08T18:34:36Z",
+      "side": 1,
+      "message": "return unauthorized only if the username/password doesn\u0027t ,match. Other cases like this, still can be internal error",
+      "range": {
+        "startLine": 51,
+        "startChar": 2,
+        "endLine": 62,
+        "endChar": 8
+      },
+      "revId": "4c743baa15d1bf748651d626e825b1cfbf1e4b22",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_f7072716",
+        "filename": "authprovider/local/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-08T18:34:36Z",
+      "side": 1,
+      "message": "This same thing to be addressed in authprovider/ldap/ldapauth.go also",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 3
+      },
+      "revId": "4c743baa15d1bf748651d626e825b1cfbf1e4b22",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
