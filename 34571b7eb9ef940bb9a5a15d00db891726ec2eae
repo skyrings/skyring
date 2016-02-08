@@ -34,6 +34,24 @@
       "revId": "34571b7eb9ef940bb9a5a15d00db891726ec2eae",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_4f393dd6",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-08T04:04:51Z",
+      "side": 1,
+      "message": "Ok. As long it works, its fine",
+      "parentUuid": "fa81d914_c9bd2db9",
+      "revId": "34571b7eb9ef940bb9a5a15d00db891726ec2eae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
