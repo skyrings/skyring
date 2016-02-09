@@ -144,6 +144,9 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 					// Check for provider task to complete and update the parent task
 					done := false
 					for {
+						if <-t.StopCh {
+							return
+						}
 						time.Sleep(2 * time.Second)
 						sessionCopy := db.GetDatastore().Copy()
 						defer sessionCopy.Close()
@@ -176,7 +179,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Storage: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run("skyring", fmt.Sprintf("Create Storage: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for create storage:%s on cluster: %v. error: %v", request.Name, *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create storage")
 		return

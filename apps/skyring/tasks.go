@@ -73,7 +73,7 @@ func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	taskId, err := uuid.Parse(vars["taskid"])
 	if err != nil {
-		logger.Get().Error("Unable to Parse the Id: %s. error: %v", vars["taskId"], err)
+		logger.Get().Error("Unable to Parse the Id: %s. error: %v", vars["taskid"], err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -99,7 +99,7 @@ func (a *App) getSubTasks(rw http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	taskId, err := uuid.Parse(vars["taskid"])
 	if err != nil {
-		logger.Get().Error("Unable to Parse the Id: %s. error: %v", vars["taskId"], err)
+		logger.Get().Error("Unable to Parse the Id: %s. error: %v", vars["taskid"], err)
 		util.HandleHttpError(rw, err)
 		return
 	}
@@ -117,5 +117,47 @@ func (a *App) getSubTasks(rw http.ResponseWriter, req *http.Request) {
 		json.NewEncoder(rw).Encode([]models.AppTask{})
 	} else {
 		json.NewEncoder(rw).Encode(tasks)
+	}
+}
+
+func (a *App) POST_StopTask(rw http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	taskId, err := uuid.Parse(vars["taskid"])
+	if err != nil {
+		logger.Get().Error("Unable to Parse the Id: %s. error: %v", vars["taskid"], err)
+		util.HandleHttpError(rw, err)
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	var subtasks []models.AppTask
+	if err := coll.Find(bson.M{"parentid": *taskId}).All(&subtasks); err != nil {
+		logger.Get().Error("Unable to get sub-task details for task: %v. error: %v", taskId, err)
+		util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// Stop the sub tasks
+	for _, subtask := range subtasks {
+		provider := a.getProviderFromClusterType(subtask.Owner)
+		if provider == nil {
+			logger.Get().Error("Error getting provider for %s", subtask.Owner)
+			continue
+		}
+		var result models.RpcResponse
+		err := provider.Client.Call(fmt.Sprintf("%s.StopTask", subtask.Owner),
+			models.RpcRequest{RpcRequestVars: map[string]string{"task-id": subtask.Id.String()}, RpcRequestData: []byte{}},
+			&result)
+		if err != nil || (result.Status.StatusCode != http.StatusOK) {
+			logger.Get().Error("Failed to stop sub-task: %v. error: %v", subtask.Id, err)
+		}
+	}
+
+	if ok, err := a.GetTaskManager().Stop(*taskId); !ok || err != nil {
+		logger.Get().Error("Failed to stop task: %v", *taskId)
+		util.HandleHttpError(rw, err)
+		return
 	}
 }

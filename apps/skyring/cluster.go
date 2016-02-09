@@ -130,6 +130,9 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 
 					// Check for provider task to complete and update the disk info
 					for {
+						if <-t.StopCh {
+							return
+						}
 						time.Sleep(2 * time.Second)
 						sessionCopy := db.GetDatastore().Copy()
 						defer sessionCopy.Close()
@@ -205,7 +208,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run("skyring", fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for creating cluster: %s. error: %v", request.Name, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create cluster")
 		return
@@ -284,7 +287,7 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run("skyring", fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task for adding monitoring plugin for cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for add monitoring plugin")
 		return
@@ -372,7 +375,7 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 				}
-				if taskId, err := a.GetTaskManager().Run("Update monitoring plugins configuration", asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+				if taskId, err := a.GetTaskManager().Run("skyring", "Update monitoring plugins configuration", asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 					logger.Get().Error("Unable to create task for update monitoring plugin configuration for cluster: %v. error: %v", *cluster_id_uuid, err)
 					util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for update monitoring plugin configuration")
 					return
@@ -461,7 +464,7 @@ func monitoringPluginActivationDeactivations(enable bool, plugin_name string, cl
 						}
 					}
 				}
-				if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("%s monitoring plugin: %s", action, plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+				if taskId, err := a.GetTaskManager().Run("skyring", fmt.Sprintf("%s monitoring plugin: %s", action, plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 					logger.Get().Error("Unable to create task for %s monitoring plugin on cluster: %s. error: %v", action, cluster.Name, err)
 					util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for"+action+"monitoring plugin")
 					return
@@ -560,7 +563,7 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-		if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove monitoring plugin : %s", plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+		if taskId, err := a.GetTaskManager().Run("skyring", fmt.Sprintf("Remove monitoring plugin : %s", plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 			logger.Get().Error("Unable to create task for remove monitoring plugin for cluster: %v. error: %v", *uuid, err)
 			util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for remove monitoring plugin")
 			return
@@ -740,7 +743,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Forget Cluster: %s", cluster_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run("skyring", fmt.Sprintf("Forget Cluster: %s", cluster_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to forget cluster: %v. error: %v", *uuid, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster forget")
 		return
@@ -873,7 +876,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Unmanage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run("skyring", fmt.Sprintf("Unmanage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to unmanage cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster unmanage")
 		return
@@ -963,7 +966,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Manage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run("skyring", fmt.Sprintf("Manage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to manage cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster manage")
 		return
@@ -1070,6 +1073,9 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 
 					// Check for provider task to complete and update the disk info
 					for {
+						if <-t.StopCh {
+							return
+						}
 						time.Sleep(2 * time.Second)
 						sessionCopy := db.GetDatastore().Copy()
 						defer sessionCopy.Close()
@@ -1102,7 +1108,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run("skyring", fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to expand cluster: %v. error: %v", *cluster_id, err)
 		util.HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster expansion")
 		return

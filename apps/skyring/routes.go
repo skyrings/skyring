@@ -196,6 +196,13 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.getSubTasks,
 			Version:     1,
 		},
+		{
+			Name:        "POST_StopTask",
+			Method:      "POST",
+			Pattern:     "tasks/{taskid}/stop",
+			HandlerFunc: a.POST_StopTask,
+			Version:     1,
+		},
 		//Routes for Cluster Management
 		{
 			Name:        "POST_Clusters",
