@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa81d914_9aec52f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-09T04:03:51Z",
+      "side": 1,
+      "message": "Instead put the bug URL here as\n\nBug-URL: https://bugzilla.redhat.com/\u003cid\u003e",
+      "revId": "4c743baa15d1bf748651d626e825b1cfbf1e4b22",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_170d9b37",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 1
