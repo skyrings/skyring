@@ -64,7 +64,7 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 		rw.Write(bytes)
 		return
 	}
-	bytes, _ := json.Marshal(`{'message': 'Logged in'}`)
+	bytes := []byte(`{"message": "Logged in"}`)
 	rw.Write(bytes)
 }
 
@@ -74,7 +74,7 @@ func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
 		util.HandleHttpError(rw, err)
 		return
 	}
-	bytes, _ := json.Marshal(`{'message': 'Logged out'}`)
+	bytes := []byte(`{"message": "Logged out"}`)
 	rw.Write(bytes)
 }
 
