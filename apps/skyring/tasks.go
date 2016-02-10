@@ -9,7 +9,6 @@ import (
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/uuid"
-	"github.com/skyrings/skyring-common/utils"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
@@ -34,12 +33,12 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 			filter["parentid"], err = uuid.Parse(rootTaskId)
 			if err != nil {
 				logger.Get().Error("Unable to Parse the Id: %s. error: %v", rootTaskId, err)
-				util.HandleHttpError(rw, err)
+				HandleHttpError(rw, err)
 				return
 			}
 		} else {
 			logger.Get().Error("Un-supported query param: %v", rootTask)
-			util.HttpResponse(rw, http.StatusInternalServerError, fmt.Sprintf("Un-supported query param: %s", rootTask))
+			HttpResponse(rw, http.StatusInternalServerError, fmt.Sprintf("Un-supported query param: %s", rootTask))
 			return
 		}
 	}
@@ -50,7 +49,7 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 			filter["completed"] = true
 		} else {
 			logger.Get().Error("Un-supported query param: %v", taskStatus)
-			util.HttpResponse(rw, http.StatusInternalServerError, fmt.Sprintf("Un-supported query param: %s", taskStatus))
+			HttpResponse(rw, http.StatusInternalServerError, fmt.Sprintf("Un-supported query param: %s", taskStatus))
 			return
 		}
 	}
@@ -58,7 +57,7 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 	var tasks []models.AppTask
 	if err := coll.Find(filter).All(&tasks); err != nil {
 		logger.Get().Error("Unable to get tasks. error: %v", err)
-		util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
+		HttpResponse(rw, http.StatusInternalServerError, err.Error())
 		return
 
 	}
@@ -74,7 +73,7 @@ func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 	taskId, err := uuid.Parse(vars["taskid"])
 	if err != nil {
 		logger.Get().Error("Unable to Parse the Id: %s. error: %v", vars["taskId"], err)
-		util.HandleHttpError(rw, err)
+		HandleHttpError(rw, err)
 		return
 	}
 
@@ -85,10 +84,10 @@ func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 	if err := coll.Find(bson.M{"id": *taskId}).One(&task); err != nil {
 		logger.Get().Error("Unable to get task. error: %v", err)
 		if err == mgo.ErrNotFound {
-			util.HttpResponse(rw, http.StatusNotFound, err.Error())
+			HttpResponse(rw, http.StatusNotFound, err.Error())
 			return
 		} else {
-			util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
+			HttpResponse(rw, http.StatusInternalServerError, err.Error())
 			return
 		}
 	}
@@ -100,7 +99,7 @@ func (a *App) getSubTasks(rw http.ResponseWriter, req *http.Request) {
 	taskId, err := uuid.Parse(vars["taskid"])
 	if err != nil {
 		logger.Get().Error("Unable to Parse the Id: %s. error: %v", vars["taskId"], err)
-		util.HandleHttpError(rw, err)
+		HandleHttpError(rw, err)
 		return
 	}
 
@@ -110,7 +109,7 @@ func (a *App) getSubTasks(rw http.ResponseWriter, req *http.Request) {
 	var tasks []models.AppTask
 	if err := coll.Find(bson.M{"parentid": *taskId}).All(&tasks); err != nil {
 		logger.Get().Error("Unable to get tasks. error: %v", err)
-		util.HttpResponse(rw, http.StatusInternalServerError, err.Error())
+		HttpResponse(rw, http.StatusInternalServerError, err.Error())
 		return
 	}
 	if len(tasks) == 0 {

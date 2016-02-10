@@ -49,8 +49,8 @@ func NewSaltNodeManager(config io.Reader) (*SaltNodeManager, error) {
 	return &SaltNodeManager{}, nil
 }
 
-func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (bool, error) {
-	if status, err := salt_backend.AcceptNode(node, fingerprint, false); err != nil {
+func (a SaltNodeManager) AcceptNode(node string, fingerprint string, ctxt string) (bool, error) {
+	if status, err := salt_backend.AcceptNode(node, fingerprint, false, ctxt); err != nil {
 		return false, err
 	} else if !status {
 		return false, errors.New(fmt.Sprintf("Unable to accept the node: %s", node))
@@ -60,8 +60,8 @@ func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (bool, erro
 	}
 }
 
-func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error) {
-	if status, err := salt_backend.AddNode(master, node, port, fingerprint, username, password); err != nil {
+func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string, ctxt string) (bool, error) {
+	if status, err := salt_backend.AddNode(master, node, port, fingerprint, username, password, ctxt); err != nil {
 		return false, err
 	} else if !status {
 		return false, errors.New(fmt.Sprintf("Unable to add the node: %s", node))
@@ -97,7 +97,7 @@ func GetStorageNodeInstance(hostname string, sProfiles []models.StorageProfile) 
 	} else {
 		storage_node.Status = models.STATUS_DOWN
 	}
-	disks, err := salt_backend.GetNodeDisk(hostname)
+	disks, err := salt_backend.GetNodeDisk(hostname, "")
 	if err != nil {
 		logger.Get().Error(fmt.Sprintf("Error getting disk details for node: %s. error: %v", hostname, err))
 		return nil, false
@@ -158,15 +158,15 @@ func (a SaltNodeManager) GetUnmanagedNodes() (*models.UnmanagedNodes, error) {
 	}
 }
 
-func (a SaltNodeManager) SyncStorageDisks(node string, sProfiles []models.StorageProfile) (bool, error) {
-	disks, err := salt_backend.GetNodeDisk(node)
+func (a SaltNodeManager) SyncStorageDisks(node string, sProfiles []models.StorageProfile, ctxt string) (bool, error) {
+	disks, err := salt_backend.GetNodeDisk(node, ctxt)
 	if err != nil {
 		return false, err
 	}
 	for _, disk := range disks {
 		dId, err := uuid.New()
 		if err != nil {
-			logger.Get().Error(fmt.Sprintf("Unable to generate uuid for disk : %s. error: %v", disk.DevName, err))
+			logger.Get().Error(fmt.Sprintf("%s-Unable to generate uuid for disk : %s. error: %v", ctxt, disk.DevName, err))
 			return false, err
 		}
 		disk.DiskId = *dId
@@ -177,7 +177,7 @@ func (a SaltNodeManager) SyncStorageDisks(node string, sProfiles []models.Storag
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if len(disks) != 0 {
 		if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"storagedisks": disks}}); err != nil {
-			logger.Get().Error("Error updating the disk details for node: %s. error: %v", node, err)
+			logger.Get().Error("%s-Error updating the disk details for node: %s. error: %v", ctxt, node, err)
 			return false, err
 		}
 	}
