@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_11c20059",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-10T14:37:11Z",
+      "side": 1,
+      "message": "I feel its better to fail post request if duplicate passed.\nwe can have a patch rest end point for editing details..",
+      "revId": "db2adff1b1755ab2043238c92db445fd5dd483d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_71d09c1f",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-10T14:37:11Z",
+      "side": 1,
+      "message": "Does this list password as well???",
+      "revId": "db2adff1b1755ab2043238c92db445fd5dd483d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_51b8f8e4",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-10T14:37:11Z",
+      "side": 1,
+      "message": "It could be insert only and add another patch rest end point.",
+      "revId": "db2adff1b1755ab2043238c92db445fd5dd483d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
