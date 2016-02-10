@@ -63,9 +63,9 @@ func init() {
 type Salt struct {
 }
 
-func (s Salt) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (status bool, err error) {
-	if finger, loc_err := s.BootstrapNode(master, node, port, fingerprint, username, password); loc_err == nil {
-		status, err = s.AcceptNode(node, finger, false)
+func (s Salt) AddNode(master string, node string, port uint, fingerprint string, username string, password string, ctxt string) (status bool, err error) {
+	if finger, loc_err := s.BootstrapNode(master, node, port, fingerprint, username, password, ctxt); loc_err == nil {
+		status, err = s.AcceptNode(node, finger, false, ctxt)
 	} else {
 		status = false
 		err = loc_err
@@ -73,10 +73,10 @@ func (s Salt) AddNode(master string, node string, port uint, fingerprint string,
 	return
 }
 
-func (s Salt) AcceptNode(node string, fingerprint string, ignored bool) (status bool, err error) {
+func (s Salt) AcceptNode(node string, fingerprint string, ignored bool, ctxt string) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["AcceptNode"].Call(node, fingerprint, ignored); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["AcceptNode"].Call(node, fingerprint, ignored, ctxt); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
 	} else {
 		status = false
@@ -149,15 +149,15 @@ func (s Salt) AddMonitoringPlugin(pluginNames []string, nodes []string, master s
 	return
 }
 
-func (s Salt) BootstrapNode(master string, node string, port uint, fingerprint string, username string, password string) (finger string, err error) {
+func (s Salt) BootstrapNode(master string, node string, port uint, fingerprint string, username string, password string, ctxt string) (finger string, err error) {
 	var buf bytes.Buffer
 	t, loc_err := template.ParseFiles("/srv/salt/template/setup-node.sh.template")
 	if loc_err != nil {
-		logger.Get().Critical("Error Parsing the setup-node.sh.template", err)
+		logger.Get().Critical("Error Parsing the setup-node.sh.template", err, ctxt)
 		return "", loc_err
 	}
 	if loc_err = t.Execute(&buf, struct{ Master string }{Master: master}); err != nil {
-		logger.Get().Critical("Error Executing the setup-node.sh.template", err)
+		logger.Get().Critical("Error Executing the setup-node.sh.template", err, ctxt)
 		return "", loc_err
 	}
 

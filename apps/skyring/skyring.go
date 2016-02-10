@@ -17,6 +17,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/codegangsta/negroni"
+	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/kidstuff/mongostore"
 	"github.com/natefinch/pie"
@@ -28,6 +29,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/lock"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/task"
+	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/nodemanager"
 	"io/ioutil"
@@ -36,14 +38,6 @@ import (
 	"net/rpc/jsonrpc"
 	"os"
 	"path"
-)
-
-const (
-	// ConfigFile default configuration file
-	ProviderConfDir   = "providers.d"
-	ProviderBinaryDir = "providers"
-	//DefaultMaxAge set to a week
-	DefaultMaxAge = 86400 * 7
 )
 
 type Provider struct {
@@ -56,8 +50,16 @@ type App struct {
 	routes    map[string]conf.Route
 }
 
+type ContextKey int
+
 const (
-	DEFAULT_API_PREFIX = "/api"
+	// ConfigFile default configuration file
+	ProviderConfDir   = "providers.d"
+	ProviderBinaryDir = "providers"
+	//DefaultMaxAge set to a week
+	DefaultMaxAge                 = 86400 * 7
+	DEFAULT_API_PREFIX            = "/api"
+	LoggingCtxt        ContextKey = 0
 )
 
 var (
@@ -378,6 +380,34 @@ func (a *App) LoginRequired(w http.ResponseWriter, r *http.Request, next http.Ha
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
+	next(w, r)
+}
+
+//Middleware to create the logging context
+func (a *App) LoggingContext(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	session, err := Store.Get(r, "session-key")
+	if err != nil {
+		logger.Get().Error("Error Getting the session. error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	var username string
+	if val, ok := session.Values["username"]; ok {
+		username = val.(string)
+	}
+
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	loggingContext := fmt.Sprintf("%v:%v", username, reqId.String())
+	context.Set(r, LoggingCtxt, loggingContext)
+	logger.Get().Critical("Context:%v", loggingContext)
+
+	defer context.Clear(r)
 	next(w, r)
 }
 

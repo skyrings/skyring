@@ -39,17 +39,21 @@ var (
 
 func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	var request models.AddStorageNodeRequest
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
 
 	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
-		logger.Get().Error("Error parsing the request. error: %v", err)
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
+		logger.Get().Error("Error parsing the request. error: %v", err, ctxt)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err), ctxt)
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
-		logger.Get().Error("Unable to unmarshal request. error: %v", err)
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err))
+		logger.Get().Error("Unable to unmarshal request. error: %v", err, ctxt)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err), ctxt)
 		return
 	}
 
@@ -60,15 +64,15 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	// Check if node already added
 	// No need to check for error, as node would be nil in case of error and the same is checked
 	if node, _ := node_exists("hostname", request.Hostname); node != nil {
-		logger.Get().Error("Node:%s already added", request.Hostname)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Node already added")
+		logger.Get().Error("Node:%s already added", request.Hostname, ctxt)
+		HttpResponse(w, http.StatusMethodNotAllowed, "Node already added", ctxt)
 		return
 	}
 
 	// Validate for required fields
 	if request.Hostname == "" || request.SshFingerprint == "" || request.User == "" || request.Password == "" {
-		logger.Get().Error("Required field(s) not provided")
-		util.HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided")
+		logger.Get().Error("Required field(s) not provided", ctxt)
+		HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided", ctxt)
 		return
 	}
 
@@ -87,7 +91,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 				}
 				defer a.GetLockManager().ReleaseLock(*appLock)
 				// Process the request
-				if err := addAndAcceptNode(w, request, t); err != nil {
+				if err := addAndAcceptNode(w, request, t, ctxt); err != nil {
 					t.UpdateStatus("Failed")
 					t.Done(models.TASK_STATUS_FAILURE)
 				} else {
@@ -99,10 +103,10 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Add and Accept Node: %s", request.Hostname), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
-		logger.Get().Error("Unable to create the task for Add and Accept Node: %s. error: %v", request.Hostname, err)
-		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
+		logger.Get().Error("Unable to create the task for Add and Accept Node: %s. error: %v", request.Hostname, err, ctxt)
+		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed", ctxt)
 	} else {
-		logger.Get().Debug("Task Created: ", taskId.String())
+		logger.Get().Debug("Task Created: ", taskId.String(), ctxt)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
@@ -115,31 +119,36 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 
 	var request models.UnmanagedNode
 
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
-		logger.Get().Error("Error parsing the request. error: %v", err)
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request. error: %v", err))
+		logger.Get().Error("Error parsing the request. error: %v", err, ctxt)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request. error: %v", err), ctxt)
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
-		logger.Get().Error("Unable to unmarshal request. error: %v", err)
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err))
+		logger.Get().Error("Unable to unmarshal request. error: %v", err, ctxt)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err), ctxt)
 		return
 	}
 
 	// Check if node already added
 	// No need to check for error, as node would be nil in case of error and the same is checked
 	if node, _ := node_exists("hostname", hostname); node != nil {
-		logger.Get().Error("Node:%s already added", hostname)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Node already added")
+		logger.Get().Error("Node:%s already added", hostname, ctxt)
+		HttpResponse(w, http.StatusMethodNotAllowed, "Node already added", ctxt)
 		return
 	}
 
 	// Validate for required fields
 	if hostname == "" || request.SaltFingerprint == "" {
-		logger.Get().Error("Required field(s) not provided")
-		util.HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided")
+		logger.Get().Error("Required field(s) not provided", ctxt)
+		HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided", ctxt)
 		return
 	}
 
@@ -158,7 +167,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 				}
 				defer a.GetLockManager().ReleaseLock(*appLock)
 				// Process the request
-				if err := acceptNode(w, hostname, request.SaltFingerprint, t); err != nil {
+				if err := acceptNode(w, hostname, request.SaltFingerprint, t, ctxt); err != nil {
 					t.UpdateStatus("Failed")
 					t.Done(models.TASK_STATUS_FAILURE)
 				} else {
@@ -170,33 +179,33 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Accept Node: %s", hostname), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
-		logger.Get().Error("Unable to create the task for Accept Node: %s. error: %v", hostname, err)
-		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
+		logger.Get().Error("Unable to create the task for Accept Node: %s. error: %v", hostname, err, ctxt)
+		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed", ctxt)
 	} else {
-		logger.Get().Debug("Task Created: ", taskId.String())
+		logger.Get().Debug("Task Created: ", taskId.String(), ctxt)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
 	}
 }
 
-func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task) error {
-	if _, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint); err == nil {
+func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task, ctxt string) error {
+	if _, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint, ctxt); err == nil {
 		t.UpdateStatus("Adding the node to DB: %s", hostname)
-		if err = AddStorageNodeToDB(hostname, models.NODE_STATE_INITIALIZING, models.STATUS_UP); err != nil {
-			logger.Get().Error("Unable to add the node:%s to DB. error: %v", hostname, err)
+		if err = AddStorageNodeToDB(hostname, models.NODE_STATE_INITIALIZING, models.STATUS_UP, ctxt); err != nil {
+			logger.Get().Error("Unable to add the node:%s to DB. error: %v", hostname, err, ctxt)
 			t.UpdateStatus("Unable to add the node:%s to DB. error: %v", hostname, err)
 			return err
 		}
 	} else {
-		logger.Get().Critical("Accepting the node: %s failed. error: %v", hostname, err)
+		logger.Get().Critical("Accepting the node: %s failed. error: %v", hostname, err, ctxt)
 		t.UpdateStatus("Accepting the node: %s failed. error: %v", hostname, err)
 		return err
 	}
 	return nil
 }
 
-func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeRequest, t *task.Task) error {
+func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeRequest, t *task.Task, ctxt string) error {
 	t.UpdateStatus("Bootstrapping the node")
 	// Add the node
 	if _, err := GetCoreNodeManager().AddNode(
@@ -205,23 +214,24 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 		uint(request.SshPort),
 		request.SshFingerprint,
 		request.User,
-		request.Password); err == nil {
+		request.Password,
+		ctxt); err == nil {
 		t.UpdateStatus("Adding the node to DB: %s", request.Hostname)
-		if err = AddStorageNodeToDB(request.Hostname, models.NODE_STATE_INITIALIZING, models.STATUS_UP); err != nil {
-			logger.Get().Error("Unable to add the node:%s to DB. error: %v", request.Hostname, err)
+		if err = AddStorageNodeToDB(request.Hostname, models.NODE_STATE_INITIALIZING, models.STATUS_UP, ctxt); err != nil {
+			logger.Get().Error("Unable to add the node:%s to DB. error: %v", request.Hostname, err, ctxt)
 			t.UpdateStatus("Unable to add the node:%s to DB. error: %v", request.Hostname, err)
 			return err
 		}
 
 	} else {
-		logger.Get().Critical("Bootstrapping the node: %s failed. error: %v: ", request.Hostname, err)
+		logger.Get().Critical("Bootstrapping the node: %s failed. error: %v: ", request.Hostname, err, ctxt)
 		t.UpdateStatus("Bootstrapping the node: %s failed. error: %v: ", request.Hostname, err)
 		return err
 	}
 	return nil
 }
 
-func AddStorageNodeToDB(hostname string, node_state int, node_status string) error {
+func AddStorageNodeToDB(hostname string, node_state int, node_status string, ctxt string) error {
 	// Add the node details to the DB
 	var storage_node models.Node
 	storage_node.Hostname = hostname
@@ -235,13 +245,13 @@ func AddStorageNodeToDB(hostname string, node_state int, node_status string) err
 	var node models.Node
 	err = coll.Find(bson.M{"hostname": storage_node.Hostname}).One(&node)
 	if err != mgo.ErrNotFound {
-		logger.Get().Critical(fmt.Sprintf("Node with name: %v already exists", storage_node.Hostname))
+		logger.Get().Critical(fmt.Sprintf("Node with name: %v already exists", storage_node.Hostname), ctxt)
 		return errors.New(fmt.Sprintf("Node with name: %v already exists", storage_node.Hostname))
 	}
 
 	// Persist the node details
 	if err := coll.Insert(storage_node); err != nil {
-		logger.Get().Critical("Error adding the node: %s. error: %v", storage_node.Hostname, err)
+		logger.Get().Critical("Error adding the node: %s. error: %v", storage_node.Hostname, err, ctxt)
 		return err
 	}
 	return nil
@@ -271,14 +281,14 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	var nodes models.Nodes
 	if admin_state_str == "" {
 		if err := collection.Find(nil).All(&nodes); err != nil {
-			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+			HttpResponse(w, http.StatusInternalServerError, err.Error())
 			logger.Get().Error("Error getting the nodes list. error: %v", err)
 			return
 		}
 	} else {
 		nodes, err = getNodesWithState(w, admin_state_str)
 		if err != nil {
-			util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+			HttpResponse(w, http.StatusInternalServerError, err.Error())
 			logger.Get().Error("Error getting the nodes list. error: %v", err)
 			return
 		}
@@ -296,7 +306,7 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 	node_id, err := uuid.Parse(node_id_str)
 	if err != nil {
 		logger.Get().Error("Error parsing node id: %s", node_id_str)
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s", node_id_str))
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s", node_id_str))
 		return
 	}
 
@@ -310,7 +320,7 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if node.Hostname == "" {
-		util.HttpResponse(w, http.StatusBadRequest, "Node not found")
+		HttpResponse(w, http.StatusBadRequest, "Node not found")
 		logger.Get().Error("Node: %v not found. error: %v", *node_id, err)
 		return
 	} else {
@@ -320,7 +330,7 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
 	if nodes, err := GetCoreNodeManager().GetUnmanagedNodes(); err != nil {
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		logger.Get().Error("No un-managed nodes found. error: %v", err)
 	} else {
 		if nodes == nil || len(*nodes) == 0 {
@@ -435,7 +445,7 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 	node_id, err := uuid.Parse(node_id_str)
 	if err != nil {
 		logger.Get().Error("Error parsing node id: %s. error: %v", node_id_str, err)
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s", node_id_str))
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s", node_id_str))
 		return
 	}
 
@@ -450,7 +460,7 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 	}
 	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove Node: %v", *node_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for remove node", err)
-		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
+		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
 	} else {
 		logger.Get().Debug("Task Created: ", taskId.String())
@@ -469,12 +479,12 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		logger.Get().Error("Error parsing the request. error: %v", err)
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request. error: %v", err))
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request. error: %v", err))
 		return
 	}
 	if err := json.Unmarshal(body, &nodeIds); err != nil {
 		logger.Get().Error("Unable to unmarshal request. error: %v", err)
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err))
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err))
 		return
 	}
 	var failedNodes []string
@@ -500,7 +510,7 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 	if taskId, err := a.GetTaskManager().Run("Remove Multiple Nodes", asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create the task for remove multiple nodes", err)
-		util.HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
+		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
 	} else {
 		logger.Get().Debug("Task Created: ", taskId.String())
@@ -515,7 +525,7 @@ func (a *App) GET_Disks(w http.ResponseWriter, r *http.Request) {
 	node_id_str := vars["node-id"]
 	node_id, err := uuid.Parse(node_id_str)
 	if err != nil {
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", node_id_str, err))
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", node_id_str, err))
 		return
 	}
 	sessionCopy := db.GetDatastore().Copy()
@@ -525,12 +535,12 @@ func (a *App) GET_Disks(w http.ResponseWriter, r *http.Request) {
 	var node models.Node
 	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
 		logger.Get().Error(fmt.Sprintf("Error getting the node detail for node: %s. error: %v", node_id_str, err))
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	if err := json.NewEncoder(w).Encode(node.StorageDisks); err != nil {
 		logger.Get().Error("Error encoding the data: %v", err)
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
 }
 
@@ -539,14 +549,14 @@ func (a *App) GET_Disk(w http.ResponseWriter, r *http.Request) {
 	node_id_str := vars["node-id"]
 	node_id, err := uuid.Parse(node_id_str)
 	if err != nil {
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", node_id_str, err))
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", node_id_str, err))
 		return
 	}
 
 	disk_id_str := vars["disk-id"]
 	disk_id, err := uuid.Parse(disk_id_str)
 	if err != nil {
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing disk id: %s. Error: %v", disk_id_str, err))
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing disk id: %s. Error: %v", disk_id_str, err))
 		return
 	}
 
@@ -557,7 +567,7 @@ func (a *App) GET_Disk(w http.ResponseWriter, r *http.Request) {
 	var node models.Node
 	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
 		logger.Get().Error(fmt.Sprintf("Error getting the node detail for node: %s. error: %v", node_id_str, err))
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	var mdisk models.Disk
@@ -569,7 +579,7 @@ func (a *App) GET_Disk(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := json.NewEncoder(w).Encode(mdisk); err != nil {
 		logger.Get().Error("Error encoding data: %v", err)
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
 
 }
@@ -579,14 +589,14 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	node_id_str := vars["node-id"]
 	node_id, err := uuid.Parse(node_id_str)
 	if err != nil {
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", node_id_str, err))
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", node_id_str, err))
 		return
 	}
 
 	disk_id_str := vars["disk-id"]
 	disk_id, err := uuid.Parse(disk_id_str)
 	if err != nil {
-		util.HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", disk_id_str, err))
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", disk_id_str, err))
 		return
 	}
 
@@ -597,21 +607,21 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	var node models.Node
 	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
 		logger.Get().Error(fmt.Sprintf("Error getting the node detail for node: %s. error: %v", node_id_str, err))
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		logger.Get().Error("Error parsing http request body:%s", err)
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	var m map[string]interface{}
 
 	if err = json.Unmarshal(body, &m); err != nil {
 		logger.Get().Error("Unable to Unmarshall the data:%s", err)
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -630,6 +640,6 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	err = collection.Update(bson.M{"nodeid": *node_id}, bson.M{"$set": node})
 	if err != nil {
 		logger.Get().Error(fmt.Sprintf("Error updating record in DB for node: %s. error: %v", node_id_str, err))
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
 }

@@ -49,8 +49,8 @@ func NewSaltNodeManager(config io.Reader) (*SaltNodeManager, error) {
 	return &SaltNodeManager{}, nil
 }
 
-func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (bool, error) {
-	if status, err := salt_backend.AcceptNode(node, fingerprint, false); err != nil {
+func (a SaltNodeManager) AcceptNode(node string, fingerprint string, ctxt string) (bool, error) {
+	if status, err := salt_backend.AcceptNode(node, fingerprint, false, ctxt); err != nil {
 		return false, err
 	} else if !status {
 		return false, errors.New(fmt.Sprintf("Unable to accept the node: %s", node))
@@ -60,8 +60,8 @@ func (a SaltNodeManager) AcceptNode(node string, fingerprint string) (bool, erro
 	}
 }
 
-func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error) {
-	if status, err := salt_backend.AddNode(master, node, port, fingerprint, username, password); err != nil {
+func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerprint string, username string, password string, ctxt string) (bool, error) {
+	if status, err := salt_backend.AddNode(master, node, port, fingerprint, username, password, ctxt); err != nil {
 		return false, err
 	} else if !status {
 		return false, errors.New(fmt.Sprintf("Unable to add the node: %s", node))

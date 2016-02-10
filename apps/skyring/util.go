@@ -13,7 +13,10 @@ limitations under the License.
 package skyring
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/gorilla/context"
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
 	"github.com/skyrings/skyring-common/models"
@@ -22,7 +25,12 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
 	"gopkg.in/mgo.v2/bson"
+	"net/http"
 )
+
+type APIError struct {
+	Error string
+}
 
 func lockNode(nodeId uuid.UUID, hostname string, operation string) (*lock.AppLock, error) {
 	//lock the node
@@ -89,4 +97,36 @@ func getClusterNodesFromRequest(clusterNodes []models.ClusterNode) (models.Nodes
 	}
 	return nodes, nil
 
+}
+
+func HandleHttpError(rw http.ResponseWriter, err error) {
+	bytes, _ := json.Marshal(APIError{Error: err.Error()})
+	rw.WriteHeader(http.StatusInternalServerError)
+	rw.Write(bytes)
+}
+
+func HttpResponse(w http.ResponseWriter, status_code int, msg string, args ...string) {
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+	w.WriteHeader(status_code)
+	var ctxt string
+	if len(args) > 0 {
+		ctxt = args[0]
+	}
+	if err := json.NewEncoder(w).Encode(msg); err != nil {
+		logger.Get().Error("Error: %v", err, ctxt)
+	}
+	return
+}
+
+func GetContext(r *http.Request) (string, error) {
+
+	val, ok := context.GetOk(r, LoggingCtxt)
+	if !ok {
+		return "", errors.New("Error Geeting the Context")
+	}
+	token, ok := val.(string)
+	if !ok {
+		return "", errors.New("Error Geeting the Context")
+	}
+	return token, nil
 }

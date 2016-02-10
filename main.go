@@ -176,6 +176,9 @@ func start() {
 	)
 	n.UseHandler(router)
 
+	//Add the logging context middleware
+	n.Use(negroni.HandlerFunc(application.LoggingContext))
+
 	//Initialize the application, db, auth etc
 	if err := application.InitializeApplication(conf.SystemConfig); err != nil {
 		logger.Get().Fatalf("Unable to initialize the application. err: %v", err)

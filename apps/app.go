@@ -15,10 +15,12 @@ package app
 import (
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring-common/conf"
+	"net/http"
 )
 
 type Application interface {
 	SetRoutes(container *mux.Router) error
 	StartProviders(configDir string, binDir string) error
 	InitializeApplication(sysConfig conf.SkyringCollection) error
+	LoggingContext(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
 }

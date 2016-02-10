@@ -32,9 +32,9 @@ type NodeList struct {
 }
 
 type Backend interface {
-	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error)
-	AcceptNode(node string, fingerprint string, ignored bool) (bool, error)
-	BootstrapNode(master string, node string, port uint, fingerprint string, username string, password string) (string, error)
+	AddNode(master string, node string, port uint, fingerprint string, username string, password string, ctxt string) (bool, error)
+	AcceptNode(node string, fingerprint string, ignored bool, ctxt string) (bool, error)
+	BootstrapNode(master string, node string, port uint, fingerprint string, username string, password string, ctxt string) (string, error)
 	GetNodes() (NodeList, error)
 	GetNodeID(node string) (uuid.UUID, error)
 	GetNodeDisk(node string) ([]models.Disk, error)
