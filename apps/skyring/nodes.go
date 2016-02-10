@@ -341,14 +341,13 @@ func (a *App) GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetNode(node_id uuid.UUID) (interface{}, error) {
+func GetNode(node_id uuid.UUID) (node models.Node, err error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	var node models.Node
 	if err := collection.Find(bson.M{"nodeid": node_id}).One(&node); err != nil {
-		return nil, fmt.Errorf("Error getting the detail of node: %v. error: %v", node_id, err)
+		return node, fmt.Errorf("Error getting the detail of node: %v. error: %v", node_id, err)
 	}
 
 	return node, nil
