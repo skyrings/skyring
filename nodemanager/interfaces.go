@@ -18,12 +18,12 @@ import (
 )
 
 type NodeManagerInterface interface {
-	AcceptNode(node string, fingerprint string) (bool, error)
-	AddNode(master string, node string, port uint, fingerprint string, username string, password string) (bool, error)
+	AcceptNode(node string, fingerprint string, ctxt string) (bool, error)
+	AddNode(master string, node string, port uint, fingerprint string, username string, password string, ctxt string) (bool, error)
 	GetUnmanagedNodes() (*models.UnmanagedNodes, error)
 	DisableNode(node string) (bool, error)
 	EnableNode(node string) (bool, error)
-	SyncStorageDisks(node string, sProfiles []models.StorageProfile) (bool, error)
+	SyncStorageDisks(node string, sProfiles []models.StorageProfile, ctxt string) (bool, error)
 	RemoveNode(node string) (bool, error)
 	IgnoreNode(node string) (bool, error)
 	AddMonitoringPlugin(nodes []string, master string, plugin monitoring.Plugin) (failed_nodes map[string]interface{}, err error)

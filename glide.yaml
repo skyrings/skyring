@@ -36,3 +36,5 @@ import:
   version: 256d65ac5b0e35e7c5ebb3f175c0bed1e5c2b253
 - package: github.com/marpaia/graphite-golang
   version: bea0c295debd84f9c80050cea3c6aeb3dd448f7c
+- package: github.com/gorilla/context
+  version: 1c83b3eabd45b6d76072b66b746c20815fb2872d

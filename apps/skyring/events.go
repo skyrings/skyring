@@ -19,7 +19,6 @@ import (
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/uuid"
-	"github.com/skyrings/skyring-common/utils"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 )
@@ -36,7 +35,7 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 		node_id, err := uuid.Parse(node_id_str)
 		if err != nil {
 			logger.Get().Error("Error parsing node id: %s. error: %v", node_id_str, err)
-			util.HandleHttpError(rw, err)
+			HandleHttpError(rw, err)
 			return
 		}
 		err = collection.Find(bson.M{"nodeid": *node_id}).All(&events)
@@ -44,7 +43,7 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 		cluster_id, err := uuid.Parse(cluster_id_str)
 		if err != nil {
 			logger.Get().Error("Error parsing cluster id: %s. error: %v", cluster_id_str, err)
-			util.HandleHttpError(rw, err)
+			HandleHttpError(rw, err)
 			return
 		}
 		err = collection.Find(bson.M{"clusterid": *cluster_id}).All(&events)
@@ -54,7 +53,7 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		logger.Get().Error("Error getting record from DB: %v", err)
-		util.HandleHttpError(rw, err)
+		HandleHttpError(rw, err)
 		return
 	}
 	if len(events) == 0 {
