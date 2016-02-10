@@ -863,7 +863,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 				t.UpdateStatus("Disabling post actions on the cluster")
 				// Disable any POST actions on cluster
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
+				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": false, "state": models.CLUSTER_STATE_UNMANAGED}}); err != nil {
 					util.FailTask(fmt.Sprintf("Error disabling post actions on cluster: %v", *cluster_id), err, t)
 					return
 				}
@@ -953,7 +953,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 				t.UpdateStatus("Enabling post actions on the cluster")
 				// Enable any POST actions on cluster
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
+				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": true, "state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
 					util.FailTask(fmt.Sprintf("Error enabling post actions on cluster: %v", *cluster_id), err, t)
 					return
 				}
