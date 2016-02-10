@@ -50,10 +50,10 @@ def _get_keys(match='*'):
             'rejected_nodes': keys.get('minions_rejected', {})}
 
 
-def AcceptNode(node, fingerprint, include_rejected=False):
+def AcceptNode(node, fingerprint, include_rejected=False, ctxt=""):
     d = _get_keys(node)
     if d['accepted_nodes'].get(node):
-        log.info("node %s already in accepted node list" % node)
+        log.info("%s-node %s already in accepted node list" % (ctxt, node))
         return True
 
     finger = d['unaccepted_nodes'].get(node)
@@ -61,12 +61,12 @@ def AcceptNode(node, fingerprint, include_rejected=False):
         if include_rejected:
             finger = d['rejected_nodes'].get(node)
     if not finger:
-        log.warn("node %s not in unaccepted/rejected node list" % node)
+        log.warn("%s-node %s not in unaccepted/rejected node list" % (ctxt, node))
         return False
 
     if finger != fingerprint:
-        log.error(("node %s minion fingerprint does not match %s != %s" %
-                   (node, finger, fingerprint)))
+        log.error(("%s-node %s minion fingerprint does not match %s != %s" %
+                   (ctxt, node, finger, fingerprint)))
         return False
 
     skey = salt.key.Key(opts)
@@ -152,7 +152,7 @@ def GetNodeNetwork(node):
     return netinfo
 
 
-def GetNodeDisk(node):
+def GetNodeDisk(node, ctxt=""):
     '''
     returns structure
     {"nodename": [{"DevName":   "devicename",

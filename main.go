@@ -174,6 +174,9 @@ func start() {
 		negroni.NewLogger(),
 		negroni.NewStatic(http.Dir(staticFileDir)),
 	)
+	//Add the logging context middleware
+	n.Use(negroni.HandlerFunc(application.LoggingContext))
+
 	n.UseHandler(router)
 
 	//Initialize the application, db, auth etc
