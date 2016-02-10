@@ -13,6 +13,7 @@ limitations under the License.
 package event
 
 import (
+	"errors"
 	"fmt"
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
@@ -21,6 +22,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/nodemanager/saltnodemanager"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"os"
 	"time"
@@ -193,7 +195,12 @@ func updateStorageNodeToDB(storage_node models.Node) error {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-
+	var node models.Node
+	err := coll.Find(bson.M{"nodeid": storage_node.NodeId}).One(&node)
+	if err != mgo.ErrNotFound {
+		logger.Get().Critical(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
+		return errors.New(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
+	}
 	storage_node.State = models.NODE_STATE_ACTIVE
 	if err := coll.Update(bson.M{"hostname": storage_node.Hostname}, storage_node); err != nil {
 		logger.Get().Critical("Error Updating the node: %s. error: %v", storage_node.Hostname, err)
