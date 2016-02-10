@@ -23,7 +23,6 @@ import (
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/schedule"
 	"github.com/skyrings/skyring-common/tools/uuid"
-	"github.com/skyrings/skyring-common/utils"
 	"net/http"
 	"strings"
 	"sync"
@@ -70,7 +69,7 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	entity_id_str := vars["entity-id"]
 	entity_id, entityIdParseError := uuid.Parse(entity_id_str)
 	if entityIdParseError != nil {
-		util.HttpResponse(w, http.StatusBadRequest, entityIdParseError.Error())
+		HttpResponse(w, http.StatusBadRequest, entityIdParseError.Error())
 		logger.Get().Error(entityIdParseError.Error())
 		return
 	}
@@ -78,7 +77,7 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	entity_type := vars["entity-type"]
 	entityName, entityNameError := getEntityName(entity_type, *entity_id)
 	if entityNameError != nil {
-		util.HttpResponse(w, http.StatusBadRequest, entityNameError.Error())
+		HttpResponse(w, http.StatusBadRequest, entityNameError.Error())
 		logger.Get().Error(entityNameError.Error())
 		return
 	}
@@ -103,7 +102,7 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		json.NewEncoder(w).Encode(res)
 	} else {
-		util.HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
 }
 
