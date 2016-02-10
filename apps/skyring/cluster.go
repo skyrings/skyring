@@ -887,10 +887,10 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 		util.HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing cluster id: %s", cluster_id))
 		return
 	}
-	ok, err := ClusterDisabled(*uuid)
+	ok, err := ClusterUnmanaged(*uuid)
 	if err != nil {
-		logger.Get().Error("Error checking enabled state of cluster. error: %v", err)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking enabled state of cluster")
+		logger.Get().Error("Error checking managed state of cluster. error: %v", err)
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if !ok {
@@ -1024,10 +1024,10 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ok, err := ClusterDisabled(*cluster_id)
+	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
-		logger.Get().Error("Error checking enabled state of cluster: %v. error: %v", *cluster_id, err)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking enabled state of cluster")
+		logger.Get().Error("Error checking managed state of cluster: %v. error: %v", *cluster_id, err)
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if ok {
@@ -1082,7 +1082,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 				t.UpdateStatus("Disabling post actions on the cluster")
 				// Disable any POST actions on cluster
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": false}}); err != nil {
+				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_UNMANAGED}}); err != nil {
 					util.FailTask(fmt.Sprintf("Error disabling post actions on cluster: %v", *cluster_id), err, t)
 					return
 				}
@@ -1114,10 +1114,10 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ok, err := ClusterDisabled(*cluster_id)
+	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
-		logger.Get().Error("Error checking enabled state of cluster: %v. error: %v", *cluster_id, err)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking enabled state of cluster")
+		logger.Get().Error("Error checking managed state of cluster: %v. error: %v", *cluster_id, err)
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if !ok {
@@ -1172,7 +1172,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 				t.UpdateStatus("Enabling post actions on the cluster")
 				// Enable any POST actions on cluster
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"enabled": true}}); err != nil {
+				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
 					util.FailTask(fmt.Sprintf("Error enabling post actions on cluster: %v", *cluster_id), err, t)
 					return
 				}
@@ -1204,15 +1204,15 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ok, err := ClusterDisabled(*cluster_id)
+	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
-		logger.Get().Error("Error checking enabled state of cluster: %v. error: %v", *cluster_id, err)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking enabled state of cluster")
+		logger.Get().Error("Error checking managed state of cluster: %v. error: %v", *cluster_id, err)
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if ok {
-		logger.Get().Error("Cluster: %v is in disabled state", *cluster_id)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in disabled state")
+		logger.Get().Error("Cluster: %v is in un-managed state", *cluster_id)
+		util.HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in un-managed state")
 		return
 	}
 
@@ -1494,7 +1494,7 @@ func disks_used(nodes []models.ClusterNode) (bool, error) {
 	return false, nil
 }
 
-func ClusterDisabled(cluster_id uuid.UUID) (bool, error) {
+func ClusterUnmanaged(cluster_id uuid.UUID) (bool, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
@@ -1502,7 +1502,7 @@ func ClusterDisabled(cluster_id uuid.UUID) (bool, error) {
 	if err := collection.Find(bson.M{"clusterid": cluster_id}).One(&cluster); err != nil {
 		return false, err
 	}
-	if cluster.Enabled == false {
+	if cluster.State == models.CLUSTER_STATE_UNMANAGED {
 		return true, nil
 	} else {
 		return false, nil
