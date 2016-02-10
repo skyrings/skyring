@@ -387,6 +387,21 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.DELETE_StorageProfile,
 			Version:     1,
 		},
+		//Routes for mail notifier Management
+		{
+			Name:        "GET_mailnotifier",
+			Method:      "GET",
+			Pattern:     "mailnotifier",
+			HandlerFunc: a.GetMailNotifier,
+			Version:     1,
+		},
+		{
+			Name:        "POST_mailnotifier",
+			Method:      "POST",
+			Pattern:     "mailnotifier",
+			HandlerFunc: a.AddMailNotifier,
+			Version:     1,
+		},
 	}
 	for _, route := range routes {
 		CORE_ROUTES = append(CORE_ROUTES, route)
