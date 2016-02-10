@@ -23,41 +23,67 @@ import (
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/schedule"
 	"github.com/skyrings/skyring-common/tools/uuid"
+	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"strings"
 	"sync"
 	"time"
 )
 
-var entityIdGetEntityMap = map[string]interface{}{
-	"node":    GetNode,
-	"cluster": GetCluster,
+func GetSLU(cluster_id *uuid.UUID, slu_id uuid.UUID) (slu models.StorageLogicalUnit, err error) {
+	if cluster_id == nil {
+		return slu, fmt.Errorf("Cluster Id not available for slu with id %v", slu_id)
+	}
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	if err := coll.Find(bson.M{"clusterid": *cluster_id, "sluid": slu_id}).One(&slu); err != nil {
+		return slu, fmt.Errorf("Error getting the slu: %v for cluster: %v. error: %v", slu_id, *cluster_id, err)
+	}
+	if slu.Name == "" {
+		return slu, fmt.Errorf("Slu: %v not found for cluster: %v", slu_id, *cluster_id)
+	}
+	return slu, nil
 }
 
-func getEntityName(entity_type string, entity_id uuid.UUID) (string, error) {
-	getEntityFunc, getEntityNameOk := entityIdGetEntityMap[entity_type].(func(uuid.UUID) (interface{}, error))
-	if !getEntityNameOk {
-		return "", fmt.Errorf("Unsupported type %v", entity_type)
-	}
-	entity, entityFetchErr := getEntityFunc(entity_id)
-	if entityFetchErr != nil {
-		return "", fmt.Errorf("Unknown %v with id %v.Err %v", entity_type, entity_id, entityFetchErr)
-	}
+func getEntityName(entity_type string, entity_id uuid.UUID, parentId *uuid.UUID) (string, error) {
 	switch entity_type {
-	case "node":
-		entity, entityConvertOk := entity.(models.Node)
-		if !entityConvertOk {
-			return "", fmt.Errorf("%v not a valid id of %v", entity_id, entity_type)
+	case monitoring.NODE:
+		entity, entityFetchErr := GetNode(entity_id)
+		if entityFetchErr != nil {
+			return "", fmt.Errorf("Unknown %v with id %v.Err %v", entity_type, entity_id, entityFetchErr)
 		}
 		return entity.Hostname, nil
-	case "cluster":
-		entity, entityConvertOk := entity.(models.Cluster)
-		if !entityConvertOk {
-			return "", fmt.Errorf("%v not a valid id of %v", entity_id, entity_type)
+	case monitoring.CLUSTER:
+		entity, entityFetchErr := GetCluster(&entity_id)
+		if entityFetchErr != nil {
+			return "", fmt.Errorf("Unknown %v with id %v.Err %v", entity_type, entity_id, entityFetchErr)
+		}
+		return entity.Name, nil
+	case monitoring.SLU:
+		entity, entityFetchErr := GetSLU(parentId, entity_id)
+		if entityFetchErr != nil {
+			return "", fmt.Errorf("%v not a valid id of %v.Err %v", entity_id, entity_type, entityFetchErr)
 		}
 		return entity.Name, nil
 	}
 	return "", fmt.Errorf("Unsupported entity type %v", entity_type)
+}
+
+var entityParentMap = map[string]string{
+	monitoring.SLU: monitoring.CLUSTER,
+}
+
+func getParentName(queriedEntityType string, parentId uuid.UUID) (string, error) {
+	switch queriedEntityType {
+	case monitoring.SLU:
+		parent, parentFetchErr := GetCluster(&parentId)
+		if parentFetchErr != nil {
+			return "", fmt.Errorf("%v not a valid id of %v.Error %v", parentId, monitoring.CLUSTER, parentFetchErr)
+		}
+		return parent.Name, nil
+	}
+	return "", nil
 }
 
 func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
@@ -67,6 +93,13 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	entity_id_str := vars["entity-id"]
+	entity_type := vars["entity-type"]
+
+	params := r.URL.Query()
+	resource_name := params.Get("resource")
+	duration := params.Get("duration")
+	parent_id_str := params.Get("parent_id")
+
 	entity_id, entityIdParseError := uuid.Parse(entity_id_str)
 	if entityIdParseError != nil {
 		HttpResponse(w, http.StatusBadRequest, entityIdParseError.Error())
@@ -74,17 +107,31 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	entity_type := vars["entity-type"]
-	entityName, entityNameError := getEntityName(entity_type, *entity_id)
+	var parent_id *uuid.UUID
+	var parentError error
+	var parentName string
+	if parent_id_str != "" {
+		parent_id, parentError = uuid.Parse(parent_id_str)
+		if parentError != nil {
+			HttpResponse(w, http.StatusBadRequest, parentError.Error())
+			logger.Get().Error(parentError.Error())
+			return
+		}
+
+		parentName, parentError = getParentName(entity_type, *parent_id)
+		if parentError != nil {
+			HttpResponse(w, http.StatusBadRequest, parentError.Error())
+			logger.Get().Error(parentError.Error())
+			return
+		}
+	}
+
+	entityName, entityNameError := getEntityName(entity_type, *entity_id, parent_id)
 	if entityNameError != nil {
 		HttpResponse(w, http.StatusBadRequest, entityNameError.Error())
 		logger.Get().Error(entityNameError.Error())
 		return
 	}
-
-	params := r.URL.Query()
-	resource_name := params.Get("resource")
-	duration := params.Get("duration")
 
 	if duration != "" {
 		if strings.Contains(duration, ",") {
@@ -97,6 +144,9 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	}
 
 	paramsToQuery := map[string]interface{}{"nodename": entityName, "resource": resource_name, "start_time": start_time, "end_time": end_time, "interval": interval}
+	if parentName != "" {
+		paramsToQuery["parentName"] = parentName
+	}
 
 	res, err := GetMonitoringManager().QueryDB(paramsToQuery)
 	if err == nil {
