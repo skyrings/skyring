@@ -478,6 +478,11 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 		user.NotificationEnabled = n
 	}
 
+	if val, ok := m["status"]; ok {
+		s := val.(bool)
+		user.Status = s
+	}
+
 	if updated {
 		err = a.userDao.SaveUser(user)
 		if err != nil {
