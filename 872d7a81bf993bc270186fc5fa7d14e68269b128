@@ -16,6 +16,24 @@
       "revId": "872d7a81bf993bc270186fc5fa7d14e68269b128",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_7daeade7",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-11T11:19:41Z",
+      "side": 1,
+      "message": "Yes because, earlier I assumed all functions of this kind would take a uuid and have a lot of such things in common and so I had made it generic but this patch adds SLU utilization and looks like slu id is supposed to be unique only within a cluster and not necessarily across clusters(I got this opinion after going through an api for getting slu). So, with this the get entity function would potentially differ b/w entity types and hence no generality can be drawn. I feel if it were such that the id for an entity type is guranteed to be unique the objective of generality can be achieved but currently although I speak only in view of monitoring, I feel this potentially can be really useful. Anyway we are generating the ids so we can probably afford to see that they are unique for gaining the advantage of code generalisation and hence less code.",
+      "parentUuid": "fa81d914_dd4f9969",
+      "revId": "872d7a81bf993bc270186fc5fa7d14e68269b128",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
