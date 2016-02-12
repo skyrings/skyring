@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_c804321a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-12T09:46:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_e8ed76b8",
+      "revId": "9d7ecb56dc463a2b2c0da3adc9a3cc756a11b62a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_88415aab",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-12T08:37:07Z",
       "side": 1,
       "message": "Why blank context?",
+      "revId": "9d7ecb56dc463a2b2c0da3adc9a3cc756a11b62a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_88279ac9",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1323,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-12T09:46:07Z",
+      "side": 1,
+      "message": "This is not implemented for expand cluster. Since the the signature changed while supporting the create cluster case ,[passing blank for campatebility",
+      "parentUuid": "fa81d914_88415aab",
       "revId": "9d7ecb56dc463a2b2c0da3adc9a3cc756a11b62a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_4811225c",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-12T09:46:07Z",
+      "side": 1,
+      "message": "As discussed, this is the negroni handler and the control will come here before invoking the actual handlers. after executing this, this will invoke the next handler in the chain by the call next()",
+      "parentUuid": "fa81d914_6887c6d7",
+      "revId": "9d7ecb56dc463a2b2c0da3adc9a3cc756a11b62a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_4859228d",
         "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2016-02-12T08:37:07Z",
       "side": 1,
       "message": "Blank context?",
+      "revId": "9d7ecb56dc463a2b2c0da3adc9a3cc756a11b62a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a80b7e28",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-12T09:46:07Z",
+      "side": 1,
+      "message": "As in the earlier case, just for compatibility. will be removed when its taken care for this func",
+      "parentUuid": "fa81d914_4859228d",
       "revId": "9d7ecb56dc463a2b2c0da3adc9a3cc756a11b62a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
