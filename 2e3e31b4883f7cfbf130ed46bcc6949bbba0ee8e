@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_a3955f88",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-12T10:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_08664a2a",
+      "range": {
+        "startLine": 37,
+        "startChar": 32,
+        "endLine": 37,
+        "endChar": 35
+      },
+      "revId": "2e3e31b4883f7cfbf130ed46bcc6949bbba0ee8e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_88795aca",
         "filename": "apps/skyring/notifier.go",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_c30173b0",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-12T10:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_88795aca",
+      "range": {
+        "startLine": 65,
+        "startChar": 1,
+        "endLine": 65,
+        "endChar": 2
+      },
+      "revId": "2e3e31b4883f7cfbf130ed46bcc6949bbba0ee8e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_c87fd2a9",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2016-02-12T09:36:46Z",
       "side": 1,
       "message": "Do we need an API to modify as well?",
+      "range": {
+        "startLine": 411,
+        "startChar": 1,
+        "endLine": 411,
+        "endChar": 2
+      },
+      "revId": "2e3e31b4883f7cfbf130ed46bcc6949bbba0ee8e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_e3fe77ad",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-12T10:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_c87fd2a9",
       "range": {
         "startLine": 411,
         "startChar": 1,
