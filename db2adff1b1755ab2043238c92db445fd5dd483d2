@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_032f0b40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-12T10:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_11c20059",
+      "revId": "db2adff1b1755ab2043238c92db445fd5dd483d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_71d09c1f",
         "filename": "apps/skyring/notifier.go",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-10T14:37:11Z",
       "side": 1,
       "message": "Does this list password as well???",
+      "revId": "db2adff1b1755ab2043238c92db445fd5dd483d2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_a339dfd8",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-12T10:44:54Z",
+      "side": 1,
+      "message": "removed this",
+      "parentUuid": "fa81d914_71d09c1f",
       "revId": "db2adff1b1755ab2043238c92db445fd5dd483d2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
