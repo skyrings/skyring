@@ -17,6 +17,7 @@ import (
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
 	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/notifier"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring/apps/skyring"
@@ -68,6 +69,17 @@ func drive_add_handler(event models.Event) error {
 }
 
 func drive_remove_handler(event models.Event) error {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var node models.Node
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := coll.Find(bson.M{"nodeid": event.NodeId}).One(&node); err != nil {
+		logger.Get().Error("Node information read from DB failed for node: %s. error: %v", event.NodeId, err)
+		return nil
+	}
+	subject := fmt.Sprintf("Warning: Storage Drive Removed from %s", node.Hostname)
+	body := event.Message
+	notifier.MailNotify(subject, body)
 	return nil
 }
 
