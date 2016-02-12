@@ -188,6 +188,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 								if err := syncStorageDisks(request.Nodes, ctxt); err != nil {
 									t.UpdateStatus("Failed")
 									t.Done(models.TASK_STATUS_FAILURE)
+									break
 								} else {
 									t.UpdateStatus("Scheduling monitoring")
 									cluster, err = cluster_exists("name", request.Name)
@@ -201,10 +202,6 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 									t.Done(models.TASK_STATUS_SUCCESS)
 									break
 								}
-							} else if providerTask.Status == models.TASK_STATUS_FAILURE {
-								t.UpdateStatus("Failed")
-								t.Done(models.TASK_STATUS_FAILURE)
-								logger.Get().Debug("%s-Task Status Failed###Breaking now", ctxt)
 							}
 						}
 					}
@@ -251,6 +248,13 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Failed to add monitoring configuration for cluster: %v.Error %v", *cluster_id, clusterFetchErr))
 		return
 	}
+
+	if cluster.State == models.CLUSTER_STATE_UNMANAGED {
+		logger.Get().Error("Cluster: %v is in un-managed state", *cluster_id)
+		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in un-managed state")
+		return
+	}
+
 	for _, plugin := range cluster.Monitoring.Plugins {
 		if plugin.Name == request.Name {
 			logger.Get().Error("Plugin %v already exists on cluster %v", request.Name, cluster.Name)
@@ -376,6 +380,13 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Failed to get cluster with id %v. error: %v", cluster_id, clusterFetchErr))
 		return
 	}
+
+	if cluster.State == models.CLUSTER_STATE_UNMANAGED {
+		logger.Get().Error("Cluster: %v is in un-managed state", cluster_id_uuid)
+		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in un-managed state")
+		return
+	}
+
 	nodes, err := getClusterNodesById(cluster_id_uuid)
 	if err != nil {
 		logger.Get().Error("Failed to get nodes of cluster id %v. error: %v", cluster_id, err)
@@ -480,6 +491,13 @@ func (a *App) POST_froceUpdateMonitoringConfiguration(w http.ResponseWriter, r *
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
+
+	if cluster.State == models.CLUSTER_STATE_UNMANAGED {
+		logger.Get().Error("Cluster: %v is in un-managed state", *cluster_id)
+		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in un-managed state")
+		return
+	}
+
 	if len(cluster.Monitoring.StaleNodes) == 0 {
 		logger.Get().Error("All nodes in the cluster %v have fresh monitoring configurations", cluster.Name)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("All nodes in the cluster %v have fresh monitoring configurations", cluster.Name))
@@ -554,6 +572,13 @@ func monitoringPluginActivationDeactivations(enable bool, plugin_name string, cl
 		logger.Get().Error("Error getting cluster with id: %v. error: %v", *cluster_id, err)
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
+
+	if cluster.State == models.CLUSTER_STATE_UNMANAGED {
+		logger.Get().Error("Cluster: %v is in un-managed state", *cluster_id)
+		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in un-managed state")
+		return
+	}
+
 	plugin_index := -1
 	for index, plugin := range cluster.Monitoring.Plugins {
 		if plugin.Name == plugin_name {
@@ -705,6 +730,13 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Failed to remove plugin %s for cluster: %v.Error %v", *uuid, plugin_name, clusterFetchErr))
 		return
 	}
+
+	if cluster.State == models.CLUSTER_STATE_UNMANAGED {
+		logger.Get().Error("Cluster: %v is in un-managed state", *uuid)
+		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in un-managed state")
+		return
+	}
+
 	nodes, nodesFetchError := getClusterNodesById(uuid)
 	if nodesFetchError != nil {
 		logger.Get().Error("Unbale to get nodes for cluster: %v. error: %v", *uuid, nodesFetchError)
