@@ -20,6 +20,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/logger"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 const (
@@ -145,7 +146,42 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 
 func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 
-	users, err := GetAuthProvider().ListExternalUsers()
+	var err error
+	pageNo := 1 //Default page number or Home page number
+	pageNumberStr := req.URL.Query().Get("pageNo")
+	if pageNumberStr != "" {
+		pageNo, err = strconv.Atoi(pageNumberStr)
+		// Check for invalid input or conversion error
+		if err != nil {
+			logger.Get().Error("Error getting pageno:%s", err)
+			HandleHttpError(rw, err)
+			return
+		}
+		// Pressing back button from ui on page 1 may request for
+		// page 0. Set page number to home page / first page number
+		// (which is number 1) if the request page no is negative
+		if pageNo < 1 {
+			pageNo = 1
+		}
+	}
+
+	pageSize := models.LDAP_USERS_PER_PAGE //Default page size
+	pageSizeStr := req.URL.Query().Get("pageSize")
+	if pageSizeStr != "" {
+		pageSize, err = strconv.Atoi(pageSizeStr)
+		// Check for invalid input or conversion error
+		if err != nil {
+			logger.Get().Error("Error getting pagesize:%s", err)
+			HandleHttpError(rw, err)
+			return
+		}
+		if pageSize > models.LDAP_USERS_PER_PAGE || pageSize < 1 {
+			pageSize = models.LDAP_USERS_PER_PAGE
+		}
+	}
+
+	search := req.URL.Query().Get("search")
+	externalUsers, err := GetAuthProvider().ListExternalUsers(search, pageNo, pageSize)
 	if err != nil {
 		logger.Get().Error("Unable to List the users:%s", err)
 		HandleHttpError(rw, err)
@@ -157,8 +193,17 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 		Hash         bool `json:"hash,omitempty"`
 		Notification bool `json:"notification,omitempty"`
 	}
+
+	type userList struct {
+		TotalCount int          `json:"totalcount"`
+		StartIndex int          `json:"startindex"`
+		EndIndex   int          `json:"endindex"`
+		Users      []PublicUser `json:"users"`
+	}
+
 	var pUsers []PublicUser
-	for _, user := range users {
+
+	for _, user := range externalUsers.Users {
 
 		pUsers = append(pUsers, PublicUser{
 			User: &models.User{Username: user.Username,
@@ -172,8 +217,9 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 				NotificationEnabled: user.NotificationEnabled},
 		})
 	}
+	users := userList{externalUsers.TotalCount, externalUsers.StartIndex, externalUsers.EndIndex, pUsers}
 	//marshal and send it across
-	bytes, err := json.Marshal(pUsers)
+	bytes, err := json.Marshal(users)
 	if err != nil {
 		logger.Get().Error("Unable to marshal the list of Users:%s", err)
 		HandleHttpError(rw, err)
