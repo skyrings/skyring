@@ -77,6 +77,7 @@ type Directory struct {
 	Uid         string
 	FullName    string
 	DisplayName string
+	Email       string
 }
 
 func Authenticate(a Authorizer, url string, user string, passwd string) error {
@@ -174,6 +175,7 @@ func NewAuthorizer(userDao dao.UserInterface, providerCfg LdapProviderCfg) (Auth
 	a.directory.Uid = providerCfg.LdapServer.Uid
 	a.directory.FullName = providerCfg.LdapServer.FullName
 	a.directory.DisplayName = providerCfg.LdapServer.DisplayName
+	a.directory.Email = providerCfg.LdapServer.Email
 	a.roles = providerCfg.UserRoles.Roles
 	a.defaultRole = providerCfg.UserRoles.DefaultRole
 	a.defaultGroup = providerCfg.UserGroups.DefaultGroup
@@ -260,11 +262,12 @@ func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
 }
 
 // List the LDAP users
-func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
+func (a Authorizer) ListExternalUsers(search string, page, count int) (users []models.User, err error) {
 	url := GetUrl(a.directory.Address, a.directory.Port)
 	Uid := "Uid"
 	DisplayName := "DisplayName"
 	FullName := "CN"
+	Email := "Mail"
 	if a.directory.Uid != "" {
 		Uid = a.directory.Uid
 	}
@@ -273,6 +276,9 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 	}
 	if a.directory.FullName != "" {
 		FullName = a.directory.FullName
+	}
+	if a.directory.Email != "" {
+		Email = a.directory.Email
 	}
 
 	ldap, err := openldap.Initialize(url)
@@ -290,9 +296,24 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 	}
 
 	scope := openldap.LDAP_SCOPE_SUBTREE
+	// If the search string is empty, it will list all the users
+	// If the search string contains 'mail=tjey*' it will returns the list of all
+	// users start with 'tjey'
+	// If the search string contains 'tim' this will return list of all users
+	// names contains the word 'tim'
+	// Possible search strings 'mail=t*redhat.com' / 'tim*' / '*john*' / '*peter'
 	filter := "(objectclass=*)"
-	attributes := []string{Uid, DisplayName, FullName, "Mail"}
+	if len(search) > 0 {
+		if strings.Contains(search, "=") {
+			filter = fmt.Sprintf("(%s*)", search)
+		} else if strings.Contains(search, "*") {
+			filter = fmt.Sprintf("(cn=%s)", search)
+		} else {
+			filter = fmt.Sprintf("(cn=*%s*)", search)
+		}
+	}
 
+	attributes := []string{Uid, DisplayName, FullName, Email}
 	rv, err := ldap.SearchAll(a.directory.Base, scope, filter, attributes)
 
 	if err != nil {
@@ -300,14 +321,28 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 		return nil, err
 	}
 
+	from := (page-1)*count + 1
+	to := from + count - 1
+	i := 0
+	if count == 0 {
+		count = 1000 // Maximum possible lines
+	}
+
 	for _, entry := range rv.Entries() {
+		i++
+		if i < from {
+			continue
+		}
+		if i > to {
+			break
+		}
 		user := models.User{}
 		fullName := ""
 		for _, attr := range entry.Attributes() {
 			switch attr.Name() {
 			case Uid:
 				user.Username = strings.Join(attr.Values(), ", ")
-			case "Mail":
+			case Email:
 				user.Email = strings.Join(attr.Values(), ", ")
 			case DisplayName:
 				user.FirstName = strings.Join(attr.Values(), ", ")
@@ -320,7 +355,6 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 					user.LastName = strings.TrimSpace(lastName[1])
 				}
 			}
-
 		}
 		// Assiging the default roles
 		user.Role = a.defaultRole

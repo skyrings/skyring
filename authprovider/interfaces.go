@@ -37,5 +37,5 @@ type AuthInterface interface {
 	GetUser(username string, req *http.Request) (models.User, error)
 	ListUsers() ([]models.User, error)
 	DeleteUser(username string) error
-	ListExternalUsers() ([]models.User, error)
+	ListExternalUsers(searchstr string, page, no int) ([]models.User, error)
 }

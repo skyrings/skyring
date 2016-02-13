@@ -20,6 +20,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/logger"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 const (
@@ -145,7 +146,24 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 
 func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 
-	users, err := GetAuthProvider().ListExternalUsers()
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Get().Error("Error parsing http request body:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+
+	var m map[string]interface{}
+	if err = json.Unmarshal(body, &m); err != nil {
+		logger.Get().Error("Unable to Unmarshall the data:%s, %s", err, m)
+		HandleHttpError(rw, err)
+		return
+	}
+
+	page, _ := strconv.Atoi(m["page"].(string))
+	count, _ := strconv.Atoi(m["count"].(string))
+
+	users, err := GetAuthProvider().ListExternalUsers(m["search"].(string), page, count)
 	if err != nil {
 		logger.Get().Error("Unable to List the users:%s", err)
 		HandleHttpError(rw, err)

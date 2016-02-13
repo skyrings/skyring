@@ -147,8 +147,8 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
-			Name:        "IMPORT_users",
-			Method:      "GET",
+			Name:        "POST_users",
+			Method:      "POST",
 			Pattern:     "externalusers",
 			HandlerFunc: a.getExternalUsers,
 			Version:     1,
