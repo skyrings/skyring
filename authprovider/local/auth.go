@@ -358,3 +358,11 @@ func (a Authorizer) DeleteUser(username string) error {
 	}
 	return nil
 }
+
+func (a Authorizer) GetDirectory() (directory models.Directory, err error) {
+	return directory, errors.New("Not Supported")
+}
+
+func (a Authorizer) SetDirectory(directory models.Directory) error {
+	return errors.New("Not Supported")
+}

@@ -174,6 +174,21 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.modifyUsers,
 			Version:     1,
 		},
+		//Routes for LDAP Settings
+		{
+			Name:        "GET_ldap",
+			Method:      "GET",
+			Pattern:     "ldap",
+			HandlerFunc: a.getLdapConfig,
+			Version:     1,
+		},
+		{
+			Name:        "POST_ldap",
+			Method:      "POST",
+			Pattern:     "ldap",
+			HandlerFunc: a.configLdap,
+			Version:     1,
+		},
 		//Routes for Task Management
 		{
 			Name:        "GET_tasks",
