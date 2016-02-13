@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa81d914_3457e7cb",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-13T07:18:37Z",
+      "side": 1,
+      "message": "The framework needs extensions in a few places to accomodate any such requirements in future.",
+      "parentUuid": "fa81d914_a50ba728",
+      "range": {
+        "startLine": 111,
+        "startChar": 6,
+        "endLine": 113,
+        "endChar": 22
+      },
+      "revId": "872d7a81bf993bc270186fc5fa7d14e68269b128",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_dd4f9969",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 1
@@ -90,6 +114,24 @@
       "side": 1,
       "message": "Also if thats the case that sluid (to be specific here OSD id) is going to unique within a cluster, there are chances that there are duplicate sluids across clusters.\nIn that case it would like, clusterId + sluid only can be uniquely identify the SLU instance in skyring.\n@Nishanth, in that I feel we should maintain another ID created by skyring to uniquely identify the instance..",
       "parentUuid": "fa81d914_45110b5c",
+      "revId": "872d7a81bf993bc270186fc5fa7d14e68269b128",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_545c5bed",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-13T07:18:37Z",
+      "side": 1,
+      "message": "Shubhendu +1, I also feel we should probably maintain an identifier unique to an entity type across entities of this type for it adds an advantage to the user of having to pass(having to remember as well :) ) very less details to identify and perform actions on it.But internally we might maintain the the ids/details that we require to perform the requested actions on the backend side",
+      "parentUuid": "fa81d914_0802ca09",
       "revId": "872d7a81bf993bc270186fc5fa7d14e68269b128",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
