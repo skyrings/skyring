@@ -77,6 +77,7 @@ type Directory struct {
 	Uid         string
 	FullName    string
 	DisplayName string
+	Email       string
 }
 
 func Authenticate(a Authorizer, url string, user string, passwd string) error {
@@ -174,6 +175,7 @@ func NewAuthorizer(userDao dao.UserInterface, providerCfg LdapProviderCfg) (Auth
 	a.directory.Uid = providerCfg.LdapServer.Uid
 	a.directory.FullName = providerCfg.LdapServer.FullName
 	a.directory.DisplayName = providerCfg.LdapServer.DisplayName
+	a.directory.Email = providerCfg.LdapServer.Email
 	a.roles = providerCfg.UserRoles.Roles
 	a.defaultRole = providerCfg.UserRoles.DefaultRole
 	a.defaultGroup = providerCfg.UserGroups.DefaultGroup
@@ -260,11 +262,12 @@ func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
 }
 
 // List the LDAP users
-func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
+func (a Authorizer) ListExternalUsers(search string, page, count int) (externalUsers models.ExternalUsers, err error) {
 	url := GetUrl(a.directory.Address, a.directory.Port)
 	Uid := "Uid"
 	DisplayName := "DisplayName"
 	FullName := "CN"
+	Email := "Mail"
 	if a.directory.Uid != "" {
 		Uid = a.directory.Uid
 	}
@@ -274,40 +277,68 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 	if a.directory.FullName != "" {
 		FullName = a.directory.FullName
 	}
+	if a.directory.Email != "" {
+		Email = a.directory.Email
+	}
 
 	ldap, err := openldap.Initialize(url)
 	if err != nil {
 		logger.Get().Error("failed to connect the LDAP/AD server. error: %v", err)
-		return nil, err
+		return externalUsers, err
 	}
 
 	if a.directory.DomainAdmin != "" {
 		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", Uid, a.directory.DomainAdmin, a.directory.Base), a.directory.Password)
 		if err != nil {
 			logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
-			return nil, err
+			return externalUsers, err
 		}
 	}
 
 	scope := openldap.LDAP_SCOPE_SUBTREE
+	// If the search string is empty, it will list all the users
+	// If the search string contains 'mail=tjey*' it will returns the list of all
+	// users start with 'tjey'
+	// If the search string contains 'tim' this will return list of all users
+	// names contains the word 'tim'
+	// Possible search strings 'mail=t*redhat.com' / 'tim*' / '*john*' / '*peter'
 	filter := "(objectclass=*)"
-	attributes := []string{Uid, DisplayName, FullName, "Mail"}
-
-	rv, err := ldap.SearchAll(a.directory.Base, scope, filter, attributes)
-
-	if err != nil {
-		logger.Get().Error("Failed to search LDAP/AD server. error: %v", err)
-		return nil, err
+	if len(search) > 0 {
+		if strings.Contains(search, "=") {
+			filter = fmt.Sprintf("(%s*)", search)
+		} else if strings.Contains(search, "*") {
+			filter = fmt.Sprintf("(cn=%s)", search)
+		} else {
+			filter = fmt.Sprintf("(cn=*%s*)", search)
+		}
 	}
 
+	attributes := []string{Uid, DisplayName, FullName, Email}
+	rv, err := ldap.SearchAll(a.directory.Base, scope, filter, attributes)
+	if err != nil {
+		logger.Get().Error("Failed to search LDAP/AD server. error: %v", err)
+		return externalUsers, err
+	}
+
+	from := (page-1)*count + 1
+	to := from + count - 1
+	i := 0
+
 	for _, entry := range rv.Entries() {
+		i++
+		if i < from {
+			continue
+		}
+		if i > to {
+			break
+		}
 		user := models.User{}
 		fullName := ""
 		for _, attr := range entry.Attributes() {
 			switch attr.Name() {
 			case Uid:
 				user.Username = strings.Join(attr.Values(), ", ")
-			case "Mail":
+			case Email:
 				user.Email = strings.Join(attr.Values(), ", ")
 			case DisplayName:
 				user.FirstName = strings.Join(attr.Values(), ", ")
@@ -320,17 +351,22 @@ func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
 					user.LastName = strings.TrimSpace(lastName[1])
 				}
 			}
-
 		}
 		// Assiging the default roles
 		user.Role = a.defaultRole
 		user.Groups = append(user.Groups, a.defaultGroup)
 		user.Type = authprovider.External
 		if len(user.Username) != 0 {
-			users = append(users, user)
+			externalUsers.Users = append(externalUsers.Users, user)
 		}
 	}
-	return users, nil
+	externalUsers.TotalCount = rv.Count()
+	externalUsers.StartIndex = from
+	externalUsers.EndIndex = to
+	if externalUsers.EndIndex > externalUsers.TotalCount {
+		externalUsers.EndIndex = externalUsers.TotalCount
+	}
+	return externalUsers, nil
 }
 
 // List the users in DB

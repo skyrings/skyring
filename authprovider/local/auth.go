@@ -344,8 +344,8 @@ func (a Authorizer) ListUsers() (users []models.User, err error) {
 	return users, nil
 }
 
-func (a Authorizer) ListExternalUsers() (users []models.User, err error) {
-	return users, errors.New("Not Supported")
+func (a Authorizer) ListExternalUsers(search string, page, count int) (externalUsers models.ExternalUsers, err error) {
+	return externalUsers, errors.New("Not Supported")
 }
 
 // DeleteUser removes a user from the Authorize. ErrMissingUser is returned if
