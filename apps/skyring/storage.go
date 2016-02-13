@@ -55,12 +55,12 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
 		logger.Get().Error("Error checking managed state of cluster: %v. error: %v", *cluster_id, err)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error checking managed state of cluster: %v", *cluster_id))
+		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error checking managed state of cluster: %v", *cluster_id))
 		return
 	}
 	if ok {
 		logger.Get().Error("Cluster: %v is in un-managed state", *cluster_id)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %v is in un-managed state", *cluster_id))
+		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %v is in un-managed state", *cluster_id))
 		return
 	}
 

@@ -895,7 +895,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 	ok, err := ClusterUnmanaged(*uuid)
 	if err != nil {
 		logger.Get().Error("Error checking managed state of cluster. error: %v", err)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
+		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 	}
 	if !ok {
 		logger.Get().Error("Cluster: %v is not in un-managed state. Cannot run forget.", *uuid)
@@ -1031,7 +1031,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
 		logger.Get().Error("Error checking managed state of cluster: %v. error: %v", *cluster_id, err)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
+		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if ok {
@@ -1121,7 +1121,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
 		logger.Get().Error("Error checking managed state of cluster: %v. error: %v", *cluster_id, err)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
+		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if !ok {
@@ -1211,12 +1211,12 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
 		logger.Get().Error("Error checking managed state of cluster: %v. error: %v", *cluster_id, err)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
+		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if ok {
 		logger.Get().Error("Cluster: %v is in un-managed state", *cluster_id)
-		util.HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in un-managed state")
+		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in un-managed state")
 		return
 	}
 
