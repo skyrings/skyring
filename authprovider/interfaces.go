@@ -38,4 +38,5 @@ type AuthInterface interface {
 	ListUsers() ([]models.User, error)
 	DeleteUser(username string) error
 	ListExternalUsers(searchstr string, page, no int) ([]models.User, error)
+	SetDirectory(directory models.Directory) error
 }

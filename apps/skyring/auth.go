@@ -301,3 +301,59 @@ func parseAuthRequestBody(req *http.Request, user *models.User) error {
 	}
 	return nil
 }
+
+func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
+
+	var directory models.Directory
+
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Get().Error("Error parsing http request body:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	var m map[string]interface{}
+
+	if err = json.Unmarshal(body, &m); err != nil {
+		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	//var password string
+	if val, ok := m["ldapserver"]; ok {
+		directory.LdapServer = val.(string)
+	}
+	if val, ok := m["port"]; ok {
+		directory.Port = int(val.(float64))
+	}
+	if val, ok := m["base"]; ok {
+		directory.Base = val.(string)
+	}
+	if val, ok := m["domainadmin"]; ok {
+		directory.DomainAdmin = val.(string)
+	}
+	if val, ok := m["password"]; ok {
+		directory.Password = val.(string)
+	}
+	if val, ok := m["uid"]; ok {
+		directory.Uid = val.(string)
+	}
+	if val, ok := m["firstname"]; ok {
+		directory.FirstName = val.(string)
+	}
+	if val, ok := m["lastname"]; ok {
+		directory.LastName = val.(string)
+	}
+	if val, ok := m["displayname"]; ok {
+		directory.DisplayName = val.(string)
+	}
+	if val, ok := m["email"]; ok {
+		directory.Email = val.(string)
+	}
+
+	if err := GetAuthProvider().SetDirectory(directory); err != nil {
+		logger.Get().Error("Unable to configure directory service:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+}
