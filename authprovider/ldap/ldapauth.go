@@ -13,23 +13,28 @@ limitations under the License.
 package ldapauthprovider
 
 import (
-	"encoding/json"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
 	"errors"
 	"fmt"
 	"github.com/mqu/openldap"
+	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/dao"
+	"github.com/skyrings/skyring-common/db"
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/authprovider"
 	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/mgo.v2/bson"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"strings"
 )
 
 const ProviderName = "ldapauthprovider"
+const CipherKey = "Skyring - RedHat"
 
 // ErrDeleteNull is returned by DeleteUser when that user didn't exist at the
 // time of call.
@@ -47,58 +52,35 @@ type Role int
 // to a backend storage system.
 type Authorizer struct {
 	userDao      dao.UserInterface
-	directory    Directory
+	directory    models.Directory
 	defaultGroup string
 	defaultRole  string
 	roles        map[string]Role
 }
 
-type LdapProviderCfg struct {
-	LdapServer Directory  `json:"ldapserver"`
-	UserRoles  RolesConf  `json:"userroles"`
-	UserGroups GroupsConf `json:"usergroups"`
-}
+func Authenticate(directory models.Directory, url string, user string, passwd string) error {
+	if len(directory.Base) == 0 || len(passwd) == 0 {
+		logger.Get().Error("Failed to find any LDAP configuration")
+		return mkerror("Failed to find any LDAP configuration")
+	}
 
-type GroupsConf struct {
-	DefaultGroup string
-}
-
-type RolesConf struct {
-	Roles       map[string]Role
-	DefaultRole string
-}
-
-type Directory struct {
-	Address     string
-	Port        int
-	Base        string
-	DomainAdmin string
-	Password    string
-	Uid         string
-	FullName    string
-	DisplayName string
-	Email       string
-}
-
-func Authenticate(a Authorizer, url string, user string, passwd string) error {
 	ldap, err := openldap.Initialize(url)
 
 	if err != nil {
 		logger.Get().Error("Failed to connect the server. error: %v", err)
 		return err
 	}
-
 	ldap.SetOption(openldap.LDAP_OPT_PROTOCOL_VERSION, openldap.LDAP_VERSION3)
-	if a.directory.Uid != "" {
-		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", a.directory.Uid, user, a.directory.Base), passwd)
+	if directory.Uid != "" {
+		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", directory.Uid, user, directory.Base), passwd)
 
 		if err != nil {
 			logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
 			return err
 		}
 	} else {
-		if ldap.Bind(fmt.Sprintf("uid=%s,%s", user, a.directory.Base), passwd) != nil {
-			err = ldap.Bind(fmt.Sprintf("cn=%s,%s", user, a.directory.Base), passwd)
+		if ldap.Bind(fmt.Sprintf("uid=%s,%s", user, directory.Base), passwd) != nil {
+			err = ldap.Bind(fmt.Sprintf("cn=%s,%s", user, directory.Base), passwd)
 			if err != nil {
 				logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
 				return err
@@ -108,14 +90,18 @@ func Authenticate(a Authorizer, url string, user string, passwd string) error {
 	return nil
 }
 
-func GetUrl(ldapserver string, port int) string {
+func GetUrl(ldapserver string, port uint) string {
 	return fmt.Sprintf("ldap://%s:%d/", ldapserver, port)
 }
 
 func LdapAuth(a Authorizer, user, passwd string) bool {
-	url := GetUrl(a.directory.Address, a.directory.Port)
+	directory, err := a.GetDirectory()
+	if err != nil {
+		return false
+	}
+	url := GetUrl(directory.LdapServer, directory.Port)
 	// Authenticating user
-	err := Authenticate(a, url, user, passwd)
+	err = Authenticate(directory, url, user, passwd)
 	if err != nil {
 		logger.Get().Error("Authentication failed for user: %s. error: %v", user, err)
 		return false
@@ -142,20 +128,17 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 		return nil, fmt.Errorf(errStr)
 	}
 
-	providerCfg := LdapProviderCfg{}
-
-	bytes, err := ioutil.ReadAll(config)
-	if err != nil {
-		logger.Get().Error("Error reading Configuration file. error: %v", err)
-		return nil, err
-	}
-	if err = json.Unmarshal(bytes, &providerCfg); err != nil {
-		logger.Get().Error("Unable to Unmarshall the data. error: %v", err)
-		return nil, err
-	}
 	userDao := skyring.GetDbProvider().UserInterface()
+
+	session := db.GetDatastore()
+	c := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_LDAP)
+	ldapDao := models.Directory{}
+	err := c.Find(bson.M{}).One(&ldapDao)
+	if err != nil {
+		logger.Get().Info("Failed to open ldap db collection:%s", err)
+	}
 	//Create the Provider
-	if provider, err := NewAuthorizer(userDao, providerCfg); err != nil {
+	if provider, err := NewAuthorizer(userDao, ldapDao); err != nil {
 		logger.Get().Error("Unable to initialize the authorizer for Ldapauthprovider. error: %v", err)
 		panic(err)
 	} else {
@@ -164,25 +147,19 @@ func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
 
 }
 
-func NewAuthorizer(userDao dao.UserInterface, providerCfg LdapProviderCfg) (Authorizer, error) {
+func NewAuthorizer(userDao dao.UserInterface, ldapDao models.Directory) (Authorizer, error) {
 	var a Authorizer
 	a.userDao = userDao
-	a.directory.Address = providerCfg.LdapServer.Address
-	a.directory.Port = providerCfg.LdapServer.Port
-	a.directory.Base = providerCfg.LdapServer.Base
-	a.directory.DomainAdmin = providerCfg.LdapServer.DomainAdmin
-	a.directory.Password = providerCfg.LdapServer.Password
-	a.directory.Uid = providerCfg.LdapServer.Uid
-	a.directory.FullName = providerCfg.LdapServer.FullName
-	a.directory.DisplayName = providerCfg.LdapServer.DisplayName
-	a.directory.Email = providerCfg.LdapServer.Email
-	a.roles = providerCfg.UserRoles.Roles
-	a.defaultRole = providerCfg.UserRoles.DefaultRole
-	a.defaultGroup = providerCfg.UserGroups.DefaultGroup
-	if _, ok := a.roles[a.defaultRole]; !ok {
-		logger.Get().Error("Default role provided is not valid")
-		return a, mkerror("defaultRole missing")
-	}
+	a.directory.LdapServer = ldapDao.LdapServer
+	a.directory.Port = ldapDao.Port
+	a.directory.Base = ldapDao.Base
+	a.directory.DomainAdmin = ldapDao.DomainAdmin
+	a.directory.Password = ldapDao.Password
+	a.directory.Uid = ldapDao.Uid
+	a.directory.FirstName = ldapDao.FirstName
+	a.directory.DisplayName = ldapDao.DisplayName
+	a.directory.LastName = ldapDao.LastName
+	a.directory.Email = ldapDao.Email
 	return a, nil
 }
 
@@ -263,22 +240,30 @@ func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
 
 // List the LDAP users
 func (a Authorizer) ListExternalUsers(search string, page, count int) (externalUsers models.ExternalUsers, err error) {
-	url := GetUrl(a.directory.Address, a.directory.Port)
+	directory, err := a.GetDirectory()
+	if err != nil {
+		return externalUsers, err
+	}
+	url := GetUrl(directory.LdapServer, directory.Port)
 	Uid := "Uid"
 	DisplayName := "DisplayName"
-	FullName := "CN"
-	Email := "Mail"
-	if a.directory.Uid != "" {
-		Uid = a.directory.Uid
+	FirstName := "CN"
+	LastName := "SN"
+	Email := "mail"
+	if directory.Uid != "" {
+		Uid = directory.Uid
 	}
-	if a.directory.DisplayName != "" {
-		DisplayName = a.directory.DisplayName
+	if directory.DisplayName != "" {
+		DisplayName = directory.DisplayName
 	}
-	if a.directory.FullName != "" {
-		FullName = a.directory.FullName
+	if directory.FirstName != "" {
+		FirstName = directory.FirstName
 	}
-	if a.directory.Email != "" {
-		Email = a.directory.Email
+	if directory.LastName != "" {
+		LastName = directory.LastName
+	}
+	if directory.Email != "" {
+		Email = directory.Email
 	}
 
 	ldap, err := openldap.Initialize(url)
@@ -287,8 +272,20 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 		return externalUsers, err
 	}
 
-	if a.directory.DomainAdmin != "" {
-		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", Uid, a.directory.DomainAdmin, a.directory.Base), a.directory.Password)
+	if directory.DomainAdmin != "" {
+		block, err := aes.NewCipher([]byte(CipherKey))
+		if err != nil {
+			logger.Get().Error("failed to generate new cipher")
+			return externalUsers, nil
+		}
+
+		ciphertext := []byte(directory.Password)
+		iv := ciphertext[:aes.BlockSize]
+		stream := cipher.NewOFB(block, iv)
+		hkey := make([]byte, 100)
+		stream = cipher.NewOFB(block, iv)
+		stream.XORKeyStream(hkey, ciphertext[aes.BlockSize:])
+		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", Uid, directory.DomainAdmin, directory.Base), string(hkey))
 		if err != nil {
 			logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
 			return externalUsers, err
@@ -313,8 +310,9 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 		}
 	}
 
-	attributes := []string{Uid, DisplayName, FullName, Email}
-	rv, err := ldap.SearchAll(a.directory.Base, scope, filter, attributes)
+	attributes := []string{Uid, DisplayName, FirstName, LastName, Email}
+	rv, err := ldap.SearchAll(directory.Base, scope, filter, attributes)
+
 	if err != nil {
 		logger.Get().Error("Failed to search LDAP/AD server. error: %v", err)
 		return externalUsers, err
@@ -333,23 +331,16 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 			break
 		}
 		user := models.User{}
-		fullName := ""
 		for _, attr := range entry.Attributes() {
 			switch attr.Name() {
 			case Uid:
 				user.Username = strings.Join(attr.Values(), ", ")
 			case Email:
 				user.Email = strings.Join(attr.Values(), ", ")
-			case DisplayName:
+			case FirstName:
 				user.FirstName = strings.Join(attr.Values(), ", ")
-			case FullName:
-				fullName = strings.Join(attr.Values(), ", ")
-			}
-			if len(fullName) != 0 && len(user.FirstName) != 0 {
-				lastName := strings.Split(fullName, user.FirstName)
-				if len(lastName) > 1 {
-					user.LastName = strings.TrimSpace(lastName[1])
-				}
+			case LastName:
+				user.LastName = strings.Join(attr.Values(), ", ")
 			}
 		}
 		// Assiging the default roles
@@ -551,5 +542,66 @@ func (a Authorizer) DeleteUser(username string) error {
 		logger.Get().Error("Unable to delete the user: %s. error: %v", username, err)
 		return err
 	}
+	return nil
+}
+
+func (a Authorizer) GetDirectory() (directory models.Directory, err error) {
+	session := db.GetDatastore()
+	c := session.DB("skyring").C("ldap")
+	val, err := c.Count()
+	if val > 0 {
+		err = c.Find(bson.M{}).One(&directory)
+		if err != nil {
+			logger.Get().Error("Failed to get ldap config details %s", err)
+			return directory, err
+		}
+	}
+	return directory, nil
+}
+
+func (a Authorizer) SetDirectory(directory models.Directory) error {
+	if directory.LdapServer == "" {
+		logger.Get().Error("no directory server name provided")
+		return mkerror("no directory server name provided")
+	}
+	if directory.Port == 0 {
+		logger.Get().Error("no directory server port number provided")
+		return mkerror("no directory server port number provided")
+	}
+	if directory.Base == "" {
+		logger.Get().Error("no directory server connection string provided")
+		return mkerror("no directory server connection string provided")
+	}
+
+	session := db.GetDatastore()
+	c := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_LDAP)
+	val, err := c.Count()
+	if err != nil {
+		logger.Get().Error("failed to get ldap records count")
+		return mkerror("failed to get ldap records count")
+	}
+	if val > 0 {
+		c.RemoveAll(nil)
+	}
+
+	pswd := []byte(directory.Password)
+	block, err := aes.NewCipher([]byte(CipherKey))
+	if err != nil {
+		logger.Get().Info("Failed to generate cipher:%s", err)
+		return mkerror("Failed to generate cipher")
+	}
+	chkey := make([]byte, aes.BlockSize+len(pswd))
+	iv := chkey[:aes.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		logger.Get().Info("Failed to configure ldap:%s", err)
+		return mkerror("Failed to configure ldap")
+	}
+	stream := cipher.NewOFB(block, iv)
+	stream.XORKeyStream(chkey[aes.BlockSize:], pswd)
+
+	err = c.Insert(&models.Directory{directory.LdapServer, directory.Port, directory.Base,
+		directory.DomainAdmin, string(chkey), directory.Uid,
+		directory.FirstName, directory.LastName, directory.DisplayName, directory.Email})
+
 	return nil
 }

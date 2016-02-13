@@ -247,7 +247,7 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 		user.Role = val.(string)
 	}
 	if val, ok := m["type"]; ok {
-		user.Type = int(val.(float64))
+		user.Type = val.(int)
 	}
 	if val, ok := m["firstname"]; ok {
 		user.FirstName = val.(string)
@@ -319,4 +319,87 @@ func parseAuthRequestBody(req *http.Request, user *models.User) error {
 		return errors.New(err.Error())
 	}
 	return nil
+}
+
+func (a *App) getLdapConfig(rw http.ResponseWriter, req *http.Request) {
+	ldapConfig, err := GetAuthProvider().GetDirectory()
+	if err != nil {
+		logger.Get().Error("Unable to reterive directory service configuration:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+
+	json.NewEncoder(rw).Encode(
+		struct {
+			LdapServer  string `json:"ldapserver"`
+			Port        uint   `json:"port"`
+			Base        string `json:"base"`
+			DomainAdmin string `json:"domainadmin"`
+			Password    string `json:"password"`
+			Uid         string `json:"uid"`
+			FirstName   string `json:"firstname"`
+			LastName    string `json:"lastname"`
+			DisplayName string `json:"displayname"`
+			Email       string `json:"email"`
+		}{ldapConfig.LdapServer, ldapConfig.Port, ldapConfig.Base, ldapConfig.DomainAdmin,
+			"", ldapConfig.Uid, ldapConfig.FirstName, ldapConfig.LastName,
+			ldapConfig.DisplayName, ldapConfig.Email})
+}
+
+func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
+
+	var directory models.Directory
+
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Get().Error("Error parsing http request body:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	var m map[string]interface{}
+
+	if err = json.Unmarshal(body, &m); err != nil {
+		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+
+	//var password string
+	if val, ok := m["ldapserver"]; ok {
+		directory.LdapServer = val.(string)
+	}
+	if val, ok := m["port"]; ok {
+		directory.Port = uint(val.(float64))
+	}
+	logger.Get().Info("Port :%d", directory.Port)
+	if val, ok := m["base"]; ok {
+		directory.Base = val.(string)
+	}
+	if val, ok := m["domainadmin"]; ok {
+		directory.DomainAdmin = val.(string)
+	}
+	if val, ok := m["password"]; ok {
+		directory.Password = val.(string)
+	}
+	if val, ok := m["uid"]; ok {
+		directory.Uid = val.(string)
+	}
+	if val, ok := m["firstname"]; ok {
+		directory.FirstName = val.(string)
+	}
+	if val, ok := m["lastname"]; ok {
+		directory.LastName = val.(string)
+	}
+	if val, ok := m["displayname"]; ok {
+		directory.DisplayName = val.(string)
+	}
+	if val, ok := m["email"]; ok {
+		directory.Email = val.(string)
+	}
+
+	if err := GetAuthProvider().SetDirectory(directory); err != nil {
+		logger.Get().Error("Unable to configure directory service:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
 }
