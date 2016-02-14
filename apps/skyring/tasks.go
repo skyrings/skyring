@@ -12,6 +12,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -55,16 +56,36 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 	}
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 	var tasks []models.AppTask
+	pageNo, pageNoErr := strconv.Atoi(req.URL.Query().Get("pageNo"))
+	pageSize, pageSizeErr := strconv.Atoi(req.URL.Query().Get("pageSize"))
+
 	if err := coll.Find(filter).All(&tasks); err != nil {
 		logger.Get().Error("Unable to get tasks. error: %v", err)
 		HttpResponse(rw, http.StatusInternalServerError, err.Error())
 		return
 
 	}
+
 	if len(tasks) == 0 {
 		json.NewEncoder(rw).Encode([]models.AppTask{})
 	} else {
-		json.NewEncoder(rw).Encode(tasks)
+		var startIndex int = 0
+		var endIndex int = models.TASKS_PER_PAGE
+		if pageNoErr == nil && pageSizeErr == nil {
+			startIndex, endIndex = Paginate(pageNo, pageSize, models.TASKS_PER_PAGE)
+		}
+		if endIndex > len(tasks) {
+			endIndex = len(tasks) - 1
+		}
+
+		json.NewEncoder(rw).Encode(
+			struct {
+				Totalcount int              `json:"totalcount"`
+				Startindex int              `json:"startindex"`
+				Endindex   int              `json:"endindex"`
+				Tasks      []models.AppTask `json:"tasks"`
+			}{len(tasks), startIndex, endIndex, tasks[startIndex : endIndex+1]})
+
 	}
 }
 
