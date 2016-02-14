@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_3691ac47",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-14T14:55:31Z",
+      "side": 1,
+      "message": "What happens if user passed an invalid number say \"xyz\" for the value of page?\n\nWe should handle the errors while parsing the numeric values?",
+      "revId": "6c3973677458cdf01403e7cfde659076c2efcce0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa81d914_56962040",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-14T14:55:31Z",
+      "side": 1,
+      "message": "How POST for a getter function?",
+      "revId": "6c3973677458cdf01403e7cfde659076c2efcce0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
