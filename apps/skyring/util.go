@@ -130,3 +130,16 @@ func GetContext(r *http.Request) (string, error) {
 	}
 	return token, nil
 }
+
+func Paginate(pageNo int, pageSize int, apiLimit int) (startIndex int, endIndex int) {
+	if pageNo < 1 {
+		pageNo = 1
+	}
+
+	if pageSize < 1 || pageSize > apiLimit {
+		pageSize = apiLimit
+	}
+	startIndex = (pageNo - 1) * pageSize
+	endIndex = pageSize + startIndex - 1
+	return startIndex, endIndex
+}
