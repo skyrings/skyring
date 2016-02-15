@@ -47,6 +47,7 @@ var funcNames = [...]string{
 	"EnableMonitoringPlugin",
 	"DisableMonitoringPlugin",
 	"RemoveMonitoringPlugin",
+	"SyncModules",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -288,6 +289,18 @@ func (s Salt) NodeUp(node string) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["NodeUp"].Call(node); loc_err == nil {
+		err = gopy.Convert(pyobj, &status)
+	} else {
+		status = false
+		err = loc_err
+	}
+	return
+}
+
+func (s Salt) SyncModules(node string) (status bool, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if pyobj, loc_err := pyFuncs["SyncModules"].Call(node); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
 	} else {
 		status = false

@@ -367,6 +367,11 @@ def EnableService(node, service, start=False):
     return out[node]
 
 
+def SyncModules(node):
+    out = local.cmd(node, 'saltutil.sync_all')
+    return out[node]
+
+
 def NodeUp(node):
     out = local.cmd(node, 'test.ping')
     return True if out.has_key(node) and out[node] else False

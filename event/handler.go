@@ -180,6 +180,12 @@ func initializeStorageNode(node string, t *task.Task) error {
 				return err
 			}
 		}
+		if ok, err := skyring.GetCoreNodeManager().SyncModules(node); !ok || err != nil {
+			logger.Get().Error("Failed to sync modules on the node: %s. error: %v", node, err)
+			t.UpdateStatus("Failed to sync modules")
+			updateNodeState(node, models.NODE_STATE_FAILED)
+			return err
+		}
 		return nil
 	} else {
 		logger.Get().Critical("Error getting the details for node: %s", node)

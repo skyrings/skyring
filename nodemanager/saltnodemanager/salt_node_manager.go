@@ -276,6 +276,13 @@ func (a SaltNodeManager) AddMonitoringPlugin(nodes []string, master string, plug
 	return failed_nodes, err
 }
 
+func (a SaltNodeManager) SyncModules(node string) (bool, error) {
+	if ok, err := salt_backend.SyncModules(node); !ok || err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
 func applyStorageProfile(disk *models.Disk, sProfiles []models.StorageProfile) error {
 
 	for _, sProfile := range sProfiles {
