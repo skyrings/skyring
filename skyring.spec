@@ -40,6 +40,9 @@ Requires: python-cpopen
 Requires: python-netaddr
 Requires: mongodb
 Requires: mongodb-server
+Requires: graphite-web
+Requires: python-carbon
+Requires: python-whisper
 
 %description
 SkyRing is a modern, extensible web-based storage management platform
@@ -76,6 +79,8 @@ install -d $RPM_BUILD_ROOT/%{python2_sitelib}/skyring
 install -D backend/salt/python/skyring/* $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/
 install -D -p -m 0644 misc/systemd/%{name}d.service %{buildroot}%{_unitdir}/%{name}d.service
 install -D -p -m 0755 misc/etc.init/%{name}.initd %{buildroot}%{_sysconfdir}/init.d/%{name}d
+rm -rf /etc/httpd/conf.d/graphite-web.conf
+install -D -p conf/sample/graphite-web.conf.sample $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf
 
 %post
 
@@ -94,6 +99,7 @@ rm -rf "$RPM_BUILD_ROOT"
 /srv/salt/*
 %{_unitdir}/%{name}d.service
 %{_sysconfdir}/init.d/%{name}d
+%config %{_sysconfdir}/httpd/conf.d/graphite-web.conf
 
 
 
