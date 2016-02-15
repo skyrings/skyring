@@ -26,43 +26,53 @@ import (
 func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 
 	var request models.StorageProfile
+
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
-		logger.Get().Error("Error parsing the request: %v", err)
-		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
+		logger.Get().Error("%s-Error parsing the request: %v", ctxt, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err), ctxt)
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
-		logger.Get().Error("Error Unmarshalling the request: %v", err)
-		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err))
+		logger.Get().Error("%s-Error Unmarshalling the request: %v", ctxt, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err), ctxt)
 		return
 	}
 	if (request == models.StorageProfile{}) {
 		logger.Get().Error("Invalid request")
-		HttpResponse(w, http.StatusBadRequest, "Invalid request")
+		HttpResponse(w, http.StatusBadRequest, "Invalid request", ctxt)
 		return
 	}
 	// Check if storage profile already added
 	if _, err := GetDbProvider().StorageProfileInterface().StorageProfile(request.Name); err == nil {
-		logger.Get().Error("Storage profile already added: %v", err)
-		HttpResponse(w, http.StatusMethodNotAllowed, "Storage profile already added")
+		logger.Get().Error("%s-Storage profile already added: %v", err)
+		HttpResponse(w, http.StatusMethodNotAllowed, "Storage profile already added", ctxt)
 		return
 
 	}
 
 	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile(request); err != nil {
-		logger.Get().Error("Storage profile add failed: %v", err)
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("%s-Storage profile add failed: %v", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
 	}
 	return
 }
 
 func (a *App) GET_StorageProfiles(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("%s-Error Getting the context. error: %v", ctxt, err)
+	}
 	sProfiles, err := GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
 	if err != nil {
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
 	}
 	if len(sProfiles) == 0 {
@@ -73,11 +83,15 @@ func (a *App) GET_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) GET_StorageProfile(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("%s-Error Getting the context. error: %v", ctxt, err)
+	}
 	vars := mux.Vars(r)
 	name := vars["name"]
 	sprofile, err := GetDbProvider().StorageProfileInterface().StorageProfile(name)
 	if err != nil {
-		HttpResponse(w, http.StatusNotFound, err.Error())
+		HttpResponse(w, http.StatusNotFound, err.Error(), ctxt)
 		return
 	}
 	json.NewEncoder(w).Encode(sprofile)
@@ -85,20 +99,24 @@ func (a *App) GET_StorageProfile(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("%s-Error Getting the context. error: %v", ctxt, err)
+	}
 	vars := mux.Vars(r)
 	sprofile, err := GetDbProvider().StorageProfileInterface().StorageProfile(vars["name"])
 	if err != nil {
-		logger.Get().Error("Unable to Get Storage Profile:%s", err)
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("%s-Unable to Get Storage Profile:%s", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
 	}
 	if sprofile.Default {
-		logger.Get().Error("Default Storage Profile cannot be deleted:%s", err)
-		HttpResponse(w, http.StatusInternalServerError, "Default Storage Profile Cannot be Deleted")
+		logger.Get().Error("%s-Default Storage Profile cannot be deleted:%s", err)
+		HttpResponse(w, http.StatusInternalServerError, "Default Storage Profile Cannot be Deleted", ctxt)
 		return
 	}
 	if err := GetDbProvider().StorageProfileInterface().DeleteStorageProfile(vars["name"]); err != nil {
-		logger.Get().Error("Unable to delete Storage Profile:%s", err)
+		logger.Get().Error("%s-Unable to delete Storage Profile:%s", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -106,30 +124,34 @@ func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("%s-Error Getting the context. error: %v", ctxt, err)
+	}
 	vars := mux.Vars(r)
 	sprofile, err := GetDbProvider().StorageProfileInterface().StorageProfile(vars["name"])
 	if err != nil {
-		logger.Get().Error("Unable to Get Storage Profile:%s", err)
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("%s-Unable to Get Storage Profile:%s", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
 	}
 	if sprofile.Default {
-		logger.Get().Error("Default Storage Profile cannot be modified:%s", err)
-		HttpResponse(w, http.StatusInternalServerError, "Default Storage Profile Cannot be Modified")
+		logger.Get().Error("%s-Default Storage Profile cannot be modified:%s", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, "Default Storage Profile Cannot be Modified", ctxt)
 		return
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		logger.Get().Error("Error parsing http request body:%s", err)
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
 	}
 	var m map[string]interface{}
 
 	if err = json.Unmarshal(body, &m); err != nil {
-		logger.Get().Error("Unable to Unmarshall the data:%s", err)
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
 	}
 	var updated bool
@@ -151,8 +173,8 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 	}
 	if updated {
 		if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile(sprofile); err != nil {
-			logger.Get().Error("Storage profile update failed: %v", err)
-			HttpResponse(w, http.StatusInternalServerError, err.Error())
+			logger.Get().Error("%s-Storage profile update failed: %v", ctxt, err)
+			HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 			return
 		}
 	}

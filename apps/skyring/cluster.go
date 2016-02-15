@@ -1446,11 +1446,18 @@ func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	sprofile := r.URL.Query().Get("storageprofile")
+
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	var slus []models.StorageLogicalUnit
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
-	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&slus); err != nil {
+	if len(sprofile) != 0 {
+		err = coll.Find(bson.M{"clusterid": *cluster_id, "storageprofile": sprofile}).All(&slus)
+	} else {
+		err = coll.Find(bson.M{"clusterid": *cluster_id}).All(&slus)
+	}
+	if err != nil {
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slus for cluster: %v. error: %v", *cluster_id, err))
 		logger.Get().Error("Error getting the slus for cluster: %v. error: %v", *cluster_id, err)
 		return
