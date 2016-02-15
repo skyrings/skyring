@@ -11,12 +11,6 @@ function info {
     printf "${GREEN}$1${NC}\n"
 }
 
-function createUser {
-    /opt/influxdb/influx  -execute "CREATE USER admin WITH PASSWORD 'admin'"
-    # Grant the privileges
-    /opt/influxdb/influx  -execute "GRANT ALL ON collectdInfluxDB TO admin"
-}
-
 if [[ $EUID -ne 0 ]]; then
     echo "This script must be run as root" 1>&2
     exit 1
@@ -31,23 +25,12 @@ info "Starting services"
 systemctl enable salt-master
 systemctl start salt-master
 
-#Enable and start InfluxDB:
-systemctl enable influxdb
-systemctl start influxdb
-
 # Enable and start MongoDB
 systemctl enable mongod
 systemctl start mongod
 
 # Need to wait for 3 to 5 sec for the services to comes up
 sleep 5
-
-info "Creating time series database"
-# Create influxdb Database
-/opt/influxdb/influx  -execute "CREATE DATABASE IF NOT EXISTS collectd"
-
-# Create InfluxDB User
-/opt/influxdb/influx  -execute 'SHOW USERS' -format column | awk '{print $1}' | grep -Fxq 'admin' || createUser
 
 info "Creating skyring database"
 # Configuring MongoDB
@@ -64,21 +47,19 @@ EOF
 systemctl enable skyringd
 systemctl start skyringd
 
-info "\n\n\n-------------------------------------------------------"
-info "Now the host setup is ready!"
-info "You can start the server by executing 'skyring'"
-info "Skyring log directory: /var/log/skyring"
-info "Influxdb user name: admin"
-info "Influxdb password: admin"
-info "Mongodb user name: admin"
-info "Mongodb password: admin"
-info "-------------------------------------------------------"
-
 info "Setup graphite user"
 /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
 
 chown apache:apache /var/lib/graphite-web/graphite.db
 service carbon-cache start && chkconfig carbon-cache on
 service httpd start && chkconfig httpd on
+
+info "\n\n\n-------------------------------------------------------"
+info "Now the host setup is ready!"
+info "You can start the server by executing 'skyring'"
+info "Skyring log directory: /var/log/skyring"
+info "Mongodb user name: admin"
+info "Mongodb password: admin"
+info "-------------------------------------------------------"
 
 info "Done!"
