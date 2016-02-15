@@ -73,4 +73,12 @@ info "Influxdb password: admin"
 info "Mongodb user name: admin"
 info "Mongodb password: admin"
 info "-------------------------------------------------------"
+
+info "Setup graphite user"
+/usr/lib/python2.7/site-packages/graphite/manage.py syncdb
+
+chown apache:apache /var/lib/graphite-web/graphite.db
+service carbon-cache start && chkconfig carbon-cache on
+service httpd start && chkconfig httpd on
+
 info "Done!"
