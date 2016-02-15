@@ -51,4 +51,5 @@ type Backend interface {
 	RemoveMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	EnableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	DisableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
+	SyncModules(nod string) (bool, error)
 }
