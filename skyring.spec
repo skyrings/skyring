@@ -40,6 +40,9 @@ Requires: python-cpopen
 Requires: python-netaddr
 Requires: mongodb
 Requires: mongodb-server
+Requires: graphite-web
+Requires: python-carbon
+Requires: python-whisper
 
 %description
 SkyRing is a modern, extensible web-based storage management platform
@@ -59,6 +62,7 @@ make pybuild
 %install
 rm -rf $RPM_BUILD_ROOT
 install -D skyring $RPM_BUILD_ROOT/usr/bin/skyring
+install -D conf/sample/graphite-web.conf.sample $RPM_BUILD_ROOT/etc/skyring/httpd/conf.d/graphite-web.conf
 install -D skyring-setup.sh $RPM_BUILD_ROOT/usr/bin/skyring-setup.sh
 install -D conf/sample/skyring.conf.sample $RPM_BUILD_ROOT/etc/skyring/skyring.conf
 install -D conf/sample/authentication.conf.sample $RPM_BUILD_ROOT/etc/skyring/authentication.conf
@@ -81,6 +85,35 @@ install -D -p -m 0755 misc/etc.init/%{name}.initd %{buildroot}%{_sysconfdir}/ini
 
 %preun
 
+%postun
+if [ -e /etc/httpd/conf.d/graphite-web.conf.orig -a -h /etc/httpd/conf.d/graphite-web.conf -a ! -e "`readlink /etc/httpd/conf.d/graphite-web.conf`" ] ; then
+ mv -f /etc/httpd/conf.d/graphite-web.conf.orig /etc/httpd/conf.d/graphite-web.conf
+fi
+
+%triggerin -- graphite-web
+if [ ! -h $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf -o ! "`readlink $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf`" = "/etc/skyring/httpd/conf.d/graphite-web.conf" ] ; then
+  if [ -e $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf ] ; then
+    mv -f $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf.orig
+  fi
+  ln -s /etc/skyring/httpd/conf.d/graphite-web.conf $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf
+fi
+
+%triggerun -- graphite-web
+if [ ! -h $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf -o ! "`readlink $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf`" = "/etc/skyring/httpd/conf.d/graphite-web.conf" ] ; then
+  if [ -e $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf ] ; then
+    mv -f $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf $RPM_BUILD_ROOT/etc/httpd/conf.d/graphite-web.conf.orig
+  fi
+  ln -s /etc/skyring/httpd/conf.d/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
+fi
+
+%triggerpostun -- graphite-web
+if [ $2 -eq 0 ] ; then
+ rm -f /etc/httpd/conf.d/graphite-web.conf.rpmsave /etc/httpd/conf.d/graphite-web.conf.orig
+fi
+if [ -e /etc/httpd/conf.d/graphite-web.conf.rpmnew ] ; then
+ mv /etc/httpd/conf.d/graphite-web.conf.rpmnew /etc/httpd/conf.d/graphite-web.conf.orig
+fi
+
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
@@ -94,6 +127,7 @@ rm -rf "$RPM_BUILD_ROOT"
 /srv/salt/*
 %{_unitdir}/%{name}d.service
 %{_sysconfdir}/init.d/%{name}d
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/httpd/conf.d/graphite-web.conf
 
 
 
