@@ -84,6 +84,17 @@ install -D -p -m 0755 misc/etc.init/%{name}.initd %{buildroot}%{_sysconfdir}/ini
 %post
 
 %preun
+%if 0%{?fedora} > 17
+if [ $1 -eq 0 ] ; then
+    # Package removal, not upgrade
+    /bin/systemctl stop %{name}.service > /dev/null 2>&1 || :
+fi
+%else
+if [ $1 = 0 ]; then
+        /sbin/service %{name} stop > /dev/null 2>&1 || :
+fi
+%endif
+
 
 %postun
 if [ -e /etc/httpd/conf.d/graphite-web.conf.orig -a -h /etc/httpd/conf.d/graphite-web.conf -a ! -e "`readlink /etc/httpd/conf.d/graphite-web.conf`" ] ; then
