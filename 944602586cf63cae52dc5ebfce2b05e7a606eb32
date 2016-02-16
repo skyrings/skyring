@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_32a076f4",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-16T01:58:04Z",
+      "side": 1,
+      "message": "Done. Actually the post req coming as (support) either string or float64 only.",
+      "parentUuid": "fa81d914_d6a13095",
+      "revId": "944602586cf63cae52dc5ebfce2b05e7a606eb32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_36b8ccc7",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-14T15:03:40Z",
       "side": 1,
       "message": "The dbname and collection name should be defined as const",
+      "revId": "944602586cf63cae52dc5ebfce2b05e7a606eb32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_52a5ea02",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-16T01:58:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_36b8ccc7",
       "revId": "944602586cf63cae52dc5ebfce2b05e7a606eb32",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_92ae82e6",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-16T01:58:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_56bd40b6",
+      "revId": "944602586cf63cae52dc5ebfce2b05e7a606eb32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_d6c85057",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2016-02-14T15:03:40Z",
       "side": 1,
       "message": "%s/given/provided/g",
+      "revId": "944602586cf63cae52dc5ebfce2b05e7a606eb32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_d2b8fa2c",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-16T01:58:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_d6c85057",
       "revId": "944602586cf63cae52dc5ebfce2b05e7a606eb32",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_f2b5fe31",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-16T01:58:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_f6c1d42f",
+      "revId": "944602586cf63cae52dc5ebfce2b05e7a606eb32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_16bf48ab",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 1
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_12829252",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-16T01:58:04Z",
+      "side": 1,
+      "message": "Done. Added the validation check.",
+      "parentUuid": "fa81d914_16bf48ab",
+      "revId": "944602586cf63cae52dc5ebfce2b05e7a606eb32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa81d914_56e460e0",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 1
@@ -115,6 +223,24 @@
       "writtenOn": "2016-02-14T15:03:40Z",
       "side": 1,
       "message": "Define a const for ket \"Skyring - RedHat\"",
+      "revId": "944602586cf63cae52dc5ebfce2b05e7a606eb32",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_32879663",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-16T01:58:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa81d914_56e460e0",
       "revId": "944602586cf63cae52dc5ebfce2b05e7a606eb32",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
