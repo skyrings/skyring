@@ -362,7 +362,7 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 
 // List the users in DB
 func (a Authorizer) ListUsers() (users []models.User, err error) {
-	if users, err = a.userDao.Users(); err != nil {
+	if users, err = a.userDao.Users(nil); err != nil {
 		logger.Get().Error("Unable get the list of users. error: %v", err)
 		return users, err
 	}

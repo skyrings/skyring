@@ -81,7 +81,7 @@ func drive_remove_handler(event models.Event) error {
 	}
 	subject := fmt.Sprintf("Warning: Storage Drive Removed from %s", node.Hostname)
 	body := event.Message
-	notifier.MailNotify(subject, body)
+	notifier.MailNotify(subject, body, skyring.GetDbProvider())
 	return nil
 }
 
