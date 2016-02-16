@@ -70,7 +70,7 @@ build-special:
 pyinstall:
 	@echo "Doing $@"
 	@if [ "$$USER" == "root" ]; then \
-		cd backend/salt/python; python setup.py --quiet install --root /; cd -; \
+		cd backend/salt/python; python setup.py --quiet install --root / --force; cd -; \
 	else \
 		cd backend/salt/python; python setup.py --quiet install --user; cd -; \
 		echo "    INFO: You should set PYTHONPATH make it into effect"; \
