@@ -45,7 +45,7 @@ EOF
 
 # Start the skyring server
 systemctl enable skyringd
-systemctl start skyringd
+systemctl restart skyringd
 
 info "Setup graphite user"
 /usr/lib/python2.7/site-packages/graphite/manage.py syncdb

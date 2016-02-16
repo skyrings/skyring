@@ -95,11 +95,15 @@ case "$1" in
     restart)
         $1
         ;;
+    condrestart)
+        [ -e $lockfile ] && restart
+        $1
+        ;;
     status)
         rh_status
         ;;
     *)
-        echo $"Usage: $0 {start|stop|status|restart}"
+        echo $"Usage: $0 {start|stop|status|restart|condrestart}"
         exit 2
 esac
 exit $?
