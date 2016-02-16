@@ -82,8 +82,22 @@ install -D -p -m 0644 misc/systemd/%{name}d.service %{buildroot}%{_unitdir}/%{na
 install -D -p -m 0755 misc/etc.init/%{name}.initd %{buildroot}%{_sysconfdir}/init.d/%{name}d
 
 %post
+if [ "$1" -ge "1" ]; then
+	/sbin/service skyringd condrestart > /dev/null 2>&1 || :
+fi
 
 %preun
+%if 0%{?fedora} > 17
+if [ $1 -eq 0 ] ; then
+    # Package removal, not upgrade
+    /bin/systemctl stop skyringd.service > /dev/null 2>&1 || :
+fi
+%else
+if [ $1 = 0 ]; then
+        /sbin/service skyringd stop > /dev/null 2>&1 || :
+fi
+%endif
+
 
 %postun
 if [ -e /etc/httpd/conf.d/graphite-web.conf.orig -a -h /etc/httpd/conf.d/graphite-web.conf -a ! -e "`readlink /etc/httpd/conf.d/graphite-web.conf`" ] ; then
