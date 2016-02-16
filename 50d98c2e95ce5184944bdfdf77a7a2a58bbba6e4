@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_328dd632",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-16T05:53:06Z",
+      "side": 1,
+      "message": "Use conf.SystemConfig.DBConfig.Database istead of new definition",
+      "revId": "50d98c2e95ce5184944bdfdf77a7a2a58bbba6e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_52824a01",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-16T05:53:06Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "50d98c2e95ce5184944bdfdf77a7a2a58bbba6e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_b278e62c",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-16T05:53:06Z",
+      "side": 1,
+      "message": "Define key in this source, may be this function only",
+      "revId": "50d98c2e95ce5184944bdfdf77a7a2a58bbba6e4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
