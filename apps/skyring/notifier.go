@@ -17,27 +17,21 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/skyrings/skyring-common/conf"
-	"github.com/skyrings/skyring-common/db"
+	"github.com/skyrings/skyring-common/dbprovider/mongodb"
 	"github.com/skyrings/skyring-common/models"
 	mail_notifier "github.com/skyrings/skyring-common/notifier"
 	"github.com/skyrings/skyring-common/tools/logger"
-	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"net/http"
 )
 
 func (a *App) GetMailNotifier(rw http.ResponseWriter, req *http.Request) {
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_MAIL_NOTIFIER)
-	var notif []models.MailNotifier
-	if err := collection.Find(nil).All(&notif); err != nil || len(notif) == 0 {
+	notifier, err := GetDbProvider().MailNotifierInterface().MailNotifier()
+	if err != nil {
 		logger.Get().Error("Unable to read MailNotifier from DB: %s", err)
 		HandleHttpError(rw, err)
 		return
 	} else {
-		notifier := notif[0]
 		n := map[string]interface{}{
 			"mailid":     notifier.MailId,
 			"smtpserver": notifier.SmtpServer,
@@ -50,12 +44,9 @@ func (a *App) GetMailNotifier(rw http.ResponseWriter, req *http.Request) {
 }
 
 func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_MAIL_NOTIFIER)
 	if req.Method == "POST" {
-		var notif []models.MailNotifier
-		if err := collection.Find(nil).All(&notif); len(notif) != 0 || err == nil {
+		_, err := GetDbProvider().MailNotifierInterface().MailNotifier()
+		if err != mongodb.ErrMissingNotifier {
 			HandleHttpError(rw, errors.New("Mail Notifier Record Already exists"))
 			return
 		}
@@ -109,7 +100,8 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 		HandleHttpError(rw, errors.New(fmt.Sprintf("Error setting the Mail Client Error: %v", err)))
 		return
 	}
-	_, err = collection.Upsert(bson.M{}, bson.M{"$set": notifier})
+
+	err = GetDbProvider().MailNotifierInterface().SaveMailNotifier(notifier)
 	if err != nil {
 		logger.Get().Error("Error Updating the mail notifier info for: %s Error: %v", notifier.MailId, err)
 		HandleHttpError(rw, err)

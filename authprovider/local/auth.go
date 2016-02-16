@@ -337,7 +337,7 @@ func (a Authorizer) GetUser(u string, req *http.Request) (user models.User, e er
 }
 
 func (a Authorizer) ListUsers() (users []models.User, err error) {
-	if users, err = a.userDao.Users(); err != nil {
+	if users, err = a.userDao.Users(nil); err != nil {
 		logger.Get().Error("Unable get the list of users. error: %v", err)
 		return users, err
 	}
