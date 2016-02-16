@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_32bf96d2",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-16T05:26:17Z",
+      "side": 1,
+      "message": "No camel case in URL query string? Use \"page_no\"",
+      "revId": "3fb5e469bceca0b80a3a790c8cb107685dff4936",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_72b90ee9",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-16T05:26:17Z",
+      "side": 1,
+      "message": "Back button should ideally be disabled if at page no 1 in UI.\nAnyway this check is fine.",
+      "revId": "3fb5e469bceca0b80a3a790c8cb107685dff4936",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_92cda289",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-16T05:26:17Z",
+      "side": 1,
+      "message": "no camel case in query strings. Use \"page_size\" rather",
+      "revId": "3fb5e469bceca0b80a3a790c8cb107685dff4936",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_b2caa66c",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-16T05:26:17Z",
+      "side": 1,
+      "message": "Instead of defining above you can define and populate here itself. Check https://review.gerrithub.io/#/c/263124/",
+      "revId": "3fb5e469bceca0b80a3a790c8cb107685dff4936",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
