@@ -22,6 +22,30 @@
       "revId": "04129818bf2c29ecb603d66030fbf46d7849e865",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_9d1f7309",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-16T10:00:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da86d52c_9d71337a",
+      "range": {
+        "startLine": 150,
+        "startChar": 15,
+        "endLine": 150,
+        "endChar": 27
+      },
+      "revId": "04129818bf2c29ecb603d66030fbf46d7849e865",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
