@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_1217edee",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-17T06:20:32Z",
+      "side": 1,
+      "message": "why is this in %postun section?\n\nShouldn\u0027t this be in %post ?",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 2
+      },
+      "revId": "17d74f758c0130e2001d4078e28b6f8fe452c87a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
