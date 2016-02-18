@@ -43,6 +43,12 @@ db.createUser( { "user" : "admin", "pwd": "admin", "roles" : ["readWrite", "dbAd
 show users
 EOF
 
+mongo skyring --eval 'db.authconfig.insert({"providername": "localauthprovider", "confpath":"/etc/skyring/authentication.conf", "status":true})'
+if [[ $? -ne 0 ]]; then
+    echo "Failed to insert default provider details" 1>&2
+    exit 1
+fi
+
 # Start the skyring server
 systemctl enable skyringd
 systemctl start skyringd

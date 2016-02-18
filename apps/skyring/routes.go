@@ -196,6 +196,20 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.configLdap,
 			Version:     1,
 		},
+		{
+			Name:        "POST_authprovider",
+			Method:      "POST",
+			Pattern:     "authprovider",
+			HandlerFunc: a.setDbAuthProvider,
+			Version:     1,
+		},
+		{
+			Name:        "GET_authprovider",
+			Method:      "GET",
+			Pattern:     "authprovider/{provider}",
+			HandlerFunc: a.getDbAuthProvider,
+			Version:     1,
+		},
 		//Routes for Task Management
 		{
 			Name:        "GET_tasks",

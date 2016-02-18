@@ -13,17 +13,27 @@ limitations under the License.
 package skyring
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring/authprovider"
+	"gopkg.in/mgo.v2/bson"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 const (
+	CipherKey       = "Skyring - RedHat"
 	DefaultUserName = "admin"
 	DefaultPassword = "admin"
 	DefaultEmail    = "admin@localhost"
@@ -322,9 +332,14 @@ func parseAuthRequestBody(req *http.Request, user *models.User) error {
 }
 
 func (a *App) getLdapConfig(rw http.ResponseWriter, req *http.Request) {
-	ldapConfig, err := GetAuthProvider().GetDirectory()
+	ctxt, err := GetContext(req)
 	if err != nil {
-		logger.Get().Error("Unable to reterive directory service configuration:%s", err)
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	ldapConfig, err := GetDirectory()
+	if err != nil {
+		logger.Get().Error("%s-Unable to reterive directory service configuration:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
@@ -346,20 +361,114 @@ func (a *App) getLdapConfig(rw http.ResponseWriter, req *http.Request) {
 			ldapConfig.DisplayName, ldapConfig.Email})
 }
 
-func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
+func getAuthProviderInfo(providerName string) (authprovider.AuthConfig, error) {
+	authConf := authprovider.AuthConfig{}
+	c := db.GetDatastore().DB(conf.SystemConfig.DBConfig.Database).C(AuthProvider)
+	err := c.Find(bson.M{"providername": providerName}).One(&authConf)
+	return authConf, err
+}
 
-	var directory models.Directory
+func (a *App) getDbAuthProvider(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+	vars := mux.Vars(req)
+	authConf, err := getAuthProviderInfo(vars["provider"])
+	if err != nil || len(authConf.ProviderName) == 0 {
+		logger.Get().Error("%s-Failed to reterive provider details: %s", ctxt, err)
+		HandleHttpError(rw, err)
+		return
+	}
+	bytes, err := json.Marshal(authConf)
+	if err != nil {
+		logger.Get().Error("%s-Unable to marshal the provider config details: %s", ctxt, err)
+		HandleHttpError(rw, err)
+		return
+	}
+	rw.Write(bytes)
+}
+
+func (a *App) setDbAuthProvider(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
 
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		logger.Get().Error("Error parsing http request body:%s", err)
+		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
 	var m map[string]interface{}
 
 	if err = json.Unmarshal(body, &m); err != nil {
-		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
+		HandleHttpError(rw, err)
+		return
+	}
+
+	var providerName, providerConf string
+	var providerState bool
+	if val, ok := m["providername"]; ok {
+		providerName = val.(string)
+	} else {
+		logger.Get().Error("%s-ProviderName not provided :%s", ctxt, err)
+		HandleHttpError(rw, err)
+		return
+	}
+	if val, ok := m["status"]; ok {
+		providerState = val.(bool)
+	} else {
+		logger.Get().Error("%s-ProviderState not provided :%s", ctxt, err)
+		HandleHttpError(rw, err)
+		return
+	}
+	if val, ok := m["confpath"]; ok {
+		providerConf = val.(string)
+	}
+	// Check ldap db available if the enabling provider name is ldap
+	if providerState && providerName == LdapAuthProvider {
+		_, err := GetDirectory()
+		if err != nil {
+			logger.Get().Error("%s-Unable to find directory service details:%s", ctxt, err)
+			HandleHttpError(rw, err)
+			return
+		}
+	}
+	// Update provider state into authconfig db
+	err = updateProvider(providerName, providerState, providerConf)
+	if err != nil {
+		logger.Get().Error("%s-Failed to set provider state :%s", ctxt, err)
+		HandleHttpError(rw, err)
+		return
+	}
+	err = SetAuthProvider()
+	if err != nil {
+		logger.Get().Error("%s-failed to set auth provider :%v", ctxt, err)
+		HandleHttpError(rw, err)
+		return
+	}
+}
+
+func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
+	var directory models.Directory
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
+		HandleHttpError(rw, err)
+		return
+	}
+	var m map[string]interface{}
+
+	if err = json.Unmarshal(body, &m); err != nil {
+		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
@@ -397,9 +506,109 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 		directory.Email = val.(string)
 	}
 
-	if err := GetAuthProvider().SetDirectory(directory); err != nil {
-		logger.Get().Error("Unable to configure directory service:%s", err)
+	if err := setDirectory(directory); err != nil {
+		logger.Get().Error("%s-Unable to configure directory service:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
+}
+
+func GetDirectory() (directory models.Directory, err error) {
+	c := db.GetDatastore().DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_LDAP)
+	val, err := c.Count()
+	if val > 0 {
+		err = c.Find(bson.M{}).One(&directory)
+		if err != nil {
+			logger.Get().Error("Failed to get ldap config details %s", err)
+			return directory, err
+		}
+	}
+	return directory, nil
+}
+
+func updateProvider(providerName string, state bool, providerPath string) (err error) {
+	// Check whether the provider exists
+	authConf, err := getAuthProviderInfo(providerName)
+	if (err != nil) && (strings.Compare(err.Error(), "not found") != 0) {
+		return err
+	}
+	authConfDb := db.GetDatastore().DB(conf.SystemConfig.DBConfig.Database).C(AuthProvider)
+
+	// Recreate the provider if it does not exists
+	if len(authConf.ProviderName) == 0 {
+		authConfDb.Insert(authprovider.AuthConfig{providerName, providerPath, state})
+	} else {
+		// Update the provider if it's already exists
+		search := bson.M{"providername": providerName}
+		change := bson.M{"providername": providerName, "confpath": providerPath, "status": state}
+		err = authConfDb.Update(search, change)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Enable or disable other provider state based on this provider state
+	// We can disable all the remaining provider if the current provider state is enable
+	// otherwise only one will be enabled.
+	search := bson.M{"status": state, "providername": bson.M{"$ne": providerName}}
+	change := bson.M{"$set": bson.M{"status": !state}}
+	if !state {
+		err = authConfDb.Update(search, change)
+	} else {
+		_, err = authConfDb.UpdateAll(search, change)
+	}
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func setDirectory(directory models.Directory) error {
+	if directory.LdapServer == "" {
+		logger.Get().Error("no directory server name provided")
+		return errors.New("no directory server name provided")
+	}
+	if directory.Port == 0 {
+		logger.Get().Error("no directory server port number provided")
+		return errors.New("no directory server port number provided")
+	}
+	if directory.Base == "" {
+		logger.Get().Error("no directory server connection string provided")
+		return errors.New("no directory server connection string provided")
+	}
+
+	c := db.GetDatastore().DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_LDAP)
+	val, err := c.Count()
+	if err != nil {
+		logger.Get().Error("failed to get ldap records count")
+		return errors.New("failed to get ldap records count")
+	}
+	if val > 0 {
+		c.RemoveAll(nil)
+	}
+
+	pswd := []byte(directory.Password)
+	block, err := aes.NewCipher([]byte(CipherKey))
+	if err != nil {
+		logger.Get().Info("Failed to generate cipher:%s", err)
+		return errors.New("Failed to generate cipher")
+	}
+	chkey := make([]byte, aes.BlockSize+len(pswd))
+	iv := chkey[:aes.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		logger.Get().Info("Failed to configure ldap:%s", err)
+		return errors.New("Failed to configure ldap")
+	}
+	stream := cipher.NewOFB(block, iv)
+	stream.XORKeyStream(chkey[aes.BlockSize:], pswd)
+
+	err = c.Insert(&models.Directory{directory.LdapServer, directory.Port, directory.Base,
+		directory.DomainAdmin, string(chkey), directory.Uid,
+		directory.FirstName, directory.LastName, directory.DisplayName, directory.Email})
+
+	if err != nil {
+		logger.Get().Error("Failed to update  :%v", err)
+		return err
+	}
+	return nil
 }

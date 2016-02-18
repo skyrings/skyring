@@ -26,6 +26,12 @@ type Plugin struct {
 	AuthPlugin AuthInterface
 }
 
+type AuthConfig struct {
+	ProviderName string `json:"providername"`
+	ConfPath     string `json:"confpath"`
+	Status       bool   `json:"status"`
+}
+
 /*
 We have taken Kubernetes plugin architecture as a reference
 https://github.com/kubernetes/kubernetes

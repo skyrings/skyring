@@ -33,6 +33,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/nodemanager"
+	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"net/http"
 	"net/rpc"
@@ -56,8 +57,10 @@ type ContextKey int
 
 const (
 	// ConfigFile default configuration file
+	AuthProvider      = "authconfig"
 	ProviderConfDir   = "providers.d"
 	ProviderBinaryDir = "providers"
+	LdapAuthProvider  = "ldapauthprovider"
 	//DefaultMaxAge set to a week
 	DefaultMaxAge                 = 86400 * 7
 	DEFAULT_API_PREFIX            = "/api"
@@ -210,7 +213,7 @@ func (a *App) SetRoutes(router *mux.Router) error {
 	return nil
 }
 
-func initializeAuth(authCfg conf.AuthConfig) error {
+func initializeAuth() error {
 	//Load authorization middleware for session
 	//TODO - make this plugin based, we should be able
 	//to plug in based on the configuration - token, jwt token etc
@@ -220,8 +223,16 @@ func initializeAuth(authCfg conf.AuthConfig) error {
 	c := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SESSION_STORE)
 	Store = mongostore.NewMongoStore(c, DefaultMaxAge, true, []byte("SkyRing-secret"))
 
+	authConf := session.DB(conf.SystemConfig.DBConfig.Database).C(AuthProvider)
+	provider := authprovider.AuthConfig{}
+	err = authConf.Find(bson.M{"status": true}).One(&provider)
+	if err != nil {
+		logger.Get().Error("Error Initializing the Authentication Provider. error: %v", err)
+		return err
+	}
+
 	//Initailize the backend auth provider based on the configuartion
-	if aaa, err := authprovider.InitAuthProvider(authCfg.ProviderName, authCfg.ConfigFile); err != nil {
+	if aaa, err := authprovider.InitAuthProvider(provider.ProviderName, provider.ConfPath); err != nil {
 
 		logger.Get().Error("Error Initializing the Authentication Provider. error: %v", err)
 		return err
@@ -229,6 +240,15 @@ func initializeAuth(authCfg conf.AuthConfig) error {
 		AuthProviderInstance = aaa
 	}
 	AddDefaultUser()
+	return nil
+}
+
+func SetAuthProvider() error {
+	err := initializeAuth()
+	if err != nil {
+		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
+		return err
+	}
 	return nil
 }
 
@@ -484,7 +504,7 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
 	}
 
 	//Initialize the auth provider
-	if err := initializeAuth(sysConfig.Authentication); err != nil {
+	if err := initializeAuth(); err != nil {
 		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
 		return err
 	}
