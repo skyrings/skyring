@@ -18,7 +18,9 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/mqu/openldap"
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
 	"github.com/skyrings/skyring-common/models"
@@ -409,6 +411,72 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 		logger.Get().Error("Unable to configure directory service:%s", err)
 		HandleHttpError(rw, err)
 		return
+	}
+}
+
+func (a *App) ldapAuthTest(rw http.ResponseWriter, req *http.Request) {
+
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Get().Error("Error parsing http request body:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	var m map[string]interface{}
+
+	if err = json.Unmarshal(body, &m); err != nil {
+		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+
+	var ldapServer, base, username, password, uid string
+	var port int
+
+	if val, ok := m["ldapserver"]; ok {
+		ldapServer = val.(string)
+	}
+	if val, ok := m["port"]; ok {
+		port = int(val.(float64))
+	}
+	if val, ok := m["base"]; ok {
+		base = val.(string)
+	}
+	if val, ok := m["domainadmin"]; ok {
+		username = val.(string)
+	}
+	if val, ok := m["password"]; ok {
+		password = val.(string)
+	}
+	if val, ok := m["uid"]; ok {
+		uid = val.(string)
+	}
+
+	ldap, err := openldap.Initialize(fmt.Sprintf("ldap://%s:%d/", ldapServer, port))
+	if err != nil {
+		logger.Get().Error("Failed to connect the server. error: %v", err)
+		HandleHttpError(rw, err)
+		return
+	}
+
+	url := fmt.Sprintf("%s=%s,%s", uid, username, base)
+	ldap.SetOption(openldap.LDAP_OPT_PROTOCOL_VERSION, openldap.LDAP_VERSION3)
+	if uid != "" {
+		err = ldap.Bind(url, password)
+		if err != nil {
+			logger.Get().Error("Error binding to LDAP Server: %v", err)
+			HandleHttpError(rw, err)
+			return
+		}
+	} else {
+		if ldap.Bind(fmt.Sprintf("uid=%s,%s", username, base), password) != nil {
+			err = ldap.Bind(fmt.Sprintf("cn=%s,%s", username, base), password)
+			if err != nil {
+				logger.Get().Error("Error binding to LDAP Server: %v", err)
+				HandleHttpError(rw, err)
+				return
+			}
+		}
 	}
 }
 

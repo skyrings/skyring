@@ -189,6 +189,13 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.configLdap,
 			Version:     1,
 		},
+		{
+			Name:        "POST_ldapauthtest",
+			Method:      "POST",
+			Pattern:     "ldapauthtest",
+			HandlerFunc: a.ldapAuthTest,
+			Version:     1,
+		},
 		//Routes for Task Management
 		{
 			Name:        "GET_tasks",
