@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_81446575",
+        "filename": "skyring.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-18T09:34:51Z",
+      "side": 1,
+      "message": "Correct. It could be removed. Will try that.",
+      "parentUuid": "da86d52c_e1ac4138",
+      "revId": "a646a4c113980e998ad04cf310088f8a2d4d2b0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_01aa3519",
         "filename": "skyring.spec",
         "patchSetId": 3
@@ -42,6 +60,24 @@
         "endLine": 86,
         "endChar": 1
       },
+      "revId": "a646a4c113980e998ad04cf310088f8a2d4d2b0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_e15a814f",
+        "filename": "skyring.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-18T09:34:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da86d52c_01aa3519",
       "revId": "a646a4c113980e998ad04cf310088f8a2d4d2b0c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
