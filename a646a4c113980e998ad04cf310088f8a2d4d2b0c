@@ -43,6 +43,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_fc3308f4",
+        "filename": "skyring.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-18T10:32:35Z",
+      "side": 1,
+      "message": "Looks like this condition is required. As after removing the service is not getting re-started.",
+      "parentUuid": "da86d52c_81446575",
+      "revId": "a646a4c113980e998ad04cf310088f8a2d4d2b0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_01aa3519",
         "filename": "skyring.spec",
         "patchSetId": 3
