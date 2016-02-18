@@ -15,7 +15,6 @@ package ldapauthprovider
 import (
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/rand"
 	"errors"
 	"fmt"
 	"github.com/mqu/openldap"
@@ -95,7 +94,7 @@ func GetUrl(ldapserver string, port uint) string {
 }
 
 func LdapAuth(a Authorizer, user, passwd string) bool {
-	directory, err := a.GetDirectory()
+	directory, err := skyring.GetDirectory()
 	if err != nil {
 		return false
 	}
@@ -122,12 +121,6 @@ func mkerror(msg string) error {
 }
 
 func NewLdapAuthProvider(config io.Reader) (*Authorizer, error) {
-	if config == nil {
-		errStr := "missing configuration file for Ldap Auth provider"
-		logger.Get().Error(errStr)
-		return nil, fmt.Errorf(errStr)
-	}
-
 	userDao := skyring.GetDbProvider().UserInterface()
 
 	session := db.GetDatastore()
@@ -199,10 +192,15 @@ func (a Authorizer) Login(rw http.ResponseWriter, req *http.Request, u string, p
 					return mkerror(errStr)
 				}
 			} else {
-				verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(p))
-				if verify != nil {
-					logger.Get().Error(errStr)
-					return mkerror(errStr)
+				if u == "admin" {
+					verify := bcrypt.CompareHashAndPassword(user.Hash, []byte(p))
+					if verify != nil {
+						logger.Get().Error(errStr)
+						return mkerror(errStr)
+					}
+				} else {
+					logger.Get().Error("User: %s is not allowed by ldapauthprovider", u)
+					return mkerror("This user is not allowed by ldapauthprovider")
 				}
 			}
 		} else {
@@ -240,7 +238,7 @@ func (a Authorizer) Logout(rw http.ResponseWriter, req *http.Request) error {
 
 // List the LDAP users
 func (a Authorizer) ListExternalUsers(search string, page, count int) (externalUsers models.ExternalUsers, err error) {
-	directory, err := a.GetDirectory()
+	directory, err := skyring.GetDirectory()
 	if err != nil {
 		return externalUsers, err
 	}
@@ -542,66 +540,5 @@ func (a Authorizer) DeleteUser(username string) error {
 		logger.Get().Error("Unable to delete the user: %s. error: %v", username, err)
 		return err
 	}
-	return nil
-}
-
-func (a Authorizer) GetDirectory() (directory models.Directory, err error) {
-	session := db.GetDatastore()
-	c := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_LDAP)
-	val, err := c.Count()
-	if val > 0 {
-		err = c.Find(bson.M{}).One(&directory)
-		if err != nil {
-			logger.Get().Error("Failed to get ldap config details %s", err)
-			return directory, err
-		}
-	}
-	return directory, nil
-}
-
-func (a Authorizer) SetDirectory(directory models.Directory) error {
-	if directory.LdapServer == "" {
-		logger.Get().Error("no directory server name provided")
-		return mkerror("no directory server name provided")
-	}
-	if directory.Port == 0 {
-		logger.Get().Error("no directory server port number provided")
-		return mkerror("no directory server port number provided")
-	}
-	if directory.Base == "" {
-		logger.Get().Error("no directory server connection string provided")
-		return mkerror("no directory server connection string provided")
-	}
-
-	session := db.GetDatastore()
-	c := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_LDAP)
-	val, err := c.Count()
-	if err != nil {
-		logger.Get().Error("failed to get ldap records count")
-		return mkerror("failed to get ldap records count")
-	}
-	if val > 0 {
-		c.RemoveAll(nil)
-	}
-
-	pswd := []byte(directory.Password)
-	block, err := aes.NewCipher([]byte(CipherKey))
-	if err != nil {
-		logger.Get().Info("Failed to generate cipher:%s", err)
-		return mkerror("Failed to generate cipher")
-	}
-	chkey := make([]byte, aes.BlockSize+len(pswd))
-	iv := chkey[:aes.BlockSize]
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		logger.Get().Info("Failed to configure ldap:%s", err)
-		return mkerror("Failed to configure ldap")
-	}
-	stream := cipher.NewOFB(block, iv)
-	stream.XORKeyStream(chkey[aes.BlockSize:], pswd)
-
-	err = c.Insert(&models.Directory{directory.LdapServer, directory.Port, directory.Base,
-		directory.DomainAdmin, string(chkey), directory.Uid,
-		directory.FirstName, directory.LastName, directory.DisplayName, directory.Email})
-
 	return nil
 }

@@ -40,6 +40,7 @@ use skyring
 db.leads.findOne()
 show collections
 db.createUser( { "user" : "admin", "pwd": "admin", "roles" : ["readWrite", "dbAdmin", "userAdmin"] })
+db.authconfig.insert({"providername": "localauthprovider", "confpath":"/etc/skyring/authentication.conf", "status":"enabled"})
 show users
 EOF
 
