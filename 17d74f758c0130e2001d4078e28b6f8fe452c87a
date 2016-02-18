@@ -58,6 +58,24 @@
       "revId": "17d74f758c0130e2001d4078e28b6f8fe452c87a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_a18889e8",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-18T08:33:04Z",
+      "side": 1,
+      "message": "I had a discussion with Ramesh. It works because %postun does install of new rpm and un-install of old rpm. So as part un-install of old one service gets re-started here.\n\nBut yes its better to move this in %post section. Will do that.",
+      "parentUuid": "da86d52c_01db151c",
+      "revId": "17d74f758c0130e2001d4078e28b6f8fe452c87a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
