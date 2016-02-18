@@ -13,17 +13,26 @@ limitations under the License.
 package skyring
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/mux"
+	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/db"
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/logger"
+	skyringmodel "github.com/skyrings/skyring/models"
+	"gopkg.in/mgo.v2/bson"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 )
 
 const (
+	CipherKey       = "Skyring - RedHat"
 	DefaultUserName = "admin"
 	DefaultPassword = "admin"
 	DefaultEmail    = "admin@localhost"
@@ -322,7 +331,7 @@ func parseAuthRequestBody(req *http.Request, user *models.User) error {
 }
 
 func (a *App) getLdapConfig(rw http.ResponseWriter, req *http.Request) {
-	ldapConfig, err := GetAuthProvider().GetDirectory()
+	ldapConfig, err := GetDirectory()
 	if err != nil {
 		logger.Get().Error("Unable to reterive directory service configuration:%s", err)
 		HandleHttpError(rw, err)
@@ -344,6 +353,89 @@ func (a *App) getLdapConfig(rw http.ResponseWriter, req *http.Request) {
 		}{ldapConfig.LdapServer, ldapConfig.Port, ldapConfig.Base, ldapConfig.DomainAdmin,
 			"", ldapConfig.Uid, ldapConfig.FirstName, ldapConfig.LastName,
 			ldapConfig.DisplayName, ldapConfig.Email})
+}
+
+func GetAuthProviderInfo(providerName string) (skyringmodel.AuthConfig, error) {
+	session := db.GetDatastore()
+	authConf := skyringmodel.AuthConfig{}
+	c := session.DB(conf.SystemConfig.DBConfig.Database).C(AuthProvider)
+	err := c.Find(bson.M{"providername": providerName}).One(&authConf)
+	return authConf, err
+}
+
+func (a *App) getDbAuthProvider(rw http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	authConf, err := GetAuthProviderInfo(vars["provider"])
+	if err != nil || len(authConf.ProviderName) == 0 {
+		logger.Get().Error("Failed to reterive provider details: %s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	bytes, err := json.Marshal(authConf)
+	if err != nil {
+		logger.Get().Error("Unable to marshal the provider config details: %s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	rw.Write(bytes)
+}
+
+func (a *App) setDbAuthProvider(rw http.ResponseWriter, req *http.Request) {
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Get().Error("Error parsing http request body:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	var m map[string]interface{}
+
+	if err = json.Unmarshal(body, &m); err != nil {
+		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+
+	var providerName, providerConf string
+	var providerState bool
+	if val, ok := m["providername"]; ok {
+		providerName = val.(string)
+	} else {
+		logger.Get().Error("ProviderName not provided :%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	if val, ok := m["status"]; ok {
+		providerState = val.(bool)
+	} else {
+		logger.Get().Error("ProviderState not provided :%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	if val, ok := m["confpath"]; ok {
+		providerConf = val.(string)
+	}
+	// Check ldap db available if the enabling provider name is ldap
+	if providerState && providerName == LdapAuthProvider {
+		_, err := GetDirectory()
+		if err != nil {
+			logger.Get().Error("Unable to find directory service details:%s", err)
+			HandleHttpError(rw, err)
+			return
+		}
+	}
+	// Update provider state into authconfig db
+	err = UpdateProvider(providerName, providerState, providerConf)
+	if err != nil {
+		logger.Get().Error("Failed to set provider state :%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	err = SetAuthProvider()
+	if err != nil {
+		logger.Get().Error("failed to set auth provider :%v", err)
+		HandleHttpError(rw, err)
+		return
+	}
 }
 
 func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
@@ -397,9 +489,111 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 		directory.Email = val.(string)
 	}
 
-	if err := GetAuthProvider().SetDirectory(directory); err != nil {
+	if err := SetDirectory(directory); err != nil {
 		logger.Get().Error("Unable to configure directory service:%s", err)
 		HandleHttpError(rw, err)
 		return
 	}
+}
+
+func GetDirectory() (directory models.Directory, err error) {
+	session := db.GetDatastore()
+	c := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_LDAP)
+	val, err := c.Count()
+	if val > 0 {
+		err = c.Find(bson.M{}).One(&directory)
+		if err != nil {
+			logger.Get().Error("Failed to get ldap config details %s", err)
+			return directory, err
+		}
+	}
+	return directory, nil
+}
+
+func UpdateProvider(providerName string, state bool, providerPath string) (err error) {
+	// Check whether the provider exists
+	authConf, _ := GetAuthProviderInfo(providerName)
+	session := db.GetDatastore()
+	authConfDb := session.DB(conf.SystemConfig.DBConfig.Database).C(AuthProvider)
+
+	// Recreate the provider if it does not exists
+	if len(authConf.ProviderName) == 0 {
+		authConfDb.Insert(skyringmodel.AuthConfig{providerName, providerPath, state})
+	} else {
+		// Update the provider if it's already exists
+		search := bson.M{"providername": providerName}
+		change := bson.M{"providername": providerName, "confpath": providerPath, "status": state}
+		err = authConfDb.Update(search, change)
+		if err != nil {
+			logger.Get().Error("failed to update auth provider :%v", err)
+			return err
+		}
+	}
+
+	// Enable or disable other provider state based on this provider state
+	// We can disable all the remaining provider if the current provider state is enable
+	// otherwise only one will be enabled.
+	search := bson.M{"status": state, "providername": bson.M{"$ne": providerName}}
+	change := bson.M{"$set": bson.M{"status": !state}}
+	if !state {
+		err = authConfDb.Update(search, change)
+	} else {
+		_, err = authConfDb.UpdateAll(search, change)
+	}
+	if err != nil {
+		logger.Get().Error("failed to set auth provider state:%v", err)
+		return err
+	}
+	return nil
+}
+
+func SetDirectory(directory models.Directory) error {
+	if directory.LdapServer == "" {
+		logger.Get().Error("no directory server name provided")
+		return errors.New("no directory server name provided")
+	}
+	if directory.Port == 0 {
+		logger.Get().Error("no directory server port number provided")
+		return errors.New("no directory server port number provided")
+	}
+	if directory.Base == "" {
+		logger.Get().Error("no directory server connection string provided")
+		return errors.New("no directory server connection string provided")
+	}
+
+	session := db.GetDatastore()
+	c := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_LDAP)
+	val, err := c.Count()
+	if err != nil {
+		logger.Get().Error("failed to get ldap records count")
+		return errors.New("failed to get ldap records count")
+	}
+	if val > 0 {
+		c.RemoveAll(nil)
+	}
+
+	pswd := []byte(directory.Password)
+	block, err := aes.NewCipher([]byte(CipherKey))
+	if err != nil {
+		logger.Get().Info("Failed to generate cipher:%s", err)
+		return errors.New("Failed to generate cipher")
+	}
+	chkey := make([]byte, aes.BlockSize+len(pswd))
+	iv := chkey[:aes.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		logger.Get().Info("Failed to configure ldap:%s", err)
+		return errors.New("Failed to configure ldap")
+	}
+	stream := cipher.NewOFB(block, iv)
+	stream.XORKeyStream(chkey[aes.BlockSize:], pswd)
+
+	err = c.Insert(&models.Directory{directory.LdapServer, directory.Port, directory.Base,
+		directory.DomainAdmin, string(chkey), directory.Uid,
+		directory.FirstName, directory.LastName, directory.DisplayName, directory.Email})
+
+	if err != nil {
+		logger.Get().Error("Failed to update  :%v", err)
+		return err
+	}
+	return nil
 }
