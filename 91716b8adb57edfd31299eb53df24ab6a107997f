@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_6165b144",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-18T08:40:42Z",
+      "side": 1,
+      "message": "I feel ldapauth.conf.sample is not required now. Remove the same and also the movement logic of the same in deployment path.",
+      "revId": "91716b8adb57edfd31299eb53df24ab6a107997f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_01779503",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-18T08:40:42Z",
+      "side": 1,
+      "message": "%s/need to set/needs to be set/g",
+      "revId": "91716b8adb57edfd31299eb53df24ab6a107997f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_217499fc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-18T08:40:42Z",
+      "side": 1,
+      "message": "%s/machanism/mechanism/g",
+      "revId": "91716b8adb57edfd31299eb53df24ab6a107997f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_4160ad35",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-18T08:40:42Z",
+      "side": 1,
+      "message": "Is this change required??",
+      "revId": "91716b8adb57edfd31299eb53df24ab6a107997f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
