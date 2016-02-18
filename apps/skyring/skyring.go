@@ -56,6 +56,7 @@ const (
 	// ConfigFile default configuration file
 	ProviderConfDir   = "providers.d"
 	ProviderBinaryDir = "providers"
+	LdapAuthProvider  = "ldapauthprovider"
 	//DefaultMaxAge set to a week
 	DefaultMaxAge                 = 86400 * 7
 	DEFAULT_API_PREFIX            = "/api"
@@ -214,12 +215,25 @@ func initializeAuth(authCfg conf.AuthConfig) error {
 	//to plug in based on the configuration - token, jwt token etc
 	//Right we are supporting only session based auth
 
+	var providerName string
 	session := db.GetDatastore().Copy()
 	c := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SESSION_STORE)
 	Store = mongostore.NewMongoStore(c, DefaultMaxAge, true, []byte("SkyRing-secret"))
 
+	ldap := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_LDAP)
+	val, err := ldap.Count()
+	if err != nil {
+		logger.Get().Error("Error Initializing the Authentication Provider. error: %v", err)
+		return err
+	}
+	if val > 0 {
+		providerName = LdapAuthProvider
+	} else {
+		providerName = authCfg.ProviderName
+	}
+
 	//Initailize the backend auth provider based on the configuartion
-	if aaa, err := authprovider.InitAuthProvider(authCfg.ProviderName, authCfg.ConfigFile); err != nil {
+	if aaa, err := authprovider.InitAuthProvider(providerName, authCfg.ConfigFile); err != nil {
 
 		logger.Get().Error("Error Initializing the Authentication Provider. error: %v", err)
 		return err
@@ -227,6 +241,15 @@ func initializeAuth(authCfg conf.AuthConfig) error {
 		AuthProviderInstance = aaa
 	}
 	AddDefaultUser()
+	return nil
+}
+
+func SetAuthProvider() error {
+	err := initializeAuth(conf.SystemConfig.Authentication)
+	if err != nil {
+		logger.Get().Error("Unable to initialize the authentication provider: %s", err)
+		return err
+	}
 	return nil
 }
 
