@@ -40,6 +40,24 @@
       "revId": "17d74f758c0130e2001d4078e28b6f8fe452c87a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_01db151c",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-18T07:02:06Z",
+      "side": 1,
+      "message": "According to http://www.rpm.org/max-rpm/s1-rpm-inside-scripts.html\n\nThe %postun Script\n\nThe %postun script executes after the package has been removed. It is the last chance for a package to clean up after itself. Quite often, %postun scripts are used to run ldconfig to remove newly erased shared libraries from ld.so.cache.\n\nRamesh might have better knowledge on this, you can check with him.",
+      "parentUuid": "da86d52c_4bf36c73",
+      "revId": "17d74f758c0130e2001d4078e28b6f8fe452c87a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
