@@ -61,6 +61,24 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_bc7359e6",
+        "filename": "skyring.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1004373
+      },
+      "writtenOn": "2016-02-19T05:08:47Z",
+      "side": 1,
+      "message": "I am not sure why it doesn\u0027t work. But its ok if its works with the current state.",
+      "parentUuid": "da86d52c_fc3308f4",
+      "revId": "a646a4c113980e998ad04cf310088f8a2d4d2b0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_01aa3519",
         "filename": "skyring.spec",
         "patchSetId": 3
@@ -96,6 +114,98 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "da86d52c_01aa3519",
+      "revId": "a646a4c113980e998ad04cf310088f8a2d4d2b0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_7c72c1e6",
+        "filename": "skyring.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1004373
+      },
+      "writtenOn": "2016-02-19T05:08:47Z",
+      "side": 1,
+      "message": "Use either \u0027$if\u0027 or \u0027if\u0027 uniformly.",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 3
+      },
+      "revId": "a646a4c113980e998ad04cf310088f8a2d4d2b0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_3c6849f5",
+        "filename": "skyring.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1004373
+      },
+      "writtenOn": "2016-02-19T05:08:47Z",
+      "side": 1,
+      "message": "How about RHEL?",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 20
+      },
+      "revId": "a646a4c113980e998ad04cf310088f8a2d4d2b0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_5c6dfd03",
+        "filename": "skyring.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1004373
+      },
+      "writtenOn": "2016-02-19T05:08:47Z",
+      "side": 1,
+      "message": "Please use either \u0027\u003d\u0027 or \u0027-eg\u0027 in all places. Currently it is mixed.",
+      "range": {
+        "startLine": 91,
+        "startChar": 8,
+        "endLine": 91,
+        "endChar": 11
+      },
+      "revId": "a646a4c113980e998ad04cf310088f8a2d4d2b0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_1c63851b",
+        "filename": "skyring.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1004373
+      },
+      "writtenOn": "2016-02-19T05:08:47Z",
+      "side": 1,
+      "message": "This can be checked first so that we don\u0027t need to this in places.",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 14
+      },
       "revId": "a646a4c113980e998ad04cf310088f8a2d4d2b0c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
