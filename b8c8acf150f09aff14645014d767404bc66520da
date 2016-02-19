@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_423196a1",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-19T12:58:47Z",
+      "side": 1,
+      "message": "Now after setting the ldap provider, you want to go back to local how you do that.\n\nIts better to provide a different API for enabling/disabling auth providers and UI should call that API to just enable/disable providers. This API will be called only when adding/updating the ldapprovider.",
+      "range": {
+        "startLine": 473,
+        "startChar": 1,
+        "endLine": 475,
+        "endChar": 55
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_a21fb208",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-19T12:58:47Z",
+      "side": 1,
+      "message": "Why this is hard-coded?",
+      "range": {
+        "startLine": 482,
+        "startChar": 20,
+        "endLine": 482,
+        "endChar": 45
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_a24a5225",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-19T12:58:47Z",
+      "side": 1,
+      "message": "This should in models",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 1
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_c247461c",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-19T12:58:47Z",
+      "side": 1,
+      "message": "Why you continuing on error. should return with error",
+      "range": {
+        "startLine": 234,
+        "startChar": 2,
+        "endLine": 234,
+        "endChar": 18
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_c26e6696",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-19T12:58:47Z",
+      "side": 1,
+      "message": "In case of ldap. there is no config file. What will happen if config file present? Did you test this scenario?",
+      "range": {
+        "startLine": 238,
+        "startChar": 69,
+        "endLine": 238,
+        "endChar": 86
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_62413a0b",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-19T12:58:47Z",
+      "side": 1,
+      "message": "log the error",
+      "range": {
+        "startLine": 98,
+        "startChar": 1,
+        "endLine": 100,
+        "endChar": 2
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_e219aa23",
+        "filename": "conf/sample/ldapauth.conf.sample",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-19T12:58:47Z",
+      "side": 1,
+      "message": "Do we need to change the spec file to remove this entry?",
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_d719c623",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-19T12:58:47Z",
+      "side": 1,
+      "message": "should be bool",
+      "range": {
+        "startLine": 43,
+        "startChar": 115,
+        "endLine": 43,
+        "endChar": 123
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
