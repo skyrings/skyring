@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_1c60e534",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-19T03:45:41Z",
+      "side": 1,
+      "message": "I am not sure this is the right way to do this?\n\n1. Still there is some auth related config in the config file, say for local auth. For local auth we are still have the old way of reading the conf and initializing.\n\n2. So since you moved ldap to DB, let us change the design for local auth too. move it to the DB. When the setup script runs, the defaul config is created(local auth) and provider is set to local. once app come up user can go ahead modify it to external auth",
+      "range": {
+        "startLine": 223,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 2
+      },
+      "revId": "521cd5af118ceedae03e8c97b794530ec7138f96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_3c65a945",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-19T03:45:41Z",
+      "side": 1,
+      "message": "Do we have something here?\nwe are getting rid of the config file right?",
+      "range": {
+        "startLine": 248,
+        "startChar": 23,
+        "endLine": 248,
+        "endChar": 54
+      },
+      "revId": "521cd5af118ceedae03e8c97b794530ec7138f96",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
