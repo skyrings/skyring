@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba7be1f8_37eea223",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-19T07:49:41Z",
+      "side": 1,
+      "message": "Just a few thoughts\n1. can this also be a public function?\n2. We are using some of these like GetCluster and getNodesInCluster(The name there is getClusterNodesById) in bigfin also can we move these to skyring-common?",
+      "revId": "0c66bde7667e38876fe492513e4f573a51d1ccc6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
