@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_3df3e374",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-19T19:14:10Z",
+      "side": 1,
+      "message": "No currently ui do not have any option / option box to uncheck",
+      "parentUuid": "ba7be1f8_9d25af0c",
+      "range": {
+        "startLine": 473,
+        "startChar": 1,
+        "endLine": 475,
+        "endChar": 55
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_a21fb208",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 3
