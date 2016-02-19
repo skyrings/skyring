@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_9d25af0c",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-19T19:06:41Z",
+      "side": 1,
+      "message": "Not acceptable. UI already has an option to select ldap provider right? so what will happen if somebody unchecked?\nIf you are able to move from local to ldap, then other way around also should b possible. At-least the API part should be ready so that it is readily available for UI to consume",
+      "parentUuid": "ba7be1f8_c2c66649",
+      "range": {
+        "startLine": 473,
+        "startChar": 1,
+        "endLine": 475,
+        "endChar": 55
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_a21fb208",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 3
