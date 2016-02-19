@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_c2c66649",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-19T14:05:52Z",
+      "side": 1,
+      "message": "Sure i will send a separate patch for that enhancement to backend and to ui to provide an option.\n\nCurrently i have moved out to this to a separate function so that it can be used easily.",
+      "parentUuid": "ba7be1f8_c29f464f",
+      "range": {
+        "startLine": 473,
+        "startChar": 1,
+        "endLine": 475,
+        "endChar": 55
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_a21fb208",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 3
