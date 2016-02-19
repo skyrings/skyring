@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_e2752a33",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-19T13:31:13Z",
+      "side": 1,
+      "message": "Currently we are not supporting. We do not have anything in ui now to control this. Actually i thought of doing this in a separate patch after i send a patch to ui with required changes to enable or disable providers.\n\nHowever I will add an api for this.",
+      "parentUuid": "ba7be1f8_423196a1",
+      "range": {
+        "startLine": 473,
+        "startChar": 1,
+        "endLine": 475,
+        "endChar": 55
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_a21fb208",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2016-02-19T12:58:47Z",
       "side": 1,
       "message": "Why this is hard-coded?",
+      "range": {
+        "startLine": 482,
+        "startChar": 20,
+        "endLine": 482,
+        "endChar": 45
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_a27b3228",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-19T13:31:13Z",
+      "side": 1,
+      "message": "I will replace with a const value which has declared already",
+      "parentUuid": "ba7be1f8_a21fb208",
       "range": {
         "startLine": 482,
         "startChar": 20,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_c2e3c603",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-19T13:31:13Z",
+      "side": 1,
+      "message": "Its used only here.\nI will move it to models",
+      "parentUuid": "ba7be1f8_a24a5225",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 1
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_c247461c",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 3
@@ -82,6 +154,30 @@
       "writtenOn": "2016-02-19T12:58:47Z",
       "side": 1,
       "message": "Why you continuing on error. should return with error",
+      "range": {
+        "startLine": 234,
+        "startChar": 2,
+        "endLine": 234,
+        "endChar": 18
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_02eebeec",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-19T13:31:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba7be1f8_c247461c",
       "range": {
         "startLine": 234,
         "startChar": 2,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_02c5de5a",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-19T13:31:13Z",
+      "side": 1,
+      "message": "Yes I have tested this. This is a very rare case unless and until some one goes to the back-end and modify.\n\nWe have moved the ldap config from conf file to db.\nSo if the user given any conf file also it will not\nconsider it and collects info from db only and allows the user to login with ldap credentials.",
+      "parentUuid": "ba7be1f8_c26e6696",
+      "range": {
+        "startLine": 238,
+        "startChar": 69,
+        "endLine": 238,
+        "endChar": 86
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_62413a0b",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 3
@@ -128,6 +248,30 @@
       "writtenOn": "2016-02-19T12:58:47Z",
       "side": 1,
       "message": "log the error",
+      "range": {
+        "startLine": 98,
+        "startChar": 1,
+        "endLine": 100,
+        "endChar": 2
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_c2910654",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-19T13:31:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba7be1f8_62413a0b",
       "range": {
         "startLine": 98,
         "startChar": 1,
@@ -157,6 +301,24 @@
     },
     {
       "key": {
+        "uuid": "ba7be1f8_62821a02",
+        "filename": "conf/sample/ldapauth.conf.sample",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-19T13:31:13Z",
+      "side": 1,
+      "message": "We are not using it in the spec file. We are moving only local auth config file. So there is no change required in spec file even if we delete this sample ldap config file.",
+      "parentUuid": "ba7be1f8_e219aa23",
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_d719c623",
         "filename": "skyring-setup.sh",
         "patchSetId": 3
@@ -168,6 +330,30 @@
       "writtenOn": "2016-02-19T12:58:47Z",
       "side": 1,
       "message": "should be bool",
+      "range": {
+        "startLine": 43,
+        "startChar": 115,
+        "endLine": 43,
+        "endChar": 123
+      },
+      "revId": "b8c8acf150f09aff14645014d767404bc66520da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba7be1f8_82870e0f",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-02-19T13:31:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba7be1f8_d719c623",
       "range": {
         "startLine": 43,
         "startChar": 115,
