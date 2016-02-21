@@ -54,7 +54,7 @@ func getEntityName(entity_type string, entity_id uuid.UUID, parentId *uuid.UUID)
 			return "", fmt.Errorf("Unknown %v with id %v.Err %v", entity_type, entity_id, entityFetchErr)
 		}
 		return entity.Hostname, nil
-	case monitoring.CLUSTER:
+	case models.CLUSTER:
 		entity, entityFetchErr := GetCluster(&entity_id)
 		if entityFetchErr != nil {
 			return "", fmt.Errorf("Unknown %v with id %v.Err %v", entity_type, entity_id, entityFetchErr)
@@ -71,7 +71,7 @@ func getEntityName(entity_type string, entity_id uuid.UUID, parentId *uuid.UUID)
 }
 
 var entityParentMap = map[string]string{
-	monitoring.SLU: monitoring.CLUSTER,
+	monitoring.SLU: models.CLUSTER,
 }
 
 func getParentName(queriedEntityType string, parentId uuid.UUID) (string, error) {
@@ -79,7 +79,7 @@ func getParentName(queriedEntityType string, parentId uuid.UUID) (string, error)
 	case monitoring.SLU:
 		parent, parentFetchErr := GetCluster(&parentId)
 		if parentFetchErr != nil {
-			return "", fmt.Errorf("%v not a valid id of %v.Error %v", parentId, monitoring.CLUSTER, parentFetchErr)
+			return "", fmt.Errorf("%v not a valid id of %v.Error %v", parentId, models.CLUSTER, parentFetchErr)
 		}
 		return parent.Name, nil
 	}
@@ -232,4 +232,84 @@ func GetClusters() (models.Clusters, error) {
 	var clusters models.Clusters
 	err := collection.Find(nil).All(&clusters)
 	return clusters, err
+}
+
+func (a *App) Get_Summary(w http.ResponseWriter, r *http.Request) {
+	var system models.System
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SYSTEM)
+	if err := coll.Find(bson.M{"name": monitoring.SYSTEM}).One(&system); err != nil {
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Could not fetch summary.Err %v", err))
+		logger.Get().Error(fmt.Sprintf("Could not fetch summary.Err %v", err))
+		return
+	}
+	json.NewEncoder(w).Encode(system)
+}
+
+func Compute_System_Summary(p map[string]interface{}) {
+	clusters, clusterFetchError := GetClusters()
+	if clusterFetchError != nil {
+		logger.Get().Error("Failed to fetch clusters.Err %v", clusterFetchError)
+	}
+
+	/*
+		Count the number of unmanaged nodes
+	*/
+	//	unmanagedNodes, unmanagedNodesError := GetCoreNodeManager().GetUnmanagedNodes()
+	//	if unmanagedNodesError != nil {
+	//		logger.Get().Error("%s", fmt.Sprintf("Failed to fetch unmanaged nodes.Err %v", unmanagedNodesError))
+	//	}
+
+	var net_cluster_used int64
+	var net_cluster_total int64
+	net_storage_profile_utilization := make(map[string]models.Utilization)
+	down_nodes := 0
+	for _, cluster := range clusters {
+		nodesInCluster, clusterNodesFetchError := getClusterNodesById(&cluster.ClusterId)
+		if clusterNodesFetchError != nil {
+			logger.Get().Error("%s", fmt.Sprintf("Failed to fetch nodes of cluster.Err %v", cluster.Name))
+			continue
+		}
+
+		/*
+			Count the number of down nodes
+		*/
+		for _, node := range nodesInCluster {
+			if node.Status == models.STATUS_DOWN {
+				down_nodes = down_nodes + 1
+			}
+		}
+
+		/*
+			Calculate net cluster utilization
+		*/
+		net_cluster_used = net_cluster_used + cluster.Usage.Used
+		net_cluster_total = net_cluster_used + cluster.Usage.Used
+
+		/*
+			Calculate net storage profile utilization
+		*/
+		for profile, profileUtilization := range cluster.StorageProfileUsage {
+			if utilization, ok := net_storage_profile_utilization[profile]; ok {
+				net_storage_profile_utilization[profile] = models.Utilization{Used: utilization.Used + profileUtilization.Used, Total: utilization.Total + profileUtilization.Total}
+			} else {
+				net_storage_profile_utilization[profile] = models.Utilization{Used: profileUtilization.Used, Total: profileUtilization.Total}
+			}
+		}
+	}
+	var system models.System
+	system.Name = monitoring.SYSTEM
+	system.Usage = models.Utilization{Used: net_cluster_used, Total: net_cluster_total}
+	system.StorageProfileUsage = net_storage_profile_utilization
+
+	/*
+		Persist system into db
+	*/
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SYSTEM)
+	if _, err := coll.Upsert(bson.M{"name": monitoring.SYSTEM}, system); err != nil {
+		logger.Get().Error("Error persisting the system.Error %v", err)
+	}
 }

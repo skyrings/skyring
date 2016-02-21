@@ -125,6 +125,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "Get_Summary",
+			Method:      "GET",
+			Pattern:     "clusters/monitoring/summary",
+			HandlerFunc: a.Get_Summary,
+			Version:     1,
+		},
+		{
 			Name:        "logout",
 			Method:      "POST",
 			Pattern:     "auth/logout",

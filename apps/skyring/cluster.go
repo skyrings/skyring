@@ -346,6 +346,7 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 
 func updatePluginsInDb(parameter bson.M, monitoringState models.MonitoringState) (err error) {
 	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 	dbUpdateError := coll.Update(parameter, bson.M{"$set": bson.M{"monitoring": monitoringState}})
 	return dbUpdateError
