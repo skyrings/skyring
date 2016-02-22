@@ -24,6 +24,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
+	"github.com/skyrings/skyring/skyringutils"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 )
@@ -240,4 +241,23 @@ func GetClusters() (models.Clusters, error) {
 	var clusters models.Clusters
 	err := collection.Find(nil).All(&clusters)
 	return clusters, err
+}
+
+func syncNodeStatus(node models.Node) error {
+	skyringutils.Update_node_state_byId(node.NodeId, models.NODE_STATE_ACTIVE)
+	//get the latest status
+	ok, err := GetCoreNodeManager().IsNodeUp(node.Hostname)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting status of node: %s. error: %v", node.Hostname, err))
+		return nil
+	}
+	if ok {
+		skyringutils.Update_node_status_byId(node.NodeId, models.NODE_STATUS_OK)
+	} else {
+		skyringutils.Update_node_status_byId(node.NodeId, models.NODE_STATUS_ERROR)
+	}
+
+	//TODO update Alaem status and count
+
+	return nil
 }

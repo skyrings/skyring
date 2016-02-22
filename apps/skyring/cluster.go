@@ -25,6 +25,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
+	"github.com/skyrings/skyring/skyringutils"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
@@ -422,6 +423,9 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 						util.FailTask(fmt.Sprintf("Error disabling node: %s on cluster: %v", node.Hostname, *cluster_id), err, t)
 						return
 					}
+					//Set the node status to unmanaged
+					skyringutils.Update_node_status_byId(node.NodeId, models.NODE_STATUS_UNKNOWN)
+					skyringutils.Update_node_state_byId(node.NodeId, models.NODE_STATE_UNMANAGED)
 				}
 
 				t.UpdateStatus("Disabling post actions on the cluster")
@@ -511,6 +515,9 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 					if err != nil || !ok {
 						util.FailTask(fmt.Sprintf("Error enabling node: %s on cluster: %v", node.Hostname, *cluster_id), err, t)
 						return
+					}
+					if err := syncNodeStatus(node); err != nil {
+						logger.Get().Error("Error syncing the status of the node %v: Error. %v:", node.Hostname, err)
 					}
 				}
 

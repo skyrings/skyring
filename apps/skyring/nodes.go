@@ -192,7 +192,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task, ctxt string) error {
 	if _, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint, ctxt); err == nil {
 		t.UpdateStatus("Adding the node to DB: %s", hostname)
-		if err = AddStorageNodeToDB(hostname, models.NODE_STATE_INITIALIZING, models.STATUS_UP, ctxt); err != nil {
+		if err = AddStorageNodeToDB(hostname, models.NODE_STATE_INITIALIZING, models.NODE_STATUS_UNKNOWN, models.ALARM_STATUS_CLEARED, ctxt); err != nil {
 			logger.Get().Error("%s-Unable to add the node:%s to DB. error: %v", ctxt, hostname, err)
 			t.UpdateStatus("Unable to add the node:%s to DB. error: %v", hostname, err)
 			return err
@@ -217,7 +217,7 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 		request.Password,
 		ctxt); err == nil {
 		t.UpdateStatus("Adding the node to DB: %s", request.Hostname)
-		if err = AddStorageNodeToDB(request.Hostname, models.NODE_STATE_INITIALIZING, models.STATUS_UP, ctxt); err != nil {
+		if err = AddStorageNodeToDB(request.Hostname, models.NODE_STATE_INITIALIZING, models.NODE_STATUS_UNKNOWN, models.ALARM_STATUS_CLEARED, ctxt); err != nil {
 			logger.Get().Error("%s-Unable to add the node:%s to DB. error: %v", ctxt, request.Hostname, err)
 			t.UpdateStatus("Unable to add the node:%s to DB. error: %v", request.Hostname, err)
 			return err
@@ -231,12 +231,13 @@ func addAndAcceptNode(w http.ResponseWriter, request models.AddStorageNodeReques
 	return nil
 }
 
-func AddStorageNodeToDB(hostname string, node_state int, node_status string, ctxt string) error {
+func AddStorageNodeToDB(hostname string, node_state models.NodeState, node_status models.NodeStatus, alm_status models.AlarmStatus, ctxt string) error {
 	// Add the node details to the DB
 	var storage_node models.Node
 	storage_node.Hostname = hostname
 	storage_node.State = node_state
 	storage_node.Status = node_status
+	storage_node.AlmStatus = alm_status
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
