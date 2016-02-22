@@ -67,6 +67,13 @@ func mount_change_handler(event models.Event) error {
 }
 
 func drive_add_handler(event models.Event) error {
+
+
+
+
+
+
+
 	return nil
 }
 
