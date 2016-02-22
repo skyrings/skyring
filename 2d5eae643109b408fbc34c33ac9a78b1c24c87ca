@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a75e904_c69202f6",
+        "filename": "skyringutils/skyringutils.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-22T03:12:13Z",
+      "side": 1,
+      "message": "Lets not use underscore in func names.  Looks bad. We can clear these in a separate patch..",
+      "revId": "2d5eae643109b408fbc34c33ac9a78b1c24c87ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
