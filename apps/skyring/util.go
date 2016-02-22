@@ -24,6 +24,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
+	"github.com/skyrings/skyring/skyringutils"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 )
@@ -142,4 +143,121 @@ func Paginate(pageNo int, pageSize int, apiLimit int) (startIndex int, endIndex 
 	startIndex = (pageNo - 1) * pageSize
 	endIndex = pageSize + startIndex - 1
 	return startIndex, endIndex
+}
+
+func GetCluster(cluster_id *uuid.UUID) (cluster models.Cluster, err error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	if err := collection.Find(bson.M{"clusterid": *cluster_id}).One(&cluster); err != nil {
+		return cluster, err
+	}
+	return cluster, nil
+}
+
+func getNodesInCluster(cluster_id *uuid.UUID) (cluster_node_names []string, err error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var nodes models.Nodes
+	if err := collection.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+		return nil, err
+	}
+	for _, node := range nodes {
+		cluster_node_names = append(cluster_node_names, node.Hostname)
+	}
+	return cluster_node_names, nil
+}
+
+func getNodes(clusterNodes []models.ClusterNode) (map[uuid.UUID]models.Node, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var nodes = make(map[uuid.UUID]models.Node)
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	for _, clusterNode := range clusterNodes {
+		uuid, err := uuid.Parse(clusterNode.NodeId)
+		if err != nil {
+			return nodes, errors.New(fmt.Sprintf("Error parsing node id: %v", clusterNode.NodeId))
+		}
+		var node models.Node
+		if err := coll.Find(bson.M{"nodeid": *uuid}).One(&node); err != nil {
+			return nodes, err
+		}
+		nodes[node.NodeId] = node
+	}
+	return nodes, nil
+}
+
+func cluster_exists(key string, value string) (*models.Cluster, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var cluster models.Cluster
+	if err := collection.Find(bson.M{key: value}).One(&cluster); err != nil {
+		return nil, err
+	} else {
+		return &cluster, nil
+	}
+}
+
+func ClusterUnmanaged(cluster_id uuid.UUID) (bool, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var cluster models.Cluster
+	if err := collection.Find(bson.M{"clusterid": cluster_id}).One(&cluster); err != nil {
+		return false, err
+	}
+	if cluster.State == models.CLUSTER_STATE_UNMANAGED {
+		return true, nil
+	} else {
+		return false, nil
+	}
+}
+
+func GetSLU(cluster_id *uuid.UUID, slu_id uuid.UUID) (slu models.StorageLogicalUnit, err error) {
+	if cluster_id == nil {
+		return slu, fmt.Errorf("Cluster Id not available for slu with id %v", slu_id)
+	}
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	if err := coll.Find(bson.M{"clusterid": *cluster_id, "sluid": slu_id}).One(&slu); err != nil {
+		return slu, fmt.Errorf("Error getting the slu: %v for cluster: %v. error: %v", slu_id, *cluster_id, err)
+	}
+	if slu.Name == "" {
+		return slu, fmt.Errorf("Slu: %v not found for cluster: %v", slu_id, *cluster_id)
+	}
+	return slu, nil
+}
+
+func GetClusters() (models.Clusters, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var clusters models.Clusters
+	err := collection.Find(nil).All(&clusters)
+	return clusters, err
+}
+
+func syncNodeStatus(node models.Node) error {
+	skyringutils.Update_node_state_byId(node.NodeId, models.NODE_STATE_ACTIVE)
+	//get the latest status
+	ok, err := GetCoreNodeManager().IsNodeUp(node.Hostname)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting status of node: %s. error: %v", node.Hostname, err))
+		return nil
+	}
+	if ok {
+		skyringutils.Update_node_status_byId(node.NodeId, models.NODE_STATUS_OK)
+	} else {
+		skyringutils.Update_node_status_byId(node.NodeId, models.NODE_STATUS_ERROR)
+	}
+
+	//TODO update Alaem status and count
+
+	return nil
 }
