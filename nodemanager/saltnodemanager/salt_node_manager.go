@@ -93,9 +93,9 @@ func GetStorageNodeInstance(hostname string, sProfiles []models.StorageProfile) 
 		return nil, false
 	}
 	if ok {
-		storage_node.Status = models.STATUS_UP
+		storage_node.Status = models.NODE_STATUS_OK
 	} else {
-		storage_node.Status = models.STATUS_DOWN
+		storage_node.Status = models.NODE_STATUS_ERROR
 	}
 	disks, err := salt_backend.GetNodeDisk(hostname, "")
 	if err != nil {
@@ -141,6 +141,15 @@ func GetStorageNodeInstance(hostname string, sProfiles []models.StorageProfile) 
 	} else {
 		return nil, false
 	}
+}
+
+func (a SaltNodeManager) IsNodeUp(hostname string) (bool, error) {
+	ok, err := salt_backend.NodeUp(hostname)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error getting status of node: %s. error: %v", hostname, err))
+		return false, nil
+	}
+	return ok, nil
 }
 
 func (a SaltNodeManager) GetUnmanagedNodes() (*models.UnmanagedNodes, error) {
