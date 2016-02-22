@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_a8e31304",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-22T19:19:51Z",
+      "side": 1,
+      "message": "As per last week\u0027s discussion, decided that we will have 4 buckets, ssd,sas,general and others. are we implemented inline with that?",
+      "range": {
+        "startLine": 293,
+        "startChar": 2,
+        "endLine": 296,
+        "endChar": 11
+      },
+      "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_055ed2e9",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 1
@@ -48,6 +71,29 @@
       "side": 1,
       "message": "the url could be\n\napi/v1/system/summary",
       "parentUuid": "5a72e520_055ed2e9",
+      "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_28bf23d2",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-22T19:19:51Z",
+      "side": 1,
+      "message": "why application.??? Can it be a normal func as it is in case of other init funcs?",
+      "range": {
+        "startLine": 519,
+        "startChar": 11,
+        "endLine": 519,
+        "endChar": 23
+      },
       "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
