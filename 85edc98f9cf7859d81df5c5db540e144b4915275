@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_055ed2e9",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-22T14:31:08Z",
+      "side": 1,
+      "message": "Is this for whole system? Do we need another one at cluster level as well?",
+      "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
