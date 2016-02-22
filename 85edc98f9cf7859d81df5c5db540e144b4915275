@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_a8915354",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-22T19:29:11Z",
+      "side": 1,
+      "message": "Sorry this was unintentional. I was testing out something and looks like I accidentally commented it out turning it back in the follow up patch.",
+      "parentUuid": "5a72e520_8501e23b",
+      "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_a8e31304",
         "filename": "apps/skyring/monitoring.go",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2016-02-22T19:19:51Z",
       "side": 1,
       "message": "As per last week\u0027s discussion, decided that we will have 4 buckets, ssd,sas,general and others. are we implemented inline with that?",
+      "range": {
+        "startLine": 293,
+        "startChar": 2,
+        "endLine": 296,
+        "endChar": 11
+      },
+      "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_48ab7f89",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-22T19:29:11Z",
+      "side": 1,
+      "message": "I feel others is a UI representation only so I feel that manipulation and/or mapping can happen in UI.\n\nSince this api can be used by anyone outside the UI as well, I felt it would be useful to give complete info.Please let me know what you opine",
+      "parentUuid": "5a72e520_a8e31304",
       "range": {
         "startLine": 293,
         "startChar": 2,
@@ -77,6 +119,42 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_68875b10",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-22T19:29:11Z",
+      "side": 1,
+      "message": "Yes Shubhendu, this is for whole system(Overall dashboard). We need one more for cluster level",
+      "parentUuid": "5a72e520_055ed2e9",
+      "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_0888a721",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-22T19:29:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_65edc68b",
+      "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_288d6332",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 1
@@ -111,6 +189,30 @@
       "writtenOn": "2016-02-22T19:19:51Z",
       "side": 1,
       "message": "why application.??? Can it be a normal func as it is in case of other init funcs?",
+      "range": {
+        "startLine": 519,
+        "startChar": 11,
+        "endLine": 519,
+        "endChar": 23
+      },
+      "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_e89b4b70",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-22T19:29:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_28bf23d2",
       "range": {
         "startLine": 519,
         "startChar": 11,
