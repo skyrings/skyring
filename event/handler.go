@@ -22,6 +22,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring/apps/skyring"
+	"github.com/skyrings/skyring/backend/salt"
 	"github.com/skyrings/skyring/nodemanager/saltnodemanager"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -30,6 +31,7 @@ import (
 )
 
 var (
+	salt_backend       = salt.New()
 	curr_hostname, err = os.Hostname()
 )
 
@@ -226,4 +228,26 @@ func updateStorageNodeToDB(storage_node models.Node) error {
 		logger.Get().Critical(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
 		return errors.New(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
 	}
+}
+
+func handle_UnManagedNode(hostname string) error {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.Node
+	err := coll.Find(bson.M{"hostname": hostname}).One(&node)
+	if err == mgo.ErrNotFound {
+		node.Hostname = hostname
+		node.Status = "unaccepted"
+		if node.Fingerprint, err = salt_backend.GetFingerPrint(node.Hostname); err != nil {
+			logger.Get().Error(fmt.Sprintf("Faild to retrive fingerprint from : %s", node.Hostname))
+			return err
+		}
+		if err := coll.Insert(node); err != nil {
+			logger.Get().Error(fmt.Sprintf("Error adding Unmanaged node : %s. error: %v", node.Hostname, err))
+			return err
+		}
+		return nil
+	}
+	return errors.New(fmt.Sprintf("Node with hostname: %v already exists", hostname))
 }

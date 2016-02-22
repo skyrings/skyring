@@ -20,7 +20,7 @@ import (
 type NodeManagerInterface interface {
 	AcceptNode(node string, fingerprint string, ctxt string) (bool, error)
 	AddNode(master string, node string, port uint, fingerprint string, username string, password string, ctxt string) (bool, error)
-	GetUnmanagedNodes() (*models.UnmanagedNodes, error)
+	GetUnmanagedNodes() (*models.Nodes, error)
 	DisableNode(node string) (bool, error)
 	EnableNode(node string) (bool, error)
 	SyncStorageDisks(node string, sProfiles []models.StorageProfile, ctxt string) (bool, error)

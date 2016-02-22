@@ -137,9 +137,8 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check if node already added
-	// No need to check for error, as node would be nil in case of error and the same is checked
-	if node, _ := node_exists("hostname", hostname); node != nil {
+	// Check unmanaged node is present in DB
+	if _, err := unaccepted_node_exists("hostname", hostname); err != nil {
 		logger.Get().Error("%s-Node:%s already added", ctxt, hostname)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Node already added", ctxt)
 		return
@@ -191,10 +190,10 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 
 func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task, ctxt string) error {
 	if _, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint, ctxt); err == nil {
-		t.UpdateStatus("Adding the node to DB: %s", hostname)
-		if err = AddStorageNodeToDB(hostname, models.NODE_STATE_INITIALIZING, models.STATUS_UP, ctxt); err != nil {
-			logger.Get().Error("%s-Unable to add the node:%s to DB. error: %v", ctxt, hostname, err)
-			t.UpdateStatus("Unable to add the node:%s to DB. error: %v", hostname, err)
+		t.UpdateStatus("Updating the node in DB: %s", hostname)
+		if err = UpdateStorageNodeToDB(hostname, models.NODE_STATE_INITIALIZING, models.STATUS_UP, ctxt); err != nil {
+			logger.Get().Error("%s-Unable to update the node:%s to DB. error: %v", ctxt, hostname, err)
+			t.UpdateStatus("Unable to update the node:%s in DB. error: %v", hostname, err)
 			return err
 		}
 	} else {
@@ -641,4 +640,36 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error(fmt.Sprintf("Error updating record in DB for node: %s. error: %v", node_id_str, err))
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
+}
+
+func unaccepted_node_exists(key string, value string) (*models.Node, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.Node
+	if err := collection.Find(bson.M{key: value, "status": "unaccepted"}).One(&node); err == nil {
+		return &node, nil
+	} else {
+		return nil, err
+	}
+}
+
+func UpdateStorageNodeToDB(hostname string, node_state int, node_status string, ctxt string) error {
+	// Updating the node details in DB
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.Node
+	err = coll.Find(bson.M{"hostname": hostname}).One(&node)
+	if err == mgo.ErrNotFound {
+		logger.Get().Critical(fmt.Sprintf("%s-Unaccepted Node %v is not found", ctxt, hostname))
+		return err
+	}
+	node.State = node_state
+	node.Status = node_status
+	if err := coll.Update(bson.M{"hostname": node.Hostname}, bson.M{"$set": node}); err != nil {
+		logger.Get().Critical("%s-Error Updating the node: %s. error: %v", ctxt, hostname, err)
+		return err
+	}
+	return nil
 }

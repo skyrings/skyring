@@ -143,19 +143,16 @@ func GetStorageNodeInstance(hostname string, sProfiles []models.StorageProfile) 
 	}
 }
 
-func (a SaltNodeManager) GetUnmanagedNodes() (*models.UnmanagedNodes, error) {
-	if nodes, err := salt_backend.GetNodes(); err != nil {
-		return nil, err
-	} else {
-		var retNodes models.UnmanagedNodes
-		for _, node := range nodes.Unmanage {
-			var retNode models.UnmanagedNode
-			retNode.Name = node.Name
-			retNode.SaltFingerprint = node.Fingerprint
-			retNodes = append(retNodes, retNode)
-		}
-		return &retNodes, nil
+func (a SaltNodeManager) GetUnmanagedNodes() (*models.Nodes, error) {
+	var nodes models.Nodes
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := coll.Find(bson.M{"status": "unaccepted"}).All(&nodes); err != nil {
+		logger.Get().Error("Unable to fetch unmanaged nodes")
+		return &nodes, err
 	}
+	return &nodes, nil
 }
 
 func (a SaltNodeManager) SyncStorageDisks(node string, sProfiles []models.StorageProfile, ctxt string) (bool, error) {
