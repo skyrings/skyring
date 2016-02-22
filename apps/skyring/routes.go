@@ -381,6 +381,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "DEL_Storage",
+			Method:      "DELETE",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}",
+			HandlerFunc: a.DEL_Storage,
+			Version:     1,
+		},
+		{
 			Name:        "GET_events",
 			Method:      "GET",
 			Pattern:     "events",

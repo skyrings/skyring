@@ -35,6 +35,7 @@ var (
 	storage_post_functions = map[string]string{
 		"create": "CreateStorage",
 		"expand": "ExpandStorage",
+		"delete": "RemoveStorage",
 	}
 
 	STORAGE_STATUS_UP   = "up"
@@ -278,5 +279,100 @@ func (a *App) GET_AllStorages(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(models.Storages{})
 	} else {
 		json.NewEncoder(w).Encode(storages)
+	}
+}
+
+func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		logger.Get().Error("%s - Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+	storage_id_str := vars["storage-id"]
+	storage_id, err := uuid.Parse(storage_id_str)
+	if err != nil {
+		logger.Get().Error("%s - Error parsing the storage id: %s. error: %v", ctxt, storage_id_str, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the storage id: %s", storage_id_str))
+		return
+	}
+	var result models.RpcResponse
+	var providerTaskId *uuid.UUID
+	// Get the specific provider and invoke the method
+	asyncTask := func(t *task.Task) {
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("Started the task for storage deletion: %v", t.ID)
+				provider := a.GetProviderFromClusterId(*cluster_id)
+				if provider == nil {
+					util.FailTask(fmt.Sprintf("%s - ", ctxt), errors.New(fmt.Sprintf("Error getting provider for cluster: %v", *cluster_id)), t)
+					return
+				}
+				err = provider.Client.Call(fmt.Sprintf("%s.%s",
+					provider.Name, storage_post_functions["delete"]),
+					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}, RpcRequestContext: ctxt},
+					&result)
+				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+					util.FailTask(fmt.Sprintf("%s - Error deleting storage: %v", ctxt, *storage_id), err, t)
+					return
+				} else {
+					// Update the master task id
+					providerTaskId, err = uuid.Parse(result.Data.RequestId)
+					if err != nil {
+						util.FailTask(fmt.Sprintf("%s - Error parsing provider task id while deleting storage: %v", ctxt, *storage_id), err, t)
+						return
+					}
+					t.UpdateStatus("Adding sub task")
+					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+						util.FailTask(fmt.Sprintf("%s - Error adding sub task while deleting storage: %v", ctxt, *storage_id), err, t)
+						return
+					}
+
+					// Check for provider task to complete and update the disk info
+					for {
+						time.Sleep(2 * time.Second)
+						sessionCopy := db.GetDatastore().Copy()
+						defer sessionCopy.Close()
+						coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+						var providerTask models.AppTask
+						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+							util.FailTask(fmt.Sprintf("%s - Error getting sub task status while deleting storage: %v", ctxt, *storage_id), err, t)
+							return
+						}
+						if providerTask.Completed {
+							if providerTask.Status == models.TASK_STATUS_SUCCESS {
+								t.UpdateStatus("Success")
+								t.Done(models.TASK_STATUS_SUCCESS)
+							} else {
+								t.UpdateStatus("Failed")
+								t.Done(models.TASK_STATUS_FAILURE)
+							}
+						}
+						break
+					}
+				}
+				return
+			}
+		}
+	}
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Delete Storage: %s", cluster_id_str), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
+		logger.Get().Error("%s - Unable to create task to delete storage: %v. error: %v", ctxt, *cluster_id, err)
+		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for delete storage")
+		return
+	} else {
+		logger.Get().Debug("Task Created: %v to delete storage: %v", taskId, *cluster_id)
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
