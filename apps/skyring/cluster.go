@@ -46,6 +46,60 @@ var (
 	}
 )
 
+func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
+	var request map[string]interface{}
+	vars := mux.Vars(r)
+	cluster_id := vars["cluster-id"]
+
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
+	if err != nil {
+		logger.Get().Error("%s-Error parsing the request. error: %v", ctxt, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
+		return
+	}
+	if err := json.Unmarshal(body, &request); err != nil {
+		logger.Get().Error("%s-Unable to unmarshal request. error: %v", ctxt, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err))
+		return
+	}
+	var disableautoexpand bool
+	if val, ok := request["disableautoexpand"]; ok {
+		disableautoexpand = val.(bool)
+	} else {
+		logger.Get().Error("Insufficient details for updating cluster")
+		HandleHttpError(w, errors.New("Insufficient details for updating cluster"))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var cluster models.Cluster
+	clid, err := uuid.Parse(cluster_id)
+	if err != nil {
+		logger.Get().Error("could not parse cluster Uuid: %s", cluster_id)
+		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("could not parse cluster Uuid: %s", cluster_id))
+		return
+	}
+	if err := collection.Find(bson.M{"clusterid": *clid}).One(&cluster); err != nil {
+		logger.Get().Error("%s-Cluster: %s does not exists", ctxt, cluster_id)
+		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %s does not exists", cluster_id))
+		return
+	}
+
+	if err := collection.Update(bson.M{"clusterid": *clid}, bson.M{"$set": bson.M{"autoexpand": !disableautoexpand}}); err != nil {
+		logger.Get().Error("Failed updating cluster. Error:%v", err)
+		HandleHttpError(w, errors.New(fmt.Sprintf("Failed updating cluster. Error:%v", err)))
+		return
+	}
+	return
+}
+
 func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	var request models.AddClusterRequest
 
