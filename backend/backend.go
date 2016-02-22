@@ -52,4 +52,5 @@ type Backend interface {
 	EnableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	DisableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error)
 	SyncModules(node string) (bool, error)
+	GetFingerPrint(node string) (string, error)
 }

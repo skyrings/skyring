@@ -143,3 +143,18 @@ func StartListener(eventSocket string) {
 		go server.ServeCodec(jsonrpc.NewServerCodec(conn))
 	}
 }
+
+func (l *Listener) PushUnManagedNode(args *NodeStartEventArgs, ack *bool) error {
+	timestamp := args.Timestamp
+	node := strings.TrimSpace(args.Node)
+	if node == "" || timestamp.IsZero() {
+		*ack = false
+		return nil
+	}
+	if err := handle_UnManagedNode(node); err != nil {
+		*ack = false
+		return nil
+	}
+	*ack = true
+	return nil
+}
