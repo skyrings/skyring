@@ -148,6 +148,16 @@ def PushNodeStatusEvent(data):
         except (socket.error, JSONRPCError) as e:
             log.error(e, exc_info=True)
 
+def PushUnManagedNode(data):
+    timestamp = getTimestamp(data['_stamp'])
+    node = data['id']
+    try:
+        with JsonRpcClient() as c:
+            c.call("Listener.PushUnManagedNode",
+                   {'timestamp': timestamp, 'node': node})
+    except (socket.error, JSONRPCError) as e:
+        log.error(e, exc_info=True)
+
 
 def PushEvent(data):
     try:
@@ -165,6 +175,8 @@ def run():
         PushNodeStatusEvent(data)
     elif data.get('tag') and fnmatch.fnmatch(data['tag'], 'skyring/*'):
         PushNodeEvent(data)
+    elif tag and fnmatch.fnmatch(tag, 'salt/auth'):
+        PushUnManagedNode(data)
     else:
         PushEvent(data)
     return {}
