@@ -95,7 +95,6 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			case <-t.StopCh:
 				return
 			default:
-				var monitoringState models.MonitoringState
 				t.UpdateStatus("Started the task for cluster creation: %v", t.ID)
 
 				nodes, err := getClusterNodesFromRequest(request.Nodes)
@@ -122,92 +121,61 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("%s-Error creating cluster: %s", ctxt, request.Name), err, t)
 					return
-				} else {
-					// Update the master task id
-					providerTaskId, err = uuid.Parse(result.Data.RequestId)
-					if err != nil {
-						util.FailTask(fmt.Sprintf("%s-Error parsing provider task id while creating cluster: %s", ctxt, request.Name), err, t)
-						return
-					}
-					t.UpdateStatus("Adding sub task")
-					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
-						util.FailTask(fmt.Sprintf("%s-Error adding sub task while creating cluster: %s", ctxt, request.Name), err, t)
-						return
-					}
-
-					// Check for provider task to complete and update the disk info
-					for {
-						time.Sleep(2 * time.Second)
-						sessionCopy := db.GetDatastore().Copy()
-						defer sessionCopy.Close()
-						coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
-						var providerTask models.AppTask
-						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
-							util.FailTask(fmt.Sprintf("%s-Error getting sub task status while creating cluster: %s", ctxt, request.Name), err, t)
-							return
-						}
-						if providerTask.Completed {
-							if providerTask.Status == models.TASK_STATUS_SUCCESS {
-								// Check if monitoring configuration passed and update them accordingly
-								if reflect.ValueOf(request.MonitoringPlugins).IsValid() && len(request.MonitoringPlugins) != 0 {
-									var nodes []string
-									nodesMap, nodesFetchError := getNodes(request.Nodes)
-									if nodesFetchError == nil {
-										for _, node := range nodesMap {
-											nodes = append(nodes, node.Hostname)
-										}
-										t.UpdateStatus("Updating the monitoring configuration on all nodes in the cluster")
-
-										if updateFailedNodesError, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); len(updateFailedNodesError) != 0 {
-											updateFailedNodesErrorValues, _ := util.GetMapKeys(updateFailedNodesError)
-											updateFailedNodes := util.Stringify(updateFailedNodesErrorValues)
-											monitoringState.StaleNodes = updateFailedNodes
-											if updateError != nil {
-												logger.Get().Error(updateError.Error())
-											}
-											logger.Get().Error("%s-Failed to update monitoring configuration on %v of cluster %v", ctxt, updateFailedNodes, request.Name)
-											t.UpdateStatus(fmt.Sprintf("Failed to update the monitoring configuration on: %v for cluster: %s", updateFailedNodes, request.Name))
-										}
-									} else {
-										t.UpdateStatus("Error getting node details")
-										logger.Get().Error("%s-Error getting node details while update monitoring configuration for cluster: %s. error: %v", ctxt, request.Name, nodesFetchError)
-									}
-								}
-								if request.MonitoringPlugins == nil || len(request.MonitoringPlugins) == 0 {
-									request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
-								}
-								// Udate the thresholds to db
-								t.UpdateStatus("Updating configuration to db")
-								monitoringState.Plugins = request.MonitoringPlugins
-								if dbError := updatePluginsInDb(bson.M{"name": request.Name}, monitoringState); dbError != nil {
-									t.UpdateStatus("Failed with error %s", dbError.Error())
-									logger.Get().Error("%s-Failed to update plugins to db: %v for cluster: %s", ctxt, dbError, request.Name)
-								} else {
-									t.UpdateStatus("Updated monitoring configuration to db")
-								}
-								t.UpdateStatus("Starting disk sync")
-								if err := syncStorageDisks(request.Nodes, ctxt); err != nil {
-									t.UpdateStatus("Failed")
-									t.Done(models.TASK_STATUS_FAILURE)
-									break
-								} else {
-									t.UpdateStatus("Scheduling monitoring")
-									cluster, err = cluster_exists("name", request.Name)
-									if err != nil {
-										t.UpdateStatus("Failed with error: %v", err)
-										logger.Get().Error("%s-Error getting cluster details for: %s. error: %v. Could not create monitoring schedules for it.", ctxt, request.Name, err)
-										break
-									}
-									ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
-									t.UpdateStatus("Success")
-									t.Done(models.TASK_STATUS_SUCCESS)
-									break
-								}
-							}
-						}
-					}
+				}
+				// Update the master task id
+				providerTaskId, err = uuid.Parse(result.Data.RequestId)
+				if err != nil {
+					util.FailTask(fmt.Sprintf("%s-Error parsing provider task id while creating cluster: %s", ctxt, request.Name), err, t)
 					return
 				}
+				t.UpdateStatus("Adding sub task")
+				if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+					util.FailTask(fmt.Sprintf("%s-Error adding sub task while creating cluster: %s", ctxt, request.Name), err, t)
+					return
+				}
+
+				// Check for provider task to complete and update the disk info
+				for {
+					time.Sleep(2 * time.Second)
+					sessionCopy := db.GetDatastore().Copy()
+					defer sessionCopy.Close()
+					coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+					var providerTask models.AppTask
+					if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+						util.FailTask(fmt.Sprintf("%s-Error getting sub task status while creating cluster: %s", ctxt, request.Name), err, t)
+						return
+					}
+					if providerTask.Completed {
+						if providerTask.Status == models.TASK_STATUS_SUCCESS {
+							t.UpdateStatus("Updating the monitoring configuration")
+							if err := updateMonitoringPluginsForCluster(request, ctxt); err != nil {
+								logger.Get().Error("%s-Updating Monitoring configuration failed on cluster:%v.Error:%v", ctxt, request.Name, err)
+								t.UpdateStatus("Failed to update monitoring configuration")
+							}
+							t.UpdateStatus("Starting disk sync")
+							if err := syncStorageDisks(request.Nodes, ctxt); err != nil {
+								t.UpdateStatus("Failed to sync the Disks")
+							}
+							t.UpdateStatus("Initializing Monitoring Schedules")
+							cluster, err = cluster_exists("name", request.Name)
+							if err != nil {
+								t.UpdateStatus("Failed to initialize monitoring schedules")
+								logger.Get().Error("%s-Error getting cluster details for: %s. error: %v. Could not create monitoring schedules for it.", ctxt, request.Name, err)
+							} else {
+								ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
+							}
+							t.UpdateStatus("Success")
+							t.Done(models.TASK_STATUS_SUCCESS)
+
+						} else { //if the task is failed????
+							t.UpdateStatus("Failed")
+							t.Done(models.TASK_STATUS_FAILURE)
+							logger.Get().Error("%s- Failed to create the cluster %s", ctxt, request.Name)
+						}
+						break
+					}
+				}
+				return
 			}
 		}
 	}
@@ -626,63 +594,54 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("Error expanding cluster: %v", *cluster_id), err, t)
 					return
-				} else {
-					// Update the master task id
-					providerTaskId, err = uuid.Parse(result.Data.RequestId)
-					if err != nil {
-						util.FailTask(fmt.Sprintf("Error parsing provider task id while expand cluster: %v", *cluster_id), err, t)
-						return
-					}
-					t.UpdateStatus("Adding sub task")
-					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
-						util.FailTask(fmt.Sprintf("Error adding sub task while expand cluster: %v", *cluster_id), err, t)
-						return
-					}
-
-					// Check for provider task to complete and update the disk info
-					for {
-						time.Sleep(2 * time.Second)
-						sessionCopy := db.GetDatastore().Copy()
-						defer sessionCopy.Close()
-						coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
-						var providerTask models.AppTask
-						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
-							util.FailTask(fmt.Sprintf("Error getting sub task status while expand cluster: %v", *cluster_id), err, t)
-							return
-						}
-						if providerTask.Completed {
-							if providerTask.Status == models.TASK_STATUS_SUCCESS {
-								//Update the monitoring configuration to the new nodes
-								cluster, clusterErr := GetCluster(cluster_id)
-								if clusterErr != nil {
-									logger.Get().Error("Failed to fetch cluster with id %v.Error %v", cluster.Name, clusterErr)
-								} else {
-									var nodeNames []string = make([]string, len(nodes))
-									for index, node := range nodes {
-										nodeNames[index] = node.Hostname
-									}
-									updateErr := forceUpdatePlugins(cluster, nodeNames)
-									if updateErr != nil {
-										t.UpdateStatus(updateErr.Error())
-									}
-								}
-								t.UpdateStatus("Starting disk sync")
-								if err := syncStorageDisks(new_nodes, ""); err != nil {
-									t.UpdateStatus("Failed")
-									t.Done(models.TASK_STATUS_FAILURE)
-								} else {
-									t.UpdateStatus("Success")
-									t.Done(models.TASK_STATUS_SUCCESS)
-								}
-							} else {
-								t.UpdateStatus("Failed")
-								t.Done(models.TASK_STATUS_FAILURE)
-							}
-							break
-						}
-					}
+				}
+				// Update the master task id
+				providerTaskId, err = uuid.Parse(result.Data.RequestId)
+				if err != nil {
+					util.FailTask(fmt.Sprintf("Error parsing provider task id while expand cluster: %v", *cluster_id), err, t)
 					return
 				}
+				t.UpdateStatus("Adding sub task")
+				if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+					util.FailTask(fmt.Sprintf("Error adding sub task while expand cluster: %v", *cluster_id), err, t)
+					return
+				}
+
+				// Check for provider task to complete and update the disk info
+				for {
+					time.Sleep(2 * time.Second)
+					sessionCopy := db.GetDatastore().Copy()
+					defer sessionCopy.Close()
+					coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+					var providerTask models.AppTask
+					if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+						util.FailTask(fmt.Sprintf("Error getting sub task status while expand cluster: %v", *cluster_id), err, t)
+						return
+					}
+					if providerTask.Completed {
+						if providerTask.Status == models.TASK_STATUS_SUCCESS {
+							t.UpdateStatus("Updating the monitoring configuration")
+							if err := updateMonitoringPluginsForClusterExpand(cluster_id, nodes); err != nil {
+								logger.Get().Error("Error Updating the montoring plugins for cluster:%v. Error: %v:", *cluster_id, err)
+								t.UpdateStatus("Failed to update the monitoring configuration")
+							}
+							t.UpdateStatus("Starting disk sync")
+							if err := syncStorageDisks(new_nodes, ""); err != nil {
+								t.UpdateStatus("Failed to sync the disks")
+							}
+							t.UpdateStatus("Success")
+							t.Done(models.TASK_STATUS_SUCCESS)
+
+						} else {
+							logger.Get().Error("Failed to expand the cluster %s", *cluster_id)
+							t.UpdateStatus("Failed")
+							t.Done(models.TASK_STATUS_FAILURE)
+						}
+						break
+					}
+				}
+				return
+
 			}
 		}
 	}
@@ -911,4 +870,58 @@ func ignoreClusterNodes(clusterId uuid.UUID) (bool, error) {
 		}
 	}
 	return true, nil
+}
+
+func updateMonitoringPluginsForCluster(request models.AddClusterRequest, ctxt string) error {
+	var monitoringState models.MonitoringState
+	// Check if monitoring configuration passed and update them accordingly
+	if reflect.ValueOf(request.MonitoringPlugins).IsValid() && len(request.MonitoringPlugins) != 0 {
+		var nodes []string
+		nodesMap, nodesFetchError := getNodes(request.Nodes)
+		if nodesFetchError != nil {
+			logger.Get().Error("%s-Error getting node details while update monitoring configuration for cluster: %s. error: %v", ctxt, request.Name, nodesFetchError)
+			return nodesFetchError
+		}
+
+		for _, node := range nodesMap {
+			nodes = append(nodes, node.Hostname)
+		}
+
+		if updateFailedNodesError, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); len(updateFailedNodesError) != 0 {
+			updateFailedNodesErrorValues, _ := util.GetMapKeys(updateFailedNodesError)
+			updateFailedNodes := util.Stringify(updateFailedNodesErrorValues)
+			monitoringState.StaleNodes = updateFailedNodes
+			if updateError != nil {
+				logger.Get().Error(updateError.Error())
+			}
+			logger.Get().Error("%s-Failed to update monitoring configuration on %v of cluster %v", ctxt, updateFailedNodes, request.Name)
+		}
+
+	} else {
+		request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
+	}
+	// Udate the thresholds to db
+	monitoringState.Plugins = request.MonitoringPlugins
+	if dbError := updatePluginsInDb(bson.M{"name": request.Name}, monitoringState); dbError != nil {
+		logger.Get().Error("%s-Failed to update plugins to db: %v for cluster: %s", ctxt, dbError, request.Name)
+		return dbError
+	}
+	return nil
+}
+
+func updateMonitoringPluginsForClusterExpand(cluster_id *uuid.UUID, nodes models.Nodes) error {
+	//Update the monitoring configuration to the new nodes
+	cluster, clusterErr := GetCluster(cluster_id)
+	if clusterErr != nil {
+		return clusterErr
+	}
+	var nodeNames []string = make([]string, len(nodes))
+	for index, node := range nodes {
+		nodeNames[index] = node.Hostname
+	}
+	updateErr := forceUpdatePlugins(cluster, nodeNames)
+	if updateErr != nil {
+		return updateErr
+	}
+	return nil
 }

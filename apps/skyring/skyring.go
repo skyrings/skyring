@@ -497,9 +497,13 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
 		os.Exit(1)
 	}
 
+	return nil
+}
+
+func (a *App) PostInitApplication() error {
+
 	logger.Get().Info("Starting clusters syncing")
 	go a.SyncClusterDetails()
 	go InitSchedules()
-
 	return nil
 }

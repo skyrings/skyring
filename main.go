@@ -203,6 +203,11 @@ func start() {
 			logger.Get().Fatalf("Unable to start the webserver. err: %v", err)
 		}
 	}()
+
+	if err := application.PostInitApplication(); err != nil {
+		logger.Get().Fatalf("Unable to run Post init. err: %v", err)
+	}
+
 	sigs := make(chan os.Signal, 1)
 	done := make(chan bool, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGHUP)
