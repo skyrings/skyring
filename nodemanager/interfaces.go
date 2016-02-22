@@ -34,4 +34,5 @@ type NodeManagerInterface interface {
 	EnforceMonitoring(plugin_names []string, nodes []string, master string, plugins []monitoring.Plugin) (map[string]interface{}, error)
 	SetUpMonitoring(node string, master string) (map[string]interface{}, error)
 	SyncModules(node string) (bool, error)
+	IsNodeUp(hostname string) (bool, error)
 }

@@ -263,7 +263,7 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	var down_nodes []string
 	for _, node := range nodes {
 		cluster_node_names = append(cluster_node_names, node.Hostname)
-		if node.Status == models.STATUS_DOWN {
+		if node.Status == models.NODE_STATUS_ERROR {
 			down_nodes = append(down_nodes, node.Hostname)
 		}
 	}
@@ -388,7 +388,7 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 	var down_nodes []string
 	for _, node := range nodes {
 		cluster_node_names = append(cluster_node_names, node.Hostname)
-		if node.Status == models.STATUS_DOWN {
+		if node.Status == models.NODE_STATUS_ERROR {
 			down_nodes = append(down_nodes, node.Hostname)
 		}
 	}
@@ -603,7 +603,7 @@ func monitoringPluginActivationDeactivations(enable bool, plugin_name string, cl
 	var down_nodes []string
 	for _, node := range nodes {
 		cluster_node_names = append(cluster_node_names, node.Hostname)
-		if node.Status == models.STATUS_DOWN {
+		if node.Status == models.NODE_STATUS_ERROR {
 			down_nodes = append(down_nodes, node.Hostname)
 		}
 	}
@@ -737,7 +737,7 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	var down_nodes []string
 	for _, node := range nodes {
 		cluster_node_names = append(cluster_node_names, node.Hostname)
-		if node.Status == models.STATUS_DOWN {
+		if node.Status == models.NODE_STATUS_ERROR {
 			down_nodes = append(down_nodes, node.Hostname)
 		}
 	}
