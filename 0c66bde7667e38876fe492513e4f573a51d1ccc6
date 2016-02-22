@@ -51,6 +51,24 @@
       "revId": "0c66bde7667e38876fe492513e4f573a51d1ccc6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a75e904_49dd4542",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-22T09:42:06Z",
+      "side": 1,
+      "message": "Can use in future. That\u0027s why I moved :) Looks like a generic func to me",
+      "parentUuid": "7a75e904_86880ac8",
+      "revId": "0c66bde7667e38876fe492513e4f573a51d1ccc6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
