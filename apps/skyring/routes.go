@@ -220,6 +220,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "PATCH_Clusters",
+			Method:      "PATCH",
+			Pattern:     "clusters",
+			HandlerFunc: a.PATCH_Clusters,
+			Version:     1,
+		},
+		{
 			Name:        "GET_Clusters",
 			Method:      "GET",
 			Pattern:     "clusters",
