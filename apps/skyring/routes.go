@@ -380,6 +380,56 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: GetEvents,
 			Version:     1,
 		},
+		//Block Devices
+		{
+			Name:        "POST_BlockDevicesWithStorage",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}/blockdevices",
+			HandlerFunc: a.POST_BlockDevicesWithStorage,
+			Version:     1,
+		},
+		{
+			Name:        "POST_BlockDevices",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}/blockdevices",
+			HandlerFunc: a.POST_BlockDevices,
+			Version:     1,
+		},
+		{
+			Name:        "GET_ClusterBlockDevices",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/blockdevices",
+			HandlerFunc: a.GET_ClusterBlockDevices,
+			Version:     1,
+		},
+		{
+			Name:        "GET_ClusterStorageBlockDevices",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}/blockdevices",
+			HandlerFunc: a.GET_ClusterStorageBlockDevices,
+			Version:     1,
+		},
+		{
+			Name:        "GET_BlockDevice",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}/blockdevices/{blockdevice-id}",
+			HandlerFunc: a.GET_BlockDevice,
+			Version:     1,
+		},
+		{
+			Name:        "DELETE_BlockDevice",
+			Method:      "DELETE",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}/blockdevices/{blockdevice-id}",
+			HandlerFunc: a.DELETE_BlockDevice,
+			Version:     1,
+		},
+		{
+			Name:        "PATCH_ResizeBlockDevice",
+			Method:      "PATCH",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}/blockdevices/{blockdevice-id}",
+			HandlerFunc: a.PATCH_ResizeBlockDevice,
+			Version:     1,
+		},
 		//Storage Profiles
 		{
 			Name:        "POST_StorageProfiles",
