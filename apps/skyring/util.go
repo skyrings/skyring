@@ -261,3 +261,21 @@ func syncNodeStatus(node models.Node) error {
 
 	return nil
 }
+
+func syncClusterStatus(cluster_id *uuid.UUID) error {
+	provider := GetApp().getProviderFromClusterId(*cluster_id)
+	if provider == nil {
+		logger.Get().Error("Error getting provider for the cluster: %s", *cluster_id)
+		return errors.New("Error getting the provider")
+	}
+	cluster, err := GetCluster(cluster_id)
+	if err != nil {
+		logger.Get().Error("Error getting cluster details for the cluster: %s", *cluster_id)
+		return err
+	}
+	success, err := sync_cluster_status(cluster, provider)
+	if !success || err != nil {
+		logger.Get().Error("Error updating cluster status for the cluster: %s", cluster.Name)
+	}
+	return nil
+}

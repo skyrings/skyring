@@ -21,6 +21,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
+	"strconv"
 )
 
 func (a *App) SyncClusterDetails() {
@@ -63,26 +64,23 @@ func sync_cluster_status(cluster models.Cluster, provider *Provider) (bool, erro
 	if err != nil || result.Status.StatusCode != http.StatusOK {
 		logger.Get().Error("Error getting status for cluster: %s. error:%v", cluster.Name, err)
 		return false, err
-	} else {
-		statusMsg := result.Status.StatusMessage
-		sessionCopy := db.GetDatastore().Copy()
-		defer sessionCopy.Close()
-		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-		var clusterStatus int
-		switch statusMsg {
-		case models.STATUS_OK:
-			clusterStatus = models.CLUSTER_STATUS_OK
-		case models.STATUS_WARN:
-			clusterStatus = models.CLUSTER_STATUS_WARN
-		case models.STATUS_ERR:
-			clusterStatus = models.CLUSTER_STATUS_ERROR
-		}
-		// Set the cluster status
-		logger.Get().Info("Updating the status of the cluster: %s to %d", cluster.Name, clusterStatus)
-		if err := coll.Update(bson.M{"clusterid": cluster.ClusterId}, bson.M{"$set": bson.M{"status": clusterStatus}}); err != nil {
-			return false, err
-		}
 	}
+	clusterStatus, err := strconv.Atoi(string(result.Data.Result))
+	if err != nil {
+		logger.Get().Error("Error getting status for cluster: %s. error:%v", cluster.Name, err)
+		return false, err
+	}
+
+	// Set the cluster status
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	logger.Get().Info("Updating the status of the cluster: %s to %d", cluster.Name, clusterStatus)
+	if err := coll.Update(bson.M{"clusterid": cluster.ClusterId}, bson.M{"$set": bson.M{"status": clusterStatus}}); err != nil {
+		logger.Get().Error("Error updating status for cluster: %s. error:%v", cluster.Name, err)
+		return false, err
+	}
+
 	return true, nil
 }
 
