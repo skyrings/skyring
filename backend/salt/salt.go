@@ -48,6 +48,7 @@ var funcNames = [...]string{
 	"DisableMonitoringPlugin",
 	"RemoveMonitoringPlugin",
 	"SyncModules",
+	"GetFingerPrint",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -311,4 +312,15 @@ func (s Salt) SyncModules(node string) (status bool, err error) {
 
 func New() backend.Backend {
 	return new(Salt)
+}
+
+func (s Salt) GetFingerPrint(node string) (fingerprint string, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if pyobj, loc_err := pyFuncs["GetFingerPrint"].Call(node); loc_err == nil {
+		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &fingerprint)
+	} else {
+		err = loc_err
+	}
+	return
 }
