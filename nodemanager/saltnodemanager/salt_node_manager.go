@@ -172,23 +172,40 @@ func (a SaltNodeManager) SyncStorageDisks(node string, sProfiles []models.Storag
 	if err != nil {
 		return false, err
 	}
-	for _, disk := range disks {
-		dId, err := uuid.New()
-		if err != nil {
-			logger.Get().Error(fmt.Sprintf("%s-Unable to generate uuid for disk : %s. error: %v", ctxt, disk.DevName, err))
-			return false, err
-		}
-		disk.DiskId = *dId
-		applyStorageProfile(&disk, sProfiles)
-	}
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	if len(disks) != 0 {
-		if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"storagedisks": disks}}); err != nil {
-			logger.Get().Error("%s-Error updating the disk details for node: %s. error: %v", ctxt, node, err)
-			return false, err
+	var storage_node models.Node
+	var updated_disks []models.Disk
+
+	if err := coll.Find(bson.M{"hostname": node}).One(&storage_node); err != nil {
+		logger.Get().Error("%s-Error updating the disk details for node: %s. error: %v", ctxt, node, err)
+		return false, err
+	}
+	var present bool
+	for _, disk := range disks {
+		present = false
+		for _, stored_disk := range storage_node.StorageDisks {
+			if disk.DevName == stored_disk.DevName {
+				present = true
+				updated_disks = append(updated_disks, stored_disk)
+				break
+			}
 		}
+		if !present {
+			dId, err := uuid.New()
+			if err != nil {
+				logger.Get().Error(fmt.Sprintf("%s-Unable to generate uuid for disk : %s. error: %v", ctxt, disk.DevName, err))
+				return false, err
+			}
+			disk.DiskId = *dId
+			applyStorageProfile(&disk, sProfiles)
+			updated_disks = append(updated_disks, disk)
+		}
+	}
+	if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"storagedisks": updated_disks}}); err != nil {
+		logger.Get().Error("%s-Error updating the disk details for node: %s. error: %v", ctxt, node, err)
+		return false, err
 	}
 	return true, nil
 }
