@@ -16,6 +16,24 @@
       "revId": "0c66bde7667e38876fe492513e4f573a51d1ccc6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a75e904_269af614",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-22T02:44:41Z",
+      "side": 1,
+      "message": "I had a look, and there are lot of duplicates all over the code base. Need to do it as separate patch and I believe that doing it part of this patch may complicate the things. I will raise a separate patch for this",
+      "parentUuid": "ba7be1f8_37eea223",
+      "revId": "0c66bde7667e38876fe492513e4f573a51d1ccc6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
