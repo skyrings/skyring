@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7a75e904_66bb0e73",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-22T03:19:52Z",
+      "side": 1,
+      "message": "Arent we rewritting the whole code of parsing etc? Can we reuse from older code?",
+      "revId": "6780461f1d2a122bfac6f8df1e7588a2ddd84d7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba7be1f8_9c01353c",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 1
