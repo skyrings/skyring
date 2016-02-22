@@ -26,6 +26,7 @@ import (
 	"github.com/skyrings/skyring-common/utils"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
+	"regexp"
 )
 
 type APIError struct {
@@ -142,4 +143,17 @@ func Paginate(pageNo int, pageSize int, apiLimit int) (startIndex int, endIndex 
 	startIndex = (pageNo - 1) * pageSize
 	endIndex = pageSize + startIndex - 1
 	return startIndex, endIndex
+}
+
+func valid_storage_size(size string) (bool, error) {
+	matched, err := regexp.Match(
+		"^([0-9])*MB$|^([0-9])*mb$|^([0-9])*GB$|^([0-9])*gb$|^([0-9])*TB$|^([0-9])*tb$|^([0-9])*PB$|^([0-9])*pb$",
+		[]byte(size))
+	if err != nil {
+		return false, errors.New(fmt.Sprintf("Error parsing the size: %s", size))
+	}
+	if !matched {
+		return false, errors.New(fmt.Sprintf("Invalid format size: %s", size))
+	}
+	return true, nil
 }
