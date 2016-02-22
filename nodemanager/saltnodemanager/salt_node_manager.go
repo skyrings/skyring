@@ -314,3 +314,8 @@ func applyStorageProfile(disk *models.Disk, sProfiles []models.StorageProfile) e
 	disk.StorageProfile = models.DefaultProfile3
 	return nil
 }
+
+func GetFingerPrint(hostname string) (string, error) {
+	fingerprint, err := salt_backend.GetFingerPrint(hostname)
+	return fingerprint, err
+}

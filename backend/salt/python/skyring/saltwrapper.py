@@ -21,7 +21,6 @@ import salt
 from salt import wheel, client, key, states, modules
 import salt.config
 
-
 log = logging.getLogger(__name__)
 
 
@@ -545,3 +544,10 @@ def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict):
             failed_minions[node] = "Failed to restart collectd"
     return failed_minions
 
+
+def GetFingerPrint(node):
+    d = _get_keys(node)
+    if d['unaccepted_nodes'].get(node):
+        return d['unaccepted_nodes']
+    log.error("Failed to retrive fingerprint from host %s" %(node))
+    return false
