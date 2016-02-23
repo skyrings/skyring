@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_59127363",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T12:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_997b0b29",
+      "revId": "2e8624fbd46522e4454392bec93ac6b369d12354",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_b978c72c",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_990b0b2b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T12:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_b978c72c",
+      "revId": "2e8624fbd46522e4454392bec93ac6b369d12354",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_d9758333",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2016-02-23T11:03:15Z",
       "side": 1,
       "message": "Shouldnt this be \"PATCH /api/\u003cver\u003e/clusters/{cluster-id}\"  ??",
+      "revId": "2e8624fbd46522e4454392bec93ac6b369d12354",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_b908c72e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T12:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_d9758333",
       "revId": "2e8624fbd46522e4454392bec93ac6b369d12354",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
