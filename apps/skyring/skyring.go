@@ -28,6 +28,7 @@ import (
 	"github.com/skyrings/skyring-common/monitoring"
 	"github.com/skyrings/skyring-common/tools/lock"
 	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/schedule"
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring/authprovider"
@@ -38,6 +39,7 @@ import (
 	"net/rpc/jsonrpc"
 	"os"
 	"path"
+	"time"
 )
 
 type Provider struct {
@@ -343,6 +345,19 @@ func (a *App) initializeMonitoringManager(config conf.MonitoringDBconfig) error 
 	}
 }
 
+func scheduleSummaryMonitoring(config conf.SystemSummaryConfig) error {
+	schedule.InitShechuleManager()
+	scheduler, err := schedule.NewScheduler()
+	if err != nil {
+		logger.Get().Error("Error scheduling the system summary calculation. Error %v", err)
+		return err
+	}
+	f := Compute_System_Summary
+	go scheduler.Schedule(time.Duration(config.NetSummaryInterval)*time.Second, f, make(map[string]interface{}))
+	Compute_System_Summary(make(map[string]interface{}))
+	return nil
+}
+
 func validApiVersion(version int) bool {
 	for _, ver := range conf.SystemConfig.Config.SupportedVersions {
 		if ver == version {
@@ -409,6 +424,16 @@ func (a *App) LoggingContext(w http.ResponseWriter, r *http.Request, next http.H
 
 	defer context.Clear(r)
 	next(w, r)
+}
+
+func GetUserName() (string, error) {
+	session, err := Store.Get(r, "session-key")
+	var username string
+	if val, ok := session.Values["username"]; ok {
+		username = val.(string)
+		return username, nil
+	}
+	return "", fmt.Errorf("User name not found")
 }
 
 func initializeTaskManager() error {
@@ -500,10 +525,16 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
 	return nil
 }
 
-func (a *App) PostInitApplication() error {
+func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 
 	logger.Get().Info("Starting clusters syncing")
 	go a.SyncClusterDetails()
 	go InitSchedules()
+
+	if err := scheduleSummaryMonitoring(sysConfig.SummaryConfig); err != nil {
+		logger.Get().Error("Failed to schedule fetching summary.Error %v", err)
+		return err
+	}
+
 	return nil
 }
