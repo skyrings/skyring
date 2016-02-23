@@ -28,7 +28,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"regexp"
 	"time"
 )
 
@@ -199,19 +198,6 @@ func storage_exists(key string, value string) (*models.Storage, error) {
 	} else {
 		return &storage, nil
 	}
-}
-
-func valid_storage_size(size string) (bool, error) {
-	matched, err := regexp.Match(
-		"^([0-9])*MB$|^([0-9])*mb$|^([0-9])*GB$|^([0-9])*gb$|^([0-9])*TB$|^([0-9])*tb$|^([0-9])*PB$|^([0-9])*pb$",
-		[]byte(size))
-	if err != nil {
-		return false, errors.New(fmt.Sprintf("Error parsing the size: %s", size))
-	}
-	if !matched {
-		return false, errors.New(fmt.Sprintf("Invalid format size: %s", size))
-	}
-	return true, nil
 }
 
 func (a *App) GET_Storages(w http.ResponseWriter, r *http.Request) {
