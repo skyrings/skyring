@@ -636,7 +636,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				defer a.GetLockManager().ReleaseLock(*appLock)
-				provider := a.getProviderFromClusterId(*cluster_id)
+				provider := a.GetProviderFromClusterId(*cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("Error etting provider for cluster: %v", *cluster_id)), t)
 					return

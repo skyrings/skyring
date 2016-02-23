@@ -84,7 +84,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 			default:
 				t.UpdateStatus("started the task for addAndAcceptNode: %s", t.ID)
 				var nodeId uuid.UUID
-				appLock, err := lockNode(nodeId, request.Hostname, "addAndAcceptNode")
+				appLock, err := LockNode(nodeId, request.Hostname, "addAndAcceptNode")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
@@ -160,7 +160,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 			default:
 				t.UpdateStatus("started the task for AcceptNode: %s", t.ID)
 				var nodeId uuid.UUID
-				appLock, err := lockNode(nodeId, hostname, "AcceptNode")
+				appLock, err := LockNode(nodeId, hostname, "AcceptNode")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
@@ -420,7 +420,7 @@ func removeNode(w http.ResponseWriter, nodeId uuid.UUID, t *task.Task) (bool, er
 	if !node.ClusterId.IsZero() {
 		return false, errors.New("Node(s) participating in a cluster. Cannot be removed")
 	}
-	appLock, err := lockNode(node.NodeId, node.Hostname, "addAndAcceptNode")
+	appLock, err := LockNode(node.NodeId, node.Hostname, "addAndAcceptNode")
 	if err != nil {
 		return false, err
 	}
