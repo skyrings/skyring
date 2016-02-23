@@ -39,11 +39,13 @@ func (a *App) GetMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	} else {
 		notifier := notif[0]
 		n := map[string]interface{}{
-			"mailid":     notifier.MailId,
-			"smtpserver": notifier.SmtpServer,
-			"port":       notifier.Port,
-			"skipverify": notifier.SkipVerify,
-			"encryption": notifier.Encryption,
+			"mailid":           notifier.MailId,
+			"smtpserver":       notifier.SmtpServer,
+			"port":             notifier.Port,
+			"skipverify":       notifier.SkipVerify,
+			"encryption":       notifier.Encryption,
+			"mailnotification": notifier.MailNotification,
+			"subprefix":        notifier.SubPrefix,
 		}
 		json.NewEncoder(rw).Encode(n)
 	}
@@ -96,8 +98,14 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if val, ok := m["encryption"]; ok {
 		notifier.Encryption = val.(string)
 	}
+	if val, ok := m["mailnotification"]; ok {
+		notifier.MailNotification = val.(bool)
+	}
+	if val, ok := m["subprefix"]; ok {
+		notifier.SubPrefix = val.(string)
+	}
 
-	if notifier.MailId == "" || notifier.Passcode == "" || notifier.SmtpServer == "" || notifier.Port == 0 || notifier.Encryption == "" {
+	if notifier.MailId == "" || notifier.Passcode == "" || notifier.SmtpServer == "" || notifier.Port == 0 || notifier.Encryption == "" || notifier.MailNotification == false || notifier.SubPrefix == "" {
 		logger.Get().Error("Insufficient details of add mail notifier: %v", notifier)
 		HandleHttpError(rw, errors.New("insufficient detail for add mail notifier"))
 		return
