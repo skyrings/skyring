@@ -108,6 +108,30 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_ab086d2e",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-23T04:07:03Z",
+      "side": 1,
+      "message": "Should be fine, the aggregation can be done in the ui",
+      "parentUuid": "5a72e520_4b3b79eb",
+      "range": {
+        "startLine": 293,
+        "startChar": 2,
+        "endLine": 296,
+        "endChar": 11
+      },
+      "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_055ed2e9",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 1
