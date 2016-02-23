@@ -27,6 +27,7 @@ import (
 	"github.com/skyrings/skyring/skyringutils"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
+	"regexp"
 )
 
 type APIError struct {
@@ -278,4 +279,17 @@ func syncClusterStatus(cluster_id *uuid.UUID) error {
 		logger.Get().Error("Error updating cluster status for the cluster: %s", cluster.Name)
 	}
 	return nil
+}
+
+func valid_storage_size(size string) (bool, error) {
+	matched, err := regexp.Match(
+		"^([0-9])*MB$|^([0-9])*mb$|^([0-9])*GB$|^([0-9])*gb$|^([0-9])*TB$|^([0-9])*tb$|^([0-9])*PB$|^([0-9])*pb$",
+		[]byte(size))
+	if err != nil {
+		return false, errors.New(fmt.Sprintf("Error parsing the size: %s", size))
+	}
+	if !matched {
+		return false, errors.New(fmt.Sprintf("Invalid format size: %s", size))
+	}
+	return true, nil
 }
