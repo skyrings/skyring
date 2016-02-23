@@ -137,16 +137,14 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check unmanaged node is present in DB
-	if _, err := unaccepted_node_exists("hostname", hostname); err == mgo.ErrNotFound {
-		logger.Get().Error("%s-Node:%s is not found", ctxt, hostname)
-		HttpResponse(w, http.StatusMethodNotAllowed, "Node not found", ctxt)
-		return
-	} else if err != nil {
-		logger.Get().Error("%s-Error in retriving node %s", ctxt, hostname)
-		HttpResponse(w, http.StatusMethodNotAllowed, "Error in retriving node", ctxt)
+	// Check if node already added
+	// No need to check for error, as node would be nil in case of error and the same is checked
+	if node, _ := node_exists("hostname", hostname); node != nil {
+		logger.Get().Error("%s-Node:%s already added", ctxt, hostname)
+		HttpResponse(w, http.StatusMethodNotAllowed, "Node already added", ctxt)
 		return
 	}
+
 	// Validate for required fields
 	if hostname == "" || request.SaltFingerprint == "" {
 		logger.Get().Error("%s-Required field(s) not provided", ctxt)
@@ -194,7 +192,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *task.Task, ctxt string) error {
 	if _, err := GetCoreNodeManager().AcceptNode(hostname, fingerprint, ctxt); err == nil {
 		t.UpdateStatus("Adding the node to DB: %s", hostname)
-		if err = UpdateStorageNodeToDB(hostname, models.NODE_STATE_INITIALIZING, models.NODE_STATUS_UNKNOWN, models.ALARM_STATUS_CLEARED, ctxt); err != nil {
+		if err = AddStorageNodeToDB(hostname, models.NODE_STATE_INITIALIZING, models.NODE_STATUS_UNKNOWN, models.ALARM_STATUS_CLEARED, ctxt); err != nil {
 			logger.Get().Error("%s-Unable to add the node:%s to DB. error: %v", ctxt, hostname, err)
 			t.UpdateStatus("Unable to add the node:%s to DB. error: %v", hostname, err)
 			return err
@@ -283,7 +281,7 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	var nodes models.Nodes
 	if admin_state_str == "" {
-		if err := collection.Find(bson.M{"state": bson.M{"$ne": models.NODE_STATE_UNACCEPTED}}).All(&nodes); err != nil {
+		if err := collection.Find(nil).All(&nodes); err != nil {
 			HttpResponse(w, http.StatusInternalServerError, err.Error())
 			logger.Get().Error("Error getting the nodes list. error: %v", err)
 			return
@@ -332,15 +330,11 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
-	var nodes models.Nodes
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	if err := coll.Find(bson.M{"state": models.NODE_STATE_UNACCEPTED}).All(&nodes); err != nil {
+	if nodes, err := GetCoreNodeManager().GetUnmanagedNodes(); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		logger.Get().Error("No un-managed nodes found. error: %v", err)
 	} else {
-		if len(nodes) == 0 {
+		if nodes == nil || len(*nodes) == 0 {
 			json.NewEncoder(w).Encode([]models.Node{})
 		} else {
 			json.NewEncoder(w).Encode(nodes)
@@ -648,28 +642,4 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error(fmt.Sprintf("Error updating record in DB for node: %s. error: %v", node_id_str, err))
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
-}
-
-func unaccepted_node_exists(key string, value string) (*models.Node, error) {
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	var node models.Node
-	if err := collection.Find(bson.M{key: value, "state": models.NODE_STATE_UNACCEPTED}).One(&node); err == nil {
-		return &node, nil
-	} else {
-		return nil, err
-	}
-}
-
-func UpdateStorageNodeToDB(hostname string, node_state models.NodeState, node_status models.NodeStatus, alm_status models.AlarmStatus, ctxt string) error {
-	// Updating the node details in DB
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	if err := coll.Update(bson.M{"hostname": hostname}, bson.M{"$set": bson.M{"state": node_state, "status": node_status, "almstatus": alm_status}}); err != nil {
-		logger.Get().Critical("%s-Error Updating the node: %s. error: %v", ctxt, hostname, err)
-		return err
-	}
-	return nil
 }
