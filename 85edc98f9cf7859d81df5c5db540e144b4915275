@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_4b3b79eb",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T03:59:31Z",
+      "side": 1,
+      "message": "If the UI team agree with this, I am fine",
+      "parentUuid": "5a72e520_48ab7f89",
+      "range": {
+        "startLine": 293,
+        "startChar": 2,
+        "endLine": 296,
+        "endChar": 11
+      },
+      "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_055ed2e9",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 1
@@ -190,6 +214,30 @@
       "side": 1,
       "message": "Its not actually a provider function but needs to make provider calls internally along with whatever details it can fetch by itself",
       "parentUuid": "5a72e520_288d6332",
+      "range": {
+        "startLine": 355,
+        "startChar": 6,
+        "endLine": 355,
+        "endChar": 28
+      },
+      "revId": "85edc98f9cf7859d81df5c5db540e144b4915275",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_0b4a6183",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T03:59:31Z",
+      "side": 1,
+      "message": "yeah, agree. probably for cluster specific dashboard, it may be a candidate to consider",
+      "parentUuid": "5a72e520_e8726b48",
       "range": {
         "startLine": 355,
         "startChar": 6,
