@@ -373,6 +373,21 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: GetEvents,
 			Version:     1,
 		},
+		//Block Devices
+		{
+			Name:        "POST_BlockDevicesWithStorage",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}/blockdevices",
+			HandlerFunc: a.POST_BlockDevicesWithStorage,
+			Version:     1,
+		},
+		{
+			Name:        "POST_BlockDevices",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}/blockdevices",
+			HandlerFunc: a.POST_BlockDevices,
+			Version:     1,
+		},
 		//Storage Profiles
 		{
 			Name:        "POST_StorageProfiles",
