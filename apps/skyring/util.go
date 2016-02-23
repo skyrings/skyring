@@ -54,7 +54,7 @@ func lockNode(nodeId uuid.UUID, hostname string, operation string) (*lock.AppLoc
 	return appLock, nil
 }
 
-func lockNodes(nodes models.Nodes, operation string) (*lock.AppLock, error) {
+func LockNodes(nodes models.Nodes, operation string) (*lock.AppLock, error) {
 	locks := make(map[uuid.UUID]string)
 	for _, node := range nodes {
 		locks[node.NodeId] = fmt.Sprintf("%s : %s", operation, node.Hostname)
@@ -263,7 +263,7 @@ func syncNodeStatus(node models.Node) error {
 }
 
 func syncClusterStatus(cluster_id *uuid.UUID) error {
-	provider := GetApp().getProviderFromClusterId(*cluster_id)
+	provider := GetApp().GetProviderFromClusterId(*cluster_id)
 	if provider == nil {
 		logger.Get().Error("Error getting provider for the cluster: %s", *cluster_id)
 		return errors.New("Error getting the provider")

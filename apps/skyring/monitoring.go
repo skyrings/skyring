@@ -285,7 +285,7 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 				monState.StaleNodes, _ = util.StringifyInterface(nodesWithStaleMonitoringConfig.GetElements())
 
 				t.UpdateStatus("Started task to add the monitoring plugin : %v", t.ID)
-				appLock, err := lockNodes(nodes, "POST_AddMonitoringPlugin")
+				appLock, err := LockNodes(nodes, "POST_AddMonitoringPlugin")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
@@ -416,7 +416,7 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 				t.UpdateStatus("Started task to update monitoring plugins configuration : %v", t.ID)
 				var updatedPlugins []monitoring.Plugin
 				var pluginUpdateError error
-				appLock, err := lockNodes(nodes, "PUT_Thresholds")
+				appLock, err := LockNodes(nodes, "PUT_Thresholds")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
@@ -626,7 +626,7 @@ func monitoringPluginActivationDeactivations(enable bool, plugin_name string, cl
 				t.UpdateStatus("Started task to %v monitoring plugin : %v", action, t.ID)
 				var actionNodeWiseFailure map[string]string
 				var actionErr error
-				appLock, err := lockNodes(nodes, "monitoringPluginActivationDeactivations")
+				appLock, err := LockNodes(nodes, "monitoringPluginActivationDeactivations")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
@@ -763,7 +763,7 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 				nodesWithStaleMonitoringConfig.AddAll(util.GenerifyStringArr(down_nodes))
 				monState.StaleNodes, _ = util.StringifyInterface(nodesWithStaleMonitoringConfig.GetElements())
 				t.UpdateStatus("Task created to remove monitoring plugin %v", plugin_name)
-				appLock, err := lockNodes(nodes, "REMOVE_MonitoringPlugin")
+				appLock, err := LockNodes(nodes, "REMOVE_MonitoringPlugin")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return

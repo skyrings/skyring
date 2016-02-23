@@ -109,14 +109,14 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("Failed to get nodes", err, t)
 					return
 				}
-				appLock, err := lockNodes(nodes, "Manage_Cluster")
+				appLock, err := LockNodes(nodes, "Manage_Cluster")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
 				defer a.GetLockManager().ReleaseLock(*appLock)
 
-				provider := a.getProviderFromClusterId(*cluster_id)
+				provider := a.GetProviderFromClusterId(*cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("Error getting provider for cluster: %v", *cluster_id)), t)
 					return

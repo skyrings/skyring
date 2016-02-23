@@ -64,7 +64,7 @@ func RouteEvent(event models.NodeEvent) {
 	}
 
 	// Push the event to DB only if the node is managed
-	if node.Hostname == "" || !node.Enabled {
+	if node.Hostname == "" || !node.Enabled || node.State != models.NODE_STATE_ACTIVE {
 		return
 	}
 	e.ClusterId = node.ClusterId
