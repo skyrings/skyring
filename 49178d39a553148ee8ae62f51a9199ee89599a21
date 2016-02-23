@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_ab730de6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T03:53:13Z",
+      "side": 1,
+      "message": "Are we doing the re-initialize as a separate patch?",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 9,
+        "endChar": 29
+      },
+      "revId": "49178d39a553148ee8ae62f51a9199ee89599a21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_2bc1dde4",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T03:53:13Z",
+      "side": 1,
+      "message": "\u0027staus\u0027 type is changed. you may have to rebase with my patch",
+      "range": {
+        "startLine": 650,
+        "startChar": 11,
+        "endLine": 650,
+        "endChar": 69
+      },
+      "revId": "49178d39a553148ee8ae62f51a9199ee89599a21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_4bb6198c",
+        "filename": "event/handler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T03:53:13Z",
+      "side": 1,
+      "message": "Don\u0027t call salt-backend from here. Use saltnodemaanger instead",
+      "range": {
+        "startLine": 34,
+        "startChar": 1,
+        "endLine": 34,
+        "endChar": 32
+      },
+      "revId": "49178d39a553148ee8ae62f51a9199ee89599a21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_8baf312b",
+        "filename": "event/handler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T03:53:13Z",
+      "side": 1,
+      "message": "I think we should not throw error here. these events are generated until the nodes are accepted. So logs and throwing errors will flood the logfiles. better return nil",
+      "range": {
+        "startLine": 252,
+        "startChar": 1,
+        "endLine": 252,
+        "endChar": 82
+      },
+      "revId": "49178d39a553148ee8ae62f51a9199ee89599a21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_abaced36",
+        "filename": "nodemanager/saltnodemanager/salt_node_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T03:53:13Z",
+      "side": 1,
+      "message": "why this change? we are defeating the purpose of saltnodemanager. saltnodemgr functions supposed call salt backend to get/set on the node. If you are retrieving from DB no need to write a func here. you can do it much before this level",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 19
+      },
+      "revId": "49178d39a553148ee8ae62f51a9199ee89599a21",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
