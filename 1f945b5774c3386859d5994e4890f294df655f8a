@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_f419667a",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T14:53:28Z",
+      "side": 1,
+      "message": "added it in listener.go",
+      "parentUuid": "5a72e520_59827301",
+      "range": {
+        "startLine": 73,
+        "startChar": 6,
+        "endLine": 73,
+        "endChar": 49
+      },
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_799e4f58",
         "filename": "event/handler.go",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2016-02-23T11:09:27Z",
       "side": 1,
       "message": "Above two lines can be written as \n\nexisting_disk :\u003d node.StorageDisks",
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_f43086ea",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T14:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_799e4f58",
       "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_b4644ee6",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T14:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_99a22b99",
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_f9a95f7c",
         "filename": "event/handler.go",
         "patchSetId": 2
@@ -70,6 +130,24 @@
       "writtenOn": "2016-02-23T11:09:27Z",
       "side": 1,
       "message": "There is a variable for \"OSD\", if not add and use in bigfin as well.",
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_94c3d289",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T14:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_f9a95f7c",
       "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_f4ba4609",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T14:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_19b63bdd",
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_5999936d",
         "filename": "event/handler.go",
         "patchSetId": 2
@@ -104,6 +200,30 @@
       "writtenOn": "2016-02-23T11:13:32Z",
       "side": 1,
       "message": "why you want to do this. As part of the event, you know which drive is getting added right?",
+      "range": {
+        "startLine": 130,
+        "startChar": 1,
+        "endLine": 146,
+        "endChar": 2
+      },
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_9471127a",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T14:53:28Z",
+      "side": 1,
+      "message": "As part of drive add event we wont get the devices\u0027 name like /dev/vdx but we get names like : VirtIo disk1. So have to go with this",
+      "parentUuid": "5a72e520_5999936d",
       "range": {
         "startLine": 130,
         "startChar": 1,
@@ -139,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_543b1aeb",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T14:53:28Z",
+      "side": 1,
+      "message": "That is causing cyclic dependency. Can we look at it later ?",
+      "parentUuid": "5a72e520_f9d79feb",
+      "range": {
+        "startLine": 156,
+        "startChar": 25,
+        "endLine": 156,
+        "endChar": 32
+      },
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_d9aca38f",
         "filename": "event/handler.go",
         "patchSetId": 2
@@ -162,6 +306,30 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_74401657",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T14:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_d9aca38f",
+      "range": {
+        "startLine": 156,
+        "startChar": 1,
+        "endLine": 161,
+        "endChar": 62
+      },
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_59e7d3e4",
         "filename": "event/handler.go",
         "patchSetId": 2
@@ -173,6 +341,30 @@
       "writtenOn": "2016-02-23T11:13:32Z",
       "side": 1,
       "message": "This is not sufficient. ExpandCluster is a async op. need to wait for the provider task to complete and once it is done you have to do some post ops. Please look at the code in cluster.go and should be inline with that",
+      "range": {
+        "startLine": 174,
+        "startChar": 1,
+        "endLine": 180,
+        "endChar": 2
+      },
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_9424b2c7",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-23T14:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_59e7d3e4",
       "range": {
         "startLine": 174,
         "startChar": 1,
