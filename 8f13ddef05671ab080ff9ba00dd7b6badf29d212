@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_d492aaf5",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-23T14:41:18Z",
+      "side": 1,
+      "message": "Remove ctx feom http response.",
+      "revId": "8f13ddef05671ab080ff9ba00dd7b6badf29d212",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
