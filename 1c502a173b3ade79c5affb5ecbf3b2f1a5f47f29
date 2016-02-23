@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_199b9bca",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T09:58:36Z",
+      "side": 1,
+      "message": "why this is imported again?",
+      "range": {
+        "startLine": 23,
+        "startChar": 1,
+        "endLine": 23,
+        "endChar": 17
+      },
+      "revId": "1c502a173b3ade79c5affb5ecbf3b2f1a5f47f29",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
