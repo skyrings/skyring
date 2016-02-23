@@ -22,6 +22,30 @@
       "revId": "37326af9257d78a392f5f555ce375454de6bbd55",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_0eba6fe1",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T06:44:54Z",
+      "side": 1,
+      "message": "Look at the patch raised in bigfin https://review.gerrithub.io/#/c/263957/",
+      "parentUuid": "5a72e520_2e3c8b93",
+      "range": {
+        "startLine": 68,
+        "startChar": 23,
+        "endLine": 68,
+        "endChar": 63
+      },
+      "revId": "37326af9257d78a392f5f555ce375454de6bbd55",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
