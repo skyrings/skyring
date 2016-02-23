@@ -58,7 +58,7 @@ func (a *App) getProviderFromClusterType(cluster_type string) *Provider {
 	}
 }
 
-func (a *App) getProviderFromClusterId(cluster_id uuid.UUID) *Provider {
+func (a *App) GetProviderFromClusterId(cluster_id uuid.UUID) *Provider {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
@@ -76,7 +76,7 @@ func (a *App) getProviderFromClusterId(cluster_id uuid.UUID) *Provider {
 }
 
 func (a *App) RouteProviderEvents(event models.Event) error {
-	provider := a.getProviderFromClusterId(event.ClusterId)
+	provider := a.GetProviderFromClusterId(event.ClusterId)
 	if provider == nil {
 		logger.Get().Error("Error getting provider for cluster: %v", event.ClusterId)
 		return errors.New(fmt.Sprintf("Error getting provider for cluster: %v", event.ClusterId))
@@ -99,7 +99,7 @@ func (a *App) RouteProviderEvents(event models.Event) error {
 }
 
 func (a *App) RouteProviderBasedMonitoring(cluster_id uuid.UUID) {
-	provider := a.getProviderFromClusterId(cluster_id)
+	provider := a.GetProviderFromClusterId(cluster_id)
 	if provider == nil {
 		logger.Get().Warning("Faield to get provider for cluster: %v", cluster_id)
 		return

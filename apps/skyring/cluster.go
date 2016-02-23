@@ -102,7 +102,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %s", request.Name), err, t)
 					return
 				}
-				appLock, err := lockNodes(nodes, "POST_Clusters")
+				appLock, err := LockNodes(nodes, "POST_Clusters")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
@@ -226,7 +226,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *uuid), err, t)
 					return
 				}
-				appLock, err := lockNodes(cnodes, "Forget_Cluster")
+				appLock, err := LockNodes(cnodes, "Forget_Cluster")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
@@ -377,7 +377,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
 					return
 				}
-				appLock, err := lockNodes(nodes, "Unmanage_Cluster")
+				appLock, err := LockNodes(nodes, "Unmanage_Cluster")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
@@ -470,7 +470,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
 					return
 				}
-				appLock, err := lockNodes(nodes, "Manage_Cluster")
+				appLock, err := LockNodes(nodes, "Manage_Cluster")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
@@ -580,13 +580,13 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
 					return
 				}
-				appLock, err := lockNodes(nodes, "Expand_Cluster")
+				appLock, err := LockNodes(nodes, "Expand_Cluster")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
 				defer a.GetLockManager().ReleaseLock(*appLock)
-				provider := a.getProviderFromClusterId(*cluster_id)
+				provider := a.GetProviderFromClusterId(*cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("Error etting provider for cluster: %v", *cluster_id)), t)
 					return
