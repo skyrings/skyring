@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_f9ba3f09",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T10:17:33Z",
+      "side": 1,
+      "message": "if \u0027disableautoexpand\u0027 not found in req, don\u0027t continue, log error and return",
+      "range": {
+        "startLine": 74,
+        "startChar": 1,
+        "endLine": 74,
+        "endChar": 2
+      },
+      "revId": "9a79a7ea8c9c8644b47070b66d76e6490344b465",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
