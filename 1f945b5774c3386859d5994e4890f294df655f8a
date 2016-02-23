@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a72e520_59827301",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T11:13:32Z",
+      "side": 1,
+      "message": "Need to honor events only if the node is in active state",
+      "range": {
+        "startLine": 73,
+        "startChar": 6,
+        "endLine": 73,
+        "endChar": 49
+      },
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_799e4f58",
         "filename": "event/handler.go",
         "patchSetId": 2
@@ -64,6 +87,98 @@
       "writtenOn": "2016-02-23T11:09:27Z",
       "side": 1,
       "message": "%s/old/exists/g",
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_5999936d",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T11:13:32Z",
+      "side": 1,
+      "message": "why you want to do this. As part of the event, you know which drive is getting added right?",
+      "range": {
+        "startLine": 130,
+        "startChar": 1,
+        "endLine": 146,
+        "endChar": 2
+      },
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_f9d79feb",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T11:13:32Z",
+      "side": 1,
+      "message": "move this func to skyringutils as we are using this outside apps/skyring",
+      "range": {
+        "startLine": 156,
+        "startChar": 25,
+        "endLine": 156,
+        "endChar": 32
+      },
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_d9aca38f",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T11:13:32Z",
+      "side": 1,
+      "message": "Need to lock all nodes in the cluster",
+      "range": {
+        "startLine": 156,
+        "startChar": 1,
+        "endLine": 161,
+        "endChar": 62
+      },
+      "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_59e7d3e4",
+        "filename": "event/handler.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-23T11:13:32Z",
+      "side": 1,
+      "message": "This is not sufficient. ExpandCluster is a async op. need to wait for the provider task to complete and once it is done you have to do some post ops. Please look at the code in cluster.go and should be inline with that",
+      "range": {
+        "startLine": 174,
+        "startChar": 1,
+        "endLine": 180,
+        "endChar": 2
+      },
       "revId": "1f945b5774c3386859d5994e4890f294df655f8a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
