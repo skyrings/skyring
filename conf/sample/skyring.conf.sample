@@ -32,5 +32,8 @@
     "authentication": {
         "providerName": "localauthprovider",
         "configFile": "/etc/skyring/authentication.conf"
+    },
+    "summary": {
+    	"netSummaryInterval": 60
     }
 }
