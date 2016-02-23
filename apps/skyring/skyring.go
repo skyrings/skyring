@@ -28,6 +28,7 @@ import (
 	"github.com/skyrings/skyring-common/monitoring"
 	"github.com/skyrings/skyring-common/tools/lock"
 	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/schedule"
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring/authprovider"
@@ -38,6 +39,7 @@ import (
 	"net/rpc/jsonrpc"
 	"os"
 	"path"
+	"time"
 )
 
 type Provider struct {
@@ -343,6 +345,19 @@ func (a *App) initializeMonitoringManager(config conf.MonitoringDBconfig) error 
 	}
 }
 
+func scheduleSummaryMonitoring(config conf.SystemSummaryConfig) error {
+	schedule.InitShechuleManager()
+	scheduler, err := schedule.NewScheduler()
+	if err != nil {
+		logger.Get().Error("Error scheduling the system summary calculation. Error %v", err)
+		return err
+	}
+	f := Compute_System_Summary
+	go scheduler.Schedule(time.Duration(config.NetSummaryInterval)*time.Second, f, make(map[string]interface{}))
+	Compute_System_Summary(make(map[string]interface{}))
+	return nil
+}
+
 func validApiVersion(version int) bool {
 	for _, ver := range conf.SystemConfig.Config.SupportedVersions {
 		if ver == version {
@@ -505,5 +520,11 @@ func (a *App) PostInitApplication() error {
 	logger.Get().Info("Starting clusters syncing")
 	go a.SyncClusterDetails()
 	go InitSchedules()
+
+	if err := scheduleSummaryMonitoring(sysConfig.Dashboard); err != nil {
+		logger.Get().Error("Failed to schedule fetching summary.Error %v", err)
+		return err
+	}
+
 	return nil
 }

@@ -30,6 +30,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"reflect"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -43,7 +44,7 @@ func getEntityName(entity_type string, entity_id uuid.UUID, parentId *uuid.UUID)
 			return "", fmt.Errorf("Unknown %v with id %v.Err %v", entity_type, entity_id, entityFetchErr)
 		}
 		return entity.Hostname, nil
-	case monitoring.CLUSTER:
+	case models.CLUSTER:
 		entity, entityFetchErr := GetCluster(&entity_id)
 		if entityFetchErr != nil {
 			return "", fmt.Errorf("Unknown %v with id %v.Err %v", entity_type, entity_id, entityFetchErr)
@@ -60,7 +61,7 @@ func getEntityName(entity_type string, entity_id uuid.UUID, parentId *uuid.UUID)
 }
 
 var entityParentMap = map[string]string{
-	monitoring.SLU: monitoring.CLUSTER,
+	monitoring.SLU: models.CLUSTER,
 }
 
 func getParentName(queriedEntityType string, parentId uuid.UUID) (string, error) {
@@ -68,7 +69,7 @@ func getParentName(queriedEntityType string, parentId uuid.UUID) (string, error)
 	case monitoring.SLU:
 		parent, parentFetchErr := GetCluster(&parentId)
 		if parentFetchErr != nil {
-			return "", fmt.Errorf("%v not a valid id of %v.Error %v", parentId, monitoring.CLUSTER, parentFetchErr)
+			return "", fmt.Errorf("%v not a valid id of %v.Error %v", parentId, models.CLUSTER, parentFetchErr)
 		}
 		return parent.Name, nil
 	}
@@ -337,6 +338,7 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 
 func updatePluginsInDb(parameter bson.M, monitoringState models.MonitoringState) (err error) {
 	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 	dbUpdateError := coll.Update(parameter, bson.M{"$set": bson.M{"monitoring": monitoringState}})
 	return dbUpdateError
@@ -836,5 +838,121 @@ func (a *App) GET_MonitoringPlugins(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		json.NewEncoder(w).Encode(cluster.Monitoring.Plugins)
+	}
+}
+
+func (a *App) Get_Summary(w http.ResponseWriter, r *http.Request) {
+	var system models.System
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SYSTEM)
+	if err := coll.Find(bson.M{"name": monitoring.SYSTEM}).One(&system); err != nil {
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Could not fetch summary.Err %v", err))
+		logger.Get().Error(fmt.Sprintf("Could not fetch summary.Err %v", err))
+		return
+	}
+	json.NewEncoder(w).Encode(system)
+}
+
+func Compute_System_Summary(p map[string]interface{}) {
+	var system models.System
+	system.Name = monitoring.SYSTEM
+	time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
+	table_name := conf.SystemConfig.TimeSeriesDBConfig.CollectionName + "." + models.SYSTEM + "."
+	hostname := conf.SystemConfig.TimeSeriesDBConfig.Hostname
+	port := conf.SystemConfig.TimeSeriesDBConfig.DataPushPort
+
+	clusters, clusterFetchError := GetClusters()
+	if clusterFetchError != nil {
+		logger.Get().Error("Failed to fetch clusters.Err %v", clusterFetchError)
+	}
+
+	/*
+		Count the number of unmanaged nodes
+	*/
+	unmanagedNodes, unmanagedNodesError := GetCoreNodeManager().GetUnmanagedNodes()
+	if unmanagedNodesError != nil {
+		logger.Get().Error("%s", fmt.Sprintf("Failed to fetch unmanaged nodes.Err %v", unmanagedNodesError))
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	var slus []models.StorageLogicalUnit
+	if err := collection.Find(nil).All(&slus); err != nil {
+		logger.Get().Error("Error getting the slus list. error: %v", err)
+		return
+	}
+	system.SLUCount = map[string]int{models.TOTAL: len(slus)}
+
+	var net_cluster_used int64
+	var net_cluster_total int64
+	var total_nodes int
+	var clusters_in_error int
+	net_storage_profile_utilization := make(map[string]models.Utilization)
+	down_nodes := 0
+	for _, cluster := range clusters {
+		if cluster.Status == models.CLUSTER_STATUS_ERROR {
+			clusters_in_error = clusters_in_error + 1
+		}
+		nodesInCluster, clusterNodesFetchError := getClusterNodesById(&cluster.ClusterId)
+		if clusterNodesFetchError != nil {
+			logger.Get().Error("%s", fmt.Sprintf("Failed to fetch nodes of cluster.Err %v", cluster.Name))
+			continue
+		}
+
+		/*
+			Count the number of down nodes
+		*/
+		for _, node := range nodesInCluster {
+			if node.Status == models.STATUS_DOWN {
+				down_nodes = down_nodes + 1
+			}
+		}
+
+		/*
+			Count the total number of nodes
+		*/
+		total_nodes = total_nodes + len(nodesInCluster)
+		/*
+			Calculate net cluster utilization
+		*/
+		net_cluster_used = net_cluster_used + cluster.Usage.Used
+		net_cluster_total = net_cluster_total + cluster.Usage.Total
+
+		/*
+			Calculate net storage profile utilization
+		*/
+		for profile, profileUtilization := range cluster.StorageProfileUsage {
+			if utilization, ok := net_storage_profile_utilization[profile]; ok {
+				net_storage_profile_utilization[profile] = models.Utilization{Used: utilization.Used + profileUtilization.Used, Total: utilization.Total + profileUtilization.Total}
+			} else {
+				net_storage_profile_utilization[profile] = models.Utilization{Used: profileUtilization.Used, Total: profileUtilization.Total}
+			}
+		}
+	}
+	system.ClustersCount = map[string]int{models.TOTAL: len(clusters), models.ClusterStatuses[models.CLUSTER_STATUS_ERROR]: clusters_in_error}
+
+	system.NodesCount = map[string]int{models.TOTAL: total_nodes, models.STATUS_DOWN: down_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(*unmanagedNodes)}
+
+	system.Usage = models.Utilization{Used: net_cluster_used, Total: net_cluster_total}
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.USED_SPACE: {time_stamp_str: strconv.FormatInt(system.Usage.Used, 10)}}, hostname, port); err != nil {
+		logger.Get().Error("Error pushing cluster utilization.Err %v", err)
+	}
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.TOTAL_SPACE: {time_stamp_str: strconv.FormatInt(system.Usage.Total, 10)}}, hostname, port); err != nil {
+		logger.Get().Error("Error pushing cluster utilization.Err %v", err)
+	}
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.PERCENT_USED: {time_stamp_str: strconv.FormatFloat((float64(system.Usage.Used*100) / float64(system.Usage.Total)), 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("Error pushing cluster utilization.Err %v", err)
+	}
+
+	system.StorageProfileUsage = net_storage_profile_utilization
+
+	/*
+		Persist system into db
+	*/
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SYSTEM)
+	if _, err := coll.Upsert(bson.M{"name": monitoring.SYSTEM}, system); err != nil {
+		logger.Get().Error("Error persisting the system.Error %v", err)
 	}
 }
