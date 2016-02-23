@@ -32,7 +32,7 @@ type APIError struct {
 	Error string
 }
 
-func lockNode(nodeId uuid.UUID, hostname string, operation string) (*lock.AppLock, error) {
+func LockNode(nodeId uuid.UUID, hostname string, operation string) (*lock.AppLock, error) {
 	//lock the node
 	locks := make(map[uuid.UUID]string)
 	if nodeId.IsZero() {

@@ -13,6 +13,7 @@ limitations under the License.
 package event
 
 import (
+	//"bytes"
 	"errors"
 	"fmt"
 	"github.com/skyrings/skyring-common/conf"
@@ -21,10 +22,14 @@ import (
 	"github.com/skyrings/skyring-common/notifier"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/task"
+	"github.com/skyrings/skyring-common/tools/uuid"
+	//"github.com/skyrings/skyring-common/utils"
+	"encoding/json"
 	"github.com/skyrings/skyring/apps/skyring"
 	"github.com/skyrings/skyring/nodemanager/saltnodemanager"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"net/http"
 	"os"
 	"time"
 )
@@ -67,14 +72,107 @@ func mount_change_handler(event models.Event) error {
 }
 
 func drive_add_handler(event models.Event) error {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var node models.Node
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := coll.Find(bson.M{"nodeid": event.NodeId}).One(&node); err != nil {
+		logger.Get().Error("Node information read from DB failed for node: %s. error: %v", event.NodeId, err)
+		return nil
+	}
+	var existing_disks []models.Disk
+	existing_disks = node.StorageDisks
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return nil
+	}
 
+	ctxt := fmt.Sprintf("%v:%v", "skyring", reqId.String())
 
+	sProfiles, err := skyring.GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
+	if err != nil {
+		logger.Get().Error("%s-Unable to get the storage profiles. err:%v", ctxt, err)
+	}
 
+	// sync the nodes to get new disks
 
+	if ok, err := skyring.GetCoreNodeManager().SyncStorageDisks(node.Hostname, sProfiles, ctxt); err != nil || !ok {
+		logger.Get().Error("Failed to sync disk for host: %s Error: %v", node.Hostname, err)
+		return nil
+	}
 
+	// check if cluster is in managed/un-managed state
 
+	ok, err := skyring.ClusterUnmanaged(event.ClusterId)
+	if err != nil {
+		logger.Get().Warning("Error checking managed state of cluster: %v. error: %v", event.ClusterId, err)
+		return nil
+	}
+	if ok {
+		logger.Get().Error("Cluster: %v is in un-managed state", event.ClusterId)
+		return nil
+	}
 
-	return nil
+	// get the list of disks after syncing.
+	if err := coll.Find(bson.M{"nodeid": event.NodeId}).One(&node); err != nil {
+		logger.Get().Error("Node information read from DB failed for node: %s. error: %v", event.NodeId, err)
+		return nil
+	}
+	var cluster_nodes []models.ClusterNode
+	var cluster_node models.ClusterNode
+	cluster_node.NodeId = event.NodeId.String()
+	cluster_node.NodeType = []string{"OSD"}
+	var old bool
+	for _, disk := range node.StorageDisks {
+		old = false
+		for _, existing_disk := range existing_disks {
+			if disk.DevName == existing_disk.DevName {
+				old = true
+				break
+			}
+		}
+		if !old {
+			cluster_node.Devices = append(cluster_node.Devices, models.ClusterNodeDevice{Name: disk.DevName, FSType: "xfs"})
+		}
+	}
+	vars := map[string]string{"cluster-id": event.ClusterId.String()}
+	cluster_nodes = append(cluster_nodes, cluster_node)
+	body, err := json.Marshal(cluster_nodes)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error forming request body. error: %v", err))
+		return nil
+	}
+	//body := bytes.NewBuffer(buf)
+
+	// lock the node for expanding
+
+	appLock, err := skyring.LockNode(node.NodeId, node.Hostname, "Expand_Cluster")
+	if err != nil {
+		logger.Get().Error("Failed to acquire lock: %v", err)
+		return nil
+	}
+	defer skyring.GetApp().GetLockManager().ReleaseLock(*appLock)
+
+	// expand cluster if node part of a cluster
+
+	provider := skyring.GetApp().GetProviderFromClusterId(node.ClusterId)
+	if provider == nil {
+		logger.Get().Error(fmt.Sprintf("Error getting provider for cluster: %v", node.ClusterId))
+		return nil
+	}
+	var result models.RpcResponse
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, "ExpandCluster"),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+		&result)
+	if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+		logger.Get().Error(fmt.Sprintf("Error expanding cluster: %v. Error: %v", node.ClusterId, err))
+		return nil
+	} else {
+		logger.Get().Info("Expanded cluster:%s successfully completed", node.ClusterId)
+		return nil
+	}
 }
 
 func drive_remove_handler(event models.Event) error {
