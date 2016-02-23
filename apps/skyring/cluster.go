@@ -179,7 +179,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 7200*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("%s-Unable to create task for creating cluster: %s. error: %v", ctxt, request.Name, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create cluster")
 		return
@@ -650,7 +650,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, 7200*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to expand cluster: %v. error: %v", *cluster_id, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster expansion")
 		return
