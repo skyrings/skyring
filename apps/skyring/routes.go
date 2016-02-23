@@ -416,6 +416,20 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.GET_BlockDevice,
 			Version:     1,
 		},
+		{
+			Name:        "DELETE_BlockDevice",
+			Method:      "DELETE",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}/blockdevices/{blockdevice-id}",
+			HandlerFunc: a.DELETE_BlockDevice,
+			Version:     1,
+		},
+		{
+			Name:        "PATCH_ResizeBlockDevice",
+			Method:      "PATCH",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}/blockdevices/{blockdevice-id}",
+			HandlerFunc: a.PATCH_ResizeBlockDevice,
+			Version:     1,
+		},
 		//Storage Profiles
 		{
 			Name:        "POST_StorageProfiles",
