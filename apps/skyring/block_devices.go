@@ -165,6 +165,125 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (a *App) GET_ClusterBlockDevices(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		logger.Get().Error("%s - Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_BLOCK_DEVICES)
+	var blkDevices []models.BlockDevice
+	if err := collection.Find(bson.M{"clusterid": *cluster_id}).All(&blkDevices); err != nil {
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("%s - Error getting the block devices list for cluster: %v. error: %v", ctxt, *cluster_id, err)
+		return
+	}
+	if len(blkDevices) == 0 {
+		json.NewEncoder(w).Encode([]models.BlockDevice{})
+	} else {
+		json.NewEncoder(w).Encode(blkDevices)
+	}
+}
+
+func (a *App) GET_ClusterStorageBlockDevices(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		logger.Get().Error("%s - Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+	storage_id_str := vars["storage-id"]
+	storage_id, err := uuid.Parse(storage_id_str)
+	if err != nil {
+		logger.Get().Error("%s - Error parsing the storage id: %s. error: %v", ctxt, storage_id_str, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the storage id: %s", storage_id_str))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_BLOCK_DEVICES)
+	var blkDevices []models.BlockDevice
+	if err := collection.Find(bson.M{"clusterid": *cluster_id, "storageid": *storage_id}).All(&blkDevices); err != nil {
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("%s - Error getting the block devices list for storage %v of cluster: %v. error: %v", ctxt, *storage_id, *cluster_id, err)
+		return
+	}
+	if len(blkDevices) == 0 {
+		json.NewEncoder(w).Encode([]models.BlockDevice{})
+	} else {
+		json.NewEncoder(w).Encode(blkDevices)
+	}
+}
+
+func (a *App) GET_BlockDevice(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		logger.Get().Error("%s - Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+	storage_id_str := vars["storage-id"]
+	storage_id, err := uuid.Parse(storage_id_str)
+	if err != nil {
+		logger.Get().Error("%s - Error parsing the storage id: %s. error: %v", ctxt, storage_id_str, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the storage id: %s", storage_id_str))
+		return
+	}
+	blockdevice_id_str := vars["blockdevice-id"]
+	blockdevice_id, err := uuid.Parse(blockdevice_id_str)
+	if err != nil {
+		logger.Get().Error("%s - Error parsing the block device id: %s. error: %v", ctxt, blockdevice_id_str, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the block device id: %s", blockdevice_id_str))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_BLOCK_DEVICES)
+	var blkDevice models.BlockDevice
+	if err := collection.Find(bson.M{"clusterid": *cluster_id, "storageid": *storage_id, "id": *blockdevice_id}).One(&blkDevice); err != nil {
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("%s - Error getting the block device %v of storage %v on cluster: %v. error: %v", ctxt, *blockdevice_id, *storage_id, *cluster_id, err)
+		return
+	}
+	if blkDevice.Name == "" {
+		HttpResponse(w, http.StatusBadRequest, "Block device not found")
+		logger.Get().Error("%s - Block device with id: %v not found for storage %v on cluster: %v. error: %v", ctxt, *blockdevice_id, *storage_id, *cluster_id, err)
+		return
+	} else {
+		json.NewEncoder(w).Encode(blkDevice)
+	}
+}
+
 func block_device_exists(key string, value interface{}) (*models.BlockDevice, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()

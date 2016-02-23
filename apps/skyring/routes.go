@@ -395,6 +395,27 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.POST_BlockDevices,
 			Version:     1,
 		},
+		{
+			Name:        "GET_ClusterBlockDevices",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/blockdevices",
+			HandlerFunc: a.GET_ClusterBlockDevices,
+			Version:     1,
+		},
+		{
+			Name:        "GET_ClusterStorageBlockDevices",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}/blockdevices",
+			HandlerFunc: a.GET_ClusterStorageBlockDevices,
+			Version:     1,
+		},
+		{
+			Name:        "GET_BlockDevice",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}/blockdevices/{blockdevice-id}",
+			HandlerFunc: a.GET_BlockDevice,
+			Version:     1,
+		},
 		//Storage Profiles
 		{
 			Name:        "POST_StorageProfiles",
