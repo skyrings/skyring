@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_04efabb1",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-24T12:50:23Z",
+      "side": 1,
+      "message": "can you move this common code to a separate function an use it from testMailNotifier and add mail notifier",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 9
+      },
+      "revId": "564bf91d0542ed52cb82a4404b6b1ab0dfe1ed61",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_c422f300",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-24T12:50:23Z",
+      "side": 1,
+      "message": "body \u003d \"This is a test mail sent from skyring server\"",
+      "range": {
+        "startLine": 180,
+        "startChar": 59,
+        "endLine": 180,
+        "endChar": 85
+      },
+      "revId": "564bf91d0542ed52cb82a4404b6b1ab0dfe1ed61",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_a425f70b",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-24T12:50:23Z",
+      "side": 1,
+      "message": "Test mail from skyring.",
+      "range": {
+        "startLine": 180,
+        "startChar": 48,
+        "endLine": 180,
+        "endChar": 56
+      },
+      "revId": "564bf91d0542ed52cb82a4404b6b1ab0dfe1ed61",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
