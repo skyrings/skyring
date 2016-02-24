@@ -416,6 +416,13 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.AddMailNotifier,
 			Version:     1,
 		},
+		{
+			Name:        "POST_Testmailnotifier",
+			Method:      "POST",
+			Pattern:     "testmailnotifier/{recipient}",
+			HandlerFunc: a.TestMailNotifier,
+			Version:     1,
+		},
 	}
 	for _, route := range routes {
 		CORE_ROUTES = append(CORE_ROUTES, route)

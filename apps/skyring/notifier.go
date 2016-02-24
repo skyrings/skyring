@@ -127,3 +127,55 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	}
 	return
 }
+func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
+        body, err := ioutil.ReadAll(req.Body)
+        if err != nil {
+                logger.Get().Error("Error parsing http request body:%s", err)
+                HandleHttpError(rw, err)
+                return
+        }
+        var m map[string]interface{}
+        var recepient string
+        if err = json.Unmarshal(body, &m); err != nil {
+                logger.Get().Error("Unable to Unmarshall the data:%s", err)
+                HandleHttpError(rw, err)
+                return
+        }
+
+        var notifier models.MailNotifier
+        notifier.SkipVerify = true
+
+        if val, ok := m["mailid"]; ok {
+                notifier.MailId = val.(string)
+        }
+        if val, ok := m["password"]; ok {
+                notifier.Passcode = base64.StdEncoding.EncodeToString([]byte(val.(string)))
+        }
+        if val, ok := m["smtpserver"]; ok {
+                notifier.SmtpServer = val.(string)
+        }
+        if val, ok := m["port"]; ok {
+                notifier.Port = int(val.(float64))
+        }
+        if val, ok := m["skipverify"]; ok {
+                notifier.SkipVerify = val.(bool)
+        }
+        if val, ok := m["encryption"]; ok {
+                notifier.Encryption = val.(string)
+        }
+        if val, ok := m["mailnotification"]; ok {
+                notifier.MailNotification = val.(bool)
+        }
+        if val, ok := m["subprefix"]; ok {
+                notifier.SubPrefix = val.(string)
+        }
+        if val, ok := m["recipient"]; ok {
+                recepient = val.(string)
+        }
+        if notifier.MailId == "" || notifier.Passcode == "" || notifier.SmtpServer == "" || notifier.Port == 0 || notifier.Encryption == "" {
+                logger.Get().Error("Insufficient details for test mail notifier: %v", notifier)
+                HandleHttpError(rw, errors.New("insufficient detail for test mail notifier"))
+                return
+        }
+        mail_notifier.TestMailNotify(notifier, "TestMail", "Checking for Mailsetting", recepient)
+}
