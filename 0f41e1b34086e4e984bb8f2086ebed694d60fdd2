@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_ce9f724f",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-24T05:38:30Z",
+      "side": 1,
+      "message": "Put an else block here to check if mail notification is not there. raise proper flags to say not enough parameters",
+      "revId": "0f41e1b34086e4e984bb8f2086ebed694d60fdd2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_aea23698",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-24T05:38:30Z",
+      "side": 1,
+      "message": "you can remove both these conditions as sub prefix is optional. for mail notification you can check above",
+      "range": {
+        "startLine": 108,
+        "startChar": 136,
+        "endLine": 108,
+        "endChar": 198
+      },
+      "revId": "0f41e1b34086e4e984bb8f2086ebed694d60fdd2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
