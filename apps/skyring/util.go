@@ -22,11 +22,15 @@ import (
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/lock"
 	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
+	"github.com/skyrings/skyring/nodemanager/saltnodemanager"
 	"github.com/skyrings/skyring/skyringutils"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
+	"time"
 )
 
 type APIError struct {
@@ -278,4 +282,110 @@ func syncClusterStatus(cluster_id *uuid.UUID) error {
 		logger.Get().Error("Error updating cluster status for the cluster: %s", cluster.Name)
 	}
 	return nil
+}
+
+func Initialize(node string, ctxt string) error {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+
+	var storage_node models.Node
+
+	_ = coll.Find(bson.M{"hostname": node}).One(&storage_node)
+	if storage_node.State != models.NODE_STATE_INITIALIZING {
+		logger.Get().Warning(fmt.Sprintf("%s-Node with name: %s not in activating state to update other details", ctxt, node))
+		return nil
+	}
+
+	asyncTask := func(t *task.Task) {
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("started the task for InitializeNode: %s", t.ID)
+				// Process the request
+				if err := initializeStorageNode(storage_node.Hostname, t, ctxt); err != nil {
+					t.UpdateStatus("Failed")
+					t.Done(models.TASK_STATUS_FAILURE)
+				} else {
+					t.UpdateStatus("Success")
+					t.Done(models.TASK_STATUS_SUCCESS)
+				}
+				return
+			}
+		}
+	}
+	if taskId, err := GetApp().GetTaskManager().Run(fmt.Sprintf("Initialize Node: %s", storage_node.Hostname), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
+		logger.Get().Error("%s-Unable to create the task for Initialize Node: %s. error: %v", ctxt, storage_node.Hostname, err)
+		return err
+	} else {
+		logger.Get().Debug("%s-Task created for initialize node. Task id: %s", ctxt, taskId.String())
+	}
+	return nil
+}
+
+func initializeStorageNode(node string, t *task.Task, ctxt string) error {
+	sProfiles, err := GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
+	if err != nil {
+		logger.Get().Error("%s-Unable to get the storage profiles. May not be able to apply storage profiles for node: %v err:%v", ctxt, node, err)
+	}
+	if storage_node, ok := saltnodemanager.GetStorageNodeInstance(node, sProfiles); ok {
+		if err := updateStorageNodeToDB(*storage_node, ctxt); err != nil {
+			logger.Get().Error("%s-Unable to add details of node: %s to DB. error: %v", ctxt, node, err)
+			t.UpdateStatus("Unable to add details of node: %s to DB. error: %v", node, err)
+			skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
+			skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+			return err
+		}
+		if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(node, curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
+			if len(nodeErrorMap) != 0 {
+				logger.Get().Error("%s-Unable to setup collectd on %s because of %v", ctxt, node, nodeErrorMap)
+				t.UpdateStatus("Unable to setup collectd on %s because of %v", node, nodeErrorMap)
+				skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
+				skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+				return err
+			} else {
+				logger.Get().Error("%s-Config Error during monitoring setup for node:%s Error:%v", ctxt, node, configureError)
+				t.UpdateStatus("Config Error during monitoring setup for node:%s Error:%v", node, configureError)
+				skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
+				skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+				return err
+			}
+		}
+		if ok, err := GetCoreNodeManager().SyncModules(node); !ok || err != nil {
+			logger.Get().Error("%s-Failed to sync modules on the node: %s. error: %v", ctxt, node, err)
+			t.UpdateStatus("Failed to sync modules")
+			skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
+			skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+			return err
+		}
+		return nil
+	} else {
+		logger.Get().Critical("%s-Error getting the details for node: %s", ctxt, node)
+		t.UpdateStatus("Error getting the details for node: %s", node)
+		skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
+		skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+		return fmt.Errorf("Error getting the details for node: %s", node)
+	}
+}
+
+func updateStorageNodeToDB(storage_node models.Node, ctxt string) error {
+	// Add the node details to the DB
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.Node
+	err := coll.Find(bson.M{"nodeid": storage_node.NodeId}).One(&node)
+	if err == mgo.ErrNotFound {
+		storage_node.State = models.NODE_STATE_ACTIVE
+		if err := coll.Update(bson.M{"hostname": storage_node.Hostname}, storage_node); err != nil {
+			logger.Get().Critical("%s-Error Updating the node: %s. error: %v", ctxt, storage_node.Hostname, err)
+			return err
+		}
+		return nil
+	} else {
+		logger.Get().Critical(fmt.Sprintf("%s-Node with id: %v already exists", ctxt, storage_node.NodeId))
+		return errors.New(fmt.Sprintf("Node with id: %v already exists", storage_node.NodeId))
+	}
 }
