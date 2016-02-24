@@ -83,6 +83,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "POST_Reinitialize",
+			Method:      "POST",
+			Pattern:     "nodes/{hostname}/actions",
+			HandlerFunc: a.POST_Actions,
+			Version:     1,
+		},
+		{
 			Name:        "Get_Utilization",
 			Method:      "GET",
 			Pattern:     "monitoring/{entity-type}/{entity-id}/utilization",
