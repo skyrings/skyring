@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_c7083530",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-24T18:14:30Z",
+      "side": 1,
+      "message": "Provide the detail description about the API introduced. e.g.\n\nAdded below APIs\n  - POST /api/\u003cver\u003e/cluster/....",
+      "revId": "85120a76c0e2fe1fc3fcc5ba537059d79fd01ffd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_e7053115",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-24T18:14:30Z",
+      "side": 1,
+      "message": "Get context from request use the same while logging errors. Refer apps/skyring/cluster.go",
+      "revId": "85120a76c0e2fe1fc3fcc5ba537059d79fd01ffd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_07032d10",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-24T18:14:30Z",
+      "side": 1,
+      "message": "This looks very generic name. Better use InitializeNode",
+      "revId": "85120a76c0e2fe1fc3fcc5ba537059d79fd01ffd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_6204cf15",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-24T18:14:30Z",
+      "side": 1,
+      "message": "Context should be passed from caller and the same should be used while loging errors.",
+      "revId": "85120a76c0e2fe1fc3fcc5ba537059d79fd01ffd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_8209cb2e",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-24T18:14:30Z",
+      "side": 1,
+      "message": "Same as above for context",
+      "revId": "85120a76c0e2fe1fc3fcc5ba537059d79fd01ffd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_a20ec732",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-24T18:14:30Z",
+      "side": 1,
+      "message": "Same as above for context",
+      "revId": "85120a76c0e2fe1fc3fcc5ba537059d79fd01ffd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
