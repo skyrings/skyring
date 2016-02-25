@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_b84a7825",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T07:58:26Z",
+      "side": 1,
+      "message": "avoid doing this inside the loop",
+      "range": {
+        "startLine": 344,
+        "startChar": 6,
+        "endLine": 346,
+        "endChar": 74
+      },
+      "revId": "94bf92b9db2105d8aba7ae14129d74435d4032a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_d847341c",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T07:58:26Z",
+      "side": 1,
+      "message": "timeouts?",
+      "range": {
+        "startLine": 353,
+        "startChar": 33,
+        "endLine": 353,
+        "endChar": 58
+      },
+      "revId": "94bf92b9db2105d8aba7ae14129d74435d4032a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
