@@ -43,6 +43,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_78e8007d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-25T09:04:36Z",
+      "side": 1,
+      "message": "I feel second option would be better.\n\nWe could also create a storage separately then create bds in it, but that requires ui caching the bd list and sending it later, which would be problematic if the user refreshes the browser.",
+      "parentUuid": "5a72e520_78d1e0cc",
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_381208b5",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
