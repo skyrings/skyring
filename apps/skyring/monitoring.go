@@ -896,9 +896,21 @@ func Compute_System_Summary(p map[string]interface{}) {
 	var slus []models.StorageLogicalUnit
 	if err := collection.Find(nil).All(&slus); err != nil {
 		logger.Get().Error("%s - Error getting the slus list. error: %v", ctxt, err)
-		return
 	}
 	system.SLUCount = map[string]int{models.TOTAL: len(slus)}
+
+	collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
+	var storages models.Storages
+	if err := collection.Find(nil).All(&storages); err != nil {
+		logger.Get().Error("%s - Error getting the storage list. error: %v", ctxt, err)
+	}
+	storage_down_cnt := 0
+	for _, storage := range storages {
+		if storage.Status == STORAGE_STATUS_DOWN {
+			storage_down_cnt = storage_down_cnt + 1
+		}
+	}
+	system.StorageCount = map[string]int{models.TOTAL: len(storages), STORAGE_STATUS_DOWN: storage_down_cnt}
 
 	var net_cluster_used int64
 	var net_cluster_total int64
@@ -962,6 +974,13 @@ func Compute_System_Summary(p map[string]interface{}) {
 	}
 
 	system.StorageProfileUsage = net_storage_profile_utilization
+	system.Others = make(map[string]map[string]interface{})
+	otherProvidersDetails, othersError := GetApp().FetchMonitoringDetailsFromProviders()
+	if othersError != nil {
+		logger.Get().Error("%s - Error fetching the provider specific details. Error %v", ctxt, othersError)
+	} else {
+		system.Others = otherProvidersDetails
+	}
 
 	/*
 		Persist system into db

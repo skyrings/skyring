@@ -98,6 +98,37 @@ func (a *App) RouteProviderEvents(event models.Event) error {
 	return nil
 }
 
+func (a *App) FetchMonitoringDetailsFromProviders() (retVal map[string]map[string]interface{}, err error) {
+	var err_str string
+	if a.providers == nil || len(a.providers) == 0 {
+		logger.Get().Error("No providers registered")
+		return nil, fmt.Errorf("No providers registered")
+	}
+	retVal = make(map[string]map[string]interface{})
+	for _, provider := range a.providers {
+		var result models.RpcResponse
+		err = provider.Client.Call(fmt.Sprintf("%s.%s", provider.Name, "GetSummary"), models.RpcRequest{RpcRequestVars: nil, RpcRequestData: []byte{}}, &result)
+		if err != nil {
+			err_str = err_str + fmt.Sprintf("%v", err)
+			continue
+		}
+		if result.Status.StatusCode == http.StatusOK || result.Status.StatusCode == http.StatusPartialContent {
+			providerResult := make(map[string]interface{})
+			unmarshalError := json.Unmarshal(result.Data.Result, &providerResult)
+			if unmarshalError != nil {
+				err_str = unmarshalError.Error() + fmt.Sprintf("%v", err)
+				logger.Get().Error("Error unmarshalling the monitoring data from provider %v.Error %v", provider.Name, unmarshalError.Error())
+				continue
+			}
+			retVal[provider.Name] = providerResult
+		}
+	}
+	if err_str != "" {
+		err = fmt.Errorf("%v", err_str)
+	}
+	return retVal, err
+}
+
 func (a *App) RouteProviderBasedMonitoring(cluster_id uuid.UUID) {
 	provider := a.GetProviderFromClusterId(cluster_id)
 	if provider == nil {
