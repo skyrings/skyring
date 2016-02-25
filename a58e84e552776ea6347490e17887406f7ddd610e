@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_3d183a84",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T06:54:21Z",
+      "side": 1,
+      "message": "Do we really need this API?\nWhile querying the ceph do we really need to give the pool-ids. If not, is there any special case are we trying to address here?\nTo me the API should look like:\n GET /api/\u003cver\u003e/clusters/{cluster-id}/blockdevices/{blockdevice-id}",
+      "range": {
+        "startLine": 16,
+        "startChar": 4,
+        "endLine": 17,
+        "endChar": 33
+      },
+      "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
