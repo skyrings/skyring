@@ -22,6 +22,24 @@
       "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_7899e06d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-25T08:26:36Z",
+      "side": 1,
+      "message": "I think we should have both at cluster level and storage level. The trello board https://trello.com/c/UGRqozeV/314-list-existing-rbds-mvp-026 asks below things\n\n1. Display RBD list in Storage section of UI\n\n2. Display RBD list in the RBD tab of the Cluster object details\n\n3. Display RBD list for a given pool\n\nSo we can have apis as below may be\n\n/clusters/\u003cid\u003e/blockdevices\n\n/clusters/\u003cid\u003e/blockdevices/\u003cid\u003e\n\n/clusters/\u003cid\u003e/storages/\u003cid\u003e/blockdevices\n\n/clusters/\u003cid\u003e/storages/\u003cid\u003e/blockdevices/\u003cid\u003e\n\n@Kanagaraj, what is your thought ??",
+      "parentUuid": "5a72e520_3d183a84",
+      "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
