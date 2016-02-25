@@ -24,6 +24,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"regexp"
+	"strings"
 )
 
 /*
@@ -96,6 +97,45 @@ func (a *App) RouteProviderEvents(event models.Event) error {
 		return err
 	}
 	return nil
+}
+
+func (a *App) FetchMonitoringDetailsFromProviders() (retVal map[string]map[string]interface{}, err error) {
+	id, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error creating the id.Err %v", err)
+		return nil, fmt.Errorf("Error creating the id.Err %v", err)
+	}
+	ctxt := fmt.Sprintf("%s - %v", models.ENGINE_NAME, *id)
+	var err_str string
+	if a.providers == nil || len(a.providers) == 0 {
+		logger.Get().Error("%s - No providers registered", ctxt)
+		return nil, fmt.Errorf("No providers registered")
+	}
+	retVal = make(map[string]map[string]interface{})
+	for _, provider := range a.providers {
+		var result models.RpcResponse
+		err = provider.Client.Call(fmt.Sprintf("%s.%s", provider.Name, "GetSummary"), models.RpcRequest{RpcRequestVars: nil, RpcRequestData: []byte{}}, &result)
+		if err != nil {
+			err_str = fmt.Sprintf("%s %v\n", err_str, err)
+			continue
+		}
+		if result.Status.StatusCode == http.StatusOK || result.Status.StatusCode == http.StatusPartialContent {
+			providerResult := make(map[string]interface{})
+			unmarshalError := json.Unmarshal(result.Data.Result, &providerResult)
+			if unmarshalError != nil {
+				err_str = fmt.Sprintf("%s %v\n", err_str, unmarshalError.Error())
+				logger.Get().Error("%s - Error unmarshalling the monitoring data from provider %v.Error %v", ctxt, provider.Name, unmarshalError.Error())
+				continue
+			}
+			retVal[provider.Name] = providerResult
+		}
+	}
+	if err_str != "" {
+		//Remove the trailing space or new line
+		err_str = strings.TrimSpace(err_str)
+		err = fmt.Errorf("%v", err_str)
+	}
+	return retVal, err
 }
 
 func (a *App) RouteProviderBasedMonitoring(cluster_id uuid.UUID) {
