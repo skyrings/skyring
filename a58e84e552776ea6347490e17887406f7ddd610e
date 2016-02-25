@@ -61,6 +61,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_d8d734be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-25T09:01:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_f81f90b5",
+      "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_98885ce9",
         "filename": "apps/skyring/block_devices.go",
         "patchSetId": 3
@@ -78,6 +96,24 @@
         "endLine": 323,
         "endChar": 38
       },
+      "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_18e2ac9f",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-25T09:01:24Z",
+      "side": 1,
+      "message": "They have the cluster and storage ids populated currently. Doesnt that suffice for further queries if required later?",
+      "parentUuid": "5a72e520_98885ce9",
       "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
