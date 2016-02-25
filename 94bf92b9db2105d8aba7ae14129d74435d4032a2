@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_58e264d6",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-25T08:30:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_b84a7825",
+      "revId": "94bf92b9db2105d8aba7ae14129d74435d4032a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_d847341c",
         "filename": "apps/skyring/storage.go",
         "patchSetId": 4
@@ -42,6 +60,24 @@
         "endLine": 353,
         "endChar": 58
       },
+      "revId": "94bf92b9db2105d8aba7ae14129d74435d4032a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_78e720e5",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-25T08:30:09Z",
+      "side": 1,
+      "message": "Same as earlier. I feel not required..",
+      "parentUuid": "5a72e520_d847341c",
       "revId": "94bf92b9db2105d8aba7ae14129d74435d4032a2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
