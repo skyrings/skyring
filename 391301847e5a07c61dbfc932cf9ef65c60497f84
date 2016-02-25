@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_38ff6803",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T07:07:49Z",
+      "side": 1,
+      "message": "avoid doing this inside the loop",
+      "range": {
+        "startLine": 480,
+        "startChar": 6,
+        "endLine": 482,
+        "endChar": 88
+      },
+      "revId": "391301847e5a07c61dbfc932cf9ef65c60497f84",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_58042415",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T07:07:49Z",
+      "side": 1,
+      "message": "do we need to handle the timed out case?",
+      "range": {
+        "startLine": 492,
+        "startChar": 31,
+        "endLine": 492,
+        "endChar": 59
+      },
+      "revId": "391301847e5a07c61dbfc932cf9ef65c60497f84",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_181aac6e",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T07:07:49Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 603,
+        "startChar": 6,
+        "endLine": 605,
+        "endChar": 63
+      },
+      "revId": "391301847e5a07c61dbfc932cf9ef65c60497f84",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_382688bb",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T07:07:49Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 612,
+        "startChar": 30,
+        "endLine": 612,
+        "endChar": 61
+      },
+      "revId": "391301847e5a07c61dbfc932cf9ef65c60497f84",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_bd0b4a2a",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T07:07:49Z",
+      "side": 1,
+      "message": "should it be \"clusters/{cluster-id}/blockdevices/{blockdevice-id} ??",
+      "range": {
+        "startLine": 429,
+        "startChar": 16,
+        "endLine": 429,
+        "endChar": 90
+      },
+      "revId": "391301847e5a07c61dbfc932cf9ef65c60497f84",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_1d037e10",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T07:07:49Z",
+      "side": 1,
+      "message": "should it be  \"clusters/{cluster-id}/blockdevices/{blockdevice-id}\",",
+      "range": {
+        "startLine": 436,
+        "startChar": 15,
+        "endLine": 436,
+        "endChar": 92
+      },
+      "revId": "391301847e5a07c61dbfc932cf9ef65c60497f84",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
