@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a72e520_f84870ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-25T08:47:43Z",
+      "side": 1,
+      "message": "This might be problematic when the user wants to create multiple block devices on a new pool.\n\nSo its better if the storage request itself include the information about the list of block devices to be created on that pool",
+      "range": {
+        "startLine": 10,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 7
+      },
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_381208b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-25T08:47:43Z",
+      "side": 1,
+      "message": "I assume snapshot and quota are optional",
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_fd578224",
         "filename": "apps/skyring/block_devices.go",
         "patchSetId": 3
