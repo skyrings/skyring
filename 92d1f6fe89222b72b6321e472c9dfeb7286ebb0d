@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_582b4482",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-25T08:22:30Z",
+      "side": 1,
+      "message": "You mean collection name setting? I can move this out I feel",
+      "parentUuid": "5a72e520_fd578224",
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_7d447274",
         "filename": "apps/skyring/block_devices.go",
         "patchSetId": 3
@@ -42,6 +60,24 @@
         "endLine": 139,
         "endChar": 33
       },
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_9825bcad",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-25T08:22:30Z",
+      "side": 1,
+      "message": "I remember in case of timeout also it would be marked as completed but status as FAILED",
+      "parentUuid": "5a72e520_7d447274",
       "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_b83998da",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-25T08:22:30Z",
+      "side": 1,
+      "message": "As above",
+      "parentUuid": "5a72e520_dd5ac64f",
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_1d553e1d",
         "filename": "apps/skyring/block_devices.go",
         "patchSetId": 3
@@ -88,6 +142,24 @@
         "endLine": 268,
         "endChar": 50
       },
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_f83310f4",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-25T08:22:30Z",
+      "side": 1,
+      "message": "As above",
+      "parentUuid": "5a72e520_1d553e1d",
       "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
