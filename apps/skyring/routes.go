@@ -410,6 +410,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "GET_BlokcDevices",
+			Method:      "GET",
+			Pattern:     "blockdevices",
+			HandlerFunc: a.GET_BlockDevices,
+			Version:     1,
+		},
+		{
 			Name:        "GET_ClusterBlockDevices",
 			Method:      "GET",
 			Pattern:     "clusters/{cluster-id}/blockdevices",
