@@ -40,6 +40,93 @@
       "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_f81f90b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-25T08:53:45Z",
+      "side": 1,
+      "message": "@shubhendu: agreed.\n\nAlso we need one more api to list all the block devices across all clusters",
+      "parentUuid": "5a72e520_7899e06d",
+      "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_98885ce9",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-25T08:53:45Z",
+      "side": 1,
+      "message": "block devices in the response should have cluster and storage/pool names",
+      "range": {
+        "startLine": 323,
+        "startChar": 28,
+        "endLine": 323,
+        "endChar": 38
+      },
+      "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_d869f426",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-25T08:53:45Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 362,
+        "startChar": 28,
+        "endLine": 362,
+        "endChar": 38
+      },
+      "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_18746cfc",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-25T08:53:45Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 410,
+        "startChar": 28,
+        "endLine": 410,
+        "endChar": 37
+      },
+      "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
