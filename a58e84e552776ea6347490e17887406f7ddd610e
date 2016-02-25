@@ -120,6 +120,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_18f9cc4d",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1006048
+      },
+      "writtenOn": "2016-02-25T09:06:59Z",
+      "side": 1,
+      "message": "No.\n\nWe need to show the cluster and pool names while listing RBDs",
+      "parentUuid": "5a72e520_18e2ac9f",
+      "revId": "a58e84e552776ea6347490e17887406f7ddd610e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_d869f426",
         "filename": "apps/skyring/block_devices.go",
         "patchSetId": 3
