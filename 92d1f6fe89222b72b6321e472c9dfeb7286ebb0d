@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_fd578224",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T06:46:26Z",
+      "side": 1,
+      "message": "should not do this inside the loop",
+      "range": {
+        "startLine": 131,
+        "startChar": 6,
+        "endLine": 133,
+        "endChar": 85
+      },
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_7d447274",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T06:46:26Z",
+      "side": 1,
+      "message": "should we habdle the case where the task is timed out?",
+      "range": {
+        "startLine": 139,
+        "startChar": 6,
+        "endLine": 139,
+        "endChar": 33
+      },
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_dd5ac64f",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T06:46:26Z",
+      "side": 1,
+      "message": "should not do this inside the loop",
+      "range": {
+        "startLine": 259,
+        "startChar": 6,
+        "endLine": 261,
+        "endChar": 87
+      },
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_1d553e1d",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-25T06:46:26Z",
+      "side": 1,
+      "message": "Handle timed out case?",
+      "range": {
+        "startLine": 268,
+        "startChar": 39,
+        "endLine": 268,
+        "endChar": 50
+      },
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
