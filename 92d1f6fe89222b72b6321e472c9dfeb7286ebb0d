@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_78d1e0cc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-25T08:59:44Z",
+      "side": 1,
+      "message": "With current apis, it would be possible to create one device with backing storage and then later devices can be created under the same backing storage pool using below api.\n\nIf you need mass block device creation as part of storage creation, we can add an optional block devices list to the storage creation request struct.\n\nAs you suggest!",
+      "parentUuid": "5a72e520_f84870ce",
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_381208b5",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -36,6 +54,24 @@
       "writtenOn": "2016-02-25T08:47:43Z",
       "side": 1,
       "message": "I assume snapshot and quota are optional",
+      "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_98d69cc4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-25T08:59:44Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "5a72e520_381208b5",
       "revId": "92d1f6fe89222b72b6321e472c9dfeb7286ebb0d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
