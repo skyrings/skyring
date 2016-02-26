@@ -75,7 +75,7 @@ func (a *App) GetProviderFromClusterId(cluster_id uuid.UUID) *Provider {
 	}
 }
 
-func (a *App) RouteProviderEvents(event models.Event) error {
+func (a *App) RouteProviderEvents(event models.AppEvent) error {
 	provider := a.GetProviderFromClusterId(event.ClusterId)
 	if provider == nil {
 		logger.Get().Error("Error getting provider for cluster: %v", event.ClusterId)

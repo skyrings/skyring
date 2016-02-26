@@ -26,8 +26,8 @@ import (
 func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_NODE_EVENTS)
-	var events []models.Event
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_APP_EVENTS)
+	var events []models.AppEvent
 
 	node_id_str := req.URL.Query().Get("node_id")
 	cluster_id_str := req.URL.Query().Get("cluster_id")
@@ -57,7 +57,7 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	if len(events) == 0 {
-		json.NewEncoder(rw).Encode([]models.Event{})
+		json.NewEncoder(rw).Encode([]models.AppEvent{})
 	} else {
 		json.NewEncoder(rw).Encode(events)
 	}

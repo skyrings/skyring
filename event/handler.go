@@ -19,7 +19,6 @@ import (
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
 	"github.com/skyrings/skyring-common/models"
-	"github.com/skyrings/skyring-common/notifier"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring-common/tools/uuid"
@@ -31,6 +30,8 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -38,56 +39,44 @@ var (
 	curr_hostname, err = os.Hostname()
 )
 
+var EventType = map[string]string{
+	"DRIVE_ADD":                 "Drive Addition",
+	"DRIVE_REMOVE":              "Drive Removal",
+	"COLLECTD_STOPPED":          "Collectd Stopped",
+	"COLLECTD_STARTED":          "Collectd Started",
+	"NODE_LOST_CONTACT":         "Node contact lost",
+	"NODE_GAINED_CONTACT":       "Node contact gained",
+	"MEMORY_THRESHOLD_CROSSED":  "Memory Threshold Crossed",
+	"CPU_THRESHOLD_CROSSED":     "Cpu Threshold Crossed",
+	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed",
+}
+
 var handlermap = map[string]interface{}{
-	"skyring/dbus/node/*/generic/storage/block/added":           block_add_handler,
-	"skyring/dbus/node/*/generic/storage/block/removed":         block_remove_handler,
-	"skyring/dbus/node/*/generic/storage/block/changed":         block_change_handler,
-	"skyring/dbus/node/*/generic/storage/mount/changed":         mount_change_handler,
-	"skyring/dbus/node/*/generic/storage/drive/added":           drive_add_handler,
-	"skyring/dbus/node/*/generic/storage/drive/removed":         drive_remove_handler,
-	"skyring/dbus/node/*/generic/storage/drive/possibleFailure": drive_remove_handler,
-	"skyring/dbus/node/*/generic/service/collectd":              collectd_status_handler,
-	"salt/node/appeared":                                        node_appeared_handler,
-	"salt/node/lost":                                            node_lost_handler,
-	"skyring/collectd/node/*/threshold/*/*":                     collectd_threshold_handler,
+	"skyring/dbus/node/*/generic/storage/drive/added":   drive_add_handler,
+	"skyring/dbus/node/*/generic/storage/drive/removed": drive_remove_handler,
+	"skyring/dbus/node/*/generic/service/collectd":      collectd_status_handler,
+	"salt/node/appeared":                                node_appeared_handler,
+	"salt/node/lost":                                    node_lost_handler,
+	"skyring/collectd/node/*/threshold/*/*":             collectd_threshold_handler,
 }
 
-// ALL HANDLERS ARE JUST WRITING THE EVENTS TO DB. OTHER HANDLING AND CORRELATION
-// IS TO BE DONE
-
-func block_add_handler(event models.Event) error {
-	return nil
-}
-
-func block_remove_handler(event models.Event) error {
-	return nil
-}
-
-func block_change_handler(event models.Event) error {
-	return nil
-}
-
-func mount_change_handler(event models.Event) error {
-	return nil
-}
-
-func drive_add_handler(event models.Event) error {
+func drive_add_handler(event models.AppEvent) (models.AppEvent, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	var node models.Node
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Find(bson.M{"nodeid": event.NodeId}).One(&node); err != nil {
 		logger.Get().Error("Node information read from DB failed for node: %s. error: %v", event.NodeId, err)
-		return nil
+		return event, err
 	}
 	if node.State != models.NODE_STATE_ACTIVE {
-		return nil
+		return event, nil
 	}
 	existing_disks := node.StorageDisks
 	reqId, err := uuid.New()
 	if err != nil {
 		logger.Get().Error("Error Creating the RequestId. error: %v", err)
-		return nil
+		return event, err
 	}
 
 	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
@@ -95,40 +84,19 @@ func drive_add_handler(event models.Event) error {
 	sProfiles, err := skyring.GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
 	if err != nil {
 		logger.Get().Error("%s-Unable to get the storage profiles. err:%v", ctxt, err)
+		return event, err
 	}
 
 	// sync the nodes to get new disks
 	if ok, err := skyring.GetCoreNodeManager().SyncStorageDisks(node.Hostname, sProfiles, ctxt); err != nil || !ok {
 		logger.Get().Error("Failed to sync disk for host: %s Error: %v", node.Hostname, err)
-		return nil
-	}
-
-	// check if autoExpand is enabled or not
-	c := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	var cluster models.Cluster
-	if err := c.Find(bson.M{"clusterid": event.ClusterId}).One(&cluster); err != nil {
-		logger.Get().Error("Cluster information read from DB failed for Cluster: %s. error: %v", event.ClusterId, err)
-		return nil
-	}
-	if !cluster.AutoExpand {
-		return nil
-	}
-
-	// check if cluster is in managed/un-managed state
-	ok, err := skyring.ClusterUnmanaged(event.ClusterId)
-	if err != nil {
-		logger.Get().Warning("Error checking managed state of cluster: %v. error: %v", event.ClusterId, err)
-		return nil
-	}
-	if ok {
-		logger.Get().Error("Cluster: %v is in un-managed state", event.ClusterId)
-		return nil
+		return event, err
 	}
 
 	// get the list of disks after syncing.
 	if err := coll.Find(bson.M{"nodeid": event.NodeId}).One(&node); err != nil {
 		logger.Get().Error("Node information read from DB failed for node: %s. error: %v", event.NodeId, err)
-		return nil
+		return event, err
 	}
 	var cluster_nodes []models.ClusterNode
 	var cluster_node models.ClusterNode
@@ -143,16 +111,47 @@ func drive_add_handler(event models.Event) error {
 				break
 			}
 		}
-		if !exists {
+		if !exists && !disk.Used {
 			cluster_node.Devices = append(cluster_node.Devices, models.ClusterNodeDevice{Name: disk.DevName, FSType: "xfs"})
+			event.EntityId = disk.DiskId
+			event.Tags["DevName"] = disk.DevName
+			event.Tags["size"] = strconv.FormatUint(disk.Size, 10)
+			event.Tags["Type"] = disk.Type
 		}
 	}
+
+	// adding the details for event
+
+	event.Name = EventType["DRIVE_ADD"]
+	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
+	event.Message = fmt.Sprintf("New Storage Drive: %s added to Host:%s", event.Tags["DevName"], node.Hostname)
+	event.Severity = models.EVENT_SEVERITY_INFO
+	event.Notify = false
+
+	c := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var cluster models.Cluster
+	if err := c.Find(bson.M{"clusterid": event.ClusterId}).One(&cluster); err != nil {
+		logger.Get().Error("Cluster information read from DB failed for Cluster: %s. error: %v", event.ClusterId, err)
+		return event, nil
+	}
+
+	// check if cluster is in managed/un-managed state
+	ok, err := skyring.ClusterUnmanaged(event.ClusterId)
+	if err != nil {
+		logger.Get().Warning("Error checking managed state of cluster: %v. error: %v", event.ClusterId, err)
+		return event, err
+	}
+	if ok {
+		logger.Get().Error("Cluster: %v is in un-managed state", event.ClusterId)
+		return event, err
+	}
+
 	vars := map[string]string{"cluster-id": event.ClusterId.String()}
 	cluster_nodes = append(cluster_nodes, cluster_node)
 	body, err := json.Marshal(cluster_nodes)
 	if err != nil {
 		logger.Get().Error(fmt.Sprintf("Error forming request body. error: %v", err))
-		return nil
+		return event, nil
 	}
 
 	// lock the node for expanding
@@ -160,7 +159,12 @@ func drive_add_handler(event models.Event) error {
 	var nodes models.Nodes
 	if err := coll.Find(bson.M{"clusterid": event.ClusterId}).All(&nodes); err != nil {
 		logger.Get().Error("Node information read from DB failed . error: %v", err)
-		return nil
+		return event, nil
+	}
+
+	// check if autoExpand is enabled or not
+	if !cluster.AutoExpand {
+		return event, nil
 	}
 
 	// Expand cluster
@@ -242,57 +246,135 @@ func drive_add_handler(event models.Event) error {
 
 	if taskId, err := skyring.GetApp().GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", event.ClusterId.String()), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("Unable to create task to expand cluster: %v. error: %v", event.ClusterId, err)
-		return nil
+		return event, nil
 	} else {
 		logger.Get().Debug("Task Created: %v to expand cluster: %v", taskId, event.ClusterId)
-		return nil
+		return event, nil
 	}
 
 }
 
-func drive_remove_handler(event models.Event) error {
+func drive_remove_handler(event models.AppEvent) (models.AppEvent, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	var node models.Node
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Find(bson.M{"nodeid": event.NodeId}).One(&node); err != nil {
 		logger.Get().Error("Node information read from DB failed for node: %s. error: %v", event.NodeId, err)
-		return nil
+		return event, err
 	}
-	subject := fmt.Sprintf("Warning: Storage Drive Removed from %s", node.Hostname)
-	body := event.Message
-	notifier.MailNotify(subject, body, skyring.GetDbProvider())
-	return nil
+
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return event, err
+	}
+
+	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
+
+	sProfiles, err := skyring.GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
+	if err != nil {
+		logger.Get().Error("%s-Unable to get the storage profiles. err:%v", ctxt, err)
+		return event, err
+	}
+
+	previous_disks := node.StorageDisks
+	// sync the nodes to get new disks
+	if ok, err := skyring.GetCoreNodeManager().SyncStorageDisks(node.Hostname, sProfiles, ctxt); err != nil || !ok {
+		logger.Get().Error("%s-Failed to sync disk for host: %s Error: %v", ctxt, node.Hostname, err)
+		return event, err
+	}
+
+	if err := coll.Find(bson.M{"nodeid": event.NodeId}).One(&node); err != nil {
+		logger.Get().Error("%s-Node information read from DB failed for node: %s. error: %v", ctxt, event.NodeId, err)
+		return event, err
+	}
+
+	var exists bool
+	for _, disk := range previous_disks {
+		exists = false
+		for _, new_disk := range node.StorageDisks {
+			if disk.DevName == new_disk.DevName {
+				exists = true
+				break
+			}
+		}
+		if !exists && !disk.Used {
+			event.EntityId = disk.DiskId
+			event.Tags["DevName"] = disk.DevName
+			event.Tags["DriveSize"] = strconv.FormatUint(disk.Size, 10)
+			event.Tags["Type"] = disk.Type
+
+		}
+	}
+
+	// adding the details for event
+
+	event.Name = EventType["DRIVE_REMOVE"]
+	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
+	event.Message = fmt.Sprintf("Storage Drive: %s removed from Host:%s", event.Tags["DevName"], node.Hostname)
+	event.Severity = models.EVENT_SEVERITY_INFO
+	event.Notify = false
+	return event, nil
 }
 
-func collectd_status_handler(event models.Event) error {
-	return nil
+func collectd_status_handler(event models.AppEvent) (models.AppEvent, error) {
+	// adding the details for event
+	if strings.HasSuffix(event.Message, "inactive") {
+		event.Name = EventType["COLLECTD_STOPPED"]
+		event.Message = fmt.Sprintf("Collectd process stopped on Host: %s", event.NodeName)
+		event.Description = fmt.Sprintf("Collectd process is stopped on Host: %s. This might affect the monitoring functionality of skyring", event.NodeName)
+		event.EntityId = event.NodeId
+		event.Severity = models.EVENT_SEVERITY_CRITICAL
+	} else if strings.HasSuffix(event.Message, "active") {
+		event.Name = EventType["COLLECTD_STARTED"]
+		event.Message = fmt.Sprintf("Collectd process started on Host: %s", event.NodeName)
+		event.EntityId = event.NodeId
+		event.Severity = models.EVENT_SEVERITY_RECOVERY
+	} else {
+		return event, nil
+	}
+	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
+	event.Notify = true
+	return event, nil
 }
 
-func node_appeared_handler(event models.Event) error {
+func node_appeared_handler(event models.AppEvent) (models.AppEvent, error) {
 	//worry about the node only if the node in active state
 	state, err := skyringutils.GetNodeStateById(event.NodeId)
 	if state == models.NODE_STATE_ACTIVE && err == nil {
 		if err := skyringutils.Update_node_status_byId(event.NodeId, models.NODE_STATUS_OK); err != nil {
-			return err
+			return event, err
 		}
 	}
-	return nil
+	event.Name = EventType["NODE_GAINED_CONTACT"]
+	event.Message = fmt.Sprintf("Host: %s gained contact", event.NodeName)
+	event.EntityId = event.NodeId
+	event.Severity = models.EVENT_SEVERITY_INFO
+	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
+	event.Notify = false
+	return event, nil
 }
 
-func node_lost_handler(event models.Event) error {
+func node_lost_handler(event models.AppEvent) (models.AppEvent, error) {
 	//worry about the node only if the node in active state
 	state, err := skyringutils.GetNodeStateById(event.NodeId)
 	if state == models.NODE_STATE_ACTIVE && err == nil {
 		if err := skyringutils.Update_node_status_byId(event.NodeId, models.NODE_STATUS_ERROR); err != nil {
-			return err
+			return event, err
 		}
 	}
-	return nil
+	event.Name = EventType["NODE_LOST_CONTACT"]
+	event.Message = fmt.Sprintf("Host: %s lost contact", event.NodeName)
+	event.EntityId = event.NodeId
+	event.Severity = models.EVENT_SEVERITY_INFO
+	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
+	event.Notify = false
+	return event, nil
 }
 
-func collectd_threshold_handler(event models.Event) error {
-	return nil
+func collectd_threshold_handler(event models.AppEvent) (models.AppEvent, error) {
+	return event, nil
 }
 
 func handle_node_start_event(node string) error {
