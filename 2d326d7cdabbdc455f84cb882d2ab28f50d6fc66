@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_5c37b3b0",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-26T09:58:17Z",
+      "side": 1,
+      "message": "othersError?? I feel its better to call \"err\"",
+      "revId": "2d326d7cdabbdc455f84cb882d2ab28f50d6fc66",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_bc5d07ec",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-26T09:58:17Z",
+      "side": 1,
+      "message": "Context for logging ??",
+      "revId": "2d326d7cdabbdc455f84cb882d2ab28f50d6fc66",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_1c553bc6",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-26T09:58:17Z",
+      "side": 1,
+      "message": "Are you trying to consolidate all the errors in err_str? Should we user \\n to separate the multiple errors or at least proper segregation required.\n\nAlso use as below may be\n\nerr_str \u003d fmt.Sprintf(\"%s %v\", err_str, err)",
+      "revId": "2d326d7cdabbdc455f84cb882d2ab28f50d6fc66",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_9c584bfc",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-26T09:58:17Z",
+      "side": 1,
+      "message": "err_str \u003d fmt.Sprintf(\"%s %v\", unmarshalError.Error(), err)",
+      "revId": "2d326d7cdabbdc455f84cb882d2ab28f50d6fc66",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
