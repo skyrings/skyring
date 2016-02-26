@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_390049aa",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-26T03:47:59Z",
+      "side": 1,
+      "message": "per std norms you are not supposed to have verbs in REST URL\nprobably you can change this to:\nnodes/{hostname}/actions\n{\n\"action\":\"reinitialize\"\n}",
+      "range": {
+        "startLine": 88,
+        "startChar": 17,
+        "endLine": 88,
+        "endChar": 48
+      },
+      "revId": "3203e2bf6542005f4fd1bd8e8a2040c0b73869fe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
