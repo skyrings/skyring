@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a72e520_1c037bb9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-26T10:10:29Z",
+      "side": 1,
+      "message": "I feel somehow this doe not describe properly what this patch does.",
+      "revId": "e12a5a1ffe930a62c4464ce33cad72f156122786",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_9c268b67",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-26T10:10:29Z",
+      "side": 1,
+      "message": "RPC or http/REST ??\n\nI would add below commit message\n\n\"skyring: Added an api to test the mail notifier\n\nAdded the below API\n  - POST /api/\u003cver\u003e/testmailnotifier/{recipient}\n    It sends a sample mail to the recipient passed in request query parameter\"",
+      "revId": "e12a5a1ffe930a62c4464ce33cad72f156122786",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_3c8d977c",
         "filename": "apps/skyring/notifier.go",
         "patchSetId": 1
