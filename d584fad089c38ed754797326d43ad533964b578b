@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_dc7643d8",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-26T12:11:05Z",
+      "side": 1,
+      "message": "errors.New(\"insufficient detail for mail notifier\")",
+      "range": {
+        "startLine": 73,
+        "startChar": 19,
+        "endLine": 73,
+        "endChar": 22
+      },
+      "revId": "d584fad089c38ed754797326d43ad533964b578b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
