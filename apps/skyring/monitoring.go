@@ -205,12 +205,68 @@ func DeleteClusterSchedule(clusterId uuid.UUID) {
 
 func (a *App) MonitorCluster(params map[string]interface{}) {
 	clusterId := params["clusterId"]
+	ctxt := fmt.Sprintf("%v", models.ENGINE_NAME)
+
 	id, ok := clusterId.(uuid.UUID)
 	if !ok {
-		logger.Get().Error("Failed to parse uuid")
+		logger.Get().Error("%s - Failed to parse cluster id %v", ctxt, clusterId)
 		return
 	}
-	a.RouteProviderBasedMonitoring(id)
+
+	go a.RouteProviderBasedMonitoring(id)
+
+	cluster, clusterFetchError := GetCluster(&id)
+	if clusterFetchError != nil {
+		logger.Get().Error("%s - Unable to get cluster with id %v.Error %v", ctxt, id, clusterFetchError)
+		return
+	}
+
+	nodeNames, nodeNamesFetchError := getNodesInCluster(&id)
+	if nodeNamesFetchError != nil {
+		logger.Get().Error("%s - Failed to fetch nodes in cluster %v. Err %v", ctxt, id, nodeNamesFetchError.Error())
+		return
+	}
+
+	hostname := conf.SystemConfig.TimeSeriesDBConfig.Hostname
+	port := conf.SystemConfig.TimeSeriesDBConfig.DataPushPort
+
+	var cluster_memory_used float64
+	var cluster_memory_free float64
+	for _, node := range nodeNames {
+		/*
+			Calculate Memory Used
+		*/
+		resource_name := monitoring.MEMORY + "." + monitoring.MEMORY + "-" + monitoring.USED
+		mStatUsed, memoryUsedFetchError := GetMonitoringManager().GetInstantValue(node, resource_name)
+		if memoryUsedFetchError != nil {
+			logger.Get().Error("%s - Error %v", ctxt, memoryUsedFetchError)
+			continue
+		}
+		cluster_memory_used = cluster_memory_used + mStatUsed
+
+		/*
+			Calculate Free Memory
+		*/
+		resource_name = monitoring.MEMORY + "." + monitoring.MEMORY + "-" + monitoring.FREE
+		mStatFree, memoryFreeFetchError := GetMonitoringManager().GetInstantValue(node, resource_name)
+		if memoryFreeFetchError != nil {
+			logger.Get().Error("%s - Error %v", ctxt, memoryFreeFetchError)
+			continue
+		}
+		cluster_memory_free = cluster_memory_free + mStatFree
+	}
+
+	time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
+
+	table_name := conf.SystemConfig.TimeSeriesDBConfig.CollectionName + "." + cluster.Name + "."
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.USED_SPACE: {time_stamp_str: strconv.FormatFloat(cluster_memory_used, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
+	}
+
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.FREE_SPACE: {time_stamp_str: strconv.FormatFloat(cluster_memory_free, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
+	}
+
 	return
 }
 
