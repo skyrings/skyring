@@ -39,12 +39,10 @@ func (l *Listener) PushNodeStartEvent(args *NodeStartEventArgs, ack *bool) error
 }
 
 func RouteEvent(event models.NodeEvent) {
-	var e models.Event
+	var e models.AppEvent
 	e.Timestamp = event.Timestamp
-	e.Tag = event.Tag
 	e.Tags = event.Tags
 	e.Message = event.Message
-	e.Severity = event.Severity
 	eventId, err := uuid.New()
 	if err != nil {
 		logger.Get().Error("Uuid generation for the event failed for node: %s. error: %v", event.Node, err)
@@ -52,7 +50,6 @@ func RouteEvent(event models.NodeEvent) {
 	}
 
 	e.EventId = *eventId
-
 	// querying DB to get node ID and Cluster ID for the event
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
@@ -69,16 +66,20 @@ func RouteEvent(event models.NodeEvent) {
 	}
 	e.ClusterId = node.ClusterId
 	e.NodeId = node.NodeId
+	e.NodeName = node.Hostname
 
 	// Invoking the event handler
 	for tag, handler := range handlermap {
-		if match, err := filepath.Match(tag, e.Tag); err == nil {
+		if match, err := filepath.Match(tag, event.Tag); err == nil {
 			if match {
-				if err := handler.(func(models.Event) error)(e); err != nil {
+				if e, err = handler.(func(models.AppEvent) (models.AppEvent, error))(e); err != nil {
 					logger.Get().Error("Event Handling Failed for event for node: %s. error: %v", node.Hostname, err)
 					return
 				}
-				if err := common_event.Persist_event(e); err != nil {
+				if e.Name == "" {
+					return
+				}
+				if err := common_event.AuditLog(e, skyring.GetDbProvider()); err != nil {
 					logger.Get().Error("Could not persist the event to DB for node: %s. error: %v", node.Hostname, err)
 					return
 				} else {
@@ -100,9 +101,8 @@ func RouteEvent(event models.NodeEvent) {
 	// Handle Provider specific events
 	app := skyring.GetApp()
 	if err := app.RouteProviderEvents(e); err != nil {
-		logger.Get().Error("Event:%s could not be handled for node: %s. error: %v", e.Tag, node.Hostname, err)
+		logger.Get().Error("Event:%s could not be handled for node: %s. error: %v", event.Tag, node.Hostname, err)
 	}
-
 	return
 }
 
