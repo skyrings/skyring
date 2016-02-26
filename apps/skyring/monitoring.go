@@ -205,12 +205,48 @@ func DeleteClusterSchedule(clusterId uuid.UUID) {
 
 func (a *App) MonitorCluster(params map[string]interface{}) {
 	clusterId := params["clusterId"]
+	ctxt := fmt.Sprintf("%v", models.ENGINE_NAME)
+
 	id, ok := clusterId.(uuid.UUID)
 	if !ok {
-		logger.Get().Error("Failed to parse uuid")
+		logger.Get().Error("%s - Failed to parse cluster id %v", ctxt, clusterId)
 		return
 	}
-	a.RouteProviderBasedMonitoring(id)
+
+	go a.RouteProviderBasedMonitoring(id)
+
+	cluster, clusterFetchError := GetCluster(&id)
+	if clusterFetchError != nil {
+		logger.Get().Error("%s - Unable to get cluster with id %v.Error %v", ctxt, id, clusterFetchError)
+		return
+	}
+
+	nodeNames, nodeNamesFetchError := getNodesInCluster(&id)
+	if nodeNamesFetchError != nil {
+		logger.Get().Error("%s - Failed to fetch nodes in cluster %v. Err %v", ctxt, id, nodeNamesFetchError.Error())
+		return
+	}
+
+	hostname := conf.SystemConfig.TimeSeriesDBConfig.Hostname
+	port := conf.SystemConfig.TimeSeriesDBConfig.DataPushPort
+
+	var cluster_memory float64
+	for _, node := range nodeNames {
+		resource_name := monitoring.MEMORY + "." + monitoring.MEMORY + "-" + monitoring.USED
+		mStat, memoryStatsFetchError := GetMonitoringManager().GetInstantValue(node, resource_name)
+		if memoryStatsFetchError != nil {
+			logger.Get().Error("%s - Error %v", ctxt, memoryStatsFetchError)
+			continue
+		}
+		cluster_memory = cluster_memory + mStat
+	}
+
+	time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
+
+	table_name := conf.SystemConfig.TimeSeriesDBConfig.CollectionName + "." + cluster.Name + "."
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.USED_SPACE: {time_stamp_str: strconv.FormatFloat(cluster_memory, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster utilization.Err %v", ctxt, err)
+	}
 	return
 }
 
