@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_3c74b7fc",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-26T11:36:33Z",
+      "side": 1,
+      "message": "return err in this case. Let the caller take care of this",
+      "range": {
+        "startLine": 73,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 74
+      },
+      "revId": "0bdd8cfeb5ebad54702d7dcd9e0c8499bd04c59d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
