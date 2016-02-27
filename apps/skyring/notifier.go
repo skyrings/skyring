@@ -34,11 +34,13 @@ func (a *App) GetMailNotifier(rw http.ResponseWriter, req *http.Request) {
 		return
 	} else {
 		n := map[string]interface{}{
-			"mailid":     notifier.MailId,
-			"smtpserver": notifier.SmtpServer,
-			"port":       notifier.Port,
-			"skipverify": notifier.SkipVerify,
-			"encryption": notifier.Encryption,
+			"mailid":           notifier.MailId,
+			"smtpserver":       notifier.SmtpServer,
+			"port":             notifier.Port,
+			"skipverify":       notifier.SkipVerify,
+			"encryption":       notifier.Encryption,
+			"mailnotification": notifier.MailNotification,
+			"subprefix":        notifier.SubPrefix,
 		}
 		json.NewEncoder(rw).Encode(n)
 	}
@@ -128,6 +130,7 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	}
 	return
 }
+
 func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	var recepient []string
 	vars := mux.Vars(req)
@@ -159,5 +162,48 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	mail_notifier.TestMailNotify(notifier, "Test mail from skyring", "This is a test mail sent from skyring server", recepient)
+	return
+}
+
+func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Get().Error("Error parsing http request body:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	var m map[string]interface{}
+
+	if err = json.Unmarshal(body, &m); err != nil {
+		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+
+	notifier, err := GetDbProvider().MailNotifierInterface().MailNotifier()
+	if err != nil {
+		logger.Get().Error("MailNotifier not set: %s", err)
+		HandleHttpError(rw, err)
+		return
+	}
+	parameterPresent := false
+	if val, mn := m["mailnotification"]; mn {
+		notifier.MailNotification = val.(bool)
+		parameterPresent = true
+	}
+	if val, sp := m["subprefix"]; sp {
+		parameterPresent = true
+		notifier.SubPrefix = val.(string)
+	}
+	if !parameterPresent {
+		logger.Get().Error("Insufficient details for patching mail notifier: %v", notifier)
+		HandleHttpError(rw, errors.New("insufficient detail for mail notifier"))
+		return
+	}
+	err = GetDbProvider().MailNotifierInterface().SaveMailNotifier(notifier)
+	if err != nil {
+		logger.Get().Error("Error Updating the mail notifier info for: %s Error: %v", notifier.MailId, err)
+		HandleHttpError(rw, err)
+	}
 	return
 }
