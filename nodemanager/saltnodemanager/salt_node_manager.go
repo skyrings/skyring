@@ -70,6 +70,14 @@ func (a SaltNodeManager) AddNode(master string, node string, port uint, fingerpr
 	}
 }
 
+func SetupSkynetService(hostname string) error {
+	if ok, err := salt_backend.SetupSkynetService(hostname); err != nil || !ok {
+		logger.Get().Error("could not setup skynet service on the node: %s", hostname)
+		return errors.New(fmt.Sprintf("could not setup skynet service on the node: %s", hostname))
+	}
+	return nil
+}
+
 func GetStorageNodeInstance(hostname string, sProfiles []models.StorageProfile) (*models.Node, bool) {
 	var storage_node models.Node
 	storage_node.Hostname = hostname

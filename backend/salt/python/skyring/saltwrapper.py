@@ -466,6 +466,31 @@ def DisableMonitoringPlugin(nodes, pluginName):
             failed_minions[node] = "Failed to restart collectd"
     return failed_minions
 
+def SetupSkynetService(node):
+    if type(node) is list:
+        minions = node
+    else:
+        minions = [node]
+    status = True
+
+    # Restart systemd-skynet service
+    out = local.cmd(minions, 'service.restart', ['systemd-skynetd'], expr_form='list')
+    for node, restartStatus in out.iteritems():
+        if not restartStatus:
+            log.error("Failed to restart skynetd on node %s " %(node))
+            status = False
+
+    # Send a signal to storaged to enable modules. After this storaged will start sending signals 
+    out = local.cmd(
+        minions, "cmd.run", [
+            "dbus-send --system --type=method_call --dest=org.storaged.Storaged /org/storaged/Storaged/Manager org.storaged.Storaged.Manager.EnableModules boolean:true"], expr_form='list')
+    for nodeName, message in out.iteritems():
+        if out.get(nodeName) != '':
+            log.error(
+                'Failed to send signal to storaged on node: %s' % (nodeName)
+            )
+            status = False
+    return status
 
 def EnableMonitoringPlugin(nodes, pluginName):
     failed_minions = {}
@@ -550,4 +575,4 @@ def GetFingerPrint(node):
     if d['unaccepted_nodes'].get(node):
         return d['unaccepted_nodes']
     log.error("Failed to retrive fingerprint from host %s" %(node))
-    return false
+    return False

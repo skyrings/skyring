@@ -361,6 +361,13 @@ func initializeStorageNode(node string, t *task.Task, ctxt string) error {
 			skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
 			return err
 		}
+		if err := saltnodemanager.SetupSkynetService(node); err != nil {
+			logger.Get().Error("%s-Failed to setup skynet service on the node: %s. error: %v", ctxt, node, err)
+			t.UpdateStatus("Failed to setup skynet service")
+			skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
+			skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+			return err
+		}
 		return nil
 	} else {
 		logger.Get().Critical("%s-Error getting the details for node: %s", ctxt, node)
