@@ -517,6 +517,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "PATCH_mailnotifier",
+			Method:      "PATCH",
+			Pattern:     "mailnotifier",
+			HandlerFunc: a.PatchMailNotifier,
+			Version:     1,
+		},
+		{
 			Name:        "POST_Testmailnotifier",
 			Method:      "POST",
 			Pattern:     "testmailnotifier/{recipient}",
