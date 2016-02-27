@@ -48,6 +48,7 @@ var funcNames = [...]string{
 	"DisableMonitoringPlugin",
 	"RemoveMonitoringPlugin",
 	"SyncModules",
+	"SetupSkynetService",
 	"GetFingerPrint",
 }
 
@@ -319,6 +320,17 @@ func (s Salt) GetFingerPrint(node string) (fingerprint string, err error) {
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["GetFingerPrint"].Call(node); loc_err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &fingerprint)
+	} else {
+		err = loc_err
+	}
+	return
+}
+
+func (s Salt) SetupSkynetService(node string) (status bool, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if pyobj, loc_err := pyFuncs["SetupSkynetService"].Call(node); loc_err == nil {
+		err = gopy.Convert(pyobj, &status)
 	} else {
 		err = loc_err
 	}
