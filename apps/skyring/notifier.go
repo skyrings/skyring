@@ -27,18 +27,26 @@ import (
 )
 
 func (a *App) GetMailNotifier(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+
 	notifier, err := GetDbProvider().MailNotifierInterface().MailNotifier()
 	if err != nil {
-		logger.Get().Error("Unable to read MailNotifier from DB: %s", err)
+		logger.Get().Error("%s-Unable to read MailNotifier from DB: %s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	} else {
 		n := map[string]interface{}{
-			"mailid":     notifier.MailId,
-			"smtpserver": notifier.SmtpServer,
-			"port":       notifier.Port,
-			"skipverify": notifier.SkipVerify,
-			"encryption": notifier.Encryption,
+			"mailid":           notifier.MailId,
+			"smtpserver":       notifier.SmtpServer,
+			"port":             notifier.Port,
+			"skipverify":       notifier.SkipVerify,
+			"encryption":       notifier.Encryption,
+			"mailnotification": notifier.MailNotification,
+			"subprefix":        notifier.SubPrefix,
 		}
 		json.NewEncoder(rw).Encode(n)
 	}
@@ -80,6 +88,11 @@ func GetDetails(m map[string]interface{}) (models.MailNotifier, error) {
 }
 
 func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	if req.Method == "POST" {
 		_, err := GetDbProvider().MailNotifierInterface().MailNotifier()
 		if err != mongodb.ErrMissingNotifier {
@@ -90,74 +103,128 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		logger.Get().Error("Error parsing http request body:%s", err)
+		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
 	var m map[string]interface{}
 
 	if err = json.Unmarshal(body, &m); err != nil {
-		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
 	notifier, err := GetDetails(m)
 	if err != nil {
-		logger.Get().Error("Insufficient details for mail notifier: %v", notifier)
+		logger.Get().Error("%s-Insufficient details for mail notifier: %v", ctxt, notifier)
 		HandleHttpError(rw, errors.New("insufficient detail for mail notifier"))
 		return
 	}
 
 	if notifier.MailId == "" || notifier.Passcode == "" || notifier.SmtpServer == "" || notifier.Port == 0 || notifier.Encryption == "" {
-		logger.Get().Error("Insufficient details for add mail notifier: %v", notifier)
+		logger.Get().Error("%s-Insufficient details for add mail notifier: %v", ctxt, notifier)
 		HandleHttpError(rw, errors.New("insufficient detail for add mail notifier"))
 		return
 	}
 
-	err = mail_notifier.SetMailClient(notifier)
+	err = mail_notifier.SetMailClient(notifier, ctxt)
 	if err != nil {
-		logger.Get().Error("Error setting the Mail Client Error: %v", err)
+		logger.Get().Error("%s-Error setting the Mail Client Error: %v",ctxt, err)
 		HandleHttpError(rw, errors.New(fmt.Sprintf("Error setting the Mail Client Error: %v", err)))
 		return
 	}
 
 	err = GetDbProvider().MailNotifierInterface().SaveMailNotifier(notifier)
 	if err != nil {
-		logger.Get().Error("Error Updating the mail notifier info for: %s Error: %v", notifier.MailId, err)
+		logger.Get().Error("%s-Error Updating the mail notifier info for: %s Error: %v", ctxt, notifier.MailId, err)
 		HandleHttpError(rw, err)
 	}
 	return
 }
+
 func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	var recepient []string
 	vars := mux.Vars(req)
 	recepient = []string{vars["recipient"]}
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		logger.Get().Error("Error parsing http request body:%s", err)
+		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
 	var m map[string]interface{}
 
 	if err = json.Unmarshal(body, &m); err != nil {
-		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
 	notifier, err := GetDetails(m)
 	if err != nil {
-		logger.Get().Error("Insufficient details for mail notifier: %v", notifier)
+		logger.Get().Error("%s-Insufficient details for mail notifier: %v", ctxt, notifier)
 		HandleHttpError(rw, errors.New("insufficient detail for mail notifier"))
 		return
 	}
 
 	if notifier.MailId == "" || notifier.Passcode == "" || notifier.SmtpServer == "" || notifier.Port == 0 || notifier.Encryption == "" {
-		logger.Get().Error("Insufficient details for Test mail notifier: %v", notifier)
+		logger.Get().Error("%s-Insufficient details for Test mail notifier: %v", ctxt, notifier)
 		HandleHttpError(rw, errors.New("insufficient details for Test mail notifier"))
 		return
 	}
 
-	mail_notifier.TestMailNotify(notifier, "Test mail from skyring", "This is a test mail sent from skyring server", recepient)
+	mail_notifier.TestMailNotify(notifier, "Test mail from skyring", "This is a test mail sent from skyring server", recepient, ctxt)
+	return
+}
+
+func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+     	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		logger.Get().Error("%s-Error parsing http request body:%s",ctxt, err)
+		HandleHttpError(rw, err)
+		return
+	}
+	var m map[string]interface{}
+
+	if err = json.Unmarshal(body, &m); err != nil {
+		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
+		HandleHttpError(rw, err)
+		return
+	}
+
+	notifier, err := GetDbProvider().MailNotifierInterface().MailNotifier()
+	if err != nil {
+		logger.Get().Error("%s-MailNotifier not set: %s", ctxt, err)
+		HandleHttpError(rw, err)
+		return
+	}
+	parameterPresent := false
+	if val, mn := m["mailnotification"]; mn {
+		notifier.MailNotification = val.(bool)
+		parameterPresent = true
+	}
+	if val, sp := m["subprefix"]; sp {
+		parameterPresent = true
+		notifier.SubPrefix = val.(string)
+	}
+	if !parameterPresent {
+		logger.Get().Error("%s-Insufficient details for patching mail notifier: %v", ctxt, notifier)
+		HandleHttpError(rw, errors.New("insufficient detail for mail notifier"))
+		return
+	}
+	err = GetDbProvider().MailNotifierInterface().SaveMailNotifier(notifier)
+	if err != nil {
+		logger.Get().Error("%s-Error Updating the mail notifier info for: %s Error: %v", ctxt, notifier.MailId, err)
+		HandleHttpError(rw, err)
+	}
 	return
 }
