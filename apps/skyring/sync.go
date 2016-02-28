@@ -14,6 +14,7 @@ package skyring
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
 	"github.com/skyrings/skyring-common/models"
@@ -22,6 +23,12 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"strconv"
+)
+
+var (
+	syc_functions = map[string]string{
+		"sync_slus": "SyncStorageLogicalUnitParams",
+	}
 )
 
 func (a *App) SyncClusterDetails() {
@@ -45,6 +52,12 @@ func (a *App) SyncClusterDetails() {
 		if ok, err := sync_cluster_status(cluster, provider); err != nil || !ok {
 			logger.Get().Error("Error updating status for cluster: %s", cluster.Name)
 		}
+
+		// Sync the cluster status
+		if ok, err := syncSlus(cluster, provider); err != nil || !ok {
+			logger.Get().Error("Error syncing slus: %s", cluster.Name)
+		}
+
 		// TODO:: Sync the nodes status
 		if ok, err := sync_cluster_nodes(cluster, provider); err != nil && !ok {
 			logger.Get().Error("Error syncing node details for cluster: %s. error: %v", cluster.Name, err)
@@ -78,6 +91,26 @@ func sync_cluster_status(cluster models.Cluster, provider *Provider) (bool, erro
 	logger.Get().Info("Updating the status of the cluster: %s to %d", cluster.Name, clusterStatus)
 	if err := coll.Update(bson.M{"clusterid": cluster.ClusterId}, bson.M{"$set": bson.M{"status": clusterStatus}}); err != nil {
 		logger.Get().Error("Error updating status for cluster: %s. error:%v", cluster.Name, err)
+		return false, err
+	}
+
+	return true, nil
+}
+
+func syncSlus(cluster models.Cluster, provider *Provider) (bool, error) {
+
+	//sync the slu status for now
+	var result models.RpcResponse
+	vars := make(map[string]string)
+	vars["cluster-id"] = cluster.ClusterId.String()
+
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, syc_functions["sync_slus"]),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}},
+		&result)
+
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		logger.Get().Error("Error syncing the slus for cluster: %s. error:%v", cluster.Name, err)
 		return false, err
 	}
 
