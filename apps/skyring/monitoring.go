@@ -906,7 +906,7 @@ func Compute_System_Summary(p map[string]interface{}) {
 	}
 	storage_down_cnt := 0
 	for _, storage := range storages {
-		if storage.Status == STORAGE_STATUS_DOWN {
+		if storage.Status == models.STORAGE_STATUS_ERROR {
 			storage_down_cnt = storage_down_cnt + 1
 		}
 	}
