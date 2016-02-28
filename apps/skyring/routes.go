@@ -360,6 +360,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "PATCH_ClusterSlu",
+			Method:      "PATCH",
+			Pattern:     "clusters/{cluster-id}/slus/{slu-id}",
+			HandlerFunc: a.PATCH_ClusterSlu,
+			Version:     1,
+		},
+		{
 			Name:        "POST_Storages",
 			Method:      "POST",
 			Pattern:     "clusters/{cluster-id}/storages",
