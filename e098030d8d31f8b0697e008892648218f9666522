@@ -16,6 +16,24 @@
       "revId": "e098030d8d31f8b0697e008892648218f9666522",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_1cac56ed",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-02-28T15:51:41Z",
+      "side": 1,
+      "message": "There are so many metric fetching items going on I mean\n\n1. Some from graphite\n2. And here from provider\n\nSo I thought sometimes the provider specific fetching can be expensive as was in the case of our volume utilization in gluster so I thought it  better to have it run as a parallel thread and then while that happens we can always do the remaining stuff.",
+      "parentUuid": "5a72e520_7c746a9c",
+      "revId": "e098030d8d31f8b0697e008892648218f9666522",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
