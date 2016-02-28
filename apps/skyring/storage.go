@@ -303,6 +303,27 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the storage id: %s", storage_id_str))
 		return
 	}
+
+	// Check if block devices are backed by this storage
+	// If so dont allow deletion and ask to delete block devices first
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_BLOCK_DEVICES)
+	var blkDevices []models.BlockDevice
+	err = coll.Find(bson.M{"clusterid": *cluster_id, "storageid": *storage_id}).All(&blkDevices)
+	if err != nil {
+		logger.Get().Error("Error checking block devices backed by storage: %v", *storage_id)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error checking block devices backed by storage: %v", *storage_id))
+		return
+	}
+	if len(blkDevices) > 0 {
+		logger.Get().Warning("There are block devices backed by storage: %v. First block devices should be deleted.", *storage_id)
+		HttpResponse(
+			w,
+			http.StatusMethodNotAllowed,
+			"There are block devices backed by storage. Make sure all connected clients are disconnected from block devices and first delete the block devices")
+		return
+	}
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	// Get the specific provider and invoke the method
