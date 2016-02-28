@@ -38,6 +38,7 @@ var (
 	cluster_post_functions = map[string]string{
 		"create":         "CreateCluster",
 		"expand_cluster": "ExpandCluster",
+		"patch_slu":      "UpdateStorageLogicalUnitParams",
 	}
 
 	storage_types = map[string]string{
@@ -843,6 +844,58 @@ func (a *App) GET_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 	} else {
 		json.NewEncoder(w).Encode(slu)
 	}
+}
+
+func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	slu_id_str := vars["slu-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s. error: %v", cluster_id_str, err))
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
+		HttpResponse(w, http.StatusBadRequest, err.Error(), ctxt)
+		return
+	}
+
+	provider := a.GetProviderFromClusterId(*cluster_id)
+	if provider == nil {
+		logger.Get().Error("%s-Error getting provider for cluster: %v", ctxt, *cluster_id)
+		return
+	}
+	var result models.RpcResponse
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, storage_post_functions["patch_slu"]),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+		&result)
+	if err != nil || (result.Status.StatusCode != http.StatusAccepted) {
+		logger.Get().Error("%s-Error updating the slu id: %s. error: %v", ctxt, slu_id_str, err)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error updating the slu id: %s. error: %v", slu_id_str, err))
+		return
+
+	}
+	// Update the master task id
+	taskId, err := uuid.Parse(result.Data.RequestId)
+	if err != nil {
+		logger.Get().Error("%s-Error parsing provider task id while updating the slu id: %s. error: %v", ctxt, slu_id_str, err)
+		return
+	}
+
+	bytes, _ := json.Marshal(models.AsyncResponse{TaskId: *taskId})
+	w.WriteHeader(http.StatusAccepted)
+	w.Write(bytes)
+
 }
 
 func disks_used(nodes []models.ClusterNode) (bool, error) {
