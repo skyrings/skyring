@@ -408,6 +408,13 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: GetEvents,
 			Version:     1,
 		},
+		{
+			Name:        "GET_event",
+			Method:      "GET",
+			Pattern:     "event/{event-id}",
+			HandlerFunc: GetEventById,
+			Version:     1,
+		},
 		//Block Devices
 		{
 			Name:        "POST_BlockDevices",
