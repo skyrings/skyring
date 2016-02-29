@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_7588fd22",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-29T13:50:15Z",
+      "side": 1,
+      "message": "check for mgo.ErrNotFound",
+      "range": {
+        "startLine": 136,
+        "startChar": 1,
+        "endLine": 136,
+        "endChar": 22
+      },
+      "revId": "c060c0c506b909da4412d33dba6759b6a26de83a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
