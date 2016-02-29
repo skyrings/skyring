@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -44,11 +45,14 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 		}
 	}
 	if len(taskStatus) != 0 {
-		if strings.ToLower(taskStatus) == "inprogress" {
+		switch strings.ToLower(taskStatus) {
+		case "inprogress":
 			filter["completed"] = false
-		} else if strings.ToLower(taskStatus) == "completed" {
+		case "completed":
 			filter["completed"] = true
-		} else {
+		case "failed":
+			filter["status"] = models.TASK_STATUS_FAILURE
+		default:
 			logger.Get().Error("Un-supported query param: %v", taskStatus)
 			HttpResponse(rw, http.StatusInternalServerError, fmt.Sprintf("Un-supported query param: %s", taskStatus))
 			return
@@ -58,12 +62,26 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 	var tasks []models.AppTask
 	pageNo, pageNoErr := strconv.Atoi(req.URL.Query().Get("pageNo"))
 	pageSize, pageSizeErr := strconv.Atoi(req.URL.Query().Get("pageSize"))
-
-	if err := coll.Find(filter).All(&tasks); err != nil {
+	fromDateTime, fromDateTimeErr := time.Parse(time.RFC3339, req.URL.Query().Get("fromdatetime"))
+	toDateTime, toDateTimeErr := time.Parse(time.RFC3339, req.URL.Query().Get("todatetime"))
+	if fromDateTimeErr == nil && toDateTimeErr == nil {
+		filter["lastupdated"] = bson.M{
+			"$gt": fromDateTime.UTC(),
+			"$lt": toDateTime.UTC(),
+		}
+	} else if fromDateTimeErr != nil && toDateTimeErr == nil {
+		filter["lastupdated"] = bson.M{
+			"$lt": toDateTime.UTC(),
+		}
+	} else if fromDateTimeErr == nil && toDateTimeErr != nil {
+		filter["lastupdated"] = bson.M{
+			"$gt": fromDateTime.UTC(),
+		}
+	}
+	if err := coll.Find(filter).Sort("-completed", "lastupdated").All(&tasks); err != nil {
 		logger.Get().Error("Unable to get tasks. error: %v", err)
 		HttpResponse(rw, http.StatusInternalServerError, err.Error())
 		return
-
 	}
 
 	if len(tasks) == 0 {
