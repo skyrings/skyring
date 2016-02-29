@@ -22,6 +22,30 @@
       "revId": "b2fbde1f674caff5147363e7afa1d6a0e3d6b499",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_3ff104ce",
+        "filename": "apps/skyring/notifier.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-02-29T08:16:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_a8f85de6",
+      "range": {
+        "startLine": 171,
+        "startChar": 3,
+        "endLine": 171,
+        "endChar": 19
+      },
+      "revId": "b2fbde1f674caff5147363e7afa1d6a0e3d6b499",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
