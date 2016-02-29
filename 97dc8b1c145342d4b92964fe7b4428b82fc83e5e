@@ -16,6 +16,24 @@
       "revId": "97dc8b1c145342d4b92964fe7b4428b82fc83e5e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_1cce165b",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-29T01:50:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_9c520612",
+      "revId": "97dc8b1c145342d4b92964fe7b4428b82fc83e5e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
