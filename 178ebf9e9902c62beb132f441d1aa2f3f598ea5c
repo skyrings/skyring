@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_1cf53683",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-29T02:47:37Z",
+      "side": 1,
+      "message": "Better put a sample of request payload as well here..",
+      "revId": "178ebf9e9902c62beb132f441d1aa2f3f598ea5c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
