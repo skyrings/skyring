@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_d2cf07af",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-02-29T10:30:02Z",
+      "side": 1,
+      "message": "Not applicable to ALL, can remove this condition from here",
+      "range": {
+        "startLine": 315,
+        "startChar": 25,
+        "endLine": 315,
+        "endChar": 40
+      },
+      "revId": "88c5c35691576774ac6181bd36dea8666928260d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
