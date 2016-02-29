@@ -448,7 +448,7 @@ func (a *App) LoadRoutes() {
 		{
 			Name:        "POST_Testmailnotifier",
 			Method:      "POST",
-			Pattern:     "testmailnotifier/{recipient}",
+			Pattern:     "testmailnotifier",
 			HandlerFunc: a.TestMailNotifier,
 			Version:     1,
 		},

@@ -17,7 +17,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring-common/dbprovider/mongodb"
 	"github.com/skyrings/skyring-common/models"
 	mail_notifier "github.com/skyrings/skyring-common/notifier"
@@ -130,8 +129,6 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 }
 func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	var recepient []string
-	vars := mux.Vars(req)
-	recepient = []string{vars["recipient"]}
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		logger.Get().Error("Error parsing http request body:%s", err)
@@ -151,8 +148,10 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 		HandleHttpError(rw, errors.New("insufficient detail for mail notifier"))
 		return
 	}
-
-	if notifier.MailId == "" || notifier.Passcode == "" || notifier.SmtpServer == "" || notifier.Port == 0 || notifier.Encryption == "" {
+	if val, ok := m["recipient"]; ok {
+		recepient = []string{val.(string)}
+	}
+	if notifier.MailId == "" || notifier.Passcode == "" || notifier.SmtpServer == "" || notifier.Port == 0 || notifier.Encryption == "" || len(recepient) == 0 {
 		logger.Get().Error("Insufficient details for Test mail notifier: %v", notifier)
 		HandleHttpError(rw, errors.New("insufficient details for Test mail notifier"))
 		return
