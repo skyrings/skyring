@@ -34,6 +34,24 @@
       "revId": "e098030d8d31f8b0697e008892648218f9666522",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_5cefaeb0",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-29T02:49:14Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "5a72e520_1cac56ed",
+      "revId": "e098030d8d31f8b0697e008892648218f9666522",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
