@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_7582bd53",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-29T12:46:18Z",
+      "side": 1,
+      "message": "We can have a map defined as map[string]models.AlarmStatus and pre-populate it with values. Thats way it would one line code to get from map.",
+      "revId": "e301f34db942f68cc254f9afbfa7b9328b663dab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_75e9dd19",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-02-29T12:46:18Z",
+      "side": 1,
+      "message": "%s/GetEventFromId/GetEventById/g",
+      "revId": "e301f34db942f68cc254f9afbfa7b9328b663dab",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
