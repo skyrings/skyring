@@ -14,6 +14,7 @@ package skyring
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring-common/conf"
@@ -23,9 +24,11 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func GetEvents(rw http.ResponseWriter, req *http.Request) {
@@ -36,11 +39,11 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 		logger.Get().Error("Error Getting the context. error: %v", err)
 	}
 
-	node_name := req.URL.Query().Get("node-name")
-	cluster_name := req.URL.Query().Get("cluster-name")
+	node_name := req.URL.Query().Get("nodename")
+	cluster_name := req.URL.Query().Get("clustername")
 	severity := req.URL.Query().Get("severity")
 	acked := req.URL.Query().Get("acked")
-	search_message := req.URL.Query().Get("search-message")
+	search_message := req.URL.Query().Get("searchmessage")
 
 	if len(node_name) != 0 {
 		filter["nodename"] = node_name
@@ -86,8 +89,26 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_APP_EVENTS)
 	var events []models.AppEvent
-	pageNo, pageNoErr := strconv.Atoi(req.URL.Query().Get("page-no"))
-	pageSize, pageSizeErr := strconv.Atoi(req.URL.Query().Get("page-size"))
+	pageNo, pageNoErr := strconv.Atoi(req.URL.Query().Get("pageno"))
+	pageSize, pageSizeErr := strconv.Atoi(req.URL.Query().Get("pagesize"))
+
+	// time stamp format of RFC3339 = "2006-01-02T15:04:05Z07:00"
+	fromDateTime, fromDateTimeErr := time.Parse(time.RFC3339, req.URL.Query().Get("fromdatetime"))
+	toDateTime, toDateTimeErr := time.Parse(time.RFC3339, req.URL.Query().Get("todatetime"))
+	if fromDateTimeErr == nil && toDateTimeErr == nil {
+		filter["timestamp"] = bson.M{
+			"$gt": fromDateTime.UTC(),
+			"$lt": toDateTime.UTC(),
+		}
+	} else if fromDateTimeErr != nil && toDateTimeErr == nil {
+		filter["timestamp"] = bson.M{
+			"$lt": toDateTime.UTC(),
+		}
+	} else if fromDateTimeErr == nil && toDateTimeErr != nil {
+		filter["timestamp"] = bson.M{
+			"$gt": fromDateTime.UTC(),
+		}
+	}
 	if err := coll.Find(filter).Sort("-timestamp").All(&events); err != nil {
 		logger.Get().Error("%s-Error getting record from DB: %v", ctxt, err)
 		HandleHttpError(rw, err)
@@ -145,4 +166,73 @@ func GetEventById(w http.ResponseWriter, r *http.Request) {
 	} else {
 		json.NewEncoder(w).Encode(event)
 	}
+}
+
+func PatchEvent(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+	var m map[string]interface{}
+	vars := mux.Vars(r)
+	event_id_str := vars["event-id"]
+	event_id, err := uuid.Parse(event_id_str)
+	if err != nil {
+		logger.Get().Error("%s-Error parsing event id: %s", ctxt, event_id_str)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing event id: %s", event_id_str))
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
+		HandleHttpError(w, err)
+		return
+	}
+	if err = json.Unmarshal(body, &m); err != nil {
+		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
+		HandleHttpError(w, err)
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_APP_EVENTS)
+	var event models.AppEvent
+	if err := collection.Find(bson.M{"eventid": *event_id}).One(&event); err == mgo.ErrNotFound {
+		HttpResponse(w, http.StatusBadRequest, "Event not found")
+		logger.Get().Error("%s-Event: %v not found. error: %v", ctxt, *event_id, err)
+		return
+	} else if err != nil {
+		logger.Get().Error("%s-Error getting the event detail for %v. error: %v", ctxt, *event_id, err)
+		HttpResponse(w, http.StatusBadRequest, "Event finding the record")
+		return
+	}
+
+	if event.Severity == models.ALARM_STATUS_CLEARED {
+		logger.Get().Error("%s-Cannot ack an event with severity: %s", ctxt, event.Severity.String())
+		HttpResponse(w, http.StatusBadRequest, "Event Cannot be acked.")
+		return
+	}
+
+	if val, ok := m["acked"]; ok {
+		event.Acked = val.(bool)
+	} else {
+		logger.Get().Error("%s-Insufficient details for patching event: %v", ctxt, *event_id)
+		HandleHttpError(w, errors.New("insufficient detail for patching event"))
+		return
+	}
+	if val, ok := m["ackcomment"]; ok {
+		event.AckComment = val.(string)
+	}
+	event.AckedBy = ctxt
+	event.AckedTime = time.Now()
+
+	err = collection.Update(bson.M{"eventid": *event_id}, bson.M{"$set": event})
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("Error updating record in DB for event: %v. error: %v", event_id_str, err))
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
+	}
+	return
 }

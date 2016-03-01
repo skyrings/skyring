@@ -401,6 +401,7 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.DEL_Storage,
 			Version:     1,
 		},
+		//Routes for Event management
 		{
 			Name:        "GET_events",
 			Method:      "GET",
@@ -413,6 +414,13 @@ func (a *App) LoadRoutes() {
 			Method:      "GET",
 			Pattern:     "event/{event-id}",
 			HandlerFunc: GetEventById,
+			Version:     1,
+		},
+		{
+			Name:        "PATCH_event",
+			Method:      "PATCH",
+			Pattern:     "event/{event-id}",
+			HandlerFunc: PatchEvent,
 			Version:     1,
 		},
 		//Block Devices
