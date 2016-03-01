@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_c68825ea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-01T05:57:35Z",
+      "side": 1,
+      "message": "I feel you should mention here about the REST api getting affected and new query string values which can be passed with example data.",
+      "revId": "e97dcbdfa7e6111c6200364ac26debb25eff40bc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_a68329cb",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-01T05:57:35Z",
+      "side": 1,
+      "message": "Can you put a comment and mention what format the date is passed?",
+      "revId": "e97dcbdfa7e6111c6200364ac26debb25eff40bc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
