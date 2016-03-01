@@ -221,9 +221,9 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 		return
 	}
 
-	nodeNames, nodeNamesFetchError := getNodesInCluster(&id)
-	if nodeNamesFetchError != nil {
-		logger.Get().Error("%s - Failed to fetch nodes in cluster %v. Err %v", ctxt, id, nodeNamesFetchError.Error())
+	nodes, nodesFetchError := getClusterNodesById(&id)
+	if nodesFetchError != nil {
+		logger.Get().Error("%s - Failed to fetch nodes in cluster %v. Err %v", ctxt, id, nodesFetchError.Error())
 		return
 	}
 
@@ -232,12 +232,16 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 
 	var cluster_memory_used float64
 	var cluster_memory_free float64
-	for _, node := range nodeNames {
+
+	var disk_reads float64
+	var disk_writes float64
+
+	for _, node := range nodes {
 		/*
 			Calculate Memory Used
 		*/
 		resource_name := monitoring.MEMORY + "." + monitoring.MEMORY + "-" + monitoring.USED
-		mStatUsed, memoryUsedFetchError := GetMonitoringManager().GetInstantValue(node, resource_name)
+		mStatUsed, memoryUsedFetchError := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name)
 		if memoryUsedFetchError != nil {
 			logger.Get().Error("%s - Error %v", ctxt, memoryUsedFetchError)
 			continue
@@ -248,17 +252,44 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 			Calculate Free Memory
 		*/
 		resource_name = monitoring.MEMORY + "." + monitoring.MEMORY + "-" + monitoring.FREE
-		mStatFree, memoryFreeFetchError := GetMonitoringManager().GetInstantValue(node, resource_name)
+		mStatFree, memoryFreeFetchError := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name)
 		if memoryFreeFetchError != nil {
 			logger.Get().Error("%s - Error %v", ctxt, memoryFreeFetchError)
 			continue
 		}
 		cluster_memory_free = cluster_memory_free + mStatFree
+
+		for _, disk := range node.StorageDisks {
+			disk_name := strings.Replace(disk.Name, "/dev/", "", 1)
+			resource_name = monitoring.DISK + "-" + disk_name + monitoring.DISK_IOPS
+			diskReads, diskReadErr := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name+monitoring.READ)
+			if diskReadErr != nil {
+				disk_reads = disk_reads + diskReads
+			} else {
+				logger.Get().Error("%s - Failed to fetch iops stats for %v of %v from cluster %v.Err %v", ctxt, disk.Name, node.Hostname, clusterId, diskReadErr)
+			}
+
+			diskWrites, diskWriteErr := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name+monitoring.READ)
+			if diskWriteErr != nil {
+				disk_writes = disk_writes + diskWrites
+			} else {
+				logger.Get().Error("%s - Failed to fetch iops stats for %v of %v from cluster %v.Err %v", ctxt, disk.Name, node.Hostname, clusterId, diskWriteErr)
+			}
+		}
 	}
 
 	time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
 
 	table_name := conf.SystemConfig.TimeSeriesDBConfig.CollectionName + "." + cluster.Name + "."
+
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.DISK + "-" + monitoring.READ: {time_stamp_str: strconv.FormatFloat(disk_reads, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing iops statistics for the cluster %v.Err %v", ctxt, clusterId, err)
+	}
+
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.DISK + "-" + monitoring.WRITE: {time_stamp_str: strconv.FormatFloat(disk_writes, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing iops statistics for the cluster %v.Err %v", ctxt, clusterId, err)
+	}
+
 	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.USED_SPACE: {time_stamp_str: strconv.FormatFloat(cluster_memory_used, 'E', -1, 64)}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
 	}
