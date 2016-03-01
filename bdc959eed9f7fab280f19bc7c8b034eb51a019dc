@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_6f03c1b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-01T19:01:58Z",
+      "side": 1,
+      "message": "Thanks for the patch. Need to do same thing for bigfin as well. Will send a patch.",
+      "revId": "bdc959eed9f7fab280f19bc7c8b034eb51a019dc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
