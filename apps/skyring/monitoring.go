@@ -266,6 +266,11 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.FREE_SPACE: {time_stamp_str: strconv.FormatFloat(cluster_memory_free, 'E', -1, 64)}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
 	}
+	net_memory_usage_percentage := strconv.FormatFloat(((cluster_memory_used * 100) / (cluster_memory_used + cluster_memory_free)), 'E', -1, 64)
+	memory_percent_table := table_name + monitoring.MEMORY + "-" + monitoring.USAGE_PERCENT
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: net_memory_usage_percentage}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
+	}
 
 	return
 }
@@ -1057,6 +1062,11 @@ func Compute_System_Summary(p map[string]interface{}) {
 		logger.Get().Error("%s - Error pushing memory utilization.Err %v", ctxt, err)
 	}
 	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.USED_SPACE: {time_stamp_str: strconv.FormatFloat(net_memory_used, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing memory utilization.Err %v", ctxt, err)
+	}
+	memory_percent := strconv.FormatFloat(((net_memory_used * 100) / (net_memory_used + net_memory_free)), 'E', -1, 64)
+	memory_percent_table := table_name + monitoring.MEMORY + "-" + monitoring.USAGE_PERCENT
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: memory_percent}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing memory utilization.Err %v", ctxt, err)
 	}
 	system.StorageProfileUsage = net_storage_profile_utilization
