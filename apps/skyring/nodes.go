@@ -387,7 +387,7 @@ func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error
 			}
 			var unusedNodes models.Nodes
 			for _, node := range nodes {
-				if node.ClusterId.IsZero() {
+				if node.ClusterId.IsZero() && node.State == models.NODE_STATE_ACTIVE {
 					unusedNodes = append(unusedNodes, node)
 				}
 			}
