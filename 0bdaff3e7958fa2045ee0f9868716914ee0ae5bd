@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_61b67bde",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-01T10:08:47Z",
+      "side": 1,
+      "message": "Is it ok to remove /dev/ from disk name use? I feel we can replace \"/\" with \"_\" and use as is. WHat you say @Nishanth?",
+      "revId": "0bdaff3e7958fa2045ee0f9868716914ee0ae5bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
