@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_a94db974",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-03-01T11:28:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_7fdd3c14",
+      "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_bfe7b4e3",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-29T09:32:56Z",
       "side": 1,
       "message": "log with context",
+      "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_090fad31",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-03-01T11:28:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_bfe7b4e3",
       "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_2913895d",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-03-01T11:28:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_dfec70ca",
+      "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_ffd04cf9",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 6
@@ -64,6 +118,24 @@
       "writtenOn": "2016-02-29T09:32:56Z",
       "side": 1,
       "message": "log with context",
+      "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_4910c54e",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-03-01T11:28:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_ffd04cf9",
       "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_a92699b8",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-03-01T11:28:57Z",
+      "side": 1,
+      "message": "only GetDirectory is used other places, I will change signature for UdateProvider and SetDirectory functions into camel case.",
+      "parentUuid": "5a72e520_7f045c7e",
+      "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_5fd8801d",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 6
@@ -98,6 +188,24 @@
       "writtenOn": "2016-02-29T09:32:56Z",
       "side": 1,
       "message": "These two lines could merged in one",
+      "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_c92bd580",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-03-01T11:28:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_5fd8801d",
       "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_0926cdb7",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-03-01T11:28:57Z",
+      "side": 1,
+      "message": "I will validate the error.",
+      "parentUuid": "5a72e520_9f091898",
+      "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_df11d0ad",
         "filename": "models/models.go",
         "patchSetId": 6
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_e909712d",
+        "filename": "models/models.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-03-01T11:28:57Z",
+      "side": 1,
+      "message": "Moved from here to authprovider",
+      "parentUuid": "5a72e520_df11d0ad",
+      "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_ff25ac0a",
         "filename": "skyring-setup.sh",
         "patchSetId": 6
@@ -149,6 +293,24 @@
       "writtenOn": "2016-02-29T09:32:56Z",
       "side": 1,
       "message": "What about error?",
+      "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_4937e5e3",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-03-01T11:28:57Z",
+      "side": 1,
+      "message": "I will handle the error",
+      "parentUuid": "5a72e520_ff25ac0a",
       "revId": "02a937bbdd1383a4cc666052879e0747b299dd7d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
