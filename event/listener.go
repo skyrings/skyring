@@ -97,12 +97,12 @@ func RouteEvent(event models.NodeEvent) {
 			return
 		}
 	}
-
+	// This has to be un commented once we start recieving events from calamari
 	// Handle Provider specific events
-	app := skyring.GetApp()
-	if err := app.RouteProviderEvents(e); err != nil {
-		logger.Get().Error("Event:%s could not be handled for node: %s. error: %v", event.Tag, node.Hostname, err)
-	}
+	//app := skyring.GetApp()
+	//if err := app.RouteProviderEvents(e); err != nil {
+	//	logger.Get().Error("Event:%s could not be handled for node: %s. error: %v", event.Tag, node.Hostname, err)
+	//}
 	return
 }
 

@@ -352,7 +352,7 @@ func node_appeared_handler(event models.AppEvent) (models.AppEvent, error) {
 	event.EntityId = event.NodeId
 	event.Severity = models.ALARM_STATUS_CLEARED
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
-	event.Notify = false
+	event.Notify = true
 	return event, nil
 }
 
@@ -367,9 +367,9 @@ func node_lost_handler(event models.AppEvent) (models.AppEvent, error) {
 	event.Name = EventType["NODE_LOST_CONTACT"]
 	event.Message = fmt.Sprintf("Host: %s lost contact", event.NodeName)
 	event.EntityId = event.NodeId
-	event.Severity = models.ALARM_STATUS_CLEARED
+	event.Severity = models.ALARM_STATUS_INDETERMINATE
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
-	event.Notify = false
+	event.Notify = true
 	return event, nil
 }
 
