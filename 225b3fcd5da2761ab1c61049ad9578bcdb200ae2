@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_a9d3f936",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-01T12:24:02Z",
+      "side": 1,
+      "message": "%s/TestmailNotifier router has modified/skyring: Modified test mail notifier or use request body for recipient/g",
+      "revId": "225b3fcd5da2761ab1c61049ad9578bcdb200ae2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_e9ddf143",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-01T12:24:02Z",
+      "side": 1,
+      "message": "%s/will/will be/g\n\n%s/thorugh/through/g",
+      "revId": "225b3fcd5da2761ab1c61049ad9578bcdb200ae2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
