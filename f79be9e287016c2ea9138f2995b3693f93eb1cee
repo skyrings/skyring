@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_9da7574f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-02T11:49:04Z",
+      "side": 1,
+      "message": "%s/contion/condition/g",
+      "revId": "f79be9e287016c2ea9138f2995b3693f93eb1cee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_dd68eff7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-02T11:49:04Z",
+      "side": 1,
+      "message": "No need to explain the whole logic here. You can just mention as below \n\n\"Modified to list only active nodes while fetching free nodes for cluster creation.\"",
+      "revId": "f79be9e287016c2ea9138f2995b3693f93eb1cee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
