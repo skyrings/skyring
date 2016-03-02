@@ -41,7 +41,7 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 
 	node_name := req.URL.Query().Get("nodename")
 	cluster_name := req.URL.Query().Get("clustername")
-	severity := req.URL.Query().Get("severity")
+	severity := req.URL.Query()["severity"]
 	acked := req.URL.Query().Get("acked")
 	search_message := req.URL.Query().Get("searchmessage")
 
@@ -49,7 +49,7 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 		filter["nodename"] = node_name
 	}
 	if len(cluster_name) != 0 {
-		filter["cluster_name"] = cluster_name
+		filter["clustername"] = cluster_name
 	}
 
 	var event_severity = map[string]models.AlarmStatus{
@@ -62,14 +62,19 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	if len(severity) != 0 {
-		if s, ok := event_severity[severity]; !ok {
-			logger.Get().Error("%s-Un-supported query param: %v", ctxt, severity)
-			HttpResponse(rw, http.StatusInternalServerError, fmt.Sprintf("Un-supported query param: %s", severity))
-			return
-		} else {
-			filter["severity"] = s
+		var arr []interface{}
+		for _, sev := range severity {
+			if s, ok := event_severity[sev]; !ok {
+				logger.Get().Error("%s-Un-supported query param: %v", ctxt, severity)
+				HttpResponse(rw, http.StatusInternalServerError, fmt.Sprintf("Un-supported query param: %s", severity))
+				return
+			} else {
+				arr = append(arr, bson.M{"severity": s})
+			}
 		}
+		filter["$or"] = arr
 	}
+
 	if len(acked) != 0 {
 		if strings.ToLower(acked) == "true" {
 			filter["acked"] = true
@@ -84,7 +89,6 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	if len(search_message) != 0 {
 		filter["message"] = bson.M{"$regex": search_message, "$options": "$i"}
 	}
-
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_APP_EVENTS)
@@ -109,6 +113,7 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 			"$gt": fromDateTime.UTC(),
 		}
 	}
+
 	if err := coll.Find(filter).Sort("-timestamp").All(&events); err != nil {
 		logger.Get().Error("%s-Error getting record from DB: %v", ctxt, err)
 		HandleHttpError(rw, err)
