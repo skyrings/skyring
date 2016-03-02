@@ -211,12 +211,21 @@ func (a *App) GET_Storages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	params := r.URL.Query()
+	storage_type := params.Get("type")
+
+	var filter bson.M = make(map[string]interface{})
+	filter["clusterid"] = *cluster_id
+	if storage_type != "" {
+		filter["type"] = storage_type
+	}
+
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
 	var storages models.Storages
-	if err := collection.Find(bson.M{"clusterid": *cluster_id}).All(&storages); err != nil {
+	if err := collection.Find(filter).All(&storages); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		logger.Get().Error("Error getting the storage list for cluster: %v. error: %v", *cluster_id, err)
 		return
