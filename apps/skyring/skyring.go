@@ -33,6 +33,8 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/nodemanager"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"net/http"
 	"net/rpc"
@@ -533,6 +535,38 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 		logger.Get().Error("%s - Failed to schedule fetching summary.Error %v", ctxt, err)
 		return err
 	}
-
+	//Check Task status
+	scheduler, err := schedule.NewScheduler()
+	if err != nil {
+		logger.Get().Error(err.Error())
+	} else {
+		f := check_task_status
+		m := make(map[string]interface{})
+		go scheduler.Schedule(time.Duration(30)*time.Second, f, m)
+	}
 	return nil
+}
+
+func check_task_status(prams map[string]interface{}) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var Tasks []models.AppTask
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	if err := collection.Find(bson.M{"completed": false}).All(&Tasks); err != nil && err != mgo.ErrNotFound {
+		logger.Get().Error(err.Error())
+		return
+	}
+	var t time.Time
+	for _, Task := range Tasks {
+		for _, status := range Task.StatusList {
+			t = status.Timestamp
+		}
+		Duration := time.Since(t)
+		minutes := int(Duration.Minutes())
+		if minutes >= 10 {
+			if ok, _ := TaskManager.Stop(Task.Id); !ok {
+				logger.Get().Error("Failed to stop task: %v", Task.Id)
+			}
+		}
+	}
 }
