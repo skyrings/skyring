@@ -102,7 +102,13 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Add and Accept Node: %s", request.Hostname), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(
+		models.ENGINE_NAME,
+		fmt.Sprintf("Add and Accept Node: %s", request.Hostname),
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
 		logger.Get().Error("%s-Unable to create the task for Add and Accept Node: %s. error: %v", ctxt, request.Hostname, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed", ctxt)
 	} else {
@@ -180,7 +186,13 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Accept Node: %s", hostname), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(
+		models.ENGINE_NAME,
+		fmt.Sprintf("Accept Node: %s", hostname),
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
 		logger.Get().Error("%s-Unable to create the task for Accept Node: %s. error: %v", ctxt, hostname, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed", ctxt)
 	} else {
@@ -485,7 +497,13 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove Node: %v", *node_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(
+		models.ENGINE_NAME,
+		fmt.Sprintf("Remove Node: %v", *node_id),
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
 		logger.Get().Error("%s-Unable to create the task for remove node", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 
@@ -540,7 +558,13 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run("Remove Multiple Nodes", asyncTask, 300*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(
+		models.ENGINE_NAME,
+		"Remove Multiple Nodes",
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
 		logger.Get().Error("%s-Unable to create the task for remove multiple nodes", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
 

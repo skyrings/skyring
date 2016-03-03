@@ -34,6 +34,8 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/nodemanager"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"net/http"
 	"net/rpc"
@@ -64,6 +66,7 @@ const (
 	DefaultMaxAge                 = 86400 * 7
 	DEFAULT_API_PREFIX            = "/api"
 	LoggingCtxt        ContextKey = 0
+	Timeout                       = 10
 )
 
 var (
@@ -546,6 +549,94 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 		logger.Get().Error("%s - Failed to schedule fetching summary.Error %v", ctxt, err)
 		return err
 	}
-
+	schedule_task_check(ctxt)
 	return nil
+}
+
+func schedule_task_check(ctxt string) {
+	//Check Task status
+	scheduler, err := schedule.NewScheduler()
+	if err != nil {
+		logger.Get().Error("%s-%v", ctxt, err.Error())
+	} else {
+		f := check_task_status
+		m := make(map[string]interface{})
+		go scheduler.Schedule(time.Duration(10*time.Minute), f, m)
+	}
+}
+
+func check_task_status(params map[string]interface{}) {
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return
+	}
+	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
+	var id uuid.UUID
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var tasks []models.AppTask
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	if err := collection.Find(bson.M{"completed": false, "parentid": id}).All(&tasks); err != nil {
+		logger.Get().Warning("%s-%v", ctxt, err.Error())
+		return
+	}
+	application := GetApp()
+	for _, task := range tasks {
+		if ok := check_TaskLastUpdate(task); ok {
+			// Fetch the child tasks for this task id
+			var subTasks []models.AppTask
+			if err := collection.Find(bson.M{"completed": false, "parentid": task.Id}).All(&subTasks); err != nil && err != mgo.ErrNotFound {
+				logger.Get().Warning("%s-%v", ctxt, err.Error())
+				return
+			}
+			if len(subTasks) == 0 {
+				//Stopping parent task
+				stop_ParentTask(task, ctxt)
+			} else {
+				var result models.RpcResponse
+				var stoppedSubTasksCount = 0
+				for _, subTask := range subTasks {
+					if ok := check_TaskLastUpdate(subTask); ok {
+						provider := application.getProviderFromClusterType(subTask.Owner)
+						vars := make(map[string]string)
+						vars["task-id"] = subTask.Id.String()
+						err := provider.Client.Call(fmt.Sprintf("%s.%s",
+							provider.Name, "StopTask"),
+							models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}, RpcRequestContext: ctxt},
+							&result)
+						if err != nil || (result.Status.StatusCode != http.StatusOK) {
+							logger.Get().Warning(fmt.Sprintf(":%s-Error stopping sub task: %v. error:%v", ctxt, subTask.Id, err))
+							continue
+						}
+						stoppedSubTasksCount++
+					}
+				}
+				if stoppedSubTasksCount == len(subTasks) {
+					// Stopping parent task
+					stop_ParentTask(task, ctxt)
+				}
+			}
+		}
+	}
+}
+
+func check_TaskLastUpdate(task models.AppTask) bool {
+	var defaultTime time.Time
+	lastUpdated := task.LastUpdated
+	if lastUpdated == defaultTime && len(task.StatusList) != 0 {
+		lastUpdated = task.StatusList[len(task.StatusList)-1].Timestamp
+	}
+	duration := int(time.Since(lastUpdated).Minutes())
+	if duration >= Timeout {
+		return true
+	}
+	return false
+}
+
+func stop_ParentTask(task models.AppTask, ctxt string) {
+	// Stoping task
+	if ok, err := application.GetTaskManager().Stop(task.Id); !ok || err != nil {
+		logger.Get().Error("%s-Failed to stop task: %v", ctxt, task.Id)
+	}
 }
