@@ -921,6 +921,39 @@ func (a *App) Get_Summary(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(system)
 }
 
+func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
+	cSummary := models.ClusterSummary{}
+
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
+		logger.Get().Error(fmt.Sprintf("Failed to parse the cluster id with error %v", err))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error Getting the context.Err %v", err))
+		return
+	}
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
+	var poolsUsage []models.PoolUsage
+	if err := coll.Find(bson.M{"clusterid": *cluster_id}).Sort("-percentused").All(&poolsUsage); err != nil {
+		logger.Get().Error("%s - Failed to fetch most used storages from cluster %v.Err %v", ctxt, *cluster_id, err)
+	}
+	if len(poolsUsage) > 5 {
+		cSummary.MostUsedPools = poolsUsage[:4]
+	} else {
+		cSummary.MostUsedPools = poolsUsage
+	}
+	json.NewEncoder(w).Encode(cSummary)
+}
+
 func Compute_System_Summary(p map[string]interface{}) {
 	var system models.System
 
@@ -1014,11 +1047,14 @@ func Compute_System_Summary(p map[string]interface{}) {
 			Calculate net storage profile utilization
 		*/
 		for profile, profileUtilization := range cluster.StorageProfileUsage {
+			used := profileUtilization.Used
+			total := profileUtilization.Total
 			if utilization, ok := net_storage_profile_utilization[profile]; ok {
-				net_storage_profile_utilization[profile] = models.Utilization{Used: utilization.Used + profileUtilization.Used, Total: utilization.Total + profileUtilization.Total}
-			} else {
-				net_storage_profile_utilization[profile] = models.Utilization{Used: profileUtilization.Used, Total: profileUtilization.Total}
+				used = used + utilization.Used
+				total = total + utilization.Total
 			}
+			percentUsed := float64(used*100) / float64(total)
+			net_storage_profile_utilization[profile] = models.Utilization{Used: used, Total: total, PercentUsed: percentUsed}
 		}
 
 		/*
@@ -1046,14 +1082,15 @@ func Compute_System_Summary(p map[string]interface{}) {
 	system.NodesCount = map[string]int{models.TOTAL: total_nodes, models.NodeStatuses[models.NODE_STATUS_ERROR]: error_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(*unmanagedNodes)}
 
 	// Update Cluster utilization to time series db
-	system.Usage = models.Utilization{Used: net_cluster_used, Total: net_cluster_total}
+	percentSystemUsed := (float64(net_cluster_used*100) / float64(net_cluster_total))
+	system.Usage = models.Utilization{Used: net_cluster_used, Total: net_cluster_total, PercentUsed: percentSystemUsed}
 	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.USED_SPACE: {time_stamp_str: strconv.FormatInt(system.Usage.Used, 10)}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing cluster utilization.Err %v", ctxt, err)
 	}
 	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.TOTAL_SPACE: {time_stamp_str: strconv.FormatInt(system.Usage.Total, 10)}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing cluster utilization.Err %v", ctxt, err)
 	}
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.PERCENT_USED: {time_stamp_str: strconv.FormatFloat((float64(system.Usage.Used*100) / float64(system.Usage.Total)), 'E', -1, 64)}}, hostname, port); err != nil {
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.PERCENT_USED: {time_stamp_str: strconv.FormatFloat(percentSystemUsed, 'E', -1, 64)}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing cluster utilization.Err %v", ctxt, err)
 	}
 
