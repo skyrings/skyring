@@ -31,7 +31,6 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"regexp"
-	"time"
 )
 
 type APIError struct {
@@ -322,7 +321,13 @@ func Initialize(node string, ctxt string) error {
 			}
 		}
 	}
-	if taskId, err := GetApp().GetTaskManager().Run(fmt.Sprintf("Initialize Node: %s", storage_node.Hostname), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := GetApp().GetTaskManager().Run(
+		models.ENGINE_NAME,
+		fmt.Sprintf("Initialize Node: %s", storage_node.Hostname),
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
 		logger.Get().Error("%s-Unable to create the task for Initialize Node: %s. error: %v", ctxt, storage_node.Hostname, err)
 		return err
 	} else {
