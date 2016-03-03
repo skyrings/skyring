@@ -33,6 +33,8 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring/authprovider"
 	"github.com/skyrings/skyring/nodemanager"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
 	"net/http"
 	"net/rpc"
@@ -533,6 +535,67 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 		logger.Get().Error("%s - Failed to schedule fetching summary.Error %v", ctxt, err)
 		return err
 	}
-
+	schedule_task_check()
 	return nil
+}
+
+func schedule_task_check() {
+	//Check Task status
+	scheduler, err := schedule.NewScheduler()
+	if err != nil {
+		logger.Get().Error(err.Error())
+	} else {
+		f := check_task_status
+		m := make(map[string]interface{})
+		go scheduler.Schedule(time.Duration(10)*time.Minute, f, m)
+	}
+}
+
+func check_task_status(params map[string]interface{}) {
+	var defaultTime, t time.Time
+	var id uuid.UUID
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var Tasks []models.AppTask
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	if err := collection.Find(bson.M{"completed": false, "parentid": id}).All(&Tasks); err != nil && err != mgo.ErrNotFound {
+		logger.Get().Warning(err.Error())
+		return
+	}
+	for _, Task := range Tasks {
+		t = Task.LastUpdated
+		if t == defaultTime {
+			t = Task.StatusList[len(Task.StatusList)-1].Timestamp
+		}
+		Duration := time.Since(t)
+		minutes := int(Duration.Minutes())
+		if minutes >= 10 {
+			// Fetch the child tasks for this task id
+			var ChildTasks []models.AppTask
+			if err := collection.Find(bson.M{"completed": false, "parentid": Task.Id}).All(&ChildTasks); err != nil && err != mgo.ErrNotFound {
+				logger.Get().Warning(err.Error())
+				return
+			}
+			for _, ChildTask := range ChildTasks {
+				var req models.RpcRequest
+				var result models.RpcResponse
+				app := GetApp()
+				provider := app.getProviderFromClusterType(ChildTask.Owner)
+				vars := make(map[string]string)
+				vars["task-id"] = ChildTask.Id.String()
+				err := provider.Client.Call(fmt.Sprintf("%s.%s",
+					provider.Name, "StopTask"),
+					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: req.RpcRequestData},
+					&result)
+				if err != nil || (result.Status.StatusCode != http.StatusOK) {
+					logger.Get().Warning(fmt.Sprintf("Error in stopping  child task: %v.error:%v", ChildTask.Id, err))
+					return
+				}
+			}
+			//Stoping parent task
+			if ok, _ := TaskManager.Stop(Task.Id); !ok {
+				logger.Get().Error("Failed to stop task: %v", Task.Id)
+			}
+		}
+	}
 }
