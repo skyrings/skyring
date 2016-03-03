@@ -139,6 +139,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "Get_ClusterSummary",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/summary",
+			HandlerFunc: a.Get_ClusterSummary,
+			Version:     1,
+		},
+		{
 			Name:        "logout",
 			Method:      "POST",
 			Pattern:     "auth/logout",
