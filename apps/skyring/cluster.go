@@ -541,18 +541,18 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 				var nodes models.Nodes
 				if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-					util.FailTask(fmt.Sprintf("Error getting nodes to manage on cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+					util.FailTask(fmt.Sprintf("Error getting nodes to manage on cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
 
 				nodes, err := getClusterNodesById(cluster_id)
 				if err != nil {
-					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
 				appLock, err := LockNodes(ctxt, nodes, "Manage_Cluster")
 				if err != nil {
-					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
+					util.FailTask("Failed to acquire lock", fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
 				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
@@ -561,7 +561,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 					t.UpdateStatus("Enabling node %s", node.Hostname)
 					ok, err := GetCoreNodeManager().EnableNode(node.Hostname, ctxt)
 					if err != nil || !ok {
-						util.FailTask(fmt.Sprintf("Error enabling node: %s on cluster: %v", node.Hostname, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+						util.FailTask(fmt.Sprintf("Error enabling node: %s on cluster: %v", node.Hostname, *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 						return
 					}
 					if err := syncNodeStatus(ctxt, node); err != nil {
@@ -573,11 +573,11 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 				// Enable any POST actions on cluster
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
-					util.FailTask(fmt.Sprintf("Error enabling post actions on cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+					util.FailTask(fmt.Sprintf("Error enabling post actions on cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
 				if err := syncClusterStatus(ctxt, cluster_id); err != nil {
-					util.FailTask(fmt.Sprintf("Error updating cluster status for the cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+					util.FailTask(fmt.Sprintf("Error updating cluster status for the cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
 				t.UpdateStatus("Success")

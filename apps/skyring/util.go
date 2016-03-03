@@ -70,6 +70,16 @@ func LockNodes(ctxt string, nodes models.Nodes, operation string) (*lock.AppLock
 	return appLock, nil
 }
 
+func LockCluster(ctxt string, cluster models.Cluster, operation string) (*lock.AppLock, error) {
+	locks := make(map[uuid.UUID]string)
+	locks[cluster.ClusterId] = fmt.Sprintf("%s - %s", operation, cluster.Name)
+	appLock := lock.NewAppLock(locks)
+	if err := GetApp().GetLockManager().AcquireLock(ctxt, *appLock); err != nil {
+		return nil, err
+	}
+	return appLock, nil
+}
+
 func getClusterNodesById(cluster_id *uuid.UUID) (models.Nodes, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
@@ -214,7 +224,7 @@ func ClusterUnmanaged(cluster_id uuid.UUID) (bool, error) {
 	if err := collection.Find(bson.M{"clusterid": cluster_id}).One(&cluster); err != nil {
 		return false, err
 	}
-	if cluster.State == models.CLUSTER_STATE_UNMANAGED {
+	if cluster.State == models.CLUSTER_STATE_UNMANAGED || cluster.State == models.CLUSTER_STATE_SYNCING {
 		return true, nil
 	} else {
 		return false, nil
@@ -252,7 +262,7 @@ func syncNodeStatus(ctxt string, node models.Node) error {
 	//get the latest status
 	ok, err := GetCoreNodeManager().IsNodeUp(node.Hostname, ctxt)
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error getting status of node: %s. error: %v", node.Hostname, err))
+		logger.Get().Error(fmt.Sprintf("%s-Error getting status of node: %s. error: %v", ctxt, node.Hostname, err))
 		return nil
 	}
 	if ok {
@@ -261,7 +271,7 @@ func syncNodeStatus(ctxt string, node models.Node) error {
 		skyringutils.Update_node_status_byId(ctxt, node.NodeId, models.NODE_STATUS_ERROR)
 	}
 
-	//TODO update Alaem status and count
+	//TODO update Alarm status and count
 
 	return nil
 }
@@ -269,17 +279,17 @@ func syncNodeStatus(ctxt string, node models.Node) error {
 func syncClusterStatus(ctxt string, cluster_id *uuid.UUID) error {
 	provider := GetApp().GetProviderFromClusterId(ctxt, *cluster_id)
 	if provider == nil {
-		logger.Get().Error("Error getting provider for the cluster: %s", *cluster_id)
+		logger.Get().Error("%s-Error getting provider for the cluster: %s", ctxt, *cluster_id)
 		return errors.New("Error getting the provider")
 	}
 	cluster, err := GetCluster(cluster_id)
 	if err != nil {
-		logger.Get().Error("Error getting cluster details for the cluster: %s", *cluster_id)
+		logger.Get().Error("%s-Error getting cluster details for the cluster: %s", ctxt, *cluster_id)
 		return err
 	}
 	success, err := sync_cluster_status(ctxt, cluster, provider)
 	if !success || err != nil {
-		logger.Get().Error("Error updating cluster status for the cluster: %s", cluster.Name)
+		logger.Get().Error("%s-Error updating cluster status for the cluster: %s", ctxt, cluster.Name)
 	}
 	return nil
 }
