@@ -13,7 +13,6 @@ limitations under the License.
 package skyring
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
@@ -27,11 +26,15 @@ import (
 
 var (
 	syc_functions = map[string]string{
-		"sync_slus": "SyncStorageLogicalUnitParams",
+		"cluster_status":     "GetClusterStatus",
+		"sync_nodes":         "SyncStorageNodes",
+		"sync_storages":      "SyncStorages",
+		"sync_slus":          "SyncStorageLogicalUnits",
+		"sync_block_devices": "SyncBlockDevices",
 	}
 )
 
-func (a *App) SyncClusterDetails() {
+func (a *App) SyncClusterDetails(params map[string]interface{}) {
 	reqId, err := uuid.New()
 	if err != nil {
 		logger.Get().Error("Error Creating the Request Id for context. error: %v", err)
@@ -48,6 +51,28 @@ func (a *App) SyncClusterDetails() {
 		return
 	}
 	for _, cluster := range clusters {
+		if cluster.State != models.CLUSTER_STATE_ACTIVE {
+			logger.Get().Info("%s-Cluster %s is not in active state. Skipping sync.", ctxt, cluster.Name)
+			continue
+		}
+
+		// Change the state of the cluster as syncing
+		logger.Get().Debug("Setting the state of cluster: %s as syncing", cluster.Name)
+		if err := coll.Update(
+			bson.M{"clusterid": cluster.ClusterId},
+			bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_SYNCING}}); err != nil {
+			logger.Get().Error("%s-Error marking the cluster %s as syncing. error: %s", ctxt, cluster.Name, err)
+			continue
+		}
+
+		// Lock the cluster
+		appLock, err := LockCluster(ctxt, cluster, "SyncClusterDetails")
+		if err != nil {
+			logger.Get().Error("Failed to acquire lock for cluster: %s. error: %v", cluster.Name, err)
+			continue
+		}
+		defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
+
 		provider := a.GetProviderFromClusterId(ctxt, cluster.ClusterId)
 		if provider == nil {
 			logger.Get().Error("%s-Error getting provider for the cluster: %s", ctxt, cluster.Name)
@@ -55,22 +80,39 @@ func (a *App) SyncClusterDetails() {
 		}
 
 		// Sync the cluster status
+		logger.Get().Debug("Syncing status of cluster: %s", cluster.Name)
 		if ok, err := sync_cluster_status(ctxt, cluster, provider); err != nil || !ok {
 			logger.Get().Error("%s-Error updating status for cluster: %s", ctxt, cluster.Name)
 		}
 
+		// Sync the cluster nodes
+		logger.Get().Debug("Syncing nodes of cluster: %s", cluster.Name)
+		if ok, err := sync_cluster_nodes(ctxt, cluster, provider); err != nil || !ok {
+			logger.Get().Error("%s-Error syncing storage nodes for cluster: %s", ctxt, cluster.Name)
+		}
+
 		// Sync the cluster status
+		logger.Get().Debug("Syncing SLUs of cluster: %s", cluster.Name)
 		if ok, err := syncSlus(ctxt, cluster, provider); err != nil || !ok {
 			logger.Get().Error("%s-Error syncing slus: %s", ctxt, cluster.Name)
 		}
 
-		// TODO:: Sync the nodes status
-		if ok, err := sync_cluster_nodes(ctxt, cluster, provider); err != nil && !ok {
-			logger.Get().Error("%s-Error syncing node details for cluster: %s. error: %v", ctxt, cluster.Name, err)
-		}
-		// TODO:: Sync the storage entities of the cluster
-		if ok, err := sync_cluster_storage_entities(ctxt, cluster, provider); err != nil && !ok {
+		// Sync the storage entities of the cluster
+		logger.Get().Debug("Syncing storages of cluster: %s", cluster.Name)
+		if ok, err := sync_cluster_storage_entities(ctxt, cluster, provider); err != nil || !ok {
 			logger.Get().Error("%s-Error syncing storage entities for cluster: %s. error: %v", ctxt, cluster.Name, err)
+		}
+		// Sync block devices
+		logger.Get().Debug("Syncing block devices of cluster: %s", cluster.Name)
+		if ok, err := sync_block_devices(ctxt, cluster, provider); err != nil || !ok {
+			logger.Get().Error("%s-Error syncing block devices for cluster: %s. error: %v", ctxt, cluster.Name, err)
+		}
+
+		logger.Get().Debug("Setting the cluster: %s back as active", cluster.Name)
+		if err := coll.Update(
+			bson.M{"clusterid": cluster.ClusterId},
+			bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
+			logger.Get().Error("%s-Error setting the back cluster state. error: %v", ctxt, err)
 		}
 	}
 }
@@ -79,12 +121,16 @@ func sync_cluster_status(ctxt string, cluster models.Cluster, provider *Provider
 	var result models.RpcResponse
 	vars := make(map[string]string)
 	vars["cluster-id"] = cluster.ClusterId.String()
-	err = provider.Client.Call(provider.Name+".GetClusterStatus", models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}}, &result)
+	err = provider.Client.Call(
+		fmt.Sprintf("%s.%s", provider.Name, syc_functions["cluster_status"]),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}, RpcRequestContext: ctxt},
+		&result)
 	if err != nil || result.Status.StatusCode != http.StatusOK {
-		logger.Get().Error("i%s-Error getting status for cluster: %s. error:%v", ctxt, cluster.Name, err)
+		logger.Get().Error("%s-Error getting status for cluster: %s. error:%v", ctxt, cluster.Name, err)
 		return false, err
 	}
 	clusterStatus, err := strconv.Atoi(string(result.Data.Result))
+	logger.Get().Debug("Cluster Status: %d", clusterStatus)
 	if err != nil {
 		logger.Get().Error("%s-Error getting status for cluster: %s. error:%v", ctxt, cluster.Name, err)
 		return false, err
@@ -94,9 +140,29 @@ func sync_cluster_status(ctxt string, cluster models.Cluster, provider *Provider
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
-	logger.Get().Info("Updating the status of the cluster: %s to %d", cluster.Name, clusterStatus)
+	logger.Get().Info("%s-Updating the status of the cluster: %s to %d", ctxt, cluster.Name, clusterStatus)
 	if err := coll.Update(bson.M{"clusterid": cluster.ClusterId}, bson.M{"$set": bson.M{"status": clusterStatus}}); err != nil {
 		logger.Get().Error("%s-Error updating status for cluster: %s. error:%v", ctxt, cluster.Name, err)
+		return false, err
+	}
+	logger.Get().Debug("Done")
+
+	return true, nil
+}
+
+func sync_cluster_nodes(ctxt string, cluster models.Cluster, provider *Provider) (bool, error) {
+	//sync the slu status for now
+	var result models.RpcResponse
+	vars := make(map[string]string)
+	vars["cluster-id"] = cluster.ClusterId.String()
+
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, syc_functions["sync_nodes"]),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}, RpcRequestContext: ctxt},
+		&result)
+
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		logger.Get().Error("%s-Error syncing the nodes for cluster: %s. error:%v", ctxt, cluster.Name, err)
 		return false, err
 	}
 
@@ -104,7 +170,6 @@ func sync_cluster_status(ctxt string, cluster models.Cluster, provider *Provider
 }
 
 func syncSlus(ctxt string, cluster models.Cluster, provider *Provider) (bool, error) {
-
 	//sync the slu status for now
 	var result models.RpcResponse
 	vars := make(map[string]string)
@@ -112,7 +177,7 @@ func syncSlus(ctxt string, cluster models.Cluster, provider *Provider) (bool, er
 
 	err = provider.Client.Call(fmt.Sprintf("%s.%s",
 		provider.Name, syc_functions["sync_slus"]),
-		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}},
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}, RpcRequestContext: ctxt},
 		&result)
 
 	if err != nil || result.Status.StatusCode != http.StatusOK {
@@ -123,103 +188,39 @@ func syncSlus(ctxt string, cluster models.Cluster, provider *Provider) (bool, er
 	return true, nil
 }
 
-func sync_cluster_nodes(ctxt string, cluster models.Cluster, provider *Provider) (bool, error) {
-	// TODO: Get the list of nodes from provider and add the new nodes to DB after comparison
-	// with fetched nodes from DB
-	return true, nil
-}
-
 func sync_cluster_storage_entities(ctxt string, cluster models.Cluster, provider *Provider) (bool, error) {
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
-
-	// Get the list of storage entities from DB
-	var fetchedStorages models.Storages
-	if err := coll.Find(bson.M{"clusterid": cluster.ClusterId}).All(&fetchedStorages); err != nil {
-		logger.Get().Error("%s-Error getting the storage entities for cluster: %v from DB. error: %v", ctxt, cluster.ClusterId, err)
-		return false, err
-	}
-
-	// Get the list of storages from cluster
+	// Sync the node details in cluster
 	var result models.RpcResponse
 	vars := make(map[string]string)
 	vars["cluster-id"] = cluster.ClusterId.String()
-	err = provider.Client.Call(provider.Name+".GetStorages", models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}}, &result)
+
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, syc_functions["sync_storages"]),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}, RpcRequestContext: ctxt},
+		&result)
+
 	if err != nil || result.Status.StatusCode != http.StatusOK {
-		logger.Get().Error("%s-Error getting storage details for cluster: %s. error:%v", ctxt, cluster.Name, err)
+		logger.Get().Error("%s-Error syncing the storage entities of cluster: %s. error:%v", ctxt, cluster.Name, err)
 		return false, err
-	} else {
-		var storages []models.AddStorageRequest
-		if err := json.Unmarshal(result.Data.Result, &storages); err != nil {
-			logger.Get().Error("%s-Error parsing result from provider for storages list of cluster: %s. error: %v", ctxt, cluster.Name, err)
-			return false, err
-		}
-		// Insert/update storages
-		for _, storage := range storages {
-			// Check if the pool already exists, if so update else insert
-			if !storage_in_list(ctxt, fetchedStorages, storage.Name) {
-				// Not found, insert
-				entity := models.Storage{
-					ClusterId:    cluster.ClusterId,
-					Name:         storage.Name,
-					Type:         storage.Type,
-					Replicas:     storage.Replicas,
-					QuotaEnabled: storage.QuotaEnabled,
-					QuotaParams:  storage.QuotaParams,
-					Options:      storage.Options,
-				}
-				uuid, err := uuid.New()
-				if err != nil {
-					logger.Get().Error("%s-Error creating id for the new storage entity: %s. error: %v", ctxt, storage.Name, err)
-					return false, err
-				}
-				entity.StorageId = *uuid
-				if err := coll.Insert(entity); err != nil {
-					logger.Get().Error("%s-Error adding storage:%s to DB. error: %v", ctxt, storage.Name, err)
-					return false, err
-				}
-				logger.Get().Info("%s-Added the new storage entity: %s", ctxt, storage.Name)
-			} else {
-				// Update
-				if err := coll.Update(
-					bson.M{"name": storage.Name},
-					bson.M{"$set": bson.M{
-						"options":       storage.Options,
-						"quota_enabled": storage.QuotaEnabled,
-						"quota_params":  storage.QuotaParams,
-					}}); err != nil {
-					logger.Get().Error("%s-Error updating the storage entity: %s. error: %v", ctxt, storage.Name, err)
-					return false, err
-				}
-				logger.Get().Info("%s-Updated details of storage entity: %s", ctxt, storage.Name)
-			}
-		}
-		// Delete the un-wanted storages
-		for _, fetchedStorage := range fetchedStorages {
-			found := false
-			for _, storage := range storages {
-				if storage.Name == fetchedStorage.Name {
-					found = true
-					break
-				}
-			}
-			if !found {
-				if err := coll.Remove(bson.M{"storageid": fetchedStorage.StorageId}); err != nil {
-					logger.Get().Error("%s-Error removing the storage: %s. error: %v", ctxt, fetchedStorage.Name, err)
-				}
-			}
-		}
 	}
 
 	return true, nil
 }
 
-func storage_in_list(ctxt string, fetchedStorages models.Storages, name string) bool {
-	for _, storage := range fetchedStorages {
-		if storage.Name == name {
-			return true
-		}
+func sync_block_devices(ctxt string, cluster models.Cluster, provider *Provider) (bool, error) {
+	// Sync the node details in cluster
+	var result models.RpcResponse
+	vars := make(map[string]string)
+	vars["cluster-id"] = cluster.ClusterId.String()
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, syc_functions["sync_block_devices"]),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}, RpcRequestContext: ctxt},
+		&result)
+
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		logger.Get().Error("%s-Error syncing the block devices for cluster: %s. error:%v", ctxt, cluster.Name, err)
+		return false, err
 	}
-	return false
+
+	return true, nil
 }
