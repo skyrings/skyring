@@ -26,6 +26,7 @@ import (
 	"github.com/skyrings/skyring-common/dbprovider"
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/monitoring"
+	"github.com/skyrings/skyring-common/provisioner"
 	"github.com/skyrings/skyring-common/tools/lock"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/schedule"
@@ -43,8 +44,9 @@ import (
 )
 
 type Provider struct {
-	Name   string
-	Client *rpc.Client
+	Name            string
+	Client          *rpc.Client
+	ProvisionerName provisioner.Provisioner
 }
 
 type App struct {
@@ -127,6 +129,12 @@ func (a *App) StartProviders(configDir string, binDir string) error {
 				logger.Get().Info("Provider already initialized, skipping the provider", config)
 				continue
 			}
+			//Initilaize the provisioner
+			prov, err := provisioner.InitializeProvisioner(config.Provisioner)
+			if err != nil {
+				logger.Get().Error("Unable to initialize the provisioner, skipping the provider:%v", config)
+				continue
+			}
 			if config.Provider.ProviderBinary == "" {
 				//set the default if not provided in config file
 				config.Provider.ProviderBinary = path.Join(providerBinaryPath, config.Provider.Name)
@@ -146,8 +154,9 @@ func (a *App) StartProviders(configDir string, binDir string) error {
 				element.Pattern = fmt.Sprintf("%s/%s", config.Provider.Name, element.Pattern)
 				a.routes[element.Name] = element
 			}
+
 			//add the provider to the map
-			a.providers[config.Provider.Name] = Provider{Name: config.Provider.Name, Client: client}
+			a.providers[config.Provider.Name] = Provider{Name: config.Provider.Name, Client: client, ProvisionerName: prov}
 		}
 	}
 	if len(a.providers) < 1 {

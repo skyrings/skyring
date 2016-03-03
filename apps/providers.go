@@ -20,6 +20,7 @@ import (
 	_ "github.com/skyrings/skyring-common/dbprovider/mongodb"
 	_ "github.com/skyrings/skyring-common/monitoring/graphitemanager"
 	_ "github.com/skyrings/skyring-common/monitoring/influxdbmanager"
+	_ "github.com/skyrings/skyring-common/provisioner/cephinstaller"
 	_ "github.com/skyrings/skyring/authprovider/ldap"
 	_ "github.com/skyrings/skyring/authprovider/local"
 	_ "github.com/skyrings/skyring/nodemanager/saltnodemanager"
