@@ -27,11 +27,15 @@ import (
 
 var (
 	syc_functions = map[string]string{
-		"sync_slus": "SyncStorageLogicalUnitParams",
+		"cluster_status":     "GetClusterStatus",
+		"get_storages":       "GetStorages",
+		"sync_nodes":         "SyncNodeDetails",
+		"sync_slus":          "SyncStorageLogicalUnits",
+		"sync_block_devices": "SyncBlockDevices",
 	}
 )
 
-func (a *App) SyncClusterDetails() {
+func (a *App) SyncClusterDetails(params map[string]interface{}) {
 	// Get the list of cluster
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
@@ -58,13 +62,17 @@ func (a *App) SyncClusterDetails() {
 			logger.Get().Error("Error syncing slus: %s", cluster.Name)
 		}
 
-		// TODO:: Sync the nodes status
-		if ok, err := sync_cluster_nodes(cluster, provider); err != nil && !ok {
+		// Sync the node details
+		if ok, err := sync_cluster_nodes(cluster, provider); err != nil || !ok {
 			logger.Get().Error("Error syncing node details for cluster: %s. error: %v", cluster.Name, err)
 		}
-		// TODO:: Sync the storage entities of the cluster
-		if ok, err := sync_cluster_storage_entities(cluster, provider); err != nil && !ok {
+		// Sync the storage entities of the cluster
+		if ok, err := sync_cluster_storage_entities(cluster, provider); err != nil || !ok {
 			logger.Get().Error("Error syncing storage entities for cluster: %s. error: %v", cluster.Name, err)
+		}
+		// Sync block devices
+		if ok, err := sync_block_devices(cluster, provider); err != nil || !ok {
+			logger.Get().Error("Error syncing block devices for cluster: %s. error: %v", cluster.Name, err)
 		}
 	}
 }
@@ -73,7 +81,10 @@ func sync_cluster_status(cluster models.Cluster, provider *Provider) (bool, erro
 	var result models.RpcResponse
 	vars := make(map[string]string)
 	vars["cluster-id"] = cluster.ClusterId.String()
-	err = provider.Client.Call(provider.Name+".GetClusterStatus", models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}}, &result)
+	err = provider.Client.Call(
+		fmt.Sprintf("%s.%s", provider.Name, syc_functions["cluster_status"]),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}},
+		&result)
 	if err != nil || result.Status.StatusCode != http.StatusOK {
 		logger.Get().Error("Error getting status for cluster: %s. error:%v", cluster.Name, err)
 		return false, err
@@ -98,7 +109,6 @@ func sync_cluster_status(cluster models.Cluster, provider *Provider) (bool, erro
 }
 
 func syncSlus(cluster models.Cluster, provider *Provider) (bool, error) {
-
 	//sync the slu status for now
 	var result models.RpcResponse
 	vars := make(map[string]string)
@@ -118,8 +128,21 @@ func syncSlus(cluster models.Cluster, provider *Provider) (bool, error) {
 }
 
 func sync_cluster_nodes(cluster models.Cluster, provider *Provider) (bool, error) {
-	// TODO: Get the list of nodes from provider and add the new nodes to DB after comparison
-	// with fetched nodes from DB
+	// Sync the node details in cluster
+	var result models.RpcResponse
+	vars := make(map[string]string)
+	vars["cluster-id"] = cluster.ClusterId.String()
+
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, syc_functions["sync_nodes"]),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}},
+		&result)
+
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		logger.Get().Error("Error syncing the nodes of cluster: %s. error:%v", cluster.Name, err)
+		return false, err
+	}
+
 	return true, nil
 }
 
@@ -139,7 +162,10 @@ func sync_cluster_storage_entities(cluster models.Cluster, provider *Provider) (
 	var result models.RpcResponse
 	vars := make(map[string]string)
 	vars["cluster-id"] = cluster.ClusterId.String()
-	err = provider.Client.Call(provider.Name+".GetStorages", models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}}, &result)
+	err = provider.Client.Call(
+		fmt.Sprintf("%s.%s", provider.Name, syc_functions["get_storages"]),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}},
+		&result)
 	if err != nil || result.Status.StatusCode != http.StatusOK {
 		logger.Get().Error("Error getting storage details for cluster: %s. error:%v", cluster.Name, err)
 		return false, err
@@ -204,6 +230,25 @@ func sync_cluster_storage_entities(cluster models.Cluster, provider *Provider) (
 				}
 			}
 		}
+	}
+
+	return true, nil
+}
+
+func sync_block_devices(cluster models.Cluster, provider *Provider) (bool, error) {
+	// Sync the node details in cluster
+	var result models.RpcResponse
+	vars := make(map[string]string)
+	vars["cluster-id"] = cluster.ClusterId.String()
+
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, syc_functions["sync_block_devices"]),
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}},
+		&result)
+
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		logger.Get().Error("Error syncing the block devices for cluster: %s. error:%v", cluster.Name, err)
+		return false, err
 	}
 
 	return true, nil
