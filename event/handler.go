@@ -285,7 +285,13 @@ func drive_add_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 		}
 	}
 
-	if taskId, err := skyring.GetApp().GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", event.ClusterId.String()), asyncTask, 600*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := skyring.GetApp().GetTaskManager().Run(
+		models.ENGINE_NAME,
+		fmt.Sprintf("Expand Cluster: %s", event.ClusterId.String()),
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
 		logger.Get().Error("%s-Unable to create task to expand cluster: %v. error: %v", ctxt, event.ClusterId, err)
 		return event, nil
 	} else {
