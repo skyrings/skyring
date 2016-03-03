@@ -477,23 +477,28 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the cluster id: %s. error: %v", cluster_id_str, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking enabled state of cluster")
 		return
 	}
 
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
-		logger.Get().Error("Error checking managed state of cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if !ok {
-		logger.Get().Error("Cluster: %v is already in managed state", *cluster_id)
+		logger.Get().Error("%s-Cluster: %v is already in managed state", ctxt, *cluster_id)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is already in managed state")
 		return
 	}
@@ -516,18 +521,18 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 				var nodes models.Nodes
 				if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-					util.FailTask(fmt.Sprintf("Error getting nodes to manage on cluster: %v", *cluster_id), err, t)
+					util.FailTask(fmt.Sprintf("Error getting nodes to manage on cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
 
 				nodes, err := getClusterNodesById(cluster_id)
 				if err != nil {
-					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
 				appLock, err := LockNodes(nodes, "Manage_Cluster")
 				if err != nil {
-					util.FailTask("Failed to acquire lock", err, t)
+					util.FailTask("Failed to acquire lock", fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
 				defer a.GetLockManager().ReleaseLock(*appLock)
@@ -536,11 +541,11 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 					t.UpdateStatus("Enabling node %s", node.Hostname)
 					ok, err := GetCoreNodeManager().EnableNode(node.Hostname)
 					if err != nil || !ok {
-						util.FailTask(fmt.Sprintf("Error enabling node: %s on cluster: %v", node.Hostname, *cluster_id), err, t)
+						util.FailTask(fmt.Sprintf("Error enabling node: %s on cluster: %v", node.Hostname, *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 						return
 					}
-					if err := syncNodeStatus(node); err != nil {
-						logger.Get().Error("Error syncing the status of the node %v: Error. %v:", node.Hostname, err)
+					if err := syncNodeStatus(ctxt, node); err != nil {
+						logger.Get().Error("%s-Error syncing the status of the node %v: Error. %v:", ctxt, node.Hostname, err)
 					}
 				}
 
@@ -548,11 +553,11 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 				// Enable any POST actions on cluster
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
-					util.FailTask(fmt.Sprintf("Error enabling post actions on cluster: %v", *cluster_id), err, t)
+					util.FailTask(fmt.Sprintf("Error enabling post actions on cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
-				if err := syncClusterStatus(cluster_id); err != nil {
-					util.FailTask(fmt.Sprintf("Error updating cluster status for the cluster: %v", *cluster_id), err, t)
+				if err := syncClusterStatus(ctxt, cluster_id); err != nil {
+					util.FailTask(fmt.Sprintf("Error updating cluster status for the cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
 				t.UpdateStatus("Success")
