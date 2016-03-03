@@ -431,7 +431,13 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(
+		models.ENGINE_NAME,
+		fmt.Sprintf("Create Cluster: %s", request.Name),
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
 		logger.Get().Error("%s-Unable to create task for adding monitoring plugin for cluster: %v. error: %v", ctxt, *cluster_id, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for add monitoring plugin")
 		return
@@ -572,7 +578,13 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run("Update monitoring plugins configuration", asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(
+		models.ENGINE_NAME,
+		"Update monitoring plugins configuration",
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
 		logger.Get().Error("%s-Unable to create task for update monitoring plugin configuration for cluster: %v. error: %v", ctxt, *cluster_id_uuid, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for update monitoring plugin configuration")
 		return
@@ -623,7 +635,13 @@ func (a *App) POST_froceUpdateMonitoringConfiguration(w http.ResponseWriter, r *
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Enforce monitoring plugins update"), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(
+		models.ENGINE_NAME,
+		fmt.Sprintf("Enforce monitoring plugins update"),
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
 		logger.Get().Error("%s-Unable to create task for enforcing monitoring plugin update. error: %v", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for enforcing monitoring plugin update")
 		return
@@ -801,7 +819,13 @@ func monitoringPluginActivationDeactivations(ctxt string, enable bool, plugin_na
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("%s monitoring plugin: %s", action, plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(
+		models.ENGINE_NAME,
+		fmt.Sprintf("%s monitoring plugin: %s", action, plugin_name),
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
 		logger.Get().Error("%s-Unable to create task for %s monitoring plugin on cluster: %s. error: %v", ctxt, action, cluster.Name, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for"+action+"monitoring plugin")
 		return
@@ -953,7 +977,13 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Remove monitoring plugin : %s", plugin_name), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(
+		models.ENGINE_NAME,
+		fmt.Sprintf("Remove monitoring plugin : %s", plugin_name),
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
 		logger.Get().Error("%s-Unable to create task for remove monitoring plugin for cluster: %v. error: %v", ctxt, *uuid, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for remove monitoring plugin")
 		return
