@@ -149,8 +149,7 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 //In memory ClusterId to ScheduleId map
 var ClusterMonitoringSchedules map[uuid.UUID]uuid.UUID
 
-func InitSchedules() {
-	schedule.InitShechuleManager()
+func InitMonitoringSchedules() {
 	if ClusterMonitoringSchedules == nil {
 		ClusterMonitoringSchedules = make(map[uuid.UUID]uuid.UUID)
 	}

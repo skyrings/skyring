@@ -525,10 +525,29 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
 }
 
 func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
+	// Initialize the scheduler
+	schedule.InitShechuleManager()
 
+	// Create syncing schedule
 	logger.Get().Info("Starting clusters syncing")
-	go a.SyncClusterDetails()
-	go InitSchedules()
+	scheduler, err := schedule.NewScheduler()
+	if err != nil {
+		logger.Get().Error("Error scheduling clusters syncing")
+	} else {
+		if sysConfig.ScheduleConfig.ClustersSyncInterval == 0 {
+			sysConfig.ScheduleConfig.ClustersSyncInterval = 86400 // 24hrs
+		}
+		go scheduler.Schedule(
+			time.Duration(sysConfig.ScheduleConfig.ClustersSyncInterval)*time.Second,
+			a.SyncClusterDetails,
+			nil)
+	}
+
+	// Create monitoring schedule
+	go InitMonitoringSchedules()
+
+	// First time sync of the cluster details while startup
+	go a.SyncClusterDetails(nil)
 
 	reqId, err := uuid.New()
 	if err != nil {
