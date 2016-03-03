@@ -16,6 +16,24 @@
       "revId": "0bdaff3e7958fa2045ee0f9868716914ee0ae5bd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_5e095530",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-03T04:47:46Z",
+      "side": 1,
+      "message": "@Shubhendu, This is actually how the graphite is storing it I mean it removes the /dev/ part of it in the table name that it maintains",
+      "parentUuid": "5a72e520_61b67bde",
+      "revId": "0bdaff3e7958fa2045ee0f9868716914ee0ae5bd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
