@@ -3,6 +3,10 @@
         "name": "ceph",
         "binary": "ceph_provider"
     },
+    "provisioner": {
+        "provisionername": "ceph-installer",
+        "configFilePath": ""
+    },
     "routes": [
         {
             "name": "CephHello",
