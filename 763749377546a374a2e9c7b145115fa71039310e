@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_922661b9",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-03T05:07:09Z",
+      "side": 1,
+      "message": "Error while getting context, so cannot use context here at least ;)",
+      "revId": "763749377546a374a2e9c7b145115fa71039310e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
