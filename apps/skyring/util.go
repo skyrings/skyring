@@ -297,13 +297,19 @@ func Initialize(node string, ctxt string) error {
 		logger.Get().Warning(fmt.Sprintf("%s-Node with name: %s not in intializing state to update other details", ctxt, node))
 		return nil
 	}
-
 	asyncTask := func(t *task.Task) {
 		for {
 			select {
 			case <-t.StopCh:
 				return
 			default:
+				var nodeId uuid.UUID
+				appLock, err := lockNode(nodeId, node, "Accepted_Nodes")
+				if err != nil {
+					util.FailTask("Failed to acquire lock", err, t)
+					return
+				}
+				defer GetApp().GetLockManager().ReleaseLock(*appLock)
 				t.UpdateStatus("started the task for InitializeNode: %s", t.ID)
 				// Process the request
 				if err := initializeStorageNode(storage_node.Hostname, t, ctxt); err != nil {
@@ -332,13 +338,6 @@ func initializeStorageNode(node string, t *task.Task, ctxt string) error {
 		logger.Get().Error("%s-Unable to get the storage profiles. May not be able to apply storage profiles for node: %v err:%v", ctxt, node, err)
 	}
 	if storage_node, ok := saltnodemanager.GetStorageNodeInstance(node, sProfiles); ok {
-		if err := updateStorageNodeToDB(*storage_node, ctxt); err != nil {
-			logger.Get().Error("%s-Unable to add details of node: %s to DB. error: %v", ctxt, node, err)
-			t.UpdateStatus("Unable to add details of node: %s to DB. error: %v", node, err)
-			skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
-			skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
-			return err
-		}
 		if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(node, curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
 			if len(nodeErrorMap) != 0 {
 				logger.Get().Error("%s-Unable to setup collectd on %s because of %v", ctxt, node, nodeErrorMap)
@@ -364,6 +363,13 @@ func initializeStorageNode(node string, t *task.Task, ctxt string) error {
 		if err := saltnodemanager.SetupSkynetService(node); err != nil {
 			logger.Get().Error("%s-Failed to setup skynet service on the node: %s. error: %v", ctxt, node, err)
 			t.UpdateStatus("Failed to setup skynet service")
+			skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
+			skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+			return err
+		}
+		if err := updateStorageNodeToDB(*storage_node, ctxt); err != nil {
+			logger.Get().Error("%s-Unable to add details of node: %s to DB. error: %v", ctxt, node, err)
+			t.UpdateStatus("Unable to add details of node: %s to DB. error: %v", node, err)
 			skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
 			skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
 			return err
