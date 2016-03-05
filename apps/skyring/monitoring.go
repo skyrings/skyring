@@ -951,6 +951,20 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 	} else {
 		cSummary.MostUsedPools = poolsUsage
 	}
+
+	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	var slus []models.StorageLogicalUnit
+	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&slus); err != nil {
+		logger.Get().Error("%s - Failed to fetch storage logical units from cluster %v.Err %v", ctxt, *cluster_id, err)
+	}
+	slu_down_cnt := 0
+	for _, slu := range slus {
+		if slu.Status == models.SLU_STATUS_ERROR {
+			slu_down_cnt = slu_down_cnt + 1
+		}
+	}
+	cSummary.OsdCounts = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_down_cnt}
+
 	json.NewEncoder(w).Encode(cSummary)
 }
 
