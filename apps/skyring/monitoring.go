@@ -941,6 +941,14 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error Getting the context.Err %v", err))
 		return
 	}
+
+	cluster, clusterFetchErr := GetCluster(cluster_id)
+	if clusterFetchErr != nil {
+		logger.Get().Error("Unknown cluster with id %v.Err %v", cluster_id, clusterFetchErr)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Unknown cluster with id %v.Err %v", cluster_id, clusterFetchErr))
+		return
+	}
+
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
 	var poolsUsage []models.PoolUsage
 	if err := coll.Find(bson.M{"clusterid": *cluster_id}).Sort("-percentused").All(&poolsUsage); err != nil {
@@ -951,6 +959,58 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 	} else {
 		cSummary.MostUsedPools = poolsUsage
 	}
+
+	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	var slus []models.StorageLogicalUnit
+	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&slus); err != nil {
+		logger.Get().Error("%s - Failed to fetch storage logical units from cluster %v.Err %v", ctxt, *cluster_id, err)
+	}
+	slu_down_cnt := 0
+	for _, slu := range slus {
+		if slu.Status == models.SLU_STATUS_ERROR {
+			slu_down_cnt = slu_down_cnt + 1
+		}
+	}
+	cSummary.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_down_cnt}
+
+	unmanagedNodes, unmanagedNodesError := GetCoreNodeManager().GetUnmanagedNodes()
+	if unmanagedNodesError != nil {
+		logger.Get().Error("%s - %s", ctxt, fmt.Sprintf("Failed to fetch unmanaged nodes.Err %v", unmanagedNodesError))
+	}
+
+	nodesInCluster, clusterNodesFetchError := getClusterNodesById(cluster_id)
+	if clusterNodesFetchError != nil {
+		logger.Get().Error("%s - %s", ctxt, fmt.Sprintf("Failed to fetch nodes of cluster.Err %v", cluster.Name))
+	}
+	/*
+		Count the number of down nodes
+	*/
+	var error_nodes int
+	for _, node := range nodesInCluster {
+		if node.Status == models.NODE_STATUS_ERROR {
+			error_nodes = error_nodes + 1
+		}
+	}
+
+	cSummary.NodesCount = map[string]int{models.TOTAL: len(nodesInCluster), models.NodeStatuses[models.NODE_STATUS_ERROR]: error_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(*unmanagedNodes)}
+
+	cSummary.Usage = cluster.Usage
+	cSummary.StorageProfileUsage = cluster.StorageProfileUsage
+	cSummary.ObjectCount = cluster.ObjectCount
+
+	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
+	var storages models.Storages
+	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&storages); err != nil {
+		logger.Get().Error("%s - Error getting the storage list. error: %v", ctxt, err)
+	}
+	storage_down_cnt := 0
+	for _, storage := range storages {
+		if storage.Status == models.STORAGE_STATUS_ERROR {
+			storage_down_cnt = storage_down_cnt + 1
+		}
+	}
+	cSummary.StorageCount = map[string]int{models.TOTAL: len(storages), STORAGE_STATUS_DOWN: storage_down_cnt}
+
 	json.NewEncoder(w).Encode(cSummary)
 }
 
