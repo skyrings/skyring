@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_ddee21ec",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-05T10:03:03Z",
+      "side": 1,
+      "message": "I think we need to re-look at this as well",
+      "range": {
+        "startLine": 407,
+        "startChar": 3,
+        "endLine": 407,
+        "endChar": 74
+      },
+      "revId": "5ee2bc1ccc2db8d8d01de293932763d78e64ca27",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
