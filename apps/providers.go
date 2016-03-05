@@ -22,5 +22,6 @@ import (
 	_ "github.com/skyrings/skyring-common/monitoring/influxdbmanager"
 	_ "github.com/skyrings/skyring/authprovider/ldap"
 	_ "github.com/skyrings/skyring/authprovider/local"
+	_ "github.com/skyrings/skyring/monitoring/graphitehelper"
 	_ "github.com/skyrings/skyring/nodemanager/saltnodemanager"
 )

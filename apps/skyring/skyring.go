@@ -32,6 +32,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring/authprovider"
+	skyring_monitoring "github.com/skyrings/skyring/monitoring"
 	"github.com/skyrings/skyring/nodemanager"
 	"io/ioutil"
 	"net/http"
@@ -68,6 +69,7 @@ var (
 	application          *App
 	CoreNodeManager      nodemanager.NodeManagerInterface
 	MonitoringManager    monitoring.MonitoringManagerInterface
+	MonitoringHelper     skyring_monitoring.MonitoringHelperInterface
 	AuthProviderInstance authprovider.AuthInterface
 	TaskManager          task.Manager
 	Store                *mongostore.MongoStore
@@ -345,6 +347,16 @@ func (a *App) initializeMonitoringManager(config conf.MonitoringDBconfig) error 
 	}
 }
 
+func (a *App) initializeMonitoringHelper(config conf.MonitoringDBconfig) error {
+	if helper, err := skyring_monitoring.InitMonitoringHelper(config.ManagerName); err != nil {
+		logger.Get().Error("Error initializing the monitoring helper: %v", err)
+		return err
+	} else {
+		MonitoringHelper = helper
+		return nil
+	}
+}
+
 func scheduleSummaryMonitoring(config conf.SystemSummaryConfig) error {
 	schedule.InitShechuleManager()
 	scheduler, err := schedule.NewScheduler()
@@ -380,6 +392,13 @@ func GetMonitoringManager() monitoring.MonitoringManagerInterface {
 		logger.Get().Error("MonitoringManager is nil")
 	}
 	return MonitoringManager
+}
+
+func GetMonitoringHelper() skyring_monitoring.MonitoringHelperInterface {
+	if MonitoringHelper == nil {
+		logger.Get().Error("MonitoringHelper is nil")
+	}
+	return MonitoringHelper
 }
 
 //Middleware to check the request is authenticated
@@ -509,6 +528,11 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
 
 	if err := application.initializeMonitoringManager(sysConfig.TimeSeriesDBConfig); err != nil {
 		logger.Get().Error("Unable to create monitoring manager")
+		os.Exit(1)
+	}
+
+	if err := application.initializeMonitoringHelper(sysConfig.TimeSeriesDBConfig); err != nil {
+		logger.Get().Error("Unable to create monitoring helper")
 		os.Exit(1)
 	}
 
