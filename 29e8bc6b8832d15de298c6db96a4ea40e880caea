@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_bd1a4515",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-05T09:51:52Z",
+      "side": 1,
+      "message": "No need to run this in every 30 sec, once in 10 minutes is good enough",
+      "range": {
+        "startLine": 545,
+        "startChar": 37,
+        "endLine": 545,
+        "endChar": 41
+      },
+      "revId": "29e8bc6b8832d15de298c6db96a4ea40e880caea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_9d1d8912",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-05T09:51:52Z",
+      "side": 1,
+      "message": "Write as separate function and invoke from here",
+      "range": {
+        "startLine": 539,
+        "startChar": 1,
+        "endLine": 546,
+        "endChar": 2
+      },
+      "revId": "29e8bc6b8832d15de298c6db96a4ea40e880caea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_dd1701ec",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-05T09:51:52Z",
+      "side": 1,
+      "message": "why you are looping here? You can just go and pick up last element in the list right?",
+      "range": {
+        "startLine": 561,
+        "startChar": 2,
+        "endLine": 563,
+        "endChar": 3
+      },
+      "revId": "29e8bc6b8832d15de298c6db96a4ea40e880caea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_fdd3dd35",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-05T09:51:52Z",
+      "side": 1,
+      "message": "declare as a constant",
+      "range": {
+        "startLine": 566,
+        "startChar": 16,
+        "endLine": 566,
+        "endChar": 19
+      },
+      "revId": "29e8bc6b8832d15de298c6db96a4ea40e880caea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_1dd99957",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-05T09:51:52Z",
+      "side": 1,
+      "message": "this will not work for the tasks started by the provider. You need to have a mechanism to identify the tasks owned the process and kill only those",
+      "range": {
+        "startLine": 567,
+        "startChar": 14,
+        "endLine": 568,
+        "endChar": 58
+      },
+      "revId": "29e8bc6b8832d15de298c6db96a4ea40e880caea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
