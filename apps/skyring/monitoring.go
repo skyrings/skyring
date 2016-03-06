@@ -221,7 +221,7 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 		return
 	}
 
-	nodeNames, nodeNamesFetchError := getNodesInCluster(&id)
+	nodes, nodeNamesFetchError := getClusterNodesById(&id)
 	if nodeNamesFetchError != nil {
 		logger.Get().Error("%s - Failed to fetch nodes in cluster %v. Err %v", ctxt, id, nodeNamesFetchError.Error())
 		return
@@ -232,12 +232,15 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 
 	var cluster_memory_used float64
 	var cluster_memory_free float64
-	for _, node := range nodeNames {
+	var latency float64
+	var cluster_cpu_user float64
+
+	for _, node := range nodes {
 		/*
 			Calculate Memory Used
 		*/
 		resource_name := monitoring.MEMORY + "." + monitoring.MEMORY + "-" + monitoring.USED
-		mStatUsed, memoryUsedFetchError := GetMonitoringManager().GetInstantValue(node, resource_name)
+		mStatUsed, memoryUsedFetchError := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name)
 		if memoryUsedFetchError != nil {
 			logger.Get().Error("%s - Error %v", ctxt, memoryUsedFetchError)
 			continue
@@ -248,28 +251,69 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 			Calculate Free Memory
 		*/
 		resource_name = monitoring.MEMORY + "." + monitoring.MEMORY + "-" + monitoring.FREE
-		mStatFree, memoryFreeFetchError := GetMonitoringManager().GetInstantValue(node, resource_name)
+		mStatFree, memoryFreeFetchError := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name)
 		if memoryFreeFetchError != nil {
 			logger.Get().Error("%s - Error %v", ctxt, memoryFreeFetchError)
 			continue
 		}
 		cluster_memory_free = cluster_memory_free + mStatFree
+
+		/*
+			Calculate cpu user utilization
+		*/
+		var resource_name_error error
+		resource_name, resource_name_error = GetMonitoringManager().GetResourceName(GetMonitoringHelper().GetResourceToCollectionNameMapper(), map[string]interface{}{"resource_name": monitoring.CPU_USER})
+		if resource_name_error == nil {
+			cpuStat, cpuStatFetchError := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name)
+			if cpuStatFetchError != nil {
+				logger.Get().Error("%s - Failed to fetch cpu statistics from %v.Error %v", ctxt, node.Hostname, cpuStatFetchError)
+				continue
+			}
+			cluster_cpu_user = cluster_cpu_user + cpuStat
+		} else {
+			logger.Get().Error("%s - Failed to fetch cpu statistics from %v.Error %v", ctxt, node.Hostname, resource_name_error)
+		}
+
+		/*
+			Calculate Latency
+		*/
+		resource_name, resource_name_error = GetMonitoringManager().GetResourceName(GetMonitoringHelper().GetResourceToCollectionNameMapper(), map[string]interface{}{"serverName": strings.Replace(curr_hostname, ".", "_", -1), "resource_name": monitoring.NETWORK_LATENCY})
+		if resource_name_error == nil {
+			latencyStat, latencyStatFetchError := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name)
+			if latencyStatFetchError != nil {
+				logger.Get().Error("%s - Failed to fetch latency statistics from %v.Error %v", ctxt, node.Hostname, latencyStatFetchError)
+				continue
+			}
+			latency = latency + latencyStat
+		} else {
+			logger.Get().Error("%s - Failed to fetch latency statistics from %v.Error %v", ctxt, node.Hostname, resource_name_error)
+		}
 	}
 
 	time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
 
 	table_name := conf.SystemConfig.TimeSeriesDBConfig.CollectionName + "." + cluster.Name + "."
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.USED_SPACE: {time_stamp_str: strconv.FormatFloat(cluster_memory_used, 'E', -1, 64)}}, hostname, port); err != nil {
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.USED_SPACE: {time_stamp_str: strconv.FormatFloat(cluster_memory_used/float64(len(nodes)), 'E', -1, 64)}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
 	}
 
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.FREE_SPACE: {time_stamp_str: strconv.FormatFloat(cluster_memory_free, 'E', -1, 64)}}, hostname, port); err != nil {
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.FREE_SPACE: {time_stamp_str: strconv.FormatFloat(cluster_memory_free/float64(len(nodes)), 'E', -1, 64)}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
 	}
 	net_memory_usage_percentage := strconv.FormatFloat(((cluster_memory_used * 100) / (cluster_memory_used + cluster_memory_free)), 'E', -1, 64)
 	memory_percent_table := table_name + monitoring.MEMORY + "-" + monitoring.USAGE_PERCENT
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: net_memory_usage_percentage}}, hostname, port); err != nil {
+	if err = GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: net_memory_usage_percentage}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
+	}
+
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + GetMonitoringHelper().GetResourceToCollectionNameMapper()[monitoring.CPU_USER]: {time_stamp_str: strconv.FormatFloat(cluster_cpu_user/float64(len(nodes)), 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster cpu utilization.Err %v", ctxt, err)
+	}
+
+	latency = float64(latency) / float64(len(nodes))
+	table_name = conf.SystemConfig.TimeSeriesDBConfig.CollectionName + "." + cluster.Name + "."
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.NETWORK_LATENCY: {time_stamp_str: strconv.FormatFloat(latency, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster network latency.Err %v", ctxt, err)
 	}
 
 	return
@@ -1026,8 +1070,11 @@ func Compute_System_Summary(p map[string]interface{}) {
 	var net_memory_free float64
 	var total_nodes int
 	var clusters_in_error int
+	var cluster_cpu_user float64
+	var latency float64
 	net_storage_profile_utilization := make(map[string]models.Utilization)
 	error_nodes := 0
+
 	for _, cluster := range clusters {
 		if cluster.Status == models.CLUSTER_STATUS_ERROR {
 			clusters_in_error = clusters_in_error + 1
@@ -1090,6 +1137,27 @@ func Compute_System_Summary(p map[string]interface{}) {
 			continue
 		}
 		net_memory_free = net_memory_free + mStatFree
+
+		/*
+			Calculate cpu user utilization
+		*/
+		cpuStat, cpuStatFetchError := GetMonitoringManager().GetInstantValue(cluster.Name, GetMonitoringHelper().GetResourceToCollectionNameMapper()[monitoring.CPU_USER])
+		if cpuStatFetchError != nil {
+			logger.Get().Error("%s - Failed to fetch cpu statistics from %v.Error %v", ctxt, cluster.Name, cpuStatFetchError)
+			continue
+		}
+		cluster_cpu_user = cluster_cpu_user + cpuStat
+
+		/*
+			Calculate Latency
+		*/
+		latencyStat, latencyStatFetchError := GetMonitoringManager().GetInstantValue(cluster.Name, monitoring.NETWORK_LATENCY)
+		if latencyStatFetchError != nil {
+			logger.Get().Error("%s - Failed to fetch latency statistics from %v.Error %v", ctxt, cluster.Name, latencyStatFetchError)
+			continue
+		}
+		latency = latency + latencyStat
+
 	}
 	system.ClustersCount = map[string]int{models.TOTAL: len(clusters), models.ClusterStatuses[models.CLUSTER_STATUS_ERROR]: clusters_in_error}
 
@@ -1109,10 +1177,10 @@ func Compute_System_Summary(p map[string]interface{}) {
 	}
 
 	// Update memory utilization to time series db
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.FREE_SPACE: {time_stamp_str: strconv.FormatFloat(net_memory_free, 'E', -1, 64)}}, hostname, port); err != nil {
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.FREE_SPACE: {time_stamp_str: strconv.FormatFloat(net_memory_free/float64(len(clusters)), 'E', -1, 64)}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing memory utilization.Err %v", ctxt, err)
 	}
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.USED_SPACE: {time_stamp_str: strconv.FormatFloat(net_memory_used, 'E', -1, 64)}}, hostname, port); err != nil {
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.MEMORY + "-" + monitoring.USED_SPACE: {time_stamp_str: strconv.FormatFloat(net_memory_used/float64(len(clusters)), 'E', -1, 64)}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing memory utilization.Err %v", ctxt, err)
 	}
 	memory_percent := strconv.FormatFloat(((net_memory_used * 100) / (net_memory_used + net_memory_free)), 'E', -1, 64)
@@ -1122,6 +1190,16 @@ func Compute_System_Summary(p map[string]interface{}) {
 	}
 	system.StorageProfileUsage = net_storage_profile_utilization
 	system.ProviderMonitoringDetails = make(map[string]map[string]interface{})
+
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + GetMonitoringHelper().GetResourceToCollectionNameMapper()[monitoring.CPU_USER]: {time_stamp_str: strconv.FormatFloat(cluster_cpu_user/float64(len(clusters)), 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster cpu utilization.Err %v", ctxt, err)
+	}
+
+	latency = float64(latency) / float64(len(clusters))
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.NETWORK_LATENCY: {time_stamp_str: strconv.FormatFloat(latency, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster network latency.Err %v", ctxt, err)
+	}
+
 	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchMonitoringDetailsFromProviders()
 	if otherDetailsFetchError != nil {
 		logger.Get().Error("%s - Error fetching the provider specific details. Error %v", ctxt, otherDetailsFetchError)

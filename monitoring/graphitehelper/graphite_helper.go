@@ -13,6 +13,7 @@ const HelperManagerName = graphitemanager.TimeSeriesDBManagerName
 
 var resourceToCollectionNameMapper = map[string]string{
 	monitoring.NETWORK_LATENCY: "ping.ping-{{.serverName}}",
+	monitoring.CPU_USER:        "cpu.percent-user",
 }
 
 func init() {
