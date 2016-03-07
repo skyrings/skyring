@@ -167,9 +167,9 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	if val, ok := m["recipient"]; ok {
-                recepient = []string{val.(string)}
-        }
-	if notifier.MailId == "" || notifier.Passcode == "" || notifier.SmtpServer == "" || notifier.Port == 0 || notifier.Encryption == "" ||len(recepient) == 0 {
+		recepient = []string{val.(string)}
+	}
+	if notifier.MailId == "" || notifier.Passcode == "" || notifier.SmtpServer == "" || notifier.Port == 0 || notifier.Encryption == "" || len(recepient) == 0 {
 		logger.Get().Error("%s-Insufficient details for Test mail notifier: %v", ctxt, notifier)
 		HandleHttpError(rw, errors.New("insufficient details for Test mail notifier"))
 		return
