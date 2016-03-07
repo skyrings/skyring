@@ -16,6 +16,24 @@
       "revId": "1a71d45bbc015e52ec24749bdab40b354e56e21d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_0ba78fbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-07T06:22:53Z",
+      "side": 1,
+      "message": "Nishanth, the problem is certain things are skyring specific and shouldn\u0027t be in skyring common but the graphite provider in skyring-common should essentially be a part of skyring-common bcoz, it wouldn\u0027t be appropriate (I feel) to limit the access of this to only skyring as even bigfin is pushing bigfin specific stuff to graphite. So, graphite provider finds its ideal place in skyring-common. But skyring specific stuff like the table/collection names for querying and also other skyring specific constants yet alligned more on the lines of graphite cannot be in graphite as common modules So I thought it is better to providerise them",
+      "parentUuid": "5a72e520_0bc06f4f",
+      "revId": "1a71d45bbc015e52ec24749bdab40b354e56e21d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
