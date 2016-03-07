@@ -22,6 +22,30 @@
       "revId": "5ee2bc1ccc2db8d8d01de293932763d78e64ca27",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a72e520_cbc1f72f",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-07T06:44:40Z",
+      "side": 1,
+      "message": "Here we are looking for un-managed nodes only, so it should be fine I feel. What else you feel should be added in conditions?",
+      "parentUuid": "5a72e520_ddee21ec",
+      "range": {
+        "startLine": 407,
+        "startChar": 3,
+        "endLine": 407,
+        "endChar": 74
+      },
+      "revId": "5ee2bc1ccc2db8d8d01de293932763d78e64ca27",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
