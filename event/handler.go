@@ -47,6 +47,7 @@ var EventType = map[string]string{
 	"NODE_LOST_CONTACT":         "Node contact lost",
 	"NODE_GAINED_CONTACT":       "Node contact gained",
 	"MEMORY_THRESHOLD_CROSSED":  "Memory Threshold Crossed",
+	"SWAP_THRESHOLD_CROSSED":    "Swap Threshold Crossed",
 	"CPU_THRESHOLD_CROSSED":     "Cpu Threshold Crossed",
 	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed",
 }
@@ -57,7 +58,84 @@ var handlermap = map[string]interface{}{
 	"skyring/dbus/node/*/generic/service/collectd":      collectd_status_handler,
 	"salt/node/appeared":                                node_appeared_handler,
 	"salt/node/lost":                                    node_lost_handler,
-	"skyring/collectd/node/*/threshold/*/*":             collectd_threshold_handler,
+	"skyring/collectd/node/*/threshold/memory/*":        memory_threshold_crossed,
+	"skyring/collectd/node/*/threshold/swap/*":          swap_threshold_crossed,
+	//"skyring/collectd/node/*/threshold/*/*": collectd_threshold_handler,
+}
+
+func get_readable_float(str string) (string, error) {
+	f, err := strconv.ParseFloat(str, 64)
+	if err != nil {
+		logger.Get().Error("Could not parse the string: %s", str)
+		return str, err
+	}
+	return fmt.Sprintf("%.2f", f), nil
+}
+
+func memory_threshold_crossed(event models.AppEvent) (models.AppEvent, error) {
+	event.Name = EventType["MEMORY_THRESHOLD_CROSSED"]
+	currentValue, currentValueErr := get_readable_float(event.Tags["CurrentValue"])
+	if currentValueErr != nil {
+		logger.Get().Error("Could not parse the CurrentValue: %s", (event.Tags["CurrentValue"]))
+		return event, currentValueErr
+	}
+	thresholdValue, thresholdValueErr := get_readable_float(event.Tags["FailureMax"])
+	if thresholdValueErr != nil {
+		logger.Get().Error("Could not parse the Failure max value: %s", (event.Tags["FailureMax"]))
+		return event, thresholdValueErr
+	}
+
+	if event.Tags["Severity"] == "FAILURE" {
+		event.Description = fmt.Sprintf("Memory utilization on the node: %s has crossed the threshold value of %s%%. Current utilization: %s%%", event.NodeName, thresholdValue, currentValue)
+		event.Message = fmt.Sprintf("Memory utilization crossed threshold on: %s", event.NodeName)
+		event.EntityId = event.NodeId
+		event.Severity = models.ALARM_STATUS_MAJOR
+	} else if event.Tags["Severity"] == "OKAY" {
+		event.Description = fmt.Sprintf("Memory utilization on the node: %s is back to normal. Threshold value: %s%%. Current utilization: %s%%", event.NodeName, thresholdValue, currentValue)
+		event.Message = fmt.Sprintf("Memory utilization back to normal on: %s", event.NodeName)
+		event.EntityId = event.NodeId
+		event.Severity = models.ALARM_STATUS_CLEARED
+	}
+	event.Tags = map[string]string{
+		"Current Utilization": currentValue,
+		"Threshold value":     thresholdValue,
+	}
+	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
+	event.Notify = true
+	return event, nil
+}
+
+func swap_threshold_crossed(event models.AppEvent) (models.AppEvent, error) {
+	event.Name = EventType["SWAP_THRESHOLD_CROSSED"]
+	currentValue, currentValueErr := get_readable_float(event.Tags["CurrentValue"])
+	if currentValueErr != nil {
+		logger.Get().Error("Could not parse the CurrentValue: %s", (event.Tags["CurrentValue"]))
+		return event, currentValueErr
+	}
+	thresholdValue, thresholdValueErr := get_readable_float(event.Tags["FailureMax"])
+	if thresholdValueErr != nil {
+		logger.Get().Error("Could not parse the Failure max value: %s", (event.Tags["FailureMax"]))
+		return event, thresholdValueErr
+	}
+
+	if event.Tags["Severity"] == "FAILURE" {
+		event.Description = fmt.Sprintf("Swap utilization on the node: %s has crossed the threshold value of %s%%. Current utilization: %s%%", event.NodeName, thresholdValue, currentValue)
+		event.Message = fmt.Sprintf("Swap utilization crossed threshold on: %s", event.NodeName)
+		event.EntityId = event.NodeId
+		event.Severity = models.ALARM_STATUS_MAJOR
+	} else if event.Tags["Severity"] == "OKAY" {
+		event.Description = fmt.Sprintf("Swap utilization on the node: %s is back to normal. Threshold value: %s%%. Current utilization: %s%%", event.NodeName, thresholdValue, currentValue)
+		event.Message = fmt.Sprintf("Swap utilization back to normal on: %s", event.NodeName)
+		event.EntityId = event.NodeId
+		event.Severity = models.ALARM_STATUS_CLEARED
+	}
+	event.Tags = map[string]string{
+		"Current Utilization": currentValue,
+		"Threshold value":     thresholdValue,
+	}
+	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
+	event.Notify = true
+	return event, nil
 }
 
 func drive_add_handler(event models.AppEvent) (models.AppEvent, error) {
