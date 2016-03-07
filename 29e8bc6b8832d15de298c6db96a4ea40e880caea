@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "5a72e520_4bed07c3",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-07T06:47:34Z",
+      "side": 1,
+      "message": "Karnan\u0027s patch https://review.gerrithub.io/#/c/264721/ has got a field lastupdated. We should use the same.",
+      "parentUuid": "5a72e520_dd1701ec",
+      "range": {
+        "startLine": 561,
+        "startChar": 2,
+        "endLine": 563,
+        "endChar": 3
+      },
+      "revId": "29e8bc6b8832d15de298c6db96a4ea40e880caea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_fdd3dd35",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 1
