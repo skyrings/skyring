@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_0bc06f4f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-07T06:12:18Z",
+      "side": 1,
+      "message": "Doesn\u0027t look to me that this needs to be done as a separate provider. why can\u0027t it be part of graphite provider itself?",
+      "revId": "1a71d45bbc015e52ec24749bdab40b354e56e21d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
