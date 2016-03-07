@@ -12,3 +12,11 @@ install:
 
 script:
   - make
+
+notifications:
+  email:
+    recipients:
+      - nthomas@redhat.com
+      - shtripat@redhat.com
+    on_success: change
+    on_failure: always
