@@ -40,14 +40,16 @@ var (
 )
 
 var EventType = map[string]string{
-	"DRIVE_ADD":                 "Drive Addition",
-	"DRIVE_REMOVE":              "Drive Removal",
-	"COLLECTD_STOPPED":          "Collectd Stopped",
-	"COLLECTD_STARTED":          "Collectd Started",
-	"NODE_LOST_CONTACT":         "Node contact lost",
-	"NODE_GAINED_CONTACT":       "Node contact gained",
-	"MEMORY_THRESHOLD_CROSSED":  "Memory Threshold Crossed",
-	"CPU_THRESHOLD_CROSSED":     "Cpu Threshold Crossed",
+	"DRIVE_ADD":           "Drive Addition",
+	"DRIVE_REMOVE":        "Drive Removal",
+	"COLLECTD_STOPPED":    "Collectd Stopped",
+	"COLLECTD_STARTED":    "Collectd Started",
+	"NODE_LOST_CONTACT":   "Node contact lost",
+	"NODE_GAINED_CONTACT": "Node contact gained",
+	"MEMORY":              "Memory Threshold Crossed",
+	"SWAP":                "Swap Threshold Crossed",
+	"CPU":                 "Cpu Threshold Crossed",
+	"DF":                  "Mount Threshold Crossed",
 	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed",
 }
 
@@ -57,7 +59,55 @@ var handlermap = map[string]interface{}{
 	"skyring/dbus/node/*/generic/service/collectd":      collectd_status_handler,
 	"salt/node/appeared":                                node_appeared_handler,
 	"salt/node/lost":                                    node_lost_handler,
-	"skyring/collectd/node/*/threshold/*/*":             collectd_threshold_handler,
+	"skyring/collectd/node/*/threshold/memory/*":        resource_threshold_crossed,
+	"skyring/collectd/node/*/threshold/swap/*":          resource_threshold_crossed,
+	"skyring/collectd/node/*/threshold/cpu/*":           resource_threshold_crossed,
+	"skyring/collectd/node/*/threshold/df/*":            resource_threshold_crossed,
+	//"skyring/collectd/node/*/threshold/*/*": collectd_threshold_handler,
+}
+
+func get_readable_float(str string) (string, error) {
+	f, err := strconv.ParseFloat(str, 64)
+	if err != nil {
+		logger.Get().Error("Could not parse the string: %s", str)
+		return str, err
+	}
+	return fmt.Sprintf("%.2f", f), nil
+}
+
+func resource_threshold_crossed(event models.AppEvent) (models.AppEvent, error) {
+	event.Name = EventType[strings.ToUpper(event.Tags["Plugin"])]
+	currentValue, currentValueErr := get_readable_float(event.Tags["CurrentValue"])
+	if currentValueErr != nil {
+		logger.Get().Error("Could not parse the CurrentValue: %s", (event.Tags["Plugin"]))
+		return event, currentValueErr
+	}
+	thresholdValue, thresholdValueErr := get_readable_float(event.Tags["FailureMax"])
+	if thresholdValueErr != nil {
+		logger.Get().Error("Could not parse the Failure max value: %s", (event.Tags["FailureMax"]))
+		return event, thresholdValueErr
+	}
+	if event.Tags["Plugin"] == "df" {
+		event.Tags["Plugin"] = fmt.Sprintf("%s MountPoint", event.Tags["PluginInstance"])
+	}
+	if event.Tags["Severity"] == "FAILURE" {
+		event.Description = fmt.Sprintf("%s utilization on the node: %s has crossed the threshold value of %s%%. Current utilization: %s%%", event.Tags["Plugin"], event.NodeName, thresholdValue, currentValue)
+		event.Message = fmt.Sprintf("%s utilization crossed threshold on: %s", event.Tags["Plugin"], event.NodeName)
+		event.EntityId = event.NodeId
+		event.Severity = models.ALARM_STATUS_MAJOR
+	} else if event.Tags["Severity"] == "OKAY" {
+		event.Description = fmt.Sprintf("%s utilization on the node: %s is back to normal. Threshold value: %s%%. Current utilization: %s%%", event.Tags["Plugin"], event.NodeName, thresholdValue, currentValue)
+		event.Message = fmt.Sprintf("%s utilization back to normal on: %s", event.Tags["Plugin"], event.NodeName)
+		event.EntityId = event.NodeId
+		event.Severity = models.ALARM_STATUS_CLEARED
+	}
+	event.Tags = map[string]string{
+		"Current Utilization": currentValue,
+		"Threshold value":     thresholdValue,
+	}
+	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
+	event.Notify = true
+	return event, nil
 }
 
 func drive_add_handler(event models.AppEvent) (models.AppEvent, error) {
