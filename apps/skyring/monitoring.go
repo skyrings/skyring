@@ -516,7 +516,7 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Add monitoring plugin: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
 		logger.Get().Error("%s-Unable to create task for adding monitoring plugin for cluster: %v. error: %v", ctxt, *cluster_id, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for add monitoring plugin")
 		return
