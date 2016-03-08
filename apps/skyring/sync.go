@@ -51,7 +51,7 @@ func (a *App) SyncClusterDetails(params map[string]interface{}) {
 		return
 	}
 	for _, cluster := range clusters {
-		provider := a.GetProviderFromClusterId(cluster.ClusterId)
+		provider := a.GetProviderFromClusterId(ctxt, cluster.ClusterId)
 		if provider == nil {
 			logger.Get().Error("%s-Error getting provider for the cluster: %s", ctxt, cluster.Name)
 			continue

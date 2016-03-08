@@ -74,13 +74,13 @@ def AcceptNode(node, fingerprint, include_rejected=False, ctxt=""):
     return (node in out['minions'])
 
 
-def IgnoreNode(node):
+def IgnoreNode(node, ctxt=""):
     skey = salt.key.Key(opts)
     out = skey.delete_key(node)
     return True
 
 
-def GetNodes():
+def GetNodes(ctxt=""):
     '''
     returns structure
     {"Manage":   [{"Name": "nodename", "Fingerprint": "nodefinger"}, ...],
@@ -107,7 +107,7 @@ def GetNodes():
     return {"Manage": manage, "Unmanage": unmanage, "Ignore": ignore}
 
 
-def GetNodeID(node):
+def GetNodeID(node, ctxt=""):
     '''
     returns structure
     {"nodename": "uuidstring", ...}
@@ -124,7 +124,7 @@ def GetNodeID(node):
     return rv
 
 
-def GetNodeNetwork(node):
+def GetNodeNetwork(node, ctxt=""):
     '''
     returns structure
     {"nodename": {"IPv4": ["ipv4address", ...],
@@ -237,7 +237,7 @@ def GetNodeDisk(node, ctxt=""):
                               "DiskId":u})
     return rv
 
-def GetNodeCpu(node):
+def GetNodeCpu(node, ctxt=""):
     '''
     returns structure
     {"nodename": [{"Architecture":   "architecture",
@@ -278,7 +278,7 @@ def GetNodeCpu(node):
 
 
 
-def GetNodeOs(node):
+def GetNodeOs(node, ctxt=""):
     '''
     returns structure
     {"nodename": [{"Name":            "osname",
@@ -319,7 +319,7 @@ def GetNodeOs(node):
 
     return osinfo
 
-def GetNodeMemory(node):
+def GetNodeMemory(node, ctxt=""):
     '''
     returns structure
     {"nodename": [{"TotalSize": "totalsize",
@@ -350,7 +350,7 @@ def GetNodeMemory(node):
 
     return memoinfo
 
-def DisableService(node, service, stop=False):
+def DisableService(node, service, stop=False, ctxt=""):
     out = local.cmd(node, 'service.disable', [service])
     if out[node] and stop:
         out = local.cmd(node, 'service.stop', [service])
@@ -358,7 +358,7 @@ def DisableService(node, service, stop=False):
     return out[node]
 
 
-def EnableService(node, service, start=False):
+def EnableService(node, service, start=False, ctxt=""):
     out = local.cmd(node, 'service.enable', [service])
     if out[node] and start:
         out = local.cmd(node, 'service.start', [service])
@@ -366,12 +366,12 @@ def EnableService(node, service, start=False):
     return out[node]
 
 
-def SyncModules(node):
+def SyncModules(node, ctxt=""):
     out = local.cmd(node, 'saltutil.sync_all')
     return out[node]
 
 
-def NodeUp(node):
+def NodeUp(node, ctxt=""):
     out = local.cmd(node, 'test.ping')
     return True if out.has_key(node) and out[node] else False
 
@@ -409,7 +409,7 @@ monitoring_disabled_root_path = '/etc/disabled_collectd.d/'
 threshold_type_map = {"warning": "WarningMax", "critical": "FailureMax"}
 
 
-def AddMonitoringPlugin(plugin_list, nodes, master=None, configs=None):
+def AddMonitoringPlugin(plugin_list, nodes, master=None, configs=None, ctxt=""):
     retVal = {}
     state_list = ''
     no_of_plugins = len(plugin_list)
@@ -443,7 +443,7 @@ def AddMonitoringPlugin(plugin_list, nodes, master=None, configs=None):
         return state_load_result
 
 
-def DisableMonitoringPlugin(nodes, pluginName):
+def DisableMonitoringPlugin(nodes, pluginName, ctxt=""):
     failed_minions = {}
     source_file = monitoring_root_path + pluginName + "*"
     destination = monitoring_disabled_root_path
@@ -454,19 +454,19 @@ def DisableMonitoringPlugin(nodes, pluginName):
     for nodeName, message in out.iteritems():
         if out.get(nodeName) != '':
             log.error(
-                'Failed to disable collectd plugin %s because %s on %s' %
-                (pluginName, out.get(nodeName), nodeName))
+                '%s-Failed to disable collectd plugin %s because %s on %s' %
+                (ctxt, pluginName, out.get(nodeName), nodeName))
             failed_minions[nodeName] = out.get(nodeName)
     if failed_minions:
         return failed_minions
     out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
     for node, restartStatus in out.iteritems():
         if not restartStatus:
-            log.error("Failed to restart collectd on node %s after disabling the plugin %s" %(node, pluginName))
+            log.error("%s-Failed to restart collectd on node %s after disabling the plugin %s" %(ctxt, node, pluginName))
             failed_minions[node] = "Failed to restart collectd"
     return failed_minions
 
-def SetupSkynetService(node):
+def SetupSkynetService(node, ctxt=""):
     if type(node) is list:
         minions = node
     else:
@@ -477,7 +477,7 @@ def SetupSkynetService(node):
     out = local.cmd(minions, 'service.restart', ['systemd-skynetd'], expr_form='list')
     for node, restartStatus in out.iteritems():
         if not restartStatus:
-            log.error("Failed to restart skynetd on node %s " %(node))
+            log.error("%s-Failed to restart skynetd on node %s " %(ctxt, node))
             status = False
 
     # Send a signal to storaged to enable modules. After this storaged will start sending signals 
@@ -487,12 +487,12 @@ def SetupSkynetService(node):
     for nodeName, message in out.iteritems():
         if out.get(nodeName) != '':
             log.error(
-                'Failed to send signal to storaged on node: %s' % (nodeName)
+                '%s-Failed to send signal to storaged on node: %s' % (ctxt, nodeName)
             )
             status = False
     return status
 
-def EnableMonitoringPlugin(nodes, pluginName):
+def EnableMonitoringPlugin(nodes, pluginName, ctxt=""):
     failed_minions = {}
     source_file = monitoring_disabled_root_path + pluginName + '.conf'
     destination = monitoring_root_path
@@ -502,24 +502,24 @@ def EnableMonitoringPlugin(nodes, pluginName):
     for nodeName, message in out.iteritems():
         if out.get(nodeName) != '':
             log.error(
-                'Failed to enable collectd plugin %s because %s on %s' %
-                (pluginName, out.get(nodeName), nodeName))
+                '%s-Failed to enable collectd plugin %s because %s on %s' %
+                (ctxt, pluginName, out.get(nodeName), nodeName))
             failed_minions[nodeName] = out.get(nodeName)
     if failed_minions:
         return failed_minions
     out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
     for node, restartStatus in out.iteritems():
         if not restartStatus:
-            log.error("Failed to restart collectd on node %s after enabling the plugin %s" %(node, pluginName))
+            log.error("%s-Failed to restart collectd on node %s after enabling the plugin %s" %(ctxt, node, pluginName))
             failed_minions[node] = "Failed to restart collectd"
     return failed_minions
 
 
-def isSSD(node, device):
+def isSSD(node, device, ctxt=""):
     cmd = 'cat /sys/block/%s/queue/rotational' % device.split("/")[-1]
     out = local.cmd('%s' % node, 'cmd.run', [cmd], expr_form='list').get(node, '').strip()
     if not out:
-        log.error("Failed to get cluster statistics from %s" % node)
+        log.error("%s-Failed to get cluster statistics from %s" % (ctxt, node))
         raise Exception("Failed to get cluster statistics from %s" % node)
     if out == '0':
         return True
@@ -529,7 +529,7 @@ def isSSD(node, device):
     return False
 
 
-def RemoveMonitoringPlugin(nodes, pluginName):
+def RemoveMonitoringPlugin(nodes, pluginName, ctxt=""):
     failed_minions = {}
     source_file = monitoring_root_path + pluginName + "*"
     out = local.cmd(
@@ -538,20 +538,20 @@ def RemoveMonitoringPlugin(nodes, pluginName):
     for nodeName, message in out.iteritems():
         if out.get(nodeName) != '':
             log.error(
-                'Failed to remove collectd plugin %s because %s on %s' %
-                (pluginName, out.get(nodeName), nodeName))
+                '%s-Failed to remove collectd plugin %s because %s on %s' %
+                (ctxt, pluginName, out.get(nodeName), nodeName))
             failed_minions[nodeName] = out.get(nodeName)
     if failed_minions :
         return failed_minions
     out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
     for node, restartStatus in out.iteritems():
         if not restartStatus:
-            log.error("Failed to restart collectd on node %s after removing the plugin %s" %(node, pluginName))
+            log.error("%s-Failed to restart collectd on node %s after removing the plugin %s" % (ctxt, node, pluginName))
             failed_minions[node] = "Failed to restart collectd"
     return failed_minions
 
 
-def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict):
+def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict, ctxt=""):
     failed_minions = {}
     for key, value in plugin_threshold_dict.iteritems():
         path = monitoring_root_path + key + '.conf'
@@ -565,14 +565,14 @@ def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict):
     out = local.cmd(nodes, 'service.restart', ['collectd'], expr_form='list')
     for node, restartStatus in out.iteritems():
         if not restartStatus:
-            log.error("Failed to restart collectd on node %s" %(node))
+            log.error("%s-Failed to restart collectd on node %s" % (ctxt, node))
             failed_minions[node] = "Failed to restart collectd"
     return failed_minions
 
 
-def GetFingerPrint(node):
+def GetFingerPrint(node, ctxt=""):
     d = _get_keys(node)
     if d['unaccepted_nodes'].get(node):
         return d['unaccepted_nodes']
-    log.error("Failed to retrive fingerprint from host %s" %(node))
+    log.error("%s-Failed to retrive fingerprint from host %s" % (ctxt, node))
     return False

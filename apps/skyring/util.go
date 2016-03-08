@@ -38,7 +38,7 @@ type APIError struct {
 	Error string
 }
 
-func lockNode(nodeId uuid.UUID, hostname string, operation string) (*lock.AppLock, error) {
+func lockNode(ctxt string, nodeId uuid.UUID, hostname string, operation string) (*lock.AppLock, error) {
 	//lock the node
 	locks := make(map[uuid.UUID]string)
 	if nodeId.IsZero() {
@@ -46,26 +46,25 @@ func lockNode(nodeId uuid.UUID, hostname string, operation string) (*lock.AppLoc
 		//for locking as the UUID is not available at this point
 		id, err := uuid.Parse(util.Md5FromString(hostname))
 		if err != nil {
-			logger.Get().Error(fmt.Sprintf("Unable to create the UUID for locking for host: %s:", hostname), err)
-			return nil, err
+			return nil, fmt.Errorf("Unable to create the UUID for locking for host: %s. error: %v", hostname, err)
 		}
 		nodeId = *id
 	}
 	locks[nodeId] = fmt.Sprintf("%s : %s", operation, hostname)
 	appLock := lock.NewAppLock(locks)
-	if err := GetApp().GetLockManager().AcquireLock(*appLock); err != nil {
+	if err := GetApp().GetLockManager().AcquireLock(ctxt, *appLock); err != nil {
 		return nil, err
 	}
 	return appLock, nil
 }
 
-func LockNodes(nodes models.Nodes, operation string) (*lock.AppLock, error) {
+func LockNodes(ctxt string, nodes models.Nodes, operation string) (*lock.AppLock, error) {
 	locks := make(map[uuid.UUID]string)
 	for _, node := range nodes {
 		locks[node.NodeId] = fmt.Sprintf("%s : %s", operation, node.Hostname)
 	}
 	appLock := lock.NewAppLock(locks)
-	if err := GetApp().GetLockManager().AcquireLock(*appLock); err != nil {
+	if err := GetApp().GetLockManager().AcquireLock(ctxt, *appLock); err != nil {
 		return nil, err
 	}
 	return appLock, nil
@@ -249,17 +248,17 @@ func GetClusters() (models.Clusters, error) {
 }
 
 func syncNodeStatus(ctxt string, node models.Node) error {
-	skyringutils.Update_node_state_byId(node.NodeId, models.NODE_STATE_ACTIVE)
+	skyringutils.Update_node_state_byId(ctxt, node.NodeId, models.NODE_STATE_ACTIVE)
 	//get the latest status
-	ok, err := GetCoreNodeManager().IsNodeUp(node.Hostname)
+	ok, err := GetCoreNodeManager().IsNodeUp(node.Hostname, ctxt)
 	if err != nil {
 		logger.Get().Error(fmt.Sprintf("%s-Error getting status of node: %s. error: %v", ctxt, node.Hostname, err))
 		return nil
 	}
 	if ok {
-		skyringutils.Update_node_status_byId(node.NodeId, models.NODE_STATUS_OK)
+		skyringutils.Update_node_status_byId(ctxt, node.NodeId, models.NODE_STATUS_OK)
 	} else {
-		skyringutils.Update_node_status_byId(node.NodeId, models.NODE_STATUS_ERROR)
+		skyringutils.Update_node_status_byId(ctxt, node.NodeId, models.NODE_STATUS_ERROR)
 	}
 
 	//TODO update Alarm status and count
@@ -268,7 +267,7 @@ func syncNodeStatus(ctxt string, node models.Node) error {
 }
 
 func syncClusterStatus(ctxt string, cluster_id *uuid.UUID) error {
-	provider := GetApp().GetProviderFromClusterId(*cluster_id)
+	provider := GetApp().GetProviderFromClusterId(ctxt, *cluster_id)
 	if provider == nil {
 		logger.Get().Error("%s-Error getting provider for the cluster: %s", ctxt, *cluster_id)
 		return errors.New("Error getting the provider")
@@ -304,12 +303,12 @@ func Initialize(node string, ctxt string) error {
 				return
 			default:
 				var nodeId uuid.UUID
-				appLock, err := lockNode(nodeId, node, "Accepted_Nodes")
+				appLock, err := lockNode(ctxt, nodeId, node, "Accepted_Nodes")
 				if err != nil {
-					util.FailTask("Failed to acquire lock", err, t)
+					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
-				defer GetApp().GetLockManager().ReleaseLock(*appLock)
+				defer GetApp().GetLockManager().ReleaseLock(ctxt, *appLock)
 				t.UpdateStatus("started the task for InitializeNode: %s", t.ID)
 				// Process the request
 				if err := initializeStorageNode(storage_node.Hostname, t, ctxt); err != nil {
@@ -333,53 +332,56 @@ func Initialize(node string, ctxt string) error {
 }
 
 func initializeStorageNode(node string, t *task.Task, ctxt string) error {
-	sProfiles, err := GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
+	sProfiles, err := GetDbProvider().StorageProfileInterface().StorageProfiles(ctxt, nil, models.QueryOps{})
 	if err != nil {
 		logger.Get().Error("%s-Unable to get the storage profiles. May not be able to apply storage profiles for node: %v err:%v", ctxt, node, err)
 	}
-	if storage_node, ok := saltnodemanager.GetStorageNodeInstance(node, sProfiles); ok {
-		if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(node, curr_hostname); configureError != nil && len(nodeErrorMap) != 0 {
+	if storage_node, ok := saltnodemanager.GetStorageNodeInstance(node, sProfiles, ctxt); ok {
+		if nodeErrorMap, configureError := GetCoreNodeManager().SetUpMonitoring(
+			node,
+			curr_hostname,
+			ctxt); configureError != nil && len(nodeErrorMap) != 0 {
 			if len(nodeErrorMap) != 0 {
 				logger.Get().Error("%s-Unable to setup collectd on %s because of %v", ctxt, node, nodeErrorMap)
 				t.UpdateStatus("Unable to setup collectd on %s because of %v", node, nodeErrorMap)
-				skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
-				skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+				skyringutils.UpdateNodeState(ctxt, node, models.NODE_STATE_FAILED)
+				skyringutils.UpdateNodeStatus(ctxt, node, models.NODE_STATUS_UNKNOWN)
 				return err
 			} else {
 				logger.Get().Error("%s-Config Error during monitoring setup for node:%s Error:%v", ctxt, node, configureError)
 				t.UpdateStatus("Config Error during monitoring setup for node:%s Error:%v", node, configureError)
-				skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
-				skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+				skyringutils.UpdateNodeState(ctxt, node, models.NODE_STATE_FAILED)
+				skyringutils.UpdateNodeStatus(ctxt, node, models.NODE_STATUS_UNKNOWN)
 				return err
 			}
 		}
-		if ok, err := GetCoreNodeManager().SyncModules(node); !ok || err != nil {
+		if ok, err := GetCoreNodeManager().SyncModules(node, ctxt); !ok || err != nil {
 			logger.Get().Error("%s-Failed to sync modules on the node: %s. error: %v", ctxt, node, err)
 			t.UpdateStatus("Failed to sync modules")
-			skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
-			skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+			skyringutils.UpdateNodeState(ctxt, node, models.NODE_STATE_FAILED)
+			skyringutils.UpdateNodeStatus(ctxt, node, models.NODE_STATUS_UNKNOWN)
 			return err
 		}
-		if err := saltnodemanager.SetupSkynetService(node); err != nil {
+		if err := saltnodemanager.SetupSkynetService(node, ctxt); err != nil {
 			logger.Get().Error("%s-Failed to setup skynet service on the node: %s. error: %v", ctxt, node, err)
 			t.UpdateStatus("Failed to setup skynet service")
-			skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
-			skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+			skyringutils.UpdateNodeState(ctxt, node, models.NODE_STATE_FAILED)
+			skyringutils.UpdateNodeStatus(ctxt, node, models.NODE_STATUS_UNKNOWN)
 			return err
 		}
 		if err := updateStorageNodeToDB(*storage_node, ctxt); err != nil {
 			logger.Get().Error("%s-Unable to add details of node: %s to DB. error: %v", ctxt, node, err)
 			t.UpdateStatus("Unable to add details of node: %s to DB. error: %v", node, err)
-			skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
-			skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+			skyringutils.UpdateNodeState(ctxt, node, models.NODE_STATE_FAILED)
+			skyringutils.UpdateNodeStatus(ctxt, node, models.NODE_STATUS_UNKNOWN)
 			return err
 		}
 		return nil
 	} else {
 		logger.Get().Critical("%s-Error getting the details for node: %s", ctxt, node)
 		t.UpdateStatus("Error getting the details for node: %s", node)
-		skyringutils.UpdateNodeState(node, models.NODE_STATE_FAILED)
-		skyringutils.UpdateNodeStatus(node, models.NODE_STATUS_UNKNOWN)
+		skyringutils.UpdateNodeState(ctxt, node, models.NODE_STATE_FAILED)
+		skyringutils.UpdateNodeStatus(ctxt, node, models.NODE_STATUS_UNKNOWN)
 		return fmt.Errorf("Error getting the details for node: %s", node)
 	}
 }

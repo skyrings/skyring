@@ -104,14 +104,14 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 				return
 			default:
 				t.UpdateStatus("Started the task for block device creation: %v", t.ID)
-				provider := a.GetProviderFromClusterId(*cluster_id)
+				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("%s - Error getting provider for cluster: %v", ctxt, *cluster_id)), t)
 					return
 				}
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
 					provider.Name, block_device_functions["create"]),
-					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body, RpcRequestContext: ctxt},
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("%s - Error creating block device: %s on cluster: %v", ctxt, request.Name, *cluster_id), err, t)
@@ -361,14 +361,14 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 				return
 			default:
 				t.UpdateStatus("Started the task for block device deletion: %v", t.ID)
-				provider := a.GetProviderFromClusterId(*cluster_id)
+				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("%s - Error getting provider for cluster: %v", ctxt, *cluster_id)), t)
 					return
 				}
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
 					provider.Name, block_device_functions["delete"]),
-					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}},
+					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}, RpcRequestContext: ctxt},
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("%s - Error deleting block device: %v on cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
@@ -484,14 +484,14 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 				return
 			default:
 				t.UpdateStatus("Started the task for block device resize: %v", t.ID)
-				provider := a.GetProviderFromClusterId(*cluster_id)
+				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("%s - Error getting provider for cluster: %v", ctxt, *cluster_id)), t)
 					return
 				}
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
 					provider.Name, block_device_functions["resize"]),
-					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body, RpcRequestContext: ctxt},
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("%s - Error resizing block device: %v on cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)

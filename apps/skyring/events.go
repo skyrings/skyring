@@ -236,7 +236,7 @@ func PatchEvent(w http.ResponseWriter, r *http.Request) {
 
 	err = collection.Update(bson.M{"eventid": *event_id}, bson.M{"$set": event})
 	if err != nil {
-		logger.Get().Error(fmt.Sprintf("Error updating record in DB for event: %v. error: %v", event_id_str, err))
+		logger.Get().Error(fmt.Sprintf("%s-Error updating record in DB for event: %v. error: %v", ctxt, event_id_str, err))
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
 	return
