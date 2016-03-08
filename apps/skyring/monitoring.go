@@ -236,6 +236,9 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 	var disk_reads float64
 	var disk_writes float64
 
+	var cluster_interface_rx float64
+	var cluster_interface_tx float64
+
 	for _, node := range nodes {
 		/*
 			Calculate Memory Used
@@ -244,7 +247,6 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 		mStatUsed, memoryUsedFetchError := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name)
 		if memoryUsedFetchError != nil {
 			logger.Get().Error("%s - Error %v", ctxt, memoryUsedFetchError)
-			continue
 		}
 		cluster_memory_used = cluster_memory_used + mStatUsed
 
@@ -255,7 +257,6 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 		mStatFree, memoryFreeFetchError := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name)
 		if memoryFreeFetchError != nil {
 			logger.Get().Error("%s - Error %v", ctxt, memoryFreeFetchError)
-			continue
 		}
 		cluster_memory_free = cluster_memory_free + mStatFree
 
@@ -264,17 +265,49 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 			resource_name = monitoring.DISK + "-" + disk_name + monitoring.DISK_IOPS
 			diskReads, diskReadErr := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name+monitoring.READ)
 			if diskReadErr != nil {
-				disk_reads = disk_reads + diskReads
-			} else {
 				logger.Get().Error("%s - Failed to fetch iops stats for %v of %v from cluster %v.Err %v", ctxt, disk.Name, node.Hostname, clusterId, diskReadErr)
+			} else {
+				disk_reads = disk_reads + diskReads
 			}
 
 			diskWrites, diskWriteErr := GetMonitoringManager().GetInstantValue(node.Hostname, resource_name+monitoring.READ)
 			if diskWriteErr != nil {
-				disk_writes = disk_writes + diskWrites
-			} else {
 				logger.Get().Error("%s - Failed to fetch iops stats for %v of %v from cluster %v.Err %v", ctxt, disk.Name, node.Hostname, clusterId, diskWriteErr)
+			} else {
+				disk_writes = disk_writes + diskWrites
 			}
+		}
+
+		/*
+			Calculate Interface bandwidth
+		*/
+
+		// Aggregate interface rx
+		var resourceNameError error
+		resourcePrefix := monitoring.AGGREGATION + monitoring.INTERFACE + monitoring.OCTETS
+		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.RX})
+		if resourceNameError != nil {
+			logger.Get().Error("%s - Failed to fetch resource name of %v for %v from cluster%v.Err %v", ctxt, resourcePrefix+monitoring.RX, node.Hostname, clusterId, resourceNameError)
+		} else {
+			interface_rx, interface_rx_error := GetMonitoringManager().GetInstantValuesAggregation(node.Hostname, resource_name, []string{monitoring.LOOP_BACK_INTERFACE})
+			if interface_rx_error != nil && interface_rx == 0.0 {
+				logger.Get().Error("%s - Failed to fetch interface stats for %v from cluster %v.Err %v", ctxt, node.Hostname, clusterId, interface_rx_error)
+			} else {
+				cluster_interface_rx = cluster_interface_rx + interface_rx
+			}
+		}
+
+		// Aggregate interface tx
+		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.TX})
+		if resourceNameError != nil {
+			logger.Get().Error("%s - Failed to fetch resource name of %v for %v from cluster%v.Err %v", ctxt, resource_name, node.Hostname, clusterId, resourceNameError)
+		}
+		logger.Get().Error("%v", resource_name)
+		interface_tx, interface_tx_error := GetMonitoringManager().GetInstantValuesAggregation(node.Hostname, resource_name, []string{monitoring.LOOP_BACK_INTERFACE})
+		if interface_tx_error != nil && interface_tx == 0.0 {
+			logger.Get().Error("%s - Failed to fetch interface stats for %v from cluster %v.Err %v", ctxt, node.Hostname, clusterId, interface_tx_error)
+		} else {
+			cluster_interface_tx = cluster_interface_tx + interface_tx
 		}
 	}
 
@@ -301,6 +334,14 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 	memory_percent_table := table_name + monitoring.MEMORY + "-" + monitoring.USAGE_PERCENT
 	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: net_memory_usage_percentage}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
+	}
+
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.INTERFACE + "-" + monitoring.RX: {time_stamp_str: strconv.FormatFloat(cluster_interface_rx, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster interface %v utilization.Err %v", ctxt, monitoring.RX, err)
+	}
+
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.INTERFACE + "-" + monitoring.TX: {time_stamp_str: strconv.FormatFloat(cluster_interface_tx, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster interface %v utilization.Err %v", ctxt, monitoring.TX, err)
 	}
 
 	return
