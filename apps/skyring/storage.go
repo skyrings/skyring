@@ -91,6 +91,13 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Validate storage type
+	if ok := valid_storage_type(request.Type); !ok {
+		logger.Get().Error("Invalid storage type: %s", request.Type)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid storage type: %s", request.Type))
+		return
+	}
+
 	// Validate storage target size info
 	if ok, err := valid_storage_size(request.Size); !ok || err != nil {
 		logger.Get().Error("%s-Invalid storage size: %v", ctxt, request.Size)
