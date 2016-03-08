@@ -32,12 +32,17 @@ func (a *App) GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) GET_LookupNode(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	hostname := vars["hostname"]
 
 	if host_addrs, err := net.LookupHost(hostname); err == nil {
 		if iaddrs, err := net.InterfaceAddrs(); err != nil {
-			logger.Get().Error("Error getting the local host subnet details")
+			logger.Get().Error("%s-Error getting the local host subnet details", ctxt)
 			json.NewEncoder(w).Encode(host_addrs)
 			return
 		} else {

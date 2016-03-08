@@ -31,7 +31,7 @@ func (a *App) GetMailNotifier(rw http.ResponseWriter, req *http.Request) {
 		logger.Get().Error("Error Getting the context. error: %v", err)
 	}
 
-	notifier, err := GetDbProvider().MailNotifierInterface().MailNotifier()
+	notifier, err := GetDbProvider().MailNotifierInterface().MailNotifier(ctxt)
 	if err != nil {
 		logger.Get().Error("%s-Unable to read MailNotifier from DB: %s", ctxt, err)
 		HandleHttpError(rw, err)
@@ -92,7 +92,7 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	if req.Method == "POST" {
-		_, err := GetDbProvider().MailNotifierInterface().MailNotifier()
+		_, err := GetDbProvider().MailNotifierInterface().MailNotifier(ctxt)
 		if err != mongodb.ErrMissingNotifier {
 			HandleHttpError(rw, errors.New("Mail Notifier Record Already exists"))
 			return
@@ -132,7 +132,7 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err = GetDbProvider().MailNotifierInterface().SaveMailNotifier(notifier)
+	err = GetDbProvider().MailNotifierInterface().SaveMailNotifier(ctxt, notifier)
 	if err != nil {
 		logger.Get().Error("%s-Error Updating the mail notifier info for: %s Error: %v", ctxt, notifier.MailId, err)
 		HandleHttpError(rw, err)
@@ -199,7 +199,7 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	notifier, err := GetDbProvider().MailNotifierInterface().MailNotifier()
+	notifier, err := GetDbProvider().MailNotifierInterface().MailNotifier(ctxt)
 	if err != nil {
 		logger.Get().Error("%s-MailNotifier not set: %s", ctxt, err)
 		HandleHttpError(rw, err)
@@ -219,7 +219,7 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 		HandleHttpError(rw, errors.New("insufficient detail for mail notifier"))
 		return
 	}
-	err = GetDbProvider().MailNotifierInterface().SaveMailNotifier(notifier)
+	err = GetDbProvider().MailNotifierInterface().SaveMailNotifier(ctxt, notifier)
 	if err != nil {
 		logger.Get().Error("%s-Error Updating the mail notifier info for: %s Error: %v", ctxt, notifier.MailId, err)
 		HandleHttpError(rw, err)

@@ -45,19 +45,19 @@ func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if (request == models.StorageProfile{}) {
-		logger.Get().Error("Invalid request")
+		logger.Get().Error("%s-Invalid request", ctxt)
 		HttpResponse(w, http.StatusBadRequest, "Invalid request", ctxt)
 		return
 	}
 	// Check if storage profile already added
-	if _, err := GetDbProvider().StorageProfileInterface().StorageProfile(request.Name); err == nil {
-		logger.Get().Error("%s-Storage profile already added: %v", err)
+	if _, err := GetDbProvider().StorageProfileInterface().StorageProfile(ctxt, request.Name); err == nil {
+		logger.Get().Error("%s-Storage profile already added: %v", ctxt, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Storage profile already added", ctxt)
 		return
 
 	}
 
-	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile(request); err != nil {
+	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile(ctxt, request); err != nil {
 		logger.Get().Error("%s-Storage profile add failed: %v", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
@@ -70,7 +70,7 @@ func (a *App) GET_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error Getting the context. error: %v", ctxt, err)
 	}
-	sProfiles, err := GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
+	sProfiles, err := GetDbProvider().StorageProfileInterface().StorageProfiles(ctxt, nil, models.QueryOps{})
 	if err != nil {
 		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
@@ -89,7 +89,7 @@ func (a *App) GET_StorageProfile(w http.ResponseWriter, r *http.Request) {
 	}
 	vars := mux.Vars(r)
 	name := vars["name"]
-	sprofile, err := GetDbProvider().StorageProfileInterface().StorageProfile(name)
+	sprofile, err := GetDbProvider().StorageProfileInterface().StorageProfile(ctxt, name)
 	if err != nil {
 		HttpResponse(w, http.StatusNotFound, err.Error(), ctxt)
 		return
@@ -104,7 +104,7 @@ func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("%s-Error Getting the context. error: %v", ctxt, err)
 	}
 	vars := mux.Vars(r)
-	sprofile, err := GetDbProvider().StorageProfileInterface().StorageProfile(vars["name"])
+	sprofile, err := GetDbProvider().StorageProfileInterface().StorageProfile(ctxt, vars["name"])
 	if err != nil {
 		logger.Get().Error("%s-Unable to Get Storage Profile:%s", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
@@ -115,7 +115,7 @@ func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusInternalServerError, "Default Storage Profile Cannot be Deleted", ctxt)
 		return
 	}
-	if err := GetDbProvider().StorageProfileInterface().DeleteStorageProfile(vars["name"]); err != nil {
+	if err := GetDbProvider().StorageProfileInterface().DeleteStorageProfile(ctxt, vars["name"]); err != nil {
 		logger.Get().Error("%s-Unable to delete Storage Profile:%s", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
@@ -129,7 +129,7 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("%s-Error Getting the context. error: %v", ctxt, err)
 	}
 	vars := mux.Vars(r)
-	sprofile, err := GetDbProvider().StorageProfileInterface().StorageProfile(vars["name"])
+	sprofile, err := GetDbProvider().StorageProfileInterface().StorageProfile(ctxt, vars["name"])
 	if err != nil {
 		logger.Get().Error("%s-Unable to Get Storage Profile:%s", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
@@ -172,7 +172,7 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if updated {
-		if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile(sprofile); err != nil {
+		if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile(ctxt, sprofile); err != nil {
 			logger.Get().Error("%s-Storage profile update failed: %v", ctxt, err)
 			HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 			return
@@ -182,15 +182,15 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 
 func AddDefaultProfiles() error {
 	//sas
-	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile(models.StorageProfile{Name: models.DefaultProfile1, Priority: models.DefaultPriority, Default: true}); err != nil {
+	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile("", models.StorageProfile{Name: models.DefaultProfile1, Priority: models.DefaultPriority, Default: true}); err != nil {
 		logger.Get().Error("Default Storage profile add failed: %v", err)
 	}
 	//ssd
-	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile(models.StorageProfile{Name: models.DefaultProfile2, Priority: models.DefaultPriority, Default: true}); err != nil {
+	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile("", models.StorageProfile{Name: models.DefaultProfile2, Priority: models.DefaultPriority, Default: true}); err != nil {
 		logger.Get().Error("Default Storage profile add failed: %v", err)
 	}
 	//general
-	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile(models.StorageProfile{Name: models.DefaultProfile3, Priority: models.DefaultPriority, Default: true}); err != nil {
+	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile("", models.StorageProfile{Name: models.DefaultProfile3, Priority: models.DefaultPriority, Default: true}); err != nil {
 		logger.Get().Error("Default Storage profile add failed: %v", err)
 	}
 	return nil

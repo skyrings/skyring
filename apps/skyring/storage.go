@@ -43,23 +43,28 @@ var (
 )
 
 func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the cluster id: %s. error: %v", cluster_id_str, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
 	}
 
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
-		logger.Get().Error("Error checking managed state of cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error checking managed state of cluster: %v", *cluster_id))
 		return
 	}
 	if ok {
-		logger.Get().Error("Cluster: %v is in un-managed state", *cluster_id)
+		logger.Get().Error("%s-Cluster: %v is in un-managed state", ctxt, *cluster_id)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %v is in un-managed state", *cluster_id))
 		return
 	}
@@ -68,12 +73,12 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
-		logger.Get().Error("Error parsing the request. error: %v", err)
+		logger.Get().Error("%s-Error parsing the request. error: %v", ctxt, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
-		logger.Get().Error("Unable to unmarshal request. error: %v", err)
+		logger.Get().Error("%s-Unable to unmarshal request. error: %v", ctxt, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err))
 		return
 	}
@@ -81,14 +86,14 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	// Check if storage entity already added
 	// No need to check for error as storage would be nil in case of error and the same is checked
 	if storage, _ := storage_exists("name", request.Name); storage != nil {
-		logger.Get().Error("Storage entity: %s already added", request.Name)
+		logger.Get().Error("%s-Storage entity: %s already added", ctxt, request.Name)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Storage entity: %s already added", request.Name))
 		return
 	}
 
 	// Validate storage target size info
 	if ok, err := valid_storage_size(request.Size); !ok || err != nil {
-		logger.Get().Error("Invalid storage size: %v", request.Size)
+		logger.Get().Error("%s-Invalid storage size: %v", ctxt, request.Size)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid storage size: %s passed for: %s", request.Size, request.Name))
 		return
 	}
@@ -106,38 +111,38 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 
 				nodes, err := getClusterNodesById(cluster_id)
 				if err != nil {
-					util.FailTask("Failed to get nodes", err, t)
+					util.FailTask("Failed to get nodes", fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
-				appLock, err := LockNodes(nodes, "Manage_Cluster")
+				appLock, err := LockNodes(ctxt, nodes, "Manage_Cluster")
 				if err != nil {
-					util.FailTask("Failed to acquire lock", err, t)
+					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
 
-				provider := a.GetProviderFromClusterId(*cluster_id)
+				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
-					util.FailTask("", errors.New(fmt.Sprintf("Error getting provider for cluster: %v", *cluster_id)), t)
+					util.FailTask("", errors.New(fmt.Sprintf("%s-Error getting provider for cluster: %v", ctxt, *cluster_id)), t)
 					return
 				}
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
 					provider.Name, storage_post_functions["create"]),
-					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body, RpcRequestContext: ctxt},
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
-					util.FailTask(fmt.Sprintf("Error creating storage: %s on cluster: %v", request.Name, *cluster_id), err, t)
+					util.FailTask(fmt.Sprintf("Error creating storage: %s on cluster: %v", request.Name, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				} else {
 					// Update the master task id
 					providerTaskId, err = uuid.Parse(result.Data.RequestId)
 					if err != nil {
-						util.FailTask(fmt.Sprintf("Error parsing provider task id while creating storage: %s for cluster: %v", request.Name, *cluster_id), err, t)
+						util.FailTask(fmt.Sprintf("Error parsing provider task id while creating storage: %s for cluster: %v", request.Name, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 						return
 					}
 					t.UpdateStatus("Adding sub task")
 					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
-						util.FailTask(fmt.Sprintf("Error adding sub task while creating storage: %s on cluster: %v", request.Name, *cluster_id), err, t)
+						util.FailTask(fmt.Sprintf("Error adding sub task while creating storage: %s on cluster: %v", request.Name, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 						return
 					}
 
@@ -150,7 +155,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 						coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 						var providerTask models.AppTask
 						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
-							util.FailTask(fmt.Sprintf("Error getting sub task status while creating storage: %s on cluster: %v", request.Name, *cluster_id), err, t)
+							util.FailTask(fmt.Sprintf("Error getting sub task status while creating storage: %s on cluster: %v", request.Name, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 							return
 						}
 						if providerTask.Completed {
@@ -168,7 +173,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 					if !done {
 						util.FailTask(
 							"Sub task timed out",
-							errors.New("Could not get sub task status after 5 minutes"),
+							fmt.Errorf("%s-Could not get sub task status after 5 minutes", ctxt),
 							t)
 					}
 					return
@@ -177,11 +182,11 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Create Storage: %s", request.Name), asyncTask, 300*time.Second, nil, nil, nil); err != nil {
-		logger.Get().Error("Unable to create task for create storage:%s on cluster: %v. error: %v", request.Name, *cluster_id, err)
+		logger.Get().Error("%s-Unable to create task for create storage:%s on cluster: %v. error: %v", ctxt, request.Name, *cluster_id, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create storage")
 		return
 	} else {
-		logger.Get().Debug("Task Created: %v for creating storage on cluster: %v", taskId, request.Name, *cluster_id)
+		logger.Get().Debug("%s-Task Created: %v for creating storage on cluster: %v", ctxt, taskId, request.Name, *cluster_id)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
@@ -202,11 +207,16 @@ func storage_exists(key string, value string) (*models.Storage, error) {
 }
 
 func (a *App) GET_Storages(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the cluster id: %s. error: %v", cluster_id_str, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
 	}
@@ -227,7 +237,7 @@ func (a *App) GET_Storages(w http.ResponseWriter, r *http.Request) {
 	var storages models.Storages
 	if err := collection.Find(filter).All(&storages); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
-		logger.Get().Error("Error getting the storage list for cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Error getting the storage list for cluster: %v. error: %v", ctxt, *cluster_id, err)
 		return
 	}
 	if len(storages) == 0 {
@@ -238,18 +248,23 @@ func (a *App) GET_Storages(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) GET_Storage(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the cluster id: %s. error: %v", cluster_id_str, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
 	}
 	storage_id_str := vars["storage-id"]
 	storage_id, err := uuid.Parse(storage_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the storage id: %s. error: %v", storage_id_str, err)
+		logger.Get().Error("%s-Error parsing the storage id: %s. error: %v", ctxt, storage_id_str, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the storage id: %s", storage_id_str))
 		return
 	}
@@ -261,12 +276,12 @@ func (a *App) GET_Storage(w http.ResponseWriter, r *http.Request) {
 	var storage models.Storage
 	if err := collection.Find(bson.M{"clusterid": *cluster_id, "storageid": *storage_id}).One(&storage); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
-		logger.Get().Error("Error getting the storage: %v on cluster: %v. error: %v", *storage_id, *cluster_id, err)
+		logger.Get().Error("%s-Error getting the storage: %v on cluster: %v. error: %v", ctxt, *storage_id, *cluster_id, err)
 		return
 	}
 	if storage.Name == "" {
 		HttpResponse(w, http.StatusBadRequest, "Storage not found")
-		logger.Get().Error("Storage with id: %v not found for cluster: %v. error: %v", *storage_id, *cluster_id, err)
+		logger.Get().Error("%s-Storage with id: %v not found for cluster: %v. error: %v", ctxt, *storage_id, *cluster_id, err)
 		return
 	} else {
 		json.NewEncoder(w).Encode(storage)
@@ -274,6 +289,11 @@ func (a *App) GET_Storage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) GET_AllStorages(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
@@ -281,7 +301,7 @@ func (a *App) GET_AllStorages(w http.ResponseWriter, r *http.Request) {
 	var storages models.Storages
 	if err := collection.Find(nil).All(&storages); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
-		logger.Get().Error("Error getting the storage list. error: %v", err)
+		logger.Get().Error("%s-Error getting the storage list. error: %v", ctxt, err)
 		return
 	}
 	if len(storages) == 0 {
@@ -321,12 +341,12 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 	var blkDevices []models.BlockDevice
 	err = coll.Find(bson.M{"clusterid": *cluster_id, "storageid": *storage_id}).All(&blkDevices)
 	if err != nil {
-		logger.Get().Error("Error checking block devices backed by storage: %v", *storage_id)
+		logger.Get().Error("%s-Error checking block devices backed by storage: %v", ctxt, *storage_id)
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error checking block devices backed by storage: %v", *storage_id))
 		return
 	}
 	if len(blkDevices) > 0 {
-		logger.Get().Warning("There are block devices backed by storage: %v. First block devices should be deleted.", *storage_id)
+		logger.Get().Warning("%s-There are block devices backed by storage: %v. First block devices should be deleted.", ctxt, *storage_id)
 		HttpResponse(
 			w,
 			http.StatusMethodNotAllowed,
@@ -343,9 +363,9 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 				return
 			default:
 				t.UpdateStatus("Started the task for storage deletion: %v", t.ID)
-				provider := a.GetProviderFromClusterId(*cluster_id)
+				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
-					util.FailTask(fmt.Sprintf("%s - ", ctxt), errors.New(fmt.Sprintf("Error getting provider for cluster: %v", *cluster_id)), t)
+					util.FailTask(fmt.Sprintf("%s - ", ctxt), errors.New(fmt.Sprintf("%s-Error getting provider for cluster: %v", ctxt, *cluster_id)), t)
 					return
 				}
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
@@ -400,7 +420,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for delete storage")
 		return
 	} else {
-		logger.Get().Debug("Task Created: %v to delete storage: %v", taskId, *cluster_id)
+		logger.Get().Debug("%s-Task Created: %v to delete storage: %v", ctxt, taskId, *cluster_id)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)

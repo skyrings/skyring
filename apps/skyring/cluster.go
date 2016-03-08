@@ -72,7 +72,7 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 	if val, ok := request["disableautoexpand"]; ok {
 		disableautoexpand = val.(bool)
 	} else {
-		logger.Get().Error("Insufficient details for updating cluster")
+		logger.Get().Error("%s-Insufficient details for updating cluster", ctxt)
 		HandleHttpError(w, errors.New("Insufficient details for updating cluster"))
 		return
 	}
@@ -83,7 +83,7 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 	var cluster models.Cluster
 	clid, err := uuid.Parse(cluster_id)
 	if err != nil {
-		logger.Get().Error("could not parse cluster Uuid: %s", cluster_id)
+		logger.Get().Error("%s-Could not parse cluster uuid: %s", ctxt, cluster_id)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("could not parse cluster Uuid: %s", cluster_id))
 		return
 	}
@@ -94,7 +94,7 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := collection.Update(bson.M{"clusterid": *clid}, bson.M{"$set": bson.M{"autoexpand": !disableautoexpand}}); err != nil {
-		logger.Get().Error("Failed updating cluster. Error:%v", err)
+		logger.Get().Error("%s-Failed updating cluster. Error:%v", ctxt, err)
 		HandleHttpError(w, errors.New(fmt.Sprintf("Failed updating cluster. Error:%v", err)))
 		return
 	}
@@ -154,15 +154,15 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 
 				nodes, err := getClusterNodesFromRequest(request.Nodes)
 				if err != nil {
-					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %s", request.Name), err, t)
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %s", request.Name), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
-				appLock, err := LockNodes(nodes, "POST_Clusters")
+				appLock, err := LockNodes(ctxt, nodes, "POST_Clusters")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
 				// Get the specific provider and invoke the method
 				provider := a.getProviderFromClusterType(request.Type)
 				if provider == nil {
@@ -239,7 +239,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create cluster")
 		return
 	} else {
-		logger.Get().Debug("Task Created: %v for creating cluster: %s", taskId.String(), request.Name)
+		logger.Get().Debug("%s-Task Created: %v for creating cluster: %s", taskId.String(), ctxt, request.Name)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
@@ -247,23 +247,28 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id := vars["cluster-id"]
 
 	// Check if cluster is already disabled, if not forget not allowed
 	uuid, err := uuid.Parse(cluster_id)
 	if err != nil {
-		logger.Get().Error("Error parsing cluster id: %s. error: %v", cluster_id, err)
+		logger.Get().Error("%s-Error parsing cluster id: %s. error: %v", ctxt, cluster_id, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing cluster id: %s", cluster_id))
 		return
 	}
 	ok, err := ClusterUnmanaged(*uuid)
 	if err != nil {
-		logger.Get().Error("Error checking managed state of cluster. error: %v", err)
+		logger.Get().Error("%s-Error checking managed state of cluster. error: %v", ctxt, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 	}
 	if !ok {
-		logger.Get().Error("Cluster: %v is not in un-managed state. Cannot run forget.", *uuid)
+		logger.Get().Error("%s-Cluster: %v is not in un-managed state. Cannot run forget.", ctxt, *uuid)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is not in un-managed state. Cannot run forget.")
 		return
 	}
@@ -278,29 +283,29 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 
 				cnodes, err := getClusterNodesById(uuid)
 				if err != nil {
-					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *uuid), err, t)
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
-				appLock, err := LockNodes(cnodes, "Forget_Cluster")
+				appLock, err := LockNodes(ctxt, cnodes, "Forget_Cluster")
 				if err != nil {
-					util.FailTask("Failed to acquire lock", err, t)
+					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
 				// TODO: Remove the sync jobs if any for the cluster
 				// TODO: Remove the performance monitoring details for the cluster
 				// TODO: Remove the collectd, salt etc configurations from the nodes
 
 				// Ignore the cluster nodes
-				if ok, err := ignoreClusterNodes(*uuid); err != nil || !ok {
-					util.FailTask(fmt.Sprintf("Error ignoring nodes for cluster: %v", *uuid), err, t)
+				if ok, err := ignoreClusterNodes(ctxt, *uuid); err != nil || !ok {
+					util.FailTask(fmt.Sprintf("Error ignoring nodes for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
 
 				// Remove storage entities for cluster
 				t.UpdateStatus("Removing storage entities for cluster")
 				if err := removeStorageEntities(*uuid); err != nil {
-					util.FailTask(fmt.Sprintf("Error removing storage entities for cluster: %v", *uuid), err, t)
+					util.FailTask(fmt.Sprintf("Error removing storage entities for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
 
@@ -310,7 +315,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 				defer sessionCopy.Close()
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 				if changeInfo, err := collection.RemoveAll(bson.M{"clusterid": *uuid}); err != nil || changeInfo == nil {
-					util.FailTask(fmt.Sprintf("Error deleting cluster nodes for cluster: %v", *uuid), err, t)
+					util.FailTask(fmt.Sprintf("Error deleting cluster nodes for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
 
@@ -318,7 +323,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 				t.UpdateStatus("removing the cluster")
 				collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 				if err := collection.Remove(bson.M{"clusterid": *uuid}); err != nil {
-					util.FailTask(fmt.Sprintf("Error removing the cluster: %v", *uuid), err, t)
+					util.FailTask(fmt.Sprintf("Error removing the cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
 				DeleteClusterSchedule(*uuid)
@@ -329,11 +334,11 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Forget Cluster: %s", cluster_id), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
-		logger.Get().Error("Unable to create task to forget cluster: %v. error: %v", *uuid, err)
+		logger.Get().Error("%s-Unable to create task to forget cluster: %v. error: %v", ctxt, *uuid, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster forget")
 		return
 	} else {
-		logger.Get().Debug("Task Created: %v to forget cluster: %v", taskId, *uuid)
+		logger.Get().Debug("%s-Task Created: %v to forget cluster: %v", ctxt, taskId, *uuid)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
@@ -341,6 +346,11 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
@@ -348,7 +358,7 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 	var clusters models.Clusters
 	if err := collection.Find(nil).All(&clusters); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the clusters list. error: %v", err))
-		logger.Get().Error("Error getting the clusters list. error: %v", err)
+		logger.Get().Error("%s-Error getting the clusters list. error: %v", ctxt, err)
 		return
 	}
 	if len(clusters) == 0 {
@@ -359,11 +369,16 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the cluster id: %s. error: %v", cluster_id_str, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
 	}
@@ -371,12 +386,12 @@ func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
 	cluster, err := GetCluster(cluster_id)
 	if err != nil {
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the cluster with id: %v. error: %v", *cluster_id, err))
-		logger.Get().Error("Error getting the cluster with id: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Error getting the cluster with id: %v. error: %v", ctxt, *cluster_id, err)
 		return
 	}
 	if cluster.Name == "" {
 		HttpResponse(w, http.StatusBadRequest, "Cluster not found")
-		logger.Get().Error("Cluster: %v not found. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Cluster: %v not found. error: %v", ctxt, *cluster_id, err)
 		return
 	} else {
 		json.NewEncoder(w).Encode(cluster)
@@ -384,23 +399,28 @@ func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the cluster id: %s. error: %v", cluster_id_str, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
 	}
 
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
-		logger.Get().Error("Error checking managed state of cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if ok {
-		logger.Get().Error("Cluster: %v is already in un-managed state", *cluster_id)
+		logger.Get().Error("%s-Cluster: %v is already in un-managed state", ctxt, *cluster_id)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is already in un-managed state")
 		return
 	}
@@ -423,39 +443,39 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 				var nodes models.Nodes
 				if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
-					util.FailTask(fmt.Sprintf("Error getting nodes to un-manage for cluster: %v", *cluster_id), err, t)
+					util.FailTask(fmt.Sprintf("Error getting nodes to un-manage for cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
 
 				nodes, err := getClusterNodesById(cluster_id)
 				if err != nil {
-					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
-				appLock, err := LockNodes(nodes, "Unmanage_Cluster")
+				appLock, err := LockNodes(ctxt, nodes, "Unmanage_Cluster")
 				if err != nil {
-					util.FailTask("Failed to acquire lock", err, t)
+					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
 
 				for _, node := range nodes {
 					t.UpdateStatus("Disabling node: %s", node.Hostname)
-					ok, err := GetCoreNodeManager().DisableNode(node.Hostname)
+					ok, err := GetCoreNodeManager().DisableNode(node.Hostname, ctxt)
 					if err != nil || !ok {
-						util.FailTask(fmt.Sprintf("Error disabling node: %s on cluster: %v", node.Hostname, *cluster_id), err, t)
+						util.FailTask(fmt.Sprintf("Error disabling node: %s on cluster: %v", node.Hostname, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 						return
 					}
 					//Set the node status to unmanaged
-					skyringutils.Update_node_status_byId(node.NodeId, models.NODE_STATUS_UNKNOWN)
-					skyringutils.Update_node_state_byId(node.NodeId, models.NODE_STATE_UNMANAGED)
+					skyringutils.Update_node_status_byId(ctxt, node.NodeId, models.NODE_STATUS_UNKNOWN)
+					skyringutils.Update_node_state_byId(ctxt, node.NodeId, models.NODE_STATE_UNMANAGED)
 				}
 
 				t.UpdateStatus("Disabling post actions on the cluster")
 				// Disable any POST actions on cluster
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_UNMANAGED, "status": models.CLUSTER_STATUS_UNKNOWN}}); err != nil {
-					util.FailTask(fmt.Sprintf("Error disabling post actions on cluster: %v", *cluster_id), err, t)
+					util.FailTask(fmt.Sprintf("Error disabling post actions on cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
 				t.UpdateStatus("Success")
@@ -465,11 +485,11 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Unmanage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
-		logger.Get().Error("Unable to create task to unmanage cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Unable to create task to unmanage cluster: %v. error: %v", ctxt, *cluster_id, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster unmanage")
 		return
 	} else {
-		logger.Get().Debug("Task Created: %v to unmanage cluster: %v", taskId, *cluster_id)
+		logger.Get().Debug("%s-Task Created: %v to unmanage cluster: %v", ctxt, taskId, *cluster_id)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
@@ -530,16 +550,16 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
-				appLock, err := LockNodes(nodes, "Manage_Cluster")
+				appLock, err := LockNodes(ctxt, nodes, "Manage_Cluster")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", fmt.Errorf("%s - %v", ctxt, err), t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
+				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
 
 				for _, node := range nodes {
 					t.UpdateStatus("Enabling node %s", node.Hostname)
-					ok, err := GetCoreNodeManager().EnableNode(node.Hostname)
+					ok, err := GetCoreNodeManager().EnableNode(node.Hostname, ctxt)
 					if err != nil || !ok {
 						util.FailTask(fmt.Sprintf("Error enabling node: %s on cluster: %v", node.Hostname, *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
 						return
@@ -567,11 +587,11 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Manage Cluster: %s", cluster_id_str), asyncTask, 120*time.Second, nil, nil, nil); err != nil {
-		logger.Get().Error("Unable to create task to manage cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Unable to create task to manage cluster: %v. error: %v", ctxt, *cluster_id, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster manage")
 		return
 	} else {
-		logger.Get().Debug("Task Created: %v to manager cluster: %v", taskId, *cluster_id)
+		logger.Get().Debug("%s-Task Created: %v to manager cluster: %v", ctxt, taskId, *cluster_id)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
@@ -579,23 +599,28 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the cluster id: %s. error: %v", cluster_id_str, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
 	}
 
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
-		logger.Get().Error("Error checking managed state of cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if ok {
-		logger.Get().Error("Cluster: %v is in un-managed state", *cluster_id)
+		logger.Get().Error("%s-Cluster: %v is in un-managed state", ctxt, *cluster_id)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in un-managed state")
 		return
 	}
@@ -604,23 +629,23 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	var new_nodes []models.ClusterNode
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
-		logger.Get().Error("Error parsing the expand cluster request for: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Error parsing the expand cluster request for: %v. error: %v", ctxt, *cluster_id, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the expand cluster request for: %v. error: %v", *cluster_id, err))
 		return
 	}
 	if err := json.Unmarshal(body, &new_nodes); err != nil {
-		logger.Get().Error("Unable to unmarshal request expand cluster request for cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Unable to unmarshal request expand cluster request for cluster: %v. error: %v", ctxt, *cluster_id, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err))
 		return
 	}
 
 	// Check if provided disks already utilized
 	if used, err := disks_used(new_nodes); err != nil {
-		logger.Get().Error("Error checking used state of disks of nodes. error: %v", err)
+		logger.Get().Error("%s-Error checking used state of disks of nodes. error: %v", ctxt, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking used state of disks of nodes")
 		return
 	} else if used {
-		logger.Get().Error("Provided disks are already used")
+		logger.Get().Error("%s-Provided disks are already used", ctxt)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Provided disks are already used")
 		return
 	}
@@ -637,37 +662,37 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 				t.UpdateStatus("Started task for cluster expansion: %v", t.ID)
 				nodes, err := getClusterNodesFromRequest(new_nodes)
 				if err != nil {
-					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), err, t)
+					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
-				appLock, err := LockNodes(nodes, "Expand_Cluster")
+				appLock, err := LockNodes(ctxt, nodes, "Expand_Cluster")
 				if err != nil {
-					util.FailTask("Failed to acquire lock", err, t)
+					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
-				defer a.GetLockManager().ReleaseLock(*appLock)
-				provider := a.GetProviderFromClusterId(*cluster_id)
+				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
+				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
-					util.FailTask("", errors.New(fmt.Sprintf("Error etting provider for cluster: %v", *cluster_id)), t)
+					util.FailTask("", errors.New(fmt.Sprintf("%s-Error etting provider for cluster: %v", ctxt, *cluster_id)), t)
 					return
 				}
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
 					provider.Name, cluster_post_functions["expand_cluster"]),
-					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body, RpcRequestContext: ctxt},
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
-					util.FailTask(fmt.Sprintf("Error expanding cluster: %v", *cluster_id), err, t)
+					util.FailTask(fmt.Sprintf("Error expanding cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
 				// Update the master task id
 				providerTaskId, err = uuid.Parse(result.Data.RequestId)
 				if err != nil {
-					util.FailTask(fmt.Sprintf("Error parsing provider task id while expand cluster: %v", *cluster_id), err, t)
+					util.FailTask(fmt.Sprintf("%s-Error parsing provider task id while expand cluster: %v", ctxt, *cluster_id), err, t)
 					return
 				}
 				t.UpdateStatus("Adding sub task")
 				if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
-					util.FailTask(fmt.Sprintf("Error adding sub task while expand cluster: %v", *cluster_id), err, t)
+					util.FailTask(fmt.Sprintf("%s-Error adding sub task while expand cluster: %v", ctxt, *cluster_id), err, t)
 					return
 				}
 
@@ -679,25 +704,25 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 					var providerTask models.AppTask
 					if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
-						util.FailTask(fmt.Sprintf("Error getting sub task status while expand cluster: %v", *cluster_id), err, t)
+						util.FailTask(fmt.Sprintf("%s-Error getting sub task status while expand cluster: %v", ctxt, *cluster_id), err, t)
 						return
 					}
 					if providerTask.Completed {
 						if providerTask.Status == models.TASK_STATUS_SUCCESS {
 							t.UpdateStatus("Updating the monitoring configuration")
-							if err := updateMonitoringPluginsForClusterExpand(cluster_id, nodes); err != nil {
-								logger.Get().Error("Error Updating the montoring plugins for cluster:%v. Error: %v:", *cluster_id, err)
+							if err := updateMonitoringPluginsForClusterExpand(cluster_id, nodes, ctxt); err != nil {
+								logger.Get().Error("%s-Error Updating the montoring plugins for cluster:%v. Error: %v:", ctxt, *cluster_id, err)
 								t.UpdateStatus("Failed to update the monitoring configuration")
 							}
 							t.UpdateStatus("Starting disk sync")
-							if err := syncStorageDisks(new_nodes, ""); err != nil {
+							if err := syncStorageDisks(new_nodes, ctxt); err != nil {
 								t.UpdateStatus("Failed to sync the disks")
 							}
 							t.UpdateStatus("Success")
 							t.Done(models.TASK_STATUS_SUCCESS)
 
 						} else {
-							logger.Get().Error("Failed to expand the cluster %s", *cluster_id)
+							logger.Get().Error("%s-Failed to expand the cluster %s", ctxt, *cluster_id)
 							t.UpdateStatus("Failed")
 							t.Done(models.TASK_STATUS_FAILURE)
 						}
@@ -711,11 +736,11 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if taskId, err := a.GetTaskManager().Run(fmt.Sprintf("Expand Cluster: %s", cluster_id_str), asyncTask, 7200*time.Second, nil, nil, nil); err != nil {
-		logger.Get().Error("Unable to create task to expand cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Unable to create task to expand cluster: %v. error: %v", ctxt, *cluster_id, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster expansion")
 		return
 	} else {
-		logger.Get().Debug("Task Created: %v to expand cluster: %v", taskId, *cluster_id)
+		logger.Get().Debug("%s-Task Created: %v to expand cluster: %v", ctxt, taskId, *cluster_id)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
@@ -723,11 +748,16 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) GET_ClusterNodes(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the cluster id: %s. error: %v", cluster_id_str, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the cluster id: %s. error: %v", cluster_id_str, err))
 		return
 	}
@@ -738,7 +768,7 @@ func (a *App) GET_ClusterNodes(w http.ResponseWriter, r *http.Request) {
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the nodes for cluster: %v. error: %v", *cluster_id, err))
-		logger.Get().Error("Error getting the nodes for cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Error getting the nodes for cluster: %v. error: %v", ctxt, *cluster_id, err)
 		return
 	}
 	if len(nodes) == 0 {
@@ -749,18 +779,23 @@ func (a *App) GET_ClusterNodes(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) GET_ClusterNode(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	node_id_str := vars["node-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the cluster id: %s. error: %v", cluster_id_str, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the cluster id: %s. error: %v", cluster_id_str, err))
 		return
 	}
 	node_id, err := uuid.Parse(node_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the node id: %s. error: %v", node_id_str, err)
+		logger.Get().Error("%s-Error parsing the node id: %s. error: %v", ctxt, node_id_str, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the node id: %s. error: %v", node_id_str, err))
 		return
 	}
@@ -771,12 +806,12 @@ func (a *App) GET_ClusterNode(w http.ResponseWriter, r *http.Request) {
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Find(bson.M{"clusterid": *cluster_id, "nodeid": *node_id}).One(&node); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the nodes for cluster: %v. error: %v", *cluster_id, err))
-		logger.Get().Error("Error getting the node for cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Error getting the node for cluster: %v. error: %v", ctxt, *cluster_id, err)
 		return
 	}
 	if node.Hostname == "" {
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Node: %v not found. error: %v", *node_id, err))
-		logger.Get().Error("Node: %v not found for cluster: %v", *node_id, *cluster_id)
+		logger.Get().Error("%s-Node: %v not found for cluster: %v", ctxt, *node_id, *cluster_id)
 		return
 	} else {
 		json.NewEncoder(w).Encode(node)
@@ -784,11 +819,16 @@ func (a *App) GET_ClusterNode(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the cluster id: %s, error: %v", cluster_id_str, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s, error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the cluster id: %s, error: %v", cluster_id_str, err))
 		return
 	}
@@ -806,7 +846,7 @@ func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
 	}
 	if err != nil {
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slus for cluster: %v. error: %v", *cluster_id, err))
-		logger.Get().Error("Error getting the slus for cluster: %v. error: %v", *cluster_id, err)
+		logger.Get().Error("%s-Error getting the slus for cluster: %v. error: %v", ctxt, *cluster_id, err)
 		return
 	}
 	if len(slus) == 0 {
@@ -817,18 +857,23 @@ func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) GET_ClusterSlu(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	slu_id_str := vars["slu-id"]
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the cluster id: %s. error: %v", cluster_id_str, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the cluster id: %s. error: %v", cluster_id_str, err))
 		return
 	}
 	slu_id, err := uuid.Parse(slu_id_str)
 	if err != nil {
-		logger.Get().Error("Error parsing the slu id: %s. error: %v", slu_id_str, err)
+		logger.Get().Error("%s-Error parsing the slu id: %s. error: %v", ctxt, slu_id_str, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the slu id: %s. error: %v", slu_id_str, err))
 		return
 	}
@@ -839,12 +884,12 @@ func (a *App) GET_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
 	if err := coll.Find(bson.M{"clusterid": *cluster_id, "sluid": *slu_id}).One(&slu); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slu: %v for cluster: %v. error: %v", *slu_id, *cluster_id, err))
-		logger.Get().Error("Error getting the slu: %v for cluster: %v. error: %v", *slu_id, *cluster_id, err)
+		logger.Get().Error("%s-Error getting the slu: %v for cluster: %v. error: %v", ctxt, *slu_id, *cluster_id, err)
 		return
 	}
 	if slu.Name == "" {
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Slu: %v not found.", *slu_id))
-		logger.Get().Error("Slu: %v not found for cluster: %v", *slu_id, *cluster_id)
+		logger.Get().Error("%s-Slu: %v not found for cluster: %v", ctxt, *slu_id, *cluster_id)
 		return
 	} else {
 		json.NewEncoder(w).Encode(slu)
@@ -874,7 +919,7 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	provider := a.GetProviderFromClusterId(*cluster_id)
+	provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 	if provider == nil {
 		logger.Get().Error("%s-Error getting provider for cluster: %v", ctxt, *cluster_id)
 		return
@@ -951,7 +996,7 @@ func syncStorageDisks(nodes []models.ClusterNode, ctxt string) error {
 	defer sessionCopy.Close()
 	var fetchedNode models.Node
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	sProfiles, err := GetDbProvider().StorageProfileInterface().StorageProfiles(nil, models.QueryOps{})
+	sProfiles, err := GetDbProvider().StorageProfileInterface().StorageProfiles(ctxt, nil, models.QueryOps{})
 	if err != nil {
 		logger.Get().Error("%s-Unable to get the storage profiles. err:%v", ctxt, err)
 	}
@@ -965,13 +1010,13 @@ func syncStorageDisks(nodes []models.ClusterNode, ctxt string) error {
 		}
 		ok, err := GetCoreNodeManager().SyncStorageDisks(fetchedNode.Hostname, sProfiles, ctxt)
 		if err != nil || !ok {
-			return errors.New(fmt.Sprintf("Error syncing storage disks for the node: %s. error: %v", fetchedNode.Hostname, err))
+			return errors.New(fmt.Sprintf("%s-Error syncing storage disks for the node: %s. error: %v", ctxt, fetchedNode.Hostname, err))
 		}
 	}
 	return nil
 }
 
-func ignoreClusterNodes(clusterId uuid.UUID) (bool, error) {
+func ignoreClusterNodes(ctxt string, clusterId uuid.UUID) (bool, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
@@ -980,7 +1025,7 @@ func ignoreClusterNodes(clusterId uuid.UUID) (bool, error) {
 		return false, err
 	}
 	for _, node := range nodes {
-		if ok, err := GetCoreNodeManager().IgnoreNode(node.Hostname); err != nil || !ok {
+		if ok, err := GetCoreNodeManager().IgnoreNode(node.Hostname, ctxt); err != nil || !ok {
 			return false, err
 		}
 	}
@@ -1002,7 +1047,10 @@ func updateMonitoringPluginsForCluster(request models.AddClusterRequest, ctxt st
 			nodes = append(nodes, node.Hostname)
 		}
 
-		if updateFailedNodesError, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(nodes, request.MonitoringPlugins); len(updateFailedNodesError) != 0 {
+		if updateFailedNodesError, updateError := GetCoreNodeManager().UpdateMonitoringConfiguration(
+			nodes,
+			request.MonitoringPlugins,
+			ctxt); len(updateFailedNodesError) != 0 {
 			updateFailedNodesErrorValues, _ := util.GetMapKeys(updateFailedNodesError)
 			updateFailedNodes := util.Stringify(updateFailedNodesErrorValues)
 			monitoringState.StaleNodes = updateFailedNodes
@@ -1024,7 +1072,7 @@ func updateMonitoringPluginsForCluster(request models.AddClusterRequest, ctxt st
 	return nil
 }
 
-func updateMonitoringPluginsForClusterExpand(cluster_id *uuid.UUID, nodes models.Nodes) error {
+func updateMonitoringPluginsForClusterExpand(cluster_id *uuid.UUID, nodes models.Nodes, ctxt string) error {
 	//Update the monitoring configuration to the new nodes
 	cluster, clusterErr := GetCluster(cluster_id)
 	if clusterErr != nil {
@@ -1034,7 +1082,7 @@ func updateMonitoringPluginsForClusterExpand(cluster_id *uuid.UUID, nodes models
 	for index, node := range nodes {
 		nodeNames[index] = node.Hostname
 	}
-	updateErr := forceUpdatePlugins(cluster, nodeNames)
+	updateErr := forceUpdatePlugins(cluster, nodeNames, ctxt)
 	if updateErr != nil {
 		return updateErr
 	}

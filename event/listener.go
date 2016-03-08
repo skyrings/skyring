@@ -27,25 +27,38 @@ type NodeStartEventArgs struct {
 }
 
 func (l *Listener) PushNodeStartEvent(args *NodeStartEventArgs, ack *bool) error {
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return err
+	}
+	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
 	timestamp := args.Timestamp
 	node := strings.TrimSpace(args.Node)
 	if node == "" || timestamp.IsZero() {
 		*ack = false
 		return nil
 	}
-	handle_node_start_event(node)
+	handle_node_start_event(ctxt, node)
 	*ack = true
 	return nil
 }
 
 func RouteEvent(event models.NodeEvent) {
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return
+	}
+	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
+
 	var e models.AppEvent
 	e.Timestamp = event.Timestamp
 	e.Tags = event.Tags
 	e.Message = event.Message
 	eventId, err := uuid.New()
 	if err != nil {
-		logger.Get().Error("Uuid generation for the event failed for node: %s. error: %v", event.Node, err)
+		logger.Get().Error("%s-Uuid generation for the event failed for node: %s. error: %v", ctxt, event.Node, err)
 		return
 	}
 
@@ -56,7 +69,7 @@ func RouteEvent(event models.NodeEvent) {
 	var node models.Node
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Find(bson.M{"hostname": event.Node}).One(&node); err != nil {
-		logger.Get().Error("Node information read from DB failed for node: %s. error: %v", event.Node, err)
+		logger.Get().Error("%s-Node information read from DB failed for node: %s. error: %v", ctxt, event.Node, err)
 		return
 	}
 
@@ -73,35 +86,35 @@ func RouteEvent(event models.NodeEvent) {
 		if match, err := filepath.Match(tag, event.Tag); err == nil {
 			if match {
 				if e, err = handler.(func(models.AppEvent) (models.AppEvent, error))(e); err != nil {
-					logger.Get().Error("Event Handling Failed for event for node: %s. error: %v", node.Hostname, err)
+					logger.Get().Error("%s-Event Handling Failed for event for node: %s. error: %v", ctxt, node.Hostname, err)
 					return
 				}
 				if e.Name == "" {
 					return
 				}
-				if err := common_event.AuditLog(e, skyring.GetDbProvider()); err != nil {
-					logger.Get().Error("Could not persist the event to DB for node: %s. error: %v", node.Hostname, err)
+				if err := common_event.AuditLog(ctxt, e, skyring.GetDbProvider()); err != nil {
+					logger.Get().Error("%s-Could not persist the event to DB for node: %s. error: %v", ctxt, node.Hostname, err)
 					return
 				} else {
 					// For upcoming any new event , broadcasting to all connected clients
 					eventObj, err := json.Marshal(e)
 					if err != nil {
-						logger.Get().Error("Error marshalling the event data for node: %s. error: %v", node.Hostname, err)
+						logger.Get().Error("%s-Error marshalling the event data for node: %s. error: %v", ctxt, node.Hostname, err)
 					}
 					GetBroadcaster().chBroadcast <- string(eventObj)
 					return
 				}
 			}
 		} else {
-			logger.Get().Error("Error while maping handler for event for node: %s. error: %v", node.Hostname, err)
+			logger.Get().Error("%s-Error while maping handler for event for node: %s. error: %v", ctxt, node.Hostname, err)
 			return
 		}
 	}
 	// This has to be un commented once we start recieving events from calamari
 	// Handle Provider specific events
 	//app := skyring.GetApp()
-	//if err := app.RouteProviderEvents(e); err != nil {
-	//	logger.Get().Error("Event:%s could not be handled for node: %s. error: %v", event.Tag, node.Hostname, err)
+	//if err := app.RouteProviderEvents(ctxt, e); err != nil {
+	//	logger.Get().Error("%s-Event:%s could not be handled for node: %s. error: %v", ctxt, event.Tag, node.Hostname, err)
 	//}
 	return
 }
@@ -145,13 +158,19 @@ func StartListener(eventSocket string) {
 }
 
 func (l *Listener) PushUnManagedNode(args *NodeStartEventArgs, ack *bool) error {
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return err
+	}
+	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
 	timestamp := args.Timestamp
 	node := strings.TrimSpace(args.Node)
 	if node == "" || timestamp.IsZero() {
 		*ack = false
 		return nil
 	}
-	if err := handle_UnManagedNode(node); err != nil {
+	if err := handle_UnManagedNode(ctxt, node); err != nil {
 		*ack = false
 		return nil
 	}
