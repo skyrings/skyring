@@ -111,7 +111,7 @@ func drive_add_handler(event models.AppEvent) (models.AppEvent, error) {
 				break
 			}
 		}
-		if !exists && !disk.Used {
+		if !exists && !disk.Used && disk.Type == "disk" {
 			cluster_node.Devices = append(cluster_node.Devices, models.ClusterNodeDevice{Name: disk.DevName, FSType: "xfs"})
 			event.EntityId = disk.DiskId
 			event.Tags["DevName"] = disk.DevName
