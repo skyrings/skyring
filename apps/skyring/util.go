@@ -416,3 +416,11 @@ func valid_storage_size(size string) (bool, error) {
 	}
 	return true, nil
 }
+
+func valid_storage_type(storage_type string) bool {
+	if storage_type == models.STORAGE_TYPE_REPLICATED || storage_type == models.STORAGE_TYPE_ERASURE_CODED {
+		return true
+	} else {
+		return false
+	}
+}
