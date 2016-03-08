@@ -21,57 +21,57 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func UpdateNodeState(node string, state models.NodeState) error {
+func UpdateNodeState(ctxt string, node string, state models.NodeState) error {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"state": state}}); err != nil {
-		logger.Get().Critical("Error updating the node state for node: %s. error: %v", node, err)
+		logger.Get().Critical("%s-Error updating the node state for node: %s. error: %v", ctxt, node, err)
 		return err
 	}
 	return nil
 }
 
-func UpdateNodeStatus(node string, status models.NodeStatus) error {
+func UpdateNodeStatus(ctxt string, node string, status models.NodeStatus) error {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Update(bson.M{"hostname": node}, bson.M{"$set": bson.M{"status": status}}); err != nil {
-		logger.Get().Critical("Error updating the node state for node: %s. error: %v", node, err)
+		logger.Get().Critical("%s-Error updating the node state for node: %s. error: %v", ctxt, node, err)
 		return err
 	}
 	return nil
 }
 
-func Update_node_status_byId(nodeId uuid.UUID, nodeStatus models.NodeStatus) error {
+func Update_node_status_byId(ctxt string, nodeId uuid.UUID, nodeStatus models.NodeStatus) error {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Update(bson.M{"nodeid": nodeId}, bson.M{"$set": bson.M{"status": nodeStatus}}); err != nil {
-		logger.Get().Error("Error updating the node status: %s", err)
+		logger.Get().Error("%s-Error updating the node status: %s", ctxt, err)
 		return err
 	}
 	return nil
 }
 
-func GetNodeStateById(nodeId uuid.UUID) (models.NodeState, error) {
+func GetNodeStateById(ctxt string, nodeId uuid.UUID) (models.NodeState, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	var node models.Node
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Find(bson.M{"nodeid": nodeId}).One(&node); err != nil {
-		logger.Get().Critical("Error Getting the node : %s. error: %v", nodeId, err)
+		logger.Get().Critical("%s-Error Getting the node : %s. error: %v", ctxt, nodeId, err)
 		return 0, err
 	}
 	return node.State, nil
 }
 
-func Update_node_state_byId(nodeId uuid.UUID, state models.NodeState) error {
+func Update_node_state_byId(ctxt string, nodeId uuid.UUID, state models.NodeState) error {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Update(bson.M{"nodeid": nodeId}, bson.M{"$set": bson.M{"state": state}}); err != nil {
-		logger.Get().Error("Error updating the node state: %s", err)
+		logger.Get().Error("%s-Error updating the node state: %s", ctxt, err)
 		return err
 	}
 	return nil

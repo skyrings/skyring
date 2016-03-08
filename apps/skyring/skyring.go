@@ -290,6 +290,10 @@ request is asynchronously executed and statuscode and statusmessage to be set in
 status field. The statuscode field should be valid http status code
 */
 func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
 
 	//Parse the Request and get the parameters and route information
 	route := mux.CurrentRoute(r)
@@ -302,23 +306,23 @@ func (a *App) ProviderHandler(w http.ResponseWriter, r *http.Request) {
 	//Get the request details from requestbody
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		logger.Get().Error("Error parsing http request body: %v", err)
+		logger.Get().Error("%s-Error parsing http request body: %v", ctxt, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Error parsing the http request body"))
 	}
 
 	//Find out the provider to process this request and send the request
 	//After getting the response, pass it on to the client
-	provider := a.getProviderFromRoute(routeCfg)
+	provider := a.getProviderFromRoute(ctxt, routeCfg)
 	if provider != nil {
-		logger.Get().Info("Sending the request to provider: %s", provider.Name)
+		logger.Get().Info("%s-Sending the request to provider: %s", ctxt, provider.Name)
 		provider.Client.Call(provider.Name+"."+routeCfg.PluginFunc, models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body}, &result)
 		//Parse the result to see if a different status needs to set
 		//By default it sets http.StatusOK(200)
 		logger.Get().Info("Got response from provider: %s", provider.Name)
 		var m models.RpcResponse
 		if err = json.Unmarshal(result, &m); err != nil {
-			logger.Get().Error("Unable to Unmarshall the result from provider: %s. error: %v", provider.Name, err)
+			logger.Get().Error("%s-Unable to Unmarshall the result from provider: %s. error: %v", ctxt, provider.Name, err)
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("Unable to unmarshall the result from provider"))
 		}

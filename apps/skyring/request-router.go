@@ -31,18 +31,18 @@ import (
 This function has the logic to find out the specific provider the request to be
 routed using the route information. Route would contain specific technology name
 */
-func (a *App) getProviderFromRoute(routeCfg conf.Route) *Provider {
+func (a *App) getProviderFromRoute(ctxt string, routeCfg conf.Route) *Provider {
 	//Look at the URL to see if there is a match
 	for _, provider := range a.providers {
-		logger.Get().Debug("provider:", provider)
+		logger.Get().Debug("%s-provider:", ctxt, provider)
 		//check for the URLs start with /api/v*/{provider-name}
 		regex := "\\bapi/v\\d/" + provider.Name + "/"
-		logger.Get().Debug("regex:", regex)
+		logger.Get().Debug("%s-regex:", ctxt, regex)
 		if r, err := regexp.Compile(regex); err != nil {
-			logger.Get().Error("Error compiling Regex %s", err)
+			logger.Get().Error("%s-Error compiling Regex %s", ctxt, err)
 			return nil
 		} else {
-			logger.Get().Debug("Pattern:", routeCfg.Pattern)
+			logger.Get().Debug("%s-Pattern:", ctxt, routeCfg.Pattern)
 			if r.MatchString(routeCfg.Pattern) == true {
 				return &provider
 			}
@@ -59,14 +59,14 @@ func (a *App) getProviderFromClusterType(cluster_type string) *Provider {
 	}
 }
 
-func (a *App) GetProviderFromClusterId(cluster_id uuid.UUID) *Provider {
+func (a *App) GetProviderFromClusterId(ctxt string, cluster_id uuid.UUID) *Provider {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 	var cluster models.Cluster
 	if err := collection.Find(bson.M{"clusterid": cluster_id}).One(&cluster); err != nil {
-		logger.Get().Error("Error getting details for cluster: %v. error: %v", cluster_id, err)
+		logger.Get().Error("%s-Error getting details for cluster: %v. error: %v", ctxt, cluster_id, err)
 		return nil
 	}
 	if provider, ok := a.providers[cluster.Type]; ok {
@@ -76,36 +76,30 @@ func (a *App) GetProviderFromClusterId(cluster_id uuid.UUID) *Provider {
 	}
 }
 
-func (a *App) RouteProviderEvents(event models.AppEvent) error {
-	provider := a.GetProviderFromClusterId(event.ClusterId)
+func (a *App) RouteProviderEvents(ctxt string, event models.AppEvent) error {
+	provider := a.GetProviderFromClusterId(ctxt, event.ClusterId)
 	if provider == nil {
-		logger.Get().Error("Error getting provider for cluster: %v", event.ClusterId)
+		logger.Get().Error("%s-Error getting provider for cluster: %v", ctxt, event.ClusterId)
 		return errors.New(fmt.Sprintf("Error getting provider for cluster: %v", event.ClusterId))
 	}
 	body, err := json.Marshal(event)
 	if err != nil {
-		logger.Get().Error("Marshalling of event failed: %s", err)
+		logger.Get().Error("%s-Marshalling of event failed: %s", ctxt, err)
 		return err
 	}
 	var result models.RpcResponse
 	err = provider.Client.Call(fmt.Sprintf("%s.%s",
 		provider.Name, "ProcessEvent"),
-		models.RpcRequest{RpcRequestVars: map[string]string{}, RpcRequestData: body},
+		models.RpcRequest{RpcRequestVars: map[string]string{}, RpcRequestData: body, RpcRequestContext: ctxt},
 		&result)
 	if err != nil || result.Status.StatusCode != http.StatusOK {
-		logger.Get().Error("Process evnet by Provider: %s failed. Reason :%s", provider.Name, err)
+		logger.Get().Error("%s-Process evnet by Provider: %s failed. Reason :%s", ctxt, provider.Name, err)
 		return err
 	}
 	return nil
 }
 
-func (a *App) FetchMonitoringDetailsFromProviders() (retVal map[string]map[string]interface{}, err error) {
-	id, err := uuid.New()
-	if err != nil {
-		logger.Get().Error("Error creating the id.Err %v", err)
-		return nil, fmt.Errorf("Error creating the id.Err %v", err)
-	}
-	ctxt := fmt.Sprintf("%s - %v", models.ENGINE_NAME, *id)
+func (a *App) FetchMonitoringDetailsFromProviders(ctxt string) (retVal map[string]map[string]interface{}, err error) {
 	var err_str string
 	if a.providers == nil || len(a.providers) == 0 {
 		logger.Get().Error("%s - No providers registered", ctxt)
@@ -114,7 +108,10 @@ func (a *App) FetchMonitoringDetailsFromProviders() (retVal map[string]map[strin
 	retVal = make(map[string]map[string]interface{})
 	for _, provider := range a.providers {
 		var result models.RpcResponse
-		err = provider.Client.Call(fmt.Sprintf("%s.%s", provider.Name, "GetSummary"), models.RpcRequest{RpcRequestVars: nil, RpcRequestData: []byte{}}, &result)
+		err = provider.Client.Call(
+			fmt.Sprintf("%s.%s", provider.Name, "GetSummary"),
+			models.RpcRequest{RpcRequestVars: nil, RpcRequestData: []byte{}, RpcRequestContext: ctxt},
+			&result)
 		if err != nil {
 			err_str = fmt.Sprintf("%s %v\n", err_str, err)
 			continue
@@ -138,10 +135,10 @@ func (a *App) FetchMonitoringDetailsFromProviders() (retVal map[string]map[strin
 	return retVal, err
 }
 
-func (a *App) RouteProviderBasedMonitoring(cluster_id uuid.UUID) {
-	provider := a.GetProviderFromClusterId(cluster_id)
+func (a *App) RouteProviderBasedMonitoring(ctxt string, cluster_id uuid.UUID) {
+	provider := a.GetProviderFromClusterId(ctxt, cluster_id)
 	if provider == nil {
-		logger.Get().Warning("Faield to get provider for cluster: %v", cluster_id)
+		logger.Get().Warning("%s-Faield to get provider for cluster: %v", ctxt, cluster_id)
 		return
 	}
 	var result models.RpcResponse
@@ -151,11 +148,11 @@ func (a *App) RouteProviderBasedMonitoring(cluster_id uuid.UUID) {
 
 	err = provider.Client.Call(fmt.Sprintf("%s.%s",
 		provider.Name, "MonitorCluster"),
-		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}},
+		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}, RpcRequestContext: ctxt},
 		&result)
 
 	if err != nil || result.Status.StatusCode != http.StatusOK {
-		logger.Get().Error("Monitoring by Provider: %s failed. Reason :%s", provider.Name, err)
+		logger.Get().Error("%s-Monitoring by Provider: %s failed. Reason :%s", ctxt, provider.Name, err)
 		return
 	}
 

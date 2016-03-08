@@ -88,11 +88,11 @@ func (s Salt) AcceptNode(node string, fingerprint string, ignored bool, ctxt str
 	return
 }
 
-func (s Salt) UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin) (failed_nodes map[string]string, err error) {
+func (s Salt) UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin, ctxt string) (failed_nodes map[string]string, err error) {
 	failed_nodes = make(map[string]string)
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["UpdateMonitoringConfiguration"].Call(nodes, monitoring.ToSaltPillarCompat(config)); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["UpdateMonitoringConfiguration"].Call(nodes, monitoring.ToSaltPillarCompat(config), ctxt); loc_err == nil {
 		err = gopy.Convert(pyobj, &failed_nodes)
 	} else {
 		err = loc_err
@@ -100,11 +100,11 @@ func (s Salt) UpdateMonitoringConfiguration(nodes []string, config []monitoring.
 	return
 }
 
-func (s Salt) EnableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error) {
+func (s Salt) EnableMonitoringPlugin(nodes []string, pluginName string, ctxt string) (failed_nodes map[string]string, err error) {
 	failed_nodes = make(map[string]string)
 	mutex.Lock()
 	defer mutex.Unlock()
-	pyobj, loc_err := pyFuncs["EnableMonitoringPlugin"].Call(nodes, pluginName)
+	pyobj, loc_err := pyFuncs["EnableMonitoringPlugin"].Call(nodes, pluginName, ctxt)
 	if loc_err == nil {
 		err = gopy.Convert(pyobj, &failed_nodes)
 	} else {
@@ -113,11 +113,11 @@ func (s Salt) EnableMonitoringPlugin(nodes []string, pluginName string) (failed_
 	return
 }
 
-func (s Salt) DisableMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error) {
+func (s Salt) DisableMonitoringPlugin(nodes []string, pluginName string, ctxt string) (failed_nodes map[string]string, err error) {
 	failed_nodes = make(map[string]string)
 	mutex.Lock()
 	defer mutex.Unlock()
-	pyobj, loc_err := pyFuncs["DisableMonitoringPlugin"].Call(nodes, pluginName)
+	pyobj, loc_err := pyFuncs["DisableMonitoringPlugin"].Call(nodes, pluginName, ctxt)
 	if loc_err == nil {
 		err = gopy.Convert(pyobj, &failed_nodes)
 	} else {
@@ -126,11 +126,11 @@ func (s Salt) DisableMonitoringPlugin(nodes []string, pluginName string) (failed
 	return
 }
 
-func (s Salt) RemoveMonitoringPlugin(nodes []string, pluginName string) (failed_nodes map[string]string, err error) {
+func (s Salt) RemoveMonitoringPlugin(nodes []string, pluginName string, ctxt string) (failed_nodes map[string]string, err error) {
 	failed_nodes = make(map[string]string)
 	mutex.Lock()
 	defer mutex.Unlock()
-	pyobj, loc_err := pyFuncs["RemoveMonitoringPlugin"].Call(nodes, pluginName)
+	pyobj, loc_err := pyFuncs["RemoveMonitoringPlugin"].Call(nodes, pluginName, ctxt)
 	if loc_err == nil {
 		err = gopy.Convert(pyobj, &failed_nodes)
 	} else {
@@ -139,11 +139,11 @@ func (s Salt) RemoveMonitoringPlugin(nodes []string, pluginName string) (failed_
 	return
 }
 
-func (s Salt) AddMonitoringPlugin(pluginNames []string, nodes []string, master string, pluginMap map[string]map[string]string) (failed_nodes map[string]interface{}, err error) {
+func (s Salt) AddMonitoringPlugin(pluginNames []string, nodes []string, master string, pluginMap map[string]map[string]string, ctxt string) (failed_nodes map[string]interface{}, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	failed_nodes = make(map[string]interface{})
-	pyobj, loc_err := pyFuncs["AddMonitoringPlugin"].Call(pluginNames, nodes, master, pluginMap)
+	pyobj, loc_err := pyFuncs["AddMonitoringPlugin"].Call(pluginNames, nodes, master, pluginMap, ctxt)
 	if loc_err == nil {
 		err = gopy.Convert(pyobj, &failed_nodes)
 	} else {
@@ -170,10 +170,10 @@ func (s Salt) BootstrapNode(master string, node string, port uint, fingerprint s
 	return "", loc_err
 }
 
-func (s Salt) GetNodes() (nodes backend.NodeList, err error) {
+func (s Salt) GetNodes(ctxt string) (nodes backend.NodeList, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["GetNodes"].Call(); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["GetNodes"].Call(ctxt); loc_err == nil {
 		err = gopy.Convert(pyobj, &nodes)
 	} else {
 		err = loc_err
@@ -181,10 +181,10 @@ func (s Salt) GetNodes() (nodes backend.NodeList, err error) {
 	return
 }
 
-func (s Salt) GetNodeID(node string) (id uuid.UUID, err error) {
+func (s Salt) GetNodeID(node string, ctxt string) (id uuid.UUID, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	pyobj, loc_err := pyFuncs["GetNodeID"].Call(node)
+	pyobj, loc_err := pyFuncs["GetNodeID"].Call(node, ctxt)
 	if loc_err == nil {
 		var s string
 		loc_err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &s)
@@ -208,10 +208,10 @@ func (s Salt) GetNodeDisk(node string, ctxt string) (disks []models.Disk, err er
 	return
 }
 
-func (s Salt) GetNodeCpu(node string) (cpu []models.Cpu, err error) {
+func (s Salt) GetNodeCpu(node string, ctxt string) (cpu []models.Cpu, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["GetNodeCpu"].Call(node); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["GetNodeCpu"].Call(node, ctxt); loc_err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &cpu)
 	} else {
 		err = loc_err
@@ -219,10 +219,10 @@ func (s Salt) GetNodeCpu(node string) (cpu []models.Cpu, err error) {
 	return
 }
 
-func (s Salt) GetNodeOs(node string) (os models.OperatingSystem, err error) {
+func (s Salt) GetNodeOs(node string, ctxt string) (os models.OperatingSystem, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["GetNodeOs"].Call(node); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["GetNodeOs"].Call(node, ctxt); loc_err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &os)
 	} else {
 		err = loc_err
@@ -230,10 +230,10 @@ func (s Salt) GetNodeOs(node string) (os models.OperatingSystem, err error) {
 	return
 }
 
-func (s Salt) GetNodeMemory(node string) (memory models.Memory, err error) {
+func (s Salt) GetNodeMemory(node string, ctxt string) (memory models.Memory, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["GetNodeMemory"].Call(node); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["GetNodeMemory"].Call(node, ctxt); loc_err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &memory)
 	} else {
 		err = loc_err
@@ -241,10 +241,10 @@ func (s Salt) GetNodeMemory(node string) (memory models.Memory, err error) {
 	return
 }
 
-func (s Salt) GetNodeNetwork(node string) (n models.Network, err error) {
+func (s Salt) GetNodeNetwork(node string, ctxt string) (n models.Network, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["GetNodeNetwork"].Call(node); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["GetNodeNetwork"].Call(node, ctxt); loc_err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &n)
 	} else {
 		err = loc_err
@@ -252,10 +252,10 @@ func (s Salt) GetNodeNetwork(node string) (n models.Network, err error) {
 	return
 }
 
-func (s Salt) IgnoreNode(node string) (status bool, err error) {
+func (s Salt) IgnoreNode(node string, ctxt string) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["IgnoreNode"].Call(node); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["IgnoreNode"].Call(node, ctxt); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
 	} else {
 		err = loc_err
@@ -263,22 +263,10 @@ func (s Salt) IgnoreNode(node string) (status bool, err error) {
 	return
 }
 
-func (s Salt) DisableService(node string, service string, stop bool) (status bool, err error) {
+func (s Salt) DisableService(node string, service string, stop bool, ctxt string) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["DisableService"].Call(node, service, stop); loc_err == nil {
-		err = gopy.Convert(pyobj, &status)
-	} else {
-		status = false
-		err = loc_err
-	}
-	return
-}
-
-func (s Salt) EnableService(node string, service string, start bool) (status bool, err error) {
-	mutex.Lock()
-	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["EnableService"].Call(node, service, start); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["DisableService"].Call(node, service, stop, ctxt); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
 	} else {
 		status = false
@@ -287,10 +275,10 @@ func (s Salt) EnableService(node string, service string, start bool) (status boo
 	return
 }
 
-func (s Salt) NodeUp(node string) (status bool, err error) {
+func (s Salt) EnableService(node string, service string, start bool, ctxt string) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["NodeUp"].Call(node); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["EnableService"].Call(node, service, start, ctxt); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
 	} else {
 		status = false
@@ -299,10 +287,22 @@ func (s Salt) NodeUp(node string) (status bool, err error) {
 	return
 }
 
-func (s Salt) SyncModules(node string) (status bool, err error) {
+func (s Salt) NodeUp(node string, ctxt string) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["SyncModules"].Call(node); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["NodeUp"].Call(node, ctxt); loc_err == nil {
+		err = gopy.Convert(pyobj, &status)
+	} else {
+		status = false
+		err = loc_err
+	}
+	return
+}
+
+func (s Salt) SyncModules(node string, ctxt string) (status bool, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if pyobj, loc_err := pyFuncs["SyncModules"].Call(node, ctxt); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
 	} else {
 		status = false
@@ -315,10 +315,10 @@ func New() backend.Backend {
 	return new(Salt)
 }
 
-func (s Salt) GetFingerPrint(node string) (fingerprint string, err error) {
+func (s Salt) GetFingerPrint(node string, ctxt string) (fingerprint string, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["GetFingerPrint"].Call(node); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["GetFingerPrint"].Call(node, ctxt); loc_err == nil {
 		err = gopy.Convert(python.PyDict_GetItemString(pyobj, node), &fingerprint)
 	} else {
 		err = loc_err
@@ -326,10 +326,10 @@ func (s Salt) GetFingerPrint(node string) (fingerprint string, err error) {
 	return
 }
 
-func (s Salt) SetupSkynetService(node string) (status bool, err error) {
+func (s Salt) SetupSkynetService(node string, ctxt string) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if pyobj, loc_err := pyFuncs["SetupSkynetService"].Call(node); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["SetupSkynetService"].Call(node, ctxt); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
 	} else {
 		err = loc_err
