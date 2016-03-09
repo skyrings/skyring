@@ -1155,6 +1155,16 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 		cSummary.MostUsedPools = poolsUsage
 	}
 
+	/*
+		This adds details like mon count, pg count which are specific to provider(bigfin)
+	*/
+	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchClusterDetailsFromProvider(ctxt, *cluster_id)
+	if otherDetailsFetchError != nil {
+		logger.Get().Error("%s - Failed to fetch provider specific details for cluster %v.Err : %v", ctxt, cluster.Name, otherDetailsFetchError)
+	} else {
+		cSummary.ProviderMonitoringDetails = otherProvidersDetails
+	}
+
 	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
 	var slus []models.StorageLogicalUnit
 	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&slus); err != nil {
@@ -1470,6 +1480,20 @@ func Compute_System_Summary(p map[string]interface{}) {
 		logger.Get().Error("%s - Error fetching the provider specific details. Error %v", ctxt, otherDetailsFetchError)
 	} else {
 		system.ProviderMonitoringDetails = otherProvidersDetails
+	}
+
+	/*
+		Add Most used pools
+	*/
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
+	var poolsUsage []models.PoolUsage
+	if err := coll.Find(nil).Sort("-percentused").All(&poolsUsage); err != nil {
+		logger.Get().Error("%s - Failed to fetch most used storages.Err %v", ctxt, err)
+	}
+	if len(poolsUsage) > 5 {
+		system.MostUsedPools = poolsUsage[:4]
+	} else {
+		system.MostUsedPools = poolsUsage
 	}
 
 	/*
