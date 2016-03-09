@@ -1149,6 +1149,10 @@ func Compute_System_Summary(p map[string]interface{}) {
 	var clusters_in_error int
 	var cluster_cpu_user float64
 	var latency float64
+	var netIStatRx float64
+	var netIStatTx float64
+	var netDiskRead float64
+	var netDiskWrite float64
 	net_storage_profile_utilization := make(map[string]models.Utilization)
 	error_nodes := 0
 
@@ -1235,6 +1239,50 @@ func Compute_System_Summary(p map[string]interface{}) {
 		}
 		latency = latency + latencyStat
 
+		/*
+			Network throughput Rx
+		*/
+		resource_name = monitoring.INTERFACE + "-" + monitoring.RX
+		iStatRx, iStatRxError := GetMonitoringManager().GetInstantValue(cluster.Name, resource_name)
+		if iStatRxError != nil {
+			logger.Get().Error("%s - Error %v", ctxt, iStatRxError)
+			continue
+		}
+		netIStatRx = netIStatRx + iStatRx
+
+		/*
+			Network throughput Tx
+		*/
+		resource_name = monitoring.INTERFACE + "-" + monitoring.TX
+		iStatTx, iStatTxError := GetMonitoringManager().GetInstantValue(cluster.Name, resource_name)
+		if iStatTxError != nil {
+			logger.Get().Error("%s - Error %v", ctxt, iStatTxError)
+			continue
+		}
+		netIStatTx = netIStatTx + mStatFree
+
+		/*
+			Disk IOPS Read
+		*/
+		resource_name = monitoring.DISK + "-" + monitoring.READ
+		diskReads, diskReadsError := GetMonitoringManager().GetInstantValue(cluster.Name, resource_name)
+		if diskReadsError != nil {
+			logger.Get().Error("%s - Error %v", ctxt, diskReadsError)
+			continue
+		}
+		netDiskRead = netDiskRead + diskReads
+
+		/*
+			Disk IOPS Write
+		*/
+		resource_name = monitoring.DISK + "-" + monitoring.WRITE
+		diskWrites, diskWritesError := GetMonitoringManager().GetInstantValue(cluster.Name, resource_name)
+		if diskWritesError != nil {
+			logger.Get().Error("%s - Error %v", ctxt, diskWritesError)
+			continue
+		}
+		netDiskWrite = netDiskWrite + diskWrites
+
 	}
 	system.ClustersCount = map[string]int{models.TOTAL: len(clusters), models.ClusterStatuses[models.CLUSTER_STATUS_ERROR]: clusters_in_error}
 
@@ -1275,6 +1323,26 @@ func Compute_System_Summary(p map[string]interface{}) {
 	latency = float64(latency) / float64(len(clusters))
 	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.NETWORK_LATENCY: {time_stamp_str: strconv.FormatFloat(latency, 'E', -1, 64)}}, hostname, port); err != nil {
 		logger.Get().Error("%s - Error pushing cluster network latency.Err %v", ctxt, err)
+	}
+
+	netDiskRead = float64(netDiskRead) / float64(len(clusters))
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.DISK + "-" + monitoring.READ: {time_stamp_str: strconv.FormatFloat(netDiskRead, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster disk read.Err %v", ctxt, err)
+	}
+
+	netDiskWrite = float64(netDiskWrite) / float64(len(clusters))
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.DISK + "-" + monitoring.WRITE: {time_stamp_str: strconv.FormatFloat(netDiskWrite, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster disk writes.Err %v", ctxt, err)
+	}
+
+	netIStatRx = float64(netIStatRx) / float64(len(clusters))
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.INTERFACE + "-" + monitoring.RX: {time_stamp_str: strconv.FormatFloat(netIStatRx, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster disk writes.Err %v", ctxt, err)
+	}
+
+	netIStatTx = float64(netIStatTx) / float64(len(clusters))
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.INTERFACE + "-" + monitoring.TX: {time_stamp_str: strconv.FormatFloat(netIStatTx, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Error("%s - Error pushing cluster disk writes.Err %v", ctxt, err)
 	}
 
 	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchMonitoringDetailsFromProviders()
