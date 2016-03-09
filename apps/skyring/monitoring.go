@@ -991,6 +991,13 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 		cSummary.MostUsedPools = poolsUsage
 	}
 
+	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchClusterDetailsFromProvider(*cluster_id)
+	if otherDetailsFetchError != nil {
+		logger.Get().Error("%s - Failed to fetch provider specific details for cluster %v.Err : %v", ctxt, cluster.Name, otherDetailsFetchError)
+	} else {
+		cSummary.ProviderMonitoringDetails = otherProvidersDetails
+	}
+
 	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
 	var slus []models.StorageLogicalUnit
 	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&slus); err != nil {

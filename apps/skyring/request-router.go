@@ -138,6 +138,38 @@ func (a *App) FetchMonitoringDetailsFromProviders() (retVal map[string]map[strin
 	return retVal, err
 }
 
+func (a *App) FetchClusterDetailsFromProvider(clusterId uuid.UUID) (retVal map[string]map[string]interface{}, err error) {
+	id, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error creating the id.Err %v", err)
+		return nil, fmt.Errorf("Error creating the id.Err %v", err)
+	}
+	ctxt := fmt.Sprintf("%s - %v", models.ENGINE_NAME, *id)
+	if a.providers == nil || len(a.providers) == 0 {
+		logger.Get().Error("%s - No providers registered", ctxt)
+		return nil, fmt.Errorf("No providers registered")
+	}
+	retVal = make(map[string]map[string]interface{})
+	var result models.RpcResponse
+	vars := make(map[string]string)
+	vars["cluster-id"] = clusterId.String()
+	provider := a.GetProviderFromClusterId(clusterId)
+	err = provider.Client.Call(fmt.Sprintf("%s.%s", provider.Name, "GetClusterSummary"), models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}}, &result)
+	if err != nil {
+		return nil, fmt.Errorf("%s - Call to provider %v failed.Err: %v\n", ctxt, provider.Name, err)
+	}
+	if result.Status.StatusCode == http.StatusOK || result.Status.StatusCode == http.StatusPartialContent {
+		providerResult := make(map[string]interface{})
+		unmarshalError := json.Unmarshal(result.Data.Result, &providerResult)
+		if unmarshalError != nil {
+			logger.Get().Error("%s - Error unmarshalling the monitoring data from provider %v.Error %v", ctxt, provider.Name, unmarshalError.Error())
+			return nil, fmt.Errorf("%s - Error unmarshalling the monitoring data from provider %v.Error %v", ctxt, provider.Name, unmarshalError.Error())
+		}
+		retVal[provider.Name] = providerResult
+	}
+	return retVal, err
+}
+
 func (a *App) RouteProviderBasedMonitoring(cluster_id uuid.UUID) {
 	provider := a.GetProviderFromClusterId(cluster_id)
 	if provider == nil {
