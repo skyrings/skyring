@@ -1145,14 +1145,21 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 	}
 
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
-	var poolsUsage []models.PoolUsage
-	if err := coll.Find(bson.M{"clusterid": *cluster_id}).Sort("-percentused").All(&poolsUsage); err != nil {
+	var stotrageUsage []models.StorageUsage
+	if err := coll.Find(bson.M{"clusterid": *cluster_id}).Sort("-percentused").All(&stotrageUsage); err != nil {
 		logger.Get().Error("%s - Failed to fetch most used storages from cluster %v.Err %v", ctxt, *cluster_id, err)
 	}
-	if len(poolsUsage) > 5 {
-		cSummary.MostUsedPools = poolsUsage[:4]
+	if len(stotrageUsage) > 5 {
+		cSummary.MostUsedStorages = stotrageUsage[:4]
 	} else {
-		cSummary.MostUsedPools = poolsUsage
+		cSummary.MostUsedStorages = stotrageUsage
+	}
+
+	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchClusterDetailsFromProvider(ctxt, *cluster_id)
+	if otherDetailsFetchError != nil {
+		logger.Get().Error("%s - Failed to fetch provider specific details for cluster %v.Err : %v", ctxt, cluster.Name, otherDetailsFetchError)
+	} else {
+		cSummary.ProviderMonitoringDetails = otherProvidersDetails
 	}
 
 	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
@@ -1470,6 +1477,20 @@ func Compute_System_Summary(p map[string]interface{}) {
 		logger.Get().Error("%s - Error fetching the provider specific details. Error %v", ctxt, otherDetailsFetchError)
 	} else {
 		system.ProviderMonitoringDetails = otherProvidersDetails
+	}
+
+	/*
+		Add Most used storages
+	*/
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
+	var stotrageUsage []models.StorageUsage
+	if err := coll.Find(nil).Sort("-percentused").All(&stotrageUsage); err != nil {
+		logger.Get().Error("%s - Failed to fetch most used storages.Err %v", ctxt, err)
+	}
+	if len(stotrageUsage) > 5 {
+		system.MostUsedStorages = stotrageUsage[:4]
+	} else {
+		system.MostUsedStorages = stotrageUsage
 	}
 
 	/*

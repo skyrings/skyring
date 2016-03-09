@@ -158,3 +158,29 @@ func (a *App) RouteProviderBasedMonitoring(ctxt string, cluster_id uuid.UUID) {
 
 	return
 }
+
+func (a *App) FetchClusterDetailsFromProvider(ctxt string, clusterId uuid.UUID) (retVal map[string]map[string]interface{}, err error) {
+	retVal = make(map[string]map[string]interface{})
+	var result models.RpcResponse
+	vars := make(map[string]string)
+	vars["cluster-id"] = clusterId.String()
+	provider := a.GetProviderFromClusterId(ctxt, clusterId)
+	if provider == nil {
+		logger.Get().Error("%s-Faield to get provider for cluster: %v", ctxt, clusterId)
+		return nil, fmt.Errorf("Faield to get provider for cluster: %v", clusterId)
+	}
+	err = provider.Client.Call(fmt.Sprintf("%s.%s", provider.Name, "GetClusterSummary"), models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}, RpcRequestContext: ctxt}, &result)
+	if err != nil {
+		return nil, fmt.Errorf("%s - Call to provider %v failed.Err: %v\n", ctxt, provider.Name, err)
+	}
+	if result.Status.StatusCode == http.StatusOK || result.Status.StatusCode == http.StatusPartialContent {
+		providerResult := make(map[string]interface{})
+		unmarshalError := json.Unmarshal(result.Data.Result, &providerResult)
+		if unmarshalError != nil {
+			logger.Get().Error("%s - Error unmarshalling the monitoring data from provider %v.Error %v", ctxt, provider.Name, unmarshalError.Error())
+			return nil, fmt.Errorf("%s - Error unmarshalling the monitoring data from provider %v.Error %v", ctxt, provider.Name, unmarshalError.Error())
+		}
+		retVal[provider.Name] = providerResult
+	}
+	return retVal, err
+}
