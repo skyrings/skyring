@@ -824,29 +824,34 @@ func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("Error Getting the context. error: %v", err)
 	}
 
+	var filter bson.M = make(map[string]interface{})
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
-	cluster_id, err := uuid.Parse(cluster_id_str)
+	filter["clusterid"], err = uuid.Parse(cluster_id_str)
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the cluster id: %s, error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the cluster id: %s, error: %v", cluster_id_str, err))
 		return
 	}
-
-	sprofile := r.URL.Query().Get("storageprofile")
+	if r.URL.Query().Get("storageprofile") != "" {
+		filter["storageprofile"] = r.URL.Query().Get("storageprofile")
+	}
+	if r.URL.Query().Get("nodeid") != "" {
+		filter["nodeid"], err = uuid.Parse(r.URL.Query().Get("nodeid"))
+		if err != nil {
+			logger.Get().Error("Error parsing the node id: %s, error: %v", r.URL.Query().Get("nodeid"), err)
+			HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the node id: %s, error: %v", r.URL.Query().Get("nodeid"), err))
+			return
+		}
+	}
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	var slus []models.StorageLogicalUnit
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
-	if len(sprofile) != 0 {
-		err = coll.Find(bson.M{"clusterid": *cluster_id, "storageprofile": sprofile}).All(&slus)
-	} else {
-		err = coll.Find(bson.M{"clusterid": *cluster_id}).All(&slus)
-	}
-	if err != nil {
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slus for cluster: %v. error: %v", *cluster_id, err))
-		logger.Get().Error("%s-Error getting the slus for cluster: %v. error: %v", ctxt, *cluster_id, err)
+	if err := coll.Find(filter).All(&slus); err != nil {
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slus for cluster: %s. error: %v", cluster_id_str, err))
+		logger.Get().Error("Error getting the slus for cluster: %s. error: %v", cluster_id_str, err)
 		return
 	}
 	if len(slus) == 0 {
