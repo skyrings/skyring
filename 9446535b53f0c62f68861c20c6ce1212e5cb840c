@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_8d42a90e",
+        "filename": "event/listener.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-03-09T06:25:37Z",
+      "side": 1,
+      "message": "can we pass the context to the handler function that we create here. So that we don\u0027t create a context in each handler ?",
+      "range": {
+        "startLine": 88,
+        "startChar": 16,
+        "endLine": 88,
+        "endChar": 75
+      },
+      "revId": "9446535b53f0c62f68861c20c6ce1212e5cb840c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
