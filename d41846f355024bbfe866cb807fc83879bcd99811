@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a72e520_13789cf1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-09T18:25:39Z",
+      "side": 1,
+      "message": "Are we adding the network latency in this patch?",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 29
+      },
+      "revId": "d41846f355024bbfe866cb807fc83879bcd99811",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
