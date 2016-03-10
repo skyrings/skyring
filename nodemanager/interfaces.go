@@ -38,4 +38,5 @@ type NodeManagerInterface interface {
 	NodeUptime(hostname string, ctxt string) (string, error)
 	GetSingleValuedMetricFromCollectd(nodes []string, metricName string, ctxt string) (map[string]models.CollectdSingleValuedMetric, error)
 	GetCpuMetricFromCollectd(nodes []string, ctxt string) (result map[string]models.CollectdCpuMetric, err error)
+	GetFingerPrint(hostname string, ctxt string) (string, error)
 }
