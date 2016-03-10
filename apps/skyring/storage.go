@@ -140,7 +140,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 						util.FailTask(fmt.Sprintf("Error parsing provider task id while creating storage: %s for cluster: %v", request.Name, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 						return
 					}
-					t.UpdateStatus("Adding sub task")
+					t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 						util.FailTask(fmt.Sprintf("Error adding sub task while creating storage: %s on cluster: %v", request.Name, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
 						return
@@ -382,7 +382,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 						util.FailTask(fmt.Sprintf("%s - Error parsing provider task id while deleting storage: %v", ctxt, *storage_id), err, t)
 						return
 					}
-					t.UpdateStatus("Adding sub task")
+					t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error adding sub task while deleting storage: %v", ctxt, *storage_id), err, t)
 						return

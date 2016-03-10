@@ -195,7 +195,7 @@ func drive_add_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 					util.FailTask(fmt.Sprintf("Error parsing provider task id while expand cluster: %v", event.ClusterId), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
 				}
-				t.UpdateStatus("Adding sub task")
+				t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 				if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 					util.FailTask(fmt.Sprintf("Error adding sub task while expand cluster: %v", event.ClusterId), fmt.Errorf("%s-%v", ctxt, err), t)
 					return
