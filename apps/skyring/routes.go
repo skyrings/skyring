@@ -374,6 +374,14 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "ImportCluster",
+			Method:      "POST",
+			Pattern:     "importcluster",
+			HandlerFunc: a.ImportCluster,
+			Version:     1,
+		},
+		//Routes for Storage management
+		{
 			Name:        "POST_Storages",
 			Method:      "POST",
 			Pattern:     "clusters/{cluster-id}/storages",
