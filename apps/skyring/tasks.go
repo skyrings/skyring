@@ -34,6 +34,8 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 
 	rootTask := req.URL.Query().Get("level")
 	taskStatusArray := req.URL.Query()["state"]
+	searchMessage := req.URL.Query().Get("searchmessage")
+
 	if len(rootTask) != 0 {
 		if strings.ToLower(rootTask) == "root" {
 			filter["parentid"], err = uuid.Parse(rootTaskId)
@@ -69,7 +71,9 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 			filter["status"] = models.TASK_STATUS_FAILURE
 		}
 	}
-
+	if len(searchMessage) != 0 {
+		filter["name"] = bson.M{"$regex": searchMessage, "$options": "$i"}
+	}
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 	var tasks []models.AppTask
 	pageNo, pageNoErr := strconv.Atoi(req.URL.Query().Get("pageNo"))
