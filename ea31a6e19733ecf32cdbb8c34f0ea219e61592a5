@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_0a9b3fca",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-10T12:16:07Z",
+      "side": 1,
+      "message": "Break this function is smaller ones and call them from here. This looks quite huge :(",
+      "range": {
+        "startLine": 212,
+        "startChar": 14,
+        "endLine": 212,
+        "endChar": 28
+      },
+      "revId": "ea31a6e19733ecf32cdbb8c34f0ea219e61592a5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_2aa0fbf3",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-10T12:16:07Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 481,
+        "startChar": 14,
+        "endLine": 481,
+        "endChar": 38
+      },
+      "revId": "ea31a6e19733ecf32cdbb8c34f0ea219e61592a5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
