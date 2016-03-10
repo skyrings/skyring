@@ -16,6 +16,24 @@
       "revId": "00404cb10875482e6086b68151dfcfe963907fcc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_24f3d274",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-03-10T05:27:38Z",
+      "side": 1,
+      "message": "No, it was not a valid case. We don\u0027t get events for new partitions. However partitions are added to the node disk DB details as part of sync. If after creating a partition, a new disk is added, it will trigger a sync and detail of this partition is updated, while this happens we were creating a osd if the storage was \"free\" whether it is a partition or actual disk was not checked. This check is to prevent that use case.\n\nUI allows osd creation only if its \"free\" and it is \"disk\", this change makes it consistent with UI.",
+      "parentUuid": "5a72e520_338f58ce",
+      "revId": "00404cb10875482e6086b68151dfcfe963907fcc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
