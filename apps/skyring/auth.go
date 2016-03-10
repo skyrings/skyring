@@ -15,12 +15,17 @@ package skyring
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/gorilla/mux"
+	common_event "github.com/skyrings/skyring-common/event"
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/logger"
+	"github.com/skyrings/skyring-common/tools/uuid"
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
+	"time"
 )
 
 const (
@@ -29,6 +34,38 @@ const (
 	DefaultEmail    = "admin@localhost"
 	DefaultRole     = "admin"
 )
+
+var EventType = map[string]string{
+	"USER_LOGGED_IN":  "User logged in",
+	"USER_LOGGED_OUT": "User logged out",
+	"USER_ADDED":      "User added",
+	"USER_MODIFIED":   "User modified",
+	"USER_DELETED":    "User deleted",
+	"LDAP_MODIFIED":   "LDAP config modified",
+}
+
+func logUserEvent(eventtype string, message string, description string, ctxt string, severity models.AlarmStatus) error {
+	var event models.AppEvent
+	eventId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("%s-Uuid generation for the event failed for event: %s. error: %v", ctxt, event.Name, err)
+		return err
+	}
+	event.EventId = *eventId
+	event.NotificationEntity = models.NOTIFICATION_ENTITY_USER
+	event.Timestamp = time.Now()
+	event.Notify = false
+	event.Name = EventType[eventtype]
+	event.Message = message
+	event.Description = description
+
+	event.Severity = severity
+	if err := common_event.AuditLog(ctxt, event, GetDbProvider()); err != nil {
+		logger.Get().Error("%s- Error logging the event: %s. Error:%v", ctxt, event.Name, err)
+		return err
+	}
+	return nil
+}
 
 func AddDefaultUser() error {
 
@@ -43,6 +80,12 @@ func AddDefaultUser() error {
 }
 
 func (a *App) login(rw http.ResponseWriter, req *http.Request) {
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return
+	}
+	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
 
 	type apiError APIError
 	body, err := ioutil.ReadAll(req.Body)
@@ -60,29 +103,60 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 	if err := GetAuthProvider().Login(rw, req, m["username"].(string), m["password"].(string)); err != nil {
 		logger.Get().Error("Unable to login User:%s", err)
 		bytes, _ := json.Marshal(apiError{Error: err.Error()})
+		if err := logUserEvent("USER_LOGGED_IN",
+			fmt.Sprintf("Log in failed for user: %s", m["username"]),
+			fmt.Sprintf("Log in failed for user: %s .Error: %s", m["username"], err),
+			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
+		}
 		rw.WriteHeader(http.StatusUnauthorized)
 		rw.Write(bytes)
 		return
 	}
+	message := fmt.Sprintf("User: %s logged in", m["username"])
+	if err := logUserEvent("USER_LOGGED_IN", message, message, ctxt, models.ALARM_STATUS_CLEARED); err != nil {
+		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
+	}
+
 	bytes := []byte(`{"message": "Logged in"}`)
 	rw.Write(bytes)
 }
 
 func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+	user := strings.Split(ctxt, ":")[0]
 	if err := GetAuthProvider().Logout(rw, req); err != nil {
 		logger.Get().Error("Unable to logout User:%s", err)
+		if err := logUserEvent("USER_LOGGED_OUT",
+			fmt.Sprintf("Log out failed for user: %s", user),
+			fmt.Sprintf("Log out failed for user: %s Error: %v", user, err),
+			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
+		}
 		HandleHttpError(rw, err)
 		return
 	}
+	message := fmt.Sprintf("User: %s logged out", user)
+	if err := logUserEvent("USER_LOGGED_OUT", message, message, ctxt, models.ALARM_STATUS_MINOR); err != nil {
+		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
+	}
+
 	bytes := []byte(`{"message": "Logged out"}`)
 	rw.Write(bytes)
 }
 
 func (a *App) getUsers(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("%s-Error Getting the context. error: %v", ctxt, err)
+	}
 
 	users, err := GetAuthProvider().ListUsers()
 	if err != nil {
-		logger.Get().Error("Unable to List the users:%s", err)
+		logger.Get().Error("%s-Unable to List the users:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
@@ -109,7 +183,7 @@ func (a *App) getUsers(rw http.ResponseWriter, req *http.Request) {
 	//marshal and send it across
 	bytes, err := json.Marshal(pUsers)
 	if err != nil {
-		logger.Get().Error("Unable to marshal the list of Users:%s", err)
+		logger.Get().Error("%s-Unable to marshal the list of Users:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
@@ -118,12 +192,16 @@ func (a *App) getUsers(rw http.ResponseWriter, req *http.Request) {
 }
 
 func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
 
 	vars := mux.Vars(req)
 
 	user, err := GetAuthProvider().GetUser(vars["username"], req)
 	if err != nil {
-		logger.Get().Error("Unable to Get the user:%s", err)
+		logger.Get().Error("%s-Unable to Get the user:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
@@ -136,7 +214,7 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 		User: &user,
 	})
 	if err != nil {
-		logger.Get().Error("Unable to marshal the User:%s", err)
+		logger.Get().Error("%s-Unable to marshal the User:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
@@ -145,15 +223,18 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 }
 
 func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
 
-	var err error
 	pageNo := 1 //Default page number or Home page number
 	pageNumberStr := req.URL.Query().Get("pageno")
 	if pageNumberStr != "" {
 		pageNo, err = strconv.Atoi(pageNumberStr)
 		// Check for invalid input or conversion error
 		if err != nil {
-			logger.Get().Error("Error getting pageno:%s", err)
+			logger.Get().Error("%s-Error getting pageno:%s", ctxt, err)
 			HandleHttpError(rw, err)
 			return
 		}
@@ -171,7 +252,7 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 		pageSize, err = strconv.Atoi(pageSizeStr)
 		// Check for invalid input or conversion error
 		if err != nil {
-			logger.Get().Error("Error getting pagesize:%s", err)
+			logger.Get().Error("%s-Error getting pagesize:%s", ctxt, err)
 			HandleHttpError(rw, err)
 			return
 		}
@@ -183,7 +264,7 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 	search := req.URL.Query().Get("search")
 	externalUsers, err := GetAuthProvider().ListExternalUsers(search, pageNo, pageSize)
 	if err != nil {
-		logger.Get().Error("Unable to List the users:%s", err)
+		logger.Get().Error("%s-Unable to List the users:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
@@ -220,19 +301,23 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 }
 
 func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
 
 	var user models.User
 
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		logger.Get().Error("Error parsing http request body:%s", err)
+		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
 	var m map[string]interface{}
 
 	if err = json.Unmarshal(body, &m); err != nil {
-		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
@@ -263,45 +348,106 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	if err := GetAuthProvider().AddUser(user, password); err != nil {
-		logger.Get().Error("Unable to create User:%s", err)
+		if err := logUserEvent("USER_ADDED",
+			fmt.Sprintf("Addition of user: %s failed", user.Username),
+			fmt.Sprintf("Addition of user: %s failed. Reason: %v", user.Username, err),
+			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
+		}
+		logger.Get().Error("%s-Unable to create User:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
+	if err := logUserEvent("USER_ADDED",
+		fmt.Sprintf("New user: %s added to skyring", user.Username),
+		fmt.Sprintf("New user: %s with role: %s added to skyring", user.Username, user.Role),
+		ctxt, models.ALARM_STATUS_CLEARED); err != nil {
+		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
+	}
+
 }
 
 func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
 
 	vars := mux.Vars(req)
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		logger.Get().Error("Error parsing http request body:%s", err)
+		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
 	var m map[string]interface{}
 	if err = json.Unmarshal(body, &m); err != nil {
-		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
 
 	if err := GetAuthProvider().UpdateUser(vars["username"], m); err != nil {
-		logger.Get().Error("Unable to update user:%s", err)
+		if err := logUserEvent("USER_MODIFIED",
+			fmt.Sprintf("User settings modification failed for user: %s", vars["username"]),
+			fmt.Sprintf("User settings modification failed for user: %s. Error: %v",
+				vars["username"], err),
+			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
+		}
+
+		logger.Get().Error("%s-Unable to update user:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
+	}
+
+	description := fmt.Sprintf("User settings has been modified for user: %s. Changed attributes:",
+		vars["username"])
+
+	if val, ok := m["email"]; ok {
+		description += fmt.Sprintf(" Email: %s", val.(string))
+	}
+	if val, ok := m["notificationenabled"]; ok {
+		description += fmt.Sprintf(" Notification Enabled: %v", val.(bool))
+	}
+	if val, ok := m["status"]; ok {
+		description += fmt.Sprintf(" Enabled: %v", val.(bool))
+	}
+
+	if err := logUserEvent("USER_MODIFIED",
+		fmt.Sprintf("User settings has been modified for user: %s", vars["username"]),
+		description,
+		ctxt, models.ALARM_STATUS_CLEARED); err != nil {
+		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 
 }
 
 func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
 
 	vars := mux.Vars(req)
 
 	if err := GetAuthProvider().DeleteUser(vars["username"]); err != nil {
-		logger.Get().Error("Unable to delete User:%s", err)
+		if err := logUserEvent("USER_DLELTED",
+			fmt.Sprintf("User deletion failed for user: %s", vars["username"]),
+			fmt.Sprintf("User deletion failed for user: %s. Error: %v",
+				vars["username"], err),
+			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
+		}
+		logger.Get().Error("%s-Unable to delete User:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
+	message := fmt.Sprintf("User :%s has been deleted ", vars["username"])
+	if err := logUserEvent("USER_DLELTED", message, message, ctxt, models.ALARM_STATUS_CLEARED); err != nil {
+		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
+	}
+
 }
 
 func parseAuthRequestBody(req *http.Request, user *models.User) error {
@@ -322,9 +468,13 @@ func parseAuthRequestBody(req *http.Request, user *models.User) error {
 }
 
 func (a *App) getLdapConfig(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
 	ldapConfig, err := GetAuthProvider().GetDirectory()
 	if err != nil {
-		logger.Get().Error("Unable to reterive directory service configuration:%s", err)
+		logger.Get().Error("%s-Unable to reterive directory service configuration:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
@@ -347,19 +497,23 @@ func (a *App) getLdapConfig(rw http.ResponseWriter, req *http.Request) {
 }
 
 func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
+	ctxt, err := GetContext(req)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
 
 	var directory models.Directory
 
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		logger.Get().Error("Error parsing http request body:%s", err)
+		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
 	var m map[string]interface{}
 
 	if err = json.Unmarshal(body, &m); err != nil {
-		logger.Get().Error("Unable to Unmarshall the data:%s", err)
+		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
 	}
@@ -396,10 +550,21 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 	if val, ok := m["email"]; ok {
 		directory.Email = val.(string)
 	}
+	user := strings.Split(ctxt, ":")[0]
 
 	if err := GetAuthProvider().SetDirectory(directory); err != nil {
-		logger.Get().Error("Unable to configure directory service:%s", err)
+		if err := logUserEvent("LDAP_MODIFIED",
+			fmt.Sprintf("Configuring LDAP failed, Tried by user: %s", user),
+			fmt.Sprintf("Configuring LDAP failed, Tried by user: %s. Error: %s", user, err),
+			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
+		}
+		logger.Get().Error("%s-Unable to configure directory service:%s", ctxt, err)
 		HandleHttpError(rw, err)
 		return
+	}
+	message := fmt.Sprintf("LDAP configuration updated successfully by user: %s", user)
+	if err := logUserEvent("LDAP_MODIFIED", message, message, ctxt, models.ALARM_STATUS_CLEARED); err != nil {
+		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 }
