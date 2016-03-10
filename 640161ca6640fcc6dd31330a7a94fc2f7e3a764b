@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_a4c6e247",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-10T03:49:41Z",
+      "side": 1,
+      "message": "Failure cases should be taken care when doing the aggregation?",
+      "range": {
+        "startLine": 411,
+        "startChar": 194,
+        "endLine": 411,
+        "endChar": 205
+      },
+      "revId": "640161ca6640fcc6dd31330a7a94fc2f7e3a764b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
