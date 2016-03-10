@@ -25,7 +25,6 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
 	"github.com/skyrings/skyring/apps/skyring"
-	"github.com/skyrings/skyring/nodemanager/saltnodemanager"
 	"github.com/skyrings/skyring/skyringutils"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -443,7 +442,7 @@ func handle_UnManagedNode(hostname string, ctxt string) error {
 	if err == mgo.ErrNotFound {
 		node.Hostname = hostname
 		node.State = models.NODE_STATE_UNACCEPTED
-		if node.Fingerprint, err = saltnodemanager.GetFingerPrint(node.Hostname, ctxt); err != nil {
+		if node.Fingerprint, err = skyring.GetCoreNodeManager().GetFingerPrint(node.Hostname, ctxt); err != nil {
 			logger.Get().Error(fmt.Sprintf("%s-Faild to retrive fingerprint from : %s", ctxt, node.Hostname))
 			return err
 		}

@@ -146,7 +146,13 @@ func (a *App) StartProviders(configDir string, binDir string) error {
 			}
 
 			confStr, _ := json.Marshal(conf.SystemConfig)
-			client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, config.Provider.ProviderBinary, string(confStr))
+			providerConfStr, _ := json.Marshal(config.Provider)
+			client, err := pie.StartProviderCodec(
+				jsonrpc.NewClientCodec,
+				os.Stderr,
+				config.Provider.ProviderBinary,
+				string(confStr),
+				string(providerConfStr))
 			if err != nil {
 				logger.Get().Error("Error starting provider for %s. error: %v", config.Provider.Name, err)
 				continue
