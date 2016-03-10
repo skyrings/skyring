@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_aa36abe5",
+        "filename": "event/handler.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-10T12:04:50Z",
+      "side": 1,
+      "message": "Do we need this commented line?",
+      "revId": "dd7f3c91c0d4f48d429206aee69f2cff2e9632b3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
