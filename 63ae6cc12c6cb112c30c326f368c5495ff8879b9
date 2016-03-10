@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_847ba628",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-10T03:32:46Z",
+      "side": 1,
+      "message": "If reading of some stat failed, you need to exclude that when average out right?",
+      "range": {
+        "startLine": 1448,
+        "startChar": 38,
+        "endLine": 1448,
+        "endChar": 60
+      },
+      "revId": "63ae6cc12c6cb112c30c326f368c5495ff8879b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
