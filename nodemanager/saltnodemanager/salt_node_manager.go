@@ -345,7 +345,7 @@ func applyStorageProfile(disk *models.Disk, sProfiles []models.StorageProfile) e
 	return nil
 }
 
-func GetFingerPrint(hostname string, ctxt string) (string, error) {
+func (a SaltNodeManager) GetFingerPrint(hostname string, ctxt string) (string, error) {
 	fingerprint, err := salt_backend.GetFingerPrint(hostname, ctxt)
 	return fingerprint, err
 }
