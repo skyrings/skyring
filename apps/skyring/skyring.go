@@ -551,6 +551,8 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 	}
 	schedule_task_check(ctxt)
 	node_Reinitialize()
+	cleanupTasks()
+
 	return nil
 }
 
@@ -676,4 +678,21 @@ func start_Reinitialize(hostname string, ctxt string) {
 		return
 	}
 	Initialize(hostname, ctxt)
+}
+
+func cleanupTasks() {
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return
+	}
+	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	s := []models.Status{{time.Now(), "Force Stop. Task explicitly stopped."}}
+	if _, err := collection.UpdateAll(bson.M{"completed": false}, bson.M{"$set": bson.M{"completed": true,
+		"status": models.TASK_STATUS_FAILURE, "statuslist": s}}); err != nil {
+		logger.Get().Debug("%s-%v", ctxt, err.Error())
+	}
 }
