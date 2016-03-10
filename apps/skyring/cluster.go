@@ -202,7 +202,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					util.FailTask(fmt.Sprintf("%s-Error parsing provider task id while creating cluster: %s", ctxt, request.Name), err, t)
 					return
 				}
-				t.UpdateStatus("Adding sub task")
+				t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 				if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 					util.FailTask(fmt.Sprintf("%s-Error adding sub task while creating cluster: %s", ctxt, request.Name), err, t)
 					return
@@ -721,7 +721,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask(fmt.Sprintf("%s-Error parsing provider task id while expand cluster: %v", ctxt, *cluster_id), err, t)
 					return
 				}
-				t.UpdateStatus("Adding sub task")
+				t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 				if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 					util.FailTask(fmt.Sprintf("%s-Error adding sub task while expand cluster: %v", ctxt, *cluster_id), err, t)
 					return

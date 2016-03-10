@@ -123,7 +123,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 						util.FailTask(fmt.Sprintf("%s - Error parsing provider task id while creating block device: %s for cluster: %v", ctxt, request.Name, *cluster_id), err, t)
 						return
 					}
-					t.UpdateStatus("Adding sub task")
+					t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error adding sub task while creating block device: %s on cluster: %v", ctxt, request.Name, *cluster_id), err, t)
 						return
@@ -386,7 +386,7 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 						util.FailTask(fmt.Sprintf("%s - Error parsing provider task id while deleting block device: %v for cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
 						return
 					}
-					t.UpdateStatus("Adding sub task")
+					t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error adding sub task while deleting block device: %v on cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
 						return
@@ -515,7 +515,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 						util.FailTask(fmt.Sprintf("%s - Error parsing provider task id while resizing block device: %v for cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
 						return
 					}
-					t.UpdateStatus("Adding sub task")
+					t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error adding sub task while resizing block device: %v on cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
 						return
