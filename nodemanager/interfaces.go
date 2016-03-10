@@ -35,4 +35,5 @@ type NodeManagerInterface interface {
 	SetUpMonitoring(node string, master string, ctxt string) (map[string]interface{}, error)
 	SyncModules(node string, ctxt string) (bool, error)
 	IsNodeUp(hostname string, ctxt string) (bool, error)
+	GetFingerPrint(hostname string, ctxt string) (string, error)
 }
