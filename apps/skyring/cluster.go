@@ -162,13 +162,32 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("Failed to acquire lock", err, t)
 					return
 				}
+
 				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
+
 				// Get the specific provider and invoke the method
 				provider := a.getProviderFromClusterType(request.Type)
 				if provider == nil {
 					util.FailTask(fmt.Sprintf("%s-", ctxt), errors.New(fmt.Sprintf("Error getting provider for cluster: %s", request.Name)), t)
 					return
 				}
+				t.UpdateStatus("Installing packages")
+				//Install the packages
+				if failedNodes := provider.ProvisionerName.Install(ctxt, request.Nodes); len(failedNodes) > 0 {
+					logger.Get().Error("%s-Package Installation failed for nodes:%v", ctxt, failedNodes)
+					successful := removeFailedNodes(request.Nodes, failedNodes)
+					if len(successful) > 0 {
+						body, err = json.Marshal(successful)
+						if err != nil {
+							util.FailTask(fmt.Sprintf("%s-", ctxt), err, t)
+							return
+						}
+					} else {
+						util.FailTask(fmt.Sprintf("%s-", ctxt), errors.New(fmt.Sprintf("Package Installation Failed for all nodes for cluster: %s", request.Name)), t)
+						return
+					}
+				}
+				t.UpdateStatus("Installing packages done. Starting Cluster Creation.")
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
 					provider.Name, cluster_post_functions["create"]),
 					models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body, RpcRequestContext: ctxt},
@@ -188,13 +207,13 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					util.FailTask(fmt.Sprintf("%s-Error adding sub task while creating cluster: %s", ctxt, request.Name), err, t)
 					return
 				}
+				sessionCopy := db.GetDatastore().Copy()
+				defer sessionCopy.Close()
+				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 
 				// Check for provider task to complete and update the disk info
 				for {
 					time.Sleep(2 * time.Second)
-					sessionCopy := db.GetDatastore().Copy()
-					defer sessionCopy.Close()
-					coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 					var providerTask models.AppTask
 					if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
 						util.FailTask(fmt.Sprintf("%s-Error getting sub task status while creating cluster: %s", ctxt, request.Name), err, t)
@@ -1042,7 +1061,7 @@ func updateMonitoringPluginsForCluster(request models.AddClusterRequest, ctxt st
 	// Check if monitoring configuration passed and update them accordingly
 	if reflect.ValueOf(request.MonitoringPlugins).IsValid() && len(request.MonitoringPlugins) != 0 {
 		var nodes []string
-		nodesMap, nodesFetchError := getNodes(request.Nodes)
+		nodesMap, nodesFetchError := util.GetNodes(request.Nodes)
 		if nodesFetchError != nil {
 			logger.Get().Error("%s-Error getting node details while update monitoring configuration for cluster: %s. error: %v", ctxt, request.Name, nodesFetchError)
 			return nodesFetchError
@@ -1092,4 +1111,21 @@ func updateMonitoringPluginsForClusterExpand(cluster_id *uuid.UUID, nodes models
 		return updateErr
 	}
 	return nil
+}
+
+func removeFailedNodes(nodes []models.ClusterNode, failed []models.ClusterNode) (diff []models.ClusterNode) {
+	var found bool
+	for _, node := range nodes {
+		for _, fnode := range failed {
+			if node.NodeId == fnode.NodeId {
+				found = true
+				break
+			}
+			if !found {
+				diff = append(diff, node)
+			}
+			found = false
+		}
+	}
+	return diff
 }
