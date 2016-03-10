@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a6ff13c_24bbd2c5",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1499,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-10T03:47:22Z",
+      "side": 1,
+      "message": "so this is here because in case of any provider the storage as a generic thing(maintained by skyring) that every provider is probably assumed to have.",
+      "parentUuid": "3a6ff13c_a49fc24f",
+      "range": {
+        "startLine": 1486,
+        "startChar": 2,
+        "endLine": 1499,
+        "endChar": 3
+      },
+      "revId": "9869ae449edb8d0a680c7fbec1c5d850d3a4cc51",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a6ff13c_649eaa58",
         "filename": "apps/skyring/request-router.go",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2016-03-10T03:44:27Z",
       "side": 1,
       "message": "use the same var -err",
+      "range": {
+        "startLine": 179,
+        "startChar": 5,
+        "endLine": 179,
+        "endChar": 19
+      },
+      "revId": "9869ae449edb8d0a680c7fbec1c5d850d3a4cc51",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_44b0cedd",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-10T03:47:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a6ff13c_649eaa58",
       "range": {
         "startLine": 179,
         "startChar": 5,
