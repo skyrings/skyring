@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a6ff13c_04ddf614",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-10T03:52:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a6ff13c_048fb624",
+      "range": {
+        "startLine": 171,
+        "startChar": 1,
+        "endLine": 171,
+        "endChar": 9
+      },
+      "revId": "0569c06053d85fd8e1dd082ec68449306a5c4fbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a6ff13c_2494b236",
         "filename": "apps/skyring/request-router.go",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2016-03-10T03:44:27Z",
       "side": 1,
       "message": "What situation you are expecting this ret code?",
+      "range": {
+        "startLine": 176,
+        "startChar": 77,
+        "endLine": 176,
+        "endChar": 97
+      },
+      "revId": "0569c06053d85fd8e1dd082ec68449306a5c4fbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_84c9e65c",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-10T03:52:15Z",
+      "side": 1,
+      "message": "Lets say some metrics were fetched and some others failed for some reason Then I am expecting this code as it might not be appropriate to fail in such cases",
+      "parentUuid": "3a6ff13c_2494b236",
       "range": {
         "startLine": 176,
         "startChar": 77,
