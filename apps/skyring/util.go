@@ -174,25 +174,6 @@ func getNodesInCluster(cluster_id *uuid.UUID) (cluster_node_names []string, err 
 	return cluster_node_names, nil
 }
 
-func getNodes(clusterNodes []models.ClusterNode) (map[uuid.UUID]models.Node, error) {
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	var nodes = make(map[uuid.UUID]models.Node)
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	for _, clusterNode := range clusterNodes {
-		uuid, err := uuid.Parse(clusterNode.NodeId)
-		if err != nil {
-			return nodes, errors.New(fmt.Sprintf("Error parsing node id: %v", clusterNode.NodeId))
-		}
-		var node models.Node
-		if err := coll.Find(bson.M{"nodeid": *uuid}).One(&node); err != nil {
-			return nodes, err
-		}
-		nodes[node.NodeId] = node
-	}
-	return nodes, nil
-}
-
 func cluster_exists(key string, value string) (*models.Cluster, error) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
