@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a6ff13c_e4ed3af1",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-10T03:17:51Z",
+      "side": 1,
+      "message": "This adds details like pg total and status based count and also mon count which are specific to providers(ceph).",
+      "parentUuid": "5a72e520_13fdfc3a",
+      "revId": "3bd8c16650a6b920dc4a6088a3683aba4df0dc56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_93a00c45",
         "filename": "apps/skyring/request-router.go",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "3a6ff13c_e468da89",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-10T03:17:51Z",
+      "side": 1,
+      "message": "You are right the context should be passed from the caller and used",
+      "parentUuid": "5a72e520_93a00c45",
+      "range": {
+        "startLine": 147,
+        "startChar": 1,
+        "endLine": 147,
+        "endChar": 5
+      },
+      "revId": "3bd8c16650a6b920dc4a6088a3683aba4df0dc56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a72e520_b3a3484e",
         "filename": "apps/skyring/request-router.go",
         "patchSetId": 1
@@ -53,6 +95,24 @@
       "writtenOn": "2016-03-09T18:47:57Z",
       "side": 1,
       "message": "Pass ctxt here so that provider side logging can correlate.\n\nRpcRequestContext: ctxt",
+      "revId": "3bd8c16650a6b920dc4a6088a3683aba4df0dc56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_6414eaf5",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-10T03:17:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a72e520_b3a3484e",
       "revId": "3bd8c16650a6b920dc4a6088a3683aba4df0dc56",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
