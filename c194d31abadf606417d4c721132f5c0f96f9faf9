@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_be918954",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-11T08:51:51Z",
+      "side": 1,
+      "message": "This may not be right all the time. sometimes the sub task will take more than 10 minutes and during that time parent task will not get any updates. so you need to check whether any of the sub task got update in last 10 mins and in that case you should not stop the tasks",
+      "range": {
+        "startLine": 593,
+        "startChar": 2,
+        "endLine": 601,
+        "endChar": 37
+      },
+      "revId": "c194d31abadf606417d4c721132f5c0f96f9faf9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
