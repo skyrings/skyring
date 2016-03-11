@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_de61e5d4",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-11T03:59:20Z",
+      "side": 1,
+      "message": "Break in multiple lines for better readability..",
+      "range": {
+        "startLine": 635,
+        "startChar": 14,
+        "endLine": 635,
+        "endChar": 168
+      },
+      "revId": "011b5c869f0ae89d77db5a28cbd93acbaaa672b0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
