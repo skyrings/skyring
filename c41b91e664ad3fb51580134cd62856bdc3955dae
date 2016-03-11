@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_3ea039f4",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-11T04:04:46Z",
+      "side": 1,
+      "message": "Define this outside function as we dont need to define this everytime the function is called..",
+      "range": {
+        "startLine": 39,
+        "startChar": 1,
+        "endLine": 46,
+        "endChar": 2
+      },
+      "revId": "c41b91e664ad3fb51580134cd62856bdc3955dae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_7eaab1d5",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-11T04:04:46Z",
+      "side": 1,
+      "message": "Do we really have user\u0027s context at the moment in request object??",
+      "range": {
+        "startLine": 83,
+        "startChar": 1,
+        "endLine": 83,
+        "endChar": 29
+      },
+      "revId": "c41b91e664ad3fb51580134cd62856bdc3955dae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_5ea5f502",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-11T04:04:46Z",
+      "side": 1,
+      "message": "I feel while function itself you can form the string and use. Applies to all...",
+      "range": {
+        "startLine": 104,
+        "startChar": 2,
+        "endLine": 105,
+        "endChar": 89
+      },
+      "revId": "c41b91e664ad3fb51580134cd62856bdc3955dae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
