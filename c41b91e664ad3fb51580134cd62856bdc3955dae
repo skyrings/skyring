@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "3a6ff13c_fee30131",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-11T06:11:00Z",
+      "side": 1,
+      "message": "what is difference between these fields?\nDoes message means email message? if that is the case, its not really valid for journal entries right as you are not sending any emails these events?",
+      "range": {
+        "startLine": 59,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 32
+      },
+      "revId": "c41b91e664ad3fb51580134cd62856bdc3955dae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a6ff13c_7eaab1d5",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 2
