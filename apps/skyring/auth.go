@@ -285,7 +285,7 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if err := GetAuthProvider().UpdateUser(vars["username"], m); err != nil {
+	if err := GetAuthProvider().UpdateUser(vars["username"], m, req); err != nil {
 		logger.Get().Error("Unable to update user:%s", err)
 		HandleHttpError(rw, err)
 		return
