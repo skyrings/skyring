@@ -22,6 +22,30 @@
       "revId": "da1420b1e5a9a9beaba1f1310dbdd82aa7c1fdbf",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_3eee7923",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-11T04:58:13Z",
+      "side": 1,
+      "message": "I remember seeing a comment for adding this I think in patch set 1. Probably I misunderstood it.",
+      "parentUuid": "3a6ff13c_2a79db93",
+      "range": {
+        "startLine": 1159,
+        "startChar": 75,
+        "endLine": 1159,
+        "endChar": 83
+      },
+      "revId": "da1420b1e5a9a9beaba1f1310dbdd82aa7c1fdbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
