@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_5e6ed5ca",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-11T03:56:07Z",
+      "side": 1,
+      "message": "t.UpdateStatus(\"Installing nodes with storage binaries\")",
+      "revId": "f8c18662ec96144156dc4b1a7f9bcc6346908571",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_7e7391b1",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-11T03:56:07Z",
+      "side": 1,
+      "message": "t.UpdateStatus(\"Starting cluster creation\")",
+      "revId": "f8c18662ec96144156dc4b1a7f9bcc6346908571",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
