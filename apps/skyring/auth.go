@@ -386,8 +386,20 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 		HandleHttpError(rw, err)
 		return
 	}
+	var currUserName string
+	session, err := Store.Get(req, "session-key")
+	if err != nil {
+		logger.Get().Error("%s-Error getting the session. error: %v", ctxt, err)
+		return
+	}
+	if val, ok := session.Values["username"]; ok {
+		currUserName = val.(string)
+	} else {
+		logger.Get().Error("%s-Unable to identify the user from session", ctxt)
+		return
+	}
 
-	if err := GetAuthProvider().UpdateUser(vars["username"], m); err != nil {
+	if err := GetAuthProvider().UpdateUser(vars["username"], m, currUserName); err != nil {
 		if err := logUserEvent("USER_MODIFIED",
 			fmt.Sprintf("User settings modification failed for user: %s", vars["username"]),
 			fmt.Sprintf("User settings modification failed for user: %s. Error: %v",
@@ -420,7 +432,6 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
-
 }
 
 func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {

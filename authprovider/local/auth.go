@@ -232,7 +232,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 
 // Update changes data for an existing user. Needs thought...
 //Just added for completeness. Will revisit later
-func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error {
+func (a Authorizer) UpdateUser(username string, m map[string]interface{}, currUserName string) error {
 	var (
 		hash []byte
 	)
@@ -259,6 +259,26 @@ func (a Authorizer) UpdateUser(username string, m map[string]interface{}) error 
 				}
 				user.Hash = hash
 			}
+		}
+	} else {
+		curUser, e := a.userDao.User(currUserName)
+		if e != nil {
+			logger.Get().Error("Error retrieving the user: %s. error: %v", currUserName, e)
+			return e
+		}
+		if curUser.Role == "admin" {
+			if val, ok := m["password"]; ok {
+				p := val.(string)
+				hash, err = bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
+				if err != nil {
+					logger.Get().Error("Error saving the password for user: %s. error: %v", username, err)
+					return mkerror("couldn't save password: " + err.Error())
+				}
+				user.Hash = hash
+			}
+		} else {
+			logger.Get().Error("Error saving the password for user since no previledge: %s. error: %v", username, err)
+			return mkerror("couldn't save password: " + err.Error())
 		}
 	}
 
