@@ -46,6 +46,30 @@
       "revId": "5ee2bc1ccc2db8d8d01de293932763d78e64ca27",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_9e712d7a",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-11T06:42:40Z",
+      "side": 1,
+      "message": "per last change, the state of the node will be set to \u0027unmanaged\u0027. So this field is redundant now, can removed as well",
+      "parentUuid": "5a72e520_cbc1f72f",
+      "range": {
+        "startLine": 407,
+        "startChar": 3,
+        "endLine": 407,
+        "endChar": 74
+      },
+      "revId": "5ee2bc1ccc2db8d8d01de293932763d78e64ca27",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
