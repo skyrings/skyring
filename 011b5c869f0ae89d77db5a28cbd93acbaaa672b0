@@ -22,6 +22,29 @@
       "revId": "011b5c869f0ae89d77db5a28cbd93acbaaa672b0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_de756533",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-11T08:58:23Z",
+      "side": 1,
+      "message": "err !\u003d mgo.ErrNotFound is not valid here -  remove",
+      "range": {
+        "startLine": 635,
+        "startChar": 175,
+        "endLine": 635,
+        "endChar": 198
+      },
+      "revId": "011b5c869f0ae89d77db5a28cbd93acbaaa672b0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
