@@ -152,6 +152,49 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (a *App) Get_SystemUtilization(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	var start_time string
+	var end_time string
+	var interval string
+
+	entityName := models.SYSTEM
+
+	params := r.URL.Query()
+	resource_name := params.Get("resource")
+	duration := params.Get("duration")
+
+	if duration != "" {
+		if strings.Contains(duration, ",") {
+			splt := strings.Split(duration, ",")
+			start_time = splt[0]
+			end_time = splt[1]
+		} else {
+			interval = duration
+		}
+	}
+
+	paramsToQuery := map[string]interface{}{
+		"nodename":   entityName,
+		"resource":   resource_name,
+		"start_time": start_time,
+		"end_time":   end_time,
+		"interval":   interval,
+	}
+
+	res, err := GetMonitoringManager().QueryDB(paramsToQuery)
+	if err == nil {
+		json.NewEncoder(w).Encode(res)
+	} else {
+		logger.Get().Error("%s - Failed to get %v utilization of system.Err %v", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
+	}
+}
+
 //In memory ClusterId to ScheduleId map
 var ClusterMonitoringSchedules map[uuid.UUID]uuid.UUID
 
