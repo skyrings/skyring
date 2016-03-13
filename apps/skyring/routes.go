@@ -97,6 +97,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "Get_SystemUtilization",
+			Method:      "GET",
+			Pattern:     "monitoring/system/utilization",
+			HandlerFunc: a.Get_SystemUtilization,
+			Version:     1,
+		},
+		{
 			Name:        "GET_Disks",
 			Method:      "GET",
 			Pattern:     "nodes/{node-id}/disks",
