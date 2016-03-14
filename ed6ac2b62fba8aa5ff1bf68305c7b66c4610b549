@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_bfda60e7",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-14T05:27:11Z",
+      "side": 1,
+      "message": "I feel passing whole http request to DAO layer is not a good idea. We should only required value from request..\n\nIf required we can get the session key from request and pass on to DAO layer.",
+      "range": {
+        "startLine": 288,
+        "startChar": 61,
+        "endLine": 288,
+        "endChar": 65
+      },
+      "revId": "ed6ac2b62fba8aa5ff1bf68305c7b66c4610b549",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
