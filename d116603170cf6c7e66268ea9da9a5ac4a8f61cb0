@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_da6e4a96",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-14T08:43:55Z",
+      "side": 1,
+      "message": "You cannot use ctxt here as it failed while getting the same from request :))",
+      "range": {
+        "startLine": 158,
+        "startChar": 66,
+        "endLine": 158,
+        "endChar": 70
+      },
+      "revId": "d116603170cf6c7e66268ea9da9a5ac4a8f61cb0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_fa6b0683",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-14T08:43:55Z",
+      "side": 1,
+      "message": "You need just \",\" ot \", \" ??",
+      "range": {
+        "startLine": 172,
+        "startChar": 33,
+        "endLine": 172,
+        "endChar": 34
+      },
+      "revId": "d116603170cf6c7e66268ea9da9a5ac4a8f61cb0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_1a69c28b",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-14T08:43:55Z",
+      "side": 1,
+      "message": "Break in multiple lines for better readability",
+      "range": {
+        "startLine": 181,
+        "startChar": 1,
+        "endLine": 181,
+        "endChar": 161
+      },
+      "revId": "d116603170cf6c7e66268ea9da9a5ac4a8f61cb0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
