@@ -44,7 +44,7 @@ var EventType = map[string]string{
 	"LDAP_MODIFIED":   "LDAP config modified",
 }
 
-func logUserEvent(eventtype string, message string, description string, ctxt string, severity models.AlarmStatus) error {
+func logUserEvent(eventtype string, message string, description string, ctxt string) error {
 	var event models.AppEvent
 	eventId, err := uuid.New()
 	if err != nil {
@@ -58,8 +58,8 @@ func logUserEvent(eventtype string, message string, description string, ctxt str
 	event.Name = EventType[eventtype]
 	event.Message = message
 	event.Description = description
+	event.Severity = models.ALARM_STATUS_CLEARED
 
-	event.Severity = severity
 	if err := common_event.AuditLog(ctxt, event, GetDbProvider()); err != nil {
 		logger.Get().Error("%s- Error logging the event: %s. Error:%v", ctxt, event.Name, err)
 		return err
@@ -106,7 +106,7 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 		if err := logUserEvent("USER_LOGGED_IN",
 			fmt.Sprintf("Log in failed for user: %s", m["username"]),
 			fmt.Sprintf("Log in failed for user: %s .Error: %s", m["username"], err),
-			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
 		rw.WriteHeader(http.StatusUnauthorized)
@@ -114,7 +114,7 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	message := fmt.Sprintf("User: %s logged in", m["username"])
-	if err := logUserEvent("USER_LOGGED_IN", message, message, ctxt, models.ALARM_STATUS_CLEARED); err != nil {
+	if err := logUserEvent("USER_LOGGED_IN", message, message, ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 
@@ -133,14 +133,14 @@ func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
 		if err := logUserEvent("USER_LOGGED_OUT",
 			fmt.Sprintf("Log out failed for user: %s", user),
 			fmt.Sprintf("Log out failed for user: %s Error: %v", user, err),
-			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
 		HandleHttpError(rw, err)
 		return
 	}
 	message := fmt.Sprintf("User: %s logged out", user)
-	if err := logUserEvent("USER_LOGGED_OUT", message, message, ctxt, models.ALARM_STATUS_MINOR); err != nil {
+	if err := logUserEvent("USER_LOGGED_OUT", message, message, ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 
@@ -351,7 +351,7 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 		if err := logUserEvent("USER_ADDED",
 			fmt.Sprintf("Addition of user: %s failed", user.Username),
 			fmt.Sprintf("Addition of user: %s failed. Reason: %v", user.Username, err),
-			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
 		logger.Get().Error("%s-Unable to create User:%s", ctxt, err)
@@ -361,7 +361,7 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 	if err := logUserEvent("USER_ADDED",
 		fmt.Sprintf("New user: %s added to skyring", user.Username),
 		fmt.Sprintf("New user: %s with role: %s added to skyring", user.Username, user.Role),
-		ctxt, models.ALARM_STATUS_CLEARED); err != nil {
+		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 
@@ -392,7 +392,7 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 			fmt.Sprintf("User settings modification failed for user: %s", vars["username"]),
 			fmt.Sprintf("User settings modification failed for user: %s. Error: %v",
 				vars["username"], err),
-			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
 
@@ -417,7 +417,7 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 	if err := logUserEvent("USER_MODIFIED",
 		fmt.Sprintf("User settings has been modified for user: %s", vars["username"]),
 		description,
-		ctxt, models.ALARM_STATUS_CLEARED); err != nil {
+		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 
@@ -436,7 +436,7 @@ func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 			fmt.Sprintf("User deletion failed for user: %s", vars["username"]),
 			fmt.Sprintf("User deletion failed for user: %s. Error: %v",
 				vars["username"], err),
-			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
 		logger.Get().Error("%s-Unable to delete User:%s", ctxt, err)
@@ -444,7 +444,7 @@ func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	message := fmt.Sprintf("User :%s has been deleted ", vars["username"])
-	if err := logUserEvent("USER_DLELTED", message, message, ctxt, models.ALARM_STATUS_CLEARED); err != nil {
+	if err := logUserEvent("USER_DLELTED", message, message, ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 
@@ -556,7 +556,7 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 		if err := logUserEvent("LDAP_MODIFIED",
 			fmt.Sprintf("Configuring LDAP failed, Tried by user: %s", user),
 			fmt.Sprintf("Configuring LDAP failed, Tried by user: %s. Error: %s", user, err),
-			ctxt, models.ALARM_STATUS_MINOR); err != nil {
+			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
 		logger.Get().Error("%s-Unable to configure directory service:%s", ctxt, err)
@@ -564,7 +564,7 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	message := fmt.Sprintf("LDAP configuration updated successfully by user: %s", user)
-	if err := logUserEvent("LDAP_MODIFIED", message, message, ctxt, models.ALARM_STATUS_CLEARED); err != nil {
+	if err := logUserEvent("LDAP_MODIFIED", message, message, ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 }
