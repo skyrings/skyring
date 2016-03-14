@@ -217,7 +217,13 @@ func PatchEvent(w http.ResponseWriter, r *http.Request) {
 
 	if event.Severity == models.ALARM_STATUS_CLEARED {
 		logger.Get().Error("%s-Cannot ack an event with severity: %s", ctxt, event.Severity.String())
-		HttpResponse(w, http.StatusBadRequest, "Event Cannot be acked.")
+		HttpResponse(w, http.StatusBadRequest, "Event with this severity cannot be acked. ")
+		return
+	}
+
+	if event.Acked {
+		logger.Get().Error("%s-Cannot ack this event as its already acked", ctxt)
+		HttpResponse(w, http.StatusBadRequest, "Event Cannot be acked as its already acked.")
 		return
 	}
 
@@ -229,10 +235,10 @@ func PatchEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if val, ok := m["ackcomment"]; ok {
-		event.AckComment = val.(string)
+		event.AckComment[0] = val.(string)
 	}
-	event.AckedBy = strings.Split(ctxt, ":")[0]
-	event.AckedTime = time.Now()
+	event.AckedBy[0] = strings.Split(ctxt, ":")[0]
+	event.AckedTime[0] = time.Now()
 
 	err = collection.Update(bson.M{"eventid": *event_id}, bson.M{"$set": event})
 	if err != nil {
