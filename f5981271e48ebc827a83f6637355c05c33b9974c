@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_b6b0c6f5",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-14T17:43:19Z",
+      "side": 1,
+      "message": "Why you named it as utilization? Does this API only gets the utlization data only?",
+      "range": {
+        "startLine": 102,
+        "startChar": 17,
+        "endLine": 102,
+        "endChar": 48
+      },
+      "revId": "f5981271e48ebc827a83f6637355c05c33b9974c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
