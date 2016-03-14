@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
+	common_event "github.com/skyrings/skyring-common/event"
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/task"
@@ -40,16 +41,14 @@ var (
 )
 
 var EventType = map[string]string{
-	"DRIVE_ADD":           "Drive Addition",
-	"DRIVE_REMOVE":        "Drive Removal",
-	"COLLECTD_STOPPED":    "Collectd Stopped",
-	"COLLECTD_STARTED":    "Collectd Started",
-	"NODE_LOST_CONTACT":   "Node contact lost",
-	"NODE_GAINED_CONTACT": "Node contact gained",
-	"MEMORY":              "Memory Threshold Crossed",
-	"SWAP":                "Swap Threshold Crossed",
-	"CPU":                 "Cpu Threshold Crossed",
-	"DF":                  "Mount Threshold Crossed",
+	"DRIVE_ADD":              "Drive Addition",
+	"DRIVE_REMOVE":           "Drive Removal",
+	"COLLECTD_STATE_CHANGED": "Collectd service state changed",
+	"NODE_STATE_CHANGED":     "Node connectivity changed",
+	"MEMORY":                 "Memory Threshold Crossed",
+	"SWAP":                   "Swap Threshold Crossed",
+	"CPU":                    "Cpu Threshold Crossed",
+	"DF":                     "Mount Threshold Crossed",
 	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed",
 }
 
@@ -106,6 +105,11 @@ func resource_threshold_crossed(event models.AppEvent, ctxt string) (models.AppE
 	}
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
+	if event.Severity == models.ALARM_STATUS_CLEARED {
+		if err := common_event.ClearCorrespondingAlert(event, ctxt); err != nil {
+			logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
+		}
+	}
 	return event, nil
 }
 
@@ -354,13 +358,13 @@ func drive_remove_handler(event models.AppEvent, ctxt string) (models.AppEvent, 
 func collectd_status_handler(event models.AppEvent, ctxt string) (models.AppEvent, error) {
 	// adding the details for event
 	if strings.HasSuffix(event.Message, "inactive") {
-		event.Name = EventType["COLLECTD_STOPPED"]
+		event.Name = EventType["COLLECTD_STATE_CHANGED"]
 		event.Message = fmt.Sprintf("Collectd process stopped on Host: %s", event.NodeName)
 		event.Description = fmt.Sprintf("Collectd process is stopped on Host: %s. This might affect the monitoring functionality of skyring", event.NodeName)
 		event.EntityId = event.NodeId
 		event.Severity = models.ALARM_STATUS_MAJOR
 	} else if strings.HasSuffix(event.Message, "active") {
-		event.Name = EventType["COLLECTD_STARTED"]
+		event.Name = EventType["COLLECTD_STATE_CHANGED"]
 		event.Message = fmt.Sprintf("Collectd process started on Host: %s", event.NodeName)
 		event.EntityId = event.NodeId
 		event.Severity = models.ALARM_STATUS_CLEARED
@@ -369,6 +373,11 @@ func collectd_status_handler(event models.AppEvent, ctxt string) (models.AppEven
 	}
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
+	if event.Severity == models.ALARM_STATUS_CLEARED {
+		if err := common_event.ClearCorrespondingAlert(event, ctxt); err != nil {
+			logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
+		}
+	}
 	return event, nil
 }
 
@@ -380,12 +389,17 @@ func node_appeared_handler(event models.AppEvent, ctxt string) (models.AppEvent,
 			return event, err
 		}
 	}
-	event.Name = EventType["NODE_GAINED_CONTACT"]
+	event.Name = EventType["NODE_STATE_CHANGED"]
 	event.Message = fmt.Sprintf("Host: %s gained contact", event.NodeName)
 	event.EntityId = event.NodeId
 	event.Severity = models.ALARM_STATUS_CLEARED
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
+
+	if err := common_event.ClearCorrespondingAlert(event, ctxt); err != nil {
+		logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
+	}
+
 	return event, nil
 }
 
@@ -397,16 +411,12 @@ func node_lost_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 			return event, err
 		}
 	}
-	event.Name = EventType["NODE_LOST_CONTACT"]
+	event.Name = EventType["NODE_STATE_CHANGED"]
 	event.Message = fmt.Sprintf("Host: %s lost contact", event.NodeName)
 	event.EntityId = event.NodeId
-	event.Severity = models.ALARM_STATUS_INDETERMINATE
+	event.Severity = models.ALARM_STATUS_MAJOR
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
-	return event, nil
-}
-
-func collectd_threshold_handler(event models.AppEvent, ctxt string) (models.AppEvent, error) {
 	return event, nil
 }
 
