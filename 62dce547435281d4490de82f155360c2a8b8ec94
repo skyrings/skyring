@@ -22,6 +22,30 @@
       "revId": "62dce547435281d4490de82f155360c2a8b8ec94",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_cadaf5e8",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-15T13:48:30Z",
+      "side": 1,
+      "message": "we are calculating no. of mons and status based count of mons lets say this succeeds but along with this info we are fetching pg count and pg status based count and this is fetched from calamari api lets say this fails for some reason. It might not be appropriate to not show even mon count right? In such cases we show what we could fetch.",
+      "parentUuid": "3a6ff13c_6a090195",
+      "range": {
+        "startLine": 182,
+        "startChar": 1,
+        "endLine": 185,
+        "endChar": 19
+      },
+      "revId": "62dce547435281d4490de82f155360c2a8b8ec94",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
