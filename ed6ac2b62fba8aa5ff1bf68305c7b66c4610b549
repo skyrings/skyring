@@ -22,6 +22,30 @@
       "revId": "ed6ac2b62fba8aa5ff1bf68305c7b66c4610b549",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_fc913f53",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1007385
+      },
+      "writtenOn": "2016-03-15T06:51:27Z",
+      "side": 1,
+      "message": "Done,Only the required field extracted from the session and passed",
+      "parentUuid": "3a6ff13c_bfda60e7",
+      "range": {
+        "startLine": 288,
+        "startChar": 61,
+        "endLine": 288,
+        "endChar": 65
+      },
+      "revId": "ed6ac2b62fba8aa5ff1bf68305c7b66c4610b549",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
