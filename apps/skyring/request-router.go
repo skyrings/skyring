@@ -170,9 +170,6 @@ func (a *App) FetchClusterDetailsFromProvider(ctxt string, clusterId uuid.UUID) 
 		return nil, fmt.Errorf("Faield to get provider for cluster: %v", clusterId)
 	}
 	err = provider.Client.Call(fmt.Sprintf("%s.%s", provider.Name, "GetClusterSummary"), models.RpcRequest{RpcRequestVars: vars, RpcRequestData: []byte{}, RpcRequestContext: ctxt}, &result)
-	if err != nil {
-		return nil, fmt.Errorf("%s - Call to provider %v failed.Err: %v\n", ctxt, provider.Name, err)
-	}
 	if result.Status.StatusCode == http.StatusOK || result.Status.StatusCode == http.StatusPartialContent {
 		providerResult := make(map[string]interface{})
 		unmarshalError := json.Unmarshal(result.Data.Result, &providerResult)
@@ -182,5 +179,8 @@ func (a *App) FetchClusterDetailsFromProvider(ctxt string, clusterId uuid.UUID) 
 		}
 		retVal[provider.Name] = providerResult
 	}
-	return retVal, err
+	if err != nil {
+		return retVal, fmt.Errorf("%s - Call to provider %v failed.Err: %v\n", ctxt, provider.Name, err)
+	}
+	return retVal, nil
 }
