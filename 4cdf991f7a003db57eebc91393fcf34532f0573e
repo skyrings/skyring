@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_8a09dd2e",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-15T12:00:29Z",
+      "side": 1,
+      "message": "Use only camelCase and not mix with underscores..\n\nRename as stoppedSubTasksCount.. Doesnt this make more sense ??",
+      "range": {
+        "startLine": 598,
+        "startChar": 8,
+        "endLine": 598,
+        "endChar": 21
+      },
+      "revId": "4cdf991f7a003db57eebc91393fcf34532f0573e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_1f060d21",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-15T12:00:29Z",
+      "side": 1,
+      "message": "camelCase with underscore?? thats too much I feel. Only camelCase is fine..",
+      "range": {
+        "startLine": 624,
+        "startChar": 5,
+        "endLine": 624,
+        "endChar": 25
+      },
+      "revId": "4cdf991f7a003db57eebc91393fcf34532f0573e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_3f03c910",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-15T12:00:29Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 637,
+        "startChar": 5,
+        "endLine": 637,
+        "endChar": 20
+      },
+      "revId": "4cdf991f7a003db57eebc91393fcf34532f0573e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
