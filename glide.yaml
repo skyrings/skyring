@@ -38,3 +38,5 @@ import:
   version: bea0c295debd84f9c80050cea3c6aeb3dd448f7c
 - package: github.com/gorilla/context
   version: 1c83b3eabd45b6d76072b66b746c20815fb2872d
+- package: github.com/parnurzeal/gorequest
+  version: 91b42fce877cc6af96c45818665a4c615cc5f4ee
