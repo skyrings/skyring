@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_eacdf15e",
+        "filename": "event/handler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-15T13:25:37Z",
+      "side": 1,
+      "message": "No mix of camelCase and unerscores",
+      "range": {
+        "startLine": 399,
+        "startChar": 24,
+        "endLine": 399,
+        "endChar": 49
+      },
+      "revId": "3c4bb40485da6ab4dc5a71dbdc63d5ceee4f24f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
