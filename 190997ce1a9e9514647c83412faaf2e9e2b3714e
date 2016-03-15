@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_dc7ba327",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-15T07:13:50Z",
+      "side": 1,
+      "message": "Break in multiple lines for better readability..",
+      "range": {
+        "startLine": 187,
+        "startChar": 6,
+        "endLine": 187,
+        "endChar": 53
+      },
+      "revId": "190997ce1a9e9514647c83412faaf2e9e2b3714e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
