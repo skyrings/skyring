@@ -550,6 +550,7 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 		return err
 	}
 	schedule_task_check(ctxt)
+	node_Reinitialize()
 	return nil
 }
 
@@ -639,4 +640,40 @@ func stop_ParentTask(task models.AppTask, ctxt string) {
 	if ok, err := application.GetTaskManager().Stop(task.Id); !ok || err != nil {
 		logger.Get().Error("%s-Failed to stop task: %v", ctxt, task.Id)
 	}
+}
+
+func node_Reinitialize() {
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return
+	}
+	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
+	var nodes models.Nodes
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := collection.Find(bson.M{"state": models.NODE_STATE_INITIALIZING}).All(&nodes); err != nil {
+		logger.Get().Debug("%s-%v", ctxt, err.Error())
+		return
+	}
+	for _, node := range nodes {
+		go start_Reinitialize(node.Hostname, ctxt)
+
+	}
+}
+
+func start_Reinitialize(hostname string, ctxt string) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if ok, err := GetCoreNodeManager().IsNodeUp(hostname, ctxt); !ok {
+		logger.Get().Error(fmt.Sprintf("%s-Error getting status of node: %s. error: %v", ctxt, hostname, err))
+		if err := collection.Update(bson.M{"hostname": hostname},
+			bson.M{"$set": bson.M{"state": models.NODE_STATE_FAILED}}); err != nil {
+			logger.Get().Critical("%s-Error Updating the node: %s. error: %v", ctxt, hostname, err)
+		}
+		return
+	}
+	Initialize(hostname, ctxt)
 }
