@@ -1105,13 +1105,28 @@ func updateMonitoringPluginsForCluster(request models.AddClusterRequest, ctxt st
 	} else {
 		request.MonitoringPlugins = monitoring.GetDefaultThresholdValues()
 	}
+	cluster, clusterFetchError := GetClusterByName(request.Name)
+	if clusterFetchError != nil {
+		logger.Get().Error("%s - Cluster %v not found.Err %v", ctxt, request.Name, clusterFetchError)
+		return clusterFetchError
+	}
 	// Udate the thresholds to db
-	monitoringState.Plugins = request.MonitoringPlugins
+	monitoringState.Plugins = append(cluster.Monitoring.Plugins, request.MonitoringPlugins...)
 	if dbError := updatePluginsInDb(bson.M{"name": request.Name}, monitoringState); dbError != nil {
 		logger.Get().Error("%s-Failed to update plugins to db: %v for cluster: %s", ctxt, dbError, request.Name)
 		return dbError
 	}
 	return nil
+}
+
+func GetClusterByName(clusterName string) (cluster models.Cluster, err error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	if err := collection.Find(bson.M{"name": clusterName}).One(&cluster); err != nil {
+		return cluster, err
+	}
+	return cluster, nil
 }
 
 func updateMonitoringPluginsForClusterExpand(cluster_id *uuid.UUID, nodes models.Nodes, ctxt string) error {
