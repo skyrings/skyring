@@ -173,7 +173,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 				}
 				t.UpdateStatus("Installing packages")
 				//Install the packages
-				if failedNodes := provider.ProvisionerName.Install(ctxt, request.Nodes); len(failedNodes) > 0 {
+				if failedNodes := provider.ProvisionerName.Install(ctxt, provider.Name, request.Nodes); len(failedNodes) > 0 {
 					logger.Get().Error("%s-Package Installation failed for nodes:%v", ctxt, failedNodes)
 					successful := removeFailedNodes(request.Nodes, failedNodes)
 					if len(successful) > 0 {
@@ -707,6 +707,25 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask("", errors.New(fmt.Sprintf("%s-Error etting provider for cluster: %v", ctxt, *cluster_id)), t)
 					return
 				}
+
+				t.UpdateStatus("Installing packages")
+				//Install the packages
+				if failedNodes := provider.ProvisionerName.Install(ctxt, provider.Name, new_nodes); len(failedNodes) > 0 {
+					logger.Get().Error("%s-Package Installation failed for nodes:%v", ctxt, failedNodes)
+					successful := removeFailedNodes(new_nodes, failedNodes)
+					if len(successful) > 0 {
+						body, err = json.Marshal(successful)
+						if err != nil {
+							util.FailTask(fmt.Sprintf("%s-", ctxt), err, t)
+							return
+						}
+					} else {
+						util.FailTask(fmt.Sprintf("%s-", ctxt), errors.New(fmt.Sprintf("Package Installation Failed for all nodes for cluster: %s", cluster_id_str)), t)
+						return
+					}
+				}
+				t.UpdateStatus("Installing packages done. Starting Cluster Creation.")
+
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
 					provider.Name, cluster_post_functions["expand_cluster"]),
 					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body, RpcRequestContext: ctxt},
@@ -726,13 +745,13 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					util.FailTask(fmt.Sprintf("%s-Error adding sub task while expand cluster: %v", ctxt, *cluster_id), err, t)
 					return
 				}
-
+				sessionCopy := db.GetDatastore().Copy()
+				defer sessionCopy.Close()
+				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 				// Check for provider task to complete and update the disk info
 				for {
 					time.Sleep(2 * time.Second)
-					sessionCopy := db.GetDatastore().Copy()
-					defer sessionCopy.Close()
-					coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+
 					var providerTask models.AppTask
 					if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
 						util.FailTask(fmt.Sprintf("%s-Error getting sub task status while expand cluster: %v", ctxt, *cluster_id), err, t)
