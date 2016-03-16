@@ -43,6 +43,7 @@ Requires: mongodb-server
 Requires: graphite-web
 Requires: python-carbon
 Requires: python-whisper
+Requires: redhat-ceph-installer
 
 %description
 SkyRing is a modern, extensible web-based storage management platform
