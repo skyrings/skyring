@@ -422,6 +422,13 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.GET_ClusterConfig,
 			Version:     1,
 		},
+		{
+			Name:        "PATCH_Storage",
+			Method:      "PATCH",
+			Pattern:     "clusters/{cluster-id}/storages/{storage-id}",
+			HandlerFunc: a.PATCH_Storage,
+			Version:     1,
+		},
 		//Routes for Event management
 		{
 			Name:        "GET_events",
