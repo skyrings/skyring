@@ -68,7 +68,10 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 			filter["completed"] = true
 		}
 		if failedErr {
-			filter["status"] = models.TASK_STATUS_FAILURE
+			var arr []interface{}
+			arr = append(arr, bson.M{"status": models.TASK_STATUS_FAILURE})
+			arr = append(arr, bson.M{"status": models.TASK_STATUS_TIMED_OUT})
+			filter["$or"] = arr
 		}
 	}
 	if len(searchMessage) != 0 {
@@ -95,7 +98,7 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 			"$gt": fromDateTime.UTC(),
 		}
 	}
-	if err := coll.Find(filter).Sort("-completed", "lastupdated").All(&tasks); err != nil {
+	if err := coll.Find(filter).Sort("completed", "-lastupdated").All(&tasks); err != nil {
 		logger.Get().Error("%s-Unable to get tasks. error: %v", ctxt, err)
 		HttpResponse(rw, http.StatusInternalServerError, err.Error())
 		return
