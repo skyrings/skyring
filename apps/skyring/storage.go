@@ -36,6 +36,7 @@ var (
 		"create": "CreateStorage",
 		"expand": "ExpandStorage",
 		"delete": "RemoveStorage",
+		"update": "UpdateStorage",
 	}
 
 	STORAGE_STATUS_UP   = "up"
@@ -420,8 +421,8 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 								t.UpdateStatus("Failed")
 								t.Done(models.TASK_STATUS_FAILURE)
 							}
+							break
 						}
-						break
 					}
 				}
 				return
@@ -440,6 +441,199 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		logger.Get().Debug("%s-Task Created: %v to delete storage: %v", ctxt, taskId, *cluster_id)
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
+	}
+}
+
+func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error(
+			"Error Getting the context. error: %v",
+			err)
+	}
+
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		logger.Get().Error(
+			"%s - Error parsing the cluster id: %s. error: %v",
+			ctxt,
+			cluster_id_str,
+			err)
+		HttpResponse(
+			w,
+			http.StatusBadRequest,
+			fmt.Sprintf(
+				"Error parsing the cluster id: %s",
+				cluster_id_str))
+		return
+	}
+	storage_id_str := vars["storage-id"]
+	storage_id, err := uuid.Parse(storage_id_str)
+	if err != nil {
+		logger.Get().Error(
+			"%s - Error parsing the storage id: %s. error: %v",
+			ctxt,
+			storage_id_str,
+			err)
+		HttpResponse(
+			w,
+			http.StatusBadRequest,
+			fmt.Sprintf(
+				"Error parsing the storage id: %s",
+				storage_id_str))
+		return
+	}
+	ok, err := ClusterUnmanaged(*cluster_id)
+	if err != nil {
+		logger.Get().Error(
+			"%s-Error checking managed state of cluster: %v. error: %v",
+			ctxt,
+			*cluster_id,
+			err)
+		HttpResponse(
+			w,
+			http.StatusMethodNotAllowed,
+			fmt.Sprintf(
+				"Error checking managed state of cluster: %v",
+				*cluster_id))
+		return
+	}
+	if ok {
+		logger.Get().Error(
+			"%s-Cluster: %v is in un-managed state",
+			ctxt,
+			*cluster_id)
+		HttpResponse(
+			w,
+			http.StatusMethodNotAllowed,
+			fmt.Sprintf(
+				"Cluster: %v is in un-managed state",
+				*cluster_id))
+		return
+	}
+
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
+	if err != nil {
+		logger.Get().Error(
+			"%s-Error parsing the request. error: %v",
+			ctxt,
+			err)
+		HttpResponse(
+			w,
+			http.StatusBadRequest,
+			fmt.Sprintf(
+				"Unable to parse the request: %v",
+				err))
+		return
+	}
+
+	var result models.RpcResponse
+	var providerTaskId *uuid.UUID
+	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("Started the task for storage update: %v", t.ID)
+				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
+				if provider == nil {
+					util.FailTask(
+						fmt.Sprintf("Error getting the provider for cluster: %v", *cluster_id),
+						fmt.Errorf("%s-%v", ctxt, err),
+						t)
+					return
+				}
+				err = provider.Client.Call(
+					fmt.Sprintf(
+						"%s.%s",
+						provider.Name,
+						storage_post_functions["update"]),
+					models.RpcRequest{
+						RpcRequestVars:    vars,
+						RpcRequestData:    body,
+						RpcRequestContext: ctxt},
+					&result)
+				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
+					util.FailTask(
+						fmt.Sprintf(
+							"Error updating storage: %v",
+							*storage_id),
+						fmt.Errorf("%s-%v", ctxt, err),
+						t)
+					return
+				} else {
+					// Update the master task id
+					providerTaskId, err = uuid.Parse(result.Data.RequestId)
+					if err != nil {
+						util.FailTask(
+							fmt.Sprintf(
+								"Error parsing provider task id while updating storage: %v",
+								*storage_id),
+							err,
+							t)
+						return
+					}
+					t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
+					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+						util.FailTask(
+							fmt.Sprintf(
+								"Error adding sub task while updating storage: %v",
+								*storage_id),
+							err,
+							t)
+						return
+					}
+
+					coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+					var providerTask models.AppTask
+					for {
+						time.Sleep(2 * time.Second)
+						if err := coll.Find(
+							bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+							util.FailTask(
+								fmt.Sprintf(
+									"Error getting sub task status while updating storage: %v",
+									*storage_id),
+								err,
+								t)
+							return
+						}
+						if providerTask.Completed {
+							if providerTask.Status == models.TASK_STATUS_SUCCESS {
+								t.UpdateStatus("Success")
+								t.Done(models.TASK_STATUS_SUCCESS)
+							} else {
+								t.UpdateStatus("Failed")
+								t.Done(models.TASK_STATUS_FAILURE)
+							}
+							break
+						}
+					}
+				}
+				return
+			}
+		}
+	}
+	if taskId, err := a.GetTaskManager().Run(
+		models.ENGINE_NAME,
+		fmt.Sprintf("Update Storage: %s", cluster_id_str),
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
+		logger.Get().Error("%s - Unable to create task to update storage: %v. error: %v", ctxt, *cluster_id, err)
+		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for update storage")
+		return
+	} else {
+		logger.Get().Debug("%s-Task Created: %v to update storage: %v", ctxt, taskId, *cluster_id)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
