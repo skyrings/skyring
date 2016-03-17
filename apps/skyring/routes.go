@@ -415,6 +415,13 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.DEL_Storage,
 			Version:     1,
 		},
+		{
+			Name:        "GET_ClusterConfig",
+			Method:      "GET",
+			Pattern:     "clusters/{cluster-id}/config",
+			HandlerFunc: a.GET_ClusterConfig,
+			Version:     1,
+		},
 		//Routes for Event management
 		{
 			Name:        "GET_events",
