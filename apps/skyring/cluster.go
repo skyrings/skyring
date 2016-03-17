@@ -39,6 +39,7 @@ var (
 		"create":         "CreateCluster",
 		"expand_cluster": "ExpandCluster",
 		"patch_slu":      "UpdateStorageLogicalUnitParams",
+		"config":         "GetClusterConfig",
 	}
 
 	storage_types = map[string]string{
@@ -1006,6 +1007,77 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusAccepted)
 	w.Write(bytes)
 
+}
+
+func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		logger.Get().Error(
+			"%s-Error parsing the cluster id: %s, error: %v",
+			ctxt,
+			cluster_id_str,
+			err)
+		HttpResponse(
+			w,
+			http.StatusMethodNotAllowed,
+			fmt.Sprintf(
+				"Error parsing the cluster id: %s, error: %v",
+				cluster_id_str,
+				err))
+		return
+	}
+	var result models.RpcResponse
+	provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
+	if provider == nil {
+		logger.Get().Error(
+			"%s-Error getting the provider for cluster: %v. error: %v",
+			ctxt,
+			*cluster_id,
+			err)
+		HttpResponse(
+			w,
+			http.StatusBadRequest,
+			fmt.Sprintf(
+				"Error getting the provider for cluster: %v. error: %v",
+				*cluster_id,
+				err))
+		return
+	}
+
+	err = provider.Client.Call(
+		fmt.Sprintf(
+			"%s.%s",
+			provider.Name,
+			cluster_post_functions["config"]),
+		models.RpcRequest{
+			RpcRequestVars:    mux.Vars(r),
+			RpcRequestData:    []byte{},
+			RpcRequestContext: ctxt},
+		&result)
+	if err != nil || (result.Status.StatusCode != http.StatusOK) {
+		logger.Get().Error(
+			"%s-Error getting config details for cluster: %v. error: %v",
+			ctxt,
+			*cluster_id,
+			err)
+		HttpResponse(
+			w,
+			http.StatusInternalServerError,
+			fmt.Sprintf(
+				"Error getting confog details of cluster: %v. error: %v",
+				*cluster_id,
+				err))
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(result.Data.Result)
 }
 
 func disks_used(nodes []models.ClusterNode) (bool, error) {
