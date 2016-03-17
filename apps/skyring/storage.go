@@ -36,6 +36,7 @@ var (
 		"create": "CreateStorage",
 		"expand": "ExpandStorage",
 		"delete": "RemoveStorage",
+		"update": "UpdateStorage",
 	}
 
 	STORAGE_STATUS_UP   = "up"
@@ -444,4 +445,136 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
 	}
+}
+
+func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error(
+			"Error Getting the context. error: %v",
+			err)
+	}
+
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		logger.Get().Error(
+			"%s - Error parsing the cluster id: %s. error: %v",
+			ctxt,
+			cluster_id_str,
+			err)
+		HttpResponse(
+			w,
+			http.StatusBadRequest,
+			fmt.Sprintf(
+				"Error parsing the cluster id: %s",
+				cluster_id_str))
+		return
+	}
+	storage_id_str := vars["storage-id"]
+	storage_id, err := uuid.Parse(storage_id_str)
+	if err != nil {
+		logger.Get().Error(
+			"%s - Error parsing the storage id: %s. error: %v",
+			ctxt,
+			storage_id_str,
+			err)
+		HttpResponse(
+			w,
+			http.StatusBadRequest,
+			fmt.Sprintf(
+				"Error parsing the storage id: %s",
+				storage_id_str))
+		return
+	}
+	ok, err := ClusterUnmanaged(*cluster_id)
+	if err != nil {
+		logger.Get().Error(
+			"%s-Error checking managed state of cluster: %v. error: %v",
+			ctxt,
+			*cluster_id,
+			err)
+		HttpResponse(
+			w,
+			http.StatusMethodNotAllowed,
+			fmt.Sprintf(
+				"Error checking managed state of cluster: %v",
+				*cluster_id))
+		return
+	}
+	if ok {
+		logger.Get().Error(
+			"%s-Cluster: %v is in un-managed state",
+			ctxt,
+			*cluster_id)
+		HttpResponse(
+			w,
+			http.StatusMethodNotAllowed,
+			fmt.Sprintf(
+				"Cluster: %v is in un-managed state",
+				*cluster_id))
+		return
+	}
+
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
+	if err != nil {
+		logger.Get().Error(
+			"%s-Error parsing the request. error: %v",
+			ctxt,
+			err)
+		HttpResponse(
+			w,
+			http.StatusBadRequest,
+			fmt.Sprintf(
+				"Unable to parse the request: %v",
+				err))
+		return
+	}
+
+	var result models.RpcResponse
+	provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
+	if provider == nil {
+		logger.Get().Error(
+			"%s-Error getting the provider for cluster: %v. error: %v",
+			ctxt,
+			*cluster_id,
+			err)
+		HttpResponse(
+			w,
+			http.StatusBadRequest,
+			fmt.Sprintf(
+				"Error getting the provider for cluster: %v. error: %v",
+				*cluster_id,
+				err))
+		return
+	}
+
+	err = provider.Client.Call(
+		fmt.Sprintf(
+			"%s.%s",
+			provider.Name,
+			cluster_post_functions["update"]),
+		models.RpcRequest{
+			RpcRequestVars:    mux.Vars(r),
+			RpcRequestData:    body,
+			RpcRequestContext: ctxt},
+		&result)
+	if err != nil || (result.Status.StatusCode != http.StatusOK) {
+		logger.Get().Error(
+			"%s-Error updating storage entity: %v. error: %v",
+			ctxt,
+			*storage_id,
+			err)
+		HttpResponse(
+			w,
+			http.StatusInternalServerError,
+			fmt.Sprintf(
+				"Error updating storage entity: %v. error: %v",
+				*storage_id,
+				err))
+		return
+	}
+	HttpResponse(w, http.StatusOK, "Done")
+	return
 }
