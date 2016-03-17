@@ -739,35 +739,66 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	if m["action"] == "reinitialize" {
-		node, err := node_exists("hostname", hostname)
-		if err != nil {
-			logger.Get().Error(fmt.Sprintf("%s-Node %s not found . error: %v", ctxt, hostname, err))
-			HttpResponse(w, http.StatusInternalServerError, err.Error())
-			return
-		} else if node.State != models.NODE_STATE_FAILED {
-			logger.Get().Error(fmt.Sprintf("%s-Node %s is not in faild state", ctxt, hostname))
-			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Node %s is not in faild state", hostname))
-			return
-		}
-		if ok, err := GetCoreNodeManager().IsNodeUp(node.Hostname, ctxt); !ok {
-			logger.Get().Error(fmt.Sprintf("%s-Error getting status of node: %s. error: %v", ctxt, hostname, err))
-			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting status of node: %s. error: %v", hostname, err))
-			return
-		}
-		sessionCopy := db.GetDatastore().Copy()
-		defer sessionCopy.Close()
-		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-		if err := coll.Update(bson.M{"hostname": node.Hostname}, bson.M{"$set": bson.M{"state": models.NODE_STATE_INITIALIZING}}); err != nil {
-			logger.Get().Error(fmt.Sprintf("%s-Faild to update the node %s state as initialize: error: %v", ctxt, hostname, err))
-			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Faild to update the node %s state as initialize: error: %v", hostname, err))
-			return
-		}
-		Initialize(node.Hostname, ctxt)
-	} else {
-		logger.Get().Error(fmt.Sprintf("%s-Unsupported action request found for Node:%s", ctxt, hostname))
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Unsupported action request found for Node:%s", hostname))
+	node, err := node_exists("hostname", hostname)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("%s-Node %s not found . error: %v", ctxt, hostname, err))
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
+	}
+	ch := m["action"]
+	switch ch {
+	case "reinitialize":
+		{
+			if node.State != models.NODE_STATE_FAILED {
+				logger.Get().Error(fmt.Sprintf("%s-Node %s is not in faild state", ctxt, hostname))
+				HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Node %s is not in faild state", hostname))
+				return
+			}
+			if ok, err := GetCoreNodeManager().IsNodeUp(node.Hostname, ctxt); !ok {
+				logger.Get().Error(fmt.Sprintf("%s-Error getting status of node: %s. error: %v", ctxt, hostname, err))
+				HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting status of node: %s. error: %v", hostname, err))
+				return
+			}
+			sessionCopy := db.GetDatastore().Copy()
+			defer sessionCopy.Close()
+			coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+			if err := coll.Update(bson.M{"hostname": node.Hostname}, bson.M{"$set": bson.M{"state": models.NODE_STATE_INITIALIZING}}); err != nil {
+				logger.Get().Error(fmt.Sprintf("%s-Faild to update the node %s state as initialize: error: %v", ctxt, hostname, err))
+				HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Faild to update the node %s state as initialize: error: %v", hostname, err))
+				return
+			}
+			Initialize(node.Hostname, ctxt)
+		}
+	case "delete":
+		{
+			sessionCopy := db.GetDatastore().Copy()
+			defer sessionCopy.Close()
+			collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+			var node models.Node
+			if err := collection.Find(bson.M{"hostname": hostname}).One(&node); err != nil {
+				logger.Get().Error(fmt.Sprintf("%s-Unable to get node details of %s : error: %v", ctxt, hostname, err))
+				HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Faild to get node details of %s : error: %v", hostname, err))
+				return
+			}
+			if !node.ClusterId.IsZero() {
+				logger.Get().Error(fmt.Sprintf("%s-Host %s already participating in a cluster . Cannot be removed: error: %v", ctxt, hostname, err))
+				HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Faild to delete host %s : error: %v", hostname, err))
+				return
+			}
+			if ret_val, _ := GetCoreNodeManager().RemoveNode(node.Hostname, ctxt); ret_val {
+				if err := collection.Remove(bson.M{"hostname": node.Hostname}); err != nil {
+					logger.Get().Error(fmt.Sprintf("%s-Error removing Host %s from DB: error: %v", ctxt, hostname, err))
+					HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error removing host %s from DB: error: %v", hostname, err))
+					return
+				}
+			}
+		}
+	default:
+		{
+			logger.Get().Error(fmt.Sprintf("%s-Unsupported action request found for Node:%s", ctxt, hostname))
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Unsupported action request found for Node:%s", ch))
+			return
+		}
 	}
 }
 
