@@ -532,7 +532,6 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
 }
 
 func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
-
 	logger.Get().Info("Starting clusters syncing")
 	go a.SyncClusterDetails()
 	go InitSchedules()
@@ -552,7 +551,7 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 	schedule_task_check(ctxt)
 	node_Reinitialize()
 	cleanupTasks()
-
+	initializeAbout(ctxt)
 	return nil
 }
 
@@ -694,5 +693,16 @@ func cleanupTasks() {
 	if _, err := collection.UpdateAll(bson.M{"completed": false}, bson.M{"$set": bson.M{"completed": true,
 		"status": models.TASK_STATUS_FAILURE, "statuslist": s}}); err != nil {
 		logger.Get().Debug("%s-%v", ctxt, err.Error())
+	}
+}
+
+func initializeAbout(ctxt string) {
+	if len(conf.SystemConfig.SysCapabilities.StorageProviderDetails) != 0 {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SYSTEM_CAPABILITIES)
+		if _, err := coll.Upsert(bson.M{"productname": conf.SystemConfig.SysCapabilities.ProductName}, conf.SystemConfig.SysCapabilities); err != nil {
+			logger.Get().Error(fmt.Sprintf("%s-Error adding System_capabilities details . error: %v", ctxt, err))
+		}
 	}
 }

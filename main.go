@@ -27,7 +27,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"path"
 	"strings"
 	"syscall"
 )
@@ -146,7 +145,7 @@ func start() {
 		panic(fmt.Sprintf("log init failed. %s", err))
 	}
 
-	conf.LoadAppConfiguration(path.Join(configDir, ConfigFile))
+	conf.LoadAppConfiguration(configDir, ConfigFile)
 	conf.SystemConfig.Logging.LogToStderr = logToStderr
 	conf.SystemConfig.Logging.Filename = logFile
 	conf.SystemConfig.Logging.Level = level
@@ -203,7 +202,6 @@ func start() {
 			logger.Get().Fatalf("Unable to start the webserver. err: %v", err)
 		}
 	}()
-
 	if err := application.PostInitApplication(conf.SystemConfig); err != nil {
 		logger.Get().Fatalf("Unable to run Post init. err: %v", err)
 	}
