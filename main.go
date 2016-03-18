@@ -204,7 +204,7 @@ func start() {
 		}
 	}()
 
-	if err := application.PostInitApplication(conf.SystemConfig); err != nil {
+	if err := application.PostInitApplication(conf.SystemConfig, configDir); err != nil {
 		logger.Get().Fatalf("Unable to run Post init. err: %v", err)
 	}
 

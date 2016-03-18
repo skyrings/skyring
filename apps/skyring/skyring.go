@@ -67,6 +67,7 @@ const (
 	DEFAULT_API_PREFIX            = "/api"
 	LoggingCtxt        ContextKey = 0
 	Timeout                       = 10
+	ConfigFile                    = "about.conf"
 )
 
 var (
@@ -531,8 +532,7 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
 	return nil
 }
 
-func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
-
+func (a *App) PostInitApplication(sysConfig conf.SkyringCollection, configDir string) error {
 	logger.Get().Info("Starting clusters syncing")
 	go a.SyncClusterDetails()
 	go InitSchedules()
@@ -552,7 +552,7 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 	schedule_task_check(ctxt)
 	node_Reinitialize()
 	cleanupTasks()
-
+	initializeAbout(configDir)
 	return nil
 }
 
@@ -695,4 +695,55 @@ func cleanupTasks() {
 		"status": models.TASK_STATUS_FAILURE, "statuslist": s}}); err != nil {
 		logger.Get().Debug("%s-%v", ctxt, err.Error())
 	}
+}
+
+func initializeAbout(configDir string) {
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return
+	}
+	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
+
+	var about models.About
+	file, err := ioutil.ReadFile(path.Join(configDir, ConfigFile))
+	if err != nil {
+		logger.Get().Critical("%s-Error Reading Config. error: %v", ctxt, err)
+		return
+	}
+	err = json.Unmarshal(file, &about)
+	if err != nil {
+		logger.Get().Critical("%s-Error Unmarshalling Config. error: %v", ctxt, err)
+		return
+	}
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_ABOUT)
+	if err := coll.Insert(about); err != nil {
+		logger.Get().Error(fmt.Sprintf("%s-Error adding About details . error: %v", ctxt, err))
+	}
+}
+
+func (a *App) About(w http.ResponseWriter, r *http.Request) {
+	reqId, err := uuid.New()
+	if err != nil {
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error Creating the RequestId. error: %v", err))
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return
+	}
+	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
+	var about []models.About
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_ABOUT)
+	if err := coll.Find(nil).All(&about); err != nil {
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error in retriving About detail. error: %v", err))
+		logger.Get().Error("%s-Error in retriving About detail. error: %v", ctxt, err)
+		return
+	}
+	if err := json.NewEncoder(w).Encode(about[len(about)-1]); err != nil {
+		logger.Get().Error("%s-Error encoding data: %v", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
+	}
+
 }
