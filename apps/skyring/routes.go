@@ -566,6 +566,14 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.TestMailNotifier,
 			Version:     1,
 		},
+		//Route for About USM
+		{
+			Name:        "GET_About",
+			Method:      "GET",
+			Pattern:     "about",
+			HandlerFunc: a.About,
+			Version:     1,
+		},
 	}
 	for _, route := range routes {
 		CORE_ROUTES = append(CORE_ROUTES, route)
