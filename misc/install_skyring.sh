@@ -98,6 +98,8 @@ cp -rf ~/.skyring_build/golang/gopath/src/github.com/skyrings/bigfin/backend/sal
 cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/skyring.conf.sample /etc/skyring/skyring.conf
 cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/authentication.conf.sample /etc/skyring/authentication.conf
 cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/providers.d/ceph.conf.sample /etc/skyring/providers.d/ceph.conf
+cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/about.conf.sample /etc/skyring/about.conf
+cp ~/.skyring_build/golang/gopath/src/github.com/skyrings/skyring/conf/sample/providers.d/ceph.dat.sample /etc/skyring/providers.d/ceph.dat
 
 # Copy the binaries into appropriate path
 cp -f ~/.skyring_build/golang/gopath/bin/skyring /usr/sbin/.

@@ -23,5 +23,5 @@ type Application interface {
 	StartProviders(configDir string, binDir string) error
 	InitializeApplication(sysConfig conf.SkyringCollection) error
 	LoggingContext(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
-	PostInitApplication(sysConfig conf.SkyringCollection) error
+	PostInitApplication(sysConfig conf.SkyringCollection, SysCapabilities conf.System_capabilities) error
 }

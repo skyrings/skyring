@@ -67,6 +67,7 @@ const (
 	DEFAULT_API_PREFIX            = "/api"
 	LoggingCtxt        ContextKey = 0
 	Timeout                       = 10
+	ConfigFile                    = "about.conf"
 )
 
 var (
@@ -531,8 +532,7 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection) error {
 	return nil
 }
 
-func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
-
+func (a *App) PostInitApplication(sysConfig conf.SkyringCollection, SysCapabilities conf.System_capabilities) error {
 	logger.Get().Info("Starting clusters syncing")
 	go a.SyncClusterDetails()
 	go InitSchedules()
@@ -552,7 +552,7 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 	schedule_task_check(ctxt)
 	node_Reinitialize()
 	cleanupTasks()
-
+	initializeAbout(SysCapabilities, ctxt)
 	return nil
 }
 
@@ -695,4 +695,36 @@ func cleanupTasks() {
 		"status": models.TASK_STATUS_FAILURE, "statuslist": s}}); err != nil {
 		logger.Get().Debug("%s-%v", ctxt, err.Error())
 	}
+}
+
+func initializeAbout(SysCapabilities conf.System_capabilities, ctxt string) {
+	if len(SysCapabilities.StorageProviderVer) != 0 {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SYSTEM_CAPABILITIES)
+		if _, err := coll.UpsertId(SysCapabilities.ProductName, SysCapabilities); err != nil {
+			logger.Get().Error(fmt.Sprintf("%s-Error adding System_capabilities details . error: %v", ctxt, err))
+		}
+	}
+}
+
+func (a *App) About(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+	var sys_capabilities conf.System_capabilities
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SYSTEM_CAPABILITIES)
+	if err := coll.Find(nil).One(&sys_capabilities); err != nil {
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error in retrieving System Capabilities detail. error: %v", err))
+		logger.Get().Error("%s-Error in retrieving System Capabilities detail. error: %v", ctxt, err)
+		return
+	}
+	if err := json.NewEncoder(w).Encode(sys_capabilities); err != nil {
+		logger.Get().Error("%s-Error encoding data: %v", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
+	}
+
 }
