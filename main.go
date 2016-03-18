@@ -203,8 +203,11 @@ func start() {
 			logger.Get().Fatalf("Unable to start the webserver. err: %v", err)
 		}
 	}()
-
-	if err := application.PostInitApplication(conf.SystemConfig); err != nil {
+	file, err := application.ReadSystemInfo(configDir)
+	if err != nil {
+		logger.Get().Critical("Error Reading Config. error: %v", err)
+	}
+	if err := application.PostInitApplication(conf.SystemConfig, file); err != nil {
 		logger.Get().Fatalf("Unable to run Post init. err: %v", err)
 	}
 
