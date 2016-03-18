@@ -33,6 +33,8 @@ import (
 )
 
 const (
+	// AboutConfigFile system-capabilities configuration file
+	aboutConfigFile = "about.conf"
 	// ConfigFile default configuration file
 	ConfigFile = "skyring.conf"
 	// DefaultLogLevel default log level
@@ -146,7 +148,7 @@ func start() {
 		panic(fmt.Sprintf("log init failed. %s", err))
 	}
 
-	conf.LoadAppConfiguration(path.Join(configDir, ConfigFile))
+	conf.LoadAppConfiguration(path.Join(configDir, ConfigFile), path.Join(configDir, aboutConfigFile))
 	conf.SystemConfig.Logging.LogToStderr = logToStderr
 	conf.SystemConfig.Logging.Filename = logFile
 	conf.SystemConfig.Logging.Level = level
@@ -203,8 +205,7 @@ func start() {
 			logger.Get().Fatalf("Unable to start the webserver. err: %v", err)
 		}
 	}()
-
-	if err := application.PostInitApplication(conf.SystemConfig); err != nil {
+	if err := application.PostInitApplication(conf.SystemConfig, conf.SysCapabilities); err != nil {
 		logger.Get().Fatalf("Unable to run Post init. err: %v", err)
 	}
 
