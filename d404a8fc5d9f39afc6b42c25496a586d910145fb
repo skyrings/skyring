@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6ff13c_9152e2db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-18T15:46:56Z",
+      "side": 1,
+      "message": "Rather call it system capabilities",
+      "range": {
+        "startLine": 7,
+        "startChar": 18,
+        "endLine": 7,
+        "endChar": 23
+      },
+      "revId": "d404a8fc5d9f39afc6b42c25496a586d910145fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_b15efee7",
+        "filename": "apps/app.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-18T15:46:56Z",
+      "side": 1,
+      "message": "This file should read outside and systemCaps should be passed here.",
+      "range": {
+        "startLine": 26,
+        "startChar": 55,
+        "endLine": 26,
+        "endChar": 64
+      },
+      "revId": "d404a8fc5d9f39afc6b42c25496a586d910145fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_d1637aaf",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-18T15:46:56Z",
+      "side": 1,
+      "message": "pass ctxt as a parameter as its already available while invocation of this function..",
+      "range": {
+        "startLine": 700,
+        "startChar": 5,
+        "endLine": 700,
+        "endChar": 20
+      },
+      "revId": "d404a8fc5d9f39afc6b42c25496a586d910145fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_f15876fc",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-18T15:46:56Z",
+      "side": 1,
+      "message": "Get the ctxt from request rather than forming here..",
+      "range": {
+        "startLine": 734,
+        "startChar": 1,
+        "endLine": 734,
+        "endChar": 5
+      },
+      "revId": "d404a8fc5d9f39afc6b42c25496a586d910145fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_115ef2e6",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-18T15:46:56Z",
+      "side": 1,
+      "message": "spelling",
+      "range": {
+        "startLine": 740,
+        "startChar": 63,
+        "endLine": 740,
+        "endChar": 72
+      },
+      "revId": "d404a8fc5d9f39afc6b42c25496a586d910145fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_31720e7d",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-18T15:46:56Z",
+      "side": 1,
+      "message": "What is this len -1 etc??",
+      "range": {
+        "startLine": 744,
+        "startChar": 37,
+        "endLine": 744,
+        "endChar": 56
+      },
+      "revId": "d404a8fc5d9f39afc6b42c25496a586d910145fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_716c869d",
+        "filename": "conf/sample/about.conf.sample",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-18T15:46:56Z",
+      "side": 1,
+      "message": "Is it version of skyring??",
+      "range": {
+        "startLine": 3,
+        "startChar": 24,
+        "endLine": 3,
+        "endChar": 43
+      },
+      "revId": "d404a8fc5d9f39afc6b42c25496a586d910145fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_9169028e",
+        "filename": "conf/sample/about.conf.sample",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-18T15:46:56Z",
+      "side": 1,
+      "message": "Shouldnt this be bigfin version",
+      "range": {
+        "startLine": 4,
+        "startChar": 24,
+        "endLine": 4,
+        "endChar": 30
+      },
+      "revId": "d404a8fc5d9f39afc6b42c25496a586d910145fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_f10f96df",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-18T15:46:56Z",
+      "side": 1,
+      "message": "I feel each of the storage providers should have their own about conf file and that should be copied in /etc/skyring/providers.d/about-\u003cname\u003e.dat\n\nI call it .dat as its more of a data file and not a configuration file :) Comments??",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 15
+      },
+      "revId": "d404a8fc5d9f39afc6b42c25496a586d910145fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
