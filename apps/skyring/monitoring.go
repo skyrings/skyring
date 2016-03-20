@@ -144,11 +144,9 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 		paramsToQuery["parentName"] = parentName
 	}
 
-	res, err := GetMonitoringManager().QueryDB(paramsToQuery)
-	if err == nil {
-		json.NewEncoder(w).Encode(res)
-	} else {
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+	err = GetMonitoringManager().QueryDBWithWriteResponse(paramsToQuery, w, r)
+	if err != nil {
+		logger.Get().Error("%s - Failed to fetch stats of %v of %v", ctxt, resource_name, entityName)
 	}
 }
 
@@ -186,12 +184,9 @@ func (a *App) Get_SystemUtilization(w http.ResponseWriter, r *http.Request) {
 		"interval":   interval,
 	}
 
-	res, err := GetMonitoringManager().QueryDB(paramsToQuery)
-	if err == nil {
-		json.NewEncoder(w).Encode(res)
-	} else {
-		logger.Get().Error("%s - Failed to get %v utilization of system.Err %v", ctxt, err)
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+	err = GetMonitoringManager().QueryDBWithWriteResponse(paramsToQuery, w, r)
+	if err != nil {
+		logger.Get().Error("%s - Failed to get %v utilization of system.Err %v", ctxt, resource_name, err)
 	}
 }
 
