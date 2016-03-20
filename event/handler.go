@@ -108,6 +108,7 @@ func resource_threshold_crossed(event models.AppEvent, ctxt string) (models.AppE
 	if event.Severity == models.ALARM_STATUS_CLEARED {
 		if err := common_event.ClearCorrespondingAlert(event, ctxt); err != nil {
 			logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
+			return event, err
 		}
 	}
 	return event, nil
@@ -376,6 +377,7 @@ func collectd_status_handler(event models.AppEvent, ctxt string) (models.AppEven
 	if event.Severity == models.ALARM_STATUS_CLEARED {
 		if err := common_event.ClearCorrespondingAlert(event, ctxt); err != nil {
 			logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
+			return event, err
 		}
 	}
 	return event, nil
@@ -398,6 +400,7 @@ func node_appeared_handler(event models.AppEvent, ctxt string) (models.AppEvent,
 
 	if err := common_event.ClearCorrespondingAlert(event, ctxt); err != nil {
 		logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
+		return event, err
 	}
 
 	return event, nil
