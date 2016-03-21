@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "3a6ff13c_bdddef16",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-03-21T13:45:09Z",
+      "side": 1,
+      "message": "ok i will do it",
+      "parentUuid": "3a6ff13c_d1637aaf",
+      "range": {
+        "startLine": 700,
+        "startChar": 5,
+        "endLine": 700,
+        "endChar": 20
+      },
+      "revId": "d404a8fc5d9f39afc6b42c25496a586d910145fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a6ff13c_f15876fc",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 1
@@ -128,6 +152,30 @@
       "writtenOn": "2016-03-18T15:46:56Z",
       "side": 1,
       "message": "What is this len -1 etc??",
+      "range": {
+        "startLine": 744,
+        "startChar": 37,
+        "endLine": 744,
+        "endChar": 56
+      },
+      "revId": "d404a8fc5d9f39afc6b42c25496a586d910145fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a6ff13c_dde2abd4",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-03-21T13:45:09Z",
+      "side": 1,
+      "message": "when ever skyring restart about details is inserted in db..so im retrieving latest record",
+      "parentUuid": "3a6ff13c_31720e7d",
       "range": {
         "startLine": 744,
         "startChar": 37,
