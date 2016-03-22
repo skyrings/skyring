@@ -99,10 +99,21 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Validate storage target size info
-	if ok, err := valid_storage_size(request.Size); !ok || err != nil {
-		logger.Get().Error("%s-Invalid storage size: %v", ctxt, request.Size)
-		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid storage size: %s passed for: %s", request.Size, request.Name))
-		return
+	if request.Size != "" {
+		if ok, err := valid_storage_size(request.Size); !ok || err != nil {
+			logger.Get().Error(
+				"%s-Invalid storage size: %v",
+				ctxt,
+				request.Size)
+			HttpResponse(
+				w,
+				http.StatusBadRequest,
+				fmt.Sprintf(
+					"Invalid storage size: %s passed for: %s",
+					request.Size,
+					request.Name))
+			return
+		}
 	}
 
 	var result models.RpcResponse
