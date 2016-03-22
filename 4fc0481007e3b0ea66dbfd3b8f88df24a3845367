@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a6ced46_ccc30337",
+        "filename": "apps/app.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-22T05:34:12Z",
+      "side": 1,
+      "message": "I think this way is not right.\n\n1. Read the conf file as part of LoadAppConfiguration and populate SystemConfig with this info\n\n2. Its not mandatory to have this info pushed into DB(just a comment, you take a call). Your API can operate on the SystemConfig itself as this is a static data and not expected change",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 27,
+        "endChar": 49
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_0cdd1b15",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-22T05:34:12Z",
+      "side": 1,
+      "message": "You can create a about.go and put this code there",
+      "range": {
+        "startLine": 725,
+        "startChar": 0,
+        "endLine": 744,
+        "endChar": 1
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_2ce2d7d5",
+        "filename": "conf/sample/about.conf.sample",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-22T05:34:12Z",
+      "side": 1,
+      "message": "How you are going to handle this when you have multiple providers?",
+      "range": {
+        "startLine": 4,
+        "startChar": 3,
+        "endLine": 4,
+        "endChar": 32
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_4ce713e5",
+        "filename": "conf/sample/providers.d/ceph.conf.sample",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-22T05:34:12Z",
+      "side": 1,
+      "message": "Not seeing any change to this file?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 1
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a6ced46_6ceccfc8",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-22T05:34:12Z",
+      "side": 1,
+      "message": "Do we need any spec file changes to accommodate about.conf",
+      "range": {
+        "startLine": 101,
+        "startChar": 5,
+        "endLine": 101,
+        "endChar": 19
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
