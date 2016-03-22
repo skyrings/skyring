@@ -297,8 +297,21 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 
 	params := r.URL.Query()
 	admin_state_str := params.Get("state")
+	node_name := params.Get("name")
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+
+	if node_name != "" {
+		var node models.Node
+		if err := collection.Find(bson.M{"hostname": node_name}).One(&node); err != nil {
+			HttpResponse(w, http.StatusInternalServerError, err.Error())
+			logger.Get().Error("%s-Error getting the node. error: %v", ctxt, err)
+			return
+		}
+		json.NewEncoder(w).Encode(node)
+		return
+	}
+
 	var nodes models.Nodes
 	if admin_state_str == "" {
 		if err := collection.Find(bson.M{"state": bson.M{"$ne": models.NODE_STATE_UNACCEPTED}}).All(&nodes); err != nil {
