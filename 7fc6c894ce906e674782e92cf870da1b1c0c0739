@@ -46,6 +46,30 @@
       "revId": "7fc6c894ce906e674782e92cf870da1b1c0c0739",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_a7132e0d",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:56:54Z",
+      "side": 1,
+      "message": "Does go provide a URL redirect as such?? I am thinking as if we can just re-direct the URL to graphite using mux...",
+      "parentUuid": "da9b358b_e73b769b",
+      "range": {
+        "startLine": 95,
+        "startChar": 29,
+        "endLine": 95,
+        "endChar": 45
+      },
+      "revId": "7fc6c894ce906e674782e92cf870da1b1c0c0739",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
