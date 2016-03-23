@@ -301,7 +301,7 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	var nodes models.Nodes
 	if admin_state_str == "" {
-		if err := collection.Find(bson.M{"state": bson.M{"$ne": models.NODE_STATE_UNACCEPTED}}).All(&nodes); err != nil {
+		if err := collection.Find(bson.M{"state": bson.M{"$ne": models.NODE_STATE_UNACCEPTED}}).Sort("hostname").All(&nodes); err != nil {
 			HttpResponse(w, http.StatusInternalServerError, err.Error())
 			logger.Get().Error("%s-Error getting the nodes list. error: %v", ctxt, err)
 			return
@@ -314,10 +314,33 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	if len(nodes) == 0 {
+	var nodesWithUtilizations []models.NodeWithUtilization
+	collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_RESOURCE_UTILIZATIONS)
+	var rUtilizations []models.ResourceUtilization
+	if err = collection.Find(nil).Sort("nodename").All(&rUtilizations); err != nil {
+		logger.Get().Warning("%s - Failed to get node utilizations.Err %v", ctxt, err)
+	} else {
+		utilizationIndex := 0
+		for nodeIndex, node := range nodes {
+			if nodes[nodeIndex].Hostname < rUtilizations[utilizationIndex].NodeName {
+				nodesWithUtilizations = append(nodesWithUtilizations, models.NodeWithUtilization{
+					NodeDet: node,
+				})
+				continue
+			}
+			if nodes[nodeIndex].Hostname == rUtilizations[utilizationIndex].NodeName {
+				nodesWithUtilizations = append(nodesWithUtilizations, models.NodeWithUtilization{
+					NodeDet:   node,
+					NodeUsage: rUtilizations[utilizationIndex],
+				})
+			}
+			utilizationIndex = utilizationIndex + 1
+		}
+	}
+	if len(nodesWithUtilizations) == 0 {
 		json.NewEncoder(w).Encode([]models.Node{})
 	} else {
-		json.NewEncoder(w).Encode(nodes)
+		json.NewEncoder(w).Encode(nodesWithUtilizations)
 	}
 }
 
@@ -409,7 +432,7 @@ func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error
 		var nodes models.Nodes
 		switch foundIndex {
 		case 0:
-			if err := coll.Find(bson.M{}).All(&nodes); err != nil {
+			if err := coll.Find(bson.M{}).Sort("hostname").All(&nodes); err != nil {
 				return models.Nodes{}, err
 			}
 			var unusedNodes models.Nodes
@@ -420,7 +443,7 @@ func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error
 			}
 			return unusedNodes, nil
 		case 1:
-			if err := coll.Find(bson.M{}).All(&nodes); err != nil {
+			if err := coll.Find(bson.M{}).Sort("hostname").All(&nodes); err != nil {
 				return models.Nodes{}, err
 			}
 			var usedNodes models.Nodes
@@ -431,7 +454,7 @@ func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error
 			}
 			return usedNodes, nil
 		case 2:
-			if err := coll.Find(bson.M{"enabled": false}).All(&nodes); err != nil {
+			if err := coll.Find(bson.M{"enabled": false}).Sort("hostname").All(&nodes); err != nil {
 				return models.Nodes{}, err
 			}
 			return nodes, nil
