@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_47e7c240",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:33:40Z",
+      "side": 1,
+      "message": "What this represents? Can we pass URL as \"monitoring/resource_path:a.b.c.d\" ??",
+      "range": {
+        "startLine": 95,
+        "startChar": 29,
+        "endLine": 95,
+        "endChar": 45
+      },
+      "revId": "7fc6c894ce906e674782e92cf870da1b1c0c0739",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
