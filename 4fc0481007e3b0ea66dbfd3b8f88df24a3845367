@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_a7afae93",
+        "filename": "apps/app.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-03-23T06:29:36Z",
+      "side": 1,
+      "message": "ok i am going to move that structure about to conf.go and then i will read that conf file from LoadAppConfiguration..and then i will remove ReadSystemInfo function",
+      "parentUuid": "1a6ced46_ccc30337",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 27,
+        "endChar": 49
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_27bb9e10",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2016-03-23T05:42:40Z",
       "side": 1,
       "message": "I meant to pass SystemConfig here and not the []byte",
+      "range": {
+        "startLine": 543,
+        "startChar": 68,
+        "endLine": 543,
+        "endChar": 80
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_8795ca41",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-03-23T06:29:36Z",
+      "side": 1,
+      "message": "ok i will change it",
+      "parentUuid": "da9b358b_27bb9e10",
       "range": {
         "startLine": 543,
         "startChar": 68,
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_470342b9",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-03-23T06:29:36Z",
+      "side": 1,
+      "message": "i will do it",
+      "parentUuid": "1a6ced46_0cdd1b15",
+      "range": {
+        "startLine": 725,
+        "startChar": 0,
+        "endLine": 744,
+        "endChar": 1
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6ced46_2ce2d7d5",
         "filename": "conf/sample/about.conf.sample",
         "patchSetId": 2
@@ -106,6 +178,30 @@
       "writtenOn": "2016-03-22T05:34:12Z",
       "side": 1,
       "message": "How you are going to handle this when you have multiple providers?",
+      "range": {
+        "startLine": 4,
+        "startChar": 3,
+        "endLine": 4,
+        "endChar": 32
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_07d3fa39",
+        "filename": "conf/sample/about.conf.sample",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-03-23T06:29:36Z",
+      "side": 1,
+      "message": "i have create one data file for each provider in provider.d,In that file i going to populate version of particular provider and im going to change providerversion feild as map in struct",
+      "parentUuid": "1a6ced46_2ce2d7d5",
       "range": {
         "startLine": 4,
         "startChar": 3,
@@ -141,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_6792c659",
+        "filename": "conf/sample/providers.d/ceph.conf.sample",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-03-23T06:29:36Z",
+      "side": 1,
+      "message": "here one new line is there.. i didn\u0027t noticed it ...i will change it",
+      "parentUuid": "1a6ced46_4ce713e5",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 1
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6ced46_6ceccfc8",
         "filename": "misc/install_skyring.sh",
         "patchSetId": 2
@@ -152,6 +272,30 @@
       "writtenOn": "2016-03-22T05:34:12Z",
       "side": 1,
       "message": "Do we need any spec file changes to accommodate about.conf",
+      "range": {
+        "startLine": 101,
+        "startChar": 5,
+        "endLine": 101,
+        "endChar": 19
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_279cbe68",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-03-23T06:29:36Z",
+      "side": 1,
+      "message": "i think not required",
+      "parentUuid": "1a6ced46_6ceccfc8",
       "range": {
         "startLine": 101,
         "startChar": 5,
