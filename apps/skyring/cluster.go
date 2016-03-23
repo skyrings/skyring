@@ -178,7 +178,8 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					logger.Get().Error("%s-Package Installation failed for nodes:%v", ctxt, failedNodes)
 					successful := removeFailedNodes(request.Nodes, failedNodes)
 					if len(successful) > 0 {
-						body, err = json.Marshal(successful)
+						request.Nodes = successful
+						body, err = json.Marshal(request)
 						if err != nil {
 							util.FailTask(fmt.Sprintf("%s-", ctxt), err, t)
 							return
