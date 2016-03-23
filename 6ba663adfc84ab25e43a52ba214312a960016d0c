@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_aa453318",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-03-23T11:12:02Z",
+      "side": 1,
+      "message": "i will change it",
+      "parentUuid": "da9b358b_2abb6310",
+      "range": {
+        "startLine": 705,
+        "startChar": 20,
+        "endLine": 705,
+        "endChar": 28
+      },
+      "revId": "6ba663adfc84ab25e43a52ba214312a960016d0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_0a377fb1",
         "filename": "misc/install_skyring.sh",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2016-03-23T11:05:41Z",
       "side": 1,
       "message": "This file should be part of bigfin",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 139
+      },
+      "revId": "6ba663adfc84ab25e43a52ba214312a960016d0c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_4a5587c4",
+        "filename": "misc/install_skyring.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-03-23T11:12:02Z",
+      "side": 1,
+      "message": "ok.. i will do it",
+      "parentUuid": "da9b358b_0a377fb1",
       "range": {
         "startLine": 102,
         "startChar": 0,
