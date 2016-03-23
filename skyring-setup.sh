@@ -30,10 +30,8 @@ systemctl enable mongod
 systemctl start mongod
 
 # Need to wait for 3 to 5 sec for the services to comes up
-sleep 5
-
-info "Creating skyring database"
-# Configuring MongoDB
+info "Setting up mongodb...."
+sleep 10
 
 mongo <<EOF
 use skyring
@@ -55,8 +53,9 @@ service carbon-cache start && chkconfig carbon-cache on
 service httpd start && chkconfig httpd on
 
 info "\n\n\n-------------------------------------------------------"
-info "Now the host setup is ready!"
-info "You can start the server by executing 'skyring'"
+info "Now the skyring setup is ready!"
+info "You can start/stop/restart the server by executing the command"
+info "\tsystemctl start/stop/restart skyringd"
 info "Skyring log directory: /var/log/skyring"
 info "Mongodb user name: admin"
 info "Mongodb password: admin"
