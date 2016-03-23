@@ -18,8 +18,10 @@ import (
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
 	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/monitoring"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/uuid"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"strconv"
@@ -127,6 +129,67 @@ func sync_cluster_nodes(ctxt string, cluster models.Cluster, provider *Provider)
 	// TODO: Get the list of nodes from provider and add the new nodes to DB after comparison
 	// with fetched nodes from DB
 	return true, nil
+}
+
+func Sync_Node_Utilizations(params map[string]interface{}) {
+	ctxt, ctxtOk := params["ctxt"].(string)
+	if !ctxtOk {
+		logger.Get().Error("Failed to fetch context")
+		return
+	}
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var nodes []models.Node
+	if err := coll.Find(bson.M{"state": models.NODE_STATE_ACTIVE}).All(&nodes); err != nil {
+		if err == mgo.ErrNotFound {
+			return
+		}
+		logger.Get().Warning("%s - Failed to fetch nodes in active state.Error %v", ctxt, err)
+	}
+	for _, node := range nodes {
+		/*
+			Get Memory Used
+		*/
+		resource_name := monitoring.MEMORY + "." + monitoring.MEMORY + "-" + monitoring.USED
+		count := 0
+		memory_used := FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
+
+		/*
+			Get Free Memory
+		*/
+		resource_name = monitoring.MEMORY + "." + monitoring.MEMORY + "-" + monitoring.FREE
+		memory_free := FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
+
+		var memory_usage_percent float64
+		if memory_free+memory_used != 0 {
+			memory_usage_percent = float64(memory_used*100) / float64(memory_free+memory_used)
+		}
+
+		/*
+			Get cpu user utilization
+		*/
+		var resource_name_error error
+		resource_name, resource_name_error = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": monitoring.CPU_USER})
+		var cpu_user float64
+		if resource_name_error == nil {
+			cpu_user = FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
+		} else {
+			logger.Get().Warning("%s - Failed to fetch cpu statistics from %v.Error %v", ctxt, node.Hostname, resource_name_error)
+		}
+
+		coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_RESOURCE_UTILIZATIONS)
+		if coll.Upsert(
+			bson.M{"nodeid": node.NodeId},
+			models.ResourceUtilization{
+				NodeId:                node.NodeId,
+				NodeName:              node.Hostname,
+				MemoryPercentageUsage: memory_usage_percent,
+				CpuPercentageUsage:    cpu_user,
+			}); err != nil {
+			logger.Get().Warning("%s - Failed to update memory and cpu utilizations of node %v to db.Error %v", ctxt, node.Hostname, err)
+		}
+	}
 }
 
 func sync_cluster_storage_entities(ctxt string, cluster models.Cluster, provider *Provider) (bool, error) {

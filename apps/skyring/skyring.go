@@ -374,6 +374,19 @@ func scheduleSummaryMonitoring(config conf.SystemSummaryConfig) error {
 	return nil
 }
 
+func schedulePhysicalResourceStatsFetch(params map[string]interface{}) error {
+	schedule.InitShechuleManager()
+	scheduler, err := schedule.NewScheduler()
+	if err != nil {
+		logger.Get().Error("Error scheduling the node resource fetch. Error %v", err)
+		return err
+	}
+	f := Sync_Node_Utilizations
+	go scheduler.Schedule(time.Duration(5)*time.Second, f, params)
+	Compute_System_Summary(make(map[string]interface{}))
+	return nil
+}
+
 func validApiVersion(version int) bool {
 	for _, ver := range conf.SystemConfig.Config.SupportedVersions {
 		if ver == version {
@@ -544,6 +557,10 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 	}
 
 	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
+	if err := schedulePhysicalResourceStatsFetch(map[string]interface{}{"ctxt": ctxt}); err != nil {
+		logger.Get().Error("%s - Failed to schedule fetching node resource utilizations.Error %v", ctxt, err)
+		return err
+	}
 
 	if err := scheduleSummaryMonitoring(sysConfig.SummaryConfig); err != nil {
 		logger.Get().Error("%s - Failed to schedule fetching summary.Error %v", ctxt, err)
