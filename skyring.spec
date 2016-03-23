@@ -4,7 +4,7 @@
 %endif
 
 %define pkg_name skyring
-%define pkg_version 0.0.1
+%define pkg_version 0.0.8
 %define pkg_release 1
 
 Name: %{pkg_name}
@@ -38,19 +38,24 @@ Requires: salt-master >= 2015.5.5
 Requires: pytz
 Requires: python-cpopen
 Requires: python-netaddr
+%if ( 0%{?fedora} && 0%{?fedora} > 16 )
+Requires: mongodb-org
+Requires: mongodb-org-server
+%else
 Requires: mongodb
 Requires: mongodb-server
+%endif
 Requires: graphite-web
 Requires: python-carbon
 Requires: python-whisper
 Requires: redhat-ceph-installer
 
 %description
-SkyRing is a modern, extensible web-based storage management platform
-which represents the future of storage management. SkyRing deploys,
+skyring is a modern, extensible web-based storage management platform
+which represents the future of storage management. skyring deploys,
 manages and monitors various storage technologies and provides
 a pluggable framework for tomorrow’s SDS technologies.
-SkyRing integrates best-of-breed open source components at its core,
+skyring integrates best-of-breed open source components at its core,
 and integrates with the broader management stack.
 
 %prep
@@ -64,7 +69,8 @@ make pybuild
 rm -rf $RPM_BUILD_ROOT
 install -D skyring $RPM_BUILD_ROOT/usr/bin/skyring
 install -D conf/sample/graphite-web.conf.sample $RPM_BUILD_ROOT/etc/skyring/httpd/conf.d/graphite-web.conf
-install -D skyring-setup.sh $RPM_BUILD_ROOT/usr/bin/skyring-setup.sh
+install -m 755 -d $RPM_BUILD_ROOT/usr/share/skyring/setup
+install -D skyring-setup.sh $RPM_BUILD_ROOT/usr/share/skyring/setup/skyring-setup.sh
 install -D conf/sample/skyring.conf.sample $RPM_BUILD_ROOT/etc/skyring/skyring.conf
 install -D conf/sample/authentication.conf.sample $RPM_BUILD_ROOT/etc/skyring/authentication.conf
 install -D conf/skyring_salt_master.conf $RPM_BUILD_ROOT/etc/salt/master.d/skyring.conf
@@ -83,6 +89,7 @@ install -D -p -m 0644 misc/systemd/%{name}d.service %{buildroot}%{_unitdir}/%{na
 install -D -p -m 0755 misc/etc.init/%{name}.initd %{buildroot}%{_sysconfdir}/init.d/%{name}d
 install -D conf/sample/about.conf.sample $RPM_BUILD_ROOT/etc/skyring/about.conf
 %post
+ln -fs $RPM_BUILD_ROOT/usr/share/skyring/setup/skyring-setup.sh RPM_BUILD_ROOT/usr/bin/skyring-setup.sh
 
 %preun
 
@@ -120,7 +127,7 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files
 %attr(0755, root, root) /usr/bin/skyring
-%attr(0755, root, root) /usr/bin/skyring-setup.sh
+%attr(0755, root, root) /usr/share/skyring/setup/skyring-setup.sh
 %{_sysconfdir}/skyring/*
 %{_sysconfdir}/salt/master.d/skyring.conf
 %{python2_sitelib}/skyring/*
