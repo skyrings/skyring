@@ -70,6 +70,30 @@
       "revId": "7fc6c894ce906e674782e92cf870da1b1c0c0739",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_27003eaa",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-23T06:06:44Z",
+      "side": 1,
+      "message": "Yes go provides redirect as in https://review.gerrithub.io/#/c/269821/2/monitoring/graphitemanager/graphite_manager.go@281\n\nWe are doing the same thing, so here we are saying everything after monitoring in the request url, is taken as a url parameter with name \"resource_path\" And then we are redirecting to graphite directly from there",
+      "parentUuid": "da9b358b_a7132e0d",
+      "range": {
+        "startLine": 95,
+        "startChar": 29,
+        "endLine": 95,
+        "endChar": 45
+      },
+      "revId": "7fc6c894ce906e674782e92cf870da1b1c0c0739",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
