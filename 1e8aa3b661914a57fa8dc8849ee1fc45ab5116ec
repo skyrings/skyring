@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_e786d664",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:31:32Z",
+      "side": 1,
+      "message": "Its not good to have a mix of camelCase and underscores for function names...",
+      "range": {
+        "startLine": 384,
+        "startChar": 6,
+        "endLine": 384,
+        "endChar": 28
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_a780ce47",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:31:32Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 386,
+        "startChar": 1,
+        "endLine": 386,
+        "endChar": 23
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_a7f7aef4",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:31:32Z",
+      "side": 1,
+      "message": "If sucessfully updated details, add an Info as well at last :)",
+      "range": {
+        "startLine": 134,
+        "startChar": 5,
+        "endLine": 134,
+        "endChar": 27
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_8796ea92",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:31:32Z",
+      "side": 1,
+      "message": "Cant we just say\n\n// Get memory used",
+      "range": {
+        "startLine": 151,
+        "startChar": 2,
+        "endLine": 153,
+        "endChar": 4
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_6793e6a4",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:31:32Z",
+      "side": 1,
+      "message": "Always use fmt.Sprintf",
+      "range": {
+        "startLine": 154,
+        "startChar": 3,
+        "endLine": 154,
+        "endChar": 42
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_4790e295",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:31:32Z",
+      "side": 1,
+      "message": "Multi line??",
+      "range": {
+        "startLine": 173,
+        "startChar": 2,
+        "endLine": 173,
+        "endChar": 74
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
