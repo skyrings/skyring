@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "da9b358b_e73016a1",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-23T06:13:09Z",
+      "side": 1,
+      "message": "This may not work with go version in RHEL as we are using a lower version",
+      "range": {
+        "startLine": 326,
+        "startChar": 6,
+        "endLine": 326,
+        "endChar": 21
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_87202a4b",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-23T06:13:09Z",
+      "side": 1,
+      "message": "What are these checks \u003c0 and \u003d\u003d 0??",
+      "range": {
+        "startLine": 332,
+        "startChar": 5,
+        "endLine": 333,
+        "endChar": 8
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_671d260f",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-23T06:13:09Z",
+      "side": 1,
+      "message": "Why this? this has to be pushed by collectd right?",
+      "range": {
+        "startLine": 377,
+        "startChar": 5,
+        "endLine": 377,
+        "endChar": 38
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_e786d664",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 1
@@ -64,6 +133,29 @@
         "startChar": 5,
         "endLine": 134,
         "endChar": 27
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_27171eef",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-23T06:13:09Z",
+      "side": 1,
+      "message": "Not sure why sync is required utilizations?",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 16
       },
       "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
