@@ -1246,11 +1246,11 @@ func removeFailedNodes(nodes []models.ClusterNode, failed []models.ClusterNode) 
 				found = true
 				break
 			}
-			if !found {
-				diff = append(diff, node)
-			}
-			found = false
 		}
+		if !found {
+			diff = append(diff, node)
+		}
+		found = false
 	}
 	return diff
 }
