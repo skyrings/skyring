@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_87138a5c",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:03:00Z",
+      "side": 1,
+      "message": "%s/faild/failed/g",
+      "range": {
+        "startLine": 753,
+        "startChar": 57,
+        "endLine": 753,
+        "endChar": 62
+      },
+      "revId": "4daa7eae6eee42086ba88d12a8b4e0d1e2a45aee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_6710864f",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:03:00Z",
+      "side": 1,
+      "message": "%s/faild/failed/s",
+      "range": {
+        "startLine": 754,
+        "startChar": 83,
+        "endLine": 754,
+        "endChar": 88
+      },
+      "revId": "4daa7eae6eee42086ba88d12a8b4e0d1e2a45aee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_07265aba",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:03:00Z",
+      "side": 1,
+      "message": "Break in multiple lines for better readability",
+      "range": {
+        "startLine": 759,
+        "startChar": 5,
+        "endLine": 759,
+        "endChar": 70
+      },
+      "revId": "4daa7eae6eee42086ba88d12a8b4e0d1e2a45aee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_e72a567e",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:03:00Z",
+      "side": 1,
+      "message": "Break in multiple lines",
+      "range": {
+        "startLine": 765,
+        "startChar": 3,
+        "endLine": 769,
+        "endChar": 4
+      },
+      "revId": "4daa7eae6eee42086ba88d12a8b4e0d1e2a45aee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_873a6acc",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:03:00Z",
+      "side": 1,
+      "message": "%s/Faild/Failed/s",
+      "range": {
+        "startLine": 780,
+        "startChar": 65,
+        "endLine": 780,
+        "endChar": 70
+      },
+      "revId": "4daa7eae6eee42086ba88d12a8b4e0d1e2a45aee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_27315eed",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:03:00Z",
+      "side": 1,
+      "message": "Remove space",
+      "range": {
+        "startLine": 784,
+        "startChar": 81,
+        "endLine": 784,
+        "endChar": 82
+      },
+      "revId": "4daa7eae6eee42086ba88d12a8b4e0d1e2a45aee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_074d3a72",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:03:00Z",
+      "side": 1,
+      "message": "%s/Faild/Failed/s",
+      "range": {
+        "startLine": 785,
+        "startChar": 65,
+        "endLine": 785,
+        "endChar": 70
+      },
+      "revId": "4daa7eae6eee42086ba88d12a8b4e0d1e2a45aee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
