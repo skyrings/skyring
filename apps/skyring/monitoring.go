@@ -183,14 +183,19 @@ func FetchAggregatedStatsFromGraphite(ctxt string, hostname string, resourceName
 	return stat
 }
 
-func AverageAndUpdateDb(ctxt string, mValue float64, count int, time_stamp_str string, tableName string) {
-	hostname := conf.SystemConfig.TimeSeriesDBConfig.Hostname
-	port := conf.SystemConfig.TimeSeriesDBConfig.DataPushPort
+func AverageAndUpdateDb(ctxt string, mValue float64, count int, time_stamp_str string, tableName string) float64 {
 	if count > 0 {
 		mValue = mValue / float64(count)
-		if err := GetMonitoringManager().PushToDb(map[string]map[string]string{tableName: {time_stamp_str: strconv.FormatFloat(mValue, 'E', -1, 64)}}, hostname, port); err != nil {
-			logger.Get().Warning("%s - Error pushing %s statistics.Err %v", ctxt, tableName, err)
-		}
+		UpdateMetricToTimeSeriesDb(ctxt, mValue, time_stamp_str, tableName)
+	}
+	return mValue
+}
+
+func UpdateMetricToTimeSeriesDb(ctxt string, mValue float64, time_stamp_str string, tableName string) {
+	hostname := conf.SystemConfig.TimeSeriesDBConfig.Hostname
+	port := conf.SystemConfig.TimeSeriesDBConfig.DataPushPort
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{tableName: {time_stamp_str: strconv.FormatFloat(mValue, 'E', -1, 64)}}, hostname, port); err != nil {
+		logger.Get().Warning("%s - Error pushing %s statistics.Err %v", ctxt, tableName, err)
 	}
 }
 
@@ -322,14 +327,18 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 
 	table_name := conf.SystemConfig.TimeSeriesDBConfig.CollectionName + "." + cluster.Name + "."
 
-	AverageAndUpdateDb(ctxt, disk_reads, disk_reads_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.READ)
-	AverageAndUpdateDb(ctxt, disk_writes, disk_writes_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
+	disk_reads = AverageAndUpdateDb(ctxt, disk_reads, disk_reads_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.READ)
+	disk_writes = AverageAndUpdateDb(ctxt, disk_writes, disk_writes_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
+	UpdateMetricToTimeSeriesDb(ctxt, disk_reads+disk_writes, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+
 	AverageAndUpdateDb(ctxt, cluster_memory_used, cluster_memory_used_count, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
 	AverageAndUpdateDb(ctxt, cluster_memory_free, cluster_memory_free_count, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.FREE_SPACE)
 	AverageAndUpdateDb(ctxt, cluster_cpu_user, cluster_cpu_user_count, time_stamp_str, table_name+monitoring.CPU_USER)
 	AverageAndUpdateDb(ctxt, latency, latency_count, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
-	AverageAndUpdateDb(ctxt, cluster_interface_rx, cluster_interface_rx_count, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.RX)
-	AverageAndUpdateDb(ctxt, cluster_interface_tx, cluster_interface_tx_count, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.TX)
+
+	cluster_interface_rx = AverageAndUpdateDb(ctxt, cluster_interface_rx, cluster_interface_rx_count, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.RX)
+	cluster_interface_tx = AverageAndUpdateDb(ctxt, cluster_interface_tx, cluster_interface_tx_count, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.TX)
+	UpdateMetricToTimeSeriesDb(ctxt, cluster_interface_rx+cluster_interface_tx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
 
 	if cluster_memory_used+cluster_memory_free != 0.0 {
 		net_memory_usage_percentage = (cluster_memory_used * 100) / (cluster_memory_used + cluster_memory_free)
@@ -1345,14 +1354,18 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
 	}
 
-	AverageAndUpdateDb(ctxt, netDiskRead, netDiskReadCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.READ)
-	AverageAndUpdateDb(ctxt, netDiskWrite, netDiskWriteCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
+	netDiskRead = AverageAndUpdateDb(ctxt, netDiskRead, netDiskReadCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.READ)
+	netDiskWrite = AverageAndUpdateDb(ctxt, netDiskWrite, netDiskWriteCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
+	UpdateMetricToTimeSeriesDb(ctxt, netDiskRead+netDiskWrite, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+
 	AverageAndUpdateDb(ctxt, net_memory_used, net_memory_used_count, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
 	AverageAndUpdateDb(ctxt, net_memory_free, net_memory_free_count, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.FREE_SPACE)
 	AverageAndUpdateDb(ctxt, cluster_cpu_user, cluster_cpu_user_count, time_stamp_str, table_name+monitoring.CPU_USER)
 	AverageAndUpdateDb(ctxt, latency, latencyCount, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
-	AverageAndUpdateDb(ctxt, netIStatRx, netIStatRxCount, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.RX)
-	AverageAndUpdateDb(ctxt, netIStatTx, netIStatTxCount, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.TX)
+
+	netIStatRx = AverageAndUpdateDb(ctxt, netIStatRx, netIStatRxCount, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.RX)
+	netIStatTx = AverageAndUpdateDb(ctxt, netIStatTx, netIStatTxCount, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.TX)
+	UpdateMetricToTimeSeriesDb(ctxt, netIStatRx+netIStatTx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
 
 	var memory_percent float64
 	if net_memory_used+net_memory_free > 0.0 {
