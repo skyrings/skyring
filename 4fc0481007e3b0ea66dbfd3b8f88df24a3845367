@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_27bb9e10",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:42:40Z",
+      "side": 1,
+      "message": "I meant to pass SystemConfig here and not the []byte",
+      "range": {
+        "startLine": 543,
+        "startChar": 68,
+        "endLine": 543,
+        "endChar": 80
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6ced46_0cdd1b15",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 2
@@ -36,6 +59,30 @@
       "writtenOn": "2016-03-22T05:34:12Z",
       "side": 1,
       "message": "You can create a about.go and put this code there",
+      "range": {
+        "startLine": 725,
+        "startChar": 0,
+        "endLine": 744,
+        "endChar": 1
+      },
+      "revId": "4fc0481007e3b0ea66dbfd3b8f88df24a3845367",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_07377ab1",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-23T05:42:40Z",
+      "side": 1,
+      "message": "Agree",
+      "parentUuid": "1a6ced46_0cdd1b15",
       "range": {
         "startLine": 725,
         "startChar": 0,
