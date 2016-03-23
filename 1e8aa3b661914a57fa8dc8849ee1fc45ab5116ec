@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_07b65adc",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-23T16:10:10Z",
+      "side": 1,
+      "message": "Ok I\u0027ll change it to normal \u003d\u003d, \u003c and \u003e checks",
+      "parentUuid": "da9b358b_e73016a1",
+      "range": {
+        "startLine": 326,
+        "startChar": 6,
+        "endLine": 326,
+        "endChar": 21
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_87202a4b",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-03-23T06:13:09Z",
       "side": 1,
       "message": "What are these checks \u003c0 and \u003d\u003d 0??",
+      "range": {
+        "startLine": 332,
+        "startChar": 5,
+        "endLine": 333,
+        "endChar": 8
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_95f974cb",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-23T16:10:10Z",
+      "side": 1,
+      "message": "\u003c 0 \u003d\u003d\u003e first param \u003c 2nd param\n\u003d\u003d0 \u003d\u003d\u003e first param \u003d\u003d 2nd param\n\nBut now as you said, it doesn\u0027t work in older versions of golang so, changing it to normal comparisons",
+      "parentUuid": "da9b358b_87202a4b",
       "range": {
         "startLine": 332,
         "startChar": 5,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_d5813cfd",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-23T16:10:10Z",
+      "side": 1,
+      "message": "Basically in UI as part of nodes listing, they have to show cpu and memory utilizations for each node. So effectively if there are n nodes, they need to make 2n + 1 queries. So this patch adds a collection to score memory and cpu utilizations in a separate new collection and this db is synced every x intervals of time which is same as the collectd\u0027s interval of metric fetch",
+      "parentUuid": "da9b358b_671d260f",
+      "range": {
+        "startLine": 377,
+        "startChar": 5,
+        "endLine": 377,
+        "endChar": 38
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_e786d664",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2016-03-23T05:31:32Z",
       "side": 1,
       "message": "Its not good to have a mix of camelCase and underscores for function names...",
+      "range": {
+        "startLine": 384,
+        "startChar": 6,
+        "endLine": 384,
+        "endChar": 28
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_3573c84f",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-23T16:10:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_e786d664",
       "range": {
         "startLine": 384,
         "startChar": 6,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_f593204e",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-23T16:10:10Z",
+      "side": 1,
+      "message": "This is not requried and unintentional Removing it",
+      "parentUuid": "da9b358b_a780ce47",
+      "range": {
+        "startLine": 386,
+        "startChar": 1,
+        "endLine": 386,
+        "endChar": 23
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_a7f7aef4",
         "filename": "apps/skyring/sync.go",
         "patchSetId": 1
@@ -128,6 +248,30 @@
       "writtenOn": "2016-03-23T05:31:32Z",
       "side": 1,
       "message": "If sucessfully updated details, add an Info as well at last :)",
+      "range": {
+        "startLine": 134,
+        "startChar": 5,
+        "endLine": 134,
+        "endChar": 27
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_d5e6dce7",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-23T16:10:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_a7f7aef4",
       "range": {
         "startLine": 134,
         "startChar": 5,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_55ad2c87",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-23T16:10:10Z",
+      "side": 1,
+      "message": "Basically in UI as part of nodes listing, they have to show cpu and memory utilizations for each node. So effectively if there are n nodes, they need to make 2n + 1 queries. So this patch adds a collection to score memory and cpu utilizations in a separate new collection and this db is synced every x intervals of time which is same as the collectd\u0027s interval of metric fetch",
+      "parentUuid": "da9b358b_27171eef",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 16
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_8796ea92",
         "filename": "apps/skyring/sync.go",
         "patchSetId": 1
@@ -174,6 +342,30 @@
       "writtenOn": "2016-03-23T05:31:32Z",
       "side": 1,
       "message": "Cant we just say\n\n// Get memory used",
+      "range": {
+        "startLine": 151,
+        "startChar": 2,
+        "endLine": 153,
+        "endChar": 4
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_f5e1e0d1",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-23T16:10:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_8796ea92",
       "range": {
         "startLine": 151,
         "startChar": 2,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_35c1882f",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-23T16:10:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_6793e6a4",
+      "range": {
+        "startLine": 154,
+        "startChar": 3,
+        "endLine": 154,
+        "endChar": 42
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_4790e295",
         "filename": "apps/skyring/sync.go",
         "patchSetId": 1
@@ -220,6 +436,30 @@
       "writtenOn": "2016-03-23T05:31:32Z",
       "side": 1,
       "message": "Multi line??",
+      "range": {
+        "startLine": 173,
+        "startChar": 2,
+        "endLine": 173,
+        "endChar": 74
+      },
+      "revId": "1e8aa3b661914a57fa8dc8849ee1fc45ab5116ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_55c40c3f",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-23T16:10:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_4790e295",
       "range": {
         "startLine": 173,
         "startChar": 2,
