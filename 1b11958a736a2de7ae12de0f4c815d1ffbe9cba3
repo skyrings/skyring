@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_96205a4b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-24T04:16:22Z",
+      "side": 1,
+      "message": "@Nishanth, ss this patch required in addition to my patch https://review.gerrithub.io/#/c/270035/?\n\nI feel yes.",
+      "revId": "1b11958a736a2de7ae12de0f4c815d1ffbe9cba3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
