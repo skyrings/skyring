@@ -22,6 +22,30 @@
       "revId": "65341d88ab6316d671a8f3b6bbeac33c1790582e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_36a74e51",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-24T07:10:43Z",
+      "side": 1,
+      "message": "Actually this patch is not required as updated by Ramesh. So we can abandon this. UI would utilize tasks framework for its needs I feel.\n\n@Rameshm can you confirm?",
+      "parentUuid": "da9b358b_36e2aea0",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 20
+      },
+      "revId": "65341d88ab6316d671a8f3b6bbeac33c1790582e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
