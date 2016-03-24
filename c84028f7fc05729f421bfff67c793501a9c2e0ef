@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_76f6f6d8",
+        "filename": "skyring.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-24T03:50:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_56909295",
+      "revId": "c84028f7fc05729f421bfff67c793501a9c2e0ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_7b65bfdf",
         "filename": "skyring.spec",
         "patchSetId": 3
@@ -54,6 +72,30 @@
       "side": 1,
       "message": "we could place the script in /usr/share/skyring/setup/skyring-setup.sh\n\nThen you can create a symlink from /usr/bin/skyring-setup",
       "parentUuid": "da9b358b_7b65bfdf",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 88
+      },
+      "revId": "c84028f7fc05729f421bfff67c793501a9c2e0ef",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_5603f2b8",
+        "filename": "skyring.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-24T03:50:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_769396a4",
       "range": {
         "startLine": 91,
         "startChar": 0,
