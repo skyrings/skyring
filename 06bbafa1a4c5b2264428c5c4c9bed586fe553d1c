@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_5681b28e",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-24T07:14:49Z",
+      "side": 1,
+      "message": "Actually they are two diff things to check. If err we log and return.\n\nBut if cluster un-managed we infirm user if not doing the task due to this.",
+      "parentUuid": "da9b358b_7686f6ba",
+      "range": {
+        "startLine": 492,
+        "startChar": 1,
+        "endLine": 518,
+        "endChar": 2
+      },
+      "revId": "06bbafa1a4c5b2264428c5c4c9bed586fe553d1c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_5693f2fa",
         "filename": "apps/skyring/storage.go",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2016-03-24T07:03:01Z",
       "side": 1,
       "message": "do we need this \u0027else\u0027 ?",
+      "range": {
+        "startLine": 572,
+        "startChar": 6,
+        "endLine": 572,
+        "endChar": 12
+      },
+      "revId": "06bbafa1a4c5b2264428c5c4c9bed586fe553d1c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_f64e8695",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-24T07:14:49Z",
+      "side": 1,
+      "message": "Actually no, as it returns from if in case of error. Will change.",
+      "parentUuid": "da9b358b_5693f2fa",
       "range": {
         "startLine": 572,
         "startChar": 6,
