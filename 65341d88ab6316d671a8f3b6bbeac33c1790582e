@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_36e2aea0",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-24T06:38:19Z",
+      "side": 1,
+      "message": "Can we do all these in a single DB query. You can have filter map and keep adding to the filter based on the params coming in and pass the filter to DB query.\nIn this case if the user gives both node_name and admin state, it will honor only the node name",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 20
+      },
+      "revId": "65341d88ab6316d671a8f3b6bbeac33c1790582e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
