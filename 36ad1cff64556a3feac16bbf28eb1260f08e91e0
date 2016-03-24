@@ -45,6 +45,30 @@
       "revId": "36ad1cff64556a3feac16bbf28eb1260f08e91e0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_36c18e2f",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 7
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-03-24T05:09:29Z",
+      "side": 1,
+      "message": "both are same, i referred in web,any way i will change it",
+      "parentUuid": "da9b358b_d6b38209",
+      "range": {
+        "startLine": 704,
+        "startChar": 27,
+        "endLine": 704,
+        "endChar": 80
+      },
+      "revId": "36ad1cff64556a3feac16bbf28eb1260f08e91e0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
