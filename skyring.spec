@@ -4,7 +4,7 @@
 %endif
 
 %define pkg_name skyring
-%define pkg_version 0.0.8
+%define pkg_version 0.0.9
 %define pkg_release 1
 
 Name: %{pkg_name}
@@ -89,7 +89,7 @@ install -D -p -m 0644 misc/systemd/%{name}d.service %{buildroot}%{_unitdir}/%{na
 install -D -p -m 0755 misc/etc.init/%{name}.initd %{buildroot}%{_sysconfdir}/init.d/%{name}d
 install -D conf/sample/about.conf.sample $RPM_BUILD_ROOT/etc/skyring/about.conf
 %post
-ln -fs $RPM_BUILD_ROOT/usr/share/skyring/setup/skyring-setup.sh RPM_BUILD_ROOT/usr/bin/skyring-setup.sh
+ln -fs $RPM_BUILD_ROOT/usr/share/skyring/setup/skyring-setup.sh $RPM_BUILD_ROOT/usr/bin/skyring-setup.sh
 
 %preun
 
