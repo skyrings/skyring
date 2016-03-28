@@ -110,6 +110,17 @@ func resource_threshold_crossed(event models.AppEvent, ctxt string) (models.AppE
 			logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
 			return event, err
 		}
+
+	}
+	var nodeAlarmStatus models.AlarmStatus
+	if event.Severity == models.ALARM_STATUS_CLEARED {
+		nodeAlarmStatus = event.Severity
+	} else {
+		nodeAlarmStatus = models.ALARM_STATUS_WARNING
+	}
+	if err = common_event.UpdateNodeAlarmCount(event.EntityId, nodeAlarmStatus, ctxt); err != nil {
+		logger.Get().Error("%s-Could not update Alarm state and count for event:%v .Error: %v", ctxt, event.EventId, err)
+		return event, err
 	}
 	return event, nil
 }
@@ -386,6 +397,18 @@ func collectd_status_handler(event models.AppEvent, ctxt string) (models.AppEven
 			return event, err
 		}
 	}
+
+	var nodeAlarmStatus models.AlarmStatus
+	if event.Severity == models.ALARM_STATUS_CLEARED {
+		nodeAlarmStatus = event.Severity
+	} else {
+		nodeAlarmStatus = models.ALARM_STATUS_WARNING
+	}
+
+	if err = common_event.UpdateNodeAlarmCount(event.EntityId, nodeAlarmStatus, ctxt); err != nil {
+		logger.Get().Error("%s-Could not update Alarm state and count for event:%v .Error: %v", ctxt, event.EventId, err)
+		return event, err
+	}
 	return event, nil
 }
 
@@ -408,7 +431,14 @@ func node_appeared_handler(event models.AppEvent, ctxt string) (models.AppEvent,
 		logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
 		return event, err
 	}
-
+	if !event.ClusterId.IsZero() {
+		if err = common_event.UpdateClusterAlarmCount(
+			event.ClusterId, models.ALARM_STATUS_CLEARED, ctxt); err != nil {
+			logger.Get().Error("%s-Could not update Alarm state and count for"+
+				" event:%v .Error: %v", ctxt, event.EventId, err)
+			return event, err
+		}
+	}
 	return event, nil
 }
 
@@ -426,6 +456,15 @@ func node_lost_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 	event.Severity = models.ALARM_STATUS_MAJOR
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
+
+	if !event.ClusterId.IsZero() {
+		if err = common_event.UpdateClusterAlarmCount(
+			event.ClusterId, models.ALARM_STATUS_WARNING, ctxt); err != nil {
+			logger.Get().Error("%s-Could not update Alarm state and count for"+
+				" event:%v .Error: %v", ctxt, event.EventId, err)
+			return event, err
+		}
+	}
 	return event, nil
 }
 
