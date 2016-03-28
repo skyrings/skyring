@@ -552,6 +552,7 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 	node_Reinitialize()
 	cleanupTasks()
 	initializeAbout(ctxt)
+	schedule_archive_activities(ctxt)
 	return nil
 }
 
@@ -703,6 +704,77 @@ func initializeAbout(ctxt string) {
 		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SYSTEM_CAPABILITIES)
 		if _, err := coll.Upsert(bson.M{"productname": conf.SystemConfig.SysCapabilities.ProductName}, conf.SystemConfig.SysCapabilities); err != nil {
 			logger.Get().Error(fmt.Sprintf("%s-Error adding System_capabilities details . error: %v", ctxt, err))
+		}
+	}
+}
+
+func schedule_archive_activities(ctxt string) {
+	scheduler, err := schedule.NewScheduler()
+	if err != nil {
+		logger.Get().Error("%s-%v", ctxt, err.Error())
+	} else {
+		f := archive_activities
+		m := make(map[string]interface{})
+		go scheduler.Schedule(time.Duration(24*time.Hour), f, m)
+	}
+}
+
+func archive_activities(params map[string]interface{}) {
+	reqId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("Error Creating the RequestId. error: %v", err)
+		return
+	}
+	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
+	archive_task(ctxt)
+	archive_event(ctxt)
+}
+
+func archive_task(ctxt string) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var tasks []models.AppTask
+	t := time.Now()
+	t = t.AddDate(0, -1, 0)
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+	if err := collection.Find(bson.M{"completed": true, "lastupdated": bson.M{"$lte": t}}).All(&tasks); err != nil {
+		logger.Get().Debug("%s-%v", ctxt, err.Error())
+		return
+	}
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_ARCHIVE_TASKS)
+	for _, task := range tasks {
+		if err := coll.Insert(task); err != nil {
+			logger.Get().Debug(fmt.Sprintf("%s-Error adding Archive task detail :%v .error : %v", ctxt, task.Id, err))
+			continue
+		}
+		if err := collection.Remove(bson.M{"id": task.Id}); err != nil {
+			logger.Get().Debug(fmt.Sprintf("%s-Error removing task detail :%v .error: %v", ctxt, task.Id, err))
+			continue
+		}
+	}
+}
+
+func archive_event(ctxt string) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var events []models.AppEvent
+	t := time.Now()
+	t = t.AddDate(0, -1, 0)
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_APP_EVENTS)
+	if err := collection.Find(bson.M{"$or": []interface{}{bson.M{"severity": models.ALARM_STATUS_CLEARED},
+		bson.M{"acked": true}}, "timestamp": bson.M{"$lte": t}}).All(&events); err != nil {
+		logger.Get().Debug("%s-%v", ctxt, err.Error())
+		return
+	}
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_ARCHIVE_EVENTS)
+	for _, event := range events {
+		if err := coll.Insert(event); err != nil {
+			logger.Get().Debug(fmt.Sprintf("%s-Error adding Archive event detail :%v .error : %v", ctxt, event.EventId, err))
+			continue
+		}
+		if err := collection.Remove(bson.M{"eventid": event.EventId}); err != nil {
+			logger.Get().Debug(fmt.Sprintf("%s-Error removing event detail :%v .error: %v", ctxt, event.EventId, err))
+			continue
 		}
 	}
 }
