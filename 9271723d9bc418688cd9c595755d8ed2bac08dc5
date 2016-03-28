@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_e92457b0",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1007385
+      },
+      "writtenOn": "2016-03-28T08:29:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_1679eafc",
+      "range": {
+        "startLine": 389,
+        "startChar": 5,
+        "endLine": 389,
+        "endChar": 6
+      },
+      "revId": "9271723d9bc418688cd9c595755d8ed2bac08dc5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_b687ded6",
         "filename": "authprovider/ldap/ldapauth.go",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_29523f14",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1007385
+      },
+      "writtenOn": "2016-03-28T08:29:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_b687ded6",
+      "range": {
+        "startLine": 437,
+        "startChar": 74,
+        "endLine": 437,
+        "endChar": 75
+      },
+      "revId": "9271723d9bc418688cd9c595755d8ed2bac08dc5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_966dfa34",
         "filename": "authprovider/local/auth.go",
         "patchSetId": 5
@@ -59,6 +107,30 @@
       "writtenOn": "2016-03-24T05:36:24Z",
       "side": 1,
       "message": "currUserName",
+      "range": {
+        "startLine": 235,
+        "startChar": 74,
+        "endLine": 235,
+        "endChar": 75
+      },
+      "revId": "9271723d9bc418688cd9c595755d8ed2bac08dc5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_e95b372d",
+        "filename": "authprovider/local/auth.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1007385
+      },
+      "writtenOn": "2016-03-28T08:29:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_966dfa34",
       "range": {
         "startLine": 235,
         "startChar": 74,
