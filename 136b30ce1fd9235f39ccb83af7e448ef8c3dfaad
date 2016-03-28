@@ -22,6 +22,30 @@
       "revId": "136b30ce1fd9235f39ccb83af7e448ef8c3dfaad",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_de714be2",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-03-28T06:56:18Z",
+      "side": 1,
+      "message": "Yes the change @line no 95 belongs to this patch",
+      "parentUuid": "da9b358b_7e1a3f19",
+      "range": {
+        "startLine": 411,
+        "startChar": 2,
+        "endLine": 411,
+        "endChar": 3
+      },
+      "revId": "136b30ce1fd9235f39ccb83af7e448ef8c3dfaad",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
