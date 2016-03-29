@@ -11,7 +11,6 @@
 # Required-Stop: $local_fs $network
 # Should-Start:
 # Should-Stop:
-# Default-Start: 2 3 4 5
 # Default-Stop: 0 1 6
 # Short-Description: start and stop skyring server
 # Description: skyring server
@@ -24,7 +23,7 @@ exec="/usr/bin/skyring"
 prog="skyring"
 config="/etc/skyring/skyring.conf"
 pidfile="/var/run/$prog.pid"
-lockfile="/var/lock/subsys/$prog"
+lockfile="/var/lock/subsys/skyringd"
 logfile="/var/log/$prog/$prog.log"
 
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
@@ -68,6 +67,11 @@ stop() {
     return $retval
 }
 
+reload() {
+    stop
+    start
+}
+
 restart() {
     stop
     start
@@ -92,6 +96,9 @@ case "$1" in
         rh_status_q || exit 0
         $1
         ;;
+    reload)
+        $1
+        ;;
     restart)
         $1
         ;;
@@ -99,7 +106,7 @@ case "$1" in
         rh_status
         ;;
     *)
-        echo $"Usage: $0 {start|stop|status|restart}"
+        echo $"Usage: $0 {start|stop|status|reload|restart}"
         exit 2
 esac
 exit $?
