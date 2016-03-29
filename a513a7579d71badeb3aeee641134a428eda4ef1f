@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_d19379a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-03-29T11:07:05Z",
+      "side": 1,
+      "message": "Just a suggestion, this can be taken up for future releases.\nHow about having a configuration to set when the sync has to happen, by default we can keep it midnight and this can be configured by admin such that it does not affect him during his working hours(as we are locking cluster)",
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_51ee4923",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-03-29T11:07:05Z",
+      "side": 1,
+      "message": "Please help me understand. Is this for readability or any other purpose ?",
+      "range": {
+        "startLine": 571,
+        "startChar": 107,
+        "endLine": 571,
+        "endChar": 110
+      },
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_91b6113c",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-03-29T11:07:05Z",
+      "side": 1,
+      "message": "In all the sync functions, I see this bool to be true if no err. if err then bool is false. So, Can we live with only err ? Please provide your thoughts",
+      "range": {
+        "startLine": 120,
+        "startChar": 83,
+        "endLine": 120,
+        "endChar": 87
+      },
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_51876961",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-03-29T11:07:05Z",
+      "side": 1,
+      "message": "this code seems to be used in many functions, can it be reused ?",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 167,
+        "endChar": 17
+      },
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
