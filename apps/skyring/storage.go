@@ -128,18 +128,6 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			default:
 				t.UpdateStatus("Started the task for pool creation: %v", t.ID)
 
-				nodes, err := getClusterNodesById(cluster_id)
-				if err != nil {
-					util.FailTask("Failed to get nodes", fmt.Errorf("%s-%v", ctxt, err), t)
-					return
-				}
-				appLock, err := LockNodes(ctxt, nodes, "Manage_Cluster")
-				if err != nil {
-					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
-					return
-				}
-				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
-
 				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("%s-Error getting provider for cluster: %v", ctxt, *cluster_id)), t)
