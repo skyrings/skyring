@@ -458,7 +458,7 @@ func updateStorageNodeToDB(storage_node models.Node, ctxt string) error {
 	}
 }
 
-func valid_storage_size(size string) (bool, error) {
+func valid_size(size string) (bool, error) {
 	matched, err := regexp.Match(
 		"^([0-9])*MB$|^([0-9])*mb$|^([0-9])*GB$|^([0-9])*gb$|^([0-9])*TB$|^([0-9])*tb$|^([0-9])*PB$|^([0-9])*pb$",
 		[]byte(size))
