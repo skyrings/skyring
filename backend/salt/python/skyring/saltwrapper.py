@@ -165,7 +165,9 @@ def GetNodeDisk(node, ctxt=""):
                   "Type":       "type",
                   "Used":       boolean,
                   "SSD":        boolean,
-                  "Vendor":     "string"}, ...], ...}
+                  "Vendor":     "string",
+                  "StorageProfile": "StorageProfile",
+                  "JournalDisk": "JournalDisk"}, ...], ...}
     '''
 
     if type(node) is list:
@@ -234,6 +236,7 @@ def GetNodeDisk(node, ctxt=""):
                               "SSD": ssdStat,
                               "Vendor": disk.get("VENDOR", ""),
                               "StorageProfile": "",
+                              "JournalDisk": "",
                               "DiskId":u})
     return rv
 
