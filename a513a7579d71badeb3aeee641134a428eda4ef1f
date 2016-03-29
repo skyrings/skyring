@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_0c2544aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-29T14:58:44Z",
+      "side": 1,
+      "message": "Our current scheduler works like this. Its interval based. May be later if its enhanced we can make it like time based.",
+      "parentUuid": "da9b358b_d19379a2",
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_51ee4923",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 8
@@ -30,6 +48,30 @@
       "writtenOn": "2016-03-29T11:07:05Z",
       "side": 1,
       "message": "Please help me understand. Is this for readability or any other purpose ?",
+      "range": {
+        "startLine": 571,
+        "startChar": 107,
+        "endLine": 571,
+        "endChar": 110
+      },
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_cc375ce2",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-29T14:58:44Z",
+      "side": 1,
+      "message": "Only for readability :))",
+      "parentUuid": "da9b358b_51ee4923",
       "range": {
         "startLine": 571,
         "startChar": 107,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_ec41003b",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-29T14:58:44Z",
+      "side": 1,
+      "message": "Actually we can. But there could be some corner cases where we say sync is not success but no specific error. May be its just a warning and logged.\n\nSo kept it. Not useful at the moment at least.",
+      "parentUuid": "da9b358b_91b6113c",
+      "range": {
+        "startLine": 120,
+        "startChar": 83,
+        "endLine": 120,
+        "endChar": 87
+      },
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_51876961",
         "filename": "apps/skyring/sync.go",
         "patchSetId": 8
@@ -76,6 +142,30 @@
       "writtenOn": "2016-03-29T11:07:05Z",
       "side": 1,
       "message": "this code seems to be used in many functions, can it be reused ?",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 167,
+        "endChar": 17
+      },
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_ec96a093",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-29T14:58:44Z",
+      "side": 1,
+      "message": "The only thing the setting of vars might be specific to different calls. So kept like this..",
+      "parentUuid": "da9b358b_51876961",
       "range": {
         "startLine": 152,
         "startChar": 0,
