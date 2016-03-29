@@ -107,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_8c73944d",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-29T16:38:31Z",
+      "side": 1,
+      "message": "This could be inside the function SyncClusterDetails() actually.",
+      "parentUuid": "da9b358b_0ce2e403",
+      "range": {
+        "startLine": 539,
+        "startChar": 1,
+        "endLine": 539,
+        "endChar": 47
+      },
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_91b6113c",
         "filename": "apps/skyring/sync.go",
         "patchSetId": 8
@@ -165,6 +189,30 @@
       "writtenOn": "2016-03-29T16:04:16Z",
       "side": 1,
       "message": "why sync nodes is a rpc call. Are we storing anything specific to storage provider in nodes. As we claim that nodes are managed by core, i think this sync to reside in core itself???",
+      "range": {
+        "startLine": 158,
+        "startChar": 32,
+        "endLine": 158,
+        "endChar": 42
+      },
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_2c99286f",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-29T16:38:31Z",
+      "side": 1,
+      "message": "The nodes details from cluster could use the mon node to find out all other nodes in the cluster. Similarly later in case of gluster it would be using peer status command on one of the nodes, so it should be provider specific.",
+      "parentUuid": "da9b358b_0cb9c4e9",
       "range": {
         "startLine": 158,
         "startChar": 32,
