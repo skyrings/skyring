@@ -37,6 +37,6 @@
     	"netSummaryInterval": 60
     },
     "schedule": {
-        "clustersSyncInterval: 86400
+        "clustersSyncInterval": 86400
     }
 }
