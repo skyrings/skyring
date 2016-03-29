@@ -143,6 +143,24 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check if valid journal size passed
+	if request.JournalSize != "" {
+		if ok, err := valid_size(request.JournalSize); !ok || err != nil {
+			logger.Get().Error(
+				"%s-Invalid journal size: %v",
+				ctxt,
+				request.JournalSize)
+			HttpResponse(
+				w,
+				http.StatusBadRequest,
+				fmt.Sprintf(
+					"Invalid journal size: %s passed for: %s",
+					request.JournalSize,
+					request.Name))
+			return
+		}
+	}
+
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {

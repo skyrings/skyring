@@ -89,7 +89,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Validate storage target size info
-	if ok, err := valid_storage_size(request.Size); !ok || err != nil {
+	if ok, err := valid_size(request.Size); !ok || err != nil {
 		logger.Get().Error("%s - Invalid size: %v", ctxt, request.Size)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid size: %s passed for: %s", request.Size, request.Name))
 		return
@@ -480,7 +480,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Validate storage target size info
-	if ok, err := valid_storage_size(request.Size); !ok || err != nil {
+	if ok, err := valid_size(request.Size); !ok || err != nil {
 		logger.Get().Error("%s - Invalid size: %v", ctxt, request.Size)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid size: %s passed for: %v", request.Size, *blockdevice_id))
 		return

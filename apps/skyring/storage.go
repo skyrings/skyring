@@ -101,7 +101,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 
 	// Validate storage target size info
 	if request.Size != "" {
-		if ok, err := valid_storage_size(request.Size); !ok || err != nil {
+		if ok, err := valid_size(request.Size); !ok || err != nil {
 			logger.Get().Error(
 				"%s-Invalid storage size: %v",
 				ctxt,
