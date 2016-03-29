@@ -84,6 +84,29 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_0ce2e403",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-29T16:04:16Z",
+      "side": 1,
+      "message": "this needs to be placed appropriately",
+      "range": {
+        "startLine": 539,
+        "startChar": 1,
+        "endLine": 539,
+        "endChar": 47
+      },
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_91b6113c",
         "filename": "apps/skyring/sync.go",
         "patchSetId": 8
@@ -124,6 +147,29 @@
         "startChar": 83,
         "endLine": 120,
         "endChar": 87
+      },
+      "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_0cb9c4e9",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-03-29T16:04:16Z",
+      "side": 1,
+      "message": "why sync nodes is a rpc call. Are we storing anything specific to storage provider in nodes. As we claim that nodes are managed by core, i think this sync to reside in core itself???",
+      "range": {
+        "startLine": 158,
+        "startChar": 32,
+        "endLine": 158,
+        "endChar": 42
       },
       "revId": "a513a7579d71badeb3aeee641134a428eda4ef1f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
