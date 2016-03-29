@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_8e902cee",
+        "filename": "event/handler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-29T10:02:11Z",
+      "side": 1,
+      "message": "This logic exactly replicated in below function as well. May be you can have small function defined and invoke",
+      "range": {
+        "startLine": 114,
+        "startChar": 1,
+        "endLine": 123,
+        "endChar": 19
+      },
+      "revId": "b94f4ce42587a437c648a4baea547d427f954aac",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
