@@ -1,4 +1,4 @@
-#!py
+#!/usr/bin/python
 
 import logging
 import socket
