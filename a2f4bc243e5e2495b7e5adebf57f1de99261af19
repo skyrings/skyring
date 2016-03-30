@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_82b6bd3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-03-30T05:39:29Z",
+      "side": 1,
+      "message": "Can you please give a brief description of what criteria is used for archiving and also the default archive interval.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 32
+      },
+      "revId": "a2f4bc243e5e2495b7e5adebf57f1de99261af19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
