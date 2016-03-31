@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_6344da73",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-31T05:11:50Z",
+      "side": 1,
+      "message": "As suggested by Kanagaraj, better list all the errors being fixed as part of this patch.",
+      "range": {
+        "startLine": 7,
+        "startChar": 5,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "05962135d64e15506c2f80577a9508bd5f398f3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_035cee49",
+        "filename": "misc/etc.init/skyring.initd",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-31T05:11:50Z",
+      "side": 1,
+      "message": "Add a case for reload as well now",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 12
+      },
+      "revId": "05962135d64e15506c2f80577a9508bd5f398f3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_e358ea58",
+        "filename": "misc/etc.init/skyring.initd",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-31T05:11:50Z",
+      "side": 1,
+      "message": "Add reload as well here as supported with new function now",
+      "range": {
+        "startLine": 106,
+        "startChar": 26,
+        "endLine": 106,
+        "endChar": 51
+      },
+      "revId": "05962135d64e15506c2f80577a9508bd5f398f3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_a331c20d",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-03-31T05:11:50Z",
+      "side": 1,
+      "message": "Remove blank space",
+      "range": {
+        "startLine": 105,
+        "startChar": 2,
+        "endLine": 105,
+        "endChar": 3
+      },
+      "revId": "05962135d64e15506c2f80577a9508bd5f398f3e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
