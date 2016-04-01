@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_0696374c",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-01T10:02:48Z",
+      "side": 1,
+      "message": "System??",
+      "range": {
+        "startLine": 16,
+        "startChar": 20,
+        "endLine": 16,
+        "endChar": 28
+      },
+      "revId": "2767b7c761bbae05ae46120e261dd6cb35705b35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_e6923357",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-01T10:02:48Z",
+      "side": 1,
+      "message": "755 as its executable",
+      "range": {
+        "startLine": 73,
+        "startChar": 13,
+        "endLine": 73,
+        "endChar": 90
+      },
+      "revId": "2767b7c761bbae05ae46120e261dd6cb35705b35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_c69f2f5e",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-01T10:02:48Z",
+      "side": 1,
+      "message": "Do we really need execute permission for these ?",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 66
+      },
+      "revId": "2767b7c761bbae05ae46120e261dd6cb35705b35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
