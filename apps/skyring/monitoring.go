@@ -249,6 +249,8 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 	cluster_interface_tx_count := len(nodes)
 	var resourceNameError error
 
+	time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
+
 	for _, node := range nodes {
 		/*
 			Calculate Memory Used
@@ -284,45 +286,55 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 		}
 
 		// Aggregate disk read
+		var current_disk_reads float64
 		resourcePrefix := monitoring.AGGREGATION + monitoring.DISK
 		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.READ})
 		if resourceNameError != nil {
 			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v from cluster%v.Err %v", ctxt, resource_name, node.Hostname, clusterId, resourceNameError)
 			disk_reads_count = disk_reads_count - 1
 		} else {
-			disk_reads = disk_reads + FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &disk_reads_count, []string{})
+			current_disk_reads = FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &disk_reads_count, []string{})
+			disk_reads = disk_reads + current_disk_reads
 		}
 
-		// Aggregate disk write
+		// Aggregate disk writetime_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
+		var current_disk_writes float64
 		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.WRITE})
 		if resourceNameError != nil {
 			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v from cluster%v.Err %v", ctxt, resource_name, node.Hostname, clusterId, resourceNameError)
 			disk_writes_count = disk_writes_count - 1
 		} else {
-			disk_writes = disk_writes + FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &disk_writes_count, []string{})
+			current_disk_writes = FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &disk_writes_count, []string{})
+			disk_writes = disk_writes + current_disk_writes
 		}
 
+		table_name := conf.SystemConfig.TimeSeriesDBConfig.CollectionName + "." + strings.Replace(node.Hostname, ".", "_", -1) + "."
+		UpdateMetricToTimeSeriesDb(ctxt, current_disk_reads+current_disk_writes, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+
 		// Aggregate interface rx
+		var current_interface_rx float64
 		resourcePrefix = monitoring.AGGREGATION + monitoring.INTERFACE + monitoring.OCTETS
 		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.RX})
 		if resourceNameError != nil {
 			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v from cluster%v.Err %v", ctxt, resourcePrefix+monitoring.RX, node.Hostname, clusterId, resourceNameError)
 			cluster_interface_rx_count = cluster_interface_rx_count - 1
 		} else {
-			cluster_interface_rx = cluster_interface_rx + FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &cluster_interface_rx_count, []string{monitoring.LOOP_BACK_INTERFACE})
+			current_interface_rx = FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &cluster_interface_rx_count, []string{monitoring.LOOP_BACK_INTERFACE})
+			cluster_interface_rx = cluster_interface_rx + current_interface_rx
 		}
 
 		// Aggregate interface tx
+		var current_interface_tx float64
 		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.TX})
 		if resourceNameError != nil {
 			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v from cluster%v.Err %v", ctxt, resource_name, node.Hostname, clusterId, resourceNameError)
 			cluster_interface_tx_count = cluster_interface_tx_count - 1
 		} else {
-			cluster_interface_tx = cluster_interface_tx + FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &cluster_interface_tx_count, []string{monitoring.LOOP_BACK_INTERFACE})
+			current_interface_tx = FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &cluster_interface_tx_count, []string{monitoring.LOOP_BACK_INTERFACE})
+			cluster_interface_tx = cluster_interface_tx + current_interface_tx
 		}
+		UpdateMetricToTimeSeriesDb(ctxt, current_interface_rx+current_interface_tx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
 	}
-
-	time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
 
 	table_name := conf.SystemConfig.TimeSeriesDBConfig.CollectionName + "." + cluster.Name + "."
 
