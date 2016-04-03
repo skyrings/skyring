@@ -88,6 +88,7 @@ install -D backend/salt/python/skyring/* $RPM_BUILD_ROOT/%{python2_sitelib}/skyr
 install -D -p -m 0644 misc/systemd/%{name}d.service %{buildroot}%{_unitdir}/%{name}d.service
 install -D -p -m 0755 misc/etc.init/%{name}.initd %{buildroot}%{_sysconfdir}/init.d/%{name}d
 install -D conf/sample/about.conf.sample $RPM_BUILD_ROOT/etc/skyring/about.conf
+install -D conf/skyring_httpd.conf $RPM_BUILD_ROOT/etc/httpd/conf.d/skyring.conf
 %post
 ln -fs $RPM_BUILD_ROOT/usr/share/skyring/setup/skyring-setup.sh RPM_BUILD_ROOT/usr/bin/skyring-setup.sh
 
