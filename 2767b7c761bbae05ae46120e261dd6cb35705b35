@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_86b6c7da",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-04T11:48:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_0696374c",
+      "range": {
+        "startLine": 16,
+        "startChar": 20,
+        "endLine": 16,
+        "endChar": 28
+      },
+      "revId": "2767b7c761bbae05ae46120e261dd6cb35705b35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_e6923357",
         "filename": "skyring.spec",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_3ae4d139",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-04T11:48:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_e6923357",
+      "range": {
+        "startLine": 73,
+        "startChar": 13,
+        "endLine": 73,
+        "endChar": 90
+      },
+      "revId": "2767b7c761bbae05ae46120e261dd6cb35705b35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_c69f2f5e",
         "filename": "skyring.spec",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2016-04-01T10:02:48Z",
       "side": 1,
       "message": "Do we really need execute permission for these ?",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 66
+      },
+      "revId": "2767b7c761bbae05ae46120e261dd6cb35705b35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_a6aaeb6e",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-04T11:48:16Z",
+      "side": 1,
+      "message": "I have removed the execute permission in the new patch",
+      "parentUuid": "da9b358b_c69f2f5e",
       "range": {
         "startLine": 92,
         "startChar": 0,
