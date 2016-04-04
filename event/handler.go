@@ -52,41 +52,41 @@ var handlermap = map[string]interface{}{
 	"skyring/collectd/node/*/threshold/df/*":            resource_threshold_crossed,
 }
 
-func get_readable_float(str string, ctxt string) (string, error) {
-	f, err := strconv.ParseFloat(str, 64)
-	if err != nil {
-		logger.Get().Error("%s-Could not parse the string: %s", ctxt, str)
-		return str, err
+func update_alarm_count(event models.AppEvent, ctxt string) error {
+	clearedSeverity, err := common_event.ClearCorrespondingAlert(event, ctxt)
+	if err != nil && event.Severity == models.ALARM_STATUS_CLEARED {
+		logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
+		return err
 	}
-	return fmt.Sprintf("%.2f", f), nil
-}
 
-func updateNodeAlarmState(event models.AppEvent, ctxt string) error {
-	var nodeAlarmStatus models.AlarmStatus
-	if event.Severity == models.ALARM_STATUS_CLEARED {
-		nodeAlarmStatus = event.Severity
-	} else {
-		nodeAlarmStatus = models.ALARM_STATUS_WARNING
-	}
-	if err = common_event.UpdateNodeAlarmCount(event.EntityId,
-		event.ClusterId,
-		nodeAlarmStatus,
+	if err = common_event.UpdateNodeAlarmCount(
+		event,
+		clearedSeverity,
 		ctxt); err != nil {
 		logger.Get().Error("%s-Could not update Alarm state and"+
 			" count for event:%v .Error: %v", ctxt, event.EventId, err)
 		return err
+	}
+
+	if !event.ClusterId.IsZero() {
+		if err = common_event.UpdateClusterAlarmCount(
+			event, clearedSeverity, ctxt); err != nil {
+			logger.Get().Error("%s-Could not update Alarm state and count for"+
+				" event:%v .Error: %v", ctxt, event.EventId, err)
+			return err
+		}
 	}
 	return nil
 }
 
 func resource_threshold_crossed(event models.AppEvent, ctxt string) (models.AppEvent, error) {
 	event.Name = skyring.EventTypes[strings.ToUpper(event.Tags["Plugin"])]
-	currentValue, currentValueErr := get_readable_float(event.Tags["CurrentValue"], ctxt)
+	currentValue, currentValueErr := util.GetReadableFloat(event.Tags["CurrentValue"], ctxt)
 	if currentValueErr != nil {
 		logger.Get().Error("%s-Could not parse the CurrentValue: %s", ctxt, (event.Tags["Plugin"]))
 		return event, currentValueErr
 	}
-	thresholdValue, thresholdValueErr := get_readable_float(event.Tags["FailureMax"], ctxt)
+	thresholdValue, thresholdValueErr := util.GetReadableFloat(event.Tags["FailureMax"], ctxt)
 	if thresholdValueErr != nil {
 		logger.Get().Error("%s-Could not parse the Failure max value: %s", ctxt, (event.Tags["FailureMax"]))
 		return event, thresholdValueErr
@@ -111,16 +111,13 @@ func resource_threshold_crossed(event models.AppEvent, ctxt string) (models.AppE
 	}
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
-	if event.Severity == models.ALARM_STATUS_CLEARED {
-		if err := common_event.ClearCorrespondingAlert(event, ctxt); err != nil {
-			logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
-			return event, err
-		}
 
-	}
-	if err = updateNodeAlarmState(event, ctxt); err != nil {
+	if err := update_alarm_count(event, ctxt); err != nil {
+		logger.Get().Error("%s-could not update alarm"+
+			" count for event: %s", ctxt, event.EventId.String())
 		return event, err
 	}
+
 	return event, nil
 }
 
@@ -390,16 +387,13 @@ func collectd_status_handler(event models.AppEvent, ctxt string) (models.AppEven
 	}
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
-	if event.Severity == models.ALARM_STATUS_CLEARED {
-		if err := common_event.ClearCorrespondingAlert(event, ctxt); err != nil {
-			logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
-			return event, err
-		}
-	}
 
-	if err = updateNodeAlarmState(event, ctxt); err != nil {
+	if err := update_alarm_count(event, ctxt); err != nil {
+		logger.Get().Error("%s-could not update alarm"+
+			" count for event: %s", ctxt, event.EventId.String())
 		return event, err
 	}
+
 	return event, nil
 }
 
@@ -418,18 +412,12 @@ func node_appeared_handler(event models.AppEvent, ctxt string) (models.AppEvent,
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
 
-	if err := common_event.ClearCorrespondingAlert(event, ctxt); err != nil {
-		logger.Get().Warning("%s-could not clear corresponding alert for: %s. Error: %v", ctxt, event.EventId.String(), err)
+	if err := update_alarm_count(event, ctxt); err != nil {
+		logger.Get().Error("%s-could not update alarm"+
+			" count for event: %s", ctxt, event.EventId.String())
 		return event, err
 	}
-	if !event.ClusterId.IsZero() {
-		if err = common_event.UpdateClusterAlarmCount(
-			event.ClusterId, models.ALARM_STATUS_CLEARED, ctxt); err != nil {
-			logger.Get().Error("%s-Could not update Alarm state and count for"+
-				" event:%v .Error: %v", ctxt, event.EventId, err)
-			return event, err
-		}
-	}
+
 	return event, nil
 }
 
@@ -448,14 +436,12 @@ func node_lost_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
 
-	if !event.ClusterId.IsZero() {
-		if err = common_event.UpdateClusterAlarmCount(
-			event.ClusterId, models.ALARM_STATUS_WARNING, ctxt); err != nil {
-			logger.Get().Error("%s-Could not update Alarm state and count for"+
-				" event:%v .Error: %v", ctxt, event.EventId, err)
-			return event, err
-		}
+	if err := update_alarm_count(event, ctxt); err != nil {
+		logger.Get().Error("%s-could not update alarm"+
+			" count for event: %s", ctxt, event.EventId.String())
+		return event, err
 	}
+
 	return event, nil
 }
 
