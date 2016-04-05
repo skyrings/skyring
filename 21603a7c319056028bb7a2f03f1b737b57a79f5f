@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_bda9f8e1",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-04-05T06:48:36Z",
+      "side": 1,
+      "message": "This is already done in latest patch",
+      "parentUuid": "baa041b7_4a55841b",
+      "range": {
+        "startLine": 763,
+        "startChar": 1,
+        "endLine": 763,
+        "endChar": 5
+      },
+      "revId": "21603a7c319056028bb7a2f03f1b737b57a79f5f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_c37e06ae",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 2
