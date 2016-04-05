@@ -308,9 +308,20 @@ func (a *App) GET_Storage(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusBadRequest, "Storage not found")
 		logger.Get().Error("%s-Storage with id: %v not found for cluster: %v. error: %v", ctxt, *storage_id, *cluster_id, err)
 		return
-	} else {
-		json.NewEncoder(w).Encode(storage)
 	}
+
+	collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	var slus []models.StorageLogicalUnit
+	if err := collection.Find(bson.M{"storageprofile": storage.Profile}).All(&slus); err != nil {
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("%s-Error getting SLUs with given storage profile: %s. error: %v", ctxt, storage.Profile, err)
+		return
+	}
+
+	for _, slu := range slus {
+		storage.SluIds = append(storage.SluIds, slu.SluId)
+	}
+	json.NewEncoder(w).Encode(storage)
 }
 
 func (a *App) GET_AllStorages(w http.ResponseWriter, r *http.Request) {
