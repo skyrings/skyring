@@ -267,9 +267,18 @@ func (a *App) GET_Storages(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(storages) == 0 {
 		json.NewEncoder(w).Encode(models.Storages{})
-	} else {
-		json.NewEncoder(w).Encode(storages)
+		return
 	}
+	for i := range storages {
+		if storages[i].SluIds, err = GetSluIds(storages[i].Profile, ctxt); err != nil {
+			HttpResponse(w, http.StatusInternalServerError, err.Error())
+			logger.Get().Error("%s-Error getting SLUs with given storage profile: %s. error: %v", ctxt, storages[i].Profile, err)
+			return
+		}
+	}
+
+	json.NewEncoder(w).Encode(storages)
+
 }
 
 func (a *App) GET_Storage(w http.ResponseWriter, r *http.Request) {
@@ -308,9 +317,29 @@ func (a *App) GET_Storage(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusBadRequest, "Storage not found")
 		logger.Get().Error("%s-Storage with id: %v not found for cluster: %v. error: %v", ctxt, *storage_id, *cluster_id, err)
 		return
-	} else {
-		json.NewEncoder(w).Encode(storage)
 	}
+	if storage.SluIds, err = GetSluIds(storage.Profile, ctxt); err != nil {
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		logger.Get().Error("%s-Error getting SLUs with given storage profile: %s. error: %v", ctxt, storage.Profile, err)
+		return
+	}
+	json.NewEncoder(w).Encode(storage)
+}
+
+func GetSluIds(storage_profile string, ctxt string) ([]uuid.UUID, error) {
+	var SluIds []uuid.UUID
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	var slus []models.StorageLogicalUnit
+	if err := collection.Find(bson.M{"storageprofile": storage_profile}).All(&slus); err != nil {
+		logger.Get().Error("%s-Error getting SLUs with given storage profile: %s. error: %v", ctxt, storage_profile, err)
+		return SluIds, err
+	}
+	for _, slu := range slus {
+		SluIds = append(SluIds, slu.SluId)
+	}
+	return SluIds, nil
 }
 
 func (a *App) GET_AllStorages(w http.ResponseWriter, r *http.Request) {
@@ -331,9 +360,17 @@ func (a *App) GET_AllStorages(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(storages) == 0 {
 		json.NewEncoder(w).Encode(models.Storages{})
-	} else {
-		json.NewEncoder(w).Encode(storages)
+		return
 	}
+
+	for i := range storages {
+		if storages[i].SluIds, err = GetSluIds(storages[i].Profile, ctxt); err != nil {
+			HttpResponse(w, http.StatusInternalServerError, err.Error())
+			logger.Get().Error("%s-Error getting SLUs with given storage profile: %s. error: %v", ctxt, storages[i].Profile, err)
+			return
+		}
+	}
+	json.NewEncoder(w).Encode(storages)
 }
 
 func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
