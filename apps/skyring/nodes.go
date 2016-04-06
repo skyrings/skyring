@@ -430,14 +430,65 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 			*node_id,
 			err)
 	}
+	OSDdetails := OSD_Details(node_id, ctxt)
 	var nodeSummary = map[string]interface{}{
 		"nodeid":      *node_id,
 		"hostname":    node.Hostname,
 		"clustername": cluster.Name,
 		"uptime":      uptime,
 		"role":        string(result.Data.Result),
+		"totalosd":    OSDdetails["TotalOSD"],
+		"errorosd":    OSDdetails["ErrorOSD"],
+		"warnosd":     OSDdetails["WarningOSD"],
+		"downosd":     OSDdetails["DownOSD"],
 	}
 	json.NewEncoder(w).Encode(nodeSummary)
+}
+
+func OSD_Details(node_id *uuid.UUID, ctxt string) map[string]int {
+	OSDdetails := make(map[string]int)
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	var slus []models.StorageLogicalUnit
+
+	if err := collection.Find(bson.M{"nodeid": *node_id}).All(&slus); err != nil {
+		logger.Get().Error(
+			"%s-Error getting SLUs to find total OSDs with given nodeid: %v. error: %v",
+			ctxt,
+			node_id,
+			err)
+	}
+	OSDdetails["TotalOSD"] = len(slus)
+
+	if err := collection.Find(bson.M{"nodeid": *node_id, "status": models.SLU_STATUS_ERROR}).All(&slus); err != nil {
+		logger.Get().Error(
+			"%s-Error getting SLUs to find error OSDs with given nodeid: %v. error: %v",
+			ctxt,
+			node_id,
+			err)
+	}
+	OSDdetails["ErrorOSD"] = len(slus)
+
+	if err := collection.Find(bson.M{"nodeid": *node_id, "status": models.SLU_STATUS_WARN}).All(&slus); err != nil {
+		logger.Get().Error(
+			"%s-Error getting SLUs to find warning OSDs with given nodeid: %v. error: %v",
+			ctxt,
+			node_id,
+			err)
+	}
+	OSDdetails["WarningOSD"] = len(slus)
+
+	if err := collection.Find(bson.M{"nodeid": *node_id, "state": "Out"}).All(&slus); err != nil {
+		logger.Get().Error(
+			"%s-Error getting SLUs to find down OSDs with given nodeid: %v. error: %v",
+			ctxt,
+			node_id,
+			err)
+	}
+	OSDdetails["DownOSD"] = len(slus)
+
+	return OSDdetails
 }
 
 func (a *App) GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
