@@ -160,6 +160,14 @@ func (a SaltNodeManager) IsNodeUp(hostname string, ctxt string) (bool, error) {
 	return ok, nil
 }
 
+func (a SaltNodeManager) NodeUptime(hostname string, ctxt string) (string, error) {
+	uptime, err := salt_backend.NodeUptime(hostname, ctxt)
+	if err != nil {
+		return "", err
+	}
+	return uptime, nil
+}
+
 func (a SaltNodeManager) GetUnmanagedNodes(ctxt string) (*models.UnmanagedNodes, error) {
 	if nodes, err := salt_backend.GetNodes(ctxt); err != nil {
 		return nil, err

@@ -376,6 +376,11 @@ def NodeUp(node, ctxt=""):
     return True if out.has_key(node) and out[node] else False
 
 
+def NodeUptime(node, ctxt=""):
+    out = local.cmd(node,'cmd.run',['uptime -p'])
+    return out[node]
+
+
 def _get_state_result(out):
     failed_minions = {}
     for minion, v in out.iteritems():
