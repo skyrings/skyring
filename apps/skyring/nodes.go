@@ -354,6 +354,92 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	vars := mux.Vars(r)
+	node_id_str := vars["node-id"]
+	node_id, err := uuid.Parse(node_id_str)
+	if err != nil {
+		logger.Get().Error("%s-Error parsing node id: %s", ctxt, node_id_str)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s", node_id_str))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	coll1 := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var node models.Node
+	var cluster models.Cluster
+	if err := coll.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
+		logger.Get().Error(
+			"%s-Error getting the node for %v. error: %v",
+			ctxt,
+			*node_id,
+			err)
+		HttpResponse(
+			w,
+			http.StatusInternalServerError,
+			fmt.Sprintf("Error getting node. error: %v", err))
+		return
+	}
+	if err := coll1.Find(bson.M{"clusterid": node.ClusterId}).One(&cluster); err != nil {
+		logger.Get().Error(
+			"%s-Error getting the cluster details for node: %v. error: %v",
+			ctxt,
+			*node_id,
+			err)
+		HttpResponse(
+			w,
+			http.StatusInternalServerError,
+			fmt.Sprintf("Error getting cluster for node. error: %v", err))
+		return
+	}
+
+	uptime, err := GetCoreNodeManager().NodeUptime(node.Hostname, ctxt)
+	if err != nil {
+		logger.Get().Error(
+			"%s-Error getting uptime info of node: %v. error: %v",
+			ctxt,
+			*node_id,
+			err)
+	}
+	provider := a.GetProviderFromClusterId(ctxt, cluster.ClusterId)
+	if provider == nil {
+		logger.Get().Error(
+			"%s-Error getting provider to figure out node type for: %v. error: %v",
+			ctxt,
+			*node_id,
+			err)
+	}
+	var result models.RpcResponse
+	err = provider.Client.Call(fmt.Sprintf("%s.GetNodeRole", provider.Name),
+		models.RpcRequest{
+			RpcRequestVars:    mux.Vars(r),
+			RpcRequestData:    []byte{},
+			RpcRequestContext: ctxt},
+		&result)
+	if err != nil || (result.Status.StatusCode != http.StatusOK) {
+		logger.Get().Error(
+			"%s-Error getting node type info for: %v from provider. error: %v",
+			ctxt,
+			*node_id,
+			err)
+	}
+	var nodeSummary = map[string]interface{}{
+		"nodeid":      *node_id,
+		"hostname":    node.Hostname,
+		"clustername": cluster.Name,
+		"uptime":      uptime,
+		"role":        string(result.Data.Result),
+	}
+	json.NewEncoder(w).Encode(nodeSummary)
+}
+
 func (a *App) GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
