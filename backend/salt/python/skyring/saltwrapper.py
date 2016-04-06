@@ -377,7 +377,7 @@ def NodeUp(node, ctxt=""):
 
 
 def NodeUptime(node, ctxt=""):
-    out = local.cmd(node, 'status.uptime')
+    out = local.cmd(node,'cmd.run',['uptime -p'])
     return out[node]
 
 

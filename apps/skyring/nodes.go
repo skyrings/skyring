@@ -372,7 +372,7 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	coll1 := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 	var node models.Node
 	var cluster models.Cluster
 	if err := coll.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
@@ -387,7 +387,7 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 			fmt.Sprintf("Error getting node. error: %v", err))
 		return
 	}
-	if err := coll1.Find(bson.M{"clusterid": node.ClusterId}).One(&cluster); err != nil {
+	if err := collection.Find(bson.M{"clusterid": node.ClusterId}).One(&cluster); err != nil {
 		logger.Get().Error(
 			"%s-Error getting the cluster details for node: %v. error: %v",
 			ctxt,
@@ -416,28 +416,46 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 			*node_id,
 			err)
 	}
-	var result models.RpcResponse
-	err = provider.Client.Call(fmt.Sprintf("%s.GetNodeRole", provider.Name),
-		models.RpcRequest{
-			RpcRequestVars:    mux.Vars(r),
-			RpcRequestData:    []byte{},
-			RpcRequestContext: ctxt},
-		&result)
-	if err != nil || (result.Status.StatusCode != http.StatusOK) {
-		logger.Get().Error(
-			"%s-Error getting node type info for: %v from provider. error: %v",
-			ctxt,
-			*node_id,
-			err)
-	}
 	var nodeSummary = map[string]interface{}{
-		"nodeid":      *node_id,
-		"hostname":    node.Hostname,
-		"clustername": cluster.Name,
-		"uptime":      uptime,
-		"role":        string(result.Data.Result),
+		"nodeid":        *node_id,
+		"hostname":      node.Hostname,
+		"clustername":   cluster.Name,
+		"clusterstatus": cluster.Status,
+		"uptime":        uptime,
+		"role":          node.Roles,
 	}
+	nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS] = getSLUStatusWiseCount(node_id, ctxt)
 	json.NewEncoder(w).Encode(nodeSummary)
+}
+
+func getSLUStatusWiseCount(node_id *uuid.UUID, ctxt string) map[string]int {
+	sluDetails := map[string]int{models.TotalSLU: 0, models.DownSLU: 0, models.ErrorSLU: 0, models.WarningSLU: 0}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	var slus []models.StorageLogicalUnit
+
+	if err := collection.Find(bson.M{"nodeid": *node_id}).All(&slus); err != nil {
+		logger.Get().Error(
+			"%s-Error fetching slus for node: %v. error: %v",
+			ctxt,
+			node_id,
+			err)
+		return
+	}
+	for _, slu := range slus {
+		switch {
+		case slu.State == models.SLU_STATE_DOWN:
+			sluDetails[models.DownSLU]++
+		case slu.Status == models.SLU_STATUS_ERROR:
+			sluDetails[models.ErrorSLU]++
+		case slu.Status == models.SLU_STATUS_WARN:
+			sluDetails[models.WarningSLU]++
+		}
+	}
+	sluDetails[models.TotalSLU] = len(slus)
+	return sluDetails
 }
 
 func (a *App) GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
