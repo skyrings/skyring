@@ -430,14 +430,47 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 			*node_id,
 			err)
 	}
+	SLUDetails := getSLUStatusWiseCount(node_id, ctxt)
 	var nodeSummary = map[string]interface{}{
 		"nodeid":      *node_id,
 		"hostname":    node.Hostname,
 		"clustername": cluster.Name,
 		"uptime":      uptime,
 		"role":        string(result.Data.Result),
+		"totalslu":    SLUDetails[models.TotalSLU],
+		"errorslu":    SLUDetails[models.ErrorSLU],
+		"warnslu":     SLUDetails[models.WarningSLU],
+		"downslu":     SLUDetails[models.DownSLU],
 	}
 	json.NewEncoder(w).Encode(nodeSummary)
+}
+
+func getSLUStatusWiseCount(node_id *uuid.UUID, ctxt string) map[string]int {
+	SLUDetails := make(map[string]int)
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	var slus []models.StorageLogicalUnit
+
+	if err := collection.Find(bson.M{"nodeid": *node_id}).All(&slus); err != nil {
+		logger.Get().Error(
+			"%s-Error getting SLUs to find total OSDs with given nodeid: %v. error: %v",
+			ctxt,
+			node_id,
+			err)
+	}
+	for _, slu := range slus {
+		switch {
+		case slu.State == models.SLU_STATE_DOWN:
+			SLUDetails[models.DownSLU]++
+		case slu.Status == models.SLU_STATUS_ERROR:
+			SLUDetails[models.ErrorSLU]++
+		case slu.Status == models.SLU_STATUS_WARN:
+			SLUDetails[models.WarningSLU]++
+		}
+	}
+	SLUDetails[models.TotalSLU] = len(slus)
+	return SLUDetails
 }
 
 func (a *App) GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
