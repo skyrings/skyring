@@ -179,7 +179,7 @@ func start() {
 	n.UseHandler(router)
 
 	//Initialize the application, db, auth etc
-	if err := application.InitializeApplication(conf.SystemConfig); err != nil {
+	if err := application.InitializeApplication(conf.SystemConfig, configDir); err != nil {
 		logger.Get().Fatalf("Unable to initialize the application. err: %v", err)
 	}
 
