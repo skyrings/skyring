@@ -24,4 +24,5 @@ type Application interface {
 	InitializeApplication(sysConfig conf.SkyringCollection) error
 	LoggingContext(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
 	PostInitApplication(sysConfig conf.SkyringCollection) error
+	LoadEventTypes(configDir string, configFile string) error
 }
