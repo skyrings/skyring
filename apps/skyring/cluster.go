@@ -1012,6 +1012,8 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
+	retVal := make(map[string]interface{})
+	httpStatus := http.StatusOK
 	if err != nil {
 		logger.Get().Error("Error Getting the context. error: %v", err)
 	}
@@ -1034,6 +1036,14 @@ func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
 				err))
 		return
 	}
+
+	cluster, clusterFetchErr := GetCluster(cluster_id)
+	if clusterFetchErr != nil {
+		logger.Get().Error("%s - Failed to fetch cluster %v.Error %v", ctxt, *cluster_id, clusterFetchErr)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("%s - Failed to fetch cluster %v.Error %v", ctxt, *cluster_id, clusterFetchErr))
+		return
+	}
+
 	var result models.RpcResponse
 	provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 	if provider == nil {
@@ -1068,17 +1078,36 @@ func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
 			ctxt,
 			*cluster_id,
 			err)
-		HttpResponse(
-			w,
-			http.StatusInternalServerError,
-			fmt.Sprintf(
-				"Error getting confog details of cluster: %v. error: %v",
-				*cluster_id,
-				err))
+		httpStatus = http.StatusPartialContent
+	} else {
+		clusterConfigs := make(map[string]string)
+		err = json.Unmarshal(result.Data.Result, &clusterConfigs)
+		if err != nil {
+			logger.Get().Error("%s - Failed to unmarshal cluster configurations of cluster %v. Error %v", ctxt, cluster.Name, err)
+			httpStatus = http.StatusPartialContent
+		}
+		retVal[models.CLUSTER_CONFIGS] = clusterConfigs
+	}
+	retVal[models.THRESHOLD_CONFIGS] = cluster.Monitoring.Plugins
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	notifSubsColl := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_CLUSTER_NOTIFICATION_SUBSCRIPTIONS)
+	var notifSub models.ClusterNotificationSubscription
+	if err := notifSubsColl.Find(bson.M{"cluster_id": cluster_id}).One(&notifSub); err != nil {
+		logger.Get().Error("%s - Failed to fetch notification subscriptions of cluster %v. Error %v", ctxt, cluster.Name, err)
+		httpStatus = http.StatusPartialContent
+	}
+	retVal[models.NOTIFICATION_LIST] = notifSub
+
+	retBytes, marshalErr := json.Marshal(retVal)
+	if marshalErr != nil {
+		logger.Get().Error("%s - Failed to marshal the cluster configurations of %v. Error %v", ctxt, cluster.Name, marshalErr)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("%s - Failed to marshal the cluster configurations of %v. Error %v", ctxt, cluster.Name, marshalErr))
 		return
 	}
-	w.WriteHeader(http.StatusOK)
-	w.Write(result.Data.Result)
+	w.WriteHeader(httpStatus)
+	w.Write(retBytes)
 }
 
 func disks_used(nodes []models.ClusterNode) (bool, error) {
