@@ -455,7 +455,9 @@ func logAuditEvent(
 	event.Description = description
 	event.Severity = models.ALARM_STATUS_CLEARED
 	if taskId != nil {
-		event.Tags["taskid"] = (*taskId).String()
+		event.Tags = map[string]string{
+			"Task Id": (*taskId).String(),
+		}
 	}
 
 	if err := common_event.AuditLog(ctxt, event, GetDbProvider()); err != nil {
