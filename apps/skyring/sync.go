@@ -24,6 +24,8 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"strconv"
+	"strings"
+	"time"
 )
 
 var (
@@ -190,6 +192,11 @@ func syncSlus(ctxt string, cluster models.Cluster, provider *Provider) (bool, er
 }
 
 func SyncNodeUtilizations(params map[string]interface{}) {
+	var disk_writes float64
+	var disk_reads float64
+	var interface_rx float64
+	var interface_tx float64
+
 	ctxt, ctxtOk := params["ctxt"].(string)
 	if !ctxtOk {
 		logger.Get().Error("Failed to fetch context")
@@ -197,6 +204,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 	}
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
+
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	var nodes []models.Node
 	if err := coll.Find(bson.M{"state": models.NODE_STATE_ACTIVE}).All(&nodes); err != nil {
@@ -205,7 +213,9 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		}
 		logger.Get().Warning("%s - Failed to fetch nodes in active state.Error %v", ctxt, err)
 	}
+	time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
 	for _, node := range nodes {
+		table_name := fmt.Sprintf("%s.%s.", conf.SystemConfig.TimeSeriesDBConfig.CollectionName, strings.Replace(node.Hostname, ".", "_", -1))
 		/*
 			Get memory usage percentage
 		*/
@@ -236,6 +246,47 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 			}}); err != nil {
 			logger.Get().Warning("%s - Failed to update memory and cpu utilizations of node %v to db.Error %v", ctxt, node.Hostname, err)
 		}
+
+		// Aggregate disk read
+		resourcePrefix := monitoring.AGGREGATION + monitoring.DISK
+		resource_name, resourceNameError := GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.READ})
+		if resourceNameError != nil {
+			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v .Err %v", ctxt, resource_name, node.Hostname, resourceNameError)
+		} else {
+			disk_reads_count := 1
+			disk_reads = FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &disk_reads_count, []string{})
+		}
+
+		// Aggregate disk write
+		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.WRITE})
+		if resourceNameError != nil {
+			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v.Err %v", ctxt, resource_name, node.Hostname, resourceNameError)
+		} else {
+			disk_writes_count := 1
+			disk_writes = FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &disk_writes_count, []string{})
+		}
+		UpdateMetricToTimeSeriesDb(ctxt, disk_reads+disk_writes, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+
+		// Aggregate interface rx
+		resourcePrefix = monitoring.AGGREGATION + monitoring.INTERFACE + monitoring.OCTETS
+		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.RX})
+		if resourceNameError != nil {
+			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v.Err %v", ctxt, resourcePrefix+monitoring.RX, node.Hostname, resourceNameError)
+		} else {
+			interface_rx_count := 1
+			interface_rx = FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &interface_rx_count, []string{monitoring.LOOP_BACK_INTERFACE})
+		}
+
+		// Aggregate interface tx
+		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.TX})
+		if resourceNameError != nil {
+			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v.Err %v", ctxt, resource_name, node.Hostname, resourceNameError)
+		} else {
+			interface_tx_count := 1
+			interface_tx = FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &interface_tx_count, []string{monitoring.LOOP_BACK_INTERFACE})
+		}
+
+		UpdateMetricToTimeSeriesDb(ctxt, interface_rx+interface_tx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
 	}
 }
 
