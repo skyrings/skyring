@@ -21,7 +21,7 @@ import (
 type Application interface {
 	SetRoutes(container *mux.Router) error
 	StartProviders(configDir string, binDir string) error
-	InitializeApplication(sysConfig conf.SkyringCollection) error
+	InitializeApplication(sysConfig conf.SkyringCollection, configDir string) error
 	LoggingContext(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
 	PostInitApplication(sysConfig conf.SkyringCollection) error
 }
