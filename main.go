@@ -20,6 +20,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/op/go-logging"
 	"github.com/skyrings/skyring-common/conf"
+	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring/apps"
 	"github.com/skyrings/skyring/apps/skyring"
@@ -181,6 +182,15 @@ func start() {
 	//Initialize the application, db, auth etc
 	if err := application.InitializeApplication(conf.SystemConfig); err != nil {
 		logger.Get().Fatalf("Unable to initialize the application. err: %v", err)
+	}
+
+	// Load the event type details
+	if err := application.LoadEventTypes(
+		configDir,
+		fmt.Sprintf("%s.evt", models.ENGINE_NAME)); err != nil {
+		panic(fmt.Errorf(
+			"Failed to initialize event types. error: %v",
+			err))
 	}
 
 	logger.Get().Info("Starting the providers")
