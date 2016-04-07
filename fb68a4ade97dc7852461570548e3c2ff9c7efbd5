@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_479b2eca",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-07T20:25:38Z",
+      "side": 1,
+      "message": "What this is meant for??",
+      "range": {
+        "startLine": 256,
+        "startChar": 3,
+        "endLine": 256,
+        "endChar": 19
+      },
+      "revId": "fb68a4ade97dc7852461570548e3c2ff9c7efbd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
