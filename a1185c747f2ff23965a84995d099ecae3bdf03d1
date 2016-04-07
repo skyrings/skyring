@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_c7685ebd",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-07T20:22:31Z",
+      "side": 1,
+      "message": "You may pass only storeg.Profile as string instead",
+      "range": {
+        "startLine": 329,
+        "startChar": 15,
+        "endLine": 329,
+        "endChar": 38
+      },
+      "revId": "a1185c747f2ff23965a84995d099ecae3bdf03d1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
