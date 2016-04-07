@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_5b266dbb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-04-07T05:29:58Z",
+      "side": 1,
+      "message": "ok i will change it",
+      "parentUuid": "baa041b7_b248fe2e",
+      "range": {
+        "startLine": 7,
+        "startChar": 10,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "064aa6c314746c16d69c4e4b8f1d0b2a6605b5b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_9255fac7",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-04-06T13:14:03Z",
       "side": 1,
       "message": "remove this as top message is sufficient",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "064aa6c314746c16d69c4e4b8f1d0b2a6605b5b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_3b2ba984",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-04-07T05:29:58Z",
+      "side": 1,
+      "message": "i will remove it",
+      "parentUuid": "baa041b7_9255fac7",
       "range": {
         "startLine": 9,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_fb2421b0",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-04-07T05:29:58Z",
+      "side": 1,
+      "message": "ok i will change it",
+      "parentUuid": "baa041b7_525e52ea",
+      "range": {
+        "startLine": 317,
+        "startChar": 25,
+        "endLine": 317,
+        "endChar": 54
+      },
+      "revId": "064aa6c314746c16d69c4e4b8f1d0b2a6605b5b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_3263ceb3",
         "filename": "apps/skyring/storage.go",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_db3a7dcd",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-04-07T05:29:58Z",
+      "side": 1,
+      "message": "i will change it",
+      "parentUuid": "baa041b7_3263ceb3",
+      "range": {
+        "startLine": 322,
+        "startChar": 10,
+        "endLine": 322,
+        "endChar": 15
+      },
+      "revId": "064aa6c314746c16d69c4e4b8f1d0b2a6605b5b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_f25c46ef",
         "filename": "apps/skyring/storage.go",
         "patchSetId": 1
@@ -105,6 +201,30 @@
       "writtenOn": "2016-04-06T13:14:03Z",
       "side": 1,
       "message": "Do we really need to fail if no slus found foor the given storage profile? I feel we can keep the list empty and return.",
+      "range": {
+        "startLine": 324,
+        "startChar": 1,
+        "endLine": 327,
+        "endChar": 8
+      },
+      "revId": "064aa6c314746c16d69c4e4b8f1d0b2a6605b5b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_bb37b9e2",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-04-07T05:29:58Z",
+      "side": 1,
+      "message": "ok.. i will change it",
+      "parentUuid": "baa041b7_f25c46ef",
       "range": {
         "startLine": 324,
         "startChar": 1,
