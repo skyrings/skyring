@@ -1,0 +1,26 @@
+{
+	"USER_LOGGED_IN":  "User logged in",
+	"USER_LOGGED_OUT": "User logged out",
+	"USER_ADDED":      "User added",
+	"USER_MODIFIED":   "User modified",
+	"USER_DELETED":    "User deleted",
+	"LDAP_MODIFIED":   "LDAP config modified"
+
+	"DRIVE_ADD":                 "Drive Addition",
+	"DRIVE_REMOVE":              "Drive Removal",
+	"COLLECTD_STATE_CHANGED":    "Collectd service state changed",
+	"NODE_STATE_CHANGED":        "Node connectivity changed",
+	"MEMORY":                    "Memory Threshold Crossed",
+	"SWAP":                      "Swap Threshold Crossed",
+	"CPU":                       "Cpu Threshold Crossed",
+	"DF":                        "Mount Threshold Crossed",
+	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed",
+
+	"CLUSTER_UPDATED":    "Cluster updated",
+	"CLUSTER_CREATED":    "Cluster created",
+	"CLUSTER_FORGOT":     "Forgot cluster",
+	"CLUSTER_UNMANAGE":   "Cluster unmanaged",
+	"CLUSTER_MANAGE":     "Cluster managed back",
+	"CLUSTER_EXPAND":     "Cluster expanded",
+	"CLUSTER_UPDATE_SLU": "Cluster slu updated"
+}

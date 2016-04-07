@@ -40,18 +40,6 @@ var (
 	curr_hostname, err = os.Hostname()
 )
 
-var EventType = map[string]string{
-	"DRIVE_ADD":              "Drive Addition",
-	"DRIVE_REMOVE":           "Drive Removal",
-	"COLLECTD_STATE_CHANGED": "Collectd service state changed",
-	"NODE_STATE_CHANGED":     "Node connectivity changed",
-	"MEMORY":                 "Memory Threshold Crossed",
-	"SWAP":                   "Swap Threshold Crossed",
-	"CPU":                    "Cpu Threshold Crossed",
-	"DF":                     "Mount Threshold Crossed",
-	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed",
-}
-
 var handlermap = map[string]interface{}{
 	"skyring/dbus/node/*/generic/storage/drive/added":   drive_add_handler,
 	"skyring/dbus/node/*/generic/storage/drive/removed": drive_remove_handler,
@@ -92,7 +80,7 @@ func updateNodeAlarmState(event models.AppEvent, ctxt string) error {
 }
 
 func resource_threshold_crossed(event models.AppEvent, ctxt string) (models.AppEvent, error) {
-	event.Name = EventType[strings.ToUpper(event.Tags["Plugin"])]
+	event.Name = skyring.EventTypes[strings.ToUpper(event.Tags["Plugin"])]
 	currentValue, currentValueErr := get_readable_float(event.Tags["CurrentValue"], ctxt)
 	if currentValueErr != nil {
 		logger.Get().Error("%s-Could not parse the CurrentValue: %s", ctxt, (event.Tags["Plugin"]))
@@ -190,7 +178,7 @@ func drive_add_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 
 	// adding the details for event
 
-	event.Name = EventType["DRIVE_ADD"]
+	event.Name = skyring.EventTypes["DRIVE_ADD"]
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Message = fmt.Sprintf("New Storage Drive: %s added to Host:%s", event.Tags["DevName"], node.Hostname)
 	event.Severity = models.ALARM_STATUS_CLEARED
@@ -376,7 +364,7 @@ func drive_remove_handler(event models.AppEvent, ctxt string) (models.AppEvent, 
 
 	// adding the details for event
 
-	event.Name = EventType["DRIVE_REMOVE"]
+	event.Name = skyring.EventTypes["DRIVE_REMOVE"]
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Message = fmt.Sprintf("Storage Drive: %s removed from Host:%s", event.Tags["DevName"], node.Hostname)
 	event.Severity = models.ALARM_STATUS_CLEARED
@@ -387,13 +375,13 @@ func drive_remove_handler(event models.AppEvent, ctxt string) (models.AppEvent, 
 func collectd_status_handler(event models.AppEvent, ctxt string) (models.AppEvent, error) {
 	// adding the details for event
 	if strings.HasSuffix(event.Message, "inactive") {
-		event.Name = EventType["COLLECTD_STATE_CHANGED"]
+		event.Name = skyring.EventTypes["COLLECTD_STATE_CHANGED"]
 		event.Message = fmt.Sprintf("Collectd process stopped on Host: %s", event.NodeName)
 		event.Description = fmt.Sprintf("Collectd process is stopped on Host: %s. This might affect the monitoring functionality of skyring", event.NodeName)
 		event.EntityId = event.NodeId
 		event.Severity = models.ALARM_STATUS_MAJOR
 	} else if strings.HasSuffix(event.Message, "active") {
-		event.Name = EventType["COLLECTD_STATE_CHANGED"]
+		event.Name = skyring.EventTypes["COLLECTD_STATE_CHANGED"]
 		event.Message = fmt.Sprintf("Collectd process started on Host: %s", event.NodeName)
 		event.EntityId = event.NodeId
 		event.Severity = models.ALARM_STATUS_CLEARED
@@ -423,7 +411,7 @@ func node_appeared_handler(event models.AppEvent, ctxt string) (models.AppEvent,
 			return event, err
 		}
 	}
-	event.Name = EventType["NODE_STATE_CHANGED"]
+	event.Name = skyring.EventTypes["NODE_STATE_CHANGED"]
 	event.Message = fmt.Sprintf("Host: %s gained contact", event.NodeName)
 	event.EntityId = event.NodeId
 	event.Severity = models.ALARM_STATUS_CLEARED
@@ -453,7 +441,7 @@ func node_lost_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 			return event, err
 		}
 	}
-	event.Name = EventType["NODE_STATE_CHANGED"]
+	event.Name = skyring.EventTypes["NODE_STATE_CHANGED"]
 	event.Message = fmt.Sprintf("Host: %s lost contact", event.NodeName)
 	event.EntityId = event.NodeId
 	event.Severity = models.ALARM_STATUS_MAJOR

@@ -35,15 +35,6 @@ const (
 	DefaultRole     = "admin"
 )
 
-var EventType = map[string]string{
-	"USER_LOGGED_IN":  "User logged in",
-	"USER_LOGGED_OUT": "User logged out",
-	"USER_ADDED":      "User added",
-	"USER_MODIFIED":   "User modified",
-	"USER_DELETED":    "User deleted",
-	"LDAP_MODIFIED":   "LDAP config modified",
-}
-
 func logUserEvent(eventtype string, message string, description string, ctxt string) error {
 	var event models.AppEvent
 	eventId, err := uuid.New()
@@ -55,7 +46,7 @@ func logUserEvent(eventtype string, message string, description string, ctxt str
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_USER
 	event.Timestamp = time.Now()
 	event.Notify = false
-	event.Name = EventType[eventtype]
+	event.Name = EventTypes[eventtype]
 	event.Message = message
 	event.Description = description
 	event.Severity = models.ALARM_STATUS_CLEARED

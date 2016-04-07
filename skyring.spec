@@ -75,6 +75,7 @@ install -Dm 0644 conf/sample/skyring.conf.sample $RPM_BUILD_ROOT/etc/skyring/sky
 install -Dm 0644 conf/sample/authentication.conf.sample $RPM_BUILD_ROOT/etc/skyring/authentication.conf
 install -Dm 0644 conf/skyring_salt_master.conf $RPM_BUILD_ROOT/etc/salt/master.d/skyring.conf
 install -Dm 0644 conf/sample/about.conf.sample $RPM_BUILD_ROOT/etc/skyring/about.conf
+install -Dm 0644 event/skyring.evt $RPM_BUILD_ROOT/etc/skyring/skyring.evt
 install -m 755 -d $RPM_BUILD_ROOT/srv/salt
 install -m 755 -d $RPM_BUILD_ROOT/srv/salt/collectd
 install -m 755 -d $RPM_BUILD_ROOT/srv/salt/template
