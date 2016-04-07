@@ -360,6 +360,13 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "GET_NodeSlus",
+			Method:      "GET",
+			Pattern:     "nodes/{node-id}/slus",
+			HandlerFunc: a.GET_NodeSlus,
+			Version:     1,
+		},
+		{
 			Name:        "GET_ClusterSlu",
 			Method:      "GET",
 			Pattern:     "clusters/{cluster-id}/slus/{slu-id}",
