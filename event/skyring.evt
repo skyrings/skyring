@@ -14,5 +14,13 @@
 	"SWAP":                      "Swap Threshold Crossed",
 	"CPU":                       "Cpu Threshold Crossed",
 	"DF":                        "Mount Threshold Crossed",
-	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed"
+	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed",
+
+	"CLUSTER_UPDATED":    "Cluster updated",
+	"CLUSTER_CREATED":    "Cluster created",
+	"CLUSTER_FORGOT":     "Forgot cluster",
+	"CLUSTER_UNMANAGE":   "Cluster unmanaged",
+	"CLUSTER_MANAGE":     "Cluster managed back",
+	"CLUSTER_EXPAND":     "Cluster expanded",
+	"CLUSTER_UPDATE_SLU": "Cluster slu updated"
 }
