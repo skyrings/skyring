@@ -24,6 +24,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 var (
@@ -205,7 +206,34 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		}
 		logger.Get().Warning("%s - Failed to fetch nodes in active state.Error %v", ctxt, err)
 	}
+	time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
 	for _, node := range nodes {
+		table_name := fmt.Sprintf("%s.%s.", conf.SystemConfig.TimeSeriesDBConfig.CollectionName, node.Hostname)
+		/*
+			Node wise storage utilisation
+		*/
+		var storageTotal int64
+		var storageUsed int64
+
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+		var slus []models.StorageLogicalUnit
+		if err := collection.Find(bson.M{"nodeid": node.NodeId}).All(&slus); err != nil {
+			if err != mgo.ErrNotFound {
+				logger.Get().Error("%s - Could not fetch slus of node %v.Error %v", ctxt, node.Hostname, err)
+				return
+			}
+		}
+		for _, slu := range slus {
+			storageTotal = storageTotal + slu.Usage.Total
+			storageUsed = storageUsed + slu.Usage.Used
+		}
+		storageUsagePercent := float64(storageUsed*100) / float64(storageTotal)
+		UpdateMetricToTimeSeriesDb(ctxt, storageUsagePercent, time_stamp_str, fmt.Sprintf("%s%s.%s", table_name, monitoring.STORAGE_UTILIZATION, monitoring.PERCENT_USED))
+		UpdateMetricToTimeSeriesDb(ctxt, float64(storageUsed), time_stamp_str, fmt.Sprintf("%s%s.%s", table_name, monitoring.STORAGE_UTILIZATION, monitoring.USED_SPACE))
+		UpdateMetricToTimeSeriesDb(ctxt, float64(storageTotal), time_stamp_str, fmt.Sprintf("%s%s.%s", table_name, monitoring.STORAGE_UTILIZATION, monitoring.TOTAL_SPACE))
+
 		/*
 			Get memory usage percentage
 		*/
