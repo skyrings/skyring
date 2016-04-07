@@ -286,6 +286,39 @@ func node_exists(key string, value interface{}) (*models.Node, error) {
 	}
 }
 
+func (a *App) GET_NodeSlus(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	vars := mux.Vars(r)
+	nodeIdStr := vars["node-id"]
+	nodeId, nodeIdErr := uuid.Parse(nodeIdStr)
+	if nodeIdErr != nil {
+		logger.Get().Error("%s - Invalid uuid.Error %v", ctxt, nodeIdStr)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("%s - Invalid uuid.Error %v", ctxt, nodeIdStr))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	var slus []models.StorageLogicalUnit
+	if err := collection.Find(bson.M{"nodeid": nodeId}).All(&slus); err != nil {
+		if err != mgo.ErrNotFound {
+			logger.Get().Error("%s - Could not fetch slus of node %v.Error %v", ctxt, nodeId, err)
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("%s - Could not fetch slus of node %v.Error %v", ctxt, nodeId, err))
+			return
+		}
+	}
+	if len(slus) == 0 {
+		json.NewEncoder(w).Encode([]models.StorageLogicalUnit{})
+	} else {
+		json.NewEncoder(w).Encode(slus)
+	}
+}
+
 func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
