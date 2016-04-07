@@ -61,11 +61,23 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the request. error: %v", ctxt, err)
+		if err := logUserEvent("CLUSTER_UPDATED",
+			fmt.Sprintf("Failed to update cluster: %s", cluster_id),
+			fmt.Sprintf("Failed to update cluster: %s Error: %v", cluster_id, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
 		logger.Get().Error("%s-Unable to unmarshal request. error: %v", ctxt, err)
+		if err := logUserEvent("CLUSTER_UPDATED",
+			fmt.Sprintf("Failed to update cluster: %s", cluster_id),
+			fmt.Sprintf("Failed to update cluster: %s Error: %v", cluster_id, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err))
 		return
 	}
@@ -74,6 +86,12 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 		disableautoexpand = val.(bool)
 	} else {
 		logger.Get().Error("%s-Insufficient details for updating cluster", ctxt)
+		if err := logUserEvent("CLUSTER_UPDATED",
+			fmt.Sprintf("Failed to update cluster: %s", cluster_id),
+			fmt.Sprintf("Failed to update cluster: %s Error: %v", cluster_id, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
+		}
 		HandleHttpError(w, errors.New("Insufficient details for updating cluster"))
 		return
 	}
@@ -85,19 +103,44 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 	clid, err := uuid.Parse(cluster_id)
 	if err != nil {
 		logger.Get().Error("%s-Could not parse cluster uuid: %s", ctxt, cluster_id)
+		if err := logUserEvent("CLUSTER_UPDATED",
+			fmt.Sprintf("Failed to update cluster: %s", cluster_id),
+			fmt.Sprintf("Failed to update cluster: %s Error: %v", cluster_id, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("could not parse cluster Uuid: %s", cluster_id))
 		return
 	}
 	if err := collection.Find(bson.M{"clusterid": *clid}).One(&cluster); err != nil {
 		logger.Get().Error("%s-Cluster: %s does not exists", ctxt, cluster_id)
+		if err := logUserEvent("CLUSTER_UPDATED",
+			fmt.Sprintf("Failed to update cluster: %s", cluster_id),
+			fmt.Sprintf("Failed to update cluster: %s Error: %v", cluster_id, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %s does not exists", cluster_id))
 		return
 	}
 
 	if err := collection.Update(bson.M{"clusterid": *clid}, bson.M{"$set": bson.M{"autoexpand": !disableautoexpand}}); err != nil {
 		logger.Get().Error("%s-Failed updating cluster. Error:%v", ctxt, err)
+		if err := logUserEvent("CLUSTER_UPDATED",
+			fmt.Sprintf("Failed to update cluster: %s", cluster_id),
+			fmt.Sprintf("Failed to update cluster: %s Error: %v", cluster_id, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
+		}
 		HandleHttpError(w, errors.New(fmt.Sprintf("Failed updating cluster. Error:%v", err)))
 		return
+	}
+	if err := logUserEvent(
+		"CLUSTER_UPDATED",
+		fmt.Sprintf("Updated cluster: %s", cluster.Name),
+		fmt.Sprintf("Updated cluster: %s", cluster.Name),
+		ctxt); err != nil {
+		logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
 	}
 	return
 }
@@ -114,11 +157,23 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the request. error: %v", ctxt, err)
+		if err := logUserEvent("CLUSTER_CREATED",
+			fmt.Sprintf("Failed to create cluster: %s", request.Name),
+			fmt.Sprintf("Failed to create cluster: %s Error: %v", request.Name, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
 		logger.Get().Error("%s-Unable to unmarshal request. error: %v", ctxt, err)
+		if err := logUserEvent("CLUSTER_CREATED",
+			fmt.Sprintf("Failed to create cluster: %s", request.Name),
+			fmt.Sprintf("Failed to create cluster: %s Error: %v", request.Name, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err))
 		return
 	}
@@ -128,6 +183,18 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	cluster, _ := cluster_exists("name", request.Name)
 	if cluster != nil {
 		logger.Get().Error("%s-Cluster: %s already exists", ctxt, request.Name)
+		if err := logUserEvent("CLUSTER_CREATED",
+			fmt.Sprintf("Failed to create cluster: %s", request.Name),
+			fmt.Sprintf(
+				"Failed to create cluster: %s Error: %v",
+				request.Name,
+				fmt.Errorf("Cluster already exists")),
+			ctxt); err != nil {
+			logger.Get().Error(
+				"%s- Unable to log create cluster event. Error: %v",
+				ctxt,
+				err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %s already exists", request.Name))
 		return
 	}
@@ -135,10 +202,28 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	// Check if provided disks already utilized
 	if used, err := disks_used(request.Nodes); err != nil {
 		logger.Get().Error("%s-Error checking used state of disks for nodes. error: %v", ctxt, err)
+		if err := logUserEvent("CLUSTER_CREATED",
+			fmt.Sprintf("Failed to create cluster: %s", request.Name),
+			fmt.Sprintf("Failed to create cluster: %s Error: %v", request.Name, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking used state of disks for nodes")
 		return
 	} else if used {
 		logger.Get().Error("%s-Provided disks are already used", ctxt)
+		if err := logUserEvent("CLUSTER_CREATED",
+			fmt.Sprintf("Failed to create cluster: %s", request.Name),
+			fmt.Sprintf(
+				"Failed to create cluster: %s Error: %v",
+				request.Name,
+				fmt.Errorf("Disks already used")),
+			ctxt); err != nil {
+			logger.Get().Error(
+				"%s- Unable to log create cluster event. Error: %v",
+				ctxt,
+				err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Provided disks are already used")
 		return
 	}
@@ -156,11 +241,23 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 				nodes, err := getClusterNodesFromRequest(request.Nodes)
 				if err != nil {
 					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %s", request.Name), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_CREATED",
+						fmt.Sprintf("Failed to create cluster: %s", request.Name),
+						fmt.Sprintf("Failed to create cluster: %s Error: %v", request.Name, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				appLock, err := LockNodes(ctxt, nodes, "POST_Clusters")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", err, t)
+					if err := logUserEvent("CLUSTER_CREATED",
+						fmt.Sprintf("Failed to create cluster: %s", request.Name),
+						fmt.Sprintf("Failed to create cluster: %s Error: %v", request.Name, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 
@@ -170,6 +267,18 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 				provider := a.getProviderFromClusterType(request.Type)
 				if provider == nil {
 					util.FailTask(fmt.Sprintf("%s-", ctxt), errors.New(fmt.Sprintf("Error getting provider for cluster: %s", request.Name)), t)
+					if err := logUserEvent("CLUSTER_CREATED",
+						fmt.Sprintf("Failed to create cluster: %s", request.Name),
+						fmt.Sprintf(
+							"Failed to create cluster: %s Error: %v",
+							request.Name,
+							fmt.Errorf("Unable to find provider")),
+						ctxt); err != nil {
+						logger.Get().Error(
+							"%s- Unable to log create cluster event. Error: %v",
+							ctxt,
+							err)
+					}
 					return
 				}
 				t.UpdateStatus("Installing packages")
@@ -182,10 +291,22 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 						body, err = json.Marshal(request)
 						if err != nil {
 							util.FailTask(fmt.Sprintf("%s-", ctxt), err, t)
+							if err := logUserEvent("CLUSTER_CREATED",
+								fmt.Sprintf("Failed to create cluster: %s", request.Name),
+								fmt.Sprintf("Failed to create cluster: %s Error: %v", request.Name, err),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
+							}
 							return
 						}
 					} else {
 						util.FailTask(fmt.Sprintf("%s-", ctxt), errors.New(fmt.Sprintf("Package Installation Failed for all nodes for cluster: %s", request.Name)), t)
+						if err := logUserEvent("CLUSTER_CREATED",
+							fmt.Sprintf("Failed to create cluster: %s", request.Name),
+							fmt.Sprintf("Failed to create cluster: %s Error: %v", request.Name, err),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
+						}
 						return
 					}
 				}
@@ -196,17 +317,41 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("%s-Error creating cluster: %s", ctxt, request.Name), err, t)
+					if err := logUserEvent("CLUSTER_CREATED",
+						fmt.Sprintf("Failed to create cluster: %s", request.Name),
+						fmt.Sprintf(
+							"Failed to create cluster: %s Error: %v",
+							request.Name,
+							fmt.Errorf("Provider task failed")),
+						ctxt); err != nil {
+						logger.Get().Error(
+							"%s- Unable to log create cluster event. Error: %v",
+							ctxt,
+							err)
+					}
 					return
 				}
 				// Update the master task id
 				providerTaskId, err = uuid.Parse(result.Data.RequestId)
 				if err != nil {
 					util.FailTask(fmt.Sprintf("%s-Error parsing provider task id while creating cluster: %s", ctxt, request.Name), err, t)
+					if err := logUserEvent("CLUSTER_CREATED",
+						fmt.Sprintf("Failed to create cluster: %s", request.Name),
+						fmt.Sprintf("Failed to create cluster: %s Error: %v", request.Name, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 				if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 					util.FailTask(fmt.Sprintf("%s-Error adding sub task while creating cluster: %s", ctxt, request.Name), err, t)
+					if err := logUserEvent("CLUSTER_CREATED",
+						fmt.Sprintf("Failed to create cluster: %s", request.Name),
+						fmt.Sprintf("Failed to create cluster: %s Error: %v", request.Name, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				sessionCopy := db.GetDatastore().Copy()
@@ -219,6 +364,12 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					var providerTask models.AppTask
 					if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
 						util.FailTask(fmt.Sprintf("%s-Error getting sub task status while creating cluster: %s", ctxt, request.Name), err, t)
+						if err := logUserEvent("CLUSTER_CREATED",
+							fmt.Sprintf("Failed to create cluster: %s", request.Name),
+							fmt.Sprintf("Failed to create cluster: %s Error: %v", request.Name, err),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					if providerTask.Completed {
@@ -240,10 +391,29 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 							} else {
 								ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
 							}
+							if err := logUserEvent(
+								"CLUSTER_CREATED",
+								fmt.Sprintf("Created cluster: %s", request.Name),
+								fmt.Sprintf("Created cluster: %s", request.Name),
+								ctxt); err != nil {
+								logger.Get().Error(
+									"%s- Unable to log create cluster event. Error: %v",
+									ctxt,
+									err)
+							}
 							t.UpdateStatus("Success")
 							t.Done(models.TASK_STATUS_SUCCESS)
 
 						} else { //if the task is failed????
+							if err := logUserEvent("CLUSTER_CREATED",
+								fmt.Sprintf("Failed to create cluster: %s", request.Name),
+								fmt.Sprintf(
+									"Failed to create cluster: %s Error: %v",
+									request.Name,
+									fmt.Errorf("Provider task failed")),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
+							}
 							t.UpdateStatus("Failed")
 							t.Done(models.TASK_STATUS_FAILURE)
 							logger.Get().Error("%s- Failed to create the cluster %s", ctxt, request.Name)
@@ -280,16 +450,34 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 	uuid, err := uuid.Parse(cluster_id)
 	if err != nil {
 		logger.Get().Error("%s-Error parsing cluster id: %s. error: %v", ctxt, cluster_id, err)
+		if err := logUserEvent("CLUSTER_FORGOT",
+			fmt.Sprintf("Failed to forget cluster: %s", cluster_id),
+			fmt.Sprintf("Failed to forget cluster: %s Error: %v", cluster_id, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing cluster id: %s", cluster_id))
 		return
 	}
 	ok, err := ClusterUnmanaged(*uuid)
 	if err != nil {
 		logger.Get().Error("%s-Error checking managed state of cluster. error: %v", ctxt, err)
+		if err := logUserEvent("CLUSTER_FORGOT",
+			fmt.Sprintf("Failed to forget cluster: %s", cluster_id),
+			fmt.Sprintf("Failed to forget cluster: %s Error: %v", cluster_id, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 	}
 	if !ok {
 		logger.Get().Error("%s-Cluster: %v is not in un-managed state. Cannot run forget.", ctxt, *uuid)
+		if err := logUserEvent("CLUSTER_FORGOT",
+			fmt.Sprintf("Failed to forget cluster: %s", cluster_id),
+			fmt.Sprintf("Failed to forget cluster: %s Error: %v", cluster_id, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is not in un-managed state. Cannot run forget.")
 		return
 	}
@@ -305,11 +493,23 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 				cnodes, err := getClusterNodesById(uuid)
 				if err != nil {
 					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_FORGOT",
+						fmt.Sprintf("Failed to forget cluster: %s", cluster_id),
+						fmt.Sprintf("Failed to forget cluster: %s Error: %v", cluster_id, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				appLock, err := LockNodes(ctxt, cnodes, "Forget_Cluster")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_FORGOT",
+						fmt.Sprintf("Failed to forget cluster: %s", cluster_id),
+						fmt.Sprintf("Failed to forget cluster: %s Error: %v", cluster_id, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
@@ -320,6 +520,12 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 				// Ignore the cluster nodes
 				if ok, err := ignoreClusterNodes(ctxt, *uuid); err != nil || !ok {
 					util.FailTask(fmt.Sprintf("Error ignoring nodes for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_FORGOT",
+						fmt.Sprintf("Failed to forget cluster: %s", cluster_id),
+						fmt.Sprintf("Failed to forget cluster: %s Error: %v", cluster_id, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 
@@ -327,6 +533,12 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 				t.UpdateStatus("Removing storage entities for cluster")
 				if err := removeStorageEntities(*uuid); err != nil {
 					util.FailTask(fmt.Sprintf("Error removing storage entities for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_FORGOT",
+						fmt.Sprintf("Failed to forget cluster: %s", cluster_id),
+						fmt.Sprintf("Failed to forget cluster: %s Error: %v", cluster_id, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 
@@ -337,6 +549,12 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 				if changeInfo, err := collection.RemoveAll(bson.M{"clusterid": *uuid}); err != nil || changeInfo == nil {
 					util.FailTask(fmt.Sprintf("Error deleting cluster nodes for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_FORGOT",
+						fmt.Sprintf("Failed to forget cluster: %s", cluster_id),
+						fmt.Sprintf("Failed to forget cluster: %s Error: %v", cluster_id, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 
@@ -345,9 +563,21 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 				collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 				if err := collection.Remove(bson.M{"clusterid": *uuid}); err != nil {
 					util.FailTask(fmt.Sprintf("Error removing the cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_FORGOT",
+						fmt.Sprintf("Failed to forget cluster: %s", cluster_id),
+						fmt.Sprintf("Failed to forget cluster: %s Error: %v", cluster_id, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				DeleteClusterSchedule(*uuid)
+				if err := logUserEvent("CLUSTER_FORGOT",
+					fmt.Sprintf("Forgot cluster: %s", cluster_id),
+					fmt.Sprintf("Forgot cluster: %s", cluster_id),
+					ctxt); err != nil {
+					logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+				}
 				t.UpdateStatus("Success")
 				t.Done(models.TASK_STATUS_SUCCESS)
 				return
@@ -430,6 +660,12 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		if err := logUserEvent("CLUSTER_UNMANAGE",
+			fmt.Sprintf("Failed to un-manage cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to un-manage cluster: %s Error: %v", cluster_id_str, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
 	}
@@ -437,11 +673,28 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
 		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		if err := logUserEvent("CLUSTER_UNMANAGE",
+			fmt.Sprintf("Failed to un-manage cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to un-manage cluster: %s Error: %v", cluster_id_str, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if ok {
 		logger.Get().Error("%s-Cluster: %v is already in un-managed state", ctxt, *cluster_id)
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		if err := logUserEvent("CLUSTER_UNMANAGE",
+			fmt.Sprintf("Failed to un-manage cluster: %s", cluster_id_str),
+			fmt.Sprintf(
+				"Failed to un-manage cluster: %s Error: %v",
+				cluster_id_str,
+				fmt.Errorf("Cluster already un-managed")),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is already in un-managed state")
 		return
 	}
@@ -465,17 +718,35 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 				var nodes models.Nodes
 				if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
 					util.FailTask(fmt.Sprintf("Error getting nodes to un-manage for cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_UNMANAGE",
+						fmt.Sprintf("Failed to un-manage cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to un-manage cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 
 				nodes, err := getClusterNodesById(cluster_id)
 				if err != nil {
 					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_UNMANAGE",
+						fmt.Sprintf("Failed to un-manage cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to un-manage cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				appLock, err := LockNodes(ctxt, nodes, "Unmanage_Cluster")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_UNMANAGE",
+						fmt.Sprintf("Failed to un-manage cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to un-manage cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
@@ -485,6 +756,12 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 					ok, err := GetCoreNodeManager().DisableNode(node.Hostname, ctxt)
 					if err != nil || !ok {
 						util.FailTask(fmt.Sprintf("Error disabling node: %s on cluster: %v", node.Hostname, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+						if err := logUserEvent("CLUSTER_UNMANAGE",
+							fmt.Sprintf("Failed to un-manage cluster: %s", cluster_id_str),
+							fmt.Sprintf("Failed to un-manage cluster: %s Error: %v", cluster_id_str, err),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					//Set the node status to unmanaged
@@ -497,7 +774,19 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_UNMANAGED, "status": models.CLUSTER_STATUS_UNKNOWN}}); err != nil {
 					util.FailTask(fmt.Sprintf("Error disabling post actions on cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_UNMANAGE",
+						fmt.Sprintf("Failed to un-manage cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to un-manage cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
+					}
 					return
+				}
+				if err := logUserEvent("CLUSTER_UNMANAGE",
+					fmt.Sprintf("Un-managed cluster: %s", cluster_id_str),
+					fmt.Sprintf("Un-managed cluster: %s", cluster_id_str),
+					ctxt); err != nil {
+					logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
 				}
 				t.UpdateStatus("Success")
 				t.Done(models.TASK_STATUS_SUCCESS)
@@ -534,6 +823,12 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		if err := logUserEvent("CLUSTER_MANAGE",
+			fmt.Sprintf("Failed to manage cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to manage cluster: %s Error: %v", cluster_id_str, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking enabled state of cluster")
 		return
 	}
@@ -541,11 +836,26 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
 		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
+		if err := logUserEvent("CLUSTER_MANAGE",
+			fmt.Sprintf("Failed to manage cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to manage cluster: %s Error: %v", cluster_id_str, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if !ok {
 		logger.Get().Error("%s-Cluster: %v is already in managed state", ctxt, *cluster_id)
+		if err := logUserEvent("CLUSTER_MANAGE",
+			fmt.Sprintf("Failed to manage cluster: %s", cluster_id_str),
+			fmt.Sprintf(
+				"Failed to manage cluster: %s Error: %v",
+				cluster_id_str,
+				fmt.Errorf("Cluster already managed")),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is already in managed state")
 		return
 	}
@@ -569,17 +879,35 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 				var nodes models.Nodes
 				if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
 					util.FailTask(fmt.Sprintf("Error getting nodes to manage on cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_MANAGE",
+						fmt.Sprintf("Failed to manage cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to manage cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 
 				nodes, err := getClusterNodesById(cluster_id)
 				if err != nil {
 					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_MANAGE",
+						fmt.Sprintf("Failed to manage cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to manage cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				appLock, err := LockNodes(ctxt, nodes, "Manage_Cluster")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", fmt.Errorf("%s - %v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_MANAGE",
+						fmt.Sprintf("Failed to manage cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to manage cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
@@ -589,6 +917,12 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 					ok, err := GetCoreNodeManager().EnableNode(node.Hostname, ctxt)
 					if err != nil || !ok {
 						util.FailTask(fmt.Sprintf("Error enabling node: %s on cluster: %v", node.Hostname, *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
+						if err := logUserEvent("CLUSTER_MANAGE",
+							fmt.Sprintf("Failed to manage cluster: %s", cluster_id_str),
+							fmt.Sprintf("Failed to manage cluster: %s Error: %v", cluster_id_str, err),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					if err := syncNodeStatus(ctxt, node); err != nil {
@@ -601,11 +935,29 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 				if err := collection.Update(bson.M{"clusterid": *cluster_id}, bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
 					util.FailTask(fmt.Sprintf("Error enabling post actions on cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_MANAGE",
+						fmt.Sprintf("Failed to manage cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to manage cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				if err := syncClusterStatus(ctxt, cluster_id); err != nil {
 					util.FailTask(fmt.Sprintf("Error updating cluster status for the cluster: %v", *cluster_id), fmt.Errorf("%s - %v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_MANAGE",
+						fmt.Sprintf("Failed to manage cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to manage cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
+					}
 					return
+				}
+				if err := logUserEvent("CLUSTER_MANAGE",
+					fmt.Sprintf("Managed back cluster: %s", cluster_id_str),
+					fmt.Sprintf("Managed back cluster: %s", cluster_id_str),
+					ctxt); err != nil {
+					logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 				}
 				t.UpdateStatus("Success")
 				t.Done(models.TASK_STATUS_SUCCESS)
@@ -642,6 +994,12 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		if err := logUserEvent("CLUSTER_EXPAND",
+			fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
 	}
@@ -649,11 +1007,26 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
 		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
+		if err := logUserEvent("CLUSTER_EXPAND",
+			fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking managed state of cluster")
 		return
 	}
 	if ok {
 		logger.Get().Error("%s-Cluster: %v is in un-managed state", ctxt, *cluster_id)
+		if err := logUserEvent("CLUSTER_EXPAND",
+			fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+			fmt.Sprintf(
+				"Failed to expand cluster: %s Error: %v",
+				cluster_id_str,
+				fmt.Errorf("Cluster is un-managed")),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Cluster is in un-managed state")
 		return
 	}
@@ -663,11 +1036,23 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the expand cluster request for: %v. error: %v", ctxt, *cluster_id, err)
+		if err := logUserEvent("CLUSTER_EXPAND",
+			fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the expand cluster request for: %v. error: %v", *cluster_id, err))
 		return
 	}
 	if err := json.Unmarshal(body, &new_nodes); err != nil {
 		logger.Get().Error("%s-Unable to unmarshal request expand cluster request for cluster: %v. error: %v", ctxt, *cluster_id, err)
+		if err := logUserEvent("CLUSTER_EXPAND",
+			fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err))
 		return
 	}
@@ -675,10 +1060,25 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	// Check if provided disks already utilized
 	if used, err := disks_used(new_nodes); err != nil {
 		logger.Get().Error("%s-Error checking used state of disks of nodes. error: %v", ctxt, err)
+		if err := logUserEvent("CLUSTER_EXPAND",
+			fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error checking used state of disks of nodes")
 		return
 	} else if used {
 		logger.Get().Error("%s-Provided disks are already used", ctxt)
+		if err := logUserEvent("CLUSTER_EXPAND",
+			fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+			fmt.Sprintf(
+				"Failed to expand cluster: %s Error: %v",
+				cluster_id_str,
+				fmt.Sprintf("Disks already used")),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Provided disks are already used")
 		return
 	}
@@ -696,17 +1096,35 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 				nodes, err := getClusterNodesFromRequest(new_nodes)
 				if err != nil {
 					util.FailTask(fmt.Sprintf("Failed to get nodes for locking for cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_EXPAND",
+						fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				appLock, err := LockNodes(ctxt, nodes, "Expand_Cluster")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_EXPAND",
+						fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
 				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("%s-Error etting provider for cluster: %v", ctxt, *cluster_id)), t)
+					if err := logUserEvent("CLUSTER_EXPAND",
+						fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 
@@ -719,10 +1137,22 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 						body, err = json.Marshal(successful)
 						if err != nil {
 							util.FailTask(fmt.Sprintf("%s-", ctxt), err, t)
+							if err := logUserEvent("CLUSTER_EXPAND",
+								fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+								fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+							}
 							return
 						}
 					} else {
 						util.FailTask(fmt.Sprintf("%s-", ctxt), errors.New(fmt.Sprintf("Package Installation Failed for all nodes for cluster: %s", cluster_id_str)), t)
+						if err := logUserEvent("CLUSTER_EXPAND",
+							fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+							fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+						}
 						return
 					}
 				}
@@ -734,17 +1164,38 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("Error expanding cluster: %v", *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logUserEvent("CLUSTER_EXPAND",
+						fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+						fmt.Sprintf(
+							"Failed to expand cluster: %s Error: %v",
+							cluster_id_str,
+							fmt.Errorf("Provider task failed")),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				// Update the master task id
 				providerTaskId, err = uuid.Parse(result.Data.RequestId)
 				if err != nil {
 					util.FailTask(fmt.Sprintf("%s-Error parsing provider task id while expand cluster: %v", ctxt, *cluster_id), err, t)
+					if err := logUserEvent("CLUSTER_EXPAND",
+						fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 				if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 					util.FailTask(fmt.Sprintf("%s-Error adding sub task while expand cluster: %v", ctxt, *cluster_id), err, t)
+					if err := logUserEvent("CLUSTER_EXPAND",
+						fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to expand cluster: %s Error: %v", cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				sessionCopy := db.GetDatastore().Copy()
@@ -770,11 +1221,26 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 							if err := syncStorageDisks(new_nodes, ctxt); err != nil {
 								t.UpdateStatus("Failed to sync the disks")
 							}
+							if err := logUserEvent("CLUSTER_MANAGE",
+								fmt.Sprintf("Expanded cluster: %s", cluster_id_str),
+								fmt.Sprintf("Expanded cluster: %s", cluster_id_str),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+							}
 							t.UpdateStatus("Success")
 							t.Done(models.TASK_STATUS_SUCCESS)
 
 						} else {
 							logger.Get().Error("%s-Failed to expand the cluster %s", ctxt, *cluster_id)
+							if err := logUserEvent("CLUSTER_EXPAND",
+								fmt.Sprintf("Failed to expand cluster: %s", cluster_id_str),
+								fmt.Sprintf(
+									"Failed to expand cluster: %s Error: %v",
+									cluster_id_str,
+									fmt.Errorf("Provider task failed")),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
+							}
 							t.UpdateStatus("Failed")
 							t.Done(models.TASK_STATUS_FAILURE)
 						}
@@ -971,6 +1437,12 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		if err := logUserEvent("CLUSTER_UPDATE_SLU",
+			fmt.Sprintf("Failed to update slu: %s of cluster: %s", slu_id_str, cluster_id_str),
+			fmt.Sprintf("Failed to update slu:%s of cluster: %s Error: %v", slu_id_str, cluster_id_str, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s. error: %v", cluster_id_str, err))
 		return
 	}
@@ -978,36 +1450,137 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
+		if err := logUserEvent("CLUSTER_UPDATE_SLU",
+			fmt.Sprintf("Failed to update slu: %s of cluster: %s", slu_id_str, cluster_id_str),
+			fmt.Sprintf("Failed to update slu:%s of cluster: %s Error: %v", slu_id_str, cluster_id_str, err),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, err.Error(), ctxt)
 		return
 	}
 
-	provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
-	if provider == nil {
-		logger.Get().Error("%s-Error getting provider for cluster: %v", ctxt, *cluster_id)
-		return
-	}
 	var result models.RpcResponse
-	err = provider.Client.Call(fmt.Sprintf("%s.%s",
-		provider.Name, cluster_post_functions["patch_slu"]),
-		models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
-		&result)
-	if err != nil || (result.Status.StatusCode != http.StatusAccepted) {
-		logger.Get().Error("%s-Error updating the slu id: %s. error: %v", ctxt, slu_id_str, err)
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error updating the slu id: %s. error: %v", slu_id_str, err))
-		return
+	var providerTaskId *uuid.UUID
+	asyncTask := func(t *task.Task) {
+		for {
+			select {
+			case <-t.StopCh:
+				return
+			default:
+				t.UpdateStatus("Started the task for updating cluster slu: %v", t.ID)
 
+				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
+				if provider == nil {
+					logger.Get().Error("%s-Error getting provider for cluster: %v", ctxt, *cluster_id)
+					if err := logUserEvent("CLUSTER_UPDATE_SLU",
+						fmt.Sprintf("Failed to update slu: %s of cluster: %s", slu_id_str, cluster_id_str),
+						fmt.Sprintf(
+							"Failed to update slu:%s of cluster: %s Error: %v",
+							slu_id_str,
+							cluster_id_str,
+							fmt.Errorf("Unable to find provider")),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
+					}
+					return
+				}
+				err = provider.Client.Call(fmt.Sprintf("%s.%s",
+					provider.Name, cluster_post_functions["patch_slu"]),
+					models.RpcRequest{RpcRequestVars: vars, RpcRequestData: body},
+					&result)
+
+				// Update the master task id
+				providerTaskId, err = uuid.Parse(result.Data.RequestId)
+				if err != nil {
+					util.FailTask(fmt.Sprintf("%s-Error parsing provider task id while update slu of cluster: %v", ctxt, *cluster_id), err, t)
+					if err := logUserEvent("CLUSTER_UPDATE_SLU",
+						fmt.Sprintf("Failed to update slu:%s of cluster: %s", slu_id_str, cluster_id_str),
+						fmt.Sprintf("Failed to update slu: %s cluster: %s Error: %v", slu_id_str, cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
+					}
+					return
+				}
+				t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
+				if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
+					util.FailTask(fmt.Sprintf("%s-Error adding sub task while update slu of cluster: %v", ctxt, *cluster_id), err, t)
+					if err := logUserEvent("CLUSTER_UPDATE_SLU",
+						fmt.Sprintf("Failed to update slu: %s of cluster: %s", slu_id_str, cluster_id_str),
+						fmt.Sprintf("Failed to update slu: %s of cluster: %s Error: %v", slu_id_str, cluster_id_str, err),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
+					}
+					return
+				}
+				sessionCopy := db.GetDatastore().Copy()
+				defer sessionCopy.Close()
+				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+				// Check for provider task to complete and update the disk info
+				for {
+					time.Sleep(2 * time.Second)
+
+					var providerTask models.AppTask
+					if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
+						util.FailTask(fmt.Sprintf("%s-Error getting sub task status while update slu of cluster: %v", ctxt, *cluster_id), err, t)
+						if err := logUserEvent("CLUSTER_UPDATE_SLU",
+							fmt.Sprintf("Failed to update slu: %s of cluster: %s", slu_id_str, cluster_id_str),
+							fmt.Sprintf("Failed to update slu: %s of cluster: %s Error: %v", slu_id_str, cluster_id_str, err),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
+						}
+						return
+					}
+					if providerTask.Completed {
+						if providerTask.Status == models.TASK_STATUS_SUCCESS {
+							if err := logUserEvent("CLUSTER_UPDATE_SLU",
+								fmt.Sprintf("Updated slu: %s of cluster: %s", slu_id_str, cluster_id_str),
+								fmt.Sprintf("Updated slu: %s of cluster: %s", slu_id_str, cluster_id_str),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
+							}
+							t.UpdateStatus("Success")
+							t.Done(models.TASK_STATUS_SUCCESS)
+
+						} else {
+							logger.Get().Error("%s-Failed to update slu: %s of cluster %s", ctxt, slu_id_str, cluster_id_str)
+							if err := logUserEvent("CLUSTER_UPDATE_SLU",
+								fmt.Sprintf("Failed to update slu: %s of cluster: %s", slu_id_str, cluster_id_str),
+								fmt.Sprintf(
+									"Failed to update slu: %s of cluster: %s Error: %v",
+									slu_id_str,
+									cluster_id_str,
+									fmt.Errorf("Provider task failed")),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
+							}
+							t.UpdateStatus("Failed")
+							t.Done(models.TASK_STATUS_FAILURE)
+						}
+						break
+					}
+				}
+				return
+			}
+		}
 	}
-	taskId, err := uuid.Parse(result.Data.RequestId)
-	if err != nil {
-		logger.Get().Error("%s-Error parsing provider task id while updating the slu id: %s. error: %v", ctxt, slu_id_str, err)
+
+	if taskId, err := a.GetTaskManager().Run(
+		models.ENGINE_NAME,
+		fmt.Sprintf("Update slu: %s of Cluster: %s", slu_id_str, cluster_id_str),
+		asyncTask,
+		nil,
+		nil,
+		nil); err != nil {
+		logger.Get().Error("%s-Unable to create task to update slu: %s of cluster: %s. error: %v", ctxt, slu_id_str, cluster_id_str, err)
+		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for update slu of cluster")
 		return
+	} else {
+		logger.Get().Debug("%s-Task Created: %v to update slu: %s of cluster: %s", ctxt, taskId, slu_id_str, cluster_id_str)
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
-
-	bytes, _ := json.Marshal(models.AsyncResponse{TaskId: *taskId})
-	w.WriteHeader(http.StatusAccepted)
-	w.Write(bytes)
-
 }
 
 func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
