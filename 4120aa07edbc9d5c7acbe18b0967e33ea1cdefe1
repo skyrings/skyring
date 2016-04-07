@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_27794a94",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-07T20:19:24Z",
+      "side": 1,
+      "message": "Should not use ceph specific lingo here.\nRather call SLUDetails always in skyring side.",
+      "range": {
+        "startLine": 437,
+        "startChar": 1,
+        "endLine": 437,
+        "endChar": 11
+      },
+      "revId": "4120aa07edbc9d5c7acbe18b0967e33ea1cdefe1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
