@@ -42,6 +42,7 @@ import (
 	"net/rpc/jsonrpc"
 	"os"
 	"path"
+	"strings"
 	"time"
 )
 
@@ -59,9 +60,6 @@ type App struct {
 type ContextKey int
 
 const (
-	// ConfigFile default configuration file
-	ProviderConfDir   = "providers.d"
-	ProviderBinaryDir = "providers"
 	//DefaultMaxAge set to a week
 	DefaultMaxAge                 = 86400 * 7
 	DEFAULT_API_PREFIX            = "/api"
@@ -78,6 +76,7 @@ var (
 	Store                *mongostore.MongoStore
 	DbManager            dbprovider.DbInterface
 	lockManager          lock.LockManager
+	EventTypes           map[string]string
 )
 
 func NewApp(configDir string, binDir string) *App {
@@ -93,9 +92,9 @@ func NewApp(configDir string, binDir string) *App {
 
 func (a *App) StartProviders(configDir string, binDir string) error {
 
-	providerBinaryPath := path.Join(binDir, ProviderBinaryDir)
+	providerBinaryPath := path.Join(binDir, conf.ProviderBinaryDir)
 
-	configs := conf.LoadProviderConfig(path.Join(configDir, ProviderConfDir))
+	configs := conf.LoadProviderConfig(path.Join(configDir, conf.ProviderConfDir))
 	logger.Get().Info("Config:", configs)
 
 	for _, config := range configs {
@@ -146,7 +145,13 @@ func (a *App) StartProviders(configDir string, binDir string) error {
 			}
 
 			confStr, _ := json.Marshal(conf.SystemConfig)
-			client, err := pie.StartProviderCodec(jsonrpc.NewClientCodec, os.Stderr, config.Provider.ProviderBinary, string(confStr))
+			eventTypesStr, _ := json.Marshal(EventTypes)
+			client, err := pie.StartProviderCodec(
+				jsonrpc.NewClientCodec,
+				os.Stderr,
+				config.Provider.ProviderBinary,
+				string(confStr),
+				string(eventTypesStr))
 			if err != nil {
 				logger.Get().Error("Error starting provider for %s. error: %v", config.Provider.Name, err)
 				continue
@@ -740,4 +745,59 @@ func initializeAbout(ctxt string) {
 			logger.Get().Error(fmt.Sprintf("%s-Error adding System_capabilities details . error: %v", ctxt, err))
 		}
 	}
+}
+
+func (a *App) LoadEventTypes(configDir string, configFile string) error {
+	var coreEventTypes = make(map[string]string)
+	var providerEventTypes = make(map[string]string)
+	file, err := ioutil.ReadFile(path.Join(configDir, configFile))
+	if err != nil {
+		return fmt.Errorf(
+			"Error reading event types from %s",
+			path.Join(configDir, configFile))
+	}
+	err = json.Unmarshal(file, &coreEventTypes)
+	if err != nil {
+		return fmt.Errorf(
+			"Error un-marshalling core event types. error: %v",
+			err)
+	}
+
+	files, err := ioutil.ReadDir(path.Join(configDir, conf.ProviderConfDir))
+	if err != nil {
+		return fmt.Errorf(
+			"Error reading provider specific events. error: %v",
+			err)
+	}
+	for _, f := range files {
+		if strings.HasSuffix(f.Name(), ".evt") {
+			file, err := ioutil.ReadFile(path.Join(
+				configDir,
+				conf.ProviderConfDir,
+				f.Name()))
+			if err != nil {
+				logger.Get().Critical(
+					"Error reading events list from %s",
+					f.Name())
+				continue
+			}
+			err = json.Unmarshal(file, &providerEventTypes)
+			if err != nil {
+				logger.Get().Critical(
+					"Error unmarshalling event types from %s",
+					f.Name())
+				continue
+			}
+			for key, value := range providerEventTypes {
+				if _, ok := coreEventTypes[key]; ok {
+					return fmt.Errorf(
+						"Duplicate event type: %s found",
+						key)
+				}
+				coreEventTypes[key] = value
+			}
+		}
+	}
+	EventTypes = coreEventTypes
+	return nil
 }
