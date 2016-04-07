@@ -19,6 +19,7 @@ import (
 	"github.com/gorilla/context"
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
+	common_event "github.com/skyrings/skyring-common/event"
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/lock"
 	"github.com/skyrings/skyring-common/tools/logger"
@@ -31,6 +32,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"regexp"
+	"time"
 )
 
 type APIError struct {
@@ -421,4 +423,44 @@ func valid_storage_type(storage_type string) bool {
 	} else {
 		return false
 	}
+}
+
+func logAuditEvent(
+	eventtype string,
+	message string,
+	description string,
+	entityId *uuid.UUID,
+	clusterId *uuid.UUID,
+	notificationEntity models.NotificationEntity,
+	taskId *uuid.UUID,
+	ctxt string) error {
+	var event models.AppEvent
+	eventId, err := uuid.New()
+	if err != nil {
+		logger.Get().Error("%s-Uuid generation for the event failed for event: %s. error: %v", ctxt, event.Name, err)
+		return err
+	}
+	event.EventId = *eventId
+	if entityId != nil {
+		event.EntityId = *entityId
+	}
+	if clusterId != nil {
+		event.ClusterId = *clusterId
+	}
+	event.NotificationEntity = notificationEntity
+	event.Timestamp = time.Now()
+	event.Notify = false
+	event.Name = eventtype
+	event.Message = message
+	event.Description = description
+	event.Severity = models.ALARM_STATUS_CLEARED
+	if taskId != nil {
+		event.Tags["taskid"] = (*taskId).String()
+	}
+
+	if err := common_event.AuditLog(ctxt, event, GetDbProvider()); err != nil {
+		logger.Get().Error("%s- Error logging the event: %s. Error:%v", ctxt, event.Name, err)
+		return err
+	}
+	return nil
 }

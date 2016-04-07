@@ -17,7 +17,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
-	common_event "github.com/skyrings/skyring-common/event"
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/uuid"
@@ -25,7 +24,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 )
 
 const (
@@ -34,38 +32,6 @@ const (
 	DefaultEmail    = "admin@localhost"
 	DefaultRole     = "admin"
 )
-
-var EventType = map[string]string{
-	"USER_LOGGED_IN":  "User logged in",
-	"USER_LOGGED_OUT": "User logged out",
-	"USER_ADDED":      "User added",
-	"USER_MODIFIED":   "User modified",
-	"USER_DELETED":    "User deleted",
-	"LDAP_MODIFIED":   "LDAP config modified",
-}
-
-func logUserEvent(eventtype string, message string, description string, ctxt string) error {
-	var event models.AppEvent
-	eventId, err := uuid.New()
-	if err != nil {
-		logger.Get().Error("%s-Uuid generation for the event failed for event: %s. error: %v", ctxt, event.Name, err)
-		return err
-	}
-	event.EventId = *eventId
-	event.NotificationEntity = models.NOTIFICATION_ENTITY_USER
-	event.Timestamp = time.Now()
-	event.Notify = false
-	event.Name = EventType[eventtype]
-	event.Message = message
-	event.Description = description
-	event.Severity = models.ALARM_STATUS_CLEARED
-
-	if err := common_event.AuditLog(ctxt, event, GetDbProvider()); err != nil {
-		logger.Get().Error("%s- Error logging the event: %s. Error:%v", ctxt, event.Name, err)
-		return err
-	}
-	return nil
-}
 
 func AddDefaultUser() error {
 
@@ -103,9 +69,13 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 	if err := GetAuthProvider().Login(rw, req, m["username"].(string), m["password"].(string)); err != nil {
 		logger.Get().Error("Unable to login User:%s", err)
 		bytes, _ := json.Marshal(apiError{Error: err.Error()})
-		if err := logUserEvent("USER_LOGGED_IN",
+		if err := logAuditEvent(EventTypes["USER_LOGGED_IN"],
 			fmt.Sprintf("Log in failed for user: %s", m["username"]),
 			fmt.Sprintf("Log in failed for user: %s .Error: %s", m["username"], err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_USER,
+			nil,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -114,7 +84,15 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	message := fmt.Sprintf("User: %s logged in", m["username"])
-	if err := logUserEvent("USER_LOGGED_IN", message, message, ctxt); err != nil {
+	if err := logAuditEvent(
+		EventTypes["USER_LOGGED_IN"],
+		message,
+		message,
+		nil,
+		nil,
+		models.NOTIFICATION_ENTITY_USER,
+		nil,
+		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 
@@ -130,9 +108,13 @@ func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
 	user := strings.Split(ctxt, ":")[0]
 	if err := GetAuthProvider().Logout(rw, req); err != nil {
 		logger.Get().Error("Unable to logout User:%s", err)
-		if err := logUserEvent("USER_LOGGED_OUT",
+		if err := logAuditEvent(EventTypes["USER_LOGGED_OUT"],
 			fmt.Sprintf("Log out failed for user: %s", user),
 			fmt.Sprintf("Log out failed for user: %s Error: %v", user, err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_USER,
+			nil,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -140,7 +122,15 @@ func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	message := fmt.Sprintf("User: %s logged out", user)
-	if err := logUserEvent("USER_LOGGED_OUT", message, message, ctxt); err != nil {
+	if err := logAuditEvent(
+		EventTypes["USER_LOGGED_OUT"],
+		message,
+		message,
+		nil,
+		nil,
+		models.NOTIFICATION_ENTITY_USER,
+		nil,
+		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 
@@ -348,9 +338,14 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	if err := GetAuthProvider().AddUser(user, password); err != nil {
-		if err := logUserEvent("USER_ADDED",
+		if err := logAuditEvent(
+			EventTypes["USER_ADDED"],
 			fmt.Sprintf("Addition of user: %s failed", user.Username),
 			fmt.Sprintf("Addition of user: %s failed. Reason: %v", user.Username, err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_USER,
+			nil,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -358,9 +353,14 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 		HandleHttpError(rw, err)
 		return
 	}
-	if err := logUserEvent("USER_ADDED",
+	if err := logAuditEvent(
+		EventTypes["USER_ADDED"],
 		fmt.Sprintf("New user: %s added to skyring", user.Username),
 		fmt.Sprintf("New user: %s with role: %s added to skyring", user.Username, user.Role),
+		nil,
+		nil,
+		models.NOTIFICATION_ENTITY_USER,
+		nil,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
@@ -400,10 +400,15 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	if err := GetAuthProvider().UpdateUser(vars["username"], m, currUserName); err != nil {
-		if err := logUserEvent("USER_MODIFIED",
+		if err := logAuditEvent(
+			EventTypes["USER_MODIFIED"],
 			fmt.Sprintf("User settings modification failed for user: %s", vars["username"]),
 			fmt.Sprintf("User settings modification failed for user: %s. Error: %v",
 				vars["username"], err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_USER,
+			nil,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -426,9 +431,14 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 		description += fmt.Sprintf(" Enabled: %v", val.(bool))
 	}
 
-	if err := logUserEvent("USER_MODIFIED",
+	if err := logAuditEvent(
+		EventTypes["USER_MODIFIED"],
 		fmt.Sprintf("User settings has been modified for user: %s", vars["username"]),
 		description,
+		nil,
+		nil,
+		models.NOTIFICATION_ENTITY_USER,
+		nil,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
@@ -443,10 +453,15 @@ func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 
 	if err := GetAuthProvider().DeleteUser(vars["username"]); err != nil {
-		if err := logUserEvent("USER_DLELTED",
+		if err := logAuditEvent(
+			EventTypes["USER_DLELTED"],
 			fmt.Sprintf("User deletion failed for user: %s", vars["username"]),
 			fmt.Sprintf("User deletion failed for user: %s. Error: %v",
 				vars["username"], err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_USER,
+			nil,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -455,7 +470,15 @@ func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	message := fmt.Sprintf("User :%s has been deleted ", vars["username"])
-	if err := logUserEvent("USER_DLELTED", message, message, ctxt); err != nil {
+	if err := logAuditEvent(
+		EventTypes["USER_DLELTED"],
+		message,
+		message,
+		nil,
+		nil,
+		models.NOTIFICATION_ENTITY_USER,
+		nil,
+		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 
@@ -564,9 +587,14 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 	user := strings.Split(ctxt, ":")[0]
 
 	if err := GetAuthProvider().SetDirectory(directory); err != nil {
-		if err := logUserEvent("LDAP_MODIFIED",
+		if err := logAuditEvent(
+			EventTypes["LDAP_MODIFIED"],
 			fmt.Sprintf("Configuring LDAP failed, Tried by user: %s", user),
 			fmt.Sprintf("Configuring LDAP failed, Tried by user: %s. Error: %s", user, err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_USER,
+			nil,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -575,7 +603,15 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	message := fmt.Sprintf("LDAP configuration updated successfully by user: %s", user)
-	if err := logUserEvent("LDAP_MODIFIED", message, message, ctxt); err != nil {
+	if err := logAuditEvent(
+		EventTypes["LDAP_MODIFIED"],
+		message,
+		message,
+		nil,
+		nil,
+		models.NOTIFICATION_ENTITY_USER,
+		nil,
+		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
 }
