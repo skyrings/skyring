@@ -81,7 +81,7 @@ install -m 755 -d $RPM_BUILD_ROOT/srv/salt/collectd
 install -m 755 -d $RPM_BUILD_ROOT/srv/salt/template
 install -m 755 -d $RPM_BUILD_ROOT/srv/salt/collectd/files
 install -m 755 -d $RPM_BUILD_ROOT/var/log/skyring
-install -Dm 0755 backend/salt/sls/*.* $RPM_BUILD_ROOT/srv/salt/
+install -Dm 0644 backend/salt/sls/*.* $RPM_BUILD_ROOT/srv/salt/
 install -Dm 0644 backend/salt/sls/collectd/*.* $RPM_BUILD_ROOT/srv/salt/collectd
 install -Dm 0644 backend/salt/conf/collectd/* $RPM_BUILD_ROOT/srv/salt/collectd/files
 install -Dm 0755 backend/salt/template/* $RPM_BUILD_ROOT/srv/salt/template
