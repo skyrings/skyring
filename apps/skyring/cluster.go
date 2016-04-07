@@ -1034,6 +1034,14 @@ func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
 				err))
 		return
 	}
+
+	cluster, clusterFetchErr := GetCluster(cluster_id)
+	if clusterFetchErr != nil {
+		logger.Get().Error("%s - Failed to fetch cluster %v.Error %v", ctxt, *cluster_id, clusterFetchErr)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("%s - Failed to fetch cluster %v.Error %v", ctxt, *cluster_id, clusterFetchErr))
+		return
+	}
+
 	var result models.RpcResponse
 	provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 	if provider == nil {
@@ -1077,8 +1085,24 @@ func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
 				err))
 		return
 	}
-	w.WriteHeader(http.StatusOK)
-	w.Write(result.Data.Result)
+
+	retVal := make(map[string]interface{})
+	err = json.Unmarshal(result.Data.Result, retVal[models.CLUSTER_CONFIGS])
+	httpStatus := http.StatusOK
+	if err != nil {
+		logger.Get().Error("%s - Failed to unmarshal cluster configurations of cluster %v. Error %v", ctxt, cluster.Name, err)
+		httpStatus = http.StatusPartialContent
+	}
+	retVal[models.THRESHOLD_CONFIGS] = cluster.Monitoring.Plugins
+
+	retBytes, marshalErr := json.Marshal(retVal)
+	if marshalErr != nil {
+		logger.Get().Error("%s - Failed to marshal the cluster configurations of %v. Error %v", ctxt, cluster.Name, marshalErr)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("%s - Failed to marshal the cluster configurations of %v. Error %v", ctxt, cluster.Name, marshalErr))
+		return
+	}
+	w.WriteHeader(httpStatus)
+	w.Write(retBytes)
 }
 
 func disks_used(nodes []models.ClusterNode) (bool, error) {
