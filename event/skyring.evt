@@ -37,5 +37,9 @@
 
 	"BLOCK_DEVICVE_CREATED": "Created block device",
 	"BLOCK_DEVICVE_REMOVED": "Removed block device",
-	"BLOCK_DEVICVE_RESIZE":  "Resized block device"
+	"BLOCK_DEVICVE_RESIZE":  "Resized block device",
+
+	"STORAGE_PROFILE_CREATED": "Storage profile create",
+	"STORAGE_PROFILE_REMOVED": "Storage profile removed",
+	"STORAGE_PROFILE_UPDATED": "Storage profile updated"
 }
