@@ -22,5 +22,9 @@
 	"CLUSTER_UNMANAGE":   "Cluster unmanaged",
 	"CLUSTER_MANAGE":     "Cluster managed back",
 	"CLUSTER_EXPAND":     "Cluster expanded",
-	"CLUSTER_UPDATE_SLU": "Cluster slu updated"
+	"CLUSTER_UPDATE_SLU": "Cluster slu updated",
+
+	"BLOCK_DEVICVE_CREATED": "Created block device",
+	"BLOCK_DEVICVE_REMOVED": "Removed block device",
+	"BLOCK_DEVICVE_RESIZE":  "Resized block device"
 }
