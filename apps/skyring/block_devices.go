@@ -50,6 +50,15 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
 		logger.Get().Error("%s - Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+			fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to create block device for cluster: %s Error: %v", cluster_id_str, err),
+			nil,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
 	}
@@ -57,11 +66,32 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
 		logger.Get().Error("%s - Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+			fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to create block device for cluster: %s Error: %v", cluster_id_str, err),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error checking managed state of cluster: %v", *cluster_id))
 		return
 	}
 	if ok {
 		logger.Get().Error("%s - Cluster: %v is in un-managed state", ctxt, *cluster_id)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+			fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+			fmt.Sprintf(
+				"Failed to create block device for cluster: %s Error: %v",
+				cluster_id_str,
+				fmt.Errorf("Cluster is un-managed")),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %v is in un-managed state", *cluster_id))
 		return
 	}
@@ -71,11 +101,29 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		logger.Get().Error("%s - Error parsing the request. error: %v", ctxt, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+			fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to create block device for cluster: %s Error: %v", cluster_id_str, err),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
 		logger.Get().Error("%s - Unable to unmarshal request. error: %v", ctxt, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+			fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to create block device for cluster: %s Error: %v", cluster_id_str, err),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err))
 		return
 	}
@@ -84,6 +132,18 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	// No need to check for error as storage would be nil in case of error and the same is checked
 	if blkDevice, _ := block_device_exists("name", request.Name); blkDevice != nil {
 		logger.Get().Error("%s - Block device: %s already added", ctxt, request.Name)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+			fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+			fmt.Sprintf(
+				"Failed to create block device for cluster: %s Error: %v",
+				cluster_id_str,
+				fmt.Errorf("Block device exists")),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Block device: %s already added", request.Name))
 		return
 	}
@@ -91,6 +151,18 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	// Validate storage target size info
 	if ok, err := valid_storage_size(request.Size); !ok || err != nil {
 		logger.Get().Error("%s - Invalid size: %v", ctxt, request.Size)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+			fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+			fmt.Sprintf(
+				"Failed to create block device for cluster: %s Error: %v",
+				cluster_id_str,
+				fmt.Sprintf("Invalid size passed")),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid size: %s passed for: %s", request.Size, request.Name))
 		return
 	}
@@ -107,6 +179,15 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("%s - Error getting provider for cluster: %v", ctxt, *cluster_id)), t)
+					if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+						fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to create block device for cluster: %s Error: %v", cluster_id_str, err),
+						cluster_id,
+						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
@@ -115,17 +196,44 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("%s - Error creating block device: %s on cluster: %v", ctxt, request.Name, *cluster_id), err, t)
+					if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+						fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+						fmt.Sprintf("Failed to create block device for cluster: %s Error: %v", cluster_id_str, err),
+						cluster_id,
+						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+					}
 					return
 				} else {
 					// Update the master task id
 					providerTaskId, err = uuid.Parse(result.Data.RequestId)
 					if err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error parsing provider task id while creating block device: %s for cluster: %v", ctxt, request.Name, *cluster_id), err, t)
+						if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+							fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+							fmt.Sprintf("Failed to create block device for cluster: %s Error: %v", cluster_id_str, err),
+							cluster_id,
+							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+							&(t.ID),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error adding sub task while creating block device: %s on cluster: %v", ctxt, request.Name, *cluster_id), err, t)
+						if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+							fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+							fmt.Sprintf("Failed to create block device for cluster: %s Error: %v", cluster_id_str, err),
+							cluster_id,
+							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+							&(t.ID),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					// Check for provider task to complete and update the parent task
@@ -137,13 +245,40 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 						time.Sleep(2 * time.Second)
 						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
 							util.FailTask(fmt.Sprintf("%s - Error getting sub task status while creating block device: %s on cluster: %v", ctxt, request.Name, *cluster_id), err, t)
+							if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+								fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+								fmt.Sprintf("Failed to create block device for cluster: %s Error: %v", cluster_id_str, err),
+								cluster_id,
+								models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+								&(t.ID),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+							}
 							return
 						}
 						if providerTask.Completed {
 							if providerTask.Status == models.TASK_STATUS_SUCCESS {
+								if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+									fmt.Sprintf("Created block device for cluster: %s", cluster_id_str),
+									fmt.Sprintf("Created block device for cluster: %s", cluster_id_str),
+									cluster_id,
+									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+									&(t.ID),
+									ctxt); err != nil {
+									logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+								}
 								t.UpdateStatus("Success")
 								t.Done(models.TASK_STATUS_SUCCESS)
 							} else if providerTask.Status == models.TASK_STATUS_FAILURE {
+								if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_CREATED"],
+									fmt.Sprintf("Failed to create block device for cluster: %s", cluster_id_str),
+									fmt.Sprintf("Failed to create block device for cluster: %s Error: %v", cluster_id_str, err),
+									cluster_id,
+									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+									&(t.ID),
+									ctxt); err != nil {
+									logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
+								}
 								t.UpdateStatus("Failed")
 								t.Done(models.TASK_STATUS_FAILURE)
 							}
@@ -341,6 +476,15 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
 		logger.Get().Error("%s - Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+			fmt.Sprintf("Failed to delete block device for cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to delete block device for cluster: %s Error: %v", cluster_id_str, err),
+			nil,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
 	}
@@ -348,11 +492,33 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 	blockdevice_id, err := uuid.Parse(blockdevice_id_str)
 	if err != nil {
 		logger.Get().Error("%s - Error parsing the block device id: %s. error: %v", ctxt, blockdevice_id_str, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+			fmt.Sprintf("Failed to delete block device:%s for cluster: %s", blockdevice_id_str, cluster_id_str),
+			fmt.Sprintf("Failed to delete block device:%s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the block device id: %s", blockdevice_id_str))
 		return
 	}
 	if blkDevice, _ := block_device_exists("id", *blockdevice_id); blkDevice == nil {
 		logger.Get().Error("%s - Block device: %v does not exist", ctxt, *blockdevice_id)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+			fmt.Sprintf("Failed to delete block device:%s for cluster: %s", blockdevice_id_str, cluster_id_str),
+			fmt.Sprintf(
+				"Failed to delete block device:%s for cluster: %s Error: %v",
+				blockdevice_id_str,
+				cluster_id_str,
+				fmt.Errorf("Block device does not exist")),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Block device: %v not found", *blockdevice_id))
 		return
 	}
@@ -370,6 +536,15 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("%s - Error getting provider for cluster: %v", ctxt, *cluster_id)), t)
+					if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+						fmt.Sprintf("Failed to delete block device:%s for cluster: %s", blockdevice_id_str, cluster_id_str),
+						fmt.Sprintf("Failed to delete block device:%s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+						cluster_id,
+						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
@@ -378,17 +553,44 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("%s - Error deleting block device: %v on cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
+					if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+						fmt.Sprintf("Failed to delete block device:%s for cluster: %s", blockdevice_id_str, cluster_id_str),
+						fmt.Sprintf("Failed to delete block device:%s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+						cluster_id,
+						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
+					}
 					return
 				} else {
 					// Update the master task id
 					providerTaskId, err = uuid.Parse(result.Data.RequestId)
 					if err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error parsing provider task id while deleting block device: %v for cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
+						if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+							fmt.Sprintf("Failed to delete block device:%s for cluster: %s", blockdevice_id_str, cluster_id_str),
+							fmt.Sprintf("Failed to delete block device:%s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+							cluster_id,
+							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+							&(t.ID),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error adding sub task while deleting block device: %v on cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
+						if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+							fmt.Sprintf("Failed to delete block device:%s for cluster: %s", blockdevice_id_str, cluster_id_str),
+							fmt.Sprintf("Failed to delete block device:%s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+							cluster_id,
+							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+							&(t.ID),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					// Check for provider task to complete and update the parent task
@@ -400,13 +602,40 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 						time.Sleep(2 * time.Second)
 						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
 							util.FailTask(fmt.Sprintf("%s - Error getting sub task status while deleting block device: %v on cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
+							if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+								fmt.Sprintf("Failed to delete block device:%s for cluster: %s", blockdevice_id_str, cluster_id_str),
+								fmt.Sprintf("Failed to delete block device:%s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+								cluster_id,
+								models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+								&(t.ID),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
+							}
 							return
 						}
 						if providerTask.Completed {
 							if providerTask.Status == models.TASK_STATUS_SUCCESS {
+								if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+									fmt.Sprintf("Deleted block device:%s for cluster: %s", blockdevice_id_str, cluster_id_str),
+									fmt.Sprintf("Deleted block device:%s for cluster: %s", blockdevice_id_str, cluster_id_str),
+									cluster_id,
+									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+									&(t.ID),
+									ctxt); err != nil {
+									logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
+								}
 								t.UpdateStatus("Success")
 								t.Done(models.TASK_STATUS_SUCCESS)
 							} else if providerTask.Status == models.TASK_STATUS_FAILURE {
+								if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+									fmt.Sprintf("Failed to delete block device:%s for cluster: %s", blockdevice_id_str, cluster_id_str),
+									fmt.Sprintf("Failed to delete block device:%s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+									cluster_id,
+									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+									&(t.ID),
+									ctxt); err != nil {
+									logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
+								}
 								t.UpdateStatus("Failed")
 								t.Done(models.TASK_STATUS_FAILURE)
 							}
@@ -447,6 +676,15 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
 		logger.Get().Error("%s - Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+			fmt.Sprintf("Failed to resize block device for cluster: %s", cluster_id_str),
+			fmt.Sprintf("Failed to resize block device for cluster: %s Error: %v", cluster_id_str, err),
+			nil,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
 	}
@@ -454,11 +692,33 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 	blockdevice_id, err := uuid.Parse(blockdevice_id_str)
 	if err != nil {
 		logger.Get().Error("%s - Error parsing the block device id: %s. error: %v", ctxt, blockdevice_id_str, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+			fmt.Sprintf("Failed to resize block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+			fmt.Sprintf("Failed to resize block device: %s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the block device id: %s", blockdevice_id_str))
 		return
 	}
 	if blkDevice, _ := block_device_exists("id", *blockdevice_id); blkDevice == nil {
 		logger.Get().Error("%s - Block device: %v does not exist", ctxt, *blockdevice_id)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+			fmt.Sprintf("Failed to resize block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+			fmt.Sprintf(
+				"Failed to resize block device: %s for cluster: %s Error: %v",
+				blockdevice_id_str,
+				cluster_id_str,
+				fmt.Errorf("Block device does not exist")),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Block device: %v not found", *blockdevice_id))
 		return
 	}
@@ -470,11 +730,29 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		logger.Get().Error("%s - Error parsing the request. error: %v", ctxt, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+			fmt.Sprintf("Failed to resize block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+			fmt.Sprintf("Failed to resize block device: %s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
 		logger.Get().Error("%s - Unable to unmarshal request. error: %v", ctxt, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+			fmt.Sprintf("Failed to resize block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+			fmt.Sprintf("Failed to resize block device: %s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err))
 		return
 	}
@@ -482,6 +760,19 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 	// Validate storage target size info
 	if ok, err := valid_storage_size(request.Size); !ok || err != nil {
 		logger.Get().Error("%s - Invalid size: %v", ctxt, request.Size)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+			fmt.Sprintf("Failed to resize block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+			fmt.Sprintf(
+				"Failed to resize block device: %s for cluster: %s Error: %v",
+				blockdevice_id_str,
+				cluster_id_str,
+				fmt.Errorf("Invalid size passed")),
+			cluster_id,
+			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid size: %s passed for: %v", request.Size, *blockdevice_id))
 		return
 	}
@@ -499,6 +790,15 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("%s - Error getting provider for cluster: %v", ctxt, *cluster_id)), t)
+					if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+						fmt.Sprintf("Failed to resize block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+						fmt.Sprintf("Failed to resize block device: %s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+						cluster_id,
+						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
@@ -507,17 +807,44 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("%s - Error resizing block device: %v on cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
+					if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+						fmt.Sprintf("Failed to resize block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+						fmt.Sprintf("Failed to resize block device: %s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+						cluster_id,
+						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+					}
 					return
 				} else {
 					// Update the master task id
 					providerTaskId, err = uuid.Parse(result.Data.RequestId)
 					if err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error parsing provider task id while resizing block device: %v for cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
+						if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+							fmt.Sprintf("Failed to resize block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+							fmt.Sprintf("Failed to resize block device: %s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+							cluster_id,
+							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+							&(t.ID),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error adding sub task while resizing block device: %v on cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
+						if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+							fmt.Sprintf("Failed to resize block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+							fmt.Sprintf("Failed to resize block device: %s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+							cluster_id,
+							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+							&(t.ID),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					// Check for provider task to complete and update the parent task
@@ -529,13 +856,40 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 						time.Sleep(2 * time.Second)
 						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
 							util.FailTask(fmt.Sprintf("%s - Error getting sub task status while resizing block device: %v on cluster: %v", ctxt, *blockdevice_id, *cluster_id), err, t)
+							if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+								fmt.Sprintf("Failed to resize block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+								fmt.Sprintf("Failed to resize block device: %s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+								cluster_id,
+								models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+								&(t.ID),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+							}
 							return
 						}
 						if providerTask.Completed {
 							if providerTask.Status == models.TASK_STATUS_SUCCESS {
+								if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+									fmt.Sprintf("Resized block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+									fmt.Sprintf("Resized block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+									cluster_id,
+									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+									&(t.ID),
+									ctxt); err != nil {
+									logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+								}
 								t.UpdateStatus("Success")
 								t.Done(models.TASK_STATUS_SUCCESS)
 							} else if providerTask.Status == models.TASK_STATUS_FAILURE {
+								if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+									fmt.Sprintf("Failed to resize block device: %s for cluster: %s", blockdevice_id_str, cluster_id_str),
+									fmt.Sprintf("Failed to resize block device: %s for cluster: %s Error: %v", blockdevice_id_str, cluster_id_str, err),
+									cluster_id,
+									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
+									&(t.ID),
+									ctxt); err != nil {
+									logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+								}
 								t.UpdateStatus("Failed")
 								t.Done(models.TASK_STATUS_FAILURE)
 							}
