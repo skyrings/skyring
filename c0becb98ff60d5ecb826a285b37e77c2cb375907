@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_5cee6023",
+        "filename": "event/skyring.evt",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-08T09:10:44Z",
+      "side": 1,
+      "message": "\",\" missing",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "c0becb98ff60d5ecb826a285b37e77c2cb375907",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
