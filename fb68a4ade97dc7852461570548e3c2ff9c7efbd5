@@ -22,6 +22,30 @@
       "revId": "fb68a4ade97dc7852461570548e3c2ff9c7efbd5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_dcadd032",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-08T11:39:32Z",
+      "side": 1,
+      "message": "The method FetchAggregatedStatsFromGraphite has a provision to differentiate b/w error case and an actual 0 and one can choose to handle it if required(used in some places like for the case of averaging).If its an error count will be reduced .Just retaining the same signature here also",
+      "parentUuid": "baa041b7_479b2eca",
+      "range": {
+        "startLine": 256,
+        "startChar": 3,
+        "endLine": 256,
+        "endChar": 19
+      },
+      "revId": "fb68a4ade97dc7852461570548e3c2ff9c7efbd5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
