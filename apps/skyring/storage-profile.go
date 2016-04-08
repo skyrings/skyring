@@ -36,22 +36,64 @@ func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the request: %v", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_CREATED"],
+			fmt.Sprintf("Failed to create storage profile"),
+			fmt.Sprintf("Failed to create storage profile. Error: %v", err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err), ctxt)
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
 		logger.Get().Error("%s-Error Unmarshalling the request: %v", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_CREATED"],
+			fmt.Sprintf("Failed to create storage profile"),
+			fmt.Sprintf("Failed to create storage profile. Error: %v", err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err), ctxt)
 		return
 	}
 	if (request == models.StorageProfile{}) {
 		logger.Get().Error("%s-Invalid request", ctxt)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_CREATED"],
+			fmt.Sprintf("Failed to create storage profile"),
+			fmt.Sprintf(
+				"Failed to create storage profile. Error: %v",
+				fmt.Errorf("Invalid request")),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, "Invalid request", ctxt)
 		return
 	}
 	// Check if storage profile already added
 	if _, err := GetDbProvider().StorageProfileInterface().StorageProfile(ctxt, request.Name); err == nil {
 		logger.Get().Error("%s-Storage profile already added: %v", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_CREATED"],
+			fmt.Sprintf("Failed to create storage profile: %s", request.Name),
+			fmt.Sprintf("Failed to create storage profile: %s. Error: %v", request.Name, err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, "Storage profile already added", ctxt)
 		return
 
@@ -59,8 +101,28 @@ func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 
 	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile(ctxt, request); err != nil {
 		logger.Get().Error("%s-Storage profile add failed: %v", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_CREATED"],
+			fmt.Sprintf("Failed to create storage profile: %s", request.Name),
+			fmt.Sprintf("Failed to create storage profile:%s. Error: %v", request.Name, err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
+	}
+	if err := logAuditEvent(EventTypes["STORAGE_PROFILE_CREATED"],
+		fmt.Sprintf("Created storage profile: %s", request.Name),
+		fmt.Sprintf("Created storage profile: %s", request.Name),
+		nil,
+		nil,
+		models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+		nil,
+		ctxt); err != nil {
+		logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
 	}
 	return
 }
@@ -107,20 +169,62 @@ func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
 	sprofile, err := GetDbProvider().StorageProfileInterface().StorageProfile(ctxt, vars["name"])
 	if err != nil {
 		logger.Get().Error("%s-Unable to Get Storage Profile:%s", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_REMOVED"],
+			fmt.Sprintf("Failed to delete storage profile: %s", vars["name"]),
+			fmt.Sprintf("Failed to delete storage profile: %s. Error: %v", vars["name"], err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
 	}
 	if sprofile.Default {
 		logger.Get().Error("%s-Default Storage Profile cannot be deleted:%s", err)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_REMOVED"],
+			fmt.Sprintf("Failed to delete storage profile: %s", vars["name"]),
+			fmt.Sprintf(
+				"Failed to delete storage profile: %s. Error: %v",
+				vars["name"],
+				fmt.Errorf("Default storage profile cannot be deleted")),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusInternalServerError, "Default Storage Profile Cannot be Deleted", ctxt)
 		return
 	}
 	if err := GetDbProvider().StorageProfileInterface().DeleteStorageProfile(ctxt, vars["name"]); err != nil {
 		logger.Get().Error("%s-Unable to delete Storage Profile:%s", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_REMOVED"],
+			fmt.Sprintf("Failed to delete storage profile: %s", vars["name"]),
+			fmt.Sprintf("Failed to delete storage profile: %s. Error: %v", vars["name"], err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-
+	if err := logAuditEvent(EventTypes["STORAGE_PROFILE_REMOVED"],
+		fmt.Sprintf("Deleted storage profile: %s", vars["name"]),
+		fmt.Sprintf("Deleted storage profile: %s.", vars["name"]),
+		nil,
+		nil,
+		models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+		nil,
+		ctxt); err != nil {
+		logger.Get().Error("%s- Unable to log delete storage profile event. Error: %v", ctxt, err)
+	}
 }
 
 func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
@@ -132,11 +236,34 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 	sprofile, err := GetDbProvider().StorageProfileInterface().StorageProfile(ctxt, vars["name"])
 	if err != nil {
 		logger.Get().Error("%s-Unable to Get Storage Profile:%s", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_UPDATED"],
+			fmt.Sprintf("Failed to update storage profile: %s", vars["name"]),
+			fmt.Sprintf("Failed to update storage profile: %s. Error: %v", vars["name"], err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
 	}
 	if sprofile.Default {
 		logger.Get().Error("%s-Default Storage Profile cannot be modified:%s", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_UPDATED"],
+			fmt.Sprintf("Failed to update storage profile: %s", vars["name"]),
+			fmt.Sprintf(
+				"Failed to update storage profile: %s. Error: %v",
+				vars["name"],
+				fmt.Errorf("Default storage profile cannot be updated")),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusInternalServerError, "Default Storage Profile Cannot be Modified", ctxt)
 		return
 	}
@@ -144,6 +271,16 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_UPDATED"],
+			fmt.Sprintf("Failed to update storage profile: %s", vars["name"]),
+			fmt.Sprintf("Failed to update storage profile: %s. Error: %v", vars["name"], err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
 	}
@@ -151,6 +288,16 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 
 	if err = json.Unmarshal(body, &m); err != nil {
 		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_PROFILE_UPDATED"],
+			fmt.Sprintf("Failed to update storage profile: %s", vars["name"]),
+			fmt.Sprintf("Failed to update storage profile: %s. Error: %v", vars["name"], err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 		return
 	}
@@ -174,9 +321,29 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 	if updated {
 		if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile(ctxt, sprofile); err != nil {
 			logger.Get().Error("%s-Storage profile update failed: %v", ctxt, err)
+			if err := logAuditEvent(EventTypes["STORAGE_PROFILE_UPDATED"],
+				fmt.Sprintf("Failed to update storage profile: %s", vars["name"]),
+				fmt.Sprintf("Failed to update storage profile: %s. Error: %v", vars["name"], err),
+				nil,
+				nil,
+				models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+				nil,
+				ctxt); err != nil {
+				logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
+			}
 			HttpResponse(w, http.StatusInternalServerError, err.Error(), ctxt)
 			return
 		}
+	}
+	if err := logAuditEvent(EventTypes["STORAGE_PROFILE_UPDATED"],
+		fmt.Sprintf("Updated storage profile: %s", vars["name"]),
+		fmt.Sprintf("Update storage profile: %s.", vars["name"]),
+		nil,
+		nil,
+		models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
+		nil,
+		ctxt); err != nil {
+		logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
 	}
 }
 
