@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_bc032cb8",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-08T09:45:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_99ef5ab0",
+      "range": {
+        "startLine": 160,
+        "startChar": 26,
+        "endLine": 160,
+        "endChar": 41
+      },
+      "revId": "68e199d8f2f20633390272f0e453c44d34064dfb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_f9266615",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-04-08T07:18:02Z",
       "side": 1,
       "message": "can we provide task detail (task-id  in tags field )  as well when there is a task ?",
+      "range": {
+        "startLine": 396,
+        "startChar": 21,
+        "endLine": 396,
+        "endChar": 41
+      },
+      "revId": "68e199d8f2f20633390272f0e453c44d34064dfb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_9c0068ac",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-08T09:45:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_f9266615",
       "range": {
         "startLine": 396,
         "startChar": 21,
