@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_bf5f970d",
+        "filename": "apps/app.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-11T09:05:19Z",
+      "side": 1,
+      "message": "moved it to InitializeApplication",
+      "parentUuid": "baa041b7_5c41b90a",
+      "range": {
+        "startLine": 27,
+        "startChar": 1,
+        "endLine": 27,
+        "endChar": 58
+      },
+      "revId": "77d5baf3d762594281eec965f37ce5b4fecc4359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_dc6ca99e",
         "filename": "skyring.spec",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2016-04-11T06:51:36Z",
       "side": 1,
       "message": "do we need an entry in %files section?",
+      "range": {
+        "startLine": 78,
+        "startChar": 12,
+        "endLine": 78,
+        "endChar": 36
+      },
+      "revId": "77d5baf3d762594281eec965f37ce5b4fecc4359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_9f9bb3c9",
+        "filename": "skyring.spec",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-11T09:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_dc6ca99e",
       "range": {
         "startLine": 78,
         "startChar": 12,
