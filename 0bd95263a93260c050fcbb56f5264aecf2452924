@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_e21a2617",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-11T12:34:39Z",
+      "side": 1,
+      "message": "As we discussed already this is mot required right??",
+      "range": {
+        "startLine": 239,
+        "startChar": 27,
+        "endLine": 239,
+        "endChar": 47
+      },
+      "revId": "0bd95263a93260c050fcbb56f5264aecf2452924",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
