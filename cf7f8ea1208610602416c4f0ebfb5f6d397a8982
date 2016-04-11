@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_9c2ce14b",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-11T07:09:50Z",
+      "side": 1,
+      "message": "name it appropriately. \u0027coll1\u0027 is not a good name",
+      "range": {
+        "startLine": 375,
+        "startChar": 1,
+        "endLine": 375,
+        "endChar": 6
+      },
+      "revId": "cf7f8ea1208610602416c4f0ebfb5f6d397a8982",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_3ce27504",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-11T07:09:50Z",
+      "side": 1,
+      "message": "As discussed let us not do a RPC call for this. let us have a option param role and populate it during cluster creation. Read this here and return",
+      "range": {
+        "startLine": 419,
+        "startChar": 1,
+        "endLine": 432,
+        "endChar": 2
+      },
+      "revId": "cf7f8ea1208610602416c4f0ebfb5f6d397a8982",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
