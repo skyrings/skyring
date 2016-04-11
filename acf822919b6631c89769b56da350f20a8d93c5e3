@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_7c311da2",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-11T07:00:16Z",
+      "side": 1,
+      "message": "Define these strings as constants in models/misc.go",
+      "range": {
+        "startLine": 444,
+        "startChar": 28,
+        "endLine": 444,
+        "endChar": 38
+      },
+      "revId": "acf822919b6631c89769b56da350f20a8d93c5e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_fc1d2d10",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-11T07:00:16Z",
+      "side": 1,
+      "message": "Probably rename as getSLUStatusWiseCount?",
+      "range": {
+        "startLine": 452,
+        "startChar": 5,
+        "endLine": 452,
+        "endChar": 17
+      },
+      "revId": "acf822919b6631c89769b56da350f20a8d93c5e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
