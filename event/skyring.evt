@@ -30,5 +30,9 @@
 
 	"STORAGE_PROFILE_CREATED": "Storage profile create",
 	"STORAGE_PROFILE_REMOVED": "Storage profile removed",
-	"STORAGE_PROFILE_UPDATED": "Storage profile updated"
+	"STORAGE_PROFILE_UPDATED": "Storage profile updated",
+
+	"STORAGE_CREATED": "Storage created",
+	"STORAGE_DELETED": "Storage deleted",
+	"STORAGE_UPDATED": "Storage updated"
 }

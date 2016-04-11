@@ -54,18 +54,55 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+			fmt.Sprintf("Failed to create storage for cluster: %v", cluster_id_str),
+			fmt.Sprintf("Failed to create storage for cluster: %s. Error: %v", cluster_id_str, err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
+	}
+	clusterName, err := GetClusterNameById(cluster_id)
+	if err != nil {
+		clusterName = cluster_id_str
 	}
 
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
 		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
+		if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+			fmt.Sprintf("Failed to create storage for cluster: %s", clusterName),
+			fmt.Sprintf("Failed to create storage for cluster: %s. Error: %v", clusterName, err),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error checking managed state of cluster: %v", *cluster_id))
 		return
 	}
 	if ok {
 		logger.Get().Error("%s-Cluster: %v is in un-managed state", ctxt, *cluster_id)
+		if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+			fmt.Sprintf("Failed to create storage for cluster: %v", clusterName),
+			fmt.Sprintf(
+				"Failed to create storage for cluster: %s. Error: %v",
+				clusterName,
+				fmt.Errorf("Cluster is un-managed")),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %v is in un-managed state", *cluster_id))
 		return
 	}
@@ -75,11 +112,31 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the request. error: %v", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+			fmt.Sprintf("Failed to create storage for cluster: %v", clusterName),
+			fmt.Sprintf("Failed to create storage for cluster: %s. Error: %v", clusterName, err),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err))
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
 		logger.Get().Error("%s-Unable to unmarshal request. error: %v", ctxt, err)
+		if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+			fmt.Sprintf("Failed to create storage for cluster: %v", clusterName),
+			fmt.Sprintf("Failed to create storage for cluster: %s. Error: %v", clusterName, err),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err))
 		return
 	}
@@ -88,6 +145,20 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	// No need to check for error as storage would be nil in case of error and the same is checked
 	if storage, _ := storage_exists("name", request.Name); storage != nil {
 		logger.Get().Error("%s-Storage entity: %s already added", ctxt, request.Name)
+		if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+			fmt.Sprintf("Failed to create storage:%s for cluster: %v", request.Name, clusterName),
+			fmt.Sprintf(
+				"Failed to create storage: %s for cluster: %s. Error: %v",
+				request.Name,
+				clusterName,
+				fmt.Errorf("Storage exists already")),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Storage entity: %s already added", request.Name))
 		return
 	}
@@ -95,6 +166,20 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	// Validate storage type
 	if ok := valid_storage_type(request.Type); !ok {
 		logger.Get().Error("Invalid storage type: %s", request.Type)
+		if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+			fmt.Sprintf("Failed to create storage:%s for cluster: %v", request.Name, clusterName),
+			fmt.Sprintf(
+				"Failed to create storage:%s for cluster: %s. Error: %v",
+				request.Name,
+				clusterName,
+				fmt.Errorf("Invalid storage type passed")),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid storage type: %s", request.Type))
 		return
 	}
@@ -106,6 +191,20 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 				"%s-Invalid storage size: %v",
 				ctxt,
 				request.Size)
+			if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+				fmt.Sprintf("Failed to create storage:%s for cluster: %v", request.Name, clusterName),
+				fmt.Sprintf(
+					"Failed to create storage:%s for cluster: %s. Error: %v",
+					request.Name,
+					clusterName,
+					fmt.Errorf("Invalid storage size passed")),
+				nil,
+				cluster_id,
+				models.NOTIFICATION_ENTITY_STORAGE,
+				nil,
+				ctxt); err != nil {
+				logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+			}
 			HttpResponse(
 				w,
 				http.StatusBadRequest,
@@ -131,6 +230,21 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
 					util.FailTask("", errors.New(fmt.Sprintf("%s-Error getting provider for cluster: %v", ctxt, *cluster_id)), t)
+					if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+						fmt.Sprintf("Failed to create storage:%s for cluster: %v",
+							request.Name, clusterName),
+						fmt.Sprintf(
+							"Failed to create storage:%s for cluster: %s. Error: %v",
+							request.Name,
+							cluster_id_str,
+							fmt.Errorf("Error getting storage provider")),
+						nil,
+						cluster_id,
+						models.NOTIFICATION_ENTITY_STORAGE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
@@ -139,17 +253,50 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("Error creating storage: %s on cluster: %v", request.Name, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+						fmt.Sprintf("Failed to create storage:%s for cluster: %v", request.Name, clusterName),
+						fmt.Sprintf("Failed to create storage:%s for cluster: %s. Error: %v", request.Name,
+							clusterName, fmt.Errorf("Error creating storage")),
+						nil,
+						cluster_id,
+						models.NOTIFICATION_ENTITY_STORAGE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+					}
 					return
 				} else {
 					// Update the master task id
 					providerTaskId, err = uuid.Parse(result.Data.RequestId)
 					if err != nil {
 						util.FailTask(fmt.Sprintf("Error parsing provider task id while creating storage: %s for cluster: %v", request.Name, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+						if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+							fmt.Sprintf("Failed to create storage:%s for cluster: %v", request.Name, clusterName),
+							fmt.Sprintf("Failed to create storage:%s for cluster: %s. Error: %v", request.Name,
+								clusterName, err),
+							nil,
+							cluster_id,
+							models.NOTIFICATION_ENTITY_STORAGE,
+							&(t.ID),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 						util.FailTask(fmt.Sprintf("Error adding sub task while creating storage: %s on cluster: %v", request.Name, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+						if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+							fmt.Sprintf("Failed to create storage:%s for cluster: %v", request.Name, clusterName),
+							fmt.Sprintf("Failed to create storage:%s for cluster: %s. Error: %v", request.Name, clusterName,
+								fmt.Errorf("Error adding subtask")),
+							nil,
+							cluster_id,
+							models.NOTIFICATION_ENTITY_STORAGE,
+							&(t.ID),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+						}
 						return
 					}
 
@@ -163,14 +310,50 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 						var providerTask models.AppTask
 						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
 							util.FailTask(fmt.Sprintf("Error getting sub task status while creating storage: %s on cluster: %v", request.Name, *cluster_id), fmt.Errorf("%s-%v", ctxt, err), t)
+							if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+								fmt.Sprintf("Failed to create storage:%s for cluster: %v", request.Name, clusterName),
+								fmt.Sprintf("Failed to create storage:%s for cluster: %s. Error: %v", request.Name,
+									clusterName, err),
+								nil,
+								cluster_id,
+								models.NOTIFICATION_ENTITY_STORAGE,
+								&(t.ID),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+							}
 							return
 						}
 						if providerTask.Completed {
 							if providerTask.Status == models.TASK_STATUS_SUCCESS {
 								t.UpdateStatus("Success")
+								if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+									fmt.Sprintf("Created storage:%s for cluster: %v", request.Name, clusterName),
+									fmt.Sprintf("Created storage:%s for cluster: %s", request.Name, clusterName),
+									nil,
+									cluster_id,
+									models.NOTIFICATION_ENTITY_STORAGE,
+									&(t.ID),
+									ctxt); err != nil {
+									logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+								}
 								t.Done(models.TASK_STATUS_SUCCESS)
 							} else if providerTask.Status == models.TASK_STATUS_FAILURE {
 								t.UpdateStatus("Failed")
+								if err := logAuditEvent(EventTypes["STORAGE_CREATED"],
+									fmt.Sprintf("Failed to create storage:%s for cluster: %v", request.Name,
+										clusterName),
+									fmt.Sprintf(
+										"Failed to create storage:%s for cluster: %s. Error: %v",
+										request.Name,
+										clusterName,
+										fmt.Errorf("Provider task failed")),
+									nil,
+									cluster_id,
+									models.NOTIFICATION_ENTITY_STORAGE,
+									&(t.ID),
+									ctxt); err != nil {
+									logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
+								}
 								t.Done(models.TASK_STATUS_FAILURE)
 							}
 							done = true
@@ -335,15 +518,43 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 	cluster_id, err := uuid.Parse(cluster_id_str)
 	if err != nil {
 		logger.Get().Error("%s - Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+			fmt.Sprintf("Failed to delete storage for cluster: %v", cluster_id_str),
+			fmt.Sprintf("Failed to delete storage for cluster: %s. Error: %v", cluster_id_str, err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
 		return
+	}
+	clusterName, err := GetClusterNameById(cluster_id)
+	if err != nil {
+		clusterName = cluster_id_str
 	}
 	storage_id_str := vars["storage-id"]
 	storage_id, err := uuid.Parse(storage_id_str)
 	if err != nil {
 		logger.Get().Error("%s - Error parsing the storage id: %s. error: %v", ctxt, storage_id_str, err)
+		if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+			fmt.Sprintf("Failed to delete storage:%v for cluster: %v", storage_id_str, clusterName),
+			fmt.Sprintf("Failed to delete storage:%v for cluster: %s. Error: %v", storage_id_str, clusterName, err),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the storage id: %s", storage_id_str))
 		return
+	}
+	storageName, err := getStorageNameById(*storage_id)
+	if storageName == "" || err != nil {
+		storageName = storage_id_str
 	}
 
 	// Check if block devices are backed by this storage
@@ -355,11 +566,35 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 	err = coll.Find(bson.M{"clusterid": *cluster_id, "storageid": *storage_id}).All(&blkDevices)
 	if err != nil {
 		logger.Get().Error("%s-Error checking block devices backed by storage: %v", ctxt, *storage_id)
+		if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+			fmt.Sprintf("Failed to delete storage:%v for cluster: %v", storageName, clusterName),
+			fmt.Sprintf("Failed to delete storage:%v for cluster: %s. Error: %v", storageName, clusterName, err),
+			storage_id,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error checking block devices backed by storage: %v", *storage_id))
 		return
 	}
 	if len(blkDevices) > 0 {
 		logger.Get().Warning("%s-There are block devices backed by storage: %v. First block devices should be deleted.", ctxt, *storage_id)
+		if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+			fmt.Sprintf("Failed to delete storage:%v for cluster: %v", storageName, clusterName),
+			fmt.Sprintf(
+				"Failed to delete storage:%v for cluster: %s. Error: %v",
+				storageName,
+				clusterName,
+				fmt.Errorf("Storage has block devices associated")),
+			storage_id,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(
 			w,
 			http.StatusMethodNotAllowed,
@@ -379,6 +614,20 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 				provider := a.GetProviderFromClusterId(ctxt, *cluster_id)
 				if provider == nil {
 					util.FailTask(fmt.Sprintf("%s - ", ctxt), errors.New(fmt.Sprintf("%s-Error getting provider for cluster: %v", ctxt, *cluster_id)), t)
+					if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+						fmt.Sprintf("Failed to delete storage:%v for cluster: %v", storageName, clusterName),
+						fmt.Sprintf(
+							"Failed to delete storage:%v for cluster: %s. Error: %v",
+							storageName,
+							clusterName,
+							fmt.Errorf("Unbale to get storage provider")),
+						storage_id,
+						cluster_id,
+						models.NOTIFICATION_ENTITY_STORAGE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				err = provider.Client.Call(fmt.Sprintf("%s.%s",
@@ -387,17 +636,59 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 					&result)
 				if err != nil || (result.Status.StatusCode != http.StatusOK && result.Status.StatusCode != http.StatusAccepted) {
 					util.FailTask(fmt.Sprintf("%s - Error deleting storage: %v", ctxt, *storage_id), err, t)
+					if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+						fmt.Sprintf("Failed to delete storage:%v for cluster: %v", storageName, clusterName),
+						fmt.Sprintf(
+							"Failed to delete storage:%v for cluster: %s. Error: %v",
+							storageName,
+							clusterName,
+							fmt.Errorf("Unbale to get storage provider")),
+						storage_id,
+						cluster_id,
+						models.NOTIFICATION_ENTITY_STORAGE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+					}
 					return
 				} else {
 					// Update the master task id
 					providerTaskId, err = uuid.Parse(result.Data.RequestId)
 					if err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error parsing provider task id while deleting storage: %v", ctxt, *storage_id), err, t)
+						if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+							fmt.Sprintf("Failed to delete storage:%v for cluster: %v", storageName, clusterName),
+							fmt.Sprintf(
+								"Failed to delete storage:%v for cluster: %s. Error: %v",
+								storageName,
+								clusterName,
+								fmt.Errorf("Unbale to get storage provider")),
+							storage_id,
+							cluster_id,
+							models.NOTIFICATION_ENTITY_STORAGE,
+							&(t.ID),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
 					if ok, err := t.AddSubTask(*providerTaskId); !ok || err != nil {
 						util.FailTask(fmt.Sprintf("%s - Error adding sub task while deleting storage: %v", ctxt, *storage_id), err, t)
+						if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+							fmt.Sprintf("Failed to delete storage:%v for cluster: %v", storageName, clusterName),
+							fmt.Sprintf(
+								"Failed to delete storage:%v for cluster: %s. Error: %v",
+								storageName,
+								clusterName,
+								fmt.Errorf("Unbale to get storage provider")),
+							storage_id,
+							cluster_id,
+							models.NOTIFICATION_ENTITY_STORAGE,
+							&(t.ID),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+						}
 						return
 					}
 
@@ -410,14 +701,53 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 						time.Sleep(2 * time.Second)
 						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
 							util.FailTask(fmt.Sprintf("%s - Error getting sub task status while deleting storage: %v", ctxt, *storage_id), err, t)
+							if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+								fmt.Sprintf("Failed to delete storage:%v for cluster: %v", storageName, clusterName),
+								fmt.Sprintf(
+									"Failed to delete storage:%v for cluster: %s. Error: %v",
+									storageName,
+									clusterName,
+									fmt.Errorf("Unbale to get storage provider")),
+								storage_id,
+								cluster_id,
+								models.NOTIFICATION_ENTITY_STORAGE,
+								&(t.ID),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+							}
 							return
 						}
 						if providerTask.Completed {
 							if providerTask.Status == models.TASK_STATUS_SUCCESS {
 								t.UpdateStatus("Success")
+								if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+									fmt.Sprintf("Deleted storage:%v for cluster: %v", storageName, clusterName),
+									fmt.Sprintf("Deleted storage:%v for cluster: %v", storageName, clusterName),
+									storage_id,
+									cluster_id,
+									models.NOTIFICATION_ENTITY_STORAGE,
+									&(t.ID),
+									ctxt); err != nil {
+									logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+								}
 								t.Done(models.TASK_STATUS_SUCCESS)
 							} else {
 								t.UpdateStatus("Failed")
+								if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+									fmt.Sprintf("Failed to delete storage:%v for cluster: %v",
+										storageName, clusterName),
+									fmt.Sprintf(
+										"Failed to delete storage:%v for cluster: %s. Error: %v",
+										storageName,
+										clusterName,
+										fmt.Errorf("Provider task failed")),
+									storage_id,
+									cluster_id,
+									models.NOTIFICATION_ENTITY_STORAGE,
+									&(t.ID),
+									ctxt); err != nil {
+									logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+								}
 								t.Done(models.TASK_STATUS_FAILURE)
 							}
 							break
@@ -463,6 +793,16 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 			ctxt,
 			cluster_id_str,
 			err)
+		if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+			fmt.Sprintf("Failed to update storage for cluster: %v", cluster_id_str),
+			fmt.Sprintf("Failed to update storage for cluster: %s. Error: %v", cluster_id_str, err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(
 			w,
 			http.StatusBadRequest,
@@ -470,6 +810,10 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 				"Error parsing the cluster id: %s",
 				cluster_id_str))
 		return
+	}
+	clusterName, err := GetClusterNameById(cluster_id)
+	if err != nil {
+		clusterName = cluster_id_str
 	}
 	storage_id_str := vars["storage-id"]
 	storage_id, err := uuid.Parse(storage_id_str)
@@ -479,6 +823,16 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 			ctxt,
 			storage_id_str,
 			err)
+		if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+			fmt.Sprintf("Failed to update storage:%s for cluster: %v", storage_id_str, clusterName),
+			fmt.Sprintf("Failed to update storage:%s for cluster: %s. Error: %v", storage_id_str, clusterName, err),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(
 			w,
 			http.StatusBadRequest,
@@ -487,6 +841,12 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 				storage_id_str))
 		return
 	}
+
+	storageName, err := getStorageNameById(*storage_id)
+	if storageName == "" || err != nil {
+		storageName = storage_id_str
+	}
+
 	ok, err := ClusterUnmanaged(*cluster_id)
 	if err != nil {
 		logger.Get().Error(
@@ -494,6 +854,16 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 			ctxt,
 			*cluster_id,
 			err)
+		if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+			fmt.Sprintf("Failed to update storage:%s for cluster: %v", storageName, clusterName),
+			fmt.Sprintf("Failed to update storage:%s for cluster: %s. Error: %v", storageName, clusterName, err),
+			storage_id,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(
 			w,
 			http.StatusMethodNotAllowed,
@@ -507,6 +877,20 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 			"%s-Cluster: %v is in un-managed state",
 			ctxt,
 			*cluster_id)
+		if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+			fmt.Sprintf("Failed to update storage:%s for cluster: %v", storageName, clusterName),
+			fmt.Sprintf(
+				"Failed to update storage:%s for cluster: %s. Error: %v",
+				storageName,
+				clusterName,
+				fmt.Errorf("Cluster is un-managed")),
+			storage_id,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(
 			w,
 			http.StatusMethodNotAllowed,
@@ -522,6 +906,16 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 			"%s-Error parsing the request. error: %v",
 			ctxt,
 			err)
+		if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+			fmt.Sprintf("Failed to update storage:%s for cluster: %v", storageName, clusterName),
+			fmt.Sprintf("Failed to update storage:%s for cluster: %s. Error: %v", storageName, clusterName, err),
+			storage_id,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+		}
 		HttpResponse(
 			w,
 			http.StatusBadRequest,
@@ -548,6 +942,20 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 						fmt.Sprintf("Error getting the provider for cluster: %v", *cluster_id),
 						fmt.Errorf("%s-%v", ctxt, err),
 						t)
+					if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+						fmt.Sprintf("Failed to update storage:%s for cluster: %v", storageName, clusterName),
+						fmt.Sprintf(
+							"Failed to update storage:%s for cluster: %s. Error: %v",
+							storageName,
+							clusterName,
+							fmt.Errorf("Failed to get storage provider")),
+						storage_id,
+						cluster_id,
+						models.NOTIFICATION_ENTITY_STORAGE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				err = provider.Client.Call(
@@ -567,6 +975,20 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 							*storage_id),
 						fmt.Errorf("%s-%v", ctxt, err),
 						t)
+					if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+						fmt.Sprintf("Failed to update storage:%s for cluster: %v", storageName, clusterName),
+						fmt.Sprintf(
+							"Failed to update storage:%s for cluster: %s. Error: %v",
+							storageName,
+							clusterName,
+							fmt.Errorf("Error executing provider task")),
+						storage_id,
+						cluster_id,
+						models.NOTIFICATION_ENTITY_STORAGE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				// Update the master task id
@@ -578,6 +1000,16 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 							*storage_id),
 						err,
 						t)
+					if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+						fmt.Sprintf("Failed to update storage:%s for cluster: %v", storageName, clusterName),
+						fmt.Sprintf("Failed to update storage:%s for cluster: %s. Error: %v", storageName, clusterName, err),
+						storage_id,
+						cluster_id,
+						models.NOTIFICATION_ENTITY_STORAGE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				t.UpdateStatus(fmt.Sprintf("Started provider task: %v", *providerTaskId))
@@ -588,6 +1020,17 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 							*storage_id),
 						err,
 						t)
+					if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+						fmt.Sprintf("Failed to update storage:%s for cluster: %v", storageName, clusterName),
+						fmt.Sprintf("Failed to update storage:%s for cluster: %s. Error: %v", storageName, clusterName,
+							fmt.Errorf("Error adding sub task")),
+						storage_id,
+						cluster_id,
+						models.NOTIFICATION_ENTITY_STORAGE,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+					}
 					return
 				}
 
@@ -603,14 +1046,49 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 								*storage_id),
 							err,
 							t)
+						if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+							fmt.Sprintf("Failed to update storage:%s for cluster: %v", storageName, clusterName),
+							fmt.Sprintf("Failed to update storage:%s for cluster: %s. Error: %v", storageName, clusterName,
+								err),
+							storage_id,
+							cluster_id,
+							models.NOTIFICATION_ENTITY_STORAGE,
+							&(t.ID),
+							ctxt); err != nil {
+							logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+						}
 						return
 					}
 					if providerTask.Completed {
 						if providerTask.Status == models.TASK_STATUS_SUCCESS {
 							t.UpdateStatus("Success")
+							if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+								fmt.Sprintf("Updated storage:%s for cluster: %v", storageName, clusterName),
+								fmt.Sprintf("Updated storage:%s for cluster: %s", storageName, clusterName),
+								storage_id,
+								cluster_id,
+								models.NOTIFICATION_ENTITY_STORAGE,
+								&(t.ID),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+							}
 							t.Done(models.TASK_STATUS_SUCCESS)
 						} else {
 							t.UpdateStatus("Failed")
+							if err := logAuditEvent(EventTypes["STORAGE_UPDATED"],
+								fmt.Sprintf("Failed to update storage:%s for cluster: %v", storageName, clusterName),
+								fmt.Sprintf(
+									"Failed to update storage:%s for cluster: %s. Error: %v",
+									storageName,
+									clusterName,
+									fmt.Errorf("Provider task failed")),
+								storage_id,
+								cluster_id,
+								models.NOTIFICATION_ENTITY_STORAGE,
+								&(t.ID),
+								ctxt); err != nil {
+								logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
+							}
 							t.Done(models.TASK_STATUS_FAILURE)
 						}
 						break
@@ -635,5 +1113,18 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
+	}
+}
+
+func getStorageNameById(uuid uuid.UUID) (string, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
+	var storage models.Storage
+	if err := collection.Find(bson.M{"storageid": uuid}).One(&storage); err != nil {
+		return "", err
+	} else {
+		return storage.Name, nil
 	}
 }
