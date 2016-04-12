@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_f1554ec6",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-12T10:35:55Z",
+      "side": 1,
+      "message": "Need to filter for the cluster",
+      "range": {
+        "startLine": 335,
+        "startChar": 23,
+        "endLine": 335,
+        "endChar": 69
+      },
+      "revId": "fec4755876b3cb055ee2974a982236f22fbb7a20",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
