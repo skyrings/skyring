@@ -22,6 +22,30 @@
       "revId": "8430f725dbe71ed62bf4ac0c4cae15babc788e65",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_91528212",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-04-12T10:14:08Z",
+      "side": 1,
+      "message": "ok ..i will put return but caller does not need any error..because i have printed error hear right..any way further function execution also possible when SLU details not present..",
+      "parentUuid": "baa041b7_166668ed",
+      "range": {
+        "startLine": 452,
+        "startChar": 66,
+        "endLine": 456,
+        "endChar": 11
+      },
+      "revId": "8430f725dbe71ed62bf4ac0c4cae15babc788e65",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
