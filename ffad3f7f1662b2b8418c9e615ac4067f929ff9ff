@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_2b6ea92f",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-12T05:41:01Z",
+      "side": 1,
+      "message": "probably what you can do is : nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS] \u003d getSLUStatusWiseCount(node_id, ctxt)\n\nThis will wrap all these counts into a separate tag called \"storage_logical_units\" and hence group related info together.",
+      "range": {
+        "startLine": 440,
+        "startChar": 2,
+        "endLine": 443,
+        "endChar": 44
+      },
+      "revId": "ffad3f7f1662b2b8418c9e615ac4067f929ff9ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ab607936",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-12T05:41:01Z",
+      "side": 1,
+      "message": "I think we should follow the convention of camel case variable naming i.e, sluDetails.\n\nThis is just as a convention.",
+      "range": {
+        "startLine": 449,
+        "startChar": 1,
+        "endLine": 449,
+        "endChar": 11
+      },
+      "revId": "ffad3f7f1662b2b8418c9e615ac4067f929ff9ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ab7999fe",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-12T05:41:01Z",
+      "side": 1,
+      "message": "\"%s - Error fetching slus for node %v.Error %v\" ?",
+      "range": {
+        "startLine": 457,
+        "startChar": 3,
+        "endLine": 457,
+        "endChar": 79
+      },
+      "revId": "ffad3f7f1662b2b8418c9e615ac4067f929ff9ff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
