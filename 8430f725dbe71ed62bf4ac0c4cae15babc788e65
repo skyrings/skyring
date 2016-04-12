@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_166668ed",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-12T07:19:07Z",
+      "side": 1,
+      "message": "why continuing on error?\nI think this function should return an error also which needs to be handled by the caller",
+      "range": {
+        "startLine": 452,
+        "startChar": 66,
+        "endLine": 456,
+        "endChar": 11
+      },
+      "revId": "8430f725dbe71ed62bf4ac0c4cae15babc788e65",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
