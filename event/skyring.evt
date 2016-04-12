@@ -18,6 +18,12 @@
 
 	"ADD_MAIL_NOTIFIER":       "Add mail notifier",
 	"TEST_MAIL_NOTIFIER":      "Test mail notifier",
-	"UPDATE_MAIL_NOTIFIER":    "Update mail notifier"
+	"UPDATE_MAIL_NOTIFIER":    "Update mail notifier",
 
+	"NODE_ADD_AND_ACCEPT":     "Node add and aaccept",
+        "NODE_ACCEPT":             "Node accept",
+	"NODE_DELETE":             "Node delete",
+	"UPDATE_DISK":             "Update disk",
+	"NODE_MODIFIED":           "Node Modified",
+	"NODE_INITIALIZE":         "Node Initialize"
 }

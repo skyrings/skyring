@@ -286,6 +286,17 @@ func Initialize(node string, ctxt string) error {
 	_ = coll.Find(bson.M{"hostname": node}).One(&storage_node)
 	if storage_node.State != models.NODE_STATE_INITIALIZING {
 		logger.Get().Warning(fmt.Sprintf("%s-Node with name: %s not in intializing state to update other details", ctxt, node))
+		if err := logAuditEvent(EventTypes["NODE_INITIALIZE"],
+			fmt.Sprintf("Failed to initialize node: %s", node),
+			fmt.Sprintf("Failed to initialize node: %s. Error: %v", node,
+				fmt.Errorf("Node not set to initializing state")),
+			&(storage_node.NodeId),
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log initialize node event. Error: %v", ctxt, err)
+		}
 		return nil
 	}
 	asyncTask := func(t *task.Task) {
@@ -298,6 +309,17 @@ func Initialize(node string, ctxt string) error {
 				appLock, err := lockNode(ctxt, nodeId, node, "Accepted_Nodes")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logAuditEvent(EventTypes["NODE_INITIALIZE"],
+						fmt.Sprintf("Failed to initialize node: %s", node),
+						fmt.Sprintf("Failed to initialize node: %s. Error: %v", node,
+							err),
+						&(storage_node.NodeId),
+						nil,
+						models.NOTIFICATION_ENTITY_HOST,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log initialize node event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				defer GetApp().GetLockManager().ReleaseLock(ctxt, *appLock)
@@ -306,9 +328,30 @@ func Initialize(node string, ctxt string) error {
 				if err := initializeStorageNode(storage_node.Hostname, t, ctxt); err != nil {
 					t.UpdateStatus("Failed")
 					t.Done(models.TASK_STATUS_FAILURE)
+					if err := logAuditEvent(EventTypes["NODE_INITIALIZE"],
+						fmt.Sprintf("Failed to initialize node: %s", node),
+						fmt.Sprintf("Failed to initialize node: %s. Error: %v", node,
+							err),
+						&(storage_node.NodeId),
+						nil,
+						models.NOTIFICATION_ENTITY_HOST,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log initialize node event. Error: %v", ctxt, err)
+					}
 				} else {
 					t.UpdateStatus("Success")
 					t.Done(models.TASK_STATUS_SUCCESS)
+					if err := logAuditEvent(EventTypes["NODE_INITIALIZE"],
+						fmt.Sprintf("Node: %s initialized successfully", node),
+						fmt.Sprintf("Node: %s initialized successfully", node),
+						&(storage_node.NodeId),
+						nil,
+						models.NOTIFICATION_ENTITY_HOST,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log initialize node event. Error: %v", ctxt, err)
+					}
 				}
 				return
 			}
@@ -322,6 +365,17 @@ func Initialize(node string, ctxt string) error {
 		nil,
 		nil); err != nil {
 		logger.Get().Error("%s-Unable to create the task for Initialize Node: %s. error: %v", ctxt, storage_node.Hostname, err)
+		if err := logAuditEvent(EventTypes["NODE_INITIALIZE"],
+			fmt.Sprintf("Failed to initialize node: %s", node),
+			fmt.Sprintf("Failed to initialize node: %s. Error: %v", node,
+				err),
+			&(storage_node.NodeId),
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log initialize node event. Error: %v", ctxt, err)
+		}
 		return err
 	} else {
 		logger.Get().Debug("%s-Task created for initialize node. Task id: %s", ctxt, taskId.String())
