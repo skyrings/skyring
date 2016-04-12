@@ -49,11 +49,31 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the request. error: %v", ctxt, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request: %v", err), ctxt)
+		if err := logAuditEvent(EventTypes["NODE_ADD_AND_ACCEPT"],
+			fmt.Sprintf("Failed to add and accept node"),
+			fmt.Sprintf("Failed to add and accept node. Error: %v", err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
 		logger.Get().Error("%s-Unable to unmarshal request. error: %v", ctxt, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request: %v", err), ctxt)
+		if err := logAuditEvent(EventTypes["NODE_ADD_AND_ACCEPT"],
+			fmt.Sprintf("Failed to add and accept node"),
+			fmt.Sprintf("Failed to add and accept node. Error: %v", err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
@@ -66,6 +86,17 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	if node, _ := node_exists("hostname", request.Hostname); node != nil {
 		logger.Get().Error("%s-Node:%s already added", ctxt, request.Hostname)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Node already added", ctxt)
+		if err := logAuditEvent(EventTypes["NODE_ADD_AND_ACCEPT"],
+			fmt.Sprintf("Failed to add and accept node: %s", request.Hostname),
+			fmt.Sprintf("Failed to add and accept node: %s. Error: %v", request.Hostname,
+				fmt.Errorf("Node already added")),
+			&node.NodeId,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
@@ -73,6 +104,17 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	if request.Hostname == "" || request.SshFingerprint == "" || request.User == "" || request.Password == "" {
 		logger.Get().Error("%s-Required field(s) not provided", ctxt)
 		HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided", ctxt)
+		if err := logAuditEvent(EventTypes["NODE_ADD_AND_ACCEPT"],
+			fmt.Sprintf("Failed to add and accept node: %s", request.Hostname),
+			fmt.Sprintf("Failed to add and accept node: %s. Error: %v", request.Hostname,
+				fmt.Errorf("Required fields not provided")),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
@@ -87,6 +129,17 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 				appLock, err := lockNode(ctxt, nodeId, request.Hostname, "addAndAcceptNode")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logAuditEvent(EventTypes["NODE_ADD_AND_ACCEPT"],
+						fmt.Sprintf("Failed to add and accept node: %s", request.Hostname),
+						fmt.Sprintf("Failed to add and accept node: %s. Error: %v", request.Hostname,
+							err),
+						nil,
+						nil,
+						models.NOTIFICATION_ENTITY_HOST,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
@@ -94,9 +147,31 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 				if err := addAndAcceptNode(w, request, t, ctxt); err != nil {
 					t.UpdateStatus("Failed")
 					t.Done(models.TASK_STATUS_FAILURE)
+					if err := logAuditEvent(EventTypes["NODE_ADD_AND_ACCEPT"],
+						fmt.Sprintf("Failed to add and accept node: %s", request.Hostname),
+						fmt.Sprintf("Failed to add and accept node: %s. Error: %v", request.Hostname,
+							err),
+						nil,
+						nil,
+						models.NOTIFICATION_ENTITY_HOST,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
+					}
 				} else {
 					t.UpdateStatus("Success")
 					t.Done(models.TASK_STATUS_SUCCESS)
+					if err := logAuditEvent(EventTypes["NODE_ADD_AND_ACCEPT"],
+						fmt.Sprintf("Node: %s added and accepted successfully", request.Hostname),
+						fmt.Sprintf("Node: %s added and accepted successfully", request.Hostname),
+						nil,
+						nil,
+						models.NOTIFICATION_ENTITY_HOST,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
+					}
+
 				}
 				return
 			}
@@ -111,6 +186,17 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 		nil); err != nil {
 		logger.Get().Error("%s-Unable to create the task for Add and Accept Node: %s. error: %v", ctxt, request.Hostname, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed", ctxt)
+		if err := logAuditEvent(EventTypes["NODE_ADD_AND_ACCEPT"],
+			fmt.Sprintf("Failed to add and accept node: %s", request.Hostname),
+			fmt.Sprintf("Failed to add and accept node: %s. Error: %v", request.Hostname,
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
+		}
 	} else {
 		logger.Get().Debug("Task Created: ", taskId.String(), ctxt)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
@@ -135,11 +221,33 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the request. error: %v", ctxt, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request. error: %v", err), ctxt)
+		if err := logAuditEvent(EventTypes["NODE_ACCEPT"],
+			fmt.Sprintf("Failed to accept node %s", hostname),
+			fmt.Sprintf("Failed to accept node %s. Error: %v", hostname,
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	if err := json.Unmarshal(body, &request); err != nil {
 		logger.Get().Error("%s-Unable to unmarshal request. error: %v", ctxt, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err), ctxt)
+		if err := logAuditEvent(EventTypes["NODE_ACCEPT"],
+			fmt.Sprintf("Failed to accept node %s", hostname),
+			fmt.Sprintf("Failed to accept node %s. Error: %v", hostname,
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
@@ -147,16 +255,49 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	if _, err := unaccepted_node_exists("hostname", hostname); err == mgo.ErrNotFound {
 		logger.Get().Error("%s-Node:%s is not found", ctxt, hostname)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Node not found", ctxt)
+		if err := logAuditEvent(EventTypes["NODE_ACCEPT"],
+			fmt.Sprintf("Failed to accept node %s", hostname),
+			fmt.Sprintf("Failed to accept node %s. Error: %v", hostname,
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
+		}
 		return
 	} else if err != nil {
 		logger.Get().Error("%s-Error in retriving node %s", ctxt, hostname)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Error in retriving node", ctxt)
+		if err := logAuditEvent(EventTypes["NODE_ACCEPT"],
+			fmt.Sprintf("Failed to accept node %s", hostname),
+			fmt.Sprintf("Failed to accept node %s. Error: %v", hostname,
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	// Validate for required fields
 	if hostname == "" || request.SaltFingerprint == "" {
 		logger.Get().Error("%s-Required field(s) not provided", ctxt)
 		HttpResponse(w, http.StatusBadRequest, "Required field(s) not provided", ctxt)
+		if err := logAuditEvent(EventTypes["NODE_ACCEPT"],
+			fmt.Sprintf("Failed to accept node %s", hostname),
+			fmt.Sprintf("Failed to accept node %s. Error: %v", hostname,
+				fmt.Errorf("Required filed(s) not provided")),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
@@ -171,6 +312,17 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 				appLock, err := lockNode(ctxt, nodeId, hostname, "AcceptNode")
 				if err != nil {
 					util.FailTask("Failed to acquire lock", fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logAuditEvent(EventTypes["NODE_ACCEPT"],
+						fmt.Sprintf("Failed to accept node %s", hostname),
+						fmt.Sprintf("Failed to accept node %s. Error: %v", hostname,
+							err),
+						nil,
+						nil,
+						models.NOTIFICATION_ENTITY_HOST,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
+					}
 					return
 				}
 				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
@@ -178,9 +330,30 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 				if err := acceptNode(w, hostname, request.SaltFingerprint, t, ctxt); err != nil {
 					t.UpdateStatus("Failed")
 					t.Done(models.TASK_STATUS_FAILURE)
+					if err := logAuditEvent(EventTypes["NODE_ACCEPT"],
+						fmt.Sprintf("Failed to accept node %s", hostname),
+						fmt.Sprintf("Failed to accept node %s. Error: %v", hostname,
+							err),
+						nil,
+						nil,
+						models.NOTIFICATION_ENTITY_HOST,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
+					}
 				} else {
 					t.UpdateStatus("Success")
 					t.Done(models.TASK_STATUS_SUCCESS)
+					if err := logAuditEvent(EventTypes["NODE_ACCEPT"],
+						fmt.Sprintf("Node %s accepted successfully", hostname),
+						fmt.Sprintf("Node %s accepted successfully", hostname),
+						nil,
+						nil,
+						models.NOTIFICATION_ENTITY_HOST,
+						&(t.ID),
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
+					}
 				}
 				return
 			}
@@ -195,6 +368,17 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 		nil); err != nil {
 		logger.Get().Error("%s-Unable to create the task for Accept Node: %s. error: %v", ctxt, hostname, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed", ctxt)
+		if err := logAuditEvent(EventTypes["NODE_ACCEPT"],
+			fmt.Sprintf("Failed to accept node %s", hostname),
+			fmt.Sprintf("Failed to accept node %s. Error: %v", hostname,
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
+		}
 	} else {
 		logger.Get().Debug("%s-Task Created: %v", ctxt, taskId.String())
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
@@ -518,17 +702,52 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error parsing node id: %s. error: %v", ctxt, node_id_str, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s", node_id_str))
+		if err := logAuditEvent(EventTypes["NODE_DELETE"],
+			fmt.Sprintf("Failed to delete node"),
+			fmt.Sprintf("Failed to delete node. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+		}
 		return
 	}
-
+	nodeName, err := getNodeNameFromId(*node_id)
+	if err != nil || nodeName == "" {
+		nodeName = node_id_str
+	}
 	asyncTask := func(t *task.Task) {
 		t.UpdateStatus("Started the task for remove node: %v", t.ID)
 		if ok, err := removeNode(ctxt, w, *node_id, t); err != nil || !ok {
 			util.FailTask(fmt.Sprintf("Error removing the node: %v", *node_id), fmt.Errorf("%s-%v", ctxt, err), t)
+			if err := logAuditEvent(EventTypes["NODE_DELETE"],
+				fmt.Sprintf("Failed to delete node %s", nodeName),
+				fmt.Sprintf("Failed to delete node %s. Error: %v", nodeName,
+					fmt.Errorf("Error occured while removing the node")),
+				node_id,
+				nil,
+				models.NOTIFICATION_ENTITY_HOST,
+				&(t.ID),
+				ctxt); err != nil {
+				logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+			}
 			return
 		}
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
+		if err := logAuditEvent(EventTypes["NODE_DELETE"],
+			fmt.Sprintf("Node %s deleted successfully", nodeName),
+			fmt.Sprintf("Node %s deleted successfully", nodeName),
+			node_id,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			&(t.ID),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+		}
 	}
 	if taskId, err := a.GetTaskManager().Run(
 		models.ENGINE_NAME,
@@ -539,6 +758,17 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 		nil); err != nil {
 		logger.Get().Error("%s-Unable to create the task for remove node", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
+		if err := logAuditEvent(EventTypes["NODE_DELETE"],
+			fmt.Sprintf("Failed to delete node %s", nodeName),
+			fmt.Sprintf("Failed to delete node %s. Error: %v", nodeName,
+				err),
+			node_id,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+		}
 
 	} else {
 		logger.Get().Debug("%s-Task Created: ", ctxt, taskId.String())
@@ -563,33 +793,97 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the request. error: %v", ctxt, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to parse the request. error: %v", err))
+		if err := logAuditEvent(EventTypes["NODE_DELETE"],
+			fmt.Sprintf("Failed to delete nodes"),
+			fmt.Sprintf("Failed to delete nodes. Error: %v", err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	if err := json.Unmarshal(body, &nodeIds); err != nil {
 		logger.Get().Error("%s-Unable to unmarshal request. error: %v", ctxt, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request. error: %v", err))
+		if err := logAuditEvent(EventTypes["NODE_DELETE"],
+			fmt.Sprintf("Failed to delete nodes"),
+			fmt.Sprintf("Failed to delete nodes. Error: %v", err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+		}
 		return
 	}
+	nodeNameList := ""
 	var failedNodes []string
 	asyncTask := func(t *task.Task) {
 		t.UpdateStatus("Started the task for remove multiple nodes: %v", t.ID)
 		for _, item := range nodeIds {
 			node_id, err := uuid.Parse(item.NodeId)
+			nodeName, err := getNodeNameFromId(*node_id)
+			if err != nil || nodeName == "" {
+				nodeName = item.NodeId
+			}
 			if err != nil {
 				failedNodes = append(failedNodes, item.NodeId)
+				if err := logAuditEvent(EventTypes["NODE_DELETE"],
+					fmt.Sprintf("Failed to delete node: %s", nodeName),
+					fmt.Sprintf("Failed to delete node: %s. Error: %v", nodeName, err),
+					node_id,
+					nil,
+					models.NOTIFICATION_ENTITY_HOST,
+					&(t.ID),
+					ctxt); err != nil {
+					logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+				}
 				continue
 			}
 			t.UpdateStatus("Removing node: %v", *node_id)
 			if ok, err := removeNode(ctxt, w, *node_id, t); err != nil || !ok {
 				util.FailTask(fmt.Sprintf("Error removing node: %v", *node_id), fmt.Errorf("%s-%v", ctxt, err), t)
 				failedNodes = append(failedNodes, item.NodeId)
+				if err := logAuditEvent(EventTypes["NODE_DELETE"],
+					fmt.Sprintf("Failed to delete node: %s", nodeName),
+					fmt.Sprintf("Failed to delete node: %s. Error: %v", nodeName,
+						fmt.Errorf("Error while removing the node")),
+					node_id,
+					nil,
+					models.NOTIFICATION_ENTITY_HOST,
+					&(t.ID),
+					ctxt); err != nil {
+					logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+				}
+				continue
 			}
+			if nodeNameList == "" {
+				nodeNameList += fmt.Sprintf("%s", nodeName)
+			} else {
+				nodeNameList += fmt.Sprintf(", %s", nodeName)
+			}
+
 		}
 		if len(failedNodes) > 0 {
 			t.UpdateStatus("Failed to remove the node id(s): %v", failedNodes)
 		}
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
+		if err := logAuditEvent(EventTypes["NODE_DELETE"],
+			fmt.Sprintf("Deleted nodes: %s successfully", nodeNameList),
+			fmt.Sprintf("Deleted nodes: %s successfully", nodeNameList),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			&(t.ID),
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+		}
+
 	}
 	if taskId, err := a.GetTaskManager().Run(
 		models.ENGINE_NAME,
@@ -600,6 +894,17 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 		nil); err != nil {
 		logger.Get().Error("%s-Unable to create the task for remove multiple nodes", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task Creation Failed")
+		if err := logAuditEvent(EventTypes["NODE_DELETE"],
+			fmt.Sprintf("Failed to delete nodes"),
+			fmt.Sprintf("Failed to delete nodes. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+		}
 
 	} else {
 		logger.Get().Debug("%s-Task Created: ", ctxt, taskId.String())
@@ -696,9 +1001,25 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	node_id_str := vars["node-id"]
 	node_id, err := uuid.Parse(node_id_str)
 	if err != nil {
-		logger.Get().Error("%s-Error oarsing node id: %s. error: %v", ctxt, node_id_str, err)
+		logger.Get().Error("%s-Error parsing node id: %s. error: %v", ctxt, node_id_str, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s. Error: %v", node_id_str, err))
+		if err := logAuditEvent(EventTypes["UPDATE_DISK"],
+			fmt.Sprintf("Failed to update disks"),
+			fmt.Sprintf("Failed to update disks. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
+		}
+
 		return
+	}
+	nodeName, err := getNodeNameFromId(*node_id)
+	if err != nil || nodeName == "" {
+		nodeName = node_id_str
 	}
 
 	disk_id_str := vars["disk-id"]
@@ -706,6 +1027,18 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error parsing disk id: %s. error: %v", ctxt, disk_id_str, err)
 		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing disk id: %s. Error: %v", disk_id_str, err))
+		if err := logAuditEvent(EventTypes["UPDATE_DISK"],
+			fmt.Sprintf("Failed to update disks for node: %s", nodeName),
+			fmt.Sprintf("Failed to update disks for node: %s. Error: %v", nodeName,
+				err),
+			node_id,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
+		}
+
 		return
 	}
 
@@ -717,6 +1050,17 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
 		logger.Get().Error(fmt.Sprintf("%s-Error getting the node detail for node: %s. error: %v", ctxt, node_id_str, err))
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err := logAuditEvent(EventTypes["UPDATE_DISK"],
+			fmt.Sprintf("Failed to update disks for node: %s", nodeName),
+			fmt.Sprintf("Failed to update disks for node: %s. Error: %v", nodeName,
+				err),
+			node_id,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
@@ -724,6 +1068,17 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error parsing http request body: %s", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err := logAuditEvent(EventTypes["UPDATE_DISK"],
+			fmt.Sprintf("Failed to update disks for node: %s", nodeName),
+			fmt.Sprintf("Failed to update disks for node: %s. Error: %v", nodeName,
+				err),
+			node_id,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	var m map[string]interface{}
@@ -731,6 +1086,17 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	if err = json.Unmarshal(body, &m); err != nil {
 		logger.Get().Error("%s-Unable to Unmarshall the data: %s", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err := logAuditEvent(EventTypes["UPDATE_DISK"],
+			fmt.Sprintf("Failed to update disks for node: %s", nodeName),
+			fmt.Sprintf("Failed to update disks for node: %s . Error: %v", nodeName,
+				err),
+			node_id,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
@@ -750,6 +1116,17 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Get().Error(fmt.Sprintf("%s-Error updating record in DB for node: %s. error: %v", ctxt, node_id_str, err))
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err := logAuditEvent(EventTypes["UPDATE_DISK"],
+			fmt.Sprintf("Failed to update disks for node: %s", nodeName),
+			fmt.Sprintf("Failed to update disks for node: %s. Error: %v", nodeName,
+				err),
+			node_id,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
+		}
 	}
 }
 
@@ -764,18 +1141,51 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Get().Error(fmt.Sprintf("%s-Error parsing http request body.error: %v", ctxt, err))
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
+			fmt.Sprintf("Failed to modify node: %s", hostname),
+			fmt.Sprintf("Failed to modify node: %s. Error: %v", hostname,
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log modify node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	var m map[string]interface{}
 	if err = json.Unmarshal(body, &m); err != nil {
 		logger.Get().Error(fmt.Sprintf("%s-Unable to Unmarshall the data.error: %v", ctxt, err))
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
+			fmt.Sprintf("Failed to modify node: %s", hostname),
+			fmt.Sprintf("Failed to modify node: %s. Error: %v", hostname,
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log modify node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	node, err := node_exists("hostname", hostname)
 	if err != nil {
 		logger.Get().Error(fmt.Sprintf("%s-Node %s not found . error: %v", ctxt, hostname, err))
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
+			fmt.Sprintf("Failed to modify node: %s", hostname),
+			fmt.Sprintf("Failed to modify node: %s. Error: %v", hostname,
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_HOST,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log modify node event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	ch := m["action"]
@@ -785,12 +1195,34 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 			if node.State != models.NODE_STATE_FAILED {
 				logger.Get().Error(fmt.Sprintf("%s-Node %s is not in failed state", ctxt, hostname))
 				HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Node %s is not in failed state", hostname))
+				if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
+					fmt.Sprintf("Failed to reinitialize node: %s", hostname),
+					fmt.Sprintf("Failed to reinitialize node: %s. Error: %v", hostname,
+						fmt.Errorf("Node not in failed state")),
+					&(node.NodeId),
+					nil,
+					models.NOTIFICATION_ENTITY_HOST,
+					nil,
+					ctxt); err != nil {
+					logger.Get().Error("%s- Unable to log reinitialize node event. Error: %v", ctxt, err)
+				}
 				return
 			}
 			if ok, err := GetCoreNodeManager().IsNodeUp(node.Hostname, ctxt); !ok {
 				logger.Get().Error(fmt.Sprintf("%s-Error getting status of node: %s. error: %v", ctxt, hostname, err))
 				HttpResponse(w, http.StatusInternalServerError,
 					fmt.Sprintf("Error getting status of node: %s. error: %v", hostname, err))
+				if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
+					fmt.Sprintf("Failed to reinitialize node: %s", hostname),
+					fmt.Sprintf("Failed to reinitialize node: %s. Error: %v", hostname,
+						fmt.Errorf("Error getting node status")),
+					&(node.NodeId),
+					nil,
+					models.NOTIFICATION_ENTITY_HOST,
+					nil,
+					ctxt); err != nil {
+					logger.Get().Error("%s- Unable to log reinitialize node event. Error: %v", ctxt, err)
+				}
 				return
 			}
 			sessionCopy := db.GetDatastore().Copy()
@@ -801,6 +1233,17 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 				logger.Get().Error(fmt.Sprintf("%s-Failed to update the node %s state as initialize: error: %v", ctxt, hostname, err))
 				HttpResponse(w, http.StatusInternalServerError,
 					fmt.Sprintf("Failed to update the node %s state as initialize: error: %v", hostname, err))
+				if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
+					fmt.Sprintf("Failed to reinitialize node: %s", hostname),
+					fmt.Sprintf("Failed to reinitialize node: %s. Error: %v", hostname,
+						fmt.Errorf("Error updating node state to initializing state")),
+					&(node.NodeId),
+					nil,
+					models.NOTIFICATION_ENTITY_HOST,
+					nil,
+					ctxt); err != nil {
+					logger.Get().Error("%s- Unable to log reinitialize node event. Error: %v", ctxt, err)
+				}
 				return
 			}
 			Initialize(node.Hostname, ctxt)
@@ -815,12 +1258,34 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 				logger.Get().Error(fmt.Sprintf("%s-Unable to get node details of %s : error: %v", ctxt, hostname, err))
 				HttpResponse(w, http.StatusInternalServerError,
 					fmt.Sprintf("Failed to get node details of %s : error: %v", hostname, err))
+				if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
+					fmt.Sprintf("Failed to delete node: %s", hostname),
+					fmt.Sprintf("Failed to delete node: %s. Error: %v", hostname,
+						err),
+					&(node.NodeId),
+					nil,
+					models.NOTIFICATION_ENTITY_HOST,
+					nil,
+					ctxt); err != nil {
+					logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+				}
 				return
 			}
 			if !node.ClusterId.IsZero() {
 				logger.Get().Error(fmt.Sprintf("%s-Host %s already participating in a cluster, Cannot be removed: error: %v",
 					ctxt, hostname, err))
 				HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Failed to delete host %s : error: %v", hostname, err))
+				if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
+					fmt.Sprintf("Failed to delete node: %s", hostname),
+					fmt.Sprintf("Failed to delete node: %s. Error: %v", hostname,
+						fmt.Errorf("Node is participating in a cluster")),
+					&(node.NodeId),
+					nil,
+					models.NOTIFICATION_ENTITY_HOST,
+					nil,
+					ctxt); err != nil {
+					logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+				}
 				return
 			}
 			if ret_val, _ := GetCoreNodeManager().RemoveNode(node.Hostname, ctxt); ret_val {
@@ -828,7 +1293,29 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 					logger.Get().Error(fmt.Sprintf("%s-Error removing Host %s from DB: error: %v", ctxt, hostname, err))
 					HttpResponse(w, http.StatusInternalServerError,
 						fmt.Sprintf("Error removing host %s from DB: error: %v", hostname, err))
+					if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
+						fmt.Sprintf("Failed to delete node: %s", hostname),
+						fmt.Sprintf("Failed to delete node: %s. Error: %v", hostname,
+							fmt.Errorf("Error removing the DB entry")),
+						&(node.NodeId),
+						nil,
+						models.NOTIFICATION_ENTITY_HOST,
+						nil,
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+					}
 					return
+				} else {
+					if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
+						fmt.Sprintf("Node: %s deleted successfully", hostname),
+						fmt.Sprintf("Node: %s deleted successfully", hostname),
+						&(node.NodeId),
+						nil,
+						models.NOTIFICATION_ENTITY_HOST,
+						nil,
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log modify node event. Error: %v", ctxt, err)
+					}
 				}
 			}
 		}
@@ -836,6 +1323,17 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 		{
 			logger.Get().Error(fmt.Sprintf("%s-Unsupported action request found for Node:%s", ctxt, hostname))
 			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Unsupported action request found for Node:%s", ch))
+			if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
+				fmt.Sprintf("Failed to modify node: %s", hostname),
+				fmt.Sprintf("Failed to modify node: %s. Error: %v", hostname,
+					fmt.Errorf("Unsupported action")),
+				&(node.NodeId),
+				nil,
+				models.NOTIFICATION_ENTITY_HOST,
+				nil,
+				ctxt); err != nil {
+				logger.Get().Error("%s- Unable to log modify node event. Error: %v", ctxt, err)
+			}
 			return
 		}
 	}
@@ -884,4 +1382,16 @@ func Check_status(hostname string, ctxt string) {
 		return
 	}
 	Initialize(hostname, ctxt)
+}
+
+func getNodeNameFromId(uuid uuid.UUID) (string, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.Node
+	if err := collection.Find(bson.M{"nodeid": uuid}).One(&node); err == nil {
+		return node.Hostname, nil
+	} else {
+		return "", err
+	}
 }
