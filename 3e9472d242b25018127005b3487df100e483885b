@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_2b27c913",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-12T05:42:32Z",
+      "side": 1,
+      "message": "We dont have error populated here? We should use something like\n\nfmt.Errotf(\"Unable to find parameter disableautoexpanf in request\")",
+      "range": {
+        "startLine": 119,
+        "startChar": 70,
+        "endLine": 119,
+        "endChar": 73
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_cb1dfdbe",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-12T05:42:32Z",
+      "side": 1,
+      "message": "No error object available. Use fmt.Errorf()",
+      "range": {
+        "startLine": 374,
+        "startChar": 75,
+        "endLine": 374,
+        "endChar": 78
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_8b7ed5e2",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-12T05:42:32Z",
+      "side": 1,
+      "message": "err could be blank here. Use fmt.Errorf()",
+      "range": {
+        "startLine": 431,
+        "startChar": 74,
+        "endLine": 431,
+        "endChar": 77
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_6b8391cd",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-12T05:42:32Z",
+      "side": 1,
+      "message": "err not defined here",
+      "range": {
+        "startLine": 591,
+        "startChar": 70,
+        "endLine": 591,
+        "endChar": 73
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_0b6be51f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-12T05:42:32Z",
+      "side": 1,
+      "message": "err could be blank here. use fmt.Errorf()",
+      "range": {
+        "startLine": 651,
+        "startChar": 73,
+        "endLine": 651,
+        "endChar": 76
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_eb77a100",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-12T05:42:32Z",
+      "side": 1,
+      "message": "err undefined. use fmt.Errorf()",
+      "range": {
+        "startLine": 1394,
+        "startChar": 73,
+        "endLine": 1394,
+        "endChar": 76
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_cb74ddfe",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-12T05:42:32Z",
+      "side": 1,
+      "message": "err undefined",
+      "range": {
+        "startLine": 1430,
+        "startChar": 74,
+        "endLine": 1430,
+        "endChar": 77
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_8b65b546",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-12T05:42:32Z",
+      "side": 1,
+      "message": "err could be blank",
+      "range": {
+        "startLine": 1485,
+        "startChar": 73,
+        "endLine": 1485,
+        "endChar": 76
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_2b55894f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1862,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-12T05:42:32Z",
+      "side": 1,
+      "message": "err could be blank",
+      "range": {
+        "startLine": 1862,
+        "startChar": 96,
+        "endLine": 1862,
+        "endChar": 99
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
