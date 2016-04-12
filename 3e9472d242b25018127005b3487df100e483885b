@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_b6ee9c89",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-12T09:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_2b27c913",
+      "range": {
+        "startLine": 119,
+        "startChar": 70,
+        "endLine": 119,
+        "endChar": 73
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_cb1dfdbe",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2016-04-12T05:42:32Z",
       "side": 1,
       "message": "No error object available. Use fmt.Errorf()",
+      "range": {
+        "startLine": 374,
+        "startChar": 75,
+        "endLine": 374,
+        "endChar": 78
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_76e8147d",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-12T09:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_cb1dfdbe",
       "range": {
         "startLine": 374,
         "startChar": 75,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_56ed108a",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-12T09:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_8b7ed5e2",
+      "range": {
+        "startLine": 431,
+        "startChar": 74,
+        "endLine": 431,
+        "endChar": 77
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_6b8391cd",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2016-04-12T05:42:32Z",
       "side": 1,
       "message": "err not defined here",
+      "range": {
+        "startLine": 591,
+        "startChar": 70,
+        "endLine": 591,
+        "endChar": 73
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_3603ac44",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-12T09:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_6b8391cd",
       "range": {
         "startLine": 591,
         "startChar": 70,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_1600a833",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-12T09:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_0b6be51f",
+      "range": {
+        "startLine": 651,
+        "startChar": 73,
+        "endLine": 651,
+        "endChar": 76
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_eb77a100",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 4
@@ -128,6 +248,30 @@
       "writtenOn": "2016-04-12T05:42:32Z",
       "side": 1,
       "message": "err undefined. use fmt.Errorf()",
+      "range": {
+        "startLine": 1394,
+        "startChar": 73,
+        "endLine": 1394,
+        "endChar": 76
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_f6fc2440",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-12T09:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_eb77a100",
       "range": {
         "startLine": 1394,
         "startChar": 73,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_d6f9204f",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-12T09:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_cb74ddfe",
+      "range": {
+        "startLine": 1430,
+        "startChar": 74,
+        "endLine": 1430,
+        "endChar": 77
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_8b65b546",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 4
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_b6957ce5",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-12T09:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_8b65b546",
+      "range": {
+        "startLine": 1485,
+        "startChar": 73,
+        "endLine": 1485,
+        "endChar": 76
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_2b55894f",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 4
@@ -197,6 +389,30 @@
       "writtenOn": "2016-04-12T05:42:32Z",
       "side": 1,
       "message": "err could be blank",
+      "range": {
+        "startLine": 1862,
+        "startChar": 96,
+        "endLine": 1862,
+        "endChar": 99
+      },
+      "revId": "3e9472d242b25018127005b3487df100e483885b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_969a7813",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1862,
+      "author": {
+        "id": 1006236
+      },
+      "writtenOn": "2016-04-12T09:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_2b55894f",
       "range": {
         "startLine": 1862,
         "startChar": 96,
