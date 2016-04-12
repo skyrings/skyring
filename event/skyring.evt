@@ -14,5 +14,12 @@
 	"SWAP":                      "Swap Threshold Crossed",
 	"CPU":                       "Cpu Threshold Crossed",
 	"DF":                        "Mount Threshold Crossed",
-	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed"
+	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed",
+
+	"NODE_ADD_AND_ACCEPT":     "Node add and aaccept",
+        "NODE_ACCEPT":             "Node accept",
+	"NODE_DELETE":             "Node delete",
+	"UPDATE_DISK":             "Update disk",
+	"NODE_MODIFIED":           "Node Modified",
+	"NODE_INITIALIZE":         "Node Initialize"
 }
