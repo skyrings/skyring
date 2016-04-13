@@ -25,6 +25,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
@@ -1129,12 +1130,16 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("%s - Failed to fetch storage logical units from cluster %v.Err %v", ctxt, *cluster_id, err)
 	}
 	slu_down_cnt := 0
+	slu_error_cnt := 0
 	for _, slu := range slus {
 		if slu.Status == models.SLU_STATUS_ERROR {
+			slu_error_cnt = slu_error_cnt + 1
+		}
+		if slu.State == models.SLU_STATE_DOWN {
 			slu_down_cnt = slu_down_cnt + 1
 		}
 	}
-	cSummary.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_down_cnt}
+	cSummary.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_error_cnt, models.STATUS_DOWN: slu_down_cnt}
 
 	unmanagedNodes, unmanagedNodesError := GetCoreNodeManager().GetUnmanagedNodes(ctxt)
 	if unmanagedNodesError != nil {
@@ -1196,7 +1201,13 @@ func ComputeSystemSummary(p map[string]interface{}) {
 
 	clusters, clusterFetchError := GetClusters()
 	if clusterFetchError != nil {
+		if clusterFetchError == mgo.ErrNotFound {
+			return
+		}
 		logger.Get().Error("%s - Failed to fetch clusters.Err %v", ctxt, clusterFetchError)
+	}
+	if len(clusters) == 0 {
+		return
 	}
 
 	/*
