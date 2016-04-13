@@ -55,4 +55,5 @@ type Backend interface {
 	SyncModules(node string, ctxt string) (bool, error)
 	SetupSkynetService(node string, ctxt string) (bool, error)
 	GetFingerPrint(node string, ctxt string) (string, error)
+	GetServiceCount(hostname string, ctxt string) (map[string]int, error)
 }

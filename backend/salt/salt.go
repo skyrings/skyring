@@ -51,6 +51,7 @@ var funcNames = [...]string{
 	"SyncModules",
 	"SetupSkynetService",
 	"GetFingerPrint",
+	"GetServiceCount",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -343,6 +344,18 @@ func (s Salt) SetupSkynetService(node string, ctxt string) (status bool, err err
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["SetupSkynetService"].Call(node, ctxt); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
+	} else {
+		err = loc_err
+	}
+	return
+}
+
+func (s Salt) GetServiceCount(Hostname string, ctxt string) (service_details map[string]int, err error) {
+	service_details = make(map[string]int)
+	mutex.Lock()
+	defer mutex.Unlock()
+	if pyobj, loc_err := pyFuncs["GetServiceCount"].Call(Hostname, ctxt); loc_err == nil {
+		err = gopy.Convert(pyobj, &service_details)
 	} else {
 		err = loc_err
 	}
