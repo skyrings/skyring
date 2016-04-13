@@ -95,6 +95,17 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 		_, err := GetDbProvider().MailNotifierInterface().MailNotifier(ctxt)
 		if err != mongodb.ErrMissingNotifier {
 			HandleHttpError(rw, errors.New("Mail Notifier Record Already exists"))
+			if err := logAuditEvent(EventTypes["ADD_MAIL_NOTIFIER"],
+				fmt.Sprintf("Failed to add mail notifier"),
+				fmt.Sprintf("Failed to add mail notifier. Error: %v",
+					fmt.Errorf("Mail notifier already exists")),
+				nil,
+				nil,
+				models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+				nil,
+				ctxt); err != nil {
+				logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
+			}
 			return
 		}
 	}
@@ -103,6 +114,17 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
 		HandleHttpError(rw, err)
+		if err := logAuditEvent(EventTypes["ADD_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to add mail notifier"),
+			fmt.Sprintf("Failed to add mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	var m map[string]interface{}
@@ -110,18 +132,51 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if err = json.Unmarshal(body, &m); err != nil {
 		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
 		HandleHttpError(rw, err)
+		if err := logAuditEvent(EventTypes["ADD_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to add mail notifier"),
+			fmt.Sprintf("Failed to add mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	notifier, err := GetDetails(m)
 	if err != nil {
 		logger.Get().Error("%s-Insufficient details for mail notifier: %v", ctxt, notifier)
 		HandleHttpError(rw, errors.New("insufficient detail for mail notifier"))
+		if err := logAuditEvent(EventTypes["ADD_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to add mail notifier"),
+			fmt.Sprintf("Failed to add mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
 	if notifier.MailId == "" || notifier.Passcode == "" || notifier.SmtpServer == "" || notifier.Port == 0 || notifier.Encryption == "" {
 		logger.Get().Error("%s-Insufficient details for add mail notifier: %v", ctxt, notifier)
 		HandleHttpError(rw, errors.New("insufficient detail for add mail notifier"))
+		if err := logAuditEvent(EventTypes["ADD_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to add mail notifier"),
+			fmt.Sprintf("Failed to add mail notifier. Error: %v",
+				fmt.Errorf("Insufficient details for adding mail notifier")),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
@@ -129,6 +184,17 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error setting the Mail Client Error: %v", ctxt, err)
 		HandleHttpError(rw, errors.New(fmt.Sprintf("Error setting the Mail Client Error: %v", err)))
+		if err := logAuditEvent(EventTypes["ADD_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to add mail notifier"),
+			fmt.Sprintf("Failed to add mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
@@ -136,6 +202,28 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error Updating the mail notifier info for: %s Error: %v", ctxt, notifier.MailId, err)
 		HandleHttpError(rw, err)
+		if err := logAuditEvent(EventTypes["ADD_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to add mail notifier"),
+			fmt.Sprintf("Failed to add mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
+		}
+	} else {
+		if err := logAuditEvent(EventTypes["ADD_MAIL_NOTIFIER"],
+			fmt.Sprintf("Successfully added mail notifier"),
+			fmt.Sprintf("Successfully added mail notifier"),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
+		}
 	}
 	return
 }
@@ -151,6 +239,17 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
 		HandleHttpError(rw, err)
+		if err := logAuditEvent(EventTypes["TEST_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to test mail notifier"),
+			fmt.Sprintf("Failed to test mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	var m map[string]interface{}
@@ -158,12 +257,34 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if err = json.Unmarshal(body, &m); err != nil {
 		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
 		HandleHttpError(rw, err)
+		if err := logAuditEvent(EventTypes["TEST_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to test mail notifier"),
+			fmt.Sprintf("Failed to test mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	notifier, err := GetDetails(m)
 	if err != nil {
 		logger.Get().Error("%s-Insufficient details for mail notifier: %v", ctxt, notifier)
 		HandleHttpError(rw, errors.New("insufficient detail for mail notifier"))
+		if err := logAuditEvent(EventTypes["TEST_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to test mail notifier"),
+			fmt.Sprintf("Failed to test mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	if val, ok := m["recipient"]; ok {
@@ -172,10 +293,49 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if notifier.MailId == "" || notifier.Passcode == "" || notifier.SmtpServer == "" || notifier.Port == 0 || notifier.Encryption == "" || len(recepient) == 0 {
 		logger.Get().Error("%s-Insufficient details for Test mail notifier: %v", ctxt, notifier)
 		HandleHttpError(rw, errors.New("insufficient details for Test mail notifier"))
+		if err := logAuditEvent(EventTypes["TEST_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to test mail notifier"),
+			fmt.Sprintf("Failed to test mail notifier. Error: %v",
+				fmt.Errorf("Insufficient Details for testing mail notifier")),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
-	mail_notifier.TestMailNotify(notifier, "Test mail from skyring", "This is a test mail sent from skyring server", recepient, ctxt)
+	if err := mail_notifier.TestMailNotify(notifier,
+		"Test mail from skyring",
+		"This is a test mail sent from skyring server",
+		recepient, ctxt); err != nil {
+		logger.Get().Error("%s-Unable test mail notifier. Error: %v", ctxt, err)
+		HandleHttpError(rw, err)
+		if err := logAuditEvent(EventTypes["TEST_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to test mail notifier"),
+			fmt.Sprintf("Failed to test mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
+		}
+	} else {
+		if err := logAuditEvent(EventTypes["TEST_MAIL_NOTIFIER"],
+			fmt.Sprintf("Mail notifier tested successfully"),
+			fmt.Sprintf("Mail notifier tested successfully"),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
+		}
+	}
 	return
 }
 
@@ -189,6 +349,17 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-Error parsing http request body:%s", ctxt, err)
 		HandleHttpError(rw, err)
+		if err := logAuditEvent(EventTypes["UPDATE_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to update mail notifier"),
+			fmt.Sprintf("Failed to update mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	var m map[string]interface{}
@@ -196,6 +367,17 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if err = json.Unmarshal(body, &m); err != nil {
 		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
 		HandleHttpError(rw, err)
+		if err := logAuditEvent(EventTypes["UPDATE_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to update mail notifier"),
+			fmt.Sprintf("Failed to update mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 
@@ -203,6 +385,17 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		logger.Get().Error("%s-MailNotifier not set: %s", ctxt, err)
 		HandleHttpError(rw, err)
+		if err := logAuditEvent(EventTypes["UPDATE_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to update mail notifier"),
+			fmt.Sprintf("Failed to update mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	parameterPresent := false
@@ -217,12 +410,45 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	if !parameterPresent {
 		logger.Get().Error("%s-Insufficient details for patching mail notifier: %v", ctxt, notifier)
 		HandleHttpError(rw, errors.New("insufficient detail for mail notifier"))
+		if err := logAuditEvent(EventTypes["UPDATE_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to update mail notifier"),
+			fmt.Sprintf("Failed to update mail notifier. Error: %v",
+				fmt.Errorf("Insufficent details to update mail notifier")),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
+		}
 		return
 	}
 	err = GetDbProvider().MailNotifierInterface().SaveMailNotifier(ctxt, notifier)
 	if err != nil {
 		logger.Get().Error("%s-Error Updating the mail notifier info for: %s Error: %v", ctxt, notifier.MailId, err)
 		HandleHttpError(rw, err)
+		if err := logAuditEvent(EventTypes["UPDATE_MAIL_NOTIFIER"],
+			fmt.Sprintf("Failed to update mail notifier"),
+			fmt.Sprintf("Failed to update mail notifier. Error: %v",
+				err),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
+		}
+	} else {
+		if err := logAuditEvent(EventTypes["UPDATE_MAIL_NOTIFIER"],
+			fmt.Sprintf("Successfully updated mail notifier"),
+			fmt.Sprintf("Successfully updated mail notifier"),
+			nil,
+			nil,
+			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
+			nil,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
+		}
 	}
 	return
 }
