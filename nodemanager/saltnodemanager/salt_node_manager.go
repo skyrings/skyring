@@ -357,3 +357,12 @@ func GetFingerPrint(hostname string, ctxt string) (string, error) {
 	fingerprint, err := salt_backend.GetFingerPrint(hostname, ctxt)
 	return fingerprint, err
 }
+
+func (a SaltNodeManager) ServiceCount(hostname string, ctxt string) (int, error) {
+	if RHSCServiceCount, err := salt_backend.ServiceCount(hostname, ctxt); err != nil {
+		logger.Get().Error("%v", RHSCServiceCount)
+		return 0, err
+	} else {
+		return 0, nil
+	}
+}

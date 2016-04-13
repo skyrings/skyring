@@ -581,3 +581,16 @@ def GetFingerPrint(node, ctxt=""):
         return d['unaccepted_nodes']
     log.error("%s-Failed to retrive fingerprint from host %s" % (ctxt, node))
     return False
+
+
+def ServiceCount(node, ctxt=""):
+    service_count = {}
+    out = local.cmd(node, 'status.procs')
+    for key, value in out[node].iteritems():
+        for key, val in value.iteritems():
+	    if val.startswith('/usr/bin/ceph-osd'):
+                service_count["no_of_osdservice"]+=1
+	    if val.startswith('/usr/bin/ceph-mon'):
+                service_count["no_of_monservice"]+=1
+    print service_count	
+    return service_count
