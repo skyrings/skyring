@@ -88,12 +88,14 @@ saltinstall:
 		cp backend/salt/sls/collectd/*.* /srv/salt/collectd; \
 		cp backend/salt/conf/collectd/* /srv/salt/collectd/files; \
 		cp backend/salt/template/* /srv/salt/template; \
+		cp event/skyring.evt /etc/skyring; \
 	else \
 		echo "ERROR: unable to install salt files. Install them manually by"; \
 		echo "    sudo cp backend/salt/sls/*.* /srv/salt"; \
 		echo "    sudo cp backend/salt/sls/collectd/*.* /srv/salt/collectd"; \
 		echo "    sudo cp backend/salt/conf/collectd/* /srv/salt/collectd/files"; \
 		echo "    sudo cp backend/salt/template/* /srv/salt/template"; \
+		echo "    sudo cp event/skyring.evt /etc/skyring"; \
 	fi
 
 install: build pyinstall saltinstall
