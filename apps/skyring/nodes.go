@@ -34,7 +34,10 @@ import (
 )
 
 var (
-	curr_hostname, err = os.Hostname()
+	curr_hostname, err  = os.Hostname()
+	node_post_functions = map[string]string{
+		"servicecount": "GetServiceCount",
+	}
 )
 
 func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
@@ -634,6 +637,44 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 		"role":          node.Roles,
 	}
 	nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS] = getSLUStatusWiseCount(node_id, ctxt)
+	var result models.RpcResponse
+	provider := a.getProviderFromClusterType(cluster.Type)
+	SluCount := nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS].(map[string]int)
+	body, err := json.Marshal(map[string]interface{}{"hostname": node.Hostname, "totalslu": SluCount[models.TotalSLU], "noderoles": node.Roles})
+	if err != nil {
+		logger.Get().Error("%s-Unable to marshall the details of node %v for getting service count .error %v", ctxt, *node_id, err)
+		HttpResponse(
+			w,
+			http.StatusPartialContent,
+			fmt.Sprintf("Error Unable to marshall the details of node %v for getting service count . error: %v", *node_id, err))
+		json.NewEncoder(w).Encode(nodeSummary)
+		return
+	}
+	err = provider.Client.Call(fmt.Sprintf("%s.%s",
+		provider.Name, node_post_functions["servicecount"]),
+		models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body, RpcRequestContext: ctxt},
+		&result)
+	if err != nil || result.Status.StatusCode != http.StatusOK {
+		logger.Get().Error(
+			"%s-Error getting service count details for node: %v. error: %v",
+			ctxt,
+			*node_id,
+			err)
+		HttpResponse(
+			w,
+			http.StatusPartialContent,
+			fmt.Sprintf("Error getting sevice count for node : %v. error: %v", *node_id, err))
+		json.NewEncoder(w).Encode(nodeSummary)
+		return
+	}
+	ServiceDetails := make(map[string]interface{})
+	if err := json.Unmarshal(result.Data.Result, &ServiceDetails); err != nil {
+		logger.Get().Error("%s-Unable to unmarshal service count details for node : %v . error: %v", ctxt, *node_id, err)
+		HttpResponse(w, http.StatusPartialContent, fmt.Sprintf("Unable to unmarshal. error: %v", err))
+		json.NewEncoder(w).Encode(nodeSummary)
+		return
+	}
+	nodeSummary["servicedetails"] = ServiceDetails
 	json.NewEncoder(w).Encode(nodeSummary)
 }
 
