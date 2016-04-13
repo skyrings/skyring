@@ -36,4 +36,5 @@ type NodeManagerInterface interface {
 	SyncModules(node string, ctxt string) (bool, error)
 	IsNodeUp(hostname string, ctxt string) (bool, error)
 	NodeUptime(hostname string, ctxt string) (string, error)
+	ServiceCount(hostname string, ctxt string) (int, error)
 }
