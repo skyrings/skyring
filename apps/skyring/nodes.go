@@ -634,6 +634,29 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 		"role":          node.Roles,
 	}
 	nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS] = getSLUStatusWiseCount(node_id, ctxt)
+	ServiceDetails := make(map[string]interface{})
+	if ServiceCount, err := GetCoreNodeManager().ServiceCount(node.Hostname, ctxt); err != nil {
+		logger.Get().Error(
+			"%s-Error fetching service count for node: %v. error: %v",
+			ctxt,
+			node_id,
+			err)
+	} else {
+		for _, role := range node.Roles {
+			switch role {
+			case "OSD":
+				SluUp := ServiceCount["SluServiceCount"]
+				SluCount := nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS].(map[string]int)
+				SluDown := SluCount[models.TotalSLU] - ServiceCount["SluServiceCount"]
+				ServiceDetails["slu"] = map[string]int{"up": SluUp, "down": SluDown}
+
+			case "MON":
+				ServiceDetails["mon"] = ServiceCount["MonServiceCount"]
+
+			}
+		}
+		nodeSummary["servicedetais"] = ServiceDetails
+	}
 	json.NewEncoder(w).Encode(nodeSummary)
 }
 
