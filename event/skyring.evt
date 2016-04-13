@@ -14,5 +14,10 @@
 	"SWAP":                      "Swap Threshold Crossed",
 	"CPU":                       "Cpu Threshold Crossed",
 	"DF":                        "Mount Threshold Crossed",
-	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed"
+	"NETWORK_THRESHOLD_CROSSED": "Network Threshold Crossed",
+
+	"ADD_MAIL_NOTIFIER":       "Add mail notifier",
+	"TEST_MAIL_NOTIFIER":      "Test mail notifier",
+	"UPDATE_MAIL_NOTIFIER":    "Update mail notifier"
+
 }
