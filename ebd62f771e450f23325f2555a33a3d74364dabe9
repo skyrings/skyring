@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_f78f7421",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-14T09:49:52Z",
+      "side": 1,
+      "message": "As discussed, we need to check for cleared events and move only cleared events",
+      "range": {
+        "startLine": 801,
+        "startChar": 7,
+        "endLine": 809,
+        "endChar": 3
+      },
+      "revId": "ebd62f771e450f23325f2555a33a3d74364dabe9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
