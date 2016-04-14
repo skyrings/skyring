@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_5493be5b",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-14T06:58:45Z",
+      "side": 1,
+      "message": "Task failed??",
+      "range": {
+        "startLine": 645,
+        "startChar": 19,
+        "endLine": 645,
+        "endChar": 49
+      },
+      "revId": "480ac785d5ebc8b2cdb4bb7ae8d71a08af4ee1e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_34a03a9f",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-14T06:58:45Z",
+      "side": 1,
+      "message": "Task failed??",
+      "range": {
+        "startLine": 665,
+        "startChar": 20,
+        "endLine": 665,
+        "endChar": 50
+      },
+      "revId": "480ac785d5ebc8b2cdb4bb7ae8d71a08af4ee1e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_149d3665",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-14T06:58:45Z",
+      "side": 1,
+      "message": "Correct the message",
+      "range": {
+        "startLine": 684,
+        "startChar": 20,
+        "endLine": 684,
+        "endChar": 50
+      },
+      "revId": "480ac785d5ebc8b2cdb4bb7ae8d71a08af4ee1e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_d48d8e32",
+        "filename": "apps/skyring/storage.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-14T06:58:45Z",
+      "side": 1,
+      "message": "As above",
+      "range": {
+        "startLine": 710,
+        "startChar": 21,
+        "endLine": 710,
+        "endChar": 51
+      },
+      "revId": "480ac785d5ebc8b2cdb4bb7ae8d71a08af4ee1e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
