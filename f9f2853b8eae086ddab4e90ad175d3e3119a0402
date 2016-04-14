@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_14c65667",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-14T06:51:51Z",
+      "side": 1,
+      "message": "Could be blank",
+      "range": {
+        "startLine": 245,
+        "startChar": 91,
+        "endLine": 245,
+        "endChar": 94
+      },
+      "revId": "f9f2853b8eae086ddab4e90ad175d3e3119a0402",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_f4a1b2aa",
+        "filename": "apps/skyring/block_devices.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-14T06:51:51Z",
+      "side": 1,
+      "message": "could be blank",
+      "range": {
+        "startLine": 624,
+        "startChar": 37,
+        "endLine": 624,
+        "endChar": 40
+      },
+      "revId": "f9f2853b8eae086ddab4e90ad175d3e3119a0402",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
