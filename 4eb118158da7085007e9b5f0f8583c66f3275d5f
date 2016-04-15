@@ -93,6 +93,30 @@
       "revId": "4eb118158da7085007e9b5f0f8583c66f3275d5f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ab2bc481",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-15T10:11:24Z",
+      "side": 1,
+      "message": "Event \"OSD\" and \"MON\" is declared as constants I feel. Use that.",
+      "parentUuid": "baa041b7_985a9482",
+      "range": {
+        "startLine": 648,
+        "startChar": 27,
+        "endLine": 648,
+        "endChar": 42
+      },
+      "revId": "4eb118158da7085007e9b5f0f8583c66f3275d5f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
