@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_d8601c38",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-15T09:56:21Z",
+      "side": 1,
+      "message": "GetServiceCount ?",
+      "range": {
+        "startLine": 638,
+        "startChar": 46,
+        "endLine": 638,
+        "endChar": 58
+      },
+      "revId": "4eb118158da7085007e9b5f0f8583c66f3275d5f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_985a9482",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-15T09:56:21Z",
+      "side": 1,
+      "message": "Please declare this kind of strings as constants in misc.go",
+      "range": {
+        "startLine": 648,
+        "startChar": 27,
+        "endLine": 648,
+        "endChar": 42
+      },
+      "revId": "4eb118158da7085007e9b5f0f8583c66f3275d5f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
