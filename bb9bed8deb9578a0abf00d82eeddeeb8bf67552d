@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_adc62d47",
+        "filename": "misc/systemd/skyringd.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1007305
+      },
+      "writtenOn": "2016-04-19T12:49:42Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we use the current upstream name of the service here? Something like \"Skyring Daemon\" or \"Skyring Server\".",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 49
+      },
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_8dc5a93d",
+        "filename": "misc/systemd/skyringd.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1007305
+      },
+      "writtenOn": "2016-04-19T12:49:42Z",
+      "side": 1,
+      "message": "Using PIDFile in the service file like this is valid\nonly when the service process will create this file itself.\nIs this the case with skyring?\n\nThat said, I see no point in writing a pid file for non\nforking service process.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 29
+      },
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
