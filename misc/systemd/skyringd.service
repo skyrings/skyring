@@ -1,8 +1,12 @@
 [Unit]
-Description=skyring server
+Description=The Unified Storage Management Server
+After=syslog.target network.target
+Wants=mongod.service salt-master.service
 
 [Service]
-Type=forking
-KillMode=process
-ExecStart=/etc/init.d/skyringd start
-ExecStop=/etc/init.d/skyringd stop
+Type=simple
+PIDFile=/var/run/skyringd.pid
+ExecStart=/usr/bin/skyring --http-port 8080 -l /var/log/skyring/skyring.log -d /etc/skyring
+
+[Install]
+WantedBy=multi-user.target
