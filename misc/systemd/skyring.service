@@ -1,0 +1,14 @@
+[Unit]
+Description=Skyring Daemon
+Documentation=man:skyring(8)
+After=mongod.service salt-master.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/skyring --http-port 8080 -d /etc/skyring
+KillMode=process
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target
