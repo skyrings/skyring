@@ -1,0 +1,16 @@
+[Unit]
+Description=Skyring Daemon
+Documentation=man:skyring(8)
+After=mongod.service salt-master.service
+Wants=mongod.service salt-master.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/skyring
+KillMode=mixed
+Restart=on-failure
+RestartSec=10s
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

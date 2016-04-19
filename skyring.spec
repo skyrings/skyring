@@ -87,24 +87,16 @@ install -Dm 0644 backend/salt/conf/collectd/* $RPM_BUILD_ROOT/srv/salt/collectd/
 install -Dm 0755 backend/salt/template/* $RPM_BUILD_ROOT/srv/salt/template
 install -d $RPM_BUILD_ROOT/%{python2_sitelib}/skyring
 install -D backend/salt/python/skyring/* $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/
-install -D -p -m 0644 misc/systemd/%{name}d.service %{buildroot}%{_unitdir}/%{name}d.service
-install -D -p -m 0755 misc/etc.init/%{name}.initd %{buildroot}%{_sysconfdir}/init.d/%{name}d
+install -D -p -m 0644 misc/systemd/%{name}.service %{buildroot}%{_unitdir}/%{name}.service
 gzip skyring.8
 install -Dm 0644 skyring.8.gz $RPM_BUILD_ROOT%{_mandir}/man8/skyring.8.gz
 chmod -x $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/__init__.py
 chmod -x $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/saltwrapper.py
+chmod +x $RPM_BUILD_ROOT/srv/salt/push_event.sls
 
 %post
 ln -fs /usr/share/skyring/setup/skyring-setup.sh /usr/bin/skyring-setup
-/sbin/chkconfig --add skyringd
-/sbin/chkconfig --level 35 skyringd on
-
-%preun
-/sbin/chkconfig --level 35 skyringd off
-if [ "$1" = 0 ] ; then
-    /sbin/service skyringd stop > /dev/null 2>&1
-    /sbin/chkconfig --del skyringd
-fi
+/bin/systemctl enable skyring.service >/dev/null 2>&1 || :
 
 %postun
 if [ -e /etc/httpd/conf.d/graphite-web.conf.orig -a -h /etc/httpd/conf.d/graphite-web.conf -a ! -e "`readlink /etc/httpd/conf.d/graphite-web.conf`" ] ; then
@@ -144,8 +136,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %{python2_sitelib}/skyring/*
 %{_var}/log/skyring
 /srv/salt/*
-%{_unitdir}/%{name}d.service
-%{_sysconfdir}/init.d/%{name}d
+%{_unitdir}/%{name}.service
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/httpd/conf.d/graphite-web.conf
 %config(noreplace) %{_sysconfdir}/skyring/authentication.conf
 %config(noreplace) %{_sysconfdir}/skyring/skyring.conf

@@ -42,8 +42,8 @@ show users
 EOF
 
 # Start the skyring server
-systemctl enable skyringd
-systemctl start skyringd
+systemctl enable skyring
+systemctl start skyring
 
 info "Setup graphite user"
 /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
@@ -55,7 +55,7 @@ service httpd start && chkconfig httpd on
 info "\n\n\n-------------------------------------------------------"
 info "Now the skyring setup is ready!"
 info "You can start/stop/restart the server by executing the command"
-info "\tsystemctl start/stop/restart skyringd"
+info "\tsystemctl start/stop/restart skyring"
 info "Skyring log directory: /var/log/skyring"
 info "Mongodb user name: admin"
 info "Mongodb password: admin"
