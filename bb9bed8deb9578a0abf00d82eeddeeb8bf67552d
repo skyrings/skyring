@@ -201,6 +201,30 @@
       "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ee21c84e",
+        "filename": "misc/systemd/skyringd.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1007305
+      },
+      "writtenOn": "2016-04-20T12:41:49Z",
+      "side": 1,
+      "message": "I\u0027m aware of the fact that you use go. But this is not an excuse for ignoring expected logging behavior.\nWe all know that we are targeting RHEL 7 (which uses systemd) as an operating system where skyring service will be supported.\n\nThat said, I don\u0027t claim you do it wrong (I would need to verify/recheck this first), I was just curious if I understand it right that you ignored that systemd logging suggestion and why.\n\nLet\u0027s not block this change because of this. Again, I was just curious about the reasoning.",
+      "parentUuid": "baa041b7_f3f9af81",
+      "range": {
+        "startLine": 9,
+        "startChar": 44,
+        "endLine": 9,
+        "endChar": 75
+      },
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
