@@ -131,6 +131,52 @@
       "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_f3facfbc",
+        "filename": "misc/systemd/skyringd.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1007305
+      },
+      "writtenOn": "2016-04-20T08:19:17Z",
+      "side": 1,
+      "message": "Additional comments:\n\nSystemd documentation[1] (man 7 daemon) suggest the following for a New-Style Daemons:\n\n\u003e Instead of using the syslog() call to log directly to the system syslog service, a new-style daemon may choose to simply log to standard error via fprintf(), which is then forwarded to syslog by the init system. If log levels are necessary, these can be encoded by prefixing individual log lines with strings like \"\u003c4\u003e\" (for log level 4 \"WARNING\" in the syslog priority scheme), following a similar style as the Linux kernel\u0027s printk() level system. For details, see sd-daemon(3) and systemd.exec(5).\n\n[1] https://www.freedesktop.org/software/systemd/man/daemon.html\n\nI don\u0027t say this is required, but I would like to know what was the reasoning not to do this and what is expected to be done in RHEL 7.",
+      "range": {
+        "startLine": 9,
+        "startChar": 44,
+        "endLine": 9,
+        "endChar": 75
+      },
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_b30447c0",
+        "filename": "misc/systemd/skyringd.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1007305
+      },
+      "writtenOn": "2016-04-20T08:19:17Z",
+      "side": 1,
+      "message": "Related BZ: https://bugzilla.redhat.com/show_bug.cgi?id\u003d1325340",
+      "range": {
+        "startLine": 9,
+        "startChar": 44,
+        "endLine": 9,
+        "endChar": 76
+      },
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
