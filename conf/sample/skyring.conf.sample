@@ -1,6 +1,8 @@
 {
     "config": {
         "host": "0.0.0.0",
+	"sslCert": "/usr/local/apache/conf/ssl.crt/skyring.crt",
+	"sslKey": "/usr/local/apache/conf/ssl.key/skyring.key",
         "supportedVersions": [
             1
         ]

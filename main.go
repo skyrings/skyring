@@ -49,6 +49,7 @@ var (
 	staticFileDir string
 	websocketPort string
 	httpPort      int
+	sslPort       int
 )
 
 func main() {
@@ -102,6 +103,11 @@ func main() {
 			Value: 8080,
 			Usage: "Http server port",
 		},
+		cli.IntFlag{
+			Name:  "ssl-port",
+			Value: 10443,
+			Usage: "SSL server port",
+		},
 	}
 
 	app.Before = func(c *cli.Context) error {
@@ -114,6 +120,7 @@ func main() {
 		staticFileDir = c.String("static-file-dir")
 		websocketPort = c.String("websocket-port")
 		httpPort = c.Int("http-port")
+		sslPort = c.Int("ssl-port")
 		return nil
 	}
 
@@ -127,6 +134,24 @@ func main() {
 	}
 
 	app.Run(os.Args)
+}
+
+func runHTTP(addr string, sslAddr string, sslParams map[string]string, n *negroni.Negroni) {
+	// Start http server
+	go func() {
+		logger.Get().Info("Started listening on %s", addr)
+		if err := http.ListenAndServe(addr, n); err != nil {
+			logger.Get().Fatalf("Unable to start the webserver. err: %v", err)
+		}
+	}()
+
+	// Start ssl server
+	go func() {
+		logger.Get().Info("Started listening on %s", sslAddr)
+		if err := http.ListenAndServeTLS(sslAddr, sslParams["cert"], sslParams["key"], n); err != nil {
+			logger.Get().Fatalf("Unable to start the webserver. err: %v", err)
+		}
+	}()
 }
 
 func start() {
@@ -150,6 +175,7 @@ func start() {
 	conf.SystemConfig.Logging.Filename = logFile
 	conf.SystemConfig.Logging.Level = level
 	conf.SystemConfig.Config.HttpPort = httpPort
+	conf.SystemConfig.Config.SslPort = sslPort
 
 	application = skyring.NewApp(configDir, providersDir)
 	if application == nil {
@@ -196,12 +222,15 @@ func start() {
 	// Starting the WebSocket server
 	event.StartBroadcaster(websocketPort)
 
-	go func() {
-		logger.Get().Info("start listening on %s : %v", conf.SystemConfig.Config.Host, httpPort)
-		if err := http.ListenAndServe(fmt.Sprintf("%s:%v", conf.SystemConfig.Config.Host, httpPort), n); err != nil {
-			logger.Get().Fatalf("Unable to start the webserver. err: %v", err)
-		}
-	}()
+	runHTTP(
+		fmt.Sprintf("%s:%d", conf.SystemConfig.Config.Host, httpPort),
+		fmt.Sprintf("%s:%d", conf.SystemConfig.Config.Host, sslPort),
+		map[string]string{
+			"cert": conf.SystemConfig.Config.SslCert,
+			"key":  conf.SystemConfig.Config.SslKey,
+		},
+		n)
+
 	if err := application.PostInitApplication(conf.SystemConfig); err != nil {
 		logger.Get().Fatalf("Unable to run Post init. err: %v", err)
 	}

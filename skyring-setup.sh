@@ -7,6 +7,37 @@ YELLOW='\033[0;33m'
 NC='\033[0m'
 CWD=`pwd`
 
+function exit_on_error {
+    echo "Error: $1"
+    exit -1
+}
+
+function create_and_install_certificate {
+    echo "Creating CA certificate"
+    mkdir -p ~/.skyring
+    cd ~/.skyring
+    openssl genrsa -des3 -out skyring.key 1024 || exit_on_error "Failed to generate SSL key"
+    openssl req -new -key skyring.key -out skyring.csr || exit_on_error "Failed to create SSL certificate"
+    cp skyring.key skyring.key.org
+    openssl rsa -in skyring.key.org -out skyring.key || exit_on_error "Failed to create SSL certificate"
+    openssl x509 -req -days 365 -in skyring.csr -signkey skyring.key -out skyring.crt || exit_on_error "Failed to sign the SSL certificate"
+    mkdir -p /usr/local/apache/conf/ssl.key
+    mkdir -p /usr/local/apache/conf/ssl.crt/
+    cp skyring.key /usr/local/apache/conf/ssl.key
+    cp skyring.crt /usr/local/apache/conf/ssl.crt
+    cat > /etc/httpd/conf.d/ssl.conf << EOF
+SSLCertificateFile /usr/local/apache/conf/ssl.crt/skyring.crt
+SSLCertificateKeyFile /usr/local/apache/conf/ssl.key/skyring.key
+EOF
+    cat > /etc/httpd/conf.d/skyring.conf << EOF
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^/skyring https://%{HTTP_HOST}%{REQUEST_URI}
+EOF
+    cd -
+    \rm -rf ~/.skyring
+}
+
 function info {
     printf "${GREEN}$1${NC}\n"
 }
@@ -51,6 +82,25 @@ info "Setup graphite user"
 chown apache:apache /var/lib/graphite-web/graphite.db
 service carbon-cache start && chkconfig carbon-cache on
 service httpd start && chkconfig httpd on
+
+echo "Setup can configure apache to use SSL using a " \
+     "certificate issues from the internal CA."
+read -p "Do you wish Setup to configure that, or prefer to perform that manually? (Y/N): " yn
+case $yn in
+	[Yy]* )
+		create_and_install_certificate
+		;;
+	[Nn]* )
+		cat > /etc/httpd/conf.d/skyring.conf << EOF
+<VirtualHost *:80>
+    ProxyRequests Off
+    ProxyVia On
+    ProxyPass "/skyring/" "http://localhost:8080/"
+    ProxyPassReverse "/skyring/(.*)$" "http://localhost:8080/$1"
+</VirtualHost>
+EOF
+		;;
+esac
 
 info "\n\n\n-------------------------------------------------------"
 info "Now the skyring setup is ready!"
