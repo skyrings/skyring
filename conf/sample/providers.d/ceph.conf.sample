@@ -6,8 +6,8 @@
     "provisioner": {
         "provisionername": "ceph-installer",
         "configfilepath": "",
-        "redhatstorage":true,
-        "redhatusecdn":false
+        "redhatstorage":false,
+        "redhatusecdn":true
     },
     "routes": [
         {

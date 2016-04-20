@@ -108,10 +108,10 @@ func (a *App) SyncClusterDetails(params map[string]interface{}) {
 			logger.Get().Error("%s-Error syncing storage entities for cluster: %s. error: %v", ctxt, cluster.Name, err)
 		}
 		// Sync block devices
-		logger.Get().Debug("Syncing block devices of cluster: %s", cluster.Name)
+		/*logger.Get().Debug("Syncing block devices of cluster: %s", cluster.Name)
 		if ok, err := sync_block_devices(ctxt, cluster, provider); err != nil || !ok {
 			logger.Get().Error("%s-Error syncing block devices for cluster: %s. error: %v", ctxt, cluster.Name, err)
-		}
+		}*/
 
 		logger.Get().Debug("Setting the cluster: %s back as active", cluster.Name)
 		if err := coll.Update(
