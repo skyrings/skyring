@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_04860b13",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-20T18:51:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_18b79287",
+      "range": {
+        "startLine": 9,
+        "startChar": 38,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_1f453c6f",
         "filename": "misc/systemd/skyringd.service",
         "patchSetId": 3
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_2e58d031",
+        "filename": "misc/systemd/skyringd.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-20T18:51:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_1f453c6f",
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_adc62d47",
         "filename": "misc/systemd/skyringd.service",
         "patchSetId": 3
@@ -53,6 +95,30 @@
       "writtenOn": "2016-04-19T12:49:42Z",
       "side": 1,
       "message": "Shouldn\u0027t we use the current upstream name of the service here? Something like \"Skyring Daemon\" or \"Skyring Server\".",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 49
+      },
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_0e5bcc2f",
+        "filename": "misc/systemd/skyringd.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-20T18:51:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_adc62d47",
       "range": {
         "startLine": 2,
         "startChar": 0,
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_8e47dc4a",
+        "filename": "misc/systemd/skyringd.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-20T18:51:15Z",
+      "side": 1,
+      "message": "Sure, I will use After\u003d",
+      "parentUuid": "baa041b7_9f070c1c",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 40
+      },
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_8dc5a93d",
         "filename": "misc/systemd/skyringd.service",
         "patchSetId": 3
@@ -99,6 +189,30 @@
       "writtenOn": "2016-04-19T12:49:42Z",
       "side": 1,
       "message": "Using PIDFile in the service file like this is valid\nonly when the service process will create this file itself.\nIs this the case with skyring?\n\nThat said, I see no point in writing a pid file for non\nforking service process.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 29
+      },
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_6e4ed870",
+        "filename": "misc/systemd/skyringd.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-20T18:51:15Z",
+      "side": 1,
+      "message": "I Agree. I will remove this here!",
+      "parentUuid": "baa041b7_8dc5a93d",
       "range": {
         "startLine": 8,
         "startChar": 0,
@@ -216,6 +330,30 @@
       "side": 1,
       "message": "I\u0027m aware of the fact that you use go. But this is not an excuse for ignoring expected logging behavior.\nWe all know that we are targeting RHEL 7 (which uses systemd) as an operating system where skyring service will be supported.\n\nThat said, I don\u0027t claim you do it wrong (I would need to verify/recheck this first), I was just curious if I understand it right that you ignored that systemd logging suggestion and why.\n\nLet\u0027s not block this change because of this. Again, I was just curious about the reasoning.",
       "parentUuid": "baa041b7_f3f9af81",
+      "range": {
+        "startLine": 9,
+        "startChar": 44,
+        "endLine": 9,
+        "endChar": 75
+      },
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_4e78b48f",
+        "filename": "misc/systemd/skyringd.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-20T18:51:15Z",
+      "side": 1,
+      "message": "Sure, I will check with them.",
+      "parentUuid": "baa041b7_020de336",
       "range": {
         "startLine": 9,
         "startChar": 44,
