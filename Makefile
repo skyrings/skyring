@@ -77,6 +77,18 @@ pyinstall:
 		echo "    INFO: or run skyring by \`PYTHONPATH=~/.local/lib/python2.7/site-packages skyring\`"; \
 	fi
 
+confinstall:
+	@echo "Doing $@"
+	@if [ "$$USER" == "root" ]; then \
+		[ -d /etc/skyring ] || mkdir -p /etc/skyring; \
+		cp conf/sample/skyring.conf.sample /etc/skyring/skyring.conf; \
+		cp event/skyring.evt /etc/skyring; \
+	else \
+		echo "ERROR: unable to install conf files. Install them manually by"; \
+		echo "    sudo cp conf/sample/skyring.conf.sample /etc/skyring/skyring.conf"; \
+		echo "    sudo cp event/skyring.evt /etc/skyring"; \
+	fi
+
 saltinstall:
 	@echo "Doing $@"
 	@if [ "$$USER" == "root" ]; then \
@@ -88,17 +100,15 @@ saltinstall:
 		cp backend/salt/sls/collectd/*.* /srv/salt/collectd; \
 		cp backend/salt/conf/collectd/* /srv/salt/collectd/files; \
 		cp backend/salt/template/* /srv/salt/template; \
-		cp event/skyring.evt /etc/skyring; \
 	else \
 		echo "ERROR: unable to install salt files. Install them manually by"; \
 		echo "    sudo cp backend/salt/sls/*.* /srv/salt"; \
 		echo "    sudo cp backend/salt/sls/collectd/*.* /srv/salt/collectd"; \
 		echo "    sudo cp backend/salt/conf/collectd/* /srv/salt/collectd/files"; \
 		echo "    sudo cp backend/salt/template/* /srv/salt/template"; \
-		echo "    sudo cp event/skyring.evt /etc/skyring"; \
 	fi
 
-install: build pyinstall saltinstall
+install: build pyinstall confinstall saltinstall
 	@echo "Doing $@"
 	@GO15VENDOREXPERIMENT=1 go install
 
