@@ -612,7 +612,7 @@ func schedule_task_check(ctxt string) {
 	} else {
 		f := check_task_status
 		m := make(map[string]interface{})
-		go scheduler.Schedule(time.Duration(10*time.Minute), f, m)
+		go scheduler.Schedule(time.Duration(20*time.Minute), f, m)
 	}
 }
 
