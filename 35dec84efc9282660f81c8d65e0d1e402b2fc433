@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_7969f9bd",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1007305
+      },
+      "writtenOn": "2016-04-21T18:31:26Z",
+      "side": 1,
+      "message": "You may also consider additional security features such as\nprivate tmp directory or listing capabilities required for the service.\n\nSee:\n\nhttp://0pointer.de/blog/projects/security.html",
+      "revId": "35dec84efc9282660f81c8d65e0d1e402b2fc433",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_793b39d2",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1007305
+      },
+      "writtenOn": "2016-04-21T18:31:26Z",
+      "side": 1,
+      "message": "I have rechecked the details here and it seems to me that here it would be better to use the 2nd approach (as mentioned in the systemd fedora packaging guide): use both After\u003d and Wants\u003d.\n\nSo that when one would run:\n\nsystemctl start skyring\n\nsystemd would start mongod and salt-master as well (this is because of Wants\u003d) and it would start skyring when both mongod and salt-master are running (this is because of After\u003d). Without Wants\u003d, mongod or salt-master would not be\nstarted if not running.\n\nSee details in systemd.unit man page:\n\nhttps://www.freedesktop.org/software/systemd/man/systemd.unit.html",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 40
+      },
+      "revId": "35dec84efc9282660f81c8d65e0d1e402b2fc433",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_394c916f",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1007305
+      },
+      "writtenOn": "2016-04-21T18:31:26Z",
+      "side": 1,
+      "message": "I have discussed this service file with systemd team, and\nthey suggest to consider using mixed mode instead.\n\nWhy? Because there are 2 processes in skyring service (skyring as the main process, and bigfin as a child), mixed\nkilling mode would send SIGTERM to the skyring only, and then after some time, SIGKILL to all remaining processes (if any) of the service.\n\nOn the other hand, only the main process itself is killed\nwhen killmode process is used.\n\nSee details in systemd.kill man page:\n\nhttps://www.freedesktop.org/software/systemd/man/systemd.kill.html#",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "35dec84efc9282660f81c8d65e0d1e402b2fc433",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
