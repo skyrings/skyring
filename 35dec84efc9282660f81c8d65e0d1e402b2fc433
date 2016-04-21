@@ -62,6 +62,29 @@
       "revId": "35dec84efc9282660f81c8d65e0d1e402b2fc433",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_99f6fdf7",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1007305
+      },
+      "writtenOn": "2016-04-21T18:41:18Z",
+      "side": 1,
+      "message": "Why have you chosen such value? What issue or design choice is this related to?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 14
+      },
+      "revId": "35dec84efc9282660f81c8d65e0d1e402b2fc433",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
