@@ -95,7 +95,7 @@ chmod -x $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/__init__.py
 chmod -x $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/saltwrapper.py
 
 %post
-ln -fs %{buildroot}/usr/share/skyring/setup/skyring-setup.sh %{buildroot}/usr/bin/skyring-setup
+ln -fs /usr/share/skyring/setup/skyring-setup.sh /usr/bin/skyring-setup
 /sbin/chkconfig --add skyringd
 /sbin/chkconfig --level 35 skyringd on
 
@@ -112,17 +112,17 @@ if [ -e /etc/httpd/conf.d/graphite-web.conf.orig -a -h /etc/httpd/conf.d/graphit
 fi
 
 %triggerin -- graphite-web
-if [ ! -h %{buildroot}/etc/httpd/conf.d/graphite-web.conf -o ! "`readlink %{buildroot}/etc/httpd/conf.d/graphite-web.conf`" = "/etc/skyring/httpd/conf.d/graphite-web.conf" ] ; then
-  if [ -e %{buildroot}/etc/httpd/conf.d/graphite-web.conf ] ; then
-    mv -f %{buildroot}/etc/httpd/conf.d/graphite-web.conf %{buildroot}/etc/httpd/conf.d/graphite-web.conf.orig
+if [ ! -h /etc/httpd/conf.d/graphite-web.conf -o ! "`readlink /etc/httpd/conf.d/graphite-web.conf`" = "/etc/skyring/httpd/conf.d/graphite-web.conf" ] ; then
+  if [ -e /etc/httpd/conf.d/graphite-web.conf ] ; then
+    mv -f /etc/httpd/conf.d/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf.orig
   fi
-  ln -s /etc/skyring/httpd/conf.d/graphite-web.conf %{buildroot}/etc/httpd/conf.d/graphite-web.conf
+  ln -s /etc/skyring/httpd/conf.d/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
 fi
 
 %triggerun -- graphite-web
-if [ ! -h %{buildroot}/etc/httpd/conf.d/graphite-web.conf -o ! "`readlink %{buildroot}/etc/httpd/conf.d/graphite-web.conf`" = "/etc/skyring/httpd/conf.d/graphite-web.conf" ] ; then
-  if [ -e %{buildroot}/etc/httpd/conf.d/graphite-web.conf ] ; then
-    mv -f %{buildroot}/etc/httpd/conf.d/graphite-web.conf %{buildroot}/etc/httpd/conf.d/graphite-web.conf.orig
+if [ ! -h /etc/httpd/conf.d/graphite-web.conf -o ! "`readlink /etc/httpd/conf.d/graphite-web.conf`" = "/etc/skyring/httpd/conf.d/graphite-web.conf" ] ; then
+  if [ -e /etc/httpd/conf.d/graphite-web.conf ] ; then
+    mv -f /etc/httpd/conf.d/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf.orig
   fi
   ln -s /etc/skyring/httpd/conf.d/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
 fi
