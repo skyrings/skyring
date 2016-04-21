@@ -363,6 +363,30 @@
       "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_cd996770",
+        "filename": "misc/systemd/skyringd.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-21T06:57:25Z",
+      "side": 1,
+      "message": "Systemd documentation suggests a way for doing the logging. It is not mandatory to choose what they recommends. That is all depends on platform and tool each development team chooses. Do  you think all the services in RHEL 7 chooses this option for logging? I don\u0027t think so. Most of the projects based on go uses go based logging libraries. Similarly projects based java uses java logging libraries. We followed the same path as generally others follow.\nAt this, point I don\u0027t think we can go with a alternative approach for logging.",
+      "parentUuid": "baa041b7_4e78b48f",
+      "range": {
+        "startLine": 9,
+        "startChar": 44,
+        "endLine": 9,
+        "endChar": 75
+      },
+      "revId": "bb9bed8deb9578a0abf00d82eeddeeb8bf67552d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
