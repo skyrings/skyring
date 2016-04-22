@@ -479,7 +479,7 @@ def SetupSkynetService(node, ctxt=""):
     status = True
 
     # Restart systemd-skynet service
-    out = local.cmd(minions, 'service.restart', ['systemd-skynetd'], expr_form='list')
+    out = local.cmd(minions, 'service.restart', ['skynetd'], expr_form='list')
     for node, restartStatus in out.iteritems():
         if not restartStatus:
             log.error("%s-Failed to restart skynetd on node %s " %(ctxt, node))
