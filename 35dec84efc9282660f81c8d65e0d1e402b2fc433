@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_39c5b13b",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-22T05:57:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_7969f9bd",
+      "revId": "35dec84efc9282660f81c8d65e0d1e402b2fc433",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_793b39d2",
         "filename": "misc/systemd/skyring.service",
         "patchSetId": 5
@@ -30,6 +48,30 @@
       "writtenOn": "2016-04-21T18:31:26Z",
       "side": 1,
       "message": "I have rechecked the details here and it seems to me that here it would be better to use the 2nd approach (as mentioned in the systemd fedora packaging guide): use both After\u003d and Wants\u003d.\n\nSo that when one would run:\n\nsystemctl start skyring\n\nsystemd would start mongod and salt-master as well (this is because of Wants\u003d) and it would start skyring when both mongod and salt-master are running (this is because of After\u003d). Without Wants\u003d, mongod or salt-master would not be\nstarted if not running.\n\nSee details in systemd.unit man page:\n\nhttps://www.freedesktop.org/software/systemd/man/systemd.unit.html",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 40
+      },
+      "revId": "35dec84efc9282660f81c8d65e0d1e402b2fc433",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_19c0ad29",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-22T05:57:49Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "baa041b7_793b39d2",
       "range": {
         "startLine": 4,
         "startChar": 0,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_d9e005cf",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-22T05:57:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_394c916f",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "35dec84efc9282660f81c8d65e0d1e402b2fc433",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_99f6fdf7",
         "filename": "misc/systemd/skyring.service",
         "patchSetId": 5
@@ -76,6 +142,30 @@
       "writtenOn": "2016-04-21T18:41:18Z",
       "side": 1,
       "message": "Why have you chosen such value? What issue or design choice is this related to?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 14
+      },
+      "revId": "35dec84efc9282660f81c8d65e0d1e402b2fc433",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_59cd155c",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-04-22T05:57:49Z",
+      "side": 1,
+      "message": "I just simply assigned this value. Sometimes the dependency service mongod taking little longer time to start.\nShall I remove this or shall i give at-least 10sec for this?",
+      "parentUuid": "baa041b7_99f6fdf7",
       "range": {
         "startLine": 11,
         "startChar": 0,
