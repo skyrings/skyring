@@ -613,11 +613,6 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 			ctxt,
 			*node_id,
 			err)
-		HttpResponse(
-			w,
-			http.StatusInternalServerError,
-			fmt.Sprintf("Error getting cluster for node. error: %v", err))
-		return
 	}
 
 	uptime, err := GetCoreNodeManager().NodeUptime(node.Hostname, ctxt)
@@ -637,6 +632,7 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 		"role":          node.Roles,
 	}
 	nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS] = getSLUStatusWiseCount(node_id, ctxt)
+	nodeSummary[models.UTILIZATIONS] = node.Utilizations
 	var result models.RpcResponse
 	provider := a.getProviderFromClusterType(cluster.Type)
 	SluCount := nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS].(map[string]int)

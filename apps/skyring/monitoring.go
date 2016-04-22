@@ -331,10 +331,29 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 	disk_writes = AverageAndUpdateDb(ctxt, disk_writes, disk_writes_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
 	UpdateMetricToTimeSeriesDb(ctxt, disk_reads+disk_writes, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
 
-	AverageAndUpdateDb(ctxt, cluster_memory_used, cluster_memory_used_count, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
-	AverageAndUpdateDb(ctxt, cluster_memory_free, cluster_memory_free_count, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.FREE_SPACE)
-	AverageAndUpdateDb(ctxt, cluster_cpu_user, cluster_cpu_user_count, time_stamp_str, table_name+monitoring.CPU_USER)
+	UpdateMetricToTimeSeriesDb(ctxt, cluster_memory_used, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
+	UpdateMetricToTimeSeriesDb(ctxt, cluster_memory_total, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.TOTAL_SPACE)
+	AverageAndUpdateDb(ctxt, cluster_cpu_user, len(nodes), time_stamp_str, table_name+monitoring.CPU_USER)
 	AverageAndUpdateDb(ctxt, latency, latency_count, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
+
+	clusterUtilizations := map[string]interface{}{
+		"memoryusage": models.Utilization{
+			Used:        int64(cluster_memory_used),
+			Total:       int64(cluster_memory_total),
+			PercentUsed: float64(cluster_memory_used*100) / float64(cluster_memory_total),
+		},
+		"cpupercentageusage": float64(cluster_cpu_user) / float64(len(nodes)),
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	if coll.Update(
+		bson.M{"clusterid": cluster.ClusterId},
+		bson.M{"$set": bson.M{"utilizations": clusterUtilizations}}); err != nil {
+		logger.Get().Warning("%s - Failed to update memory and cpu utilizations of cluster %v to db.Error %v", ctxt, cluster.Name, err)
+	}
 
 	cluster_interface_rx = AverageAndUpdateDb(ctxt, cluster_interface_rx, cluster_interface_rx_count, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.RX)
 	cluster_interface_tx = AverageAndUpdateDb(ctxt, cluster_interface_tx, cluster_interface_tx_count, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.TX)
@@ -1244,8 +1263,8 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	var net_cluster_total int64
 	var net_memory_used float64
 	net_memory_used_count := len(clusters)
-	var net_memory_free float64
-	net_memory_free_count := len(clusters)
+	var net_memory_total float64
+	net_memory_total_count := len(clusters)
 	var total_nodes int
 	var clusters_in_error int
 	var cluster_cpu_user float64
@@ -1315,8 +1334,8 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		/*
 			Calculate Free Memory
 		*/
-		resource_name = monitoring.MEMORY + "-" + monitoring.FREE_SPACE
-		net_memory_free = net_memory_free + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &net_memory_free_count)
+		resource_name = monitoring.MEMORY + "-" + monitoring.TOTAL_SPACE
+		net_memory_total = net_memory_total + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &net_memory_total_count)
 
 		/*
 			Calculate cpu user utilization
@@ -1368,8 +1387,8 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	netDiskWrite = AverageAndUpdateDb(ctxt, netDiskWrite, netDiskWriteCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
 	UpdateMetricToTimeSeriesDb(ctxt, netDiskRead+netDiskWrite, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
 
-	AverageAndUpdateDb(ctxt, net_memory_used, net_memory_used_count, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
-	AverageAndUpdateDb(ctxt, net_memory_free, net_memory_free_count, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.FREE_SPACE)
+	UpdateMetricToTimeSeriesDb(ctxt, net_memory_used, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
+	UpdateMetricToTimeSeriesDb(ctxt, net_memory_total, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.TOTAL_SPACE)
 	AverageAndUpdateDb(ctxt, cluster_cpu_user, cluster_cpu_user_count, time_stamp_str, table_name+monitoring.CPU_USER)
 	AverageAndUpdateDb(ctxt, latency, latencyCount, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
 
@@ -1378,8 +1397,8 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	UpdateMetricToTimeSeriesDb(ctxt, netIStatRx+netIStatTx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
 
 	var memory_percent float64
-	if net_memory_used+net_memory_free > 0.0 {
-		memory_percent = (net_memory_used * 100) / (net_memory_used + net_memory_free)
+	if net_memory_total > 0.0 {
+		memory_percent = (net_memory_used * 100) / net_memory_total
 	}
 	memory_percent_table := table_name + monitoring.MEMORY + "-" + monitoring.USAGE_PERCENT
 	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: strconv.FormatFloat(memory_percent, 'E', -1, 64)}}, hostname, port); err != nil {
@@ -1388,7 +1407,15 @@ func ComputeSystemSummary(p map[string]interface{}) {
 
 	system.StorageProfileUsage = net_storage_profile_utilization
 	system.ProviderMonitoringDetails = make(map[string]map[string]interface{})
-
+	systemUtilizations := map[string]interface{}{
+		"memoryusage": models.Utilization{
+			Used:        int64(net_memory_used),
+			Total:       int64(net_memory_total),
+			PercentUsed: memory_percent,
+		},
+		"cpupercentageusage": float64(cluster_cpu_user) / float64(cluster_cpu_user_count),
+	}
+	system.Utilizations = systemUtilizations
 	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchMonitoringDetailsFromProviders(ctxt)
 	if otherDetailsFetchError != nil {
 		logger.Get().Error("%s - Error fetching the provider specific details. Error %v", ctxt, otherDetailsFetchError)
