@@ -175,6 +175,30 @@
       "revId": "35dec84efc9282660f81c8d65e0d1e402b2fc433",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_24c0e829",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1007305
+      },
+      "writtenOn": "2016-04-22T08:04:53Z",
+      "side": 1,
+      "message": "Thanks for the explanation. Let\u0027s have the 10s here as you\nsuggested and see how it will behave in the real\nenvironment. I will create a bug if I notice any problem\nhere.",
+      "parentUuid": "baa041b7_59cd155c",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 14
+      },
+      "revId": "35dec84efc9282660f81c8d65e0d1e402b2fc433",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
