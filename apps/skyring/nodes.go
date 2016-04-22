@@ -634,6 +634,7 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 		"role":          node.Roles,
 	}
 	nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS] = getSLUStatusWiseCount(node_id, ctxt)
+	nodeSummary[models.UTILIZATIONS] = node.Utilizations
 	json.NewEncoder(w).Encode(nodeSummary)
 }
 
