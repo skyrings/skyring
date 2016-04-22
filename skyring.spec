@@ -4,7 +4,7 @@
 %endif
 
 %define pkg_name skyring
-%define pkg_version 0.0.9
+%define pkg_version 0.0.12
 %define pkg_release 1
 
 Name: %{pkg_name}
@@ -48,7 +48,7 @@ Requires: mongodb-server
 Requires: graphite-web
 Requires: python-carbon
 Requires: python-whisper
-Requires: redhat-ceph-installer
+Requires: ceph-installer
 
 %description
 SKYRING is a modern, extensible web-based storage management platform
