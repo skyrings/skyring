@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_2472284a",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-22T07:10:21Z",
+      "side": 1,
+      "message": "I feel we should let it to default as earlier..",
+      "range": {
+        "startLine": 9,
+        "startChar": 27,
+        "endLine": 9,
+        "endChar": 59
+      },
+      "revId": "0da28a3623a1a5e010f7a3730848f0f889c253e9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
