@@ -99,8 +99,15 @@ func (a *App) LoadRoutes() {
 		{
 			Name:        "Get_Utilization",
 			Method:      "GET",
-			Pattern:     "monitoring/{resource_path:.*}",
-			HandlerFunc: a.Get_Utilization,
+			Pattern:     "monitoring/{entity-type}/{entity-id}/utilization",
+			HandlerFunc: a.GET_Utilization,
+			Version:     1,
+		},
+		{
+			Name:        "Get_SystemUtilization",
+			Method:      "GET",
+			Pattern:     "monitoring/system/utilization",
+			HandlerFunc: a.Get_SystemUtilization,
 			Version:     1,
 		},
 		{
