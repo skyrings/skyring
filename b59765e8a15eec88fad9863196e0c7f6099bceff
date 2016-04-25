@@ -22,6 +22,30 @@
       "revId": "b59765e8a15eec88fad9863196e0c7f6099bceff",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_053b9b9d",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-25T09:36:14Z",
+      "side": 0,
+      "message": "If the node is not part of any cluster, this node summary api can still report the other details right.\n\nThe only 2 details that will be passed extra if node is part of cluster are : cluster name and cluster status.",
+      "parentUuid": "baa041b7_e5a55704",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 617,
+        "endChar": 8
+      },
+      "revId": "b59765e8a15eec88fad9863196e0c7f6099bceff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
