@@ -1,7 +1,7 @@
 {
-    "productname": "skyring",
+    "productname": "Skyring",
     "productversion": "0.0.8",
-    "dbsoftware": "mongo",
+    "dbsoftware": "Mongo DB",
     "dbsoftwareversion": "2.6.11"
 }
 
