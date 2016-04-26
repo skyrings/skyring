@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_5b2182fa",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-26T04:13:16Z",
+      "side": 1,
+      "message": "Message is very generic. Make it more specific to the activity happening here.",
+      "range": {
+        "startLine": 645,
+        "startChar": 25,
+        "endLine": 645,
+        "endChar": 51
+      },
+      "revId": "11063f2f6f9bc9c4fee61eb9d671192ef374dd02",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_9b270a12",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-26T04:13:16Z",
+      "side": 1,
+      "message": "Could it be an async task? I think no..",
+      "range": {
+        "startLine": 656,
+        "startChar": 64,
+        "endLine": 656,
+        "endChar": 111
+      },
+      "revId": "11063f2f6f9bc9c4fee61eb9d671192ef374dd02",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_7b220603",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-26T04:13:16Z",
+      "side": 1,
+      "message": "Message is very generic. Make it more specific to the activity happening here.",
+      "range": {
+        "startLine": 670,
+        "startChar": 25,
+        "endLine": 670,
+        "endChar": 44
+      },
+      "revId": "11063f2f6f9bc9c4fee61eb9d671192ef374dd02",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
