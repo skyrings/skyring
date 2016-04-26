@@ -77,20 +77,121 @@ func getParentName(queriedEntityType string, parentId uuid.UUID) (string, error)
 	return "", nil
 }
 
-func (a *App) Get_Utilization(w http.ResponseWriter, r *http.Request) {
+func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
 		logger.Get().Error("Error Getting the context. error: %v", err)
-		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error : %v", err))
 	}
 
+	var start_time string
+	var end_time string
+	var interval string
 	vars := mux.Vars(r)
-	resource_path := vars["resource_path"]
 
-	err = GetMonitoringManager().QueryRedirectWithWriteResponse(resource_path, w, r)
+	entity_id_str := vars["entity-id"]
+	entity_type := vars["entity-type"]
+
+	params := r.URL.Query()
+	resource_name := params.Get("resource")
+	duration := params.Get("duration")
+	parent_id_str := params.Get("parent_id")
+
+	entity_id, entityIdParseError := uuid.Parse(entity_id_str)
+	if entityIdParseError != nil {
+		HttpResponse(w, http.StatusBadRequest, entityIdParseError.Error())
+		logger.Get().Error("%s-%v", ctxt, entityIdParseError.Error())
+		return
+	}
+
+	var parent_id *uuid.UUID
+	var parentError error
+	var parentName string
+	if parent_id_str != "" {
+		parent_id, parentError = uuid.Parse(parent_id_str)
+		if parentError != nil {
+			HttpResponse(w, http.StatusBadRequest, parentError.Error())
+			logger.Get().Error("%s-%v", ctxt, parentError.Error())
+			return
+		}
+
+		parentName, parentError = getParentName(entity_type, *parent_id)
+		if parentError != nil {
+			HttpResponse(w, http.StatusBadRequest, parentError.Error())
+			logger.Get().Error("%s-%v", ctxt, parentError.Error())
+			return
+		}
+	}
+
+	entityName, entityNameError := getEntityName(entity_type, *entity_id, parent_id)
+	if entityNameError != nil {
+		HttpResponse(w, http.StatusBadRequest, entityNameError.Error())
+		logger.Get().Error("%s-%v", ctxt, entityNameError.Error())
+		return
+	}
+
+	if duration != "" {
+		if strings.Contains(duration, ",") {
+			splt := strings.Split(duration, ",")
+			start_time = splt[0]
+			end_time = splt[1]
+		} else {
+			interval = duration
+		}
+	}
+
+	paramsToQuery := map[string]interface{}{"nodename": entityName, "resource": resource_name, "start_time": start_time, "end_time": end_time, "interval": interval}
+	if parentName != "" {
+		paramsToQuery["parentName"] = parentName
+	}
+
+	res, err := GetMonitoringManager().QueryDB(paramsToQuery)
+	if err == nil {
+		json.NewEncoder(w).Encode(res)
+	} else {
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
+	}
+}
+
+func (a *App) Get_SystemUtilization(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
 	if err != nil {
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error : %v", err))
-		logger.Get().Error("%s - Failed to fetch the requested metrics at path %v.Error %v", ctxt, resource_path, err)
+		logger.Get().Error("Error Getting the context. error: %v", err)
+	}
+
+	var start_time string
+	var end_time string
+	var interval string
+
+	entityName := models.SYSTEM
+
+	params := r.URL.Query()
+	resource_name := params.Get("resource")
+	duration := params.Get("duration")
+
+	if duration != "" {
+		if strings.Contains(duration, ",") {
+			splt := strings.Split(duration, ",")
+			start_time = splt[0]
+			end_time = splt[1]
+		} else {
+			interval = duration
+		}
+	}
+
+	paramsToQuery := map[string]interface{}{
+		"nodename":   entityName,
+		"resource":   resource_name,
+		"start_time": start_time,
+		"end_time":   end_time,
+		"interval":   interval,
+	}
+
+	res, err := GetMonitoringManager().QueryDB(paramsToQuery)
+	if err == nil {
+		json.NewEncoder(w).Encode(res)
+	} else {
+		logger.Get().Error("%s - Failed to get %v utilization of system.Err %v", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
 }
 
