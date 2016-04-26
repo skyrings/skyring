@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_56c5d739",
+        "filename": "conf/sample/skyring.conf.sample",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1006225
+      },
+      "writtenOn": "2016-04-26T09:16:59Z",
+      "side": 1,
+      "message": "Certificates are in /etc/pki/tls/ on RHEL or at least in /etc because of SELinux.",
+      "range": {
+        "startLine": 4,
+        "startChar": 1,
+        "endLine": 5,
+        "endChar": 55
+      },
+      "revId": "2e5fafd098b63d6879a12225ba9ac88ae034e576",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_16de2f11",
+        "filename": "main.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1006225
+      },
+      "writtenOn": "2016-04-26T09:16:59Z",
+      "side": 1,
+      "message": "If SSL is configured I think plain HTTP should be disabled.",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 4
+      },
+      "revId": "2e5fafd098b63d6879a12225ba9ac88ae034e576",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_96cb5f53",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006225
+      },
+      "writtenOn": "2016-04-26T09:16:59Z",
+      "side": 1,
+      "message": "Certificates are in /etc/pki/tls/ on RHEL or at least in /etc because of SELinux.",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 28,
+        "endChar": 43
+      },
+      "revId": "2e5fafd098b63d6879a12225ba9ac88ae034e576",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_f6b98bcc",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1006225
+      },
+      "writtenOn": "2016-04-26T09:16:59Z",
+      "side": 1,
+      "message": "On port 80 already listen Graphite.",
+      "range": {
+        "startLine": 95,
+        "startChar": 1,
+        "endLine": 95,
+        "endChar": 17
+      },
+      "revId": "2e5fafd098b63d6879a12225ba9ac88ae034e576",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
