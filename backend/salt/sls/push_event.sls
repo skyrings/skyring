@@ -127,6 +127,23 @@ def PushNodeEvent(data):
     except (socket.error, JSONRPCError) as e:
         log.error(e, exc_info=True)
 
+def PushNodeCollectdEvent(data):
+    timestamp = getTimestamp(data['_stamp'])
+    node = data['id']
+    tag = data.get("arg")[1]
+    d = json.loads(data.get("arg")[0].replace("'",'"'))
+    tags = d['tags']
+    message = d['message']
+    severity = d['severity']
+    try:
+        with JsonRpcClient() as c:
+            c.call("Listener.PersistNodeEvent",
+                   {'timestamp': timestamp, 'node': node, 'tag': tag, 'message': message,
+                    'severity': severity, 'tags': tags})
+    except (socket.error, JSONRPCError) as e:
+        log.error(e, exc_info=True)
+
+
 def PushNodeStatusEvent(data):
     for n in data['new']:
         try:
@@ -177,6 +194,14 @@ def run():
         PushNodeEvent(data)
     elif tag and fnmatch.fnmatch(tag, 'salt/auth'):
         PushUnManagedNode(data)
+    elif tag and fnmatch.fnmatch(tag, 'salt/job/*'):
+        t = data.get('arg')
+        if len(t) == 2:
+            t = t[1]
+        else:
+            return {}
+        if fnmatch.fnmatch(t, 'skyring/*'):
+            PushNodeCollectdEvent(data)
     else:
         PushEvent(data)
     return {}
