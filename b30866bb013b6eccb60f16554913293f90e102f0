@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_d609e72d",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-26T06:34:50Z",
+      "side": 1,
+      "message": "I don\u0027t think we have to fail here with error RESPONSE. I feel it is nice to give whatever we already have and set the http status as partial content or something similar and log the error.",
+      "range": {
+        "startLine": 646,
+        "startChar": 2,
+        "endLine": 649,
+        "endChar": 119
+      },
+      "revId": "b30866bb013b6eccb60f16554913293f90e102f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_b60c233c",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-26T06:34:50Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 662,
+        "startChar": 2,
+        "endLine": 665,
+        "endChar": 85
+      },
+      "revId": "b30866bb013b6eccb60f16554913293f90e102f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_96147f44",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-26T06:34:50Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 671,
+        "startChar": 2,
+        "endLine": 671,
+        "endChar": 101
+      },
+      "revId": "b30866bb013b6eccb60f16554913293f90e102f0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
