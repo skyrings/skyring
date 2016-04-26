@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_56303701",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-26T10:58:50Z",
+      "side": 1,
+      "message": "Its lte or gte??",
+      "range": {
+        "startLine": 840,
+        "startChar": 77,
+        "endLine": 840,
+        "endChar": 80
+      },
+      "revId": "29ff3cc30025cdceb09e37bd8586d7908b49aa46",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_362b7396",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-26T10:58:50Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 865,
+        "startChar": 72,
+        "endLine": 865,
+        "endChar": 75
+      },
+      "revId": "29ff3cc30025cdceb09e37bd8586d7908b49aa46",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
