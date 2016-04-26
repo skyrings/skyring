@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_9442380f",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-04-26T11:51:59Z",
+      "side": 1,
+      "message": "less than or equal to is correct",
+      "parentUuid": "baa041b7_56303701",
+      "range": {
+        "startLine": 840,
+        "startChar": 77,
+        "endLine": 840,
+        "endChar": 80
+      },
+      "revId": "29ff3cc30025cdceb09e37bd8586d7908b49aa46",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_362b7396",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2016-04-26T10:58:50Z",
       "side": 1,
       "message": "Same as above",
+      "range": {
+        "startLine": 865,
+        "startChar": 72,
+        "endLine": 865,
+        "endChar": 75
+      },
+      "revId": "29ff3cc30025cdceb09e37bd8586d7908b49aa46",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_544dd03c",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-04-26T11:51:59Z",
+      "side": 1,
+      "message": "here also lte is correct",
+      "parentUuid": "baa041b7_362b7396",
       "range": {
         "startLine": 865,
         "startChar": 72,
