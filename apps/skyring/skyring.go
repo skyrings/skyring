@@ -604,6 +604,7 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 	cleanupTasks()
 	initializeAbout(ctxt)
 	schedule_archive_activities(ctxt)
+	FailStillCreatingClusters(ctxt)
 	return nil
 }
 
@@ -878,5 +879,15 @@ func archive_events(ctxt string) {
 			logger.Get().Debug(fmt.Sprintf("%s-Error removing event detail :%v .error: %v", ctxt, event.EventId, err))
 			continue
 		}
+	}
+}
+
+func FailStillCreatingClusters(ctxt string) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	if _, err := collection.UpdateAll(bson.M{"state": models.CLUSTER_STATE_CREATING}, bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_FAILED,
+		"status": models.CLUSTER_STATUS_ERROR}}); err != nil {
+		logger.Get().Debug("%s-%v", ctxt, err.Error())
 	}
 }
