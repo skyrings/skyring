@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_7bcb1ca6",
+        "filename": "apps/skyring/import_cluster.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-27T20:18:05Z",
+      "side": 1,
+      "message": "Does this a time taking request? Is there a chance this will get stuck due to some reason?",
+      "range": {
+        "startLine": 78,
+        "startChar": 7,
+        "endLine": 78,
+        "endChar": 28
+      },
+      "revId": "8fa03c90556d0f861f592501d7b704e2927a16c7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_5bce18b5",
+        "filename": "apps/skyring/import_cluster.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-27T20:18:05Z",
+      "side": 1,
+      "message": "This should be outside the loop",
+      "range": {
+        "startLine": 227,
+        "startChar": 5,
+        "endLine": 227,
+        "endChar": 15
+      },
+      "revId": "8fa03c90556d0f861f592501d7b704e2927a16c7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ce094bdf",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-27T20:18:05Z",
+      "side": 1,
+      "message": "\u0027getnodesforimport\u0027 ??",
+      "range": {
+        "startLine": 393,
+        "startChar": 17,
+        "endLine": 393,
+        "endChar": 35
+      },
+      "revId": "8fa03c90556d0f861f592501d7b704e2927a16c7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ce626bad",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-27T20:18:05Z",
+      "side": 1,
+      "message": "I think its better to name it \u0027import\u0027",
+      "range": {
+        "startLine": 397,
+        "startChar": 17,
+        "endLine": 397,
+        "endChar": 30
+      },
+      "revId": "8fa03c90556d0f861f592501d7b704e2927a16c7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
