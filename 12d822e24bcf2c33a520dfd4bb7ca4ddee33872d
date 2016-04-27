@@ -22,6 +22,30 @@
       "revId": "12d822e24bcf2c33a520dfd4bb7ca4ddee33872d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_433e34b9",
+        "filename": "backend/salt/conf/collectd/memory.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-27T06:27:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_65ba6725",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 4
+      },
+      "revId": "12d822e24bcf2c33a520dfd4bb7ca4ddee33872d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
