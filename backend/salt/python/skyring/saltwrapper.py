@@ -575,6 +575,10 @@ def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict, ctxt=""):
     return failed_minions
 
 
+def GetMetricValueFromCollectd(nodes, table_name, ctxt=""):
+    return local.cmd(nodes, "collectd.getMetricFromCollectd", expr_form='list', [table_name])
+
+
 def GetFingerPrint(node, ctxt=""):
     d = _get_keys(node)
     if d['unaccepted_nodes'].get(node):
