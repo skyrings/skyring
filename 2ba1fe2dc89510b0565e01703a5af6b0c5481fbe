@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_7110db01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-28T11:31:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_be05127b",
+      "range": {
+        "startLine": 7,
+        "startChar": 46,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "2ba1fe2dc89510b0565e01703a5af6b0c5481fbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_9e080e93",
         "filename": "apps/skyring/monitoring.go",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2016-04-28T06:09:53Z",
       "side": 1,
       "message": "If total is zero, how %tage calculated ;)",
+      "range": {
+        "startLine": 434,
+        "startChar": 1,
+        "endLine": 434,
+        "endChar": 31
+      },
+      "revId": "2ba1fe2dc89510b0565e01703a5af6b0c5481fbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_1e6abe1a",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-28T11:31:16Z",
+      "side": 1,
+      "message": "It is not calculated it is written as 0.0 which is default value of float64",
+      "parentUuid": "baa041b7_9e080e93",
       "range": {
         "startLine": 434,
         "startChar": 1,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_de733614",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-28T11:31:16Z",
+      "side": 1,
+      "message": "We are doing same here",
+      "parentUuid": "baa041b7_7eff8a67",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 244,
+        "endChar": 2
+      },
+      "revId": "2ba1fe2dc89510b0565e01703a5af6b0c5481fbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_1ef51e82",
         "filename": "apps/skyring/util.go",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2016-04-28T06:09:53Z",
       "side": 1,
       "message": "Do we really need a function for this only? Cant we just say like below where we need this\n\nvar nodeNames []string\nfor _, node :\u003d range nodes {\n  nodeNames \u003d append(nodeNames, node.Hostname)\n}\n\nJust 3 lines of code...",
+      "range": {
+        "startLine": 524,
+        "startChar": 5,
+        "endLine": 524,
+        "endChar": 26
+      },
+      "revId": "2ba1fe2dc89510b0565e01703a5af6b0c5481fbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_be61923b",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-28T11:31:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_1ef51e82",
       "range": {
         "startLine": 524,
         "startChar": 5,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_9e648e49",
+        "filename": "salt_module/collectd.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-28T11:31:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_be2cf202",
+      "range": {
+        "startLine": 16,
+        "startChar": 7,
+        "endLine": 16,
+        "endChar": 12
+      },
+      "revId": "2ba1fe2dc89510b0565e01703a5af6b0c5481fbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_9e2feef5",
         "filename": "salt_module/collectd.py",
         "patchSetId": 4
@@ -128,6 +248,30 @@
       "writtenOn": "2016-04-28T06:09:53Z",
       "side": 1,
       "message": "Space around \u003d",
+      "range": {
+        "startLine": 25,
+        "startChar": 11,
+        "endLine": 25,
+        "endChar": 12
+      },
+      "revId": "2ba1fe2dc89510b0565e01703a5af6b0c5481fbe",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_7e5b0a88",
+        "filename": "salt_module/collectd.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-04-28T11:31:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_9e2feef5",
       "range": {
         "startLine": 25,
         "startChar": 11,
