@@ -22,6 +22,30 @@
       "revId": "5461a8ac914cc568bd01ae572fb8ff95a22608d8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_f1c98b79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-04-28T09:01:52Z",
+      "side": 1,
+      "message": "when skyring restart If any of the cluster is in creating state it makes state as failed and status as error :)",
+      "parentUuid": "baa041b7_e983e954",
+      "range": {
+        "startLine": 7,
+        "startChar": 10,
+        "endLine": 7,
+        "endChar": 61
+      },
+      "revId": "5461a8ac914cc568bd01ae572fb8ff95a22608d8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
