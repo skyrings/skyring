@@ -229,9 +229,7 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 	}
 
 	var cluster_memory_used float64
-	cluster_memory_used_count := len(nodes)
-	var cluster_memory_free float64
-	cluster_memory_free_count := len(nodes)
+	var cluster_memory_total float64
 	var net_memory_usage_percentage float64
 
 	var disk_reads float64
@@ -242,7 +240,6 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 	var latency float64
 	latency_count := len(nodes)
 	var cluster_cpu_user float64
-	cluster_cpu_user_count := len(nodes)
 
 	var cluster_interface_rx float64
 	cluster_interface_rx_count := len(nodes)
@@ -254,30 +251,24 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 		/*
 			Calculate Memory Used
 		*/
-		resource_name := monitoring.MEMORY + "." + monitoring.MEMORY + "-" + monitoring.USED
-		cluster_memory_used = cluster_memory_used + FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &cluster_memory_used_count)
+		memoryUtilization := node.Utilizations["memoryusage"].(models.Utilization)
+		cluster_memory_used = cluster_memory_used + float64(memoryUtilization.Used)
 
 		/*
 			Calculate Free Memory
 		*/
-		resource_name = monitoring.MEMORY + "." + monitoring.MEMORY + "-" + monitoring.FREE
-		cluster_memory_free = cluster_memory_free + FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &cluster_memory_free_count)
+		cluster_memory_total = cluster_memory_total + float64(memoryUtilization.Total)
 
 		/*
 			Calculate cpu user utilization
 		*/
-		var resource_name_error error
-		resource_name, resource_name_error = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": monitoring.CPU_USER})
-		if resource_name_error == nil {
-			cluster_cpu_user = cluster_cpu_user + FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &cluster_cpu_user_count)
-		} else {
-			logger.Get().Warning("%s - Failed to fetch cpu statistics from %v.Error %v", ctxt, node.Hostname, resource_name_error)
-		}
+		cpuUser := node.Utilizations["cpupercentageusage"].(float64)
+		cluster_cpu_user = cluster_cpu_user + cpuUser
 
 		/*
 			Calculate Latency
 		*/
-		resource_name, resource_name_error = GetMonitoringManager().GetResourceName(map[string]interface{}{"serverName": strings.Replace(curr_hostname, ".", "_", -1), "resource_name": monitoring.NETWORK_LATENCY})
+		resource_name, resource_name_error := GetMonitoringManager().GetResourceName(map[string]interface{}{"serverName": strings.Replace(curr_hostname, ".", "_", -1), "resource_name": monitoring.NETWORK_LATENCY})
 		if resource_name_error == nil {
 			latency = latency + FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &latency_count)
 		} else {
@@ -331,17 +322,16 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 	disk_writes = AverageAndUpdateDb(ctxt, disk_writes, disk_writes_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
 	UpdateMetricToTimeSeriesDb(ctxt, disk_reads+disk_writes, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
 
-	AverageAndUpdateDb(ctxt, cluster_memory_used, cluster_memory_used_count, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
-	AverageAndUpdateDb(ctxt, cluster_memory_free, cluster_memory_free_count, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.FREE_SPACE)
-	AverageAndUpdateDb(ctxt, cluster_cpu_user, cluster_cpu_user_count, time_stamp_str, table_name+monitoring.CPU_USER)
+	AverageAndUpdateDb(ctxt, cluster_memory_used, len(nodes), time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
+	AverageAndUpdateDb(ctxt, cluster_cpu_user, len(nodes), time_stamp_str, table_name+monitoring.CPU_USER)
 	AverageAndUpdateDb(ctxt, latency, latency_count, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
 
 	cluster_interface_rx = AverageAndUpdateDb(ctxt, cluster_interface_rx, cluster_interface_rx_count, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.RX)
 	cluster_interface_tx = AverageAndUpdateDb(ctxt, cluster_interface_tx, cluster_interface_tx_count, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.TX)
 	UpdateMetricToTimeSeriesDb(ctxt, cluster_interface_rx+cluster_interface_tx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
 
-	if cluster_memory_used+cluster_memory_free != 0.0 {
-		net_memory_usage_percentage = (cluster_memory_used * 100) / (cluster_memory_used + cluster_memory_free)
+	if cluster_memory_total != 0.0 {
+		net_memory_usage_percentage = (cluster_memory_used * 100) / cluster_memory_total
 	}
 	hostname := conf.SystemConfig.TimeSeriesDBConfig.Hostname
 	port := conf.SystemConfig.TimeSeriesDBConfig.DataPushPort
@@ -350,6 +340,18 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 		logger.Get().Warning("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
 	}
 	return
+}
+
+func ParseStatFromCollectd(statTag string, metric map[string]string) (float64, error) {
+	mValue, ok := metric[statTag]
+	if !ok {
+		return 0.0, fmt.Errorf("%v", metric["error"])
+	}
+	value, valueErr := strconv.ParseFloat(mValue, 64)
+	if valueErr != nil {
+		return 0.0, valueErr
+	}
+	return value, nil
 }
 
 func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
