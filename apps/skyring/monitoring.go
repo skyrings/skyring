@@ -352,6 +352,18 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 	return
 }
 
+func ParseStatFromCollectd(statTag string, metric map[string]string) (float64, error) {
+	mValue, ok := metric[statTag]
+	if !ok {
+		return 0.0, fmt.Errorf("%v", metric["error"])
+	}
+	value, valueErr := strconv.ParseFloat(mValue, 64)
+	if valueErr != nil {
+		return 0.0, valueErr
+	}
+	return value, nil
+}
+
 func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {

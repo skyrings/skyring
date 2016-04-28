@@ -520,3 +520,11 @@ func logAuditEvent(
 	}
 	return nil
 }
+
+func GetNodeNamesFromNodes(nodes []models.Node) []string {
+	var nodeNames []string
+	for _, node := range nodes {
+		nodeNames = append(nodeNames, node.Hostname)
+	}
+	return nodeNames
+}
