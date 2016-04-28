@@ -288,6 +288,18 @@ func (s Salt) EnableService(node string, service string, start bool, ctxt string
 	return
 }
 
+func (s Salt) GetMetricValueFromCollectd(nodes []string, metricName string, ctxt string) (result map[string]map[string]map[string]string, err error) {
+	result = make(map[string]map[string]map[string]string)
+	mutex.Lock()
+	defer mutex.Unlock()
+	if pyobj, loc_err := pyFuncs["GetMetricValueFromCollectd"].Call(nodes, metricName, ctxt); loc_err == nil {
+		err = gopy.Convert(pyobj, &result)
+	} else {
+		err = loc_err
+	}
+	return
+}
+
 func (s Salt) NodeUp(node string, ctxt string) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()

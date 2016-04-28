@@ -303,6 +303,11 @@ func (a SaltNodeManager) UpdateMonitoringConfiguration(nodes []string, config []
 	return failed_nodes, err
 }
 
+func (a SaltNodeManager) GetMetricValueFromCollectd(nodes []string, metricName string, ctxt string) (map[string]map[string]map[string]string, error) {
+	result, err := salt_backend.GetMetricValueFromCollectd(nodes, metricName, ctxt)
+	return result, err
+}
+
 func (a SaltNodeManager) EnableMonitoringPlugin(nodes []string, pluginName string, ctxt string) (map[string]string, error) {
 	failed_nodes, err := salt_backend.EnableMonitoringPlugin(nodes, pluginName, ctxt)
 	return failed_nodes, err
