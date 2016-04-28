@@ -51,6 +51,7 @@ var funcNames = [...]string{
 	"SyncModules",
 	"SetupSkynetService",
 	"GetFingerPrint",
+	"GetSingleValuedMetricFromCollectd",
 }
 
 var pyFuncs map[string]*gopy.PyFunction
@@ -283,6 +284,30 @@ func (s Salt) EnableService(node string, service string, start bool, ctxt string
 		err = gopy.Convert(pyobj, &status)
 	} else {
 		status = false
+		err = loc_err
+	}
+	return
+}
+
+func (s Salt) GetSingleValuedMetricFromCollectd(nodes []string, metricName string, ctxt string) (result map[string]models.CollectdSingleValuedMetric, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	result = make(map[string]models.CollectdSingleValuedMetric)
+	if pyobj, loc_err := pyFuncs["GetSingleValuedMetricFromCollectd"].Call(nodes, metricName, ctxt); loc_err == nil {
+		err = gopy.Convert(pyobj, &result)
+	} else {
+		err = loc_err
+	}
+	return
+}
+
+func (s Salt) GetCpuMetricFromCollectd(nodes []string, ctxt string) (result map[string]models.CollectdCpuMetric, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	result = make(map[string]models.CollectdCpuMetric)
+	if pyobj, loc_err := pyFuncs["GetSingleValuedMetricFromCollectd"].Call(nodes, monitoring.CPU, ctxt); loc_err == nil {
+		err = gopy.Convert(pyobj, &result)
+	} else {
 		err = loc_err
 	}
 	return
