@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_063710e4",
+        "filename": "apps/skyring/import_cluster.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-29T14:37:02Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "baa041b7_beeab20d",
+      "range": {
+        "startLine": 78,
+        "startChar": 7,
+        "endLine": 78,
+        "endChar": 28
+      },
+      "revId": "8fa03c90556d0f861f592501d7b704e2927a16c7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_5bce18b5",
         "filename": "apps/skyring/import_cluster.go",
         "patchSetId": 9
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_4624f8ad",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-29T14:37:02Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "baa041b7_7ef42af1",
+      "range": {
+        "startLine": 393,
+        "startChar": 17,
+        "endLine": 393,
+        "endChar": 35
+      },
+      "revId": "8fa03c90556d0f861f592501d7b704e2927a16c7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_ce626bad",
         "filename": "apps/skyring/routes.go",
         "patchSetId": 9
@@ -178,6 +226,30 @@
       "side": 1,
       "message": "Its top level api like /api/importcluster so kept name like this.\n\nIf you still feel to call /api/import, I would change it.",
       "parentUuid": "baa041b7_ce626bad",
+      "range": {
+        "startLine": 397,
+        "startChar": 17,
+        "endLine": 397,
+        "endChar": 30
+      },
+      "revId": "8fa03c90556d0f861f592501d7b704e2927a16c7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_263c54c7",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 9
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-29T14:37:02Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "baa041b7_5ef726f5",
       "range": {
         "startLine": 397,
         "startChar": 17,
