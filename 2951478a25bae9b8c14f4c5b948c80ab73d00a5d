@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_ea2bd492",
+        "filename": "apps/skyring/util.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-04-29T04:54:51Z",
+      "side": 1,
+      "message": "Do we still need this function?",
+      "range": {
+        "startLine": 524,
+        "startChar": 5,
+        "endLine": 524,
+        "endChar": 26
+      },
+      "revId": "2951478a25bae9b8c14f4c5b948c80ab73d00a5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
