@@ -22,6 +22,52 @@
       "revId": "2951478a25bae9b8c14f4c5b948c80ab73d00a5d",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_a5edfd26",
+        "filename": "salt_module/collectd.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-29T07:38:33Z",
+      "side": 1,
+      "message": "Can you rename one of these funcs if it does not take too much of time. really confusing :)",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 25
+      },
+      "revId": "2951478a25bae9b8c14f4c5b948c80ab73d00a5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_a5d4dd46",
+        "filename": "skyring.spec",
+        "patchSetId": 8
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-04-29T07:38:33Z",
+      "side": 1,
+      "message": "You need to clear the files so need an entry under %files section",
+      "range": {
+        "startLine": 91,
+        "startChar": 1,
+        "endLine": 92,
+        "endChar": 72
+      },
+      "revId": "2951478a25bae9b8c14f4c5b948c80ab73d00a5d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
