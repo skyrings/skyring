@@ -192,6 +192,8 @@ def run():
         PushNodeStatusEvent(data)
     elif data.get('tag') and fnmatch.fnmatch(data['tag'], 'skyring/*'):
         PushNodeEvent(data)
+    elif data.get('tag') and fnmatch.fnmatch(data['tag'], 'calamari/*'):
+        PushNodeEvent(data)
     elif tag and fnmatch.fnmatch(tag, 'salt/auth'):
         PushUnManagedNode(data)
     elif tag and fnmatch.fnmatch(tag, 'salt/job/*'):
