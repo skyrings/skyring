@@ -1236,6 +1236,9 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 	} else {
 		cSummary.MostUsedStorages = stotrageUsage
 	}
+	if len(stotrageUsage) == 0 {
+		cSummary.MostUsedStorages = make([]models.StorageUsage, 0)
+	}
 
 	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchClusterDetailsFromProvider(ctxt, *cluster_id)
 	if otherDetailsFetchError != nil {
@@ -1325,9 +1328,6 @@ func ComputeSystemSummary(p map[string]interface{}) {
 			return
 		}
 		logger.Get().Error("%s - Failed to fetch clusters.Err %v", ctxt, clusterFetchError)
-	}
-	if len(clusters) == 0 {
-		return
 	}
 
 	/*
@@ -1511,13 +1511,17 @@ func ComputeSystemSummary(p map[string]interface{}) {
 
 	system.StorageProfileUsage = net_storage_profile_utilization
 	system.ProviderMonitoringDetails = make(map[string]map[string]interface{})
+	var cpuPercentUsed float64
+	if cluster_cpu_user_count > 0 {
+		cpuPercentUsed = float64(cluster_cpu_user) / float64(cluster_cpu_user_count)
+	}
 	systemUtilizations := map[string]interface{}{
 		"memoryusage": models.Utilization{
 			Used:        int64(net_memory_used),
 			Total:       int64(net_memory_total),
 			PercentUsed: memory_percent,
 		},
-		"cpupercentageusage": float64(cluster_cpu_user) / float64(cluster_cpu_user_count),
+		"cpupercentageusage": cpuPercentUsed,
 	}
 	system.Utilizations = systemUtilizations
 	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchMonitoringDetailsFromProviders(ctxt)

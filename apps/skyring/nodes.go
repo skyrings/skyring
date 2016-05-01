@@ -651,44 +651,46 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 		w.Write(bytes)
 		return
 	}
-	err = provider.Client.Call(fmt.Sprintf("%s.%s",
-		provider.Name, node_post_functions["servicecount"]),
-		models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body, RpcRequestContext: ctxt},
-		&result)
-	if err != nil || result.Status.StatusCode != http.StatusOK {
-		logger.Get().Error(
-			"%s-Error getting service count details for node: %v. error: %v",
-			ctxt,
-			*node_id,
-			err)
-		bytes, err := json.Marshal(nodeSummary)
-		if err != nil {
-			HttpResponse(
-				w,
-				http.StatusInternalServerError,
-				fmt.Sprintf("Error Unable to marshall the node summary details of node %v . error: %v", *node_id, err))
+	if provider != nil {
+		err = provider.Client.Call(fmt.Sprintf("%s.%s",
+			provider.Name, node_post_functions["servicecount"]),
+			models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body, RpcRequestContext: ctxt},
+			&result)
+		if err != nil || result.Status.StatusCode != http.StatusOK {
+			logger.Get().Error(
+				"%s-Error getting service count details for node: %v. error: %v",
+				ctxt,
+				*node_id,
+				err)
+			bytes, err := json.Marshal(nodeSummary)
+			if err != nil {
+				HttpResponse(
+					w,
+					http.StatusInternalServerError,
+					fmt.Sprintf("Error Unable to marshall the node summary details of node %v . error: %v", *node_id, err))
+				return
+			}
+			w.WriteHeader(http.StatusPartialContent)
+			w.Write(bytes)
 			return
 		}
-		w.WriteHeader(http.StatusPartialContent)
-		w.Write(bytes)
-		return
-	}
-	ServiceDetails := make(map[string]interface{})
-	if err := json.Unmarshal(result.Data.Result, &ServiceDetails); err != nil {
-		logger.Get().Error("%s-Unable to unmarshal service count details for node : %v . error: %v", ctxt, *node_id, err)
-		bytes, err := json.Marshal(nodeSummary)
-		if err != nil {
-			HttpResponse(
-				w,
-				http.StatusInternalServerError,
-				fmt.Sprintf("Error Unable to marshall the node summary details of node %v . error: %v", *node_id, err))
+		ServiceDetails := make(map[string]interface{})
+		if err := json.Unmarshal(result.Data.Result, &ServiceDetails); err != nil {
+			logger.Get().Error("%s-Unable to unmarshal service count details for node : %v . error: %v", ctxt, *node_id, err)
+			bytes, err := json.Marshal(nodeSummary)
+			if err != nil {
+				HttpResponse(
+					w,
+					http.StatusInternalServerError,
+					fmt.Sprintf("Error Unable to marshall the node summary details of node %v . error: %v", *node_id, err))
+				return
+			}
+			w.WriteHeader(http.StatusPartialContent)
+			w.Write(bytes)
 			return
 		}
-		w.WriteHeader(http.StatusPartialContent)
-		w.Write(bytes)
-		return
+		nodeSummary["servicedetails"] = ServiceDetails
 	}
-	nodeSummary["servicedetails"] = ServiceDetails
 	json.NewEncoder(w).Encode(nodeSummary)
 }
 
