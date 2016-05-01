@@ -231,7 +231,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 	*/
 	nodesMemory, nodesMemoryError := GetCoreNodeManager().GetSingleValuedMetricFromCollectd(nodeNames, monitoring.MEMORY, ctxt)
 	if nodesMemoryError != nil {
-		logger.Get().Error("Failed to sync memory utilizations.Error %v", nodesMemoryError)
+		logger.Get().Warning("Failed to sync memory utilizations.Error %v", nodesMemoryError)
 	}
 
 	/*
@@ -239,7 +239,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 	*/
 	nodesCPU, cpuErr := GetCoreNodeManager().GetCpuMetricFromCollectd(nodeNames, ctxt)
 	if cpuErr != nil {
-		logger.Get().Error("Failed to sync cpu stats.Error %v", cpuErr)
+		logger.Get().Warning("Failed to sync cpu stats.Error %v", cpuErr)
 	}
 
 	/*
@@ -247,7 +247,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 	*/
 	nodesSwap, swapErr := GetCoreNodeManager().GetSingleValuedMetricFromCollectd(nodeNames, monitoring.SWAP, ctxt)
 	if swapErr != nil {
-		logger.Get().Error("Failed to sync swap used.Error %v", swapErr)
+		logger.Get().Warning("Failed to sync swap used.Error %v", swapErr)
 	}
 
 	var err error
@@ -293,7 +293,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		if nodesMemoryError == nil {
 			memory_usage_percent, err = ParseStatFromCollectd(nodesMemory[node.Hostname].PercentUsed)
 			if err != nil {
-				logger.Get().Error("Failed to get memory usage percentage from node %v.err %v", node.Hostname, err)
+				logger.Get().Warning("Failed to get memory usage percentage from node %v.err %v", node.Hostname, err)
 			}
 		}
 
@@ -302,7 +302,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		if nodesMemoryError == nil {
 			memory_total, err = ParseStatFromCollectd(nodesMemory[node.Hostname].Total)
 			if err != nil {
-				logger.Get().Error("Failed to get total memory of node %v.err %v", node.Hostname, err)
+				logger.Get().Warning("Failed to get total memory of node %v.err %v", node.Hostname, err)
 			}
 		}
 
@@ -311,7 +311,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		if nodesMemoryError == nil {
 			memory_used, err = ParseStatFromCollectd(nodesMemory[node.Hostname].Used)
 			if err != nil {
-				logger.Get().Error("Failed to get memory usage percentage from node %v.err %v", node.Hostname, err)
+				logger.Get().Warning("Failed to get memory usage percentage from node %v.err %v", node.Hostname, err)
 			}
 		}
 
@@ -324,7 +324,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		if cpuErr == nil {
 			cpu_user, err = ParseStatFromCollectd(nodesCPU[node.Hostname].PercentUsed)
 			if err != nil {
-				logger.Get().Error("Failed to get cpu usage percentage from node %v.err %v", node.Hostname, err)
+				logger.Get().Warning("Failed to get cpu usage percentage from node %v.err %v", node.Hostname, err)
 			}
 		}
 
@@ -339,7 +339,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		if swapErr == nil {
 			swap_used, err = ParseStatFromCollectd(nodesSwap[node.Hostname].Used)
 			if err != nil {
-				logger.Get().Error("Failed to get swap used from node %v.err %v", node.Hostname, err)
+				logger.Get().Warning("Failed to get swap used from node %v.err %v", node.Hostname, err)
 			}
 		}
 
@@ -347,7 +347,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		if swapErr == nil {
 			swap_usage_percent, err = ParseStatFromCollectd(nodesSwap[node.Hostname].PercentUsed)
 			if err != nil {
-				logger.Get().Error("Failed to get swap usage percentage from node %v.err %v", node.Hostname, err)
+				logger.Get().Warning("Failed to get swap usage percentage from node %v.err %v", node.Hostname, err)
 			}
 		}
 
@@ -356,7 +356,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		if swapErr == nil {
 			swap_total, err = ParseStatFromCollectd(nodesSwap[node.Hostname].Total)
 			if err != nil {
-				logger.Get().Error("Failed to get total swap from node %v.err %v", node.Hostname, err)
+				logger.Get().Warning("Failed to get total swap from node %v.err %v", node.Hostname, err)
 			}
 		}
 

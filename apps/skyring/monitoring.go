@@ -1326,9 +1326,6 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		}
 		logger.Get().Error("%s - Failed to fetch clusters.Err %v", ctxt, clusterFetchError)
 	}
-	if len(clusters) == 0 {
-		return
-	}
 
 	/*
 		Count the number of unmanaged nodes
@@ -1511,13 +1508,17 @@ func ComputeSystemSummary(p map[string]interface{}) {
 
 	system.StorageProfileUsage = net_storage_profile_utilization
 	system.ProviderMonitoringDetails = make(map[string]map[string]interface{})
+	var cpuPercentUsed float64
+	if cluster_cpu_user_count > 0 {
+		cpuPercentUsed = float64(cluster_cpu_user) / float64(cluster_cpu_user_count)
+	}
 	systemUtilizations := map[string]interface{}{
 		"memoryusage": models.Utilization{
 			Used:        int64(net_memory_used),
 			Total:       int64(net_memory_total),
 			PercentUsed: memory_percent,
 		},
-		"cpupercentageusage": float64(cluster_cpu_user) / float64(cluster_cpu_user_count),
+		"cpupercentageusage": cpuPercentUsed,
 	}
 	system.Utilizations = systemUtilizations
 	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchMonitoringDetailsFromProviders(ctxt)
