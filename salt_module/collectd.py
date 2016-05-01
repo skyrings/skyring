@@ -66,7 +66,10 @@ def getSingleValuedMetricsFromCollectd(resource_name):
     ret_val = {}
     table_val = {}
     for table_name in resource_collectd_table_dict[resource_name]:
-        table_val[collectd_table_stat_type[table_name]] = getMetricFromCollectd(table_name)["value"]
+        if "value" in getMetricFromCollectd(table_name):
+            table_val[collectd_table_stat_type[table_name]] = getMetricFromCollectd(table_name)["value"]
+        else:
+            table_val[collectd_table_stat_type[table_name]] = getMetricFromCollectd(table_name)["error"]
     return table_val
 
 

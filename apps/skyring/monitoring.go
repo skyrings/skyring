@@ -466,7 +466,7 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 func ParseStatFromCollectd(mValue string) (float64, error) {
 	value, valueErr := strconv.ParseFloat(mValue, 64)
 	if valueErr != nil {
-		return 0.0, fmt.Errorf("%v", value)
+		return 0.0, fmt.Errorf("%v", mValue)
 	}
 	return value, nil
 }
