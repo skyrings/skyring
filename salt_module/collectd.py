@@ -56,10 +56,11 @@ def getMetricFromCollectd(table_name):
             else:
                 values["error"] = err
         else:
-            return err
+            values["error"] = err
         return values
     except skyring_utils.CmdExecFailed as e:
         values["error"] = str(e)
+        return values
 
 
 def getSingleValuedMetricsFromCollectd(resource_name):
