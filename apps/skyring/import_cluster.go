@@ -19,6 +19,7 @@ import (
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
 	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/monitoring"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring-common/tools/uuid"
@@ -253,6 +254,13 @@ func (a *App) ImportCluster(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 				}
+				// Setup monitoring for the imported cluster
+				if err := setupMonitoring(request.BootstrapNode); err != nil {
+					logger.Get().Warning(
+						"%s-Failed to setup monitoring for the cluster. error: %v",
+						ctxt,
+						err)
+				}
 				return
 			}
 		}
@@ -324,4 +332,29 @@ func checkAndAcceptNode(node string, ctxt string) (bool, error) {
 		}
 	}
 	return true, nil
+}
+
+func setupMonitoring(bootstrapNode string) error {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	var node models.Node
+	if err := coll.Find(bson.M{"hostname": bootstrapNode}).One(&node); err != nil {
+		return err
+	}
+	collCluster := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+	var cluster models.Cluster
+	if err := collCluster.Find(bson.M{"clusterid": node.ClusterId}).One(&cluster); err != nil {
+		return err
+	}
+
+	var monitoringState models.MonitoringState
+	monitoringState.Plugins = monitoring.GetDefaultThresholdValues()
+	if err := updatePluginsInDb(bson.M{"name": cluster.Name}, monitoringState); err != nil {
+		return err
+	}
+
+	ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
+
+	return nil
 }
