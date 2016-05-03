@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_fb3b9d36",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-03T08:56:28Z",
+      "side": 1,
+      "message": "What I meant is to loop through all the providers and add logrorate logic for them..",
+      "revId": "f1b5cced63e2fbb3fd256eb88794c1814a41b6cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
