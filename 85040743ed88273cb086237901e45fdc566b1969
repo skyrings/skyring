@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_bb2bd593",
+        "filename": "apps/skyring/import_cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-05-03T11:04:32Z",
+      "side": 1,
+      "message": "Why are we updating the plugins to db here? Its already set in cluster right? Are we planning to allow overriding thresholds @ expand cluster time also?\n\nAlso, I think the configuration should be fetched from cluster and enforced on the new node. as in that case the new node which will have the default thresholds configured during accept node flow will now get the cluster configurations on it.\n\nAlso a failure in updating the cluster wide configurations to the new node should be recorded in cluster.Monitoring.StaleNodes by appending to possibly already existing list the field contains",
+      "range": {
+        "startLine": 352,
+        "startChar": 1,
+        "endLine": 352,
+        "endChar": 65
+      },
+      "revId": "85040743ed88273cb086237901e45fdc566b1969",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
