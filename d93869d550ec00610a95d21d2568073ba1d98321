@@ -22,6 +22,30 @@
       "revId": "d93869d550ec00610a95d21d2568073ba1d98321",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_dbe8d912",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-03T06:29:14Z",
+      "side": 1,
+      "message": "It ok if we create file like this.\nBut for each of the provider, we should have one file created.\nHere I see same name for both the files.",
+      "parentUuid": "baa041b7_1bdf616a",
+      "range": {
+        "startLine": 44,
+        "startChar": 1,
+        "endLine": 67,
+        "endChar": 3
+      },
+      "revId": "d93869d550ec00610a95d21d2568073ba1d98321",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
