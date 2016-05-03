@@ -21,6 +21,7 @@ resource_collectd_table_dict = {
     'memory': ['memory/memory-used', 'aggregation-memory-sum/memory', 'memory/percent-used'],
     'cpu': ['cpu/percent-user'],
     'swap': ['swap/swap-used', 'aggregation-swap-sum/swap', 'swap/percent-used'],
+    'network': ['interface-average/bytes-total_bandwidth', 'interface-average/bytes-total_bandwidth_used', 'interface-average/percent-network_utilization'],
 }
 
 collectd_table_stat_type = {
@@ -31,6 +32,9 @@ collectd_table_stat_type = {
     'swap/swap-used': 'Used',
     'aggregation-swap-sum/swap': 'Total',
     'swap/percent-used': 'PercentUsed',
+    'interface-average/bytes-total_bandwidth': 'Total',
+    'interface-average/bytes-total_bandwidth_used': 'Used',
+    'interface-average/percent-network_utilization': 'PercentUsed',
 }
 
 def getMetricFromCollectd(table_name):
