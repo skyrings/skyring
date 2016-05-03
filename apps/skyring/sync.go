@@ -250,6 +250,14 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		logger.Get().Warning("Failed to sync swap used.Error %v", swapErr)
 	}
 
+	/*
+		Get Network utilization
+	*/
+	nwUtilization, nwUtilizationErr := GetCoreNodeManager().GetSingleValuedMetricFromCollectd(nodeNames, monitoring.NETWORK, ctxt)
+	if nwUtilizationErr != nil {
+		logger.Get().Warning("Failed to sync network utilization.Error %v", nwUtilizationErr)
+	}
+
 	var err error
 
 	for _, node := range nodes {
@@ -360,6 +368,34 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 			}
 		}
 
+		//Network used
+		var nwPreviousUtilization models.Utilization
+		nwPreviousUtilization = node.Utilizations["networkusage"]
+
+		nwUsed := float64(nwPreviousUtilization.Used)
+		if nwUtilizationErr == nil {
+			nwUsed, err = ParseStatFromCollectd(nwUtilization[node.Hostname].Used)
+			if err != nil {
+				logger.Get().Warning("Failed to get network bandwidth used of node %v.err %v", node.Hostname, err)
+			}
+		}
+
+		nwUsagePercentage := float64(nwPreviousUtilization.PercentUsed)
+		if nwUtilizationErr == nil {
+			nwUsagePercentage, err = ParseStatFromCollectd(nwUtilization[node.Hostname].PercentUsed)
+			if err != nil {
+				logger.Get().Warning("Failed to get network bandwidth usage of node %v.err %v", node.Hostname, err)
+			}
+		}
+
+		nwBandwidth := float64(nwPreviousUtilization.Total)
+		if nwUtilizationErr == nil {
+			nwBandwidth, err = ParseStatFromCollectd(nwUtilization[node.Hostname].Total)
+			if err != nil {
+				logger.Get().Warning("Failed to get network bandwidth of node %v.err %v", node.Hostname, err)
+			}
+		}
+
 		coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 		utilizations := map[string]models.Utilization{
 			"memoryusage": {
@@ -381,6 +417,11 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 				Used:        int64(swap_used),
 				Total:       int64(swap_total),
 				PercentUsed: swap_usage_percent,
+			},
+			"networkusage": {
+				Used:        int64(nwUsed),
+				Total:       int64(nwBandwidth),
+				PercentUsed: nwUsagePercentage,
 			},
 		}
 
