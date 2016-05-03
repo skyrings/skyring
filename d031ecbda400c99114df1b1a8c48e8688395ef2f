@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_7bd42d46",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-03T06:31:25Z",
+      "side": 1,
+      "message": "Name looks very generic and looks like you are clearing the cluster from USM. Rather I would prefer a name like \"FailStillCreatingClusters\"",
+      "range": {
+        "startLine": 885,
+        "startChar": 5,
+        "endLine": 885,
+        "endChar": 19
+      },
+      "revId": "d031ecbda400c99114df1b1a8c48e8688395ef2f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
