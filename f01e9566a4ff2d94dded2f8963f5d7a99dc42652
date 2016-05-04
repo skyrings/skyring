@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_377d916e",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-05-04T15:39:27Z",
+      "side": 1,
+      "message": "Why this is required???",
+      "range": {
+        "startLine": 753,
+        "startChar": 2,
+        "endLine": 758,
+        "endChar": 85
+      },
+      "revId": "f01e9566a4ff2d94dded2f8963f5d7a99dc42652",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
