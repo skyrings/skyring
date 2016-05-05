@@ -419,11 +419,25 @@ func (a *App) GET_Storages(w http.ResponseWriter, r *http.Request) {
 
 	params := r.URL.Query()
 	storage_type := params.Get("type")
+	storage_status := params.Get("status")
 
 	var filter bson.M = make(map[string]interface{})
 	filter["clusterid"] = *cluster_id
 	if storage_type != "" {
 		filter["type"] = storage_type
+	}
+	if storage_status != "" {
+		switch storage_status {
+		case "ok":
+			filter["status"] = models.STORAGE_STATUS_OK
+		case "warning":
+			filter["status"] = models.STORAGE_STATUS_WARN
+		case "error":
+			filter["status"] = models.STORAGE_STATUS_ERROR
+		default:
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid status %s for storage", storage_status))
+			return
+		}
 	}
 
 	sessionCopy := db.GetDatastore().Copy()
