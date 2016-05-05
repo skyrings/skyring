@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_b04768bb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-05T10:02:18Z",
+      "side": 1,
+      "message": "\"skyring: Import user without email address\n\nThis patch allows the user to be added without an email\"\n\n\nBug-URL is already there below. Why to add in top level comment?",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "0d121978d0a5014b2ce88b882ab0a8509c78df56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_300a387a",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-05T10:02:18Z",
+      "side": 1,
+      "message": "Email not mentioned for the user ??",
+      "range": {
+        "startLine": 384,
+        "startChar": 24,
+        "endLine": 384,
+        "endChar": 59
+      },
+      "revId": "0d121978d0a5014b2ce88b882ab0a8509c78df56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
