@@ -536,9 +536,26 @@ func (a *App) GET_AllStorages(w http.ResponseWriter, r *http.Request) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
+	var filter bson.M = make(map[string]interface{})
+	params := r.URL.Query()
+	status_str := params.Get("status")
+	if status_str != "" {
+		switch status_str {
+		case "ok":
+			filter["status"] = models.STORAGE_STATUS_OK
+		case "warning":
+			filter["status"] = models.STORAGE_STATUS_WARN
+		case "error":
+			filter["status"] = models.STORAGE_STATUS_ERROR
+		default:
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid status %s for storages", status_str))
+			return
+		}
+	}
+
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
 	var storages models.Storages
-	if err := collection.Find(nil).All(&storages); err != nil {
+	if err := collection.Find(filter).All(&storages); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 		logger.Get().Error("%s-Error getting the storage list. error: %v", ctxt, err)
 		return
