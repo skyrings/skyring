@@ -71,19 +71,30 @@ func Authenticate(directory models.Directory, url string, user string, passwd st
 		return err
 	}
 	ldap.SetOption(openldap.LDAP_OPT_PROTOCOL_VERSION, openldap.LDAP_VERSION3)
-	if directory.Uid != "" {
-		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", directory.Uid, user, directory.Base), passwd)
-
-		if err != nil {
+	if strings.ContainsAny(directory.DomainAdmin, "@") || strings.ContainsAny(directory.DomainAdmin, "=") {
+		if err = ldap.Bind(directory.DomainAdmin, passwd); err != nil {
 			logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
 			return err
 		}
 	} else {
-		if ldap.Bind(fmt.Sprintf("uid=%s,%s", user, directory.Base), passwd) != nil {
-			err = ldap.Bind(fmt.Sprintf("cn=%s,%s", user, directory.Base), passwd)
+		if directory.Uid != "" {
+			err = ldap.Bind(fmt.Sprintf("%s=%s,%s", directory.Uid, user, directory.Base), passwd)
 			if err != nil {
-				logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
+				logger.Get().Error("Errors in binding to LDAP Server:%s. error: %v", url, err)
 				return err
+			}
+		} else {
+			if ldap.Bind(fmt.Sprintf("uid=%s,%s", user, directory.Base), passwd) != nil {
+				err = ldap.Bind(fmt.Sprintf("cn=%s,%s", user, directory.Base), passwd)
+				if err != nil {
+					// Re-initialization is required here!
+					ldap, _ = openldap.Initialize(url)
+					ldap.SetOption(openldap.LDAP_OPT_PROTOCOL_VERSION, openldap.LDAP_VERSION3)
+					if ldap.Bind(fmt.Sprintf("cn=%s,%s", user, directory.Base), passwd) != nil {
+						logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
+					}
+					return err
+				}
 			}
 		}
 	}
@@ -285,10 +296,27 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 		hkey := make([]byte, 100)
 		stream = cipher.NewOFB(block, iv)
 		stream.XORKeyStream(hkey, ciphertext[aes.BlockSize:])
-		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", Uid, directory.DomainAdmin, directory.Base), string(hkey))
-		if err != nil {
-			logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
-			return externalUsers, err
+		if strings.ContainsAny(directory.DomainAdmin, "@") || strings.ContainsAny(directory.DomainAdmin, "=") {
+			if err = ldap.Bind(directory.DomainAdmin, string(hkey)); err != nil {
+				logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
+			}
+		} else if directory.Uid != "" {
+			if err = ldap.Bind(fmt.Sprintf("%s=%s,%s", directory.Uid, directory.DomainAdmin, directory.Base), string(hkey)); err != nil {
+				logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
+				return externalUsers, err
+			}
+		} else {
+			if err = ldap.Bind(fmt.Sprintf("cn=%s,%s", directory.DomainAdmin, directory.Base), string(hkey)); err != nil {
+				ldap, err = openldap.Initialize(url)
+				if err != nil {
+					logger.Get().Error("failed to connect the LDAP/AD server. error: %v", err)
+					return externalUsers, err
+				}
+				if err = ldap.Bind(fmt.Sprintf("uid=%s,%s", directory.DomainAdmin, directory.Base), string(hkey)); err != nil {
+					logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
+					return externalUsers, err
+				}
+			}
 		}
 	}
 
@@ -300,22 +328,32 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 	// names contains the word 'tim'
 	// Possible search strings 'mail=t*redhat.com' / 'tim*' / '*john*' / '*peter'
 	filter := "(objectclass=*)"
+	attributes := []string{Uid, DisplayName, FirstName, LastName, Email}
 	if len(search) > 0 {
 		if strings.Contains(search, "=") {
 			filter = fmt.Sprintf("(%s*)", search)
 		} else if strings.Contains(search, "*") {
-			filter = fmt.Sprintf("(cn=%s)", search)
+			filter = fmt.Sprintf("(%s=%s)", Uid, search)
 		} else {
-			filter = fmt.Sprintf("(cn=*%s*)", search)
+			filter = fmt.Sprintf("(%s=*%s*)", Uid, search)
 		}
 	}
 
-	attributes := []string{Uid, DisplayName, FirstName, LastName, Email}
 	rv, err := ldap.SearchAll(directory.Base, scope, filter, attributes)
-
 	if err != nil {
 		logger.Get().Error("Failed to search LDAP/AD server. error: %v", err)
 		return externalUsers, err
+	}
+	if rv.Entries() == nil {
+		if !strings.Contains(search, "=") {
+			r := strings.NewReplacer("cn", "Uid", "uid", "cn", "CN", "Uid", "Uid", "cn")
+			attributes := []string{r.Replace(Uid), DisplayName, FirstName, LastName, Email}
+			rv, err = ldap.SearchAll(directory.Base, scope, r.Replace(filter), attributes)
+			if rv.Entries() != nil {
+				Uid = r.Replace(Uid)
+				logger.Get().Info("Update the search attribute:%s correctly into the db!", Uid)
+			}
+		}
 	}
 
 	from := (page-1)*count + 1
@@ -336,6 +374,8 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 			case Uid:
 				user.Username = strings.Join(attr.Values(), ", ")
 			case Email:
+				user.Email = strings.Join(attr.Values(), ", ")
+			case "email":
 				user.Email = strings.Join(attr.Values(), ", ")
 			case FirstName:
 				user.FirstName = strings.Join(attr.Values(), ", ")
