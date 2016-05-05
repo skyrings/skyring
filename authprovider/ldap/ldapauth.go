@@ -324,6 +324,10 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 				user.Username = strings.Join(attr.Values(), ", ")
 			case Email:
 				user.Email = strings.Join(attr.Values(), ", ")
+			// Some setup may have an attribute like mail or email
+			// or operator can't be used between strings to combind cases
+			case "email":
+				user.Email = strings.Join(attr.Values(), ", ")
 			case FirstName:
 				user.FirstName = strings.Join(attr.Values(), ", ")
 			case LastName:
@@ -368,8 +372,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		return mkerror("no username given")
 	}
 	if user.Email == "" {
-		logger.Get().Error("no email given")
-		return mkerror("no email given")
+		logger.Get().Warning("Email not mentioned for the user")
 	}
 
 	user.Status = true
