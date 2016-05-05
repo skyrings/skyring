@@ -381,8 +381,7 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 		return mkerror("no username given")
 	}
 	if user.Email == "" {
-		logger.Get().Error("no email given")
-		return mkerror("no email given")
+		logger.Get().Warning("User does not have an email address")
 	}
 
 	user.Status = true
