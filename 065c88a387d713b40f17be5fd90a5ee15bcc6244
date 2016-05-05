@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_30aeb881",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-05T09:57:44Z",
+      "side": 1,
+      "message": "skyring:",
+      "revId": "065c88a387d713b40f17be5fd90a5ee15bcc6244",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_b0c2c832",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-05T09:57:44Z",
+      "side": 1,
+      "message": "Can we merge these two and say \"else if \" ??",
+      "range": {
+        "startLine": 79,
+        "startChar": 1,
+        "endLine": 80,
+        "endChar": 26
+      },
+      "revId": "065c88a387d713b40f17be5fd90a5ee15bcc6244",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_50e49cdf",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-05T09:57:44Z",
+      "side": 1,
+      "message": "This could be top level else if previous comment taken care",
+      "range": {
+        "startLine": 86,
+        "startChar": 2,
+        "endLine": 86,
+        "endChar": 10
+      },
+      "revId": "065c88a387d713b40f17be5fd90a5ee15bcc6244",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_d0d0acf8",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-05T09:57:44Z",
+      "side": 1,
+      "message": "These conditions can be merged using \u0026\u0026",
+      "range": {
+        "startLine": 347,
+        "startChar": 1,
+        "endLine": 348,
+        "endChar": 37
+      },
+      "revId": "065c88a387d713b40f17be5fd90a5ee15bcc6244",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_1001746a",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-05T09:57:44Z",
+      "side": 1,
+      "message": "These two cases can be merged in one",
+      "range": {
+        "startLine": 376,
+        "startChar": 3,
+        "endLine": 379,
+        "endChar": 50
+      },
+      "revId": "065c88a387d713b40f17be5fd90a5ee15bcc6244",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
