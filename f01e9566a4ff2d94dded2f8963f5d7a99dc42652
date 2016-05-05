@@ -22,6 +22,30 @@
       "revId": "f01e9566a4ff2d94dded2f8963f5d7a99dc42652",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_32459f6f",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-05T04:32:07Z",
+      "side": 1,
+      "message": "@Nishanth, the provider name he wants to show as \"Ceph\" and not \"ceph\" as suggested by Jeff I feel.\n\n@Gowtham, again you are changing and putting the details in DB.\n\nWhat we discussed was to change the name just before returning to UI and api output and not in DB..\n\nYou should have this logic written in /apps/skyring/about.go --\u003e About() function after line#38 :)",
+      "parentUuid": "baa041b7_377d916e",
+      "range": {
+        "startLine": 753,
+        "startChar": 2,
+        "endLine": 758,
+        "endChar": 85
+      },
+      "revId": "f01e9566a4ff2d94dded2f8963f5d7a99dc42652",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
