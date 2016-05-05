@@ -331,7 +331,11 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 		user.LastName = val.(string)
 	}
 	if val, ok := m["notificationenabled"]; ok {
-		user.NotificationEnabled = val.(bool)
+		if user.Email == "" {
+			user.NotificationEnabled = false
+		} else {
+			user.NotificationEnabled = val.(bool)
+		}
 	}
 	if val, ok := m["password"]; ok {
 		password = val.(string)
