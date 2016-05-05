@@ -1652,12 +1652,29 @@ func (a *App) GET_ClusterNodes(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the cluster id: %s. error: %v", cluster_id_str, err))
 		return
 	}
+	var filter bson.M = make(map[string]interface{})
+	filter["clusterid"] = cluster_id
+	params := r.URL.Query()
+	node_status := params.Get("status")
+	if node_status != "" {
+		switch node_status {
+		case "ok":
+			filter["status"] = models.NODE_STATUS_OK
+		case "warning":
+			filter["status"] = models.NODE_STATUS_WARN
+		case "error":
+			filter["status"] = models.NODE_STATUS_ERROR
+		default:
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid status %s for cluster node", node_status))
+			return
+		}
+	}
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	var nodes models.Nodes
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&nodes); err != nil {
+	if err := coll.Find(filter).All(&nodes); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the nodes for cluster: %v. error: %v", *cluster_id, err))
 		logger.Get().Error("%s-Error getting the nodes for cluster: %v. error: %v", ctxt, *cluster_id, err)
 		return
