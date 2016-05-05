@@ -232,7 +232,9 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 		// page 0. Set page number to home page / first page number
 		// (which is number 1) if the request page no is negative
 		if pageNo < 1 {
-			pageNo = 1
+			logger.Get().Error("%s-Not a valid page number for pagination :%d", ctxt, pageNo)
+			HandleHttpError(rw, errors.New("search: not valid numbers for pagination"))
+			return
 		}
 	}
 
@@ -246,7 +248,12 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 			HandleHttpError(rw, err)
 			return
 		}
-		if pageSize > models.LDAP_USERS_PER_PAGE || pageSize < 1 {
+		if pageSize < 1 {
+			logger.Get().Error("%s-Not a valid page count:%d for pagination", ctxt, pageSize)
+			HandleHttpError(rw, errors.New("search: not valid numbers for pagination"))
+			return
+		}
+		if pageSize > models.LDAP_USERS_PER_PAGE {
 			pageSize = models.LDAP_USERS_PER_PAGE
 		}
 	}
