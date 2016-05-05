@@ -777,9 +777,27 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
+	params := r.URL.Query()
+	cluster_status_str := params.Get("status")
+
+	var filter bson.M = make(map[string]interface{})
+	if cluster_status_str != "" {
+		switch cluster_status_str {
+		case "ok":
+			filter["status"] = models.CLUSTER_STATUS_OK
+		case "warning":
+			filter["status"] = models.CLUSTER_STATUS_WARN
+		case "error":
+			filter["status"] = models.CLUSTER_STATUS_ERROR
+		default:
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid status %s for cluster", cluster_status_str))
+			return
+		}
+	}
+
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 	var clusters models.Clusters
-	if err := collection.Find(nil).All(&clusters); err != nil {
+	if err := collection.Find(filter).All(&clusters); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the clusters list. error: %v", err))
 		logger.Get().Error("%s-Error getting the clusters list. error: %v", ctxt, err)
 		return
