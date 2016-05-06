@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_6580fcc0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-05-06T17:46:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_d0f78c89",
+      "revId": "90629a5b213e5aee952ad8ccfe43ec202c72405c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_702d60fd",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_052930e6",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-05-06T17:46:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_702d60fd",
+      "range": {
+        "startLine": 235,
+        "startChar": 3,
+        "endLine": 235,
+        "endChar": 75
+      },
+      "revId": "90629a5b213e5aee952ad8ccfe43ec202c72405c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_1038543c",
         "filename": "apps/skyring/auth.go",
         "patchSetId": 1
@@ -53,6 +95,30 @@
       "writtenOn": "2016-05-05T09:59:24Z",
       "side": 1,
       "message": "Same as above",
+      "range": {
+        "startLine": 252,
+        "startChar": 3,
+        "endLine": 252,
+        "endChar": 75
+      },
+      "revId": "90629a5b213e5aee952ad8ccfe43ec202c72405c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_e5252c09",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-05-06T17:46:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_1038543c",
       "range": {
         "startLine": 252,
         "startChar": 3,
