@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_44805ef7",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-05-06T06:49:56Z",
+      "side": 1,
+      "message": "So, here we assume filtering on only 1 status and/or 1 role.\n\nOr is it possible to have something like get list of nodes that are both in error and warning states\n\nAnd also get list of nodes that serve as both osd and mon.\n\nWe could probably think of comma-separated list for these combinations if we think its required.\n\nJust a doubt I am not sure if we really need this kind of a thing.",
+      "range": {
+        "startLine": 520,
+        "startChar": 0,
+        "endLine": 521,
+        "endChar": 32
+      },
+      "revId": "69990898c5e80912c02de45ad9ee5266ddd63d05",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_44585e8a",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-05-06T06:49:56Z",
+      "side": 1,
+      "message": "Can this come as part of filter? Or atleast be generated within this function? Instead of looping?\n\nJust a thought",
+      "range": {
+        "startLine": 803,
+        "startChar": 0,
+        "endLine": 808,
+        "endChar": 4
+      },
+      "revId": "69990898c5e80912c02de45ad9ee5266ddd63d05",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
