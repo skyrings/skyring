@@ -1484,13 +1484,13 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		percentSystemUsed = (float64(net_cluster_used*100) / float64(net_cluster_total))
 	}
 	system.Usage = models.Utilization{Used: net_cluster_used, Total: net_cluster_total, PercentUsed: percentSystemUsed}
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.USED_SPACE: {time_stamp_str: strconv.FormatInt(system.Usage.Used, 10)}}, hostname, port); err != nil {
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{fmt.Sprintf("%s%s.%s", table_name, monitoring.SYSTEM_UTILIZATION, monitoring.USED_SPACE): {time_stamp_str: strconv.FormatInt(system.Usage.Used, 10)}}, hostname, port); err != nil {
 		logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
 	}
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.TOTAL_SPACE: {time_stamp_str: strconv.FormatInt(system.Usage.Total, 10)}}, hostname, port); err != nil {
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{fmt.Sprintf("%s%s.%s", table_name, monitoring.SYSTEM_UTILIZATION, monitoring.TOTAL_SPACE): {time_stamp_str: strconv.FormatInt(system.Usage.Total, 10)}}, hostname, port); err != nil {
 		logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
 	}
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{table_name + monitoring.PERCENT_USED: {time_stamp_str: strconv.FormatFloat(percentSystemUsed, 'E', -1, 64)}}, hostname, port); err != nil {
+	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{fmt.Sprintf("%s%s.%s", table_name, monitoring.SYSTEM_UTILIZATION, monitoring.PERCENT_USED): {time_stamp_str: strconv.FormatFloat(percentSystemUsed, 'E', -1, 64)}}, hostname, port); err != nil {
 		logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
 	}
 
