@@ -516,17 +516,37 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 
 	params := r.URL.Query()
 	admin_state_str := params.Get("state")
+	node_status := params.Get("status")
+	node_role := params.Get("role")
+	var filter bson.M = make(map[string]interface{})
+	if node_status != "" {
+		switch node_status {
+		case "ok":
+			filter["status"] = models.NODE_STATUS_OK
+		case "warning":
+			filter["status"] = models.NODE_STATUS_WARN
+		case "error":
+			filter["status"] = models.NODE_STATUS_ERROR
+		default:
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid status %s for nodes", node_status))
+			return
+		}
+	}
+	if node_role != "" {
+		filter["roles"] = bson.M{"$in": []string{node_role}}
+	}
 
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	var nodes models.Nodes
 	if admin_state_str == "" {
-		if err := collection.Find(bson.M{"state": bson.M{"$ne": models.NODE_STATE_UNACCEPTED}}).All(&nodes); err != nil {
+		filter["state"] = bson.M{"$ne": models.NODE_STATE_UNACCEPTED}
+		if err := collection.Find(filter).All(&nodes); err != nil {
 			HttpResponse(w, http.StatusInternalServerError, err.Error())
 			logger.Get().Error("%s-Error getting the nodes list. error: %v", ctxt, err)
 			return
 		}
 	} else {
-		nodes, err = getNodesWithState(w, admin_state_str)
+		nodes, err = getNodesWithCriteria(w, admin_state_str, filter)
 		if err != nil {
 			HttpResponse(w, http.StatusInternalServerError, err.Error())
 			logger.Get().Error("%s-Error getting the nodes list. error: %v", ctxt, err)
@@ -757,7 +777,7 @@ func GetNode(node_id uuid.UUID) (node models.Node, err error) {
 	return node, nil
 }
 
-func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error) {
+func getNodesWithCriteria(w http.ResponseWriter, state string, filter bson.M) (models.Nodes, error) {
 	var validStates = [...]string{"free", "used", "unmanaged"}
 	var found = false
 	var foundIndex = -1
@@ -778,7 +798,7 @@ func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error
 		var nodes models.Nodes
 		switch foundIndex {
 		case 0:
-			if err := coll.Find(bson.M{}).All(&nodes); err != nil {
+			if err := coll.Find(filter).All(&nodes); err != nil {
 				return models.Nodes{}, err
 			}
 			var unusedNodes models.Nodes
@@ -789,7 +809,7 @@ func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error
 			}
 			return unusedNodes, nil
 		case 1:
-			if err := coll.Find(bson.M{}).All(&nodes); err != nil {
+			if err := coll.Find(filter).All(&nodes); err != nil {
 				return models.Nodes{}, err
 			}
 			var usedNodes models.Nodes
@@ -800,7 +820,8 @@ func getNodesWithState(w http.ResponseWriter, state string) (models.Nodes, error
 			}
 			return usedNodes, nil
 		case 2:
-			if err := coll.Find(bson.M{"enabled": false}).All(&nodes); err != nil {
+			filter["enabled"] = false
+			if err := coll.Find(filter).All(&nodes); err != nil {
 				return models.Nodes{}, err
 			}
 			return nodes, nil
