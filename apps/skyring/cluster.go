@@ -1669,6 +1669,10 @@ func (a *App) GET_ClusterNodes(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	node_role := params.Get("role")
+	if node_role != "" {
+		filter["roles"] = bson.M{"$in": []string{node_role}}
+	}
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
