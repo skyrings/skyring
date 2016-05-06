@@ -428,11 +428,15 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 	AverageAndUpdateDb(ctxt, cluster_cpu_user, len(nodes), time_stamp_str, table_name+monitoring.CPU_USER)
 	AverageAndUpdateDb(ctxt, latency, latency_count, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
 
+	var cluster_memory_percentage float64
+	if cluster_memory_total != 0 {
+		cluster_memory_percentage = float64(cluster_memory_used*100) / float64(cluster_memory_total)
+	}
 	clusterUtilizations := map[string]interface{}{
 		"memoryusage": models.Utilization{
 			Used:        int64(cluster_memory_used),
 			Total:       int64(cluster_memory_total),
-			PercentUsed: float64(cluster_memory_used*100) / float64(cluster_memory_total),
+			PercentUsed: cluster_memory_percentage,
 		},
 		"cpupercentageusage": float64(cluster_cpu_user) / float64(len(nodes)),
 	}
@@ -1422,7 +1426,10 @@ func ComputeSystemSummary(p map[string]interface{}) {
 				used = used + utilization.Used
 				total = total + utilization.Total
 			}
-			percentUsed := float64(used*100) / float64(total)
+			var percentUsed float64
+			if total != 0.0 {
+				percentUsed = float64(used*100) / float64(total)
+			}
 			net_storage_profile_utilization[profile] = models.Utilization{Used: used, Total: total, PercentUsed: percentUsed}
 		}
 
