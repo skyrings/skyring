@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_e4af7228",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-05-06T06:53:06Z",
+      "side": 1,
+      "message": "Just a thought can this be a comma separated list which we break into roles and pass here. Or if we think a node can only either be OSD or mon then probably we can make this a single string instead of []",
+      "range": {
+        "startLine": 1674,
+        "startChar": 33,
+        "endLine": 1674,
+        "endChar": 53
+      },
+      "revId": "60e5bf142a78cbf55ea27dde7b5ecfe73864c28e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
