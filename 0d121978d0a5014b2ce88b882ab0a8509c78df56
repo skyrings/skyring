@@ -45,6 +45,30 @@
       "revId": "0d121978d0a5014b2ce88b882ab0a8509c78df56",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_2aeac3ac",
+        "filename": "authprovider/ldap/ldapauth.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-05-06T12:31:05Z",
+      "side": 1,
+      "message": "Do we have UI changes done?\nIf you look at comment 2 on the bz\n\u003d\u003d\u003d\u003d\u003d\n1. if email is not configured, allow the user to be imported, with a warning message\n2. Disable the Notifications and email configurations for the user without email\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nSo UI changes are also required. Please make this is done",
+      "parentUuid": "baa041b7_300a387a",
+      "range": {
+        "startLine": 384,
+        "startChar": 24,
+        "endLine": 384,
+        "endChar": 59
+      },
+      "revId": "0d121978d0a5014b2ce88b882ab0a8509c78df56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
