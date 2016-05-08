@@ -1198,6 +1198,20 @@ func (a *App) Get_Summary(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(system)
 }
 
+func fetchThresholdEvents(selectCriteria bson.M, utilizationType string) ([]models.ThresholdEvent, error) {
+	var tEventsInDb []models.ThresholdEvent
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_THRESHOLD_BREACHES)
+	err := coll.Find(selectCriteria).All(&tEventsInDb)
+	if err != nil {
+		if err != mgo.ErrNotFound {
+			logger.Get().Warning("Failed to fetch %v events from db.Error %v", err, utilizationType)
+		}
+	}
+	return tEventsInDb, err
+}
+
 func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 	cSummary := models.ClusterSummary{}
 
@@ -1282,9 +1296,33 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 	cSummary.NodesCount = map[string]int{models.TOTAL: len(nodesInCluster), models.NodeStatuses[models.NODE_STATUS_ERROR]: error_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(*unmanagedNodes)}
 
 	cSummary.Usage = cluster.Usage
-	cSummary.StorageProfileUsage = cluster.StorageProfileUsage
 	cSummary.ObjectCount = cluster.ObjectCount
 	cSummary.Utilizations = cluster.Utilizations
+
+	/*
+		Fetch storage profile threshold events
+	*/
+	selectCriteria := bson.M{
+		"clusterid":         cluster.ClusterId,
+		"utilizationtype":   monitoring.STORAGE_PROFILE_UTILIZATION,
+		"thresholdseverity": models.CRITICAL,
+	}
+	spThresholdEvenstInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.STORAGE_PROFILE_UTILIZATION)
+	cSummary.StorageProfileUsage = make(map[string]map[string]interface{})
+	for storageProfile, utilization := range cluster.StorageProfileUsage {
+		sizeAndIsFullMap := make(map[string]interface{})
+		for _, event := range spThresholdEvenstInDb {
+			if event.EntityName == storageProfile {
+				sizeAndIsFullMap["IsFull"] = true
+			}
+		}
+		sizeAndIsFullMap["Utilization"] = utilization
+		_, ok := sizeAndIsFullMap["IsFull"]
+		if !ok {
+			sizeAndIsFullMap["IsFull"] = false
+		}
+		cSummary.StorageProfileUsage[storageProfile] = sizeAndIsFullMap
+	}
 
 	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
 	var storages models.Storages
@@ -1380,10 +1418,22 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	netDiskReadCount := len(clusters)
 	var netDiskWrite float64
 	netDiskWriteCount := len(clusters)
-	net_storage_profile_utilization := make(map[string]models.Utilization)
+	net_storage_profile_utilization := make(map[string]map[string]interface{})
 	error_nodes := 0
+	var nearFullClusters int
+
+	selectCriteria := bson.M{
+		"utilizationtype":   monitoring.CLUSTER_UTILIZATION,
+		"thresholdseverity": models.CRITICAL,
+	}
+	clusterThresholdEvenstInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.CLUSTER_UTILIZATION)
 
 	for _, cluster := range clusters {
+		for _, tEvent := range clusterThresholdEvenstInDb {
+			if uuid.Equal(tEvent.EntityId, cluster.ClusterId) {
+				nearFullClusters = nearFullClusters + 1
+			}
+		}
 		if cluster.Status == models.CLUSTER_STATUS_ERROR {
 			clusters_in_error = clusters_in_error + 1
 		}
@@ -1418,12 +1468,15 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		for profile, profileUtilization := range cluster.StorageProfileUsage {
 			used := profileUtilization.Used
 			total := profileUtilization.Total
-			if utilization, ok := net_storage_profile_utilization[profile]; ok {
+			if utilization, ok := net_storage_profile_utilization[profile]["utilization"].(models.Utilization); ok {
 				used = used + utilization.Used
 				total = total + utilization.Total
 			}
-			percentUsed := float64(used*100) / float64(total)
-			net_storage_profile_utilization[profile] = models.Utilization{Used: used, Total: total, PercentUsed: percentUsed}
+			var percentUsed float64
+			if total != 0.0 {
+				percentUsed = float64(used*100) / float64(total)
+			}
+			net_storage_profile_utilization[profile]["utilization"] = models.Utilization{Used: used, Total: total, PercentUsed: percentUsed}
 		}
 
 		/*
@@ -1467,7 +1520,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		netIStatTx = netIStatTx + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &netIStatTxCount)
 
 	}
-	system.ClustersCount = map[string]int{models.TOTAL: len(clusters), models.ClusterStatuses[models.CLUSTER_STATUS_ERROR]: clusters_in_error}
+	system.ClustersCount = map[string]int{models.TOTAL: len(clusters), models.ClusterStatuses[models.CLUSTER_STATUS_ERROR]: clusters_in_error, models.NEAR_FULL: nearFullClusters}
 
 	system.NodesCount = map[string]int{models.TOTAL: total_nodes, models.NodeStatuses[models.NODE_STATUS_ERROR]: error_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(*unmanagedNodes)}
 
@@ -1509,6 +1562,24 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		logger.Get().Warning("%s - Error pushing memory utilization.Err %v", ctxt, err)
 	}
 
+	systemthresholds := monitoring.GetSystemDefaultThresholdValues()
+
+	if len(net_storage_profile_utilization) != 0 {
+		var spNearFullThreshold float64
+		spThresholdconfigs := systemthresholds[monitoring.STORAGE_PROFILE_UTILIZATION].Configs
+		for _, spThreshold := range spThresholdconfigs {
+			if spThreshold.Type == monitoring.CRITICAL {
+				spNearFullThreshold, _ = strconv.ParseFloat(spThreshold.Value, 64)
+			}
+		}
+		for sProfile, isNearFullUtilizationMap := range net_storage_profile_utilization {
+			if isNearFullUtilizationMap["utilization"] != nil && isNearFullUtilizationMap["utilization"].(models.Utilization).PercentUsed > spNearFullThreshold {
+				net_storage_profile_utilization[sProfile]["isNearFull"] = true
+			} else {
+				net_storage_profile_utilization[sProfile]["isNearFull"] = false
+			}
+		}
+	}
 	system.StorageProfileUsage = net_storage_profile_utilization
 	system.ProviderMonitoringDetails = make(map[string]map[string]interface{})
 	systemUtilizations := map[string]interface{}{
