@@ -26,7 +26,6 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
 	"github.com/skyrings/skyring/skyringutils"
-	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
@@ -767,20 +766,6 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(bytes)
 	}
-}
-
-func fetchThresholdEvents(selectCriteria bson.M, utilizationType string) ([]models.ThresholdEvent, error) {
-	var tEventsInDb []models.ThresholdEvent
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_THRESHOLD_BREACHES)
-	err := coll.Find(selectCriteria).All(&tEventsInDb)
-	if err != nil {
-		if err != mgo.ErrNotFound {
-			logger.Get().Warning("Failed to fetch %v events from db.Error %v", err, utilizationType)
-		}
-	}
-	return tEventsInDb, err
 }
 
 func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
@@ -1781,6 +1766,25 @@ func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("Error getting the slus for cluster: %s. error: %v", cluster_id_str, err)
 		return
 	}
+
+	if r.URL.Query().Get("near_full") == "true" {
+		selectCriteria := bson.M{
+			"utilizationtype":   monitoring.SLU_UTILIZATION,
+			"thresholdseverity": monitoring.CRITICAL,
+			"clusterid":         filter["clusterid"],
+		}
+		sluThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.SLU_UTILIZATION)
+		var filteredSlus []models.StorageLogicalUnit
+		for _, slu := range slus {
+			for _, sluEvent := range sluThresholdEventsInDb {
+				if uuid.Equal(slu.SluId, sluEvent.EntityId) {
+					filteredSlus = append(filteredSlus, slu)
+				}
+			}
+		}
+		slus = filteredSlus
+	}
+
 	if len(slus) == 0 {
 		json.NewEncoder(w).Encode([]models.StorageLogicalUnit{})
 	} else {
@@ -2329,4 +2333,48 @@ func removeFailedNodes(nodes []models.ClusterNode, failed []models.ClusterNode) 
 		found = false
 	}
 	return diff
+}
+
+func (a *App) GET_Slus(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error Getting the context.Err %v", err))
+		return
+	}
+
+	params := r.URL.Query()
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var slus []models.StorageLogicalUnit
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	if err := coll.Find(nil).All(&slus); err != nil {
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slus. error: %v", err))
+		logger.Get().Error("%s - Error getting the slus. error: %v", ctxt, err)
+		return
+	}
+
+	if params.Get("near_full") == "true" {
+		selectCriteria := bson.M{
+			"utilizationtype":   monitoring.SLU_UTILIZATION,
+			"thresholdseverity": monitoring.CRITICAL,
+		}
+		sluThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.SLU_UTILIZATION)
+		var filteredSlus []models.StorageLogicalUnit
+		for _, slu := range slus {
+			for _, sluEvent := range sluThresholdEventsInDb {
+				if uuid.Equal(slu.SluId, sluEvent.EntityId) && uuid.Equal(slu.ClusterId, sluEvent.ClusterId) {
+					filteredSlus = append(filteredSlus, slu)
+				}
+			}
+		}
+		slus = filteredSlus
+	}
+
+	if len(slus) == 0 {
+		json.NewEncoder(w).Encode([]models.StorageLogicalUnit{})
+	} else {
+		json.NewEncoder(w).Encode(slus)
+	}
 }
