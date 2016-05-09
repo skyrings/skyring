@@ -854,6 +854,8 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	nearFull := params.Get("near_full")
+
 	if cluster_status_str != "" {
 		switch cluster_status_str {
 		case "ok":
@@ -875,6 +877,25 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("%s-Error getting the clusters list. error: %v", ctxt, err)
 		return
 	}
+
+	selectCriteria := bson.M{
+		"utilizationtype":   monitoring.CLUSTER_UTILIZATION,
+		"thresholdseverity": models.CRITICAL,
+	}
+	clusterThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.CLUSTER_UTILIZATION, ctxt)
+
+	if nearFull == "true" {
+		var nearFullClusters []models.Cluster
+		for _, cluster := range clusters {
+			for _, clusterThresholdEvent := range clusterThresholdEventsInDb {
+				if uuid.Equal(cluster.ClusterId, clusterThresholdEvent.ClusterId) {
+					nearFullClusters = append(nearFullClusters, cluster)
+				}
+			}
+		}
+		clusters = models.Clusters(nearFullClusters)
+	}
+
 	if len(clusters) == 0 {
 		json.NewEncoder(w).Encode([]models.Cluster{})
 	} else {
