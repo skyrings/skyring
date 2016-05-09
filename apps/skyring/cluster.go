@@ -26,6 +26,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
 	"github.com/skyrings/skyring/skyringutils"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
@@ -768,6 +769,20 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func fetchThresholdEvents(selectCriteria bson.M, utilizationType string) ([]models.ThresholdEvent, error) {
+	var tEventsInDb []models.ThresholdEvent
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_THRESHOLD_BREACHES)
+	err := coll.Find(selectCriteria).All(&tEventsInDb)
+	if err != nil {
+		if err != mgo.ErrNotFound {
+			logger.Get().Warning("Failed to fetch %v events from db.Error %v", err, utilizationType)
+		}
+	}
+	return tEventsInDb, err
+}
+
 func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -779,9 +794,11 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 
 	params := r.URL.Query()
 	cluster_status_str := params.Get("status")
+	nearFull := params.Get("near_full")
 
-	var filter bson.M = make(map[string]interface{})
+	var filter bson.M
 	if cluster_status_str != "" {
+		filter = make(map[string]interface{})
 		switch cluster_status_str {
 		case "ok":
 			filter["status"] = models.CLUSTER_STATUS_OK
@@ -802,6 +819,25 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("%s-Error getting the clusters list. error: %v", ctxt, err)
 		return
 	}
+
+	selectCriteria := bson.M{
+		"utilizationtype":   monitoring.CLUSTER_UTILIZATION,
+		"thresholdseverity": monitoring.CRITICAL,
+	}
+	clusterThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.CLUSTER_UTILIZATION)
+
+	if nearFull == "true" {
+		var nearFullClusters []models.Cluster
+		for _, cluster := range clusters {
+			for _, clusterThresholdEvent := range clusterThresholdEventsInDb {
+				if uuid.Equal(cluster.ClusterId, clusterThresholdEvent.ClusterId) {
+					nearFullClusters = append(nearFullClusters, cluster)
+				}
+			}
+		}
+		clusters = models.Clusters(nearFullClusters)
+	}
+
 	if len(clusters) == 0 {
 		json.NewEncoder(w).Encode([]models.Cluster{})
 	} else {
