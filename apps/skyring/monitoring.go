@@ -1271,6 +1271,13 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 	}
 	slu_down_cnt := 0
 	slu_error_cnt := 0
+	selectCriteria := bson.M{
+		"utilizationtype":   monitoring.SLU_UTILIZATION,
+		"thresholdseverity": models.CRITICAL,
+		"clusterid":         cluster.ClusterId,
+	}
+	sluThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.SLU_UTILIZATION, ctxt)
+
 	for _, slu := range slus {
 		if slu.Status == models.SLU_STATUS_ERROR {
 			slu_error_cnt = slu_error_cnt + 1
@@ -1279,7 +1286,7 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 			slu_down_cnt = slu_down_cnt + 1
 		}
 	}
-	cSummary.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_error_cnt, models.STATUS_DOWN: slu_down_cnt}
+	cSummary.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_error_cnt, models.STATUS_DOWN: slu_down_cnt, models.NEAR_FULL: len(sluThresholdEventsInDb)}
 
 	unmanagedNodes, unmanagedNodesError := GetCoreNodeManager().GetUnmanagedNodes(ctxt)
 	if unmanagedNodesError != nil {
@@ -1312,7 +1319,7 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 		3. For each profile find if thers's an entry in list fetched in 1
 			i. If there's an event, it means, the current profile is near full
 	*/
-	selectCriteria := bson.M{
+	selectCriteria = bson.M{
 		"clusterid":         cluster.ClusterId,
 		"utilizationtype":   monitoring.STORAGE_PROFILE_UTILIZATION,
 		"thresholdseverity": models.CRITICAL,
@@ -1390,7 +1397,25 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	if err := collection.Find(nil).All(&slus); err != nil {
 		logger.Get().Error("%s - Error getting the slus list. error: %v", ctxt, err)
 	}
-	system.SLUCount = map[string]int{models.TOTAL: len(slus)}
+
+	slu_down_cnt := 0
+	slu_error_cnt := 0
+
+	for _, slu := range slus {
+		if slu.Status == models.SLU_STATUS_ERROR {
+			slu_error_cnt = slu_error_cnt + 1
+		}
+		if slu.State == models.SLU_STATE_DOWN {
+			slu_down_cnt = slu_down_cnt + 1
+		}
+	}
+
+	selectCriteria := bson.M{
+		"utilizationtype":   monitoring.SLU_UTILIZATION,
+		"thresholdseverity": models.CRITICAL,
+	}
+	sluThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.SLU_UTILIZATION, ctxt)
+	system.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_error_cnt, models.STATUS_DOWN: slu_down_cnt, models.NEAR_FULL: len(sluThresholdEventsInDb)}
 
 	collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
 	var storages models.Storages
@@ -1429,7 +1454,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	error_nodes := 0
 	var nearFullClusters int
 
-	selectCriteria := bson.M{
+	selectCriteria = bson.M{
 		"utilizationtype":   monitoring.CLUSTER_UTILIZATION,
 		"thresholdseverity": models.CRITICAL,
 	}
