@@ -78,10 +78,6 @@ cat <<EOF >/etc/logrotate.d/skyring
 }
 EOF
 
-# Start the skyring server
-systemctl enable skyring
-systemctl start skyring
-
 info "Setup graphite user"
 /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
 
@@ -100,6 +96,10 @@ case $yn in
 	[Nn]* )
 		;;
 esac
+
+# Start the skyring server
+systemctl enable skyring
+systemctl start skyring
 
 info "\n\n\n-------------------------------------------------------"
 info "Now the skyring setup is ready!"
