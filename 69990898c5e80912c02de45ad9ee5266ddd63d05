@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_e8e2992e",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-10T17:10:39Z",
+      "side": 1,
+      "message": "Currently its one role and one status.. If required we need to change the logic. @Karnan, what you need from UI perspective?",
+      "parentUuid": "baa041b7_44805ef7",
+      "range": {
+        "startLine": 520,
+        "startChar": 0,
+        "endLine": 521,
+        "endChar": 32
+      },
+      "revId": "69990898c5e80912c02de45ad9ee5266ddd63d05",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_44585e8a",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-05-06T06:49:56Z",
       "side": 1,
       "message": "Can this come as part of filter? Or atleast be generated within this function? Instead of looping?\n\nJust a thought",
+      "range": {
+        "startLine": 803,
+        "startChar": 0,
+        "endLine": 808,
+        "endChar": 4
+      },
+      "revId": "69990898c5e80912c02de45ad9ee5266ddd63d05",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_88c8ada9",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-10T17:10:39Z",
+      "side": 1,
+      "message": "This was existing logic and didnnt touch. I think this is the way to figure out unused nodes..",
+      "parentUuid": "baa041b7_44585e8a",
       "range": {
         "startLine": 803,
         "startChar": 0,
