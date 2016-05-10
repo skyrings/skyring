@@ -22,6 +22,30 @@
       "revId": "60e5bf142a78cbf55ea27dde7b5ecfe73864c28e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_887aed75",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-10T17:05:58Z",
+      "side": 1,
+      "message": "I think here we can pass one role only..",
+      "parentUuid": "baa041b7_e4af7228",
+      "range": {
+        "startLine": 1674,
+        "startChar": 33,
+        "endLine": 1674,
+        "endChar": 53
+      },
+      "revId": "60e5bf142a78cbf55ea27dde7b5ecfe73864c28e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
