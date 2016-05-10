@@ -672,6 +672,7 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 		"role":          node.Roles,
 	}
 	nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS] = getSLUStatusWiseCount(node_id, ctxt)
+
 	nodeSummary[models.UTILIZATIONS] = node.Utilizations
 	var result models.RpcResponse
 	provider := a.getProviderFromClusterType(cluster.Type)
@@ -750,7 +751,9 @@ func getSLUStatusWiseCount(node_id *uuid.UUID, ctxt string) map[string]int {
 			err)
 		return sluDetails
 	}
+	sluCriticalAlertsCount := 0
 	for _, slu := range slus {
+		sluCriticalAlertsCount = sluCriticalAlertsCount + slu.AlmCritCount
 		switch {
 		case slu.State == models.SLU_STATE_DOWN:
 			sluDetails[models.DownSLU]++
@@ -760,6 +763,7 @@ func getSLUStatusWiseCount(node_id *uuid.UUID, ctxt string) map[string]int {
 			sluDetails[models.WarningSLU]++
 		}
 	}
+	sluDetails["criticalAlerts"] = sluCriticalAlertsCount
 	sluDetails[models.TotalSLU] = len(slus)
 	return sluDetails
 }

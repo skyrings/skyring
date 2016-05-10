@@ -1278,7 +1278,9 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 	}
 	sluThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.SLU_UTILIZATION, ctxt)
 
+	sluCriticalAlertCount := 0
 	for _, slu := range slus {
+		sluCriticalAlertCount = sluCriticalAlertCount + slu.AlmCritCount
 		if slu.Status == models.SLU_STATUS_ERROR {
 			slu_error_cnt = slu_error_cnt + 1
 		}
@@ -1286,7 +1288,7 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 			slu_down_cnt = slu_down_cnt + 1
 		}
 	}
-	cSummary.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_error_cnt, models.STATUS_DOWN: slu_down_cnt, models.NEAR_FULL: len(sluThresholdEventsInDb)}
+	cSummary.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_error_cnt, models.STATUS_DOWN: slu_down_cnt, models.NEAR_FULL: len(sluThresholdEventsInDb), "criticalAlerts": sluCriticalAlertCount}
 
 	unmanagedNodes, unmanagedNodesError := GetCoreNodeManager().GetUnmanagedNodes(ctxt)
 	if unmanagedNodesError != nil {
@@ -1301,13 +1303,15 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 		Count the number of down nodes
 	*/
 	var error_nodes int
+	var nodeCriticalAlertsCount int
 	for _, node := range nodesInCluster {
+		nodeCriticalAlertsCount = nodeCriticalAlertsCount + node.AlmCritCount
 		if node.Status == models.NODE_STATUS_ERROR {
 			error_nodes = error_nodes + 1
 		}
 	}
 
-	cSummary.NodesCount = map[string]int{models.TOTAL: len(nodesInCluster), models.NodeStatuses[models.NODE_STATUS_ERROR]: error_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(*unmanagedNodes)}
+	cSummary.NodesCount = map[string]int{models.TOTAL: len(nodesInCluster), models.NodeStatuses[models.NODE_STATUS_ERROR]: error_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(*unmanagedNodes), "criticalAlerts": nodeCriticalAlertsCount}
 
 	cSummary.Usage = cluster.Usage
 	cSummary.ObjectCount = cluster.ObjectCount
@@ -1347,12 +1351,14 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("%s - Error getting the storage list. error: %v", ctxt, err)
 	}
 	storage_down_cnt := 0
+	storageCriticalAlertsCount := 0
 	for _, storage := range storages {
+		storageCriticalAlertsCount = storageCriticalAlertsCount + storage.AlmCritCount
 		if storage.Status == models.STORAGE_STATUS_ERROR {
 			storage_down_cnt = storage_down_cnt + 1
 		}
 	}
-	cSummary.StorageCount = map[string]int{models.TOTAL: len(storages), STORAGE_STATUS_DOWN: storage_down_cnt}
+	cSummary.StorageCount = map[string]int{models.TOTAL: len(storages), STORAGE_STATUS_DOWN: storage_down_cnt, "criticalAlerts": storageCriticalAlertsCount}
 
 	json.NewEncoder(w).Encode(cSummary)
 }
@@ -1400,8 +1406,10 @@ func ComputeSystemSummary(p map[string]interface{}) {
 
 	slu_down_cnt := 0
 	slu_error_cnt := 0
+	sluCriticalAlertsCount := 0
 
 	for _, slu := range slus {
+		sluCriticalAlertsCount = sluCriticalAlertsCount + slu.AlmCritCount
 		if slu.Status == models.SLU_STATUS_ERROR {
 			slu_error_cnt = slu_error_cnt + 1
 		}
@@ -1415,7 +1423,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		"thresholdseverity": models.CRITICAL,
 	}
 	sluThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.SLU_UTILIZATION, ctxt)
-	system.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_error_cnt, models.STATUS_DOWN: slu_down_cnt, models.NEAR_FULL: len(sluThresholdEventsInDb)}
+	system.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_error_cnt, models.STATUS_DOWN: slu_down_cnt, models.NEAR_FULL: len(sluThresholdEventsInDb), "criticalAlerts": sluCriticalAlertsCount}
 
 	collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
 	var storages models.Storages
@@ -1423,12 +1431,14 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		logger.Get().Error("%s - Error getting the storage list. error: %v", ctxt, err)
 	}
 	storage_down_cnt := 0
+	storageCriticalAlertsCount := 0
 	for _, storage := range storages {
+		storageCriticalAlertsCount = storageCriticalAlertsCount + storage.AlmCritCount
 		if storage.Status == models.STORAGE_STATUS_ERROR {
 			storage_down_cnt = storage_down_cnt + 1
 		}
 	}
-	system.StorageCount = map[string]int{models.TOTAL: len(storages), STORAGE_STATUS_DOWN: storage_down_cnt}
+	system.StorageCount = map[string]int{models.TOTAL: len(storages), STORAGE_STATUS_DOWN: storage_down_cnt, "criticalAlerts": storageCriticalAlertsCount}
 
 	var net_cluster_used int64
 	var net_cluster_total int64
@@ -1460,7 +1470,11 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	}
 	clusterThresholdEvenstInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.CLUSTER_UTILIZATION, ctxt)
 
+	clusterCriticalAlertCount := 0
+	nodeCriticalAlertCount := 0
+
 	for _, cluster := range clusters {
+		clusterCriticalAlertCount = clusterCriticalAlertCount + cluster.AlmCritCount
 		for _, tEvent := range clusterThresholdEvenstInDb {
 			if uuid.Equal(tEvent.EntityId, cluster.ClusterId) {
 				nearFullClusters = nearFullClusters + 1
@@ -1479,6 +1493,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 			Count the number of down nodes
 		*/
 		for _, node := range nodesInCluster {
+			nodeCriticalAlertCount = nodeCriticalAlertCount + node.AlmCritCount
 			if node.Status == models.NODE_STATUS_ERROR {
 				error_nodes = error_nodes + 1
 			}
@@ -1508,7 +1523,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 			if total != 0.0 {
 				percentUsed = float64(used*100) / float64(total)
 			}
-			net_storage_profile_utilization[profile]["utilization"] = models.Utilization{Used: used, Total: total, PercentUsed: percentUsed}
+			net_storage_profile_utilization[profile] = map[string]interface{}{"utilization": models.Utilization{Used: used, Total: total, PercentUsed: percentUsed}}
 		}
 
 		/*
@@ -1552,9 +1567,9 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		netIStatTx = netIStatTx + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &netIStatTxCount)
 
 	}
-	system.ClustersCount = map[string]int{models.TOTAL: len(clusters), models.ClusterStatuses[models.CLUSTER_STATUS_ERROR]: clusters_in_error, models.NEAR_FULL: nearFullClusters}
+	system.ClustersCount = map[string]int{models.TOTAL: len(clusters), models.ClusterStatuses[models.CLUSTER_STATUS_ERROR]: clusters_in_error, models.NEAR_FULL: nearFullClusters, "criticalAlerts": clusterCriticalAlertCount}
 
-	system.NodesCount = map[string]int{models.TOTAL: total_nodes, models.NodeStatuses[models.NODE_STATUS_ERROR]: error_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(*unmanagedNodes)}
+	system.NodesCount = map[string]int{models.TOTAL: total_nodes, models.NodeStatuses[models.NODE_STATUS_ERROR]: error_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(*unmanagedNodes), "criticalAlerts": nodeCriticalAlertCount}
 
 	// Update Cluster utilization to time series db
 	var percentSystemUsed float64
