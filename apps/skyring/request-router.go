@@ -114,7 +114,9 @@ func (a *App) FetchMonitoringDetailsFromProviders(ctxt string) (retVal map[strin
 			&result)
 		if err != nil {
 			err_str = fmt.Sprintf("%s %v\n", err_str, err)
-			continue
+		}
+		if result.Status.StatusMessage != "" && (result.Status.StatusCode == http.StatusPartialContent || result.Status.StatusCode == http.StatusInternalServerError) {
+			err_str = fmt.Sprintf("%s %v\n", err_str, result.Status.StatusMessage)
 		}
 		if result.Status.StatusCode == http.StatusOK || result.Status.StatusCode == http.StatusPartialContent {
 			providerResult := make(map[string]interface{})
@@ -181,6 +183,9 @@ func (a *App) FetchClusterDetailsFromProvider(ctxt string, clusterId uuid.UUID) 
 	}
 	if err != nil {
 		return retVal, fmt.Errorf("%s - Call to provider %v failed.Err: %v\n", ctxt, provider.Name, err)
+	}
+	if result.Status.StatusMessage != "" && (result.Status.StatusCode == http.StatusPartialContent || result.Status.StatusCode == http.StatusInternalServerError || result.Status.StatusCode == http.StatusBadRequest) {
+		return retVal, fmt.Errorf("%s - Call to provider %v failed.Err: %v\n", ctxt, provider.Name, result.Status.StatusMessage)
 	}
 	return retVal, nil
 }
