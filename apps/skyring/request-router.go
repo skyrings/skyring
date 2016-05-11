@@ -114,7 +114,6 @@ func (a *App) FetchMonitoringDetailsFromProviders(ctxt string) (retVal map[strin
 			&result)
 		if err != nil {
 			err_str = fmt.Sprintf("%s %v\n", err_str, err)
-			continue
 		}
 		if result.Status.StatusCode == http.StatusOK || result.Status.StatusCode == http.StatusPartialContent {
 			providerResult := make(map[string]interface{})
