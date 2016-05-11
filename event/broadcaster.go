@@ -1,6 +1,7 @@
 package event
 
 import (
+	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/tools/logger"
@@ -39,17 +40,32 @@ func GetBroadcaster() *EventBroadcaster {
 }
 
 // Start event broadcaster
-func StartBroadcaster(websocketPort string) {
+func StartBroadcaster(websocketPort string, ssl bool, sslParams map[string]string) {
 	InitBroadcaster()
 	broadcaster := GetBroadcaster()
 	go broadcaster.Run()
 	http.HandleFunc("/ws", ServeWs)
-	go func() {
-		logger.Get().Info("Websocket - start listening on %s : %v", conf.SystemConfig.Config.Host, websocketPort)
-		if err := http.ListenAndServe(conf.SystemConfig.Config.Host+":"+websocketPort, nil); err != nil {
-			logger.Get().Fatalf("Unable to start the websocket server.err: %v", err)
-		}
-	}()
+	if conf.SystemConfig.Config.SSLEnabled {
+		go func() {
+			logger.Get().Info("Websocket - start listening on %s : %v", conf.SystemConfig.Config.Host, websocketPort)
+			if err := http.ListenAndServeTLS(
+				fmt.Sprintf("%s:%s", conf.SystemConfig.Config.Host, websocketPort),
+				sslParams["cert"],
+				sslParams["key"],
+				nil); err != nil {
+				logger.Get().Fatalf("Unable to start the websocket server.err: %v", err)
+			}
+		}()
+	} else {
+		go func() {
+			logger.Get().Info("Websocket - start listening on %s : %v", conf.SystemConfig.Config.Host, websocketPort)
+			if err := http.ListenAndServe(
+				fmt.Sprintf("%s:%s", conf.SystemConfig.Config.Host, websocketPort),
+				nil); err != nil {
+				logger.Get().Fatalf("Unable to start the websocket server.err: %v", err)
+			}
+		}()
+	}
 }
 
 //  At the end, we instantiate our EventBroadcaster

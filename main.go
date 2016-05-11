@@ -222,7 +222,13 @@ func start() {
 	go event.StartListener(SkyringEventSocketFile)
 
 	// Starting the WebSocket server
-	event.StartBroadcaster(websocketPort)
+	event.StartBroadcaster(
+		websocketPort,
+		conf.SystemConfig.Config.SSLEnabled,
+		map[string]string{
+			"cert": conf.SystemConfig.Config.SslCert,
+			"key":  conf.SystemConfig.Config.SslKey,
+		})
 
 	runHTTP(
 		fmt.Sprintf("%s:%d", conf.SystemConfig.Config.Host, httpPort),
