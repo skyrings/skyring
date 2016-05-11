@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_d6b9b216",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-05-11T03:29:06Z",
+      "side": 1,
+      "message": "Required but can added as a separate patch",
+      "parentUuid": "baa041b7_e8e2992e",
+      "range": {
+        "startLine": 520,
+        "startChar": 0,
+        "endLine": 521,
+        "endChar": 32
+      },
+      "revId": "69990898c5e80912c02de45ad9ee5266ddd63d05",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_44585e8a",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 1
