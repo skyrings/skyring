@@ -572,6 +572,15 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 	if val, ok := m["uid"]; ok {
 		directory.Uid = val.(string)
 	}
+	if directory.Uid == "" {
+		if val, ok := m["directoryservice"]; ok {
+			if strings.ToUpper(val.(string)) == "AD" {
+				directory.Uid = "cn"
+			} else {
+				directory.Uid = "uid"
+			}
+		}
+	}
 	if val, ok := m["firstname"]; ok {
 		directory.FirstName = val.(string)
 	}
