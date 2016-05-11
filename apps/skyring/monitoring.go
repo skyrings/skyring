@@ -1388,16 +1388,20 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		logger.Get().Error("%s - Failed to fetch clusters.Err %v", ctxt, clusterFetchError)
 	}
 
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
 	/*
 		Count the number of unmanaged nodes
 	*/
-	unmanagedNodes, unmanagedNodesError := GetCoreNodeManager().GetUnmanagedNodes(ctxt)
-	if unmanagedNodesError != nil {
-		logger.Get().Error("%s - %s", ctxt, fmt.Sprintf("Failed to fetch unmanaged nodes.Err %v", unmanagedNodesError))
+	var unmanagedNodes models.Nodes
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if unmanagedNodesError := coll.Find(bson.M{"state": models.NODE_STATE_UNACCEPTED}).All(&unmanagedNodes); err != nil {
+		if clusterFetchError != mgo.ErrNotFound {
+			logger.Get().Error("%s-Failed to fetch un-managed nodes. error: %v", ctxt, unmanagedNodesError)
+		}
 	}
 
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
 	var slus []models.StorageLogicalUnit
 	if err := collection.Find(nil).All(&slus); err != nil {
@@ -1569,7 +1573,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	}
 	system.ClustersCount = map[string]int{models.TOTAL: len(clusters), models.ClusterStatuses[models.CLUSTER_STATUS_ERROR]: clusters_in_error, models.NEAR_FULL: nearFullClusters, "criticalAlerts": clusterCriticalAlertCount}
 
-	system.NodesCount = map[string]int{models.TOTAL: total_nodes, models.NodeStatuses[models.NODE_STATUS_ERROR]: error_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(*unmanagedNodes), "criticalAlerts": nodeCriticalAlertCount}
+	system.NodesCount = map[string]int{models.TOTAL: total_nodes, models.NodeStatuses[models.NODE_STATUS_ERROR]: error_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(unmanagedNodes), "criticalAlerts": nodeCriticalAlertCount}
 
 	// Update Cluster utilization to time series db
 	var percentSystemUsed float64
@@ -1652,7 +1656,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	/*
 		Add Most used storages
 	*/
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
+	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
 	var stotrageUsage []models.StorageUsage
 	if err := coll.Find(nil).Sort("-percentused").All(&stotrageUsage); err != nil {
 		logger.Get().Error("%s - Failed to fetch most used storages.Err %v", ctxt, err)
