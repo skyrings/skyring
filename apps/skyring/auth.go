@@ -518,6 +518,7 @@ func (a *App) getLdapConfig(rw http.ResponseWriter, req *http.Request) {
 			LdapServer  string `json:"ldapserver"`
 			Port        uint   `json:"port"`
 			Base        string `json:"base"`
+			Type        string `json:"ldaptype"`
 			DomainAdmin string `json:"domainadmin"`
 			Password    string `json:"password"`
 			Uid         string `json:"uid"`
@@ -525,9 +526,9 @@ func (a *App) getLdapConfig(rw http.ResponseWriter, req *http.Request) {
 			LastName    string `json:"lastname"`
 			DisplayName string `json:"displayname"`
 			Email       string `json:"email"`
-		}{ldapConfig.LdapServer, ldapConfig.Port, ldapConfig.Base, ldapConfig.DomainAdmin,
-			"", ldapConfig.Uid, ldapConfig.FirstName, ldapConfig.LastName,
-			ldapConfig.DisplayName, ldapConfig.Email})
+		}{ldapConfig.LdapServer, ldapConfig.Port, ldapConfig.Base, ldapConfig.Type,
+			ldapConfig.DomainAdmin, "", ldapConfig.Uid, ldapConfig.FirstName,
+			ldapConfig.LastName, ldapConfig.DisplayName, ldapConfig.Email})
 }
 
 func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
@@ -571,6 +572,16 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 	}
 	if val, ok := m["uid"]; ok {
 		directory.Uid = val.(string)
+	}
+	if val, ok := m["ldaptype"]; ok {
+		directory.Type = val.(string)
+	}
+	if directory.Uid == "" {
+		if directory.Type == "ad" {
+			directory.Uid = "cn"
+		} else {
+			directory.Uid = "uid"
+		}
 	}
 	if val, ok := m["firstname"]; ok {
 		directory.FirstName = val.(string)

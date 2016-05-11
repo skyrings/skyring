@@ -71,21 +71,11 @@ func Authenticate(directory models.Directory, url string, user string, passwd st
 		return err
 	}
 	ldap.SetOption(openldap.LDAP_OPT_PROTOCOL_VERSION, openldap.LDAP_VERSION3)
-	if directory.Uid != "" {
-		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", directory.Uid, user, directory.Base), passwd)
+	err = ldap.Bind(fmt.Sprintf("%s=%s,%s", directory.Uid, user, directory.Base), passwd)
 
-		if err != nil {
-			logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
-			return err
-		}
-	} else {
-		if ldap.Bind(fmt.Sprintf("uid=%s,%s", user, directory.Base), passwd) != nil {
-			err = ldap.Bind(fmt.Sprintf("cn=%s,%s", user, directory.Base), passwd)
-			if err != nil {
-				logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
-				return err
-			}
-		}
+	if err != nil {
+		logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
+		return err
 	}
 	return nil
 }
@@ -153,6 +143,7 @@ func NewAuthorizer(userDao dao.UserInterface, ldapDao models.Directory) (Authori
 	a.directory.LdapServer = ldapDao.LdapServer
 	a.directory.Port = ldapDao.Port
 	a.directory.Base = ldapDao.Base
+	a.directory.Type = ldapDao.Type
 	a.directory.DomainAdmin = ldapDao.DomainAdmin
 	a.directory.Password = ldapDao.Password
 	a.directory.Uid = ldapDao.Uid
@@ -245,14 +236,10 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 		return externalUsers, err
 	}
 	url := GetUrl(directory.LdapServer, directory.Port)
-	Uid := "Uid"
 	DisplayName := "DisplayName"
 	FirstName := "CN"
 	LastName := "SN"
 	Email := "mail"
-	if directory.Uid != "" {
-		Uid = directory.Uid
-	}
 	if directory.DisplayName != "" {
 		DisplayName = directory.DisplayName
 	}
@@ -285,7 +272,7 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 		hkey := make([]byte, 100)
 		stream = cipher.NewOFB(block, iv)
 		stream.XORKeyStream(hkey, ciphertext[aes.BlockSize:])
-		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", Uid, directory.DomainAdmin, directory.Base), string(hkey))
+		err = ldap.Bind(fmt.Sprintf("%s=%s,%s", directory.Uid, directory.DomainAdmin, directory.Base), string(hkey))
 		if err != nil {
 			logger.Get().Error("Error binding to LDAP Server:%s. error: %v", url, err)
 			return externalUsers, err
@@ -304,13 +291,13 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 		if strings.Contains(search, "=") {
 			filter = fmt.Sprintf("(%s*)", search)
 		} else if strings.Contains(search, "*") {
-			filter = fmt.Sprintf("(cn=%s)", search)
+			filter = fmt.Sprintf("(%s=%s)", directory.Uid, search)
 		} else {
-			filter = fmt.Sprintf("(cn=*%s*)", search)
+			filter = fmt.Sprintf("(%s=*%s*)", directory.Uid, search)
 		}
 	}
 
-	attributes := []string{Uid, DisplayName, FirstName, LastName, Email}
+	attributes := []string{directory.Uid, DisplayName, FirstName, LastName, Email}
 	rv, err := ldap.SearchAll(directory.Base, scope, filter, attributes)
 
 	if err != nil {
@@ -333,7 +320,7 @@ func (a Authorizer) ListExternalUsers(search string, page, count int) (externalU
 		user := models.User{}
 		for _, attr := range entry.Attributes() {
 			switch attr.Name() {
-			case Uid:
+			case directory.Uid:
 				user.Username = strings.Join(attr.Values(), ", ")
 			case Email:
 				user.Email = strings.Join(attr.Values(), ", ")
@@ -623,7 +610,7 @@ func (a Authorizer) SetDirectory(directory models.Directory) error {
 	stream.XORKeyStream(chkey[aes.BlockSize:], pswd)
 
 	err = c.Insert(&models.Directory{directory.LdapServer, directory.Port, directory.Base,
-		directory.DomainAdmin, string(chkey), directory.Uid,
+		directory.Type, directory.DomainAdmin, string(chkey), directory.Uid,
 		directory.FirstName, directory.LastName, directory.DisplayName, directory.Email})
 
 	return nil
