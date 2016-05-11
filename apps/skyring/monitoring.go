@@ -1649,9 +1649,8 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchMonitoringDetailsFromProviders(ctxt)
 	if otherDetailsFetchError != nil {
 		logger.Get().Error("%s - Error fetching the provider specific details. Error %v", ctxt, otherDetailsFetchError)
-	} else {
-		system.ProviderMonitoringDetails = otherProvidersDetails
 	}
+	system.ProviderMonitoringDetails = otherProvidersDetails
 
 	/*
 		Add Most used storages
