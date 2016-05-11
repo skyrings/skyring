@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_7124305f",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-05-11T09:45:33Z",
+      "side": 1,
+      "message": "This need not be done at the server side. UI should ask for confirmation before importing user.",
+      "range": {
+        "startLine": 360,
+        "startChar": 1,
+        "endLine": 364,
+        "endChar": 25
+      },
+      "revId": "43632098277b4c1971f0bff8725805e562c3b45e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
