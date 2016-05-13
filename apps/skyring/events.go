@@ -52,24 +52,15 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 		filter["clustername"] = cluster_name
 	}
 
-	var event_severity = map[string]models.AlarmStatus{
-		"indeterminate": models.ALARM_STATUS_INDETERMINATE,
-		"critical":      models.ALARM_STATUS_CRITICAL,
-		"major":         models.ALARM_STATUS_MAJOR,
-		"minor":         models.ALARM_STATUS_MINOR,
-		"warning":       models.ALARM_STATUS_WARNING,
-		"cleared":       models.ALARM_STATUS_CLEARED,
-	}
-
 	if len(severity) != 0 {
 		var arr []interface{}
 		for _, sev := range severity {
 			if sev == "" {
 				continue
 			}
-			if s, ok := event_severity[sev]; !ok {
-				logger.Get().Error("%s-Un-supported query param: %v", ctxt, sev)
-				HttpResponse(rw, http.StatusBadRequest, fmt.Sprintf("Un-supported query param: %s", severity))
+			if s, ok := Event_severity[sev]; !ok {
+				logger.Get().Error("%s-Un-supported query param: %v", ctxt, severity)
+				HttpResponse(rw, http.StatusInternalServerError, fmt.Sprintf("Un-supported query param: %s", severity))
 				return
 			} else {
 				arr = append(arr, bson.M{"severity": s})
