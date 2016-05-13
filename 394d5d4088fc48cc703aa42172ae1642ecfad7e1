@@ -22,6 +22,30 @@
       "revId": "394d5d4088fc48cc703aa42172ae1642ecfad7e1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ce84725f",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-05-13T12:20:09Z",
+      "side": 1,
+      "message": "No this is error message I added a field in rpcresponse struct. I needed this bcoz I found that in case of partial failures some how if I return error message from this remote procedure, then it was landing in skyring with status 0 which means unreachable. So I wanted a way to safely pass on all the information (error and data).",
+      "parentUuid": "baa041b7_5f4252af",
+      "range": {
+        "startLine": 118,
+        "startChar": 2,
+        "endLine": 118,
+        "endChar": 17
+      },
+      "revId": "394d5d4088fc48cc703aa42172ae1642ecfad7e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
