@@ -39,6 +39,15 @@ type APIError struct {
 	Error string
 }
 
+var Event_severity = map[string]models.AlarmStatus{
+	"indeterminate": models.ALARM_STATUS_INDETERMINATE,
+	"critical":      models.ALARM_STATUS_CRITICAL,
+	"major":         models.ALARM_STATUS_MAJOR,
+	"minor":         models.ALARM_STATUS_MINOR,
+	"warning":       models.ALARM_STATUS_WARNING,
+	"cleared":       models.ALARM_STATUS_CLEARED,
+}
+
 func lockNode(ctxt string, nodeId uuid.UUID, hostname string, operation string) (*lock.AppLock, error) {
 	//lock the node
 	locks := make(map[uuid.UUID]string)
