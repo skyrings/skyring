@@ -1782,6 +1782,9 @@ func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	filter["clusterid"], err = uuid.Parse(cluster_id_str)
+
+	params := r.URL.Query()
+
 	if err != nil {
 		logger.Get().Error("%s-Error parsing the cluster id: %s, error: %v", ctxt, cluster_id_str, err)
 		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error parsing the cluster id: %s, error: %v", cluster_id_str, err))
@@ -1790,6 +1793,24 @@ func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Query().Get("storageprofile") != "" {
 		filter["storageprofile"] = r.URL.Query().Get("storageprofile")
 	}
+
+	slu_status_str := params.Get("status")
+	if slu_status_str != "" {
+		switch slu_status_str {
+		case "ok":
+			filter["status"] = models.SLU_STATUS_OK
+		case "warning":
+			filter["status"] = models.SLU_STATUS_WARN
+		case "error":
+			filter["status"] = models.SLU_STATUS_ERROR
+		case "down":
+			filter["state"] = models.SLU_STATE_DOWN
+		default:
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid status %s for slus", slu_status_str))
+			return
+		}
+	}
+
 	if r.URL.Query().Get("nodeid") != "" {
 		filter["nodeid"], err = uuid.Parse(r.URL.Query().Get("nodeid"))
 		if err != nil {
@@ -2386,12 +2407,30 @@ func (a *App) GET_Slus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	params := r.URL.Query()
+	slu_status_str := params.Get("status")
+
+	var filter bson.M = make(map[string]interface{})
+	if slu_status_str != "" {
+		switch slu_status_str {
+		case "ok":
+			filter["status"] = models.SLU_STATUS_OK
+		case "warning":
+			filter["status"] = models.SLU_STATUS_WARN
+		case "error":
+			filter["status"] = models.SLU_STATUS_ERROR
+		case "down":
+			filter["state"] = models.SLU_STATE_DOWN
+		default:
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid status %s for slus", slu_status_str))
+			return
+		}
+	}
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	var slus []models.StorageLogicalUnit
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
-	if err := coll.Find(nil).All(&slus); err != nil {
+	if err := coll.Find(filter).All(&slus); err != nil {
 		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slus. error: %v", err))
 		logger.Get().Error("%s - Error getting the slus. error: %v", ctxt, err)
 		return
