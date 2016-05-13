@@ -64,15 +64,20 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	if len(severity) != 0 {
 		var arr []interface{}
 		for _, sev := range severity {
+			if sev == "" {
+				continue
+			}
 			if s, ok := event_severity[sev]; !ok {
-				logger.Get().Error("%s-Un-supported query param: %v", ctxt, severity)
-				HttpResponse(rw, http.StatusInternalServerError, fmt.Sprintf("Un-supported query param: %s", severity))
+				logger.Get().Error("%s-Un-supported query param: %v", ctxt, sev)
+				HttpResponse(rw, http.StatusBadRequest, fmt.Sprintf("Un-supported query param: %s", severity))
 				return
 			} else {
 				arr = append(arr, bson.M{"severity": s})
 			}
 		}
-		filter["$or"] = arr
+		if len(arr) != 0 {
+			filter["$or"] = arr
+		}
 	}
 
 	if len(acked) != 0 {
@@ -82,7 +87,7 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 			filter["acked"] = false
 		} else {
 			logger.Get().Error("%s-Un-supported query param: %v", ctxt, acked)
-			HttpResponse(rw, http.StatusInternalServerError, fmt.Sprintf("Un-supported query param: %s", acked))
+			HttpResponse(rw, http.StatusBadRequest, fmt.Sprintf("Un-supported query param: %s", acked))
 			return
 		}
 	}
@@ -99,7 +104,23 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	// time stamp format of RFC3339 = "2006-01-02T15:04:05Z07:00"
 	fromDateTime, fromDateTimeErr := time.Parse(time.RFC3339, req.URL.Query().Get("fromdatetime"))
 	toDateTime, toDateTimeErr := time.Parse(time.RFC3339, req.URL.Query().Get("todatetime"))
+	if len(req.URL.Query().Get("fromdatetime")) != 0 && fromDateTimeErr != nil {
+		logger.Get().Error("%s-Un-supported query param: %v.Error: %v", ctxt, req.URL.Query().Get("fromdatetime"), fromDateTimeErr)
+		HttpResponse(rw, http.StatusBadRequest, fmt.Sprintf("Un-supported query param for date-time filter: %v", req.URL.Query().Get("fromdatetime")))
+		return
+	}
+	if len(req.URL.Query().Get("todatetime")) != 0 && toDateTimeErr != nil {
+		logger.Get().Error("%s-Un-supported query param: %v. Error: %v", ctxt, req.URL.Query().Get("todatetime"), toDateTimeErr)
+		HttpResponse(rw, http.StatusBadRequest, fmt.Sprintf("Un-supported query param for date-time filter: %v", req.URL.Query().Get("todatetime")))
+		return
+	}
 	if fromDateTimeErr == nil && toDateTimeErr == nil {
+		if toDateTime.Before(fromDateTime) {
+			logger.Get().Error("%s-Un-supported query param. From date should be before To date", ctxt)
+			HttpResponse(rw, http.StatusBadRequest, fmt.Sprintf("Un-supported query param for date-time filter. From date should be before To date"))
+			return
+		}
+
 		filter["timestamp"] = bson.M{
 			"$gt": fromDateTime.UTC(),
 			"$lt": toDateTime.UTC(),
@@ -124,8 +145,34 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	} else {
 		var startIndex int = 0
 		var endIndex int = models.EVENTS_PER_PAGE
+		// its valid to not mention pageno and page size
+		// but pageNoErr and pageSizeErr will have err values
+		// if they are not passed. So assigining nil here
+		if len(req.URL.Query().Get("pageno")) == 0 {
+			pageNoErr = nil
+		} else if pageNo <= 0 {
+			logger.Get().Error("%s-Un-supported query param: %v", ctxt, pageNo)
+			HttpResponse(rw, http.StatusBadRequest, fmt.Sprintf("Un-supported query param for pagination: %v", req.URL.Query().Get("pageno")))
+			return
+		}
+		if len(req.URL.Query().Get("pagesize")) == 0 {
+			pageSizeErr = nil
+		} else if pageSize <= 0 {
+			logger.Get().Error("%s-Un-supported query param: %v", ctxt, pageSize)
+			HttpResponse(rw, http.StatusBadRequest, fmt.Sprintf("Un-supported query param for pagination: %v", req.URL.Query().Get("pagesize")))
+			return
+		}
 		if pageNoErr == nil && pageSizeErr == nil {
 			startIndex, endIndex = Paginate(pageNo, pageSize, models.EVENTS_PER_PAGE)
+		} else {
+			logger.Get().Error("%s-Un-supported query param: %v, %v ", ctxt, pageNo, pageSize)
+			HttpResponse(rw, http.StatusBadRequest, fmt.Sprintf("Un-supported query param for pagination: %v, %v", req.URL.Query().Get("pageno"), req.URL.Query().Get("pagesize")))
+			return
+		}
+		if startIndex > len(events)-1 {
+			logger.Get().Error("%s-Un-supported query param: %v, %v ", ctxt, pageNo, pageSize)
+			HttpResponse(rw, http.StatusBadRequest, fmt.Sprintf("Un-supported query param for pagination: %v, %v", req.URL.Query().Get("pageno"), req.URL.Query().Get("pagesize")))
+			return
 		}
 		if endIndex > len(events) {
 			endIndex = len(events) - 1
