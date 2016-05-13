@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_7370addc",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-13T11:40:58Z",
+      "side": 1,
+      "message": "Just the value of page no might not give enough info why it failed. I think we should say Invalid page no value \u003cno\u003e",
+      "range": {
+        "startLine": 155,
+        "startChar": 97,
+        "endLine": 155,
+        "endChar": 99
+      },
+      "revId": "926bfbc94b76ba88b6a5faa227c18f6e78454642",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_3377c5d4",
+        "filename": "apps/skyring/events.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-13T11:40:58Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 162,
+        "startChar": 97,
+        "endLine": 162,
+        "endChar": 99
+      },
+      "revId": "926bfbc94b76ba88b6a5faa227c18f6e78454642",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
