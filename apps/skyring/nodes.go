@@ -518,7 +518,28 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	admin_state_str := params.Get("state")
 	node_status := params.Get("status")
 	node_role := params.Get("role")
+	alarmStatus := r.URL.Query()["alarmstatus"]
+
 	var filter bson.M = make(map[string]interface{})
+	if len(alarmStatus) != 0 {
+		var arr []interface{}
+		for _, as := range alarmStatus {
+			if as == "" {
+				continue
+			}
+			if s, ok := Event_severity[as]; !ok {
+				logger.Get().Error("%s-Un-supported query param: %v", ctxt, alarmStatus)
+				HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Un-supported query param: %s", alarmStatus))
+				return
+			} else {
+				arr = append(arr, bson.M{"almstatus": s})
+			}
+		}
+		if len(arr) != 0 {
+			filter["$or"] = arr
+		}
+	}
+
 	if node_status != "" {
 		switch node_status {
 		case "ok":
