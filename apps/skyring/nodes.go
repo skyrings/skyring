@@ -511,6 +511,28 @@ func (a *App) GET_NodeSlus(w http.ResponseWriter, r *http.Request) {
 		filter["nodeid"] = nodeId
 	}
 
+	params := r.URL.Query()
+	slu_status_str := params.Get("status")
+
+	var filter bson.M = make(map[string]interface{})
+	filter["nodeid"] = *nodeId
+
+	if slu_status_str != "" {
+		switch slu_status_str {
+		case "ok":
+			filter["status"] = models.SLU_STATUS_OK
+		case "warning":
+			filter["status"] = models.SLU_STATUS_WARN
+		case "error":
+			filter["status"] = models.SLU_STATUS_ERROR
+		case "down":
+			filter["state"] = models.SLU_STATE_DOWN
+		default:
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid status %s for slu", slu_status_str))
+			return
+		}
+	}
+
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
