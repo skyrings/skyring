@@ -2,7 +2,7 @@
 CWD := $(shell pwd)
 PRINT_STATUS = export EC=$$?; cd $(CWD); if [ "$$EC" -eq "0" ]; then printf "SUCCESS!\n"; else exit $$EC; fi
 
-VERSION   := 0.0.17
+VERSION   := 0.0.18
 RELEASE   := 1
 TARDIR    := ../skyring-$(VERSION)
 RPMBUILD  := $(HOME)/rpmbuild
