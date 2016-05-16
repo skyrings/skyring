@@ -235,7 +235,10 @@ func ScheduleCluster(clusterId uuid.UUID, intervalInSecs int) {
 		logger.Get().Error(err.Error())
 	}
 	f := GetApp().MonitorCluster
+	// Schedule cluster monitoring
 	go scheduler.Schedule(time.Duration(intervalInSecs)*time.Second, f, map[string]interface{}{"clusterId": clusterId})
+	// Default run so that the user doesn't need to wait for scheduled interval seconds for correct data to appear.
+	GetApp().MonitorCluster(map[string]interface{}{"clusterId": clusterId})
 }
 
 func DeleteClusterSchedule(clusterId uuid.UUID) {
@@ -417,7 +420,7 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 
 	time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
 
-	table_name := conf.SystemConfig.TimeSeriesDBConfig.CollectionName + "." + cluster.Name + "."
+	table_name := conf.SystemConfig.TimeSeriesDBConfig.CollectionName + "." + strings.Replace(cluster.Name, ".", "_", -1) + "."
 
 	disk_reads = AverageAndUpdateDb(ctxt, disk_reads, disk_reads_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.READ)
 	disk_writes = AverageAndUpdateDb(ctxt, disk_writes, disk_writes_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
@@ -1183,6 +1186,35 @@ func (a *App) GET_MonitoringPlugins(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
+	var cSummary models.ClusterSummary
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error Getting the context.Err %v", err))
+		return
+	}
+
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_CLUSTER_SUMMARY)
+	if err := coll.Find(bson.M{"clusterid": *cluster_id}).One(&cSummary); err != nil {
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Could not fetch summary.Err %v", err))
+		logger.Get().Error(fmt.Sprintf("%s - Could not fetch summary for cluster %v .Err %v", ctxt, *cluster_id, err))
+		return
+	}
+	json.NewEncoder(w).Encode(cSummary)
+}
+
 func (a *App) Get_Summary(w http.ResponseWriter, r *http.Request) {
 	var system models.System
 	sessionCopy := db.GetDatastore().Copy()
@@ -1216,38 +1248,23 @@ func fetchThresholdEvents(selectCriteria bson.M, utilizationType string, ctxt st
 	return tEventsInDb, err
 }
 
-func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
+func ComputeClusterSummary(cluster models.Cluster) {
 	cSummary := models.ClusterSummary{}
 
-	vars := mux.Vars(r)
-	cluster_id_str := vars["cluster-id"]
-	cluster_id, err := uuid.Parse(cluster_id_str)
+	reqId, err := uuid.New()
 	if err != nil {
-		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
-		logger.Get().Error(fmt.Sprintf("Failed to parse the cluster id with error %v", err))
+		logger.Get().Error("Error Creating the RequestId during cluster summary calculation. error: %v", err)
 		return
 	}
+	ctxt := fmt.Sprintf("%s:%v", models.ENGINE_NAME, reqId.String())
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
-	ctxt, err := GetContext(r)
-	if err != nil {
-		logger.Get().Error("Error Getting the context. error: %v", err)
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error Getting the context.Err %v", err))
-		return
-	}
-
-	cluster, clusterFetchErr := GetCluster(cluster_id)
-	if clusterFetchErr != nil {
-		logger.Get().Error("%s-Unknown cluster with id %v.Err %v", ctxt, cluster_id, clusterFetchErr)
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Unknown cluster with id %v.Err %v", cluster_id, clusterFetchErr))
-		return
-	}
 
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
 	var stotrageUsage []models.StorageUsage
-	if err := coll.Find(bson.M{"clusterid": *cluster_id}).Sort("-percentused").All(&stotrageUsage); err != nil {
-		logger.Get().Error("%s - Failed to fetch most used storages from cluster %v.Err %v", ctxt, *cluster_id, err)
+	if err := coll.Find(bson.M{"clusterid": cluster.ClusterId}).Sort("-percentused").All(&stotrageUsage); err != nil {
+		logger.Get().Error("%s - Failed to fetch most used storages from cluster %v.Err %v", ctxt, cluster.Name, err)
 	}
 	if len(stotrageUsage) > 5 {
 		cSummary.MostUsedStorages = stotrageUsage[:4]
@@ -1258,16 +1275,16 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 		cSummary.MostUsedStorages = make([]models.StorageUsage, 0)
 	}
 
-	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchClusterDetailsFromProvider(ctxt, *cluster_id)
+	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchClusterDetailsFromProvider(ctxt, cluster.ClusterId)
 	if otherDetailsFetchError != nil {
-		logger.Get().Error("%s - Failed to fetch provider specific details for cluster %v.Err : %v", ctxt, cluster.Name, otherDetailsFetchError)
+		logger.Get().Warning("%s - Failed to fetch provider specific details for cluster %v.Err : %v", ctxt, cluster.Name, otherDetailsFetchError)
 	}
 	cSummary.ProviderMonitoringDetails = otherProvidersDetails
 
 	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
 	var slus []models.StorageLogicalUnit
-	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&slus); err != nil {
-		logger.Get().Error("%s - Failed to fetch storage logical units from cluster %v.Err %v", ctxt, *cluster_id, err)
+	if err := coll.Find(bson.M{"clusterid": cluster.ClusterId}).All(&slus); err != nil {
+		logger.Get().Error("%s - Failed to fetch storage logical units from cluster %v.Err %v", ctxt, cluster.Name, err)
 	}
 	slu_down_cnt := 0
 	slu_error_cnt := 0
@@ -1295,7 +1312,7 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("%s - %s", ctxt, fmt.Sprintf("Failed to fetch unmanaged nodes.Err %v", unmanagedNodesError))
 	}
 
-	nodesInCluster, clusterNodesFetchError := getClusterNodesById(cluster_id)
+	nodesInCluster, clusterNodesFetchError := getClusterNodesById(&(cluster.ClusterId))
 	if clusterNodesFetchError != nil {
 		logger.Get().Error("%s - %s", ctxt, fmt.Sprintf("Failed to fetch nodes of cluster.Err %v", cluster.Name))
 	}
@@ -1347,7 +1364,7 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 
 	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
 	var storages models.Storages
-	if err := coll.Find(bson.M{"clusterid": *cluster_id}).All(&storages); err != nil {
+	if err := coll.Find(bson.M{"clusterid": cluster.ClusterId}).All(&storages); err != nil {
 		logger.Get().Error("%s - Error getting the storage list. error: %v", ctxt, err)
 	}
 	storage_down_cnt := 0
@@ -1360,7 +1377,13 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 	}
 	cSummary.StorageCount = map[string]int{models.TOTAL: len(storages), STORAGE_STATUS_DOWN: storage_down_cnt, "criticalAlerts": storageCriticalAlertsCount}
 
-	json.NewEncoder(w).Encode(cSummary)
+	cSummary.ClusterId = cluster.ClusterId
+	cSummary.Name = cluster.Name
+
+	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_CLUSTER_SUMMARY)
+	if _, err := coll.Upsert(bson.M{"clusterid": cluster.ClusterId}, cSummary); err != nil {
+		logger.Get().Error("%s - Error persisting the cluster summary.Error %v", ctxt, err)
+	}
 }
 
 func ComputeSystemSummary(p map[string]interface{}) {
@@ -1478,6 +1501,9 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	nodeCriticalAlertCount := 0
 
 	for _, cluster := range clusters {
+
+		go ComputeClusterSummary(cluster)
+
 		clusterCriticalAlertCount = clusterCriticalAlertCount + cluster.AlmCritCount
 		for _, tEvent := range clusterThresholdEvenstInDb {
 			if uuid.Equal(tEvent.EntityId, cluster.ClusterId) {
