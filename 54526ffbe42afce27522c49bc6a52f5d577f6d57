@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_76fad176",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-17T05:10:32Z",
+      "side": 1,
+      "message": "Should it be error or warning is good enough?",
+      "range": {
+        "startLine": 1287,
+        "startChar": 15,
+        "endLine": 1287,
+        "endChar": 20
+      },
+      "revId": "54526ffbe42afce27522c49bc6a52f5d577f6d57",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_9600b567",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 1505,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-17T05:10:32Z",
+      "side": 1,
+      "message": "Why not pass the above created ctxt here as well?",
+      "range": {
+        "startLine": 1505,
+        "startChar": 5,
+        "endLine": 1505,
+        "endChar": 26
+      },
+      "revId": "54526ffbe42afce27522c49bc6a52f5d577f6d57",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
