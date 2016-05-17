@@ -514,7 +514,6 @@ func (a *App) GET_NodeSlus(w http.ResponseWriter, r *http.Request) {
 	params := r.URL.Query()
 	slu_status_str := params.Get("status")
 
-	var filter bson.M = make(map[string]interface{})
 	filter["nodeid"] = *nodeId
 
 	if slu_status_str != "" {
