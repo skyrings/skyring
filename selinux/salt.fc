@@ -1,0 +1,13 @@
+/usr/bin/salt-master		--	gen_context(system_u:object_r:salt_exec_t,s0)
+/usr/bin/salt-minion		--  	gen_context(system_u:object_r:salt_exec_t,s0)
+
+/usr/lib/systemd/system/salt-master.*		--	gen_context(system_u:object_r:salt_unit_file_t,s0)
+/usr/lib/systemd/system/salt-minion.*		--	gen_context(system_u:object_r:salt_unit_file_t,s0)
+
+/var/cache/salt(/.*)?		gen_context(system_u:object_r:salt_cache_t,s0)
+
+/var/log/salt(/.*)?		gen_context(system_u:object_r:salt_log_t,s0)
+
+/var/run/salt(/.*)?		gen_context(system_u:object_r:salt_var_run_t,s0)
+
+/srv/salt(/.*)?		gen_context(system_u:object_r:salt_data_t,s0)

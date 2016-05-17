@@ -1,0 +1,294 @@
+
+## <summary>policy for salt</summary>
+
+########################################
+## <summary>
+##	Execute TEMPLATE in the salt domin.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`salt_domtrans',`
+	gen_require(`
+		type salt_t, salt_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, salt_exec_t, salt_t)
+')
+
+########################################
+## <summary>
+##	Search salt cache directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`salt_search_cache',`
+	gen_require(`
+		type salt_cache_t;
+	')
+
+	allow $1 salt_cache_t:dir search_dir_perms;
+	files_search_var($1)
+')
+
+########################################
+## <summary>
+##	Read salt cache files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`salt_read_cache',`
+	gen_require(`
+		type salt_cache_t;
+	')
+
+	files_search_var($1)
+	list_dirs_pattern($1, salt_cache_t, salt_cache_t)
+	read_files_pattern($1, salt_cache_t, salt_cache_t)
+')
+
+########################################
+## <summary>
+##	Create, read, write, and delete
+##	salt cache files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`salt_manage_cache_files',`
+	gen_require(`
+		type salt_cache_t;
+	')
+
+	files_search_var($1)
+	manage_files_pattern($1, salt_cache_t, salt_cache_t)
+')
+
+########################################
+## <summary>
+##	Manage salt cache dirs.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`salt_manage_cache_dirs',`
+	gen_require(`
+		type salt_cache_t;
+	')
+
+	files_search_var($1)
+	manage_dirs_pattern($1, salt_cache_t, salt_cache_t)
+')
+
+########################################
+## <summary>
+##	Read salt's data files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`salt_read_data',`
+	gen_require(`
+		type salt_data_t;
+	')
+
+	files_search_var($1)
+	list_dirs_pattern($1, salt_data_t, salt_data_t)
+	read_files_pattern($1, salt_data_t, salt_data_t)
+')
+
+########################################
+## <summary>
+##	Read salt's log files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`salt_read_log',`
+	gen_require(`
+		type salt_log_t;
+	')
+
+	logging_search_logs($1)
+	read_files_pattern($1, salt_log_t, salt_log_t)
+')
+
+########################################
+## <summary>
+##	Append to salt log files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`salt_append_log',`
+	gen_require(`
+		type salt_log_t;
+	')
+
+	logging_search_logs($1)
+	append_files_pattern($1, salt_log_t, salt_log_t)
+')
+
+########################################
+## <summary>
+##	Manage salt log files
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`salt_manage_log',`
+	gen_require(`
+		type salt_log_t;
+	')
+
+	logging_search_logs($1)
+	manage_dirs_pattern($1, salt_log_t, salt_log_t)
+	manage_files_pattern($1, salt_log_t, salt_log_t)
+	manage_lnk_files_pattern($1, salt_log_t, salt_log_t)
+')
+########################################
+## <summary>
+##	Read salt PID files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`salt_read_pid_files',`
+	gen_require(`
+		type salt_var_run_t;
+	')
+
+	files_search_pids($1)
+	read_files_pattern($1, salt_var_run_t, salt_var_run_t)
+')
+
+########################################
+## <summary>
+##      Connect to salt over an unix
+##      stream socket.
+## </summary>
+## <param name="domain">
+##      <summary>
+##      Domain allowed access.
+##      </summary>
+## </param>
+#
+interface(`salt_stream_connect',`
+        gen_require(`
+                type salt_t, salt_var_run_t;
+        ')
+
+        files_search_pids($1)
+        stream_connect_pattern($1, salt_var_run_t, salt_var_run_t, salt_t)
+')
+
+########################################
+## <summary>
+##	Execute salt server in the salt domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed to transition.
+##	</summary>
+## </param>
+#
+interface(`salt_systemctl',`
+	gen_require(`
+		type salt_t;
+		type salt_unit_file_t;
+	')
+
+	systemd_exec_systemctl($1)
+        systemd_read_fifo_file_passwd_run($1)
+	allow $1 salt_unit_file_t:file read_file_perms;
+	allow $1 salt_unit_file_t:service manage_service_perms;
+
+	ps_process_pattern($1, salt_t)
+')
+
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	an salt environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`salt_admin',`
+	gen_require(`
+		type salt_t;
+		type salt_cache_t;
+		type salt_log_t;
+		type salt_var_run_t;
+	type salt_unit_file_t;
+	')
+
+	allow $1 salt_t:process { signal_perms };
+	ps_process_pattern($1, salt_t)
+
+    tunable_policy(`deny_ptrace',`',`
+        allow $1 salt_t:process ptrace;
+    ')
+
+	files_search_var($1)
+	admin_pattern($1, salt_cache_t)
+
+	logging_search_logs($1)
+	admin_pattern($1, salt_log_t)
+
+	files_search_pids($1)
+	admin_pattern($1, salt_var_run_t)
+
+	salt_systemctl($1)
+	admin_pattern($1, salt_unit_file_t)
+	allow $1 salt_unit_file_t:service all_service_perms;
+	optional_policy(`
+		systemd_passwd_agent_exec($1)
+		systemd_read_fifo_file_passwd_run($1)
+	')
+')
