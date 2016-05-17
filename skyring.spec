@@ -3,6 +3,19 @@
 %global with_systemd 1
 %endif
 
+%global selinuxtype targeted
+%global moduletype  services
+%global modulenames skyring
+
+%global _format() export %1=""; for x in %{modulenames}; do %1+=%2; %1+=" "; done;
+# Relabel files
+%global skyring_relabel_files() %{_bindir}/skyring %{_prefix}/lib/systemd/system/skyring.* /var/lib/skyring/.* /var/run/\.skyring-event
+%global salt_relabel_files() %{_bindir}/salt-master.* %{_bindir}/salt-minion.* %{_prefix}/lib/systemd/system/salt-master.* /var/cache/salt/.* /var/log/salt/.* /var/run/salt/* /srv/salt/.*
+%global carbon_relabel_files() %{_bindir}/carbon-aggregator %{_bindir}/carbon-cache %{_bindir}/carbon-client %{_bindir}/carbon-relay %{_bindir}/validate-storage-schemas %{_prefix}/lib/systemd/system/carbon* /var/lib/carbon/.* /var/log/carbon/.* /var/run/carbon-aggregator.pid /var/run/carbon-cache.pid
+
+# Version of distribution SELinux policy package
+%global selinux_policyver 3.13.1-158.18.fc23
+
 %define pkg_name skyring
 %define pkg_version 0.0.18
 %define pkg_release 1
@@ -58,10 +71,46 @@ a plugin framework for tomorrow’s SDS technologies.
 SKYRING integrates best-of-breed open source components at its core,
 and integrates with the broader management stack.
 
+%package selinux
+License: GPLv2
+Group: System Environment/Base
+Summary: SELinux Policies for Skyring
+BuildArch: noarch
+Requires(post): selinux-policy-base >= %{selinux_policyver}, selinux-policy-targeted >= %{selinux_policyver}, policycoreutils, policycoreutils-python libselinux-utils
+BuildRequires: selinux-policy selinux-policy-devel
+
+%description selinux
+SELinux Policies for Skyring
+
+
+%package -n salt-selinux
+License: GPLv2
+Group: System Environment/Base
+Summary: SELinux Policies for Salt
+BuildArch: noarch
+Requires(post): selinux-policy-base >= %{selinux_policyver}, selinux-policy-targeted >= %{selinux_policyver}, policycoreutils, policycoreutils-python libselinux-utils
+BuildRequires: selinux-policy selinux-policy-devel
+
+%description -n salt-selinux
+SELinux Policies for Salt
+
+
+%package -n carbon-selinux
+License: GPLv2
+Group: System Environment/Base
+Summary: SELinux Policies for Carbon
+BuildArch: noarch
+Requires(post): selinux-policy-base >= %{selinux_policyver}, selinux-policy-targeted >= %{selinux_policyver}, policycoreutils, policycoreutils-python libselinux-utils
+BuildRequires: selinux-policy selinux-policy-devel
+
+%description -n carbon-selinux
+SELinux Policies for Carbon
+
 %prep
 %setup -n %{pkg_name}-%{pkg_version}
 
 %build
+make bzip-selinux-policies
 make build-special
 make pybuild
 
@@ -97,9 +146,82 @@ chmod -x $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/__init__.py
 chmod -x $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/saltwrapper.py
 chmod +x $RPM_BUILD_ROOT/srv/salt/push_event.sls
 
+# Install SELinux interfaces and policy modules
+install -d %{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
+install -d %{buildroot}%{_datadir}/selinux/packages
+
+# skyring
+install -p -m 644 selinux/skyring.if \
+	%{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
+install -m 0644 selinux/skyring.pp.bz2 \
+	%{buildroot}%{_datadir}/selinux/packages
+
+# salt
+install -p -m 644 selinux/salt.if \
+	%{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
+install -m 0644 selinux/salt.pp.bz2 \
+	%{buildroot}%{_datadir}/selinux/packages
+
+# carbon
+install -p -m 644 selinux/carbon.if \
+	%{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
+install -m 0644 selinux/carbon.pp.bz2 \
+	%{buildroot}%{_datadir}/selinux/packages
+
 %post
 ln -fs /usr/share/skyring/setup/skyring-setup.sh /usr/bin/skyring-setup
 /bin/systemctl enable skyring.service >/dev/null 2>&1 || :
+
+%post selinux
+%_format MODULE %{_datadir}/selinux/packages/skyring.pp.bz2
+%{_sbindir}/semodule -n -s %{selinuxtype} -i $MODULE
+if %{_sbindir}/selinuxenabled ; then
+    %{_sbindir}/load_policy
+    %skyring_relabel_files
+fi
+
+%post -n salt-selinux
+%_format MODULE %{_datadir}/selinux/packages/salt.pp.bz2
+%{_sbindir}/semodule -n -s %{selinuxtype} -i $MODULE
+if %{_sbindir}/selinuxenabled ; then
+    %{_sbindir}/load_policy
+    %salt_relabel_files
+fi
+
+%post -n carbon-selinux
+%_format MODULE %{_datadir}/selinux/packages/carbon.pp.bz2
+%{_sbindir}/semodule -n -s %{selinuxtype} -i $MODULE
+if %{_sbindir}/selinuxenabled ; then
+    %{_sbindir}/load_policy
+    %carbon_relabel_files
+fi
+
+%postun selinux
+if [ $1 -eq 0 ]; then
+    %{_sbindir}/semodule -n -r %{modulenames} &> /dev/null || :
+    if %{_sbindir}/selinuxenabled ; then
+	%{_sbindir}/load_policy
+	%skyring_relabel_files
+    fi
+fi
+
+%postun -n salt-selinux
+if [ $1 -eq 0 ]; then
+    %{_sbindir}/semodule -n -r %{modulenames} &> /dev/null || :
+    if %{_sbindir}/selinuxenabled ; then
+	%{_sbindir}/load_policy
+	%salt_relabel_files
+    fi
+fi
+
+%postun -n carbon-selinux
+if [ $1 -eq 0 ]; then
+    %{_sbindir}/semodule -n -r %{modulenames} &> /dev/null || :
+    if %{_sbindir}/selinuxenabled ; then
+	%{_sbindir}/load_policy
+	%carbon_relabel_files
+    fi
+fi
 
 %postun
 if [ -e /etc/httpd/conf.d/graphite-web.conf.orig -a -h /etc/httpd/conf.d/graphite-web.conf -a ! -e "`readlink /etc/httpd/conf.d/graphite-web.conf`" ] ; then
@@ -132,6 +254,21 @@ fi
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
+
+%files selinux
+%defattr(-,root,root,0755)
+%attr(0644,root,root) %{_datadir}/selinux/packages/skyring.pp.bz2
+%attr(0644,root,root) %{_datadir}/selinux/devel/include/%{moduletype}/skyring.if
+
+%files -n salt-selinux
+%defattr(-,root,root,0755)
+%attr(0644,root,root) %{_datadir}/selinux/packages/salt.pp.bz2
+%attr(0644,root,root) %{_datadir}/selinux/devel/include/%{moduletype}/salt.if
+
+%files -n carbon-selinux
+%defattr(-,root,root,0755)
+%attr(0644,root,root) %{_datadir}/selinux/packages/carbon.pp.bz2
+%attr(0644,root,root) %{_datadir}/selinux/devel/include/%{moduletype}/carbon.if
 
 %files
 %attr(0755, root, root) /usr/bin/skyring

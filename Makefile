@@ -10,6 +10,14 @@ SKYRING_BUILD  := $(HOME)/.skyring_build
 SKYRING_BUILD_SRC  := $(SKYRING_BUILD)/golang/gopath/src/github.com/skyrings/skyring
 SKYRING_BUILD_TARDIR := $(SKYRING_BUILD)/golang/gopath/src/github.com/skyrings/skyring/$(TARDIR)
 
+bzip-selinux-policies:
+	@cd selinux; \
+	rm -f *.pp.bz2 tmp; \
+	make -f /usr/share/selinux/devel/Makefile; \
+	bzip2 -9 skyring.pp; \
+	bzip2 -9 salt.pp; \
+	bzip2 -9 carbon.pp
+
 all: install
 
 checkdeps:
