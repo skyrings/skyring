@@ -1,0 +1,9 @@
+/usr/bin/skyring		--	gen_context(system_u:object_r:skyring_exec_t,s0)
+
+/usr/lib/systemd/system/skyring.*		--	gen_context(system_u:object_r:skyring_unit_file_t,s0)
+
+/var/lib/skyring(/.*)?		gen_context(system_u:object_r:skyring_var_lib_t,s0)
+
+/var/log/skyring(/.*)?		gen_context(system_u:object_r:skyring_log_t,s0)
+
+/var/run/\.skyring-event		-s	gen_context(system_u:object_r:skyring_var_run_t,s0)
