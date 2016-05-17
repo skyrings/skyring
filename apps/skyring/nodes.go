@@ -478,20 +478,44 @@ func (a *App) GET_NodeSlus(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("Error Getting the context. error: %v", err)
 	}
 
+	alarmStatus := r.URL.Query()["alarmstatus"]
+
+	var filter bson.M = make(map[string]interface{})
+	if len(alarmStatus) != 0 {
+		var arr []interface{}
+		for _, as := range alarmStatus {
+			if as == "" {
+				continue
+			}
+			if s, ok := Event_severity[as]; !ok {
+				logger.Get().Error("%s-Un-supported query param: %v", ctxt, alarmStatus)
+				HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Un-supported query param: %s", alarmStatus))
+				return
+			} else {
+				arr = append(arr, bson.M{"almstatus": s})
+			}
+		}
+		if len(arr) != 0 {
+			filter["$or"] = arr
+		}
+	}
+
 	vars := mux.Vars(r)
 	nodeIdStr := vars["node-id"]
 	nodeId, nodeIdErr := uuid.Parse(nodeIdStr)
 	if nodeIdErr != nil {
 		logger.Get().Error("%s - Invalid uuid.Error %v", ctxt, nodeIdStr)
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("%s - Invalid uuid.Error %v", ctxt, nodeIdStr))
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("%s - Invalid uuid.Error %v", ctxt, nodeIdStr))
 		return
+	} else {
+		filter["nodeid"] = nodeId
 	}
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
 	var slus []models.StorageLogicalUnit
-	if err := collection.Find(bson.M{"nodeid": nodeId}).All(&slus); err != nil {
+	if err := collection.Find(filter).All(&slus); err != nil {
 		if err != mgo.ErrNotFound {
 			logger.Get().Error("%s - Could not fetch slus of node %v.Error %v", ctxt, nodeId, err)
 			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("%s - Could not fetch slus of node %v.Error %v", ctxt, nodeId, err))
