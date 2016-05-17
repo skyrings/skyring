@@ -844,6 +844,72 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 		clusters = models.Clusters(nearFullClusters)
 	}
 
+	slu_status_str := params.Get("slu_status")
+
+	var sluFilter bson.M = make(map[string]interface{})
+
+	if slu_status_str != "" {
+		switch slu_status_str {
+		case "ok":
+			sluFilter["status"] = models.SLU_STATUS_OK
+		case "warning":
+			sluFilter["status"] = models.SLU_STATUS_WARN
+		case "error":
+			sluFilter["status"] = models.SLU_STATUS_ERROR
+		case "down":
+			sluFilter["state"] = models.SLU_STATE_DOWN
+		default:
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid status %s for slus", slu_status_str))
+			return
+		}
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		var slus []models.StorageLogicalUnit
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+		if err := coll.Find(sluFilter).All(&slus); err != nil {
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slus. error: %v", err))
+			logger.Get().Error("%s - Error getting the slus. error: %v", ctxt, err)
+			return
+		}
+
+		var sluStatusFilteredClusters []models.Cluster
+		filteredSlusClusterSet := util.NewSet()
+		for _, slu := range slus {
+			filteredSlusClusterSet.Add(slu.ClusterId)
+		}
+		for _, filteredClusterIdInterface := range filteredSlusClusterSet.GetElements() {
+			cId := filteredClusterIdInterface.(uuid.UUID)
+			for _, cluster := range clusters {
+				if uuid.Equal(cId, cluster.ClusterId) {
+					sluStatusFilteredClusters = append(sluStatusFilteredClusters, cluster)
+				}
+			}
+		}
+		clusters = sluStatusFilteredClusters
+	}
+
+	if params.Get("slu_near_full") == "true" {
+		selectCriteria := bson.M{
+			"utilizationtype":   monitoring.SLU_UTILIZATION,
+			"thresholdseverity": models.CRITICAL,
+		}
+		sluThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.SLU_UTILIZATION, ctxt)
+		filteredSlusClusterSet := util.NewSet()
+		for _, sluEvent := range sluThresholdEventsInDb {
+			filteredSlusClusterSet.Add(sluEvent.ClusterId)
+		}
+		var sluStatusFilteredClusters []models.Cluster
+		for _, filteredClusterIdInterface := range filteredSlusClusterSet.GetElements() {
+			cId := filteredClusterIdInterface.(uuid.UUID)
+			for _, cluster := range clusters {
+				if uuid.Equal(cId, cluster.ClusterId) {
+					sluStatusFilteredClusters = append(sluStatusFilteredClusters, cluster)
+				}
+			}
+		}
+		clusters = sluStatusFilteredClusters
+	}
+
 	if len(clusters) == 0 {
 		json.NewEncoder(w).Encode([]models.Cluster{})
 	} else {
