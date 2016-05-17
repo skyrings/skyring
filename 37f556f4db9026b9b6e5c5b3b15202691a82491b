@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_0cb93815",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-17T11:17:53Z",
+      "side": 1,
+      "message": "Shouldnt we looks for statusCode as well here?",
+      "range": {
+        "startLine": 118,
+        "startChar": 5,
+        "endLine": 118,
+        "endChar": 33
+      },
+      "revId": "37f556f4db9026b9b6e5c5b3b15202691a82491b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
