@@ -46,6 +46,30 @@
       "revId": "394d5d4088fc48cc703aa42172ae1642ecfad7e1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_96e9d5b9",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-17T05:00:22Z",
+      "side": 1,
+      "message": "Even Nishanth has a feeling that changing rpc response struct change at this stage certainly is not the way.",
+      "parentUuid": "baa041b7_ce84725f",
+      "range": {
+        "startLine": 118,
+        "startChar": 2,
+        "endLine": 118,
+        "endChar": 17
+      },
+      "revId": "394d5d4088fc48cc703aa42172ae1642ecfad7e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
