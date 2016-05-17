@@ -1,0 +1,265 @@
+
+## <summary>policy for skyring</summary>
+
+########################################
+## <summary>
+##	Execute TEMPLATE in the skyring domin.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`skyring_domtrans',`
+	gen_require(`
+		type skyring_t, skyring_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, skyring_exec_t, skyring_t)
+')
+########################################
+## <summary>
+##	Read skyring's log files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`skyring_read_log',`
+	gen_require(`
+		type skyring_log_t;
+	')
+
+	logging_search_logs($1)
+	read_files_pattern($1, skyring_log_t, skyring_log_t)
+')
+
+########################################
+## <summary>
+##	Append to skyring log files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`skyring_append_log',`
+	gen_require(`
+		type skyring_log_t;
+	')
+
+	logging_search_logs($1)
+	append_files_pattern($1, skyring_log_t, skyring_log_t)
+')
+
+########################################
+## <summary>
+##	Manage skyring log files
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`skyring_manage_log',`
+	gen_require(`
+		type skyring_log_t;
+	')
+
+	logging_search_logs($1)
+	manage_dirs_pattern($1, skyring_log_t, skyring_log_t)
+	manage_files_pattern($1, skyring_log_t, skyring_log_t)
+	manage_lnk_files_pattern($1, skyring_log_t, skyring_log_t)
+')
+
+########################################
+## <summary>
+##	Search skyring lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`skyring_search_lib',`
+	gen_require(`
+		type skyring_var_lib_t;
+	')
+
+	allow $1 skyring_var_lib_t:dir search_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	Read skyring lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`skyring_read_lib_files',`
+	gen_require(`
+		type skyring_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	read_files_pattern($1, skyring_var_lib_t, skyring_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage skyring lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`skyring_manage_lib_files',`
+	gen_require(`
+		type skyring_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_files_pattern($1, skyring_var_lib_t, skyring_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage skyring lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`skyring_manage_lib_dirs',`
+	gen_require(`
+		type skyring_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_dirs_pattern($1, skyring_var_lib_t, skyring_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Execute skyring server in the skyring domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed to transition.
+##	</summary>
+## </param>
+#
+interface(`skyring_systemctl',`
+	gen_require(`
+		type skyring_t;
+		type skyring_unit_file_t;
+	')
+
+	systemd_exec_systemctl($1)
+        systemd_read_fifo_file_passwd_run($1)
+	allow $1 skyring_unit_file_t:file read_file_perms;
+	allow $1 skyring_unit_file_t:service manage_service_perms;
+
+	ps_process_pattern($1, skyring_t)
+')
+
+########################################
+## <summary>
+##      Connect to skyring over an unix
+##      stream socket.
+## </summary>
+## <param name="domain">
+##      <summary>
+##      Domain allowed access.
+##      </summary>
+## </param>
+#
+interface(`skyring_stream_connect',`
+        gen_require(`
+                type skyring_t, skyring_var_run_t;
+        ')
+
+        files_search_pids($1)
+        stream_connect_pattern($1, skyring_var_run_t, skyring_var_run_t, skyring_t)
+')
+
+########################################
+## <summary>
+##      Connect to skyring over an unix
+##      stream socket.
+## </summary>
+## <param name="domain">
+##      <summary>
+##      Domain allowed access.
+##      </summary>
+## </param>
+#
+interface(`skyring_stream_connect_salt',`
+        gen_require(`
+		type salt_t;
+        ')
+	skyring_stream_connect(salt_t)
+')
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	an skyring environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`skyring_admin',`
+	gen_require(`
+		type skyring_t;
+		type skyring_log_t;
+		type skyring_var_lib_t;
+	type skyring_unit_file_t;
+	')
+
+	allow $1 skyring_t:process { signal_perms };
+	ps_process_pattern($1, skyring_t)
+
+    tunable_policy(`deny_ptrace',`',`
+        allow $1 skyring_t:process ptrace;
+    ')
+
+	logging_search_logs($1)
+	admin_pattern($1, skyring_log_t)
+
+	files_search_var_lib($1)
+	admin_pattern($1, skyring_var_lib_t)
+
+	skyring_systemctl($1)
+	admin_pattern($1, skyring_unit_file_t)
+	allow $1 skyring_unit_file_t:service all_service_perms;
+	optional_policy(`
+		systemd_passwd_agent_exec($1)
+		systemd_read_fifo_file_passwd_run($1)
+	')
+')
