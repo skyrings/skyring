@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_2cd99c22",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-05-17T13:04:21Z",
+      "side": 1,
+      "message": "I will change this to libselinux-utils",
+      "range": {
+        "startLine": 77,
+        "startChar": 150,
+        "endLine": 77,
+        "endChar": 167
+      },
+      "revId": "47bf8e4a0f9f4dec5f1e3f1bf9751cd734ddec62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
