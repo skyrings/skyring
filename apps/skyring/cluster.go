@@ -768,6 +768,15 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func clusterExists(clusterList []uuid.UUID, cluster uuid.UUID) bool {
+	for _, c := range clusterList {
+		if c == cluster {
+			return true
+		}
+	}
+	return false
+}
+
 func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -801,6 +810,39 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	sluAlarmStatus := r.URL.Query()["slualarmstatus"]
+	var sluAffectedClusters []uuid.UUID
+	if len(sluAlarmStatus) != 0 {
+		var sluFilter bson.M = make(map[string]interface{})
+		var arr []interface{}
+		for _, as := range sluAlarmStatus {
+			if as == "" {
+				continue
+			}
+			if s, ok := Event_severity[as]; !ok {
+				logger.Get().Error("%s-Un-supported query param: %v", ctxt, sluAlarmStatus)
+				HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Un-supported query param: %s", sluAlarmStatus))
+				return
+			} else {
+				arr = append(arr, bson.M{"almstatus": s})
+			}
+		}
+		if len(arr) != 0 {
+			sluFilter["$or"] = arr
+			var slus []models.StorageLogicalUnit
+			coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+			if err := coll.Find(sluFilter).All(&slus); err != nil {
+				HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slus . error: %v", err))
+				logger.Get().Error("Error getting the slus . error: %v", err)
+				return
+			}
+			for _, slu := range slus {
+				if !clusterExists(sluAffectedClusters, slu.ClusterId) {
+					sluAffectedClusters = append(sluAffectedClusters, slu.ClusterId)
+				}
+			}
+		}
+	}
 	if cluster_status_str != "" {
 		switch cluster_status_str {
 		case "ok":
@@ -825,7 +867,21 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 	if len(clusters) == 0 {
 		json.NewEncoder(w).Encode([]models.Cluster{})
 	} else {
-		json.NewEncoder(w).Encode(clusters)
+		if len(sluAlarmStatus) != 0 {
+			var filteredClusters []models.Cluster
+			for _, cluster := range clusters {
+				if clusterExists(sluAffectedClusters, cluster.ClusterId) {
+					filteredClusters = append(filteredClusters, cluster)
+				}
+			}
+			if len(filteredClusters) != 0 {
+				json.NewEncoder(w).Encode(filteredClusters)
+			} else {
+				json.NewEncoder(w).Encode([]models.Cluster{})
+			}
+		} else {
+			json.NewEncoder(w).Encode(clusters)
+		}
 	}
 }
 
