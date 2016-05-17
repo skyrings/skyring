@@ -1755,8 +1755,28 @@ func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Get().Error("Error Getting the context. error: %v", err)
 	}
+	alarmStatus := r.URL.Query()["alarmstatus"]
 
 	var filter bson.M = make(map[string]interface{})
+	if len(alarmStatus) != 0 {
+		var arr []interface{}
+		for _, as := range alarmStatus {
+			if as == "" {
+				continue
+			}
+			if s, ok := Event_severity[as]; !ok {
+				logger.Get().Error("%s-Un-supported query param: %v", ctxt, alarmStatus)
+				HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Un-supported query param: %s", alarmStatus))
+				return
+			} else {
+				arr = append(arr, bson.M{"almstatus": s})
+			}
+		}
+		if len(arr) != 0 {
+			filter["$or"] = arr
+		}
+	}
+
 	vars := mux.Vars(r)
 	cluster_id_str := vars["cluster-id"]
 	filter["clusterid"], err = uuid.Parse(cluster_id_str)
