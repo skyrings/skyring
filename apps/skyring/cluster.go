@@ -816,6 +816,44 @@ func getSluAffectedClusters(w http.ResponseWriter, r *http.Request, ctxt string)
 	return sluAffectedClusters, nil
 }
 
+func getClustersBySluStatus(slu_status_str string, clusters []models.Cluster) (error, []models.Cluster) {
+	var sluFilter bson.M = make(map[string]interface{})
+	switch slu_status_str {
+	case "ok":
+		sluFilter["status"] = models.SLU_STATUS_OK
+	case "warning":
+		sluFilter["status"] = models.SLU_STATUS_WARN
+	case "error":
+		sluFilter["status"] = models.SLU_STATUS_ERROR
+	case "down":
+		sluFilter["state"] = models.SLU_STATE_DOWN
+	default:
+		return fmt.Errorf("Invalid status %s for slus", slu_status_str), []models.Cluster{}
+	}
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+	var slus []models.StorageLogicalUnit
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
+	if err := coll.Find(sluFilter).All(&slus); err != nil {
+		return fmt.Errorf("Error getting the slus. error: %v", err), []models.Cluster{}
+	}
+
+	var sluStatusFilteredClusters []models.Cluster
+	filteredSlusClusterSet := util.NewSet()
+	for _, slu := range slus {
+		filteredSlusClusterSet.Add(slu.ClusterId)
+	}
+	for _, filteredClusterIdInterface := range filteredSlusClusterSet.GetElements() {
+		cId := filteredClusterIdInterface.(uuid.UUID)
+		for _, cluster := range clusters {
+			if uuid.Equal(cId, cluster.ClusterId) {
+				sluStatusFilteredClusters = append(sluStatusFilteredClusters, cluster)
+			}
+		}
+	}
+	return nil, sluStatusFilteredClusters
+}
+
 func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -870,6 +908,12 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	name := params.Get("name")
+
+	if name != "" {
+		filter["name"] = name
+	}
+
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
 	var clusters models.Clusters
 	if err := collection.Find(filter).All(&clusters); err != nil {
@@ -896,6 +940,26 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 		clusters = models.Clusters(nearFullClusters)
 	}
 
+	slu_status_str := params.Get("slu_status")
+
+	if slu_status_str != "" {
+		err, clusters = getClustersBySluStatus(slu_status_str, clusters)
+		if err != nil {
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the clusters list. error: %v", err))
+			logger.Get().Error("%s-Error getting the clusters list. error: %v", ctxt, err)
+			return
+		}
+	}
+
+	slu_near_full := params.Get("slu_near_full")
+	if slu_near_full == "true" {
+		clusters = getClusterWithNearFullSlus(ctxt, clusters)
+	} else if slu_near_full != "" && slu_near_full != "false" {
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Incorrect value for slu_near_full flag"))
+		logger.Get().Error("%s - Incorrect value for slu_near_full flag", ctxt)
+		return
+	}
+
 	if len(clusters) == 0 {
 		json.NewEncoder(w).Encode([]models.Cluster{})
 	} else {
@@ -915,6 +979,28 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(clusters)
 		}
 	}
+}
+
+func getClusterWithNearFullSlus(ctxt string, clusters []models.Cluster) []models.Cluster {
+	selectCriteria := bson.M{
+		"utilizationtype":   monitoring.SLU_UTILIZATION,
+		"thresholdseverity": models.CRITICAL,
+	}
+	sluThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.SLU_UTILIZATION, ctxt)
+	filteredSlusClusterSet := util.NewSet()
+	for _, sluEvent := range sluThresholdEventsInDb {
+		filteredSlusClusterSet.Add(sluEvent.ClusterId)
+	}
+	var sluStatusFilteredClusters []models.Cluster
+	for _, filteredClusterIdInterface := range filteredSlusClusterSet.GetElements() {
+		cId := filteredClusterIdInterface.(uuid.UUID)
+		for _, cluster := range clusters {
+			if uuid.Equal(cId, cluster.ClusterId) {
+				sluStatusFilteredClusters = append(sluStatusFilteredClusters, cluster)
+			}
+		}
+	}
+	return sluStatusFilteredClusters
 }
 
 func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
