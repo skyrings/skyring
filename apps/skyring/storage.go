@@ -558,6 +558,27 @@ func (a *App) GET_AllStorages(w http.ResponseWriter, r *http.Request) {
 
 	var filter bson.M = make(map[string]interface{})
 	params := r.URL.Query()
+	alarmStatus := r.URL.Query()["alarmstatus"]
+
+	if len(alarmStatus) != 0 {
+		var arr []interface{}
+		for _, as := range alarmStatus {
+			if as == "" {
+				continue
+			}
+			if s, ok := Event_severity[as]; !ok {
+				logger.Get().Error("%s-Un-supported query param: %v", ctxt, alarmStatus)
+				HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Un-supported query param: %s", alarmStatus))
+				return
+			} else {
+				arr = append(arr, bson.M{"almstatus": s})
+			}
+		}
+		if len(arr) != 0 {
+			filter["$or"] = arr
+		}
+	}
+
 	status_str := params.Get("status")
 	if status_str != "" {
 		switch status_str {
