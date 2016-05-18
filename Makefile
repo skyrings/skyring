@@ -15,7 +15,8 @@ bzip-selinux-policies:
 	rm -f *.pp.bz2 tmp; \
 	make -f /usr/share/selinux/devel/Makefile; \
 	bzip2 -9 skyring.pp; \
-	bzip2 -9 salt.pp
+	bzip2 -9 salt.pp; \
+        bzip2 -9 carbon.pp
 
 all: install
 
