@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_dd1e586f",
+        "filename": "apps/skyring/request-router.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-18T04:32:28Z",
+      "side": 1,
+      "message": "I think we should check for 200 and 202 both as both are valid success cases..",
+      "range": {
+        "startLine": 118,
+        "startChar": 2,
+        "endLine": 118,
+        "endChar": 86
+      },
+      "revId": "0c227800203ff9cb0c1e24c23922d118b837577a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
