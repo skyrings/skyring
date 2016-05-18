@@ -277,47 +277,34 @@ def GetNodeCpu(node, ctxt=""):
     return cpuinfo
 
 
-
 def GetNodeOs(node, ctxt=""):
-    '''
-    returns structure
-    {"nodename": [{"Name":            "osname",
-                   "OSVersion":       "osversion",
-                   "KernelVersion":   "oskernelversion",
-                   "SELinuxMode":     "selinuxmode"}, ...], ...}
-    '''
-
     if type(node) is list:
         minions = node
     else:
         minions = [node]
-
-    lsb = ("lsb_release -v -i -r --short")
-    lsb_out = local.cmd(minions, 'cmd.run', [lsb], expr_form='list')
-
+    os_out = local.cmd(minions, 'grains.item', ['osfullname'], expr_form='list')
+    os_version_out = local.cmd(minions, 'grains.item', ['osrelease'], expr_form='list')
     uname = ("uname --all")
     uname_out = local.cmd(minions, 'cmd.run', [uname], expr_form='list')
-
     se = ("sestatus")
     se_out = local.cmd(minions, 'cmd.run', [se], expr_form='list')
-
     osinfo = {}
     for minion in minions:
-        lsb_info = lsb_out.get(minion)
+        os = os_out.get(minion).get("osfullname")
+        os_version = os_version_out.get(minion).get("osrelease")
         uname_info = uname_out.get(minion)
         se_info = se_out.get(minion)
-        if lsb_info and uname_info and se_info:
-            lsb_info_list = lsb_info.split(' ')
+        if os and os_version and uname_info and se_info:
             uname_info_list = uname_info.split(' ')
             se_info_list = se_info.split('\n')
-            osinfo[minion] = {'Name': lsb_info_list[1],
-                              'OSVersion': lsb_info_list[2],
+            osinfo[minion] = {'Name': os,
+                              'OSVersion': os_version,
                               'KernelVersion': uname_info_list[2],
                               'SELinuxMode': se_info_list[4].split(':')[1].strip()}
         else:
             osinfo[minion] = {'Name': '', 'OSVersion': '', 'KernelVersion': '', 'SELinuxMode': ''}
-
     return osinfo
+
 
 def GetNodeMemory(node, ctxt=""):
     '''
