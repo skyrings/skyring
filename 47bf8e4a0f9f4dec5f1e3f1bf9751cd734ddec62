@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "baa041b7_381b1275",
+        "filename": "Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-18T04:46:45Z",
+      "side": 1,
+      "message": "bz? means?",
+      "range": {
+        "startLine": 13,
+        "startChar": 8,
+        "endLine": 13,
+        "endChar": 10
+      },
+      "revId": "47bf8e4a0f9f4dec5f1e3f1bf9751cd734ddec62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_b81de263",
+        "filename": "selinux/salt.fc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-18T04:46:45Z",
+      "side": 1,
+      "message": "Why minion stuff in skyring core side? Do we have separate policy defined for storage nodes?",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "47bf8e4a0f9f4dec5f1e3f1bf9751cd734ddec62",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_2cd99c22",
         "filename": "skyring.spec",
         "patchSetId": 1
