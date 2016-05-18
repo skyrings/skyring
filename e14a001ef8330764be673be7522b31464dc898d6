@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_64be9466",
+        "filename": "conf/sample/about.conf.sample",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-05-18T20:04:07Z",
+      "side": 1,
+      "message": "we need to make the API changes also to get this info to UI right?",
+      "range": {
+        "startLine": 6,
+        "startChar": 6,
+        "endLine": 7,
+        "endChar": 30
+      },
+      "revId": "e14a001ef8330764be673be7522b31464dc898d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
