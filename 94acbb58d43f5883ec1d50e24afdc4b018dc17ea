@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_7d0e2c3c",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-18T04:35:46Z",
+      "side": 1,
+      "message": "Better write two different functions for these sections and invoke them based on params passed. This function looks messy now :(",
+      "range": {
+        "startLine": 847,
+        "startChar": 1,
+        "endLine": 889,
+        "endChar": 2
+      },
+      "revId": "94acbb58d43f5883ec1d50e24afdc4b018dc17ea",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
