@@ -1,0 +1,40 @@
+
+## <summary>policy for carbon</summary>
+
+########################################
+## <summary>
+##	Execute carbon_exec_t in the carbon domain.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`carbon_domtrans',`
+	gen_require(`
+		type carbon_t, carbon_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, carbon_exec_t, carbon_t)
+')
+
+######################################
+## <summary>
+##	Execute carbon in the caller domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`carbon_exec',`
+	gen_require(`
+		type carbon_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	can_exec($1, carbon_exec_t)
+')
