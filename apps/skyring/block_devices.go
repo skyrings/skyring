@@ -181,6 +181,8 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	var providerTaskId *uuid.UUID
 	// Get the specific provider and invoke the method
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
@@ -255,8 +257,6 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 					// Check for provider task to complete and update the parent task
-					sessionCopy := db.GetDatastore().Copy()
-					defer sessionCopy.Close()
 					coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 					var providerTask models.AppTask
 					for {
@@ -558,6 +558,8 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 	var providerTaskId *uuid.UUID
 	// Get the specific provider and invoke the method
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
@@ -635,8 +637,6 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 					// Check for provider task to complete and update the parent task
-					sessionCopy := db.GetDatastore().Copy()
-					defer sessionCopy.Close()
 					coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 					var providerTask models.AppTask
 					for {
@@ -850,6 +850,8 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 	var providerTaskId *uuid.UUID
 	// Get the specific provider and invoke the method
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
@@ -929,8 +931,6 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 					// Check for provider task to complete and update the parent task
-					sessionCopy := db.GetDatastore().Copy()
-					defer sessionCopy.Close()
 					coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 					var providerTask models.AppTask
 					for {

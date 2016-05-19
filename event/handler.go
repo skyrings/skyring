@@ -223,6 +223,8 @@ func drive_add_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
@@ -264,8 +266,6 @@ func drive_add_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 				// Check for provider task to complete and update the disk info
 				for {
 					time.Sleep(2 * time.Second)
-					sessionCopy := db.GetDatastore().Copy()
-					defer sessionCopy.Close()
 					coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 					var providerTask models.AppTask
 					if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {

@@ -268,8 +268,6 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		var storageTotal int64
 		var storageUsed int64
 
-		sessionCopy := db.GetDatastore().Copy()
-		defer sessionCopy.Close()
 		collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
 		var slus []models.StorageLogicalUnit
 		if err := collection.Find(bson.M{"nodeid": node.NodeId}).All(&slus); err != nil {
