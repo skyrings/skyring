@@ -220,6 +220,8 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	var providerTaskId *uuid.UUID
 	// Get the specific provider and invoke the method
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
@@ -304,8 +306,6 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 					done := false
 					for {
 						time.Sleep(2 * time.Second)
-						sessionCopy := db.GetDatastore().Copy()
-						defer sessionCopy.Close()
 						coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 						var providerTask models.AppTask
 						if err := coll.Find(bson.M{"id": *providerTaskId}).One(&providerTask); err != nil {
@@ -714,6 +714,8 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 	var providerTaskId *uuid.UUID
 	// Get the specific provider and invoke the method
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
@@ -802,8 +804,6 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 					}
 
 					// Check for provider task to complete and update the disk info
-					sessionCopy := db.GetDatastore().Copy()
-					defer sessionCopy.Close()
 					coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 					var providerTask models.AppTask
 					for {

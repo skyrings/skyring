@@ -302,6 +302,8 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
@@ -459,8 +461,6 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					}
 					return
 				}
-				sessionCopy := db.GetDatastore().Copy()
-				defer sessionCopy.Close()
 				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 
 				// Check for provider task to complete and update the disk info
@@ -993,14 +993,14 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
 				return
 			default:
 				t.UpdateStatus("Started the task for cluster unmanage: %v", t.ID)
-				sessionCopy := db.GetDatastore().Copy()
-				defer sessionCopy.Close()
 
 				// TODO: Disable sync jobs for the cluster
 				// TODO: Disable performance monitoring for the cluster
@@ -1197,14 +1197,14 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
 				return
 			default:
 				t.UpdateStatus("Started the task for cluster manage: %v", t.ID)
-				sessionCopy := db.GetDatastore().Copy()
-				defer sessionCopy.Close()
 
 				// TODO: Enable sync jobs for the cluster
 				// TODO: Enable performance monitoring for the cluster
@@ -1485,6 +1485,8 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
@@ -1634,8 +1636,6 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 					}
 					return
 				}
-				sessionCopy := db.GetDatastore().Copy()
-				defer sessionCopy.Close()
 				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 				// Check for provider task to complete and update the disk info
 				for {
@@ -1970,6 +1970,8 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
@@ -2056,8 +2058,6 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 					}
 					return
 				}
-				sessionCopy := db.GetDatastore().Copy()
-				defer sessionCopy.Close()
 				coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
 				// Check for provider task to complete and update the disk info
 				for {
@@ -2239,13 +2239,13 @@ func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
 }
 
 func disks_used(nodes []models.ClusterNode) (bool, error) {
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
 	for _, node := range nodes {
 		uuid, err := uuid.Parse(node.NodeId)
 		if err != nil {
 			return false, err
 		}
-		sessionCopy := db.GetDatastore().Copy()
-		defer sessionCopy.Close()
 		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 		var storageNode models.Node
 		if err := coll.Find(bson.M{"nodeid": *uuid}).One(&storageNode); err != nil {

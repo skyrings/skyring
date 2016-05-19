@@ -1406,6 +1406,8 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
 	ch := m["action"]
 	switch ch {
 	case "reinitialize":
@@ -1443,8 +1445,6 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 				}
 				return
 			}
-			sessionCopy := db.GetDatastore().Copy()
-			defer sessionCopy.Close()
 			coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 			if err := coll.Update(bson.M{"hostname": node.Hostname},
 				bson.M{"$set": bson.M{"state": models.NODE_STATE_INITIALIZING}}); err != nil {
@@ -1468,8 +1468,6 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 		}
 	case "delete":
 		{
-			sessionCopy := db.GetDatastore().Copy()
-			defer sessionCopy.Close()
 			collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 			var node models.Node
 			if err := collection.Find(bson.M{"hostname": hostname}).One(&node); err != nil {
