@@ -22,6 +22,30 @@
       "revId": "e14a001ef8330764be673be7522b31464dc898d6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_d2fabe74",
+        "filename": "conf/sample/about.conf.sample",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-19T04:03:13Z",
+      "side": 1,
+      "message": "Not required as api reads the data in struct and returns the whole struct. Already verified with rest client and works fine..",
+      "parentUuid": "baa041b7_64be9466",
+      "range": {
+        "startLine": 6,
+        "startChar": 6,
+        "endLine": 7,
+        "endChar": 30
+      },
+      "revId": "e14a001ef8330764be673be7522b31464dc898d6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
