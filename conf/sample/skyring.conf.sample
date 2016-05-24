@@ -36,7 +36,7 @@
         "configFile": "/etc/skyring/authentication.conf"
     },
     "summary": {
-    	"netSummaryInterval": 60
+       "netSummaryInterval": 300
     },
     "schedule": {
         "clustersSyncInterval": 86400
