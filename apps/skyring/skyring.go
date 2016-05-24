@@ -369,6 +369,7 @@ func (a *App) initializeMonitoringManager(config conf.MonitoringDBconfig) error 
 }
 
 func scheduleSummaryMonitoring(config conf.SystemSummaryConfig) error {
+	go ComputeSystemSummary(make(map[string]interface{}))
 	schedule.InitShechuleManager()
 	scheduler, err := schedule.NewScheduler()
 	if err != nil {
@@ -377,11 +378,11 @@ func scheduleSummaryMonitoring(config conf.SystemSummaryConfig) error {
 	}
 	f := ComputeSystemSummary
 	go scheduler.Schedule(time.Duration(config.NetSummaryInterval)*time.Second, f, make(map[string]interface{}))
-	ComputeSystemSummary(make(map[string]interface{}))
 	return nil
 }
 
-func schedulePhysicalResourceStatsFetch(params map[string]interface{}) error {
+func schedulePhysicalResourceStatsFetch(config conf.SystemSummaryConfig, params map[string]interface{}) error {
+	go SyncNodeUtilizations(params)
 	schedule.InitShechuleManager()
 	scheduler, err := schedule.NewScheduler()
 	if err != nil {
@@ -389,7 +390,7 @@ func schedulePhysicalResourceStatsFetch(params map[string]interface{}) error {
 		return err
 	}
 	f := SyncNodeUtilizations
-	go scheduler.Schedule(time.Duration(5)*time.Second, f, params)
+	go scheduler.Schedule(time.Duration(config.NetSummaryInterval)*time.Second, f, params)
 	return nil
 }
 
@@ -590,7 +591,7 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 	}
 
 	ctxt := fmt.Sprintf("%v:%v", models.ENGINE_NAME, reqId.String())
-	if err := schedulePhysicalResourceStatsFetch(map[string]interface{}{"ctxt": ctxt}); err != nil {
+	if err := schedulePhysicalResourceStatsFetch(sysConfig.SummaryConfig, map[string]interface{}{"ctxt": ctxt}); err != nil {
 		logger.Get().Error("%s - Failed to schedule fetching node resource utilizations.Error %v", ctxt, err)
 		return err
 	}
