@@ -125,6 +125,7 @@ install -D skyring $RPM_BUILD_ROOT/usr/bin/skyring
 install -Dm 0644 conf/sample/graphite-web.conf.sample $RPM_BUILD_ROOT/etc/skyring/httpd/conf.d/graphite-web.conf
 install -Dm 0644 conf/sample/skyring-web.conf.sample $RPM_BUILD_ROOT/etc/httpd/conf.d/skyring-web.conf
 install -m 755 -d $RPM_BUILD_ROOT/usr/share/skyring/setup
+install -Dm 755 skyring-pre.sh $RPM_BUILD_ROOT/usr/bin/skyring-pre.sh
 install -Dm 755 skyring-setup.sh $RPM_BUILD_ROOT/usr/share/skyring/setup/skyring-setup.sh
 install -Dm 0644 conf/sample/skyring_logrotate.conf.sample $RPM_BUILD_ROOT/etc/logrotate.d/skyring
 install -Dm 0644 conf/sample/skyring.conf.sample $RPM_BUILD_ROOT/etc/skyring/skyring.conf
@@ -287,6 +288,7 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files
 %attr(0755, root, root) /usr/bin/skyring
+%attr(0755, root, root) /usr/bin/skyring-pre.sh
 %attr(0755, root, root) /usr/share/skyring/setup/skyring-setup.sh
 %{python2_sitelib}/skyring/*
 %{_var}/log/skyring

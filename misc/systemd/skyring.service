@@ -6,6 +6,7 @@ Wants=mongod.service salt-master.service
 
 [Service]
 Type=simple
+ExecStartPre=/usr/bin/skyring-pre.sh
 ExecStart=/usr/bin/skyring
 KillMode=mixed
 Restart=on-failure

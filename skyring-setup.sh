@@ -53,13 +53,6 @@ systemctl start mongod
 info "Setting up mongodb...."
 sleep 10
 
-mongo <<EOF
-use skyring
-db.leads.findOne()
-show collections
-db.createUser( { "user" : "admin", "pwd": "admin", "roles" : ["readWrite", "dbAdmin", "userAdmin"] })
-show users
-EOF
 
 info "Setup graphite user"
 /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
