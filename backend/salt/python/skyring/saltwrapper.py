@@ -220,7 +220,10 @@ def GetNodeDisk(node, ctxt=""):
             except ValueError:
                 # TODO: log the error
                 u = [0] * 16
-            ssdStat = isSSD(node, disk['KNAME'])
+            if disk['TYPE'] == 'disk':
+                ssdStat = isSSD(node, disk['KNAME'])
+            else:
+                ssdStat = None
             rv[node].append({"DevName": disk["KNAME"],
                               "FSType": disk["FSTYPE"],
                               "FSUUID": u,
