@@ -71,6 +71,7 @@ install -D skyring $RPM_BUILD_ROOT/usr/bin/skyring
 install -Dm 0644 conf/sample/graphite-web.conf.sample $RPM_BUILD_ROOT/etc/skyring/httpd/conf.d/graphite-web.conf
 install -m 755 -d $RPM_BUILD_ROOT/usr/share/skyring/setup
 install -Dm 755 skyring-setup.sh $RPM_BUILD_ROOT/usr/share/skyring/setup/skyring-setup.sh
+install -Dm 0644 conf/sample/skyring_logrotate.conf.sample $RPM_BUILD_ROOT/etc/logrotate.d/skyring
 install -Dm 0644 conf/sample/skyring.conf.sample $RPM_BUILD_ROOT/etc/skyring/skyring.conf
 install -Dm 0644 conf/sample/authentication.conf.sample $RPM_BUILD_ROOT/etc/skyring/authentication.conf
 install -Dm 0644 conf/skyring_salt_master.conf $RPM_BUILD_ROOT/etc/salt/master.d/skyring.conf
@@ -105,6 +106,8 @@ ln -fs /usr/share/skyring/setup/skyring-setup.sh /usr/bin/skyring-setup
 if [ -e /etc/httpd/conf.d/graphite-web.conf.orig -a -h /etc/httpd/conf.d/graphite-web.conf -a ! -e "`readlink /etc/httpd/conf.d/graphite-web.conf`" ] ; then
  mv -f /etc/httpd/conf.d/graphite-web.conf.orig /etc/httpd/conf.d/graphite-web.conf
 fi
+rm -f /etc/logrotate.d/skyring
+
 
 %triggerin -- graphite-web
 if [ ! -h /etc/httpd/conf.d/graphite-web.conf -o ! "`readlink /etc/httpd/conf.d/graphite-web.conf`" = "/etc/skyring/httpd/conf.d/graphite-web.conf" ] ; then
@@ -147,6 +150,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %config(noreplace) %{_sysconfdir}/salt/master.d/skyring.conf
 %config(noreplace) %{_sysconfdir}/skyring/about.conf
 %config(noreplace) %{_sysconfdir}/skyring/skyring.evt
+%config(noreplace) %{_sysconfdir}/logrotate.d/skyring
 %doc README.md
 %{_mandir}/man8/skyring.8.gz
 
