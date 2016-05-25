@@ -293,21 +293,19 @@ def GetNodeOs(node, ctxt=""):
     os_version_out = local.cmd(minions, 'grains.item', ['osrelease'], expr_form='list')
     uname = ("uname --all")
     uname_out = local.cmd(minions, 'cmd.run', [uname], expr_form='list')
-    se = ("sestatus")
+    se = ("getenforce")
     se_out = local.cmd(minions, 'cmd.run', [se], expr_form='list')
     osinfo = {}
     for minion in minions:
         os = os_out.get(minion).get("osfullname")
         os_version = os_version_out.get(minion).get("osrelease")
         uname_info = uname_out.get(minion)
-        se_info = se_out.get(minion)
-        if os and os_version and uname_info and se_info:
+        if os and os_version and uname_info:
             uname_info_list = uname_info.split(' ')
-            se_info_list = se_info.split('\n')
             osinfo[minion] = {'Name': os,
                               'OSVersion': os_version,
                               'KernelVersion': uname_info_list[2],
-                              'SELinuxMode': se_info_list[4].split(':')[1].strip()}
+                              'SELinuxMode': se_out.get(minion)}
         else:
             osinfo[minion] = {'Name': '', 'OSVersion': '', 'KernelVersion': '', 'SELinuxMode': ''}
     return osinfo
