@@ -87,7 +87,7 @@ service httpd start && chkconfig httpd on
 
 echo "Setup can configure apache to use SSL using a " \
      "certificate issued from the internal CA."
-read -p "Do you wish setup to configure that, or prefer to perform that manually? (Y/N): " yn
+read -p "Do you wish skyring-setup to configure that ? (Y/N): " yn
 case $yn in
 	[Yy]* )
 		create_and_install_certificate
