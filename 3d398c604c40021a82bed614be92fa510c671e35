@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_e8a700a5",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-25T14:59:46Z",
+      "side": 1,
+      "message": "How this is different from sestatus? Is it like if selinux disabled sestatus does not return anything?",
+      "range": {
+        "startLine": 292,
+        "startChar": 11,
+        "endLine": 292,
+        "endChar": 21
+      },
+      "revId": "3d398c604c40021a82bed614be92fa510c671e35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
