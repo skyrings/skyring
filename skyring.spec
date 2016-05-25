@@ -102,10 +102,25 @@ chmod +x $RPM_BUILD_ROOT/srv/salt/push_event.sls
 ln -fs /usr/share/skyring/setup/skyring-setup.sh /usr/bin/skyring-setup
 /bin/systemctl enable skyring.service >/dev/null 2>&1 || :
 
+# Configuring Logrotation
+cat <<EOF >/etc/logrotate.d/skyring
+/var/log/skyring/*.log {
+    su root root
+    size=100M
+    rotate 10
+    missingok
+    compress
+    notifempty
+    create 0664 root root
+}
+EOF
+
 %postun
 if [ -e /etc/httpd/conf.d/graphite-web.conf.orig -a -h /etc/httpd/conf.d/graphite-web.conf -a ! -e "`readlink /etc/httpd/conf.d/graphite-web.conf`" ] ; then
  mv -f /etc/httpd/conf.d/graphite-web.conf.orig /etc/httpd/conf.d/graphite-web.conf
 fi
+rm -f /etc/logrotate.d/skyring
+
 
 %triggerin -- graphite-web
 if [ ! -h /etc/httpd/conf.d/graphite-web.conf -o ! "`readlink /etc/httpd/conf.d/graphite-web.conf`" = "/etc/skyring/httpd/conf.d/graphite-web.conf" ] ; then
