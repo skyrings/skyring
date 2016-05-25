@@ -49,18 +49,6 @@ systemctl start salt-master
 systemctl enable mongod
 systemctl start mongod
 
-# Need to wait for 3 to 5 sec for the services to comes up
-info "Setting up mongodb...."
-sleep 10
-
-mongo <<EOF
-use skyring
-db.leads.findOne()
-show collections
-db.createUser( { "user" : "admin", "pwd": "admin", "roles" : ["readWrite", "dbAdmin", "userAdmin"] })
-show users
-EOF
-
 info "Setup graphite user"
 /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
 
