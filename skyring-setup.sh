@@ -44,27 +44,6 @@ info "Configure and setting up the system to use skyring"
 info "Disabling firewalld"
 systemctl stop firewalld && systemctl disable firewalld
 
-info "Starting services"
-# Enable and start the salt-master:
-systemctl enable salt-master
-systemctl start salt-master
-
-# Enable and start MongoDB
-systemctl enable mongod
-systemctl start mongod
-
-# Need to wait for 3 to 5 sec for the services to comes up
-info "Setting up mongodb...."
-sleep 10
-
-mongo <<EOF
-use skyring
-db.leads.findOne()
-show collections
-db.createUser( { "user" : "admin", "pwd": "admin", "roles" : ["readWrite", "dbAdmin", "userAdmin"] })
-show users
-EOF
-
 # Configuring Logrotation
 cat <<EOF >/etc/logrotate.d/skyring
 /var/log/skyring/*.log {
