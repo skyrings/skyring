@@ -7,6 +7,7 @@ Wants=mongod.service salt-master.service
 [Service]
 Type=simple
 EnvironmentFile=/etc/sysconfig/skyring
+ExecStartPre=/usr/bin/skyring-pre.sh
 ExecStart=/usr/bin/skyring $OPTIONS
 KillMode=mixed
 LimitNOFILE=64000
