@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_28a28899",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-25T14:53:28Z",
+      "side": 1,
+      "message": "Have you tested this end to end. Hope this does not fail while restoring in go side.",
+      "range": {
+        "startLine": 226,
+        "startChar": 15,
+        "endLine": 226,
+        "endChar": 30
+      },
+      "revId": "461e17e7855c9c0181f6b78a1b2444567c49a2ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
