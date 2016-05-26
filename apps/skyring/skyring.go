@@ -77,6 +77,7 @@ var (
 	DbManager            dbprovider.DbInterface
 	lockManager          lock.LockManager
 	EventTypes           map[string]string
+	AuthSession          *mgo.Session
 )
 
 func NewApp(configDir string, binDir string) *App {
@@ -234,8 +235,8 @@ func initializeAuth(authCfg conf.AuthConfig) error {
 	//TODO - make this plugin based, we should be able
 	//to plug in based on the configuration - token, jwt token etc
 	//Right we are supporting only session based auth
-
 	session := db.GetDatastore().Copy()
+	AuthSession = session
 	c := session.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SESSION_STORE)
 	Store = mongostore.NewMongoStore(c, DefaultMaxAge, true, []byte("SkyRing-secret"))
 
@@ -922,10 +923,11 @@ func schedule_session_refresh(ctxt string) {
 	} else {
 		f := RefreshDBSession
 		m := make(map[string]interface{})
-		go scheduler.Schedule(time.Duration(24*time.Hour), f, m)
+		go scheduler.Schedule(time.Duration(5*time.Hour), f, m)
 	}
 }
 
 func RefreshDBSession(params map[string]interface{}) {
 	db.GetDatastore().Refresh()
+	AuthSession.Refresh()
 }
