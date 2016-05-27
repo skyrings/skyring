@@ -46,6 +46,30 @@
       "revId": "461e17e7855c9c0181f6b78a1b2444567c49a2ec",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_baac978c",
+        "filename": "backend/salt/python/skyring/saltwrapper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-05-27T07:30:45Z",
+      "side": 1,
+      "message": "Got it, I will change this to false.",
+      "parentUuid": "baa041b7_5ac0eb4f",
+      "range": {
+        "startLine": 226,
+        "startChar": 15,
+        "endLine": 226,
+        "endChar": 30
+      },
+      "revId": "461e17e7855c9c0181f6b78a1b2444567c49a2ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
