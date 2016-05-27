@@ -57,22 +57,23 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	if len(taskStatusMap) != 0 {
-		_, inprogressErr := taskStatusMap["inprogress"]
-		_, completedErr := taskStatusMap["completed"]
-		_, failedErr := taskStatusMap["failed"]
+		_, inprogress := taskStatusMap["inprogress"]
+		_, completed := taskStatusMap["completed"]
+		_, failed := taskStatusMap["failed"]
 
-		if inprogressErr && !completedErr {
-			filter["completed"] = false
+		var arr []interface{}
+
+		if inprogress {
+			arr = append(arr, bson.M{"status": models.TASK_STATUS_NONE})
 		}
-		if !inprogressErr && completedErr {
-			filter["completed"] = true
+		if completed {
+			arr = append(arr, bson.M{"status": models.TASK_STATUS_SUCCESS})
 		}
-		if failedErr {
-			var arr []interface{}
+		if failed {
 			arr = append(arr, bson.M{"status": models.TASK_STATUS_FAILURE})
 			arr = append(arr, bson.M{"status": models.TASK_STATUS_TIMED_OUT})
-			filter["$or"] = arr
 		}
+		filter["$or"] = arr
 	}
 	if len(searchMessage) != 0 {
 		filter["name"] = bson.M{"$regex": searchMessage, "$options": "$i"}
