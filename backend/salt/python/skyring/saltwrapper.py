@@ -38,7 +38,6 @@ opts = salt.config.master_config('/etc/salt/master')
 master = salt.wheel.WheelClient(opts)
 setattr(salt.client.LocalClient, 'cmd',
         enableLogger(salt.client.LocalClient.cmd))
-local = salt.client.LocalClient()
 
 
 def _get_keys(match='*'):
@@ -117,6 +116,7 @@ def GetNodeID(node, ctxt=""):
     else:
         minions = [node]
 
+    local = salt.client.LocalClient()
     out = local.cmd(minions, 'grains.item', ['machine_id'], expr_form='list')
     rv = {}
     for minion in minions:
@@ -136,6 +136,7 @@ def GetNodeNetwork(node, ctxt=""):
     else:
         minions = [node]
 
+    local = salt.client.LocalClient()
     out = local.cmd(minions, ['grains.item', 'network.subnets'],
                     [['ipv4', 'ipv6'], []], expr_form='list')
     netinfo = {}
@@ -178,6 +179,7 @@ def GetNodeDisk(node, ctxt=""):
     keys = columes.split(',')
     lsblk = ("lsblk --all --bytes --noheadings --output='%s' --path --raw" %
              columes)
+    local = salt.client.LocalClient()
     out = local.cmd(minions, 'cmd.run', [lsblk], expr_form='list')
 
     minion_dev_info = {}
@@ -256,6 +258,7 @@ def GetNodeCpu(node, ctxt=""):
         minions = [node]
 
     lscpu = ("lscpu")
+    local = salt.client.LocalClient()
     out = local.cmd(minions, 'cmd.run', [lscpu], expr_form='list')
     cpuinfo = {}
     for minion in minions:
@@ -282,6 +285,7 @@ def GetNodeOs(node, ctxt=""):
         minions = node
     else:
         minions = [node]
+    local = salt.client.LocalClient()
     os_out = local.cmd(minions, 'grains.item', ['osfullname'], expr_form='list')
     os_version_out = local.cmd(minions, 'grains.item', ['osrelease'], expr_form='list')
     uname = ("uname --all")
@@ -321,6 +325,7 @@ def GetNodeMemory(node, ctxt=""):
         minions = [node]
 
     vmstat = ("cat /proc/meminfo")
+    local = salt.client.LocalClient()
     out = local.cmd(minions, 'cmd.run', [vmstat], expr_form='list')
 
     memoinfo = {}
@@ -338,6 +343,7 @@ def GetNodeMemory(node, ctxt=""):
     return memoinfo
 
 def DisableService(node, service, stop=False, ctxt=""):
+    local = salt.client.LocalClient()
     out = local.cmd(node, 'service.disable', [service])
     if out[node] and stop:
         out = local.cmd(node, 'service.stop', [service])
@@ -346,6 +352,7 @@ def DisableService(node, service, stop=False, ctxt=""):
 
 
 def EnableService(node, service, start=False, ctxt=""):
+    local = salt.client.LocalClient()
     out = local.cmd(node, 'service.enable', [service])
     if out[node] and start:
         out = local.cmd(node, 'service.start', [service])
@@ -354,16 +361,19 @@ def EnableService(node, service, start=False, ctxt=""):
 
 
 def SyncModules(node, ctxt=""):
+    local = salt.client.LocalClient()
     out = local.cmd(node, 'saltutil.sync_all')
     return out[node]
 
 
 def NodeUp(node, ctxt=""):
+    local = salt.client.LocalClient()
     out = local.cmd(node, 'test.ping')
     return True if out.has_key(node) and out[node] else False
 
 
 def NodeUptime(node, ctxt=""):
+    local = salt.client.LocalClient()
     out = local.cmd(node,'cmd.run',['uptime -p'])
     return out[node]
 
@@ -383,6 +393,7 @@ def _get_state_result(out):
 
 
 def run_state(tgts, state, *args, **kwargs):
+    local = salt.client.LocalClient()
     out = local.cmd(
         tgts,
         'state.sls',
@@ -439,6 +450,7 @@ def DisableMonitoringPlugin(nodes, pluginName, ctxt=""):
     failed_minions = {}
     source_file = monitoring_root_path + pluginName + "*"
     destination = monitoring_disabled_root_path
+    local = salt.client.LocalClient()
     local.cmd(nodes, "cmd.run", ["mkdir -p " + destination], expr_form='list')
     out = local.cmd(
         nodes, "cmd.run", [
@@ -466,6 +478,7 @@ def SetupSkynetService(node, ctxt=""):
     status = True
 
     # Restart systemd-skynet service
+    local = salt.client.LocalClient()
     out = local.cmd(minions, 'service.restart', ['skynetd'], expr_form='list')
     for node, restartStatus in out.iteritems():
         if not restartStatus:
@@ -488,6 +501,7 @@ def EnableMonitoringPlugin(nodes, pluginName, ctxt=""):
     failed_minions = {}
     source_file = monitoring_disabled_root_path + pluginName + '.conf'
     destination = monitoring_root_path
+    local = salt.client.LocalClient()
     out = local.cmd(
         nodes, "cmd.run", [
             "mv " + source_file + " " + destination], expr_form='list')
@@ -509,6 +523,7 @@ def EnableMonitoringPlugin(nodes, pluginName, ctxt=""):
 
 def isSSD(node, device, ctxt=""):
     cmd = 'cat /sys/block/%s/queue/rotational' % device.split("/")[-1]
+    local = salt.client.LocalClient()
     out = local.cmd('%s' % node, 'cmd.run', [cmd], expr_form='list').get(node, '').strip()
     if not out:
         log.error("%s-Failed to get cluster statistics from %s" % (ctxt, node))
@@ -524,6 +539,7 @@ def isSSD(node, device, ctxt=""):
 def RemoveMonitoringPlugin(nodes, pluginName, ctxt=""):
     failed_minions = {}
     source_file = monitoring_root_path + pluginName + "*"
+    local = salt.client.LocalClient()
     out = local.cmd(
         nodes, "cmd.run", [
             "rm -fr " + source_file], expr_form='list')
@@ -545,6 +561,7 @@ def RemoveMonitoringPlugin(nodes, pluginName, ctxt=""):
 
 def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict, ctxt=""):
     failed_minions = {}
+    local = salt.client.LocalClient()
     for key, value in plugin_threshold_dict.iteritems():
         path = monitoring_root_path + key + '.conf'
         for threshold_type, threshold in value.iteritems():
@@ -563,7 +580,8 @@ def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict, ctxt=""):
 
 
 def GetSingleValuedMetricFromCollectd(nodes, resource_name, ctxt=""):
-    return local.cmd(nodes, "collectd.getSingleValuedMetricsFromCollectd", [resource_name], expr_form='list')
+    saltClient = salt.client.LocalClient()
+    return saltClient.cmd(nodes, "collectd.getSingleValuedMetricsFromCollectd", [resource_name], expr_form='list')
 
 
 def GetFingerPrint(node, ctxt=""):
