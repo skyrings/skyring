@@ -27,6 +27,7 @@ import (
 	"strings"
 	"sync"
 	"text/template"
+	"time"
 )
 
 var funcNames = [...]string{
@@ -293,7 +294,7 @@ func (s Salt) GetSingleValuedMetricFromCollectd(nodes []string, metricName strin
 	mutex.Lock()
 	defer mutex.Unlock()
 	result = make(map[string]models.CollectdSingleValuedMetric)
-	if pyobj, loc_err := pyFuncs["GetSingleValuedMetricFromCollectd"].Call(nodes, metricName, ctxt); loc_err == nil {
+	if pyobj, loc_err := pyFuncs["GetSingleValuedMetricFromCollectd"].CallWithTimeOut(5*time.Minute, nodes, metricName, ctxt); loc_err == nil {
 		err = gopy.Convert(pyobj, &result)
 	} else {
 		err = loc_err
