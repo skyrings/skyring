@@ -24,6 +24,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
@@ -389,7 +390,11 @@ func (a *App) GET_ClusterBlockDevices(w http.ResponseWriter, r *http.Request) {
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_BLOCK_DEVICES)
 	var blkDevices []models.BlockDevice
 	if err := collection.Find(bson.M{"clusterid": *cluster_id}).All(&blkDevices); err != nil {
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, err.Error())
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, err.Error())
+		}
 		logger.Get().Error("%s - Error getting the block devices list for cluster: %v. error: %v", ctxt, *cluster_id, err)
 		return
 	}
@@ -474,7 +479,11 @@ func (a *App) GET_BlockDevice(w http.ResponseWriter, r *http.Request) {
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_BLOCK_DEVICES)
 	var blkDevice models.BlockDevice
 	if err := collection.Find(bson.M{"clusterid": *cluster_id, "storageid": *storage_id, "id": *blockdevice_id}).One(&blkDevice); err != nil {
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, err.Error())
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, err.Error())
+		}
 		logger.Get().Error("%s - Error getting the block device %v of storage %v on cluster: %v. error: %v", ctxt, *blockdevice_id, *storage_id, *cluster_id, err)
 		return
 	}

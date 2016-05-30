@@ -506,7 +506,12 @@ func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	cluster, clusterFetchErr := GetCluster(cluster_id)
 	if clusterFetchErr != nil {
 		logger.Get().Error("%s-Failed to add monitoring configuration for cluster: %v.Error %v", ctxt, *cluster_id, clusterFetchErr)
-		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Failed to add monitoring configuration for cluster: %v.Error %v", *cluster_id, clusterFetchErr))
+		if clusterFetchErr == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Failed to add monitoring configuration for cluster: %v.Error %v", *cluster_id, clusterFetchErr))
+
+		} else {
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Failed to add monitoring configuration for cluster: %v.Error %v", *cluster_id, clusterFetchErr))
+		}
 		return
 	}
 
@@ -650,7 +655,11 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 	cluster, clusterFetchErr := GetCluster(cluster_id_uuid)
 	if clusterFetchErr != nil {
 		logger.Get().Error("%s-Failed to get cluster with id %v. error: %v", ctxt, cluster_id, clusterFetchErr)
-		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Failed to get cluster with id %v. error: %v", cluster_id, clusterFetchErr))
+		if clusterFetchErr == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Failed to get cluster with id %v. error: %v", cluster_id, clusterFetchErr))
+		} else {
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Failed to get cluster with id %v. error: %v", cluster_id, clusterFetchErr))
+		}
 		return
 	}
 
@@ -769,12 +778,16 @@ func (a *App) POST_froceUpdateMonitoringConfiguration(w http.ResponseWriter, r *
 	cluster_id, err := uuid.Parse(vars["cluster-id"])
 	if err != nil {
 		logger.Get().Error("%s-%v", ctxt, err.Error())
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
 	if cluster, err = GetCluster(cluster_id); err != nil {
 		logger.Get().Error("%s-%v", ctxt, err.Error())
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, err.Error())
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, err.Error())
+		}
 		return
 	}
 
@@ -867,7 +880,12 @@ func monitoringPluginActivationDeactivations(ctxt string, enable bool, plugin_na
 	cluster, err := GetCluster(cluster_id)
 	if err != nil {
 		logger.Get().Error("%s-Error getting cluster with id: %v. error: %v", ctxt, *cluster_id, err)
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, err.Error())
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, err.Error())
+		}
+		return
 	}
 
 	if cluster.State == models.CLUSTER_STATE_UNMANAGED {
@@ -1010,7 +1028,8 @@ func (a *App) POST_MonitoringPluginEnable(w http.ResponseWriter, r *http.Request
 	cluster_id, cluster_id_parse_error := uuid.Parse(vars["cluster-id"])
 	if cluster_id_parse_error != nil {
 		logger.Get().Error("%s-Error parsing request. error: %v", ctxt, cluster_id_parse_error)
-		HttpResponse(w, http.StatusInternalServerError, cluster_id_parse_error.Error())
+		HttpResponse(w, http.StatusBadRequest, cluster_id_parse_error.Error())
+		return
 	}
 	plugin_name := vars["plugin-name"]
 	monitoringPluginActivationDeactivations(ctxt, true, plugin_name, cluster_id, w, a)
@@ -1027,7 +1046,8 @@ func (a *App) POST_MonitoringPluginDisable(w http.ResponseWriter, r *http.Reques
 	cluster_id, cluster_id_parse_error := uuid.Parse(vars["cluster-id"])
 	if cluster_id_parse_error != nil {
 		logger.Get().Error("%s-Error parsing the request. error: %v", ctxt, cluster_id_parse_error)
-		HttpResponse(w, http.StatusInternalServerError, cluster_id_parse_error.Error())
+		HttpResponse(w, http.StatusBadRequest, cluster_id_parse_error.Error())
+		return
 	}
 	plugin_name := vars["plugin-name"]
 	monitoringPluginActivationDeactivations(ctxt, false, plugin_name, cluster_id, w, a)
@@ -1173,7 +1193,11 @@ func (a *App) GET_MonitoringPlugins(w http.ResponseWriter, r *http.Request) {
 	}
 	cluster, err := GetCluster(cluster_id)
 	if err != nil {
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting cluster with id: %v. error: %v", *cluster_id, err))
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Error getting cluster with id: %v. error: %v", *cluster_id, err))
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting cluster with id: %v. error: %v", *cluster_id, err))
+		}
 		logger.Get().Error(fmt.Sprintf("%s-Failed to fetch cluster with error %v", ctxt, err))
 		return
 	}
@@ -1208,7 +1232,11 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_CLUSTER_SUMMARY)
 	if err := coll.Find(bson.M{"clusterid": *cluster_id}).One(&cSummary); err != nil {
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Could not fetch summary.Err %v", err))
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Could not fetch summary.Err %v", err))
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Could not fetch summary.Err %v", err))
+		}
 		logger.Get().Error(fmt.Sprintf("%s - Could not fetch summary for cluster %v .Err %v", ctxt, *cluster_id, err))
 		return
 	}

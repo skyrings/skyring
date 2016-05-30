@@ -26,6 +26,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
 	"github.com/skyrings/skyring/skyringutils"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
@@ -1020,9 +1021,14 @@ func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
 
 	cluster, err := GetCluster(cluster_id)
 	if err != nil {
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the cluster with id: %v. error: %v", *cluster_id, err))
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Error getting the cluster with id: %v. error: %v", *cluster_id, err))
+		} else {
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error getting the cluster with id: %v. error: %v", *cluster_id, err))
+		}
 		logger.Get().Error("%s-Error getting the cluster with id: %v. error: %v", ctxt, *cluster_id, err)
 		return
+
 	}
 	if cluster.Name == "" {
 		HttpResponse(w, http.StatusBadRequest, "Cluster not found")
@@ -1873,7 +1879,11 @@ func (a *App) GET_ClusterNodes(w http.ResponseWriter, r *http.Request) {
 	var nodes models.Nodes
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Find(filter).All(&nodes); err != nil {
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the nodes for cluster: %v. error: %v", *cluster_id, err))
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Error getting the nodes for cluster: %v. error: %v", *cluster_id, err))
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the nodes for cluster: %v. error: %v", *cluster_id, err))
+		}
 		logger.Get().Error("%s-Error getting the nodes for cluster: %v. error: %v", ctxt, *cluster_id, err)
 		return
 	}
@@ -1911,7 +1921,12 @@ func (a *App) GET_ClusterNode(w http.ResponseWriter, r *http.Request) {
 	var node models.Node
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 	if err := coll.Find(bson.M{"clusterid": *cluster_id, "nodeid": *node_id}).One(&node); err != nil {
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the nodes for cluster: %v. error: %v", *cluster_id, err))
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Error getting the nodes for cluster: %v. error: %v", *cluster_id, err))
+
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the nodes for cluster: %v. error: %v", *cluster_id, err))
+		}
 		logger.Get().Error("%s-Error getting the node for cluster: %v. error: %v", ctxt, *cluster_id, err)
 		return
 	}
@@ -1997,7 +2012,11 @@ func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
 	var slus []models.StorageLogicalUnit
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
 	if err := coll.Find(filter).All(&slus); err != nil {
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slus for cluster: %s. error: %v", cluster_id_str, err))
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Error getting the slus for cluster: %s. error: %v", cluster_id_str, err))
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slus for cluster: %s. error: %v", cluster_id_str, err))
+		}
 		logger.Get().Error("Error getting the slus for cluster: %s. error: %v", cluster_id_str, err)
 		return
 	}
@@ -2054,7 +2073,11 @@ func (a *App) GET_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 	var slu models.StorageLogicalUnit
 	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
 	if err := coll.Find(bson.M{"clusterid": *cluster_id, "sluid": *slu_id}).One(&slu); err != nil {
-		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slu: %v for cluster: %v. error: %v", *slu_id, *cluster_id, err))
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Error getting the slu: %v for cluster: %v. error: %v", *slu_id, *cluster_id, err))
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the slu: %v for cluster: %v. error: %v", *slu_id, *cluster_id, err))
+		}
 		logger.Get().Error("%s-Error getting the slu: %v for cluster: %v. error: %v", ctxt, *slu_id, *cluster_id, err)
 		return
 	}
@@ -2304,7 +2327,7 @@ func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
 			err)
 		HttpResponse(
 			w,
-			http.StatusMethodNotAllowed,
+			http.StatusBadRequest,
 			fmt.Sprintf(
 				"Error parsing the cluster id: %s, error: %v",
 				cluster_id_str,
@@ -2315,7 +2338,11 @@ func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
 	cluster, clusterFetchErr := GetCluster(cluster_id)
 	if clusterFetchErr != nil {
 		logger.Get().Error("%s - Failed to fetch cluster %v.Error %v", ctxt, *cluster_id, clusterFetchErr)
-		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("%s - Failed to fetch cluster %v.Error %v", ctxt, *cluster_id, clusterFetchErr))
+		if clusterFetchErr == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("%s - Failed to fetch cluster %v.Error %v", ctxt, *cluster_id, clusterFetchErr))
+		} else {
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("%s - Failed to fetch cluster %v.Error %v", ctxt, *cluster_id, clusterFetchErr))
+		}
 		return
 	}
 

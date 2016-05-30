@@ -24,6 +24,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"github.com/skyrings/skyring-common/utils"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"io/ioutil"
@@ -514,7 +515,11 @@ func (a *App) GET_Storage(w http.ResponseWriter, r *http.Request) {
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
 	var storage models.Storage
 	if err := collection.Find(bson.M{"clusterid": *cluster_id, "storageid": *storage_id}).One(&storage); err != nil {
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, err.Error())
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, err.Error())
+		}
 		logger.Get().Error("%s-Error getting the storage: %v on cluster: %v. error: %v", ctxt, *storage_id, *cluster_id, err)
 		return
 	}
