@@ -166,6 +166,13 @@ func (a *App) LoadRoutes() {
 			HandlerFunc: a.logout,
 			Version:     1,
 		},
+		{
+			Name:        "DiskHierarchy",
+			Method:      "POST",
+			Pattern:     "utils/diskhierarchy",
+			HandlerFunc: a.DiskHierarchy,
+			Version:     1,
+		},
 		//Routes for User Management
 		{
 			Name:        "GET_users",

@@ -45,5 +45,7 @@
 
 	"STORAGE_CREATED": "Storage created",
 	"STORAGE_DELETED": "Storage deleted",
-	"STORAGE_UPDATED": "Storage updated"
+	"STORAGE_UPDATED": "Storage updated",
+
+	"GET_DISK_HIERARCHY": "Get disk hierarchy"
 }
