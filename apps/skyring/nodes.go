@@ -651,7 +651,7 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if node.Hostname == "" {
-		HttpResponse(w, http.StatusBadRequest, "Node not found")
+		HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Error getting the node with id: %s.Node not found", node_id_str))
 		logger.Get().Error("%s-Node: %v not found. error: %v", ctxt, *node_id, err)
 		return
 	} else {
@@ -686,10 +686,17 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 			ctxt,
 			*node_id,
 			err)
-		HttpResponse(
-			w,
-			http.StatusInternalServerError,
-			fmt.Sprintf("Error getting node. error: %v", err))
+		if err == mgo.ErrNotFound {
+			HttpResponse(
+				w,
+				http.StatusNotFound,
+				fmt.Sprintf("Error getting node:%s. error: %v", node_id_str, err))
+		} else {
+			HttpResponse(
+				w,
+				http.StatusInternalServerError,
+				fmt.Sprintf("Error getting node:%s. error: %v", node_id_str, err))
+		}
 		return
 	}
 	if err := collection.Find(bson.M{"clusterid": node.ClusterId}).One(&cluster); err != nil {
@@ -1178,7 +1185,7 @@ func (a *App) GET_Disks(w http.ResponseWriter, r *http.Request) {
 	var node models.Node
 	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
 		logger.Get().Error(fmt.Sprintf("%s-Error getting the node detail for node: %s. error: %v", ctxt, node_id_str, err))
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Error getting the node with id: %s. error :%v", node_id_str, err))
 		return
 	}
 	if err := json.NewEncoder(w).Encode(node.StorageDisks); err != nil {
@@ -1217,7 +1224,11 @@ func (a *App) GET_Disk(w http.ResponseWriter, r *http.Request) {
 	var node models.Node
 	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
 		logger.Get().Error(fmt.Sprintf("%s-Error getting the node detail for node: %s. error: %v", ctxt, node_id_str, err))
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Error getting the node with id: %s. error :%v", node_id_str, err))
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the node with id: %s. error :%v", node_id_str, err))
+		}
 		return
 	}
 	var mdisk models.Disk
@@ -1292,7 +1303,11 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	var node models.Node
 	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
 		logger.Get().Error(fmt.Sprintf("%s-Error getting the node detail for node: %s. error: %v", ctxt, node_id_str, err))
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Error getting the node with id: %s. error :%v", node_id_str, err))
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error getting the node with id: %s. error :%v", node_id_str, err))
+		}
 		if err := logAuditEvent(EventTypes["UPDATE_DISK"],
 			fmt.Sprintf("Failed to update disks for node: %s", nodeName),
 			fmt.Sprintf("Failed to update disks for node: %s. Error: %v", nodeName,
@@ -1400,7 +1415,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 	var m map[string]interface{}
 	if err = json.Unmarshal(body, &m); err != nil {
 		logger.Get().Error(fmt.Sprintf("%s-Unable to Unmarshall the data.error: %v", ctxt, err))
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		HttpResponse(w, http.StatusBadRequest, err.Error())
 		if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
 			fmt.Sprintf("Failed to modify node: %s", hostname),
 			fmt.Sprintf("Failed to modify node: %s. Error: %v", hostname,
@@ -1417,7 +1432,11 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 	node, err := node_exists("hostname", hostname)
 	if err != nil {
 		logger.Get().Error(fmt.Sprintf("%s-Node %s not found . error: %v", ctxt, hostname, err))
-		HttpResponse(w, http.StatusInternalServerError, err.Error())
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, err.Error())
+		} else {
+			HttpResponse(w, http.StatusInternalServerError, err.Error())
+		}
 		if err := logAuditEvent(EventTypes["NODE_MODIFIED"],
 			fmt.Sprintf("Failed to modify node: %s", hostname),
 			fmt.Sprintf("Failed to modify node: %s. Error: %v", hostname,
@@ -1428,6 +1447,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 			nil,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log modify node event. Error: %v", ctxt, err)
+
 		}
 		return
 	}
