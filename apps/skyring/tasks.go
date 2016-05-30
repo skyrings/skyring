@@ -132,12 +132,13 @@ func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		logger.Get().Error("Error Getting the context. error: %v", err)
 	}
-
 	vars := mux.Vars(req)
 	taskId, err := uuid.Parse(vars["taskid"])
 	if err != nil {
 		logger.Get().Error("%s-Unable to Parse the Id: %s. error: %v", ctxt, vars["taskId"], err)
-		HandleHttpError(rw, err)
+		rw.WriteHeader(http.StatusBadRequest)
+		bytes, _ := json.Marshal(apiError{Error: err.Error()})
+		rw.Write(bytes)
 		return
 	}
 
@@ -164,12 +165,13 @@ func (a *App) getSubTasks(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		logger.Get().Error("Error Getting the context. error: %v", err)
 	}
-
 	vars := mux.Vars(req)
 	taskId, err := uuid.Parse(vars["taskid"])
 	if err != nil {
 		logger.Get().Error("%s-Unable to Parse the Id: %s. error: %v", ctxt, vars["taskId"], err)
-		HandleHttpError(rw, err)
+		rw.WriteHeader(http.StatusBadRequest)
+		bytes, _ := json.Marshal(apiError{Error: err.Error()})
+		rw.Write(bytes)
 		return
 	}
 
@@ -179,7 +181,11 @@ func (a *App) getSubTasks(rw http.ResponseWriter, req *http.Request) {
 	var tasks []models.AppTask
 	if err := coll.Find(bson.M{"parentid": *taskId}).All(&tasks); err != nil {
 		logger.Get().Error("%s-Unable to get tasks. error: %v", ctxt, err)
-		HttpResponse(rw, http.StatusInternalServerError, err.Error())
+		if err == mgo.ErrNotFound {
+			HttpResponse(rw, http.StatusNotFound, err.Error())
+		} else {
+			HttpResponse(rw, http.StatusInternalServerError, err.Error())
+		}
 		return
 	}
 	if len(tasks) == 0 {

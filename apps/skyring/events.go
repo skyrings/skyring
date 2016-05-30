@@ -208,7 +208,7 @@ func GetEventById(w http.ResponseWriter, r *http.Request) {
 	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_APP_EVENTS)
 	var event models.AppEvent
 	if err := collection.Find(bson.M{"eventid": *event_id}).One(&event); err == mgo.ErrNotFound {
-		HttpResponse(w, http.StatusBadRequest, "Event not found")
+		HttpResponse(w, http.StatusNotFound, "Event not found")
 		logger.Get().Error("%s-Event: %v not found. error: %v", ctxt, *event_id, err)
 		return
 	} else if err != nil {
