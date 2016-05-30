@@ -351,7 +351,7 @@ func setupMonitoring(bootstrapNode string) error {
 	}
 
 	var monitoringState models.MonitoringState
-	monitoringState.Plugins = monitoring.GetDefaultThresholdValues()
+	monitoringState.Plugins = append(cluster.Monitoring.Plugins, monitoring.GetDefaultThresholdValues()...)
 	if err := updatePluginsInDb(bson.M{"name": cluster.Name}, monitoringState); err != nil {
 		return err
 	}
