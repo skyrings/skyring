@@ -22,6 +22,30 @@
       "revId": "a417f4dc0497504a66f24851c26bbaa46777c9c8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_29af237e",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-05-30T04:33:02Z",
+      "side": 1,
+      "message": "no it should completed ... all the conditions i appended in array ..if user wants inprogress the inprogrss first if append inprogress in array... if the uesr wants completed then completed sucess is append...all the conditions filter using or that why i gave like that\n\n\n\ni think i have to change variable completed as success here...",
+      "parentUuid": "baa041b7_bdbdb103",
+      "range": {
+        "startLine": 69,
+        "startChar": 5,
+        "endLine": 69,
+        "endChar": 17
+      },
+      "revId": "a417f4dc0497504a66f24851c26bbaa46777c9c8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
