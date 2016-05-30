@@ -188,11 +188,13 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	vars := mux.Vars(req)
-
+	type apiError APIError
 	user, err := GetAuthProvider().GetUser(vars["username"], req)
 	if err != nil {
+		rw.WriteHeader(http.StatusNotFound)
+		bytes, _ := json.Marshal(apiError{Error: err.Error()})
+		rw.Write(bytes)
 		logger.Get().Error("%s-Unable to Get the user:%s", ctxt, err)
-		HandleHttpError(rw, err)
 		return
 	}
 
@@ -380,10 +382,13 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 		HandleHttpError(rw, err)
 		return
 	}
+	type apiError APIError
 	var m map[string]interface{}
 	if err = json.Unmarshal(body, &m); err != nil {
 		logger.Get().Error("%s-Unable to Unmarshall the data:%s", ctxt, err)
-		HandleHttpError(rw, err)
+		rw.WriteHeader(http.StatusBadRequest)
+		bytes, _ := json.Marshal(apiError{Error: err.Error()})
+		rw.Write(bytes)
 		return
 	}
 	var currUserName string
@@ -451,7 +456,7 @@ func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	vars := mux.Vars(req)
-
+	type apiError APIError
 	if err := GetAuthProvider().DeleteUser(vars["username"]); err != nil {
 		if err := logAuditEvent(
 			EventTypes["USER_DLELTED"],
@@ -466,7 +471,9 @@ func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
 		logger.Get().Error("%s-Unable to delete User:%s", ctxt, err)
-		HandleHttpError(rw, err)
+		rw.WriteHeader(http.StatusNotFound)
+		bytes, _ := json.Marshal(apiError{Error: err.Error()})
+		rw.Write(bytes)
 		return
 	}
 	message := fmt.Sprintf("User :%s has been deleted ", vars["username"])
