@@ -1,6 +1,6 @@
 # Graphite Web Basic mod_wsgi vhost
 
-<VirtualHost *:80>
+<VirtualHost *:10080>
     ServerName graphite-web
     DocumentRoot "/usr/share/graphite/webapp"
     ErrorLog /var/log/httpd/graphite-web-error.log

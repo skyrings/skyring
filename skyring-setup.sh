@@ -23,10 +23,6 @@ function create_and_install_certificate {
     openssl x509 -req -days 365 -in skyring.csr -signkey skyring.key -out skyring.crt || exit_on_error "Failed to sign the SSL certificate"
     cp skyring.key /etc/pki/tls
     cp skyring.crt /etc/pki/tls
-    cat > /etc/httpd/conf.d/ssl.conf << EOF
-SSLCertificateFile /etc/pki/tls/skyring.crt
-SSLCertificateKeyFile /etc/pki/tls/skyring.key
-EOF
     cd -
     \rm -rf ~/.skyring
 }
@@ -83,7 +79,6 @@ info "Setup graphite user"
 
 chown apache:apache /var/lib/graphite-web/graphite.db
 service carbon-cache start && chkconfig carbon-cache on
-service httpd start && chkconfig httpd on
 
 echo "Setup can configure apache to use SSL using a " \
      "certificate issued from the internal CA."
@@ -91,11 +86,16 @@ read -p "Do you wish setup to configure that, or prefer to perform that manually
 case $yn in
 	[Yy]* )
 		create_and_install_certificate
-		grep -q "sslEnabled" /etc/skyring/skyring.conf || sed -i -e 's/"config".*{/"config": {\n\t"sslEnabled": true,/g' /etc/skyring/skyring.conf
 		;;
 	[Nn]* )
 		;;
 esac
+
+grep -q "sslEnabled" /etc/skyring/skyring.conf || sed -i -e 's/"config".*{/"config": {\n\t"sslEnabled": true,/g' /etc/skyring/skyring.conf
+
+echo 'Define host_name' `hostname` | cat - /etc/httpd/conf.d/skyring-web.conf > temp && mv -f temp /etc/httpd/conf.d/skyring-web.conf
+
+service httpd restart && chkconfig httpd on
 
 # Start the skyring server
 systemctl enable skyring
