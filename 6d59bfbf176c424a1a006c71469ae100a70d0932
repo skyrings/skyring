@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_84885172",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-31T04:41:10Z",
+      "side": 1,
+      "message": "This type could be defined globally on top I feel. Why to define again and again in each function?",
+      "range": {
+        "startLine": 191,
+        "startChar": 1,
+        "endLine": 191,
+        "endChar": 23
+      },
+      "revId": "6d59bfbf176c424a1a006c71469ae100a70d0932",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_249aa5b9",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-31T04:41:10Z",
+      "side": 1,
+      "message": "Shouldnt we add NotFound separatently for rest 500 error?",
+      "range": {
+        "startLine": 1186,
+        "startChar": 66,
+        "endLine": 1186,
+        "endChar": 77
+      },
+      "revId": "6d59bfbf176c424a1a006c71469ae100a70d0932",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_04956185",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-05-31T04:41:10Z",
+      "side": 1,
+      "message": "Define globally",
+      "range": {
+        "startLine": 135,
+        "startChar": 1,
+        "endLine": 135,
+        "endChar": 23
+      },
+      "revId": "6d59bfbf176c424a1a006c71469ae100a70d0932",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
