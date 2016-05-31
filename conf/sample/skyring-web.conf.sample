@@ -1,0 +1,18 @@
+Listen 80
+Listen 443
+Listen 10080
+
+
+LoadModule ssl_module modules/mod_ssl.so
+
+<VirtualHost *:80>
+            Redirect permanent /skyring https://%{SERVER_NAME}:10443/
+            Redirect permanent /graphite-web http://%{SERVER_NAME}:10080/
+</VirtualHost>
+
+<VirtualHost *:443>
+            SSLEngine on
+            SSLCertificateFile /etc/pki/tls/skyring.crt
+            SSLCertificateKeyFile /etc/pki/tls/skyring.key
+            Redirect permanent /skyring https://%{SERVER_NAME}:10443/
+</VirtualHost>

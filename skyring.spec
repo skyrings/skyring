@@ -49,6 +49,7 @@ Requires: graphite-web
 Requires: python-carbon
 Requires: python-whisper
 Requires: ceph-installer
+Requires: mod_ssl
 
 %description
 SKYRING is a modern, extensible web-based storage management platform
@@ -69,6 +70,7 @@ make pybuild
 rm -rf $RPM_BUILD_ROOT
 install -D skyring $RPM_BUILD_ROOT/usr/bin/skyring
 install -Dm 0644 conf/sample/graphite-web.conf.sample $RPM_BUILD_ROOT/etc/skyring/httpd/conf.d/graphite-web.conf
+install -Dm 0644 conf/sample/skyring-web.conf.sample $RPM_BUILD_ROOT/etc/httpd/conf.d/skyring-web.conf
 install -m 755 -d $RPM_BUILD_ROOT/usr/share/skyring/setup
 install -Dm 755 skyring-setup.sh $RPM_BUILD_ROOT/usr/share/skyring/setup/skyring-setup.sh
 install -Dm 0644 conf/sample/skyring.conf.sample $RPM_BUILD_ROOT/etc/skyring/skyring.conf
@@ -142,6 +144,7 @@ rm -rf "$RPM_BUILD_ROOT"
 /srv/salt/_modules/*
 %{_unitdir}/%{name}.service
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/httpd/conf.d/graphite-web.conf
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/httpd/conf.d/skyring-web.conf
 %config(noreplace) %{_sysconfdir}/skyring/authentication.conf
 %config(noreplace) %{_sysconfdir}/skyring/skyring.conf
 %config(noreplace) %{_sysconfdir}/salt/master.d/skyring.conf
