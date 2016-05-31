@@ -26,7 +26,7 @@
     },
     "timeseriesdbconfig": {
         "hostname": "127.0.0.1",
-        "port": 80,
+        "port": 10080,
         "collection_name": "collectd",
         "managername": "GraphiteManager",
         "dataPushPort": 2003
