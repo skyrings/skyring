@@ -1,0 +1,20 @@
+Listen 80
+Listen 443
+Listen 10080
+
+
+LoadModule ssl_module modules/mod_ssl.so
+
+<VirtualHost *:80>
+            ServerName dhcp46-25.lab.eng.blr.redhat.com
+            Redirect permanent /skyring https://dhcp46-25.lab.eng.blr.redhat.com:10443/
+            Redirect permanent /graphite-web http://dhcp46-25.lab.eng.blr.redhat.com:180/
+</VirtualHost>
+
+<VirtualHost *:443>
+            ServerName dhcp46-25.lab.eng.blr.redhat.com
+            SSLEngine on
+            SSLCertificateFile /etc/pki/tls/skyring.crt
+            SSLCertificateKeyFile /etc/pki/tls/skyring.key
+            Redirect permanent /skyring https://dhcp46-25.lab.eng.blr.redhat.com:10443/
+</VirtualHost>
