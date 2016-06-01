@@ -78,6 +78,18 @@ func getParentName(queriedEntityType string, parentId uuid.UUID) (string, error)
 	return "", nil
 }
 
+// @Title GET_Utilization
+// @Description Retrieves utilization data for a given resource based on filters
+// @Param entity-id   form  string true  "UUID of the entity"
+// @Param entity-type form  string true  "Type of the entity (cluster/node etc)"
+// @Param resource    query string true  "Name of the resource"
+// @Param duration    query string false "time duration in the format 2006-01-02T15:04:05Z07:00,2006-01-02T15:04:05Z07:00"
+// @Param parent-id   query string false "UUID of parent entity"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/monitoring
+// @router /api/v1/monitoring/{entity-type}/{entity-id}/utilization [get]
 func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -153,6 +165,15 @@ func (a *App) GET_Utilization(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title Get_SystemUtilization
+// @Description Retrieves system wide utilization as summary
+// @Param resource    query string true  "Name of the resource"
+// @Param duration    query string false "time duration in the format 2006-01-02T15:04:05Z07:00,2006-01-02T15:04:05Z07:00"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/monitoring
+// @router /api/v1/monitoring/system/utilization [get]
 func (a *App) Get_SystemUtilization(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -478,6 +499,17 @@ func ParseStatFromCollectd(mValue string) (float64, error) {
 	return value, nil
 }
 
+// @Title POST_AddMonitoringPlugin
+// @Description Configures a monitoring plugin for given cluster
+// @Param cluster-id  path string                  true  "UUID of the cluster"
+// @Param name        form string                  true  "Name of the plugin"
+// @Param enable      form bool                    true  "whether to enable the plugin"
+// @Param configs     form monitoring.PluginConfig true  "Map which contains fields category, type and value"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/mon_plugins [post]
 func (a *App) POST_AddMonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -619,6 +651,15 @@ func updatePluginsInDb(parameter bson.M, monitoringState models.MonitoringState)
 	return dbUpdateError
 }
 
+// @Title PUT_Thresholds
+// @Description Updates threshold values for a given monitoring plugin of a cluster
+// @Param cluster-id  path string              true  "UUID of the cluster"
+// @Param items       form monitoring.Plugins  true  "List of monitoring plugin details"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/mon_plugins/thresholds [put]
 func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -758,6 +799,14 @@ func (a *App) PUT_Thresholds(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title POST_froceUpdateMonitoringConfiguration
+// @Description Force updates monitoring configurations for stale nodes on the cluster
+// @Param cluster-id  path string true  "UUID of the cluster"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/mon_plugins/actions/enforceupdate [post]
 func (a *App) POST_froceUpdateMonitoringConfiguration(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -999,6 +1048,15 @@ func monitoringPluginActivationDeactivations(ctxt string, enable bool, plugin_na
 	}
 }
 
+// @Title POST_MonitoringPluginEnable
+// @Description Enables a given monitoring plugin for the cluster
+// @Param cluster-id  path string true  "UUID of the cluster"
+// @Param plugin-name path string true  "Name of the plugin to be enabled"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/mon_plugins/actions/activations/{plugin-name} [post]
 func (a *App) POST_MonitoringPluginEnable(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1016,6 +1074,15 @@ func (a *App) POST_MonitoringPluginEnable(w http.ResponseWriter, r *http.Request
 	monitoringPluginActivationDeactivations(ctxt, true, plugin_name, cluster_id, w, a)
 }
 
+// @Title POST_MonitoringPluginDisable
+// @Description Disables a given monitoring plugin for the cluster
+// @Param cluster-id  path string true  "UUID of the cluster"
+// @Param plugin-name path string true  "Name of the plugin to be disabled"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/mon_plugins/actions/deactivations/{plugin-name} [post]
 func (a *App) POST_MonitoringPluginDisable(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1033,6 +1100,15 @@ func (a *App) POST_MonitoringPluginDisable(w http.ResponseWriter, r *http.Reques
 	monitoringPluginActivationDeactivations(ctxt, false, plugin_name, cluster_id, w, a)
 }
 
+// @Title REMOVE_MonitoringPlugin
+// @Description Removes a given monitoring plugin for the cluster
+// @Param cluster-id  path string true  "UUID of the cluster"
+// @Param plugin-name path string true  "Name of the plugin to be removed"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/mon_plugins/{plugin-name} [delete]
 func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1157,6 +1233,14 @@ func (a *App) REMOVE_MonitoringPlugin(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_MonitoringPlugins
+// @Description Retrieves all monitoring plugins for the cluster
+// @Param cluster-id  path string true  "UUID of the cluster"
+// @Success 200 {object} monitoring.Plugins
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/mon_plugins [get]
 func (a *App) GET_MonitoringPlugins(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1186,6 +1270,14 @@ func (a *App) GET_MonitoringPlugins(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title Get_ClusterSummary
+// @Description Retrieves summary of all monitring data for a cluster
+// @Param cluster-id  path string true  "UUID of the cluster"
+// @Success 200 {object} models.ClusterSummary
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/summary [get]
 func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 	var cSummary models.ClusterSummary
 	sessionCopy := db.GetDatastore().Copy()
@@ -1215,6 +1307,14 @@ func (a *App) Get_ClusterSummary(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(cSummary)
 }
 
+// @Title Get_Summary
+// @Description Retrieves system-wide all monitring data
+// @Param cluster-id  path string true  "UUID of the cluster"
+// @Success 200 {object} models.System
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1
+// @router /api/v1/system/summary [get]
 func (a *App) Get_Summary(w http.ResponseWriter, r *http.Request) {
 	var system models.System
 	sessionCopy := db.GetDatastore().Copy()

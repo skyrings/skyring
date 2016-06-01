@@ -39,6 +39,18 @@ var (
 	}
 )
 
+// @Title POST_Nodes
+// @Description Adds a storage node to the system with provided SSH fingerprint and credentials
+// @Param hostname       form  string true  "FQDN name of the host"
+// @Param sshfingerprint form  string true  "SSH fingerprint of the host"
+// @Param user           form  string true  "User name to connect to the host"
+// @Param password       form  string true  "Password for the user"
+// @Param sshport        form  int    false "SSH port for the host (defaults to 22 if not provided)"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/nodes
+// @router /api/v1/nodes [post]
 func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	var request models.AddStorageNodeRequest
 	ctxt, err := GetContext(r)
@@ -207,6 +219,15 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title POST_AcceptUnamangedNode
+// @Description Accepts an un-managed node in the system using salt fingerprint
+// @Param name            form  string true  "FQDN name of the host"
+// @Param saltfingerprint form  string true  "salt fingerprint of the host"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/unmanaged_nodes
+// @router /api/v1/unmanaged_nodes/{hostname}/accept [post]
 func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	hostname := vars["hostname"]
@@ -472,6 +493,16 @@ func node_exists(key string, value interface{}) (*models.Node, error) {
 	}
 }
 
+// @Title GET_NodeSlus
+// @Description Retrieves the storage logical units from the given node with filters
+// @Param node-id            path  string true  "UUID of the node"
+// @Param alarmstatus        query string false "Alarm status (ok/warning/error)"
+// @Param status             query string false "status of the SLUs (ok/warning/error/down)"
+// @Success 200 {object} models.StorageLogicalUnits
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/nodes
+// @router /api/v1/nodes/{node-id}/slus [get]
 func (a *App) GET_NodeSlus(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -550,6 +581,17 @@ func (a *App) GET_NodeSlus(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_Nodes
+// @Description Retrieves the storage nodes with given filters
+// @Param state       query  string false "State of the node ("unaccepted/initializing/active/failed/unmanaged/importing")"
+// @Param status      query  string false "status of the node (ok/warning/error/down)"
+// @Param role        query  string false "role of the node"
+// @Param alarmstatus query  string false "Alarm status (indeterminate/critical/major/minor/warning/clered)"
+// @Success 200 {object} models.Nodes
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/nodes
+// @router /api/v1/nodes [get]
 func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -626,6 +668,17 @@ func (a *App) GET_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_Node
+// @Description Retrieves the individual storage node with given filters
+// @Param state       query  string false "State of the node ("unaccepted/initializing/active/failed/unmanaged/importing")"
+// @Param status      query  string false "status of the node (ok/warning/error/down)"
+// @Param role        query  string false "role of the node"
+// @Param alarmstatus query  string false "Alarm status (indeterminate/critical/major/minor/warning/clered)"
+// @Success 200 {object} models.Node
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/nodes
+// @router /api/v1/nodes [get]
 func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -659,6 +712,14 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_NodeSummary
+// @Description Retrieves the individual storage node summary
+// @Param node-id     path   string false "UUID of the node"
+// @Success 200 {object} models.GenericMap
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/nodes
+// @router /api/v1/nodes/{node-id}/summary [get]
 func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -813,6 +874,13 @@ func getSLUStatusWiseCount(node_id *uuid.UUID, ctxt string) map[string]int {
 	return sluDetails
 }
 
+// @Title GET_UnmanagedNodes
+// @Description Retrieves the list of un-managed nodes in system
+// @Success 200 {object} models.Nodes
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/unmanaged_nodes
+// @router /api/v1/unmanaged_nodes [get]
 func (a *App) GET_UnmanagedNodes(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -933,6 +1001,14 @@ func removeNode(ctxt string, w http.ResponseWriter, nodeId uuid.UUID, t *task.Ta
 	return true, nil
 }
 
+// @Title DELETE_Node
+// @Description Removes the individual node (node should be non participating in cluster)
+// @Param node-id path string true "UUID of the node to be deleted"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/nodes
+// @router /api/v1/nodes/{node-id} [delete]
 func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1021,15 +1097,21 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title DELETE_Nodes
+// @Description Removes all the nodes (nodes should be non participating in cluster)
+// @Param items form models.NodeIds true "List of UUIDs of the nodes to be deleted"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/nodes
+// @router /api/v1/nodes [delete]
 func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
 		logger.Get().Error("Error Getting the context. error: %v", err)
 	}
 
-	var nodeIds []struct {
-		NodeId string `json:"nodeid"`
-	}
+	var nodeIds models.NodeIds
 
 	// Unmarshal the request body
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, models.REQUEST_SIZE_LIMIT))
@@ -1157,6 +1239,14 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_Disks
+// @Description Retrieves storage disks for the given node
+// @Param node-id path string true "UUID of the node"
+// @Success 200 {object} models.Disks
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/nodes
+// @router /api/v1/nodes/{node-id}/disks [get]
 func (a *App) GET_Disks(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1187,6 +1277,15 @@ func (a *App) GET_Disks(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_Disk
+// @Description Retrieves an individual storage disk for the given node
+// @Param node-id path string true "UUID of the node"
+// @Param disk-id path string true "UUID of the disk"
+// @Success 200 {object} models.Disk
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/nodes
+// @router /api/v1/nodes/{node-id}/disks/{disk-id} [get]
 func (a *App) GET_Disk(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1234,6 +1333,16 @@ func (a *App) GET_Disk(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// @Title PATCH_Disk
+// @Description Parrially update the storage disk details of node
+// @Param node-id        path string true "UUID of the node"
+// @Param disk-id        path string true "UUID of the disk"
+// @Param storageprofile form string true "Storage profile value for the disk"
+// @Success 200 {object} models.Disk
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/nodes
+// @router /api/v1/nodes/{node-id}/disks/{disk-id} [patch]
 func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1373,6 +1482,15 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title POST_Actions
+// @Description Perform actions on the host
+// @Param hostname path string true "FQDN name of the host"
+// @Param action   form string true "action to be performed (reinitialize/delete)"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/nodes
+// @router /api/v1/nodes/{hostname}/actions [post]
 func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	hostname := vars["hostname"]

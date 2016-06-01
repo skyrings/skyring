@@ -43,6 +43,26 @@ var (
 	STORAGE_STATUS_DOWN = "down"
 )
 
+// @Title POST_Storages
+// @Description Adds a new storage entity to the cluster
+// @Param cluster-id        path  string                           true  "UUID of cluster"
+// @Param name              form  string                           true  "name of storage entity"
+// @Param type              form  string                           true  "type of the storage entity (replicated/erasure_coded)"
+// @Param tags              form  models.StringArray               false "tags if any"
+// @Param size              form  string                           true  "storage size (format <Num>MB/GB/TB/PB)"
+// @Param replicas          form  int                              true  "replica size for the storage entity"
+// @Param profile           form  string                           false "storage profile name"
+// @Param snapshot_enabled  form  bool                             false "if snapshot feature is enabled"
+// @Param snapshot_schedule form  models.SnapshotScheduleRequest    false "snapshot schedule details"
+// @Param quota_enabled     form  bool                             false "if quota feature enabled"
+// @Param quota_params      form  models.GenericMap                 false "storage technology specific quota parameters nale:value pair"
+// @Param options           form  models.GenericMap                false "storage technology specific options if any in name:value pair"
+// @Param blockdevices      form  models.StorageBlockDevicesForAdd false "block devices to be created which would be backed by storage entity"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/storages [post]
 func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -402,6 +422,17 @@ func storage_exists(key string, value string) (*models.Storage, error) {
 	}
 }
 
+// @Title GET_Storages
+// @Description Retrieves storage entities in the system with filter
+// @Param cluster-id  path  string  true  "UUID of cluster"
+// @Param type        form  string  false  "type of the storage entity (replicated/erasure_coded)"
+// @Param status      form  string  false "status of storage entity (ok/warning/error)"
+// @Param alarmstatus form  string  false "alarm status (indeterminate/critical/major/minor/warning/cleared)""
+// @Success 200 {object} models.Storages
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/storages [get]
 func (a *App) GET_Storages(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -486,6 +517,15 @@ func (a *App) GET_Storages(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// @Title GET_Storage
+// @Description Retrieves an individual storage entity
+// @Param cluster-id path  string  true  "UUID of cluster"
+// @Param storage-id path  string  true  "UUID of storage entity"
+// @Success 200 {object} models.Storage
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/storages/{storage-id} [get]
 func (a *App) GET_Storage(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -547,6 +587,15 @@ func GetSluIds(storage_profile string, clusterid uuid.UUID, ctxt string) ([]uuid
 	return SluIds, nil
 }
 
+// @Title GET_AllStorages
+// @Description Retrieves all the storage entities in system with filter
+// @Param status      form  string  false "status of storage entity (ok/warning/error)"
+// @Param alarmstatus form  string  false "alarm status (indeterminate/critical/major/minor/warning/cleared)""
+// @Success 200 {object} models.Storages
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/storages [get]
 func (a *App) GET_AllStorages(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -616,6 +665,15 @@ func (a *App) GET_AllStorages(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(storages)
 }
 
+// @Title DEL_Storage
+// @Description Removes an individual storage entity
+// @Param cluster-id  path  string  true "UUID of cluser"
+// @Param storage-id  path  string  true "UUID of storage entity"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/storages/{storage-id} [delete]
 func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -885,6 +943,18 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title PATCH_Storage
+// @Description Partially update the storage entity details
+// @Param cluster-id   path  string            true  "UUID of cluser"
+// @Param storage-id   path  string            true  "UUID of storage entity"
+// @Param name         form  string            false "new name for the storage entity"
+// @Param replicas     form  int               false "new value for replica count"
+// @Param quota_params form  models.GenericMap false "storage technology specific quota parameters name:value pair"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/storages/{storage-id} [patch]
 func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {

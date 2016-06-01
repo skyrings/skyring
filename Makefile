@@ -47,11 +47,15 @@ pybuild:
 	@echo "Doing $@"
 	@cd backend/salt/python; python setup.py build
 
+swagger-build:
+	@echo "Doing $@"
+	@swagger -apiPackage="github.com/skyrings/skyring/apps/skyring" -mainApiFile="github.com/skyrings/skyring/main.go" -format="swagger"
+
 vendor-update:
 	@echo "Updating vendored packages"
 	@GO15VENDOREXPERIMENT=1 glide -q up 2> /dev/null
 
-build: verifiers pybuild test
+build: verifiers pybuild test swagger-build
 	@echo "Doing $@"
 	@GO15VENDOREXPERIMENT=1 go build
 

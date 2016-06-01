@@ -39,6 +39,23 @@ var (
 	}
 )
 
+// @Title POST_BlockDevices
+// @Description Adds a block device to the cluster
+// @Param cluster-id        path  string                         true  "UUID of the cluster"
+// @Param storage-id        path  string                         true  "UUID of the storage entity using which block device to create"
+// @Param name              form  string                         true  "name of the block device"
+// @Param tags              form  models.StringArray             false "tags if any"
+// @Param size              form  string                         true  "size of block device (in format <Num>MB/GB/TB/PB)"
+// @Param snapshots_enabled form  bool                           false "whether snapshot enabled"
+// @Param snapshot_schedule form  models.SnapshotScheduleRequest false "snapshot schedule details"
+// @Param quota_enabled     form  bool                           true  "whether quota feature enabled"
+// @Param quota_params      form  models.GenericMap              true  "storage specific quota parameters name:value"
+// @Param options           form  models.GenericMap              false "name:value pair to set any other options"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/storages/{storage-id}/blockdevices [post]
 func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -330,6 +347,15 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_BlockDevices
+// @Description Retrieves block devices from system based on criteria
+// @Param clusterid  query string true  "UUID of the cluster"
+// @Param storageid  query string true  "UUID of the storage entity using which block device to create"
+// @Success 200 {object} models.BlockDevices
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/blockdevices
+// @router /api/v1/blockdevices [get]
 func (a *App) GET_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -368,6 +394,14 @@ func (a *App) GET_BlockDevices(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_ClusterBlockDevices
+// @Description Retrieves block devices for a given cluster
+// @Param cluster-id  path  string true  "UUID of the cluster"
+// @Success 200 {object} models.BlockDevices
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/blockdevices [get]
 func (a *App) GET_ClusterBlockDevices(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -400,6 +434,15 @@ func (a *App) GET_ClusterBlockDevices(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_ClusterStorageBlockDevices
+// @Description Retrieves block devices for a given cluster and storage entity
+// @Param cluster-id  path  string true  "UUID of the cluster"
+// @Param storage-id  path  string true  "UUID of the storage entity"
+// @Success 200 {object} models.BlockDevices
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/storages/{storage-id}/blockdevices [get]
 func (a *App) GET_ClusterStorageBlockDevices(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -439,6 +482,16 @@ func (a *App) GET_ClusterStorageBlockDevices(w http.ResponseWriter, r *http.Requ
 	}
 }
 
+// @Title GET_BlockDevice
+// @Description Retrieves a specific block device from system
+// @Param cluster-id     path  string true  "UUID of the cluster"
+// @Param storage-id     path  string true  "UUID of the storage entity"
+// @Param blockdevice-id path  string true  "UUID of the block device"
+// @Success 200 {object} models.BlockDevice
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/storages/{storage-id}/blockdevices/{blockdevice-id} [get]
 func (a *App) GET_BlockDevice(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -487,6 +540,15 @@ func (a *App) GET_BlockDevice(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title DELETE_BlockDevice
+// @Description Removes a specific block device from system
+// @Param cluster-id     path  string true  "UUID of the cluster"
+// @Param blockdevice-id path  string true  "UUID of the block device"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/storages/{storage-id}/blockdevices/{blockdevice-id} [delete]
 func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -717,6 +779,16 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title PATCH_ResizeBlockDevice
+// @Description partially update the size of a specific block device
+// @Param cluster-id     path  string true  "UUID of the cluster"
+// @Param blockdevice-id path  string true  "UUID of the block device"
+// @Param size           form  string true  "new size for the block device (format <Num>MB/GB/TB/PB)"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/storages/{storage-id}/blockdevices/{blockdevice-id} [patch]
 func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {

@@ -31,6 +31,22 @@ import (
 	"time"
 )
 
+// @Title GetEvents
+// @Description Retrieves list of events in the system based on filters
+// @Param nodename      query string false "FQDN name of the node"
+// @Param clustername   query string false "name of the cluster"
+// @Param severity      query string false "severity of the event (indeterminate/critical/major/minor/warning/cleared)"
+// @Param acked         query string false "whether event is acked (true/fasle)"
+// @Param searchmessage query string false "search string for message of event"
+// @Param fromdatetime  query string false "from time to filter (format 2006-01-02T15:04:05Z07:00)"
+// @Param todatetime    query string false "end time to filter (format 2006-01-02T15:04:05Z07:00)"
+// @Param pageno        query string false "page no for pagination purpose"
+// @Param pagesize      query string false "no of records per page for pagination purpose"
+// @Success 200 {object} models.EventsListPage
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/events
+// @router /api/v1/events [get]
 func GetEvents(rw http.ResponseWriter, req *http.Request) {
 	var filter bson.M = make(map[string]interface{})
 
@@ -177,16 +193,25 @@ func GetEvents(rw http.ResponseWriter, req *http.Request) {
 		if endIndex > len(events) {
 			endIndex = len(events) - 1
 		}
-		json.NewEncoder(rw).Encode(
-			struct {
-				Totalcount int               `json:"totalcount"`
-				Startindex int               `json:"startindex"`
-				Endindex   int               `json:"endindex"`
-				Events     []models.AppEvent `json:"events"`
-			}{len(events), startIndex, endIndex, events[startIndex : endIndex+1]})
+
+		eventsPage := models.EventsListPage{
+			Totalcount: len(events),
+			Startindex: startIndex,
+			Endindex:   endIndex,
+			Events:     events[startIndex : endIndex+1],
+		}
+		json.NewEncoder(rw).Encode(eventsPage)
 	}
 }
 
+// @Title GetEventById
+// @Description Retrieves a specific event in the system
+// @Param event-id path string true "UUID of the vent"
+// @Success 200 {object} models.AppEvent
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/events
+// @router /api/v1/events/{event-id} [get]
 func GetEventById(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -220,6 +245,16 @@ func GetEventById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title PatchEvent
+// @Description partially update the details of an event
+// @Param event-id   path string true "UUID of the vent"
+// @Param acked      form bool   true  "whether the event is acked (true/false)"
+// @Param ackcomment form string true  "ack comment"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/events
+// @router /api/v1/events/{event-id} [patch]
 func PatchEvent(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
