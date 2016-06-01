@@ -21,6 +21,20 @@ const (
 	rootTaskId = "00000000-0000-0000-0000-000000000000"
 )
 
+// @Title getTasks
+// @Description Retrieves the list of tasks with filter
+// @Param level         query  string  false  "level of the task (root)"
+// @Param state         query  string  false  "task state (inprogress/completed/failed). Can be passed mutiple times"
+// @Param searchmessage query  string  false  "search message text"
+// @Param pageNo        query  int     false  "page no for pagination"
+// @Param pageSize      query  int     false  "no of records per page for pagination"
+// @Param fromdatetime  query  string  false  "from time to filter (format 2006-01-02T15:04:05Z07:00)"
+// @Param todatetime    query  string  false  "to time to filter (format 2006-01-02T15:04:05Z07:00)"
+// @Success 200 {object} models.AppTasks
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/tasks
+// @router /api/v1/tasks [get]
 func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -127,6 +141,14 @@ func (a *App) getTasks(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// @Title getTasks
+// @Description Retrieves an individual task
+// @Param taskid path  string  true  "UUID of the task"
+// @Success 200 {object} models.AppTask
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/tasks
+// @router /api/v1/tasks/{taskid} [get]
 func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -159,6 +181,14 @@ func (a *App) getTask(rw http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(rw).Encode(task)
 }
 
+// @Title getSubTasks
+// @Description Retrieves sub tasks of an individual task
+// @Param taskid path  string  true  "UUID of the task"
+// @Success 200 {object} models.AppTask
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/tasks
+// @router /api/v1/tasks/{taskid}/subtasks [get]
 func (a *App) getSubTasks(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {

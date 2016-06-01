@@ -11,6 +11,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// @APIVersion 1.0.0
+// @APITitle skyring apis
+// @APIDescription skyring apis for storage management
+// @Contact skyring@redhat.com
+// @TermsOfServiceUrl http://redhat.com
+// @License ASL2
+// @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0
+
 package main
 
 import (

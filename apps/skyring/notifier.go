@@ -25,6 +25,15 @@ import (
 	"net/http"
 )
 
+// @Title GetMailNotifier
+// @Description Retrieves the mail notofier details
+// @Param node-id path string true "UUID of the node"
+// @Param disk-id path string true "UUID of the disk"
+// @Success 200 {object} models.MailNotifier
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/mailnotifier
+// @router /api/v1/mailnotifier [get]
 func (a *App) GetMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -37,16 +46,9 @@ func (a *App) GetMailNotifier(rw http.ResponseWriter, req *http.Request) {
 		HandleHttpError(rw, err)
 		return
 	} else {
-		n := map[string]interface{}{
-			"mailid":           notifier.MailId,
-			"smtpserver":       notifier.SmtpServer,
-			"port":             notifier.Port,
-			"skipverify":       notifier.SkipVerify,
-			"encryption":       notifier.Encryption,
-			"mailnotification": notifier.MailNotification,
-			"subprefix":        notifier.SubPrefix,
-		}
-		json.NewEncoder(rw).Encode(n)
+		// explicitly set passcode as blank
+		notifier.Passcode = ""
+		json.NewEncoder(rw).Encode(notifier)
 	}
 }
 
@@ -85,6 +87,20 @@ func GetDetails(m map[string]interface{}) (models.MailNotifier, error) {
 	return notifier, nil
 }
 
+// @Title AddMailNotifier
+// @Description Adds a mail notifier in the system
+// @Param mail-id          form  string true  "email id to be used as From in notification mail"
+// @Param passcode         form  string true  "password for the email"
+// @Param smtpserver       form  string true  "SMTP Server address"
+// @Param port             form  int    true  "SMTP server port"
+// @Param encryption       form  bool   true  "if encryption required"
+// @Param mailnotification form  bool   true  "if email notification required"
+// @Param subprefix        form  string false "subject prefix text"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/mailnotifier
+// @router /api/v1/mailnotifier [post]
 func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -228,6 +244,21 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	return
 }
 
+// @Title TestMailNotifier
+// @Description Test verifies the mail notification
+// @Param mail-id          form  string true  "email id to be used as From in notification mail"
+// @Param passcode         form  string true  "password for the email"
+// @Param smtpserver       form  string true  "SMTP Server address"
+// @Param port             form  int    true  "SMTP server port"
+// @Param encryption       form  bool   true  "if encryption required"
+// @Param mailnotification form  bool   true  "if email notification required"
+// @Param subprefix        form  string false "subject prefix text"
+// @Param recipient        form  string true  "Recipient mail ids (comma separated)"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1
+// @router /api/v1/testmailnotifier [post]
 func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -339,6 +370,15 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	return
 }
 
+// @Title PatchMailNotifier
+// @Description Partially update the mail notofoer details
+// @Param mailnotification form  bool   false  "if email notification required"
+// @Param subprefix        form  string false  "subject prefix text"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/mailnotifier
+// @router /api/v1/mailnotifier [patch]
 func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {

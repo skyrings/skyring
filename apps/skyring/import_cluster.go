@@ -31,6 +31,15 @@ import (
 	"time"
 )
 
+// @Title GET_ClusterNodesForImport
+// @Description Retrieves the nodes for an importing cluster provided a bootstrap node
+// @Param bootstrapnode query string true "FQDN name of bootstrap node"
+// @Param clustertype   query string true "Type of the cluster (ceph/gluster)"
+// @Success 200 {object} models.ClusterForImport
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1
+// @router /api/v1/nodesforimport [get]
 func (a *App) GET_ClusterNodesForImport(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -108,6 +117,16 @@ func (a *App) GET_ClusterNodesForImport(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
+// @Title ImportCluster
+// @Description Imports the cluster in the system provided details of the nodes
+// @Param bootstrapnode query             string true "FQDN name of bootstrap node"
+// @Param type   query string             true "Type of the cluster (ceph/gluster)"
+// @Param nodes  query models.StringArray true "List fo FQDN names for participating cluster nodes"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1
+// @router /api/v1/importcluster [post]
 func (a *App) ImportCluster(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {

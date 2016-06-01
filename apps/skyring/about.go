@@ -23,6 +23,13 @@ import (
 	"strings"
 )
 
+// @Title About
+// @Description Retrieves project information
+// @Success 200 {object} conf.SystemCapabilities
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1
+// @router /api/v1/about [get]
 func (a *App) About(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
