@@ -45,6 +45,15 @@ func AddDefaultUser() error {
 	return nil
 }
 
+// @Title login
+// @Description Logs into the system
+// @Param  username form string true "Name of the user"
+// @Param  password form string true "Password for the user"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/auth
+// @router /api/v1/auth/login [post]
 func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 	reqId, err := uuid.New()
 	if err != nil {
@@ -100,6 +109,13 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 	rw.Write(bytes)
 }
 
+// @Title logout
+// @Description Logs out the currently logged in user from system
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/auth
+// @router /api/v1/auth/logout [post]
 func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -138,6 +154,13 @@ func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
 	rw.Write(bytes)
 }
 
+// @Title getUsers
+// @Description Retrieves the list of users from the system
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/users
+// @router /api/v1/users [get]
 func (a *App) getUsers(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -181,6 +204,14 @@ func (a *App) getUsers(rw http.ResponseWriter, req *http.Request) {
 
 }
 
+// @Title getUser
+// @Description Retrieves the details of given user
+// @Param  username path string true "username for the user"
+// @Success 200 {object} models.User
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/users
+// @router /api/v1/users/{username} [get]
 func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -212,6 +243,16 @@ func (a *App) getUser(rw http.ResponseWriter, req *http.Request) {
 
 }
 
+// @Title getExternalUsers
+// @Description Retrieves the list of external users from ldap server
+// @Param  pageno   query string false "page no (for pagination purpose)"
+// @Param  pagesize query string false "no of records per page"
+// @Param  search   query string false "search criteria"
+// @Success 200 {object} models.ExternalUsersListPage
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1
+// @router /api/v1/externalusers [get]
 func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -258,17 +299,11 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 		HandleHttpError(rw, err)
 		return
 	}
-	//hide the hash field for users in the list
-	type PublicUser struct {
-		*models.User
-		Hash         bool `json:"hash,omitempty"`
-		Notification bool `json:"notification,omitempty"`
-	}
 
-	var pUsers []PublicUser
+	var pUsers []models.PublicUser
 	for _, user := range externalUsers.Users {
 
-		pUsers = append(pUsers, PublicUser{
+		pUsers = append(pUsers, models.PublicUser{
 			User: &models.User{Username: user.Username,
 				Email:               user.Email,
 				Role:                user.Role,
@@ -281,15 +316,30 @@ func (a *App) getExternalUsers(rw http.ResponseWriter, req *http.Request) {
 		})
 	}
 
-	json.NewEncoder(rw).Encode(
-		struct {
-			TotalCount int          `json:"totalcount"`
-			StartIndex int          `json:"startindex"`
-			EndIndex   int          `json:"endindex"`
-			Users      []PublicUser `json:"users"`
-		}{externalUsers.TotalCount, externalUsers.StartIndex, externalUsers.EndIndex, pUsers})
+	usersDet := models.ExternalUsersListPage{
+		TotalCount: externalUsers.TotalCount,
+		StartIndex: externalUsers.StartIndex,
+		EndIndex:   externalUsers.EndIndex,
+		Users:      pUsers,
+	}
+	json.NewEncoder(rw).Encode(usersDet)
 }
 
+// @Title addUsers
+// @Description Adds external users to the system
+// @Param  username            form string true  "username for user"
+// @Param  email               form string true  "email of the user"
+// @Param  role                form string false "role of the user"
+// @Param  type                form int    false "type of the user"
+// @Param  firstname           form string true  "first name of the user"
+// @Param  lastname            form string false "last name of the user"
+// @Param  notificationenabled form bool   false "whether notification to be enabled for user"
+// @Param  password            form string  true  "password for user"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/users
+// @router /api/v1/users [post]
 func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -367,6 +417,18 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 
 }
 
+// @Title modifyUsers
+// @Description Adds external users to the system
+// @Param  username            path string true  "username for user"
+// @Param  email               form string false  "email of the user"
+// @Param  notificationenabled form bool   false "whether notification to be enabled for user"
+// @Param  password            form string  false  "password for user"
+// @Param  status              form bool   false  "whethere user is enabled or not"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/users
+// @router /api/v1/users/{username} [put]
 func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -444,6 +506,14 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// @Title deleteUser
+// @Description Deletes a user from system
+// @Param  username            path string true  "username for user"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/users
+// @router /api/v1/users/{username} [delete]
 func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -501,6 +571,13 @@ func parseAuthRequestBody(req *http.Request, user *models.User) error {
 	return nil
 }
 
+// @Title getLdapConfig
+// @Description Retrieves the ldap configuration details
+// @Success 200 {object} models.Directory
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/ldap
+// @router /api/v1/ldap [get]
 func (a *App) getLdapConfig(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {
@@ -513,23 +590,28 @@ func (a *App) getLdapConfig(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	json.NewEncoder(rw).Encode(
-		struct {
-			LdapServer  string `json:"ldapserver"`
-			Port        uint   `json:"port"`
-			Base        string `json:"base"`
-			DomainAdmin string `json:"domainadmin"`
-			Password    string `json:"password"`
-			Uid         string `json:"uid"`
-			FirstName   string `json:"firstname"`
-			LastName    string `json:"lastname"`
-			DisplayName string `json:"displayname"`
-			Email       string `json:"email"`
-		}{ldapConfig.LdapServer, ldapConfig.Port, ldapConfig.Base, ldapConfig.DomainAdmin,
-			"", ldapConfig.Uid, ldapConfig.FirstName, ldapConfig.LastName,
-			ldapConfig.DisplayName, ldapConfig.Email})
+	// Explicitly set the password as blank
+	ldapConfig.Password = ""
+	json.NewEncoder(rw).Encode(ldapConfig)
 }
 
+// @Title configLdap
+// @Description Configures ldap directory service for system
+// @Param ldapserver  form  string true  "ldp server name"
+// @Param port        form  int    true  "port number"
+// @Param base        form  string true  "base name"
+// @Param domainadmin form  string true  "domain admin name"
+// @Param password    form  string true  "password"
+// @Param uid         form  string true  "uid"
+// @Param firstname   form  string true  "firstname"
+// @Param lastname    form  string false "lastname"
+// @Param displayname form  string false "displayname"
+// @Param email       form  string false "email"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/ldap
+// @router /api/v1/ldap [post]
 func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 	ctxt, err := GetContext(req)
 	if err != nil {

@@ -91,6 +91,21 @@ install -D -p -m 0644 misc/systemd/%{name}.service %{buildroot}%{_unitdir}/%{nam
 install -m 755 -d $RPM_BUILD_ROOT/srv/salt/_modules
 install -Dm 0644 salt_module/skyring_utils.py $RPM_BUILD_ROOT/srv/salt/_modules
 install -Dm 0644 salt_module/collectd.py $RPM_BUILD_ROOT/srv/salt/_modules
+install -m 755 -d $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec
+install -Dm 0644 api/v1/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/v1.json
+install -Dm 0644 api/v1/auth/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/auth.json
+install -Dm 0644 api/v1/blockdevices/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/blockdevices.json
+install -Dm 0644 api/v1/clusters/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/clusters.json
+install -Dm 0644 api/v1/events/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/events.json
+install -Dm 0644 api/v1/ldap/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/ldap.json
+install -Dm 0644 api/v1/mailnotifier/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/mailnotifier.json
+install -Dm 0644 api/v1/monitoring/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/monitoring.json
+install -Dm 0644 api/v1/nodes/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/nodes.json
+install -Dm 0644 api/v1/storageprofiles/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/storageprofiles.json
+install -Dm 0644 api/v1/tasks/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/tasks.json
+install -Dm 0644 api/v1/unmanaged_nodes/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/unmanaged_nodes.json
+install -Dm 0644 api/v1/users/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/users.json
+install -Dm 0644 api/v1/utils/index.json $RPM_BUILD_ROOT/usr/share/skyring/webapp/swagger-spec/utils.json
 gzip skyring.8
 install -Dm 0644 skyring.8.gz $RPM_BUILD_ROOT%{_mandir}/man8/skyring.8.gz
 chmod -x $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/__init__.py

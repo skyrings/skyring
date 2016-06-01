@@ -48,6 +48,16 @@ var (
 	}
 )
 
+// @Title PATCH_Clusters
+// @Description partially update the details of a specific cluster
+// @Accept  json
+// @Param   cluster-id         path  string true  "UUID of the cluster"
+// @Param   disableautoexpand  form  bool   true  "Whether to disable auto expand of cluster when a new disk gets added"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id} [patch]
 func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -178,6 +188,27 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// @Title POST_Clusters
+// @Description Adds a new cluster to the system
+// @Accept  json
+// @Param   name                  form  string                 true  "Name of the cluster"
+// @Param   compat_version        form  string                 true  "Compatibility version of the cluster for storage nodes"
+// @Param   type                  form  string                 true  "Type of the cluster. Valid values are ceph/gluster"
+// @Param   workload              form  string                 false "Worload for which the cluster is being created"
+// @Param   tags                  form  models.StringArray     false "tags if any"
+// @Param   options               form  models.GenericMap      false "Storage specific any options"
+// @Param   openstackservices     form  models.StringArray     false "OPenstack services for which cluster is getting created"
+// @Param   nodes                 form  models.ClusterNodes    true  "Participating nodes of the cluster"
+// @Param   networks              form  models.ClusterNetworks true  "Network details of the cluster (public and cluster n/w)"
+// @Param   monitoringplugins     form  monitoring.Plugins     true  "List of monitoring plugins to be enabled for the cluster"
+// @Param   monitoringinterval    form  int                    false "Interval at which monitoring data should be pushed to time series database"
+// @Param   disableautoexpand     form  bool                   false "Whether to disable auto expand of cluster while new disk added to nodes"
+// @Param   journalSize           form  string                 true  "Metadata size in format <Num>MB/GB/TB/PB"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters [post]
 func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	var request models.AddClusterRequest
 
@@ -559,6 +590,14 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title Forget_Cluster
+// @Description Forgets a cluster from system. Just deletes the records from DB but does not touch the underlying cluster
+// @Param   cluster-id  path  string true  "UUID of the cluster"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id} [delete]
 func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -854,6 +893,11 @@ func getClustersBySluStatus(slu_status_str string, clusters []models.Cluster) (e
 	return nil, sluStatusFilteredClusters
 }
 
+// @Title GET_Clusters
+// @Description retrieves the list of clusters maintained in system
+// @Success 200 {array}  models.Clusters
+// @Resource /api/v1/clusters
+// @Router /api/v1/clusters [get]
 func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1003,6 +1047,14 @@ func getClusterWithNearFullSlus(ctxt string, clusters []models.Cluster) []models
 	return sluStatusFilteredClusters
 }
 
+// @Title GET_Cluster
+// @Description Returns a specific cluster's details
+// @Param   cluster-id  path  string true  "UUID of the cluster"
+// @Success 200 {object} models.Cluster
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id} [get]
 func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1033,6 +1085,14 @@ func (a *App) GET_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title Unmanage_Cluster
+// @Description Moves the specific cluster in maintenance mode and marks as un-managed
+// @Param   cluster-id  path  string true  "UUID of the cluster"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/unmanage [post]
 func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1239,6 +1299,14 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title Manage_Cluster
+// @Description Moves back the specific cluster to managed state
+// @Param   cluster-id  path  string true  "UUID of the cluster"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/manage [post]
 func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1456,6 +1524,15 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title Expand_Cluster
+// @Description Expands the existing cluster with new set of nodes
+// @Param   cluster-id  path  string              true  "UUID of the cluster"
+// @Param   nodes       form  models.ClusterNodes true  "List of nodes to be appended to cluster"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/expand [post]
 func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1832,6 +1909,16 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_ClusterNodes
+// @Description Retrieves participating nodes of the cluster with specific status or role
+// @Param   cluster-id  path  string  true  "UUID of the cluster"
+// @Param   status      query string  false "Status of the node" "ok/warning/error"
+// @Param   role        query string  false "Role of the node" "OSD/MON"
+// @Success 200 {object} models.Nodes
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/nodes [get]
 func (a *App) GET_ClusterNodes(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1884,6 +1971,15 @@ func (a *App) GET_ClusterNodes(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_ClusterNode
+// @Description Retrieves a specific participating nodes of the cluster
+// @Param   cluster-id  path  string  true  "UUID of the cluster"
+// @Param   node-id     path  string  true  "UUID of the node"
+// @Success 200 {object} models.Node
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/nodes/{node-id} [get]
 func (a *App) GET_ClusterNode(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -1924,6 +2020,19 @@ func (a *App) GET_ClusterNode(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_ClusterSlus
+// @Description Retrieves all the storage logical units of the cluster
+// @Param   cluster-id      path  string  true  "UUID of the cluster"
+// @Param   alarmstatus     query string  false "Alarm status of the SLU" "ok/warning/error and multiple values can be passed"
+// @Param   storageprofile  query string  false "Storage profile name for the SLU"
+// @Param   status          query string  false "Status of the SLU" "ok/warning/error/down"
+// @Param   nodeid          query string  false "UUID of the node from which SLU is created"
+// @Param   near_full       query string  false "Pass near_full=true to get all the near full SLUs"
+// @Success 200 {object} models.StorageLogicalUnits
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/slus [get]
 func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -2027,6 +2136,15 @@ func (a *App) GET_ClusterSlus(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_ClusterSlu
+// @Description Retrieves a specific storage logical unit of the cluster
+// @Param   cluster-id  path  string  true  "UUID of the cluster"
+// @Param   slu-id      path  string  true  "UUID of the slu"
+// @Success 200 {object} models.StorageLogicalUnit
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/slus/{slu-id} [get]
 func (a *App) GET_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -2067,6 +2185,16 @@ func (a *App) GET_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title PATCH_ClusterSlu
+// @Description partially update the details of a specific storage logical unit of cluster
+// @Param   cluster-id  path  string            true  "UUID of the cluster"
+// @Param   slu-id      path  string            true  "UUID of the slu"
+// @Param   items       form  models.GenericMap true  "Storage technologi specific options for the SLU as key:value pair"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id}/slus/{slu-id} [patch]
 func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -2285,6 +2413,14 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_ClusterConfig
+// @Description Retrieves the cluster configurations details in form of key:value pair
+// @Param   cluster-id  path  string            true  "UUID of the cluster"
+// @Success 200 {object} models.GenericMap
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/clusters
+// @router /api/v1/clusters/{cluster-id} [get]
 func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	retVal := make(map[string]interface{})
@@ -2570,6 +2706,15 @@ func removeFailedNodes(nodes []models.ClusterNode, failed []models.ClusterNode) 
 	return diff
 }
 
+// @Title GET_Slus
+// @Description Retrieves storage logical units across the system
+// @Param   status    query  string false  "Status of the SLU" "ok/warning/error/down"
+// @Param   near_full query  string false  "Pass near_full=true to filter the list further"
+// @Success 200 {object} models.StorageLogicalUnits
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1
+// @router /api/v1/slus [get]
 func (a *App) GET_Slus(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {

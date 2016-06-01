@@ -97,6 +97,12 @@ case $yn in
 		;;
 esac
 
+# Update swagger specs
+for FILE in /usr/share/skyring/webapp/swagger-spec/*.json
+do
+	sed -i -e 's/"basePath".*/"basePath": "\/",/g' ${FILE}
+done
+
 # Start the skyring server
 systemctl enable skyring
 systemctl start skyring

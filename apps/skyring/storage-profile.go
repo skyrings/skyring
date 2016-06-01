@@ -23,6 +23,17 @@ import (
 	"net/http"
 )
 
+// @Title POST_StorageProfiles
+// @Description Adds a custom storage profile to the system
+// @Param name     form  string             true  "Name of the storage profile"
+// @Param rule     form  models.DiskProfile true  "disk profile details"
+// @Param priority form  int                true  "priority oreder of the profile"
+// @Param default  form  bool               true  "if it is default profile"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/storageprofiles
+// @router /api/v1/storageprofiles [post]
 func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 
 	var request models.StorageProfile
@@ -127,6 +138,13 @@ func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// @Title GET_StorageProfiles
+// @Description Retrieves the storage profiles available in the system
+// @Success 200 {object} models.StorageProfiles
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/storageprofiles
+// @router /api/v1/storageprofiles [get]
 func (a *App) GET_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -144,6 +162,14 @@ func (a *App) GET_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title GET_StorageProfile
+// @Description Retrieves an individual storage profile by name
+// @Param name form string true "Name of the storage profile"
+// @Success 200 {object} models.StorageProfile
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/storageprofiles
+// @router /api/v1/storageprofiles [get]
 func (a *App) GET_StorageProfile(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -160,6 +186,14 @@ func (a *App) GET_StorageProfile(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// @Title DELETE_StorageProfile
+// @Description Removes an individual storage profile by name
+// @Param name path string true "Name of the storage profile"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/storageprofiles
+// @router /api/v1/storageprofiles/{name} [delete]
 func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
@@ -227,6 +261,16 @@ func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @Title PATCH_StorageProfile
+// @Description Partially update storage profile details
+// @Param name     path string             true  "Name of the storage profile"
+// @Param priority form int                false "priority oreder of the storage profile"
+// @Param rule     form models.DiskProfile false "new disk profile of storage profile"
+// @Success 200 {object} string
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/storageprofiles
+// @router /api/v1/storageprofiles/{name} [patch]
 func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {

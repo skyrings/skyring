@@ -21,6 +21,14 @@ import (
 	"net/http"
 )
 
+// @Title GET_SshFingerprint
+// @Description Retrieves SSH fingerprint of a specific host
+// @Param hostname path string true "FQDN name of the host"
+// @Success 200 {object} models.GenericMap
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/utils
+// @router /api/v1/utils/ssh_fingerprint/{hostname} [get]
 func (a *App) GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	hostname := vars["hostname"]
@@ -31,6 +39,14 @@ func (a *App) GET_SshFingerprint(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(fingerprint)
 }
 
+// @Title GET_LookupNode
+// @Description Returns valid IP addresses for the given host
+// @Param hostname path string true "FQDN name of the host"
+// @Success 200 {object} models.StringArray
+// @Failure 500 {object} string
+// @Failure 400 {object} string
+// @Resource /api/v1/utils
+// @router /api/v1/utils/lookup_node/{hostname} [get]
 func (a *App) GET_LookupNode(w http.ResponseWriter, r *http.Request) {
 	ctxt, err := GetContext(r)
 	if err != nil {
