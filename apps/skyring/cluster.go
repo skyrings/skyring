@@ -2374,6 +2374,7 @@ func (a *App) GET_ClusterConfig(w http.ResponseWriter, r *http.Request) {
 		httpStatus = http.StatusPartialContent
 	}
 	retVal[models.NOTIFICATION_LIST] = notifSub
+	retVal["monitoringInterval"] = cluster.MonitoringInterval
 
 	retBytes, marshalErr := json.Marshal(retVal)
 	if marshalErr != nil {
