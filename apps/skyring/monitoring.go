@@ -1283,7 +1283,6 @@ func ComputeClusterSummary(cluster models.Cluster, ctxt string) {
 	slu_error_cnt := 0
 	selectCriteria := bson.M{
 		"utilizationtype":   monitoring.SLU_UTILIZATION,
-		"thresholdseverity": models.CRITICAL,
 		"clusterid":         cluster.ClusterId,
 	}
 	sluThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.SLU_UTILIZATION, ctxt)
@@ -1334,24 +1333,27 @@ func ComputeClusterSummary(cluster models.Cluster, ctxt string) {
 			i. If there's an event, it means, the current profile is near full
 	*/
 	selectCriteria = bson.M{
-		"clusterid":         cluster.ClusterId,
-		"utilizationtype":   monitoring.STORAGE_PROFILE_UTILIZATION,
-		"thresholdseverity": models.CRITICAL,
+		"clusterid":       cluster.ClusterId,
+		"utilizationtype": monitoring.STORAGE_PROFILE_UTILIZATION,
 	}
 	spThresholdEvenstInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.STORAGE_PROFILE_UTILIZATION, ctxt)
 	cSummary.StorageProfileUsage = make(map[string]map[string]interface{})
 	for storageProfile, utilization := range cluster.StorageProfileUsage {
 		utilizationWithIsFullFlag := make(map[string]interface{})
+		utilizationWithIsFullFlag["IsFull"] = false
+		utilizationWithIsFullFlag["IsNearFull"] = false
 		for _, event := range spThresholdEvenstInDb {
-			if event.EntityName == storageProfile {
+			utilizationWithIsFullFlag["IsFull"] = false
+			utilizationWithIsFullFlag["IsNearFull"] = false
+			if event.EntityName == storageProfile && event.ThresholdSeverity == models.CRITICAL {
 				utilizationWithIsFullFlag["IsFull"] = true
+				continue
+			}
+			if event.EntityName == storageProfile && event.ThresholdSeverity == models.WARNING {
+				utilizationWithIsFullFlag["IsNearFull"] = true
 			}
 		}
 		utilizationWithIsFullFlag["Utilization"] = utilization
-		_, ok := utilizationWithIsFullFlag["IsFull"]
-		if !ok {
-			utilizationWithIsFullFlag["IsFull"] = false
-		}
 		cSummary.StorageProfileUsage[storageProfile] = utilizationWithIsFullFlag
 	}
 
@@ -1372,6 +1374,7 @@ func ComputeClusterSummary(cluster models.Cluster, ctxt string) {
 
 	cSummary.ClusterId = cluster.ClusterId
 	cSummary.Name = cluster.Name
+	cSummary.MonitoringPlugins = cluster.Monitoring.Plugins
 
 	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_CLUSTER_SUMMARY)
 	if _, err := coll.Upsert(bson.M{"clusterid": cluster.ClusterId}, cSummary); err != nil {
@@ -1636,17 +1639,27 @@ func ComputeSystemSummary(p map[string]interface{}) {
 
 	if len(net_storage_profile_utilization) != 0 {
 		var spNearFullThreshold float64
+		var spFullThreshold float64
 		spThresholdconfigs := systemthresholds[monitoring.STORAGE_PROFILE_UTILIZATION].Configs
 		for _, spThreshold := range spThresholdconfigs {
 			if spThreshold.Type == monitoring.CRITICAL {
+				spFullThreshold, _ = strconv.ParseFloat(spThreshold.Value, 64)
+			}
+			if spThreshold.Type == monitoring.WARNING {
 				spNearFullThreshold, _ = strconv.ParseFloat(spThreshold.Value, 64)
 			}
 		}
 		for sProfile, isNearFullUtilizationMap := range net_storage_profile_utilization {
-			if isNearFullUtilizationMap["utilization"] != nil && isNearFullUtilizationMap["utilization"].(models.Utilization).PercentUsed > spNearFullThreshold {
-				net_storage_profile_utilization[sProfile]["isNearFull"] = true
-			} else {
-				net_storage_profile_utilization[sProfile]["isNearFull"] = false
+			net_storage_profile_utilization[sProfile]["isNearFull"] = false
+			net_storage_profile_utilization[sProfile]["isFull"] = false
+			if isNearFullUtilizationMap["utilization"] != nil {
+				if isNearFullUtilizationMap["utilization"].(models.Utilization).PercentUsed > spFullThreshold {
+					net_storage_profile_utilization[sProfile]["isFull"] = true
+					continue
+				}
+				if isNearFullUtilizationMap["utilization"].(models.Utilization).PercentUsed > spNearFullThreshold {
+					net_storage_profile_utilization[sProfile]["isNearFull"] = true
+				}
 			}
 		}
 	}
@@ -1656,6 +1669,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	if cluster_cpu_user_count > 0 {
 		cpuPercentUsed = float64(cluster_cpu_user) / float64(cluster_cpu_user_count)
 	}
+	system.MonitoringPlugins = systemthresholds
 	systemUtilizations := map[string]interface{}{
 		"memoryusage": models.Utilization{
 			Used:        int64(net_memory_used),
