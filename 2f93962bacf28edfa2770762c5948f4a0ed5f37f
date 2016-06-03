@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_4e45b840",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-06-03T05:30:30Z",
+      "side": 1,
+      "message": "Why do you need a separate set of func for this? why cant you do it the older set of funcs you wrote for main session refresh?",
+      "range": {
+        "startLine": 935,
+        "startChar": 0,
+        "endLine": 949,
+        "endChar": 1
+      },
+      "revId": "2f93962bacf28edfa2770762c5948f4a0ed5f37f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
