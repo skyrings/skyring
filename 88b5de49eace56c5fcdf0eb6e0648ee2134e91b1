@@ -22,6 +22,30 @@
       "revId": "88b5de49eace56c5fcdf0eb6e0648ee2134e91b1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_8e118054",
+        "filename": "apps/skyring/tasks.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-06-03T04:34:58Z",
+      "side": 1,
+      "message": "ok i will change it",
+      "parentUuid": "baa041b7_18aa5985",
+      "range": {
+        "startLine": 140,
+        "startChar": 27,
+        "endLine": 140,
+        "endChar": 35
+      },
+      "revId": "88b5de49eace56c5fcdf0eb6e0648ee2134e91b1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
