@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_2e29548a",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-06-03T04:47:25Z",
+      "side": 1,
+      "message": "I think the convention is without _,- etc",
+      "range": {
+        "startLine": 172,
+        "startChar": 24,
+        "endLine": 172,
+        "endChar": 29
+      },
+      "revId": "15698ea036b1ac55929fd7e2fc8c9f9a7ef03677",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_0e2c5097",
+        "filename": "apps/skyring/slus.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-06-03T04:47:25Z",
+      "side": 1,
+      "message": "I think we need to send proper response here. 500?",
+      "range": {
+        "startLine": 77,
+        "startChar": 2,
+        "endLine": 77,
+        "endChar": 3
+      },
+      "revId": "15698ea036b1ac55929fd7e2fc8c9f9a7ef03677",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ee1ecc5d",
+        "filename": "apps/skyring/slus.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-06-03T04:47:25Z",
+      "side": 1,
+      "message": "Same here too",
+      "range": {
+        "startLine": 97,
+        "startChar": 2,
+        "endLine": 97,
+        "endChar": 8
+      },
+      "revId": "15698ea036b1ac55929fd7e2fc8c9f9a7ef03677",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
