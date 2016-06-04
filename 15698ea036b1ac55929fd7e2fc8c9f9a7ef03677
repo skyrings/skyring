@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_55fd3faf",
+        "filename": "apps/skyring/routes.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-06-04T16:42:17Z",
+      "side": 1,
+      "message": "Done. Will change it...",
+      "parentUuid": "baa041b7_2e29548a",
+      "range": {
+        "startLine": 172,
+        "startChar": 24,
+        "endLine": 172,
+        "endChar": 29
+      },
+      "revId": "15698ea036b1ac55929fd7e2fc8c9f9a7ef03677",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_0e2c5097",
         "filename": "apps/skyring/slus.go",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_352f5b40",
+        "filename": "apps/skyring/slus.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-06-04T16:42:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_0e2c5097",
+      "range": {
+        "startLine": 77,
+        "startChar": 2,
+        "endLine": 77,
+        "endChar": 3
+      },
+      "revId": "15698ea036b1ac55929fd7e2fc8c9f9a7ef03677",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_ee1ecc5d",
         "filename": "apps/skyring/slus.go",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2016-06-03T04:47:25Z",
       "side": 1,
       "message": "Same here too",
+      "range": {
+        "startLine": 97,
+        "startChar": 2,
+        "endLine": 97,
+        "endChar": 8
+      },
+      "revId": "15698ea036b1ac55929fd7e2fc8c9f9a7ef03677",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_153217a7",
+        "filename": "apps/skyring/slus.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-06-04T16:42:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_ee1ecc5d",
       "range": {
         "startLine": 97,
         "startChar": 2,
