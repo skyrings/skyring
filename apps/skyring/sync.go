@@ -81,36 +81,77 @@ func (a *App) SyncClusterDetails(params map[string]interface{}) {
 		provider := a.GetProviderFromClusterId(ctxt, cluster.ClusterId)
 		if provider == nil {
 			logger.Get().Error("%s-Error getting provider for the cluster: %s", ctxt, cluster.Name)
+			// Re-set the cluster state to active
+			if err := coll.Update(
+				bson.M{"clusterid": cluster.ClusterId},
+				bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
+				logger.Get().Debug("%s-Failed to set state set to active for cluster: %v", ctxt, cluster.ClusterId)
+			}
 			continue
 		}
 
 		// Sync the cluster status
 		logger.Get().Debug("Syncing status of cluster: %s", cluster.Name)
 		if ok, err := sync_cluster_status(ctxt, cluster, provider); err != nil || !ok {
+			// Re-set the cluster state to active
+			if err := coll.Update(
+				bson.M{"clusterid": cluster.ClusterId},
+				bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
+				logger.Get().Debug("%s-Failed to set state set to active for cluster: %v", ctxt, cluster.ClusterId)
+			}
 			logger.Get().Error("%s-Error updating status for cluster: %s", ctxt, cluster.Name)
+			continue
 		}
 
 		// Sync the cluster nodes
 		logger.Get().Debug("Syncing nodes of cluster: %s", cluster.Name)
 		if ok, err := sync_cluster_nodes(ctxt, cluster, provider); err != nil || !ok {
+			// Re-set the cluster state to active
+			if err := coll.Update(
+				bson.M{"clusterid": cluster.ClusterId},
+				bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
+				logger.Get().Debug("%s-Failed to set state set to active for cluster: %v", ctxt, cluster.ClusterId)
+			}
 			logger.Get().Error("%s-Error syncing storage nodes for cluster: %s", ctxt, cluster.Name)
+			continue
 		}
 
 		// Sync the cluster status
 		logger.Get().Debug("Syncing SLUs of cluster: %s", cluster.Name)
 		if ok, err := syncSlus(ctxt, cluster, provider); err != nil || !ok {
+			// Re-set the cluster state to active
+			if err := coll.Update(
+				bson.M{"clusterid": cluster.ClusterId},
+				bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
+				logger.Get().Debug("%s-Failed to set state set to active for cluster: %v", ctxt, cluster.ClusterId)
+			}
 			logger.Get().Error("%s-Error syncing slus: %s", ctxt, cluster.Name)
+			continue
 		}
 
 		// Sync the storage entities of the cluster
 		logger.Get().Debug("Syncing storages of cluster: %s", cluster.Name)
 		if ok, err := sync_cluster_storage_entities(ctxt, cluster, provider); err != nil || !ok {
+			// Re-set the cluster state to active
+			if err := coll.Update(
+				bson.M{"clusterid": cluster.ClusterId},
+				bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
+				logger.Get().Debug("%s-Failed to set state set to active for cluster: %v", ctxt, cluster.ClusterId)
+			}
 			logger.Get().Error("%s-Error syncing storage entities for cluster: %s. error: %v", ctxt, cluster.Name, err)
+			continue
 		}
 		// Sync block devices
 		/*logger.Get().Debug("Syncing block devices of cluster: %s", cluster.Name)
 		if ok, err := sync_block_devices(ctxt, cluster, provider); err != nil || !ok {
+			// Re-set the cluster state to active
+			if err := coll.Update(
+				bson.M{"clusterid": cluster.ClusterId},
+				bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_ACTIVE}}); err != nil {
+				logger.Get().Debug("%s-Failed to set state set to active for cluster: %v", ctxt, cluster.ClusterId)
+			}
 			logger.Get().Error("%s-Error syncing block devices for cluster: %s. error: %v", ctxt, cluster.Name, err)
+			continue
 		}*/
 
 		logger.Get().Debug("Setting the cluster: %s back as active", cluster.Name)
