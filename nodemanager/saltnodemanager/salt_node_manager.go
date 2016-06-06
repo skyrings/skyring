@@ -160,6 +160,15 @@ func (a SaltNodeManager) IsNodeUp(hostname string, ctxt string) (bool, error) {
 	return ok, nil
 }
 
+func (a SaltNodeManager) NodeRebooted(hostname string, ctxt string) (bool, error) {
+	ok, err := salt_backend.NodeRebooted(hostname, ctxt)
+	if err != nil {
+		logger.Get().Error(fmt.Sprintf("%s-Error finding if node was rebooted: %s. error: %v", ctxt, hostname, err))
+		return false, nil
+	}
+	return ok, nil
+}
+
 func (a SaltNodeManager) NodeUptime(hostname string, ctxt string) (string, error) {
 	uptime, err := salt_backend.NodeUptime(hostname, ctxt)
 	if err != nil {

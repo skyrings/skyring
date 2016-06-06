@@ -44,6 +44,7 @@ var funcNames = [...]string{
 	"EnableService",
 	"NodeUp",
 	"NodeUptime",
+	"NodeRebooted",
 	"AddMonitoringPlugin",
 	"UpdateMonitoringConfiguration",
 	"EnableMonitoringPlugin",
@@ -318,6 +319,18 @@ func (s Salt) NodeUp(node string, ctxt string) (status bool, err error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	if pyobj, loc_err := pyFuncs["NodeUp"].Call(node, ctxt); loc_err == nil {
+		err = gopy.Convert(pyobj, &status)
+	} else {
+		status = false
+		err = loc_err
+	}
+	return
+}
+
+func (s Salt) NodeRebooted(node string, ctxt string) (status bool, err error) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if pyobj, loc_err := pyFuncs["NodeRebooted"].Call(node, ctxt); loc_err == nil {
 		err = gopy.Convert(pyobj, &status)
 	} else {
 		status = false

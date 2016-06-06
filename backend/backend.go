@@ -46,6 +46,7 @@ type Backend interface {
 	DisableService(node string, service string, stop bool, ctxt string) (bool, error)
 	EnableService(node string, service string, start bool, ctxt string) (bool, error)
 	NodeUp(node string, ctxt string) (bool, error)
+	NodeRebooted(node string, ctxt string) (bool, error)
 	NodeUptime(node string, ctxt string) (string, error)
 	AddMonitoringPlugin(pluginNames []string, nodes []string, master string, pluginMap map[string]map[string]string, ctxt string) (failed_nodes map[string]interface{}, err error)
 	UpdateMonitoringConfiguration(nodes []string, config []monitoring.Plugin, ctxt string) (failed_nodes map[string]string, err error)

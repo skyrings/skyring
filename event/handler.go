@@ -417,6 +417,16 @@ func node_appeared_handler(event models.AppEvent, ctxt string) (models.AppEvent,
 		return event, err
 	}
 
+	if rebooted, err := skyring.GetCoreNodeManager().NodeRebooted(event.NodeName, ctxt); err != nil {
+		logger.Get().Error("%s-Could not find if the node: %s was rebooted. Error: %v",
+			ctxt,
+			event.NodeName,
+			err)
+	} else if rebooted {
+		// The node has been rebooted hence we have to sync the OSDs to
+		// get the latest device info after the reboot.
+	}
+
 	return event, nil
 }
 

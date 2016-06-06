@@ -379,6 +379,16 @@ def NodeUptime(node, ctxt=""):
     return out[node]
 
 
+
+def NodeRebooted(node, ctxt=""):
+    local = salt.client.LocalClient()
+    out = local.cmd(node,'cmd.run',['cat /proc/uptime'])
+    if float(out[node].split()[0]) <= 300:
+        return True
+    else:
+        return False
+
+
 def _get_state_result(out):
     failed_minions = {}
     for minion, v in out.iteritems():
