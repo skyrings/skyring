@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_bce8f3b3",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 2377,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-06-06T17:26:24Z",
+      "side": 1,
+      "message": "camelCase?? al lower case is better I feel",
+      "range": {
+        "startLine": 2377,
+        "startChar": 9,
+        "endLine": 2377,
+        "endChar": 27
+      },
+      "revId": "a8ec99386f957982f28a863b070350d86d46a45c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
