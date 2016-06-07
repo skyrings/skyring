@@ -612,8 +612,8 @@ func (a Authorizer) SetDirectory(directory models.Directory) error {
 	stream := cipher.NewOFB(block, iv)
 	stream.XORKeyStream(chkey[aes.BlockSize:], pswd)
 
-	err = c.Insert(&models.Directory{directory.LdapServer, directory.Port, directory.Base,
-		directory.Type, directory.DomainAdmin, string(chkey), directory.Uid,
+	err = c.Insert(&models.Directory{directory.LdapServer, directory.Type, directory.Port, directory.Base,
+		directory.DomainAdmin, string(chkey), directory.Uid,
 		directory.FirstName, directory.LastName, directory.DisplayName, directory.Email})
 
 	return nil
