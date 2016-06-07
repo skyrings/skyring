@@ -219,6 +219,24 @@ interface(`skyring_stream_connect_salt',`
 
 ########################################
 ## <summary>
+##      Connect to skyring over an unix
+##      stream socket.
+## </summary>
+## <param name="domain">
+##      <summary>
+##      Domain allowed access.
+##      </summary>
+## </param>
+#
+interface(`skyring_read_conf_salt',`
+        gen_require(`
+		type salt_t;
+        ')
+	skyring_read_conf(salt_t)
+')
+
+########################################
+## <summary>
 ##	All of the rules required to administrate
 ##	an skyring environment
 ## </summary>
@@ -261,5 +279,77 @@ interface(`skyring_admin',`
 	optional_policy(`
 		systemd_passwd_agent_exec($1)
 		systemd_read_fifo_file_passwd_run($1)
+	')
+')
+
+########################################
+## <summary>
+##	Read skyring conf files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`skyring_read_conf',`
+	gen_require(`
+		type skyring_conf_t;
+	')
+
+	files_search_etc($1)
+	list_dirs_pattern($1, skyring_conf_t, skyring_conf_t)
+	read_files_pattern($1, skyring_conf_t, skyring_conf_t)
+')
+
+########################################
+## <summary>
+##	Manage skyring conf files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`skyring_manage_conf',`
+	gen_require(`
+		type skyring_conf_t;
+	')
+
+	files_search_etc($1)
+	manage_dirs_pattern($1, skyring_conf_t, skyring_conf_t)
+	manage_files_pattern($1, skyring_conf_t, skyring_conf_t)
+')
+
+########################################
+## <summary>
+##	carbon stub interface.  No access allowed.
+## </summary>
+## <param name="domain" unused="true">
+##	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+#
+interface(`skyring_stub_carbon',`
+	gen_require(`
+		type carbon_t;
+	')
+')
+
+########################################
+## <summary>
+##	carbon stub interface.  No access allowed.
+## </summary>
+## <param name="domain" unused="true">
+##	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+#
+interface(`skyring_stub_httpd',`
+	gen_require(`
+		type httpd_t;
 	')
 ')

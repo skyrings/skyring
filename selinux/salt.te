@@ -27,6 +27,12 @@ files_type(salt_data_t)
 type salt_unit_file_t;
 systemd_unit_file(salt_unit_file_t)
 
+type salt_conf_t;
+files_config_file(salt_conf_t)
+
+type salt_tmp_t;
+files_type(salt_tmp_t)
+
 ########################################
 #
 # salt local policy
@@ -55,15 +61,23 @@ manage_lnk_files_pattern(salt_t, salt_var_run_t, salt_var_run_t)
 manage_sock_files_pattern(salt_t, salt_var_run_t, salt_var_run_t)
 files_pid_filetrans(salt_t, salt_var_run_t, { dir file lnk_file sock_file })
 
+manage_dirs_pattern(salt_t, salt_tmp_t, salt_tmp_t)
+manage_files_pattern(salt_t, salt_tmp_t, salt_tmp_t)
+files_tmp_filetrans(salt_t, salt_tmp_t, { dir file })
+
 manage_files_pattern(salt_t, salt_tmpfs_t, salt_tmpfs_t)
 fs_tmpfs_filetrans(salt_t, salt_tmpfs_t, { file })
 
 manage_dirs_pattern(salt_t, salt_data_t, salt_data_t)
 manage_files_pattern(salt_t, salt_data_t, salt_data_t)
 
+allow salt_t salt_conf_t:dir manage_dir_perms;
+allow salt_t salt_conf_t:file manage_file_perms;
+
 kernel_dgram_send(salt_t)
 kernel_read_ring_buffer(salt_t)
 kernel_read_system_state(salt_t)
+kernel_read_network_state(salt_t)
 kernel_read_net_sysctls(salt_t)
 kernel_read_software_raid_state(salt_t)
 
@@ -97,6 +111,6 @@ optional_policy(`
 ')
 
 optional_policy(`
-    dbus_connect_system_bus(salt_t)
+	dbus_system_bus_client(salt_t)
 ')
 

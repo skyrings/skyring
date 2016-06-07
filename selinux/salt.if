@@ -199,6 +199,26 @@ interface(`salt_read_pid_files',`
 
 ########################################
 ## <summary>
+##	Manage salt conf files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`salt_manage_conf',`
+	gen_require(`
+		type salt_conf_t;
+	')
+
+	files_search_etc($1)
+	manage_dirs_pattern($1, salt_conf_t, salt_conf_t)
+	manage_files_pattern($1, salt_conf_t, salt_conf_t)
+')
+
+########################################
+## <summary>
 ##      Connect to salt over an unix
 ##      stream socket.
 ## </summary>
