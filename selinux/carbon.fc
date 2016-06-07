@@ -1,0 +1,13 @@
+/usr/bin/carbon-aggregator		--	gen_context(system_u:object_r:carbon_exec_t,s0)
+/usr/bin/carbon-cache		--	gen_context(system_u:object_r:carbon_exec_t,s0)
+/usr/bin/carbon-client		--	gen_context(system_u:object_r:carbon_exec_t,s0)
+/usr/bin/carbon-relay		--	gen_context(system_u:object_r:carbon_exec_t,s0)
+/usr/bin/validate-storage-schemas	--	gen_context(system_u:object_r:carbon_exec_t,s0)
+
+/usr/lib/systemd/system/carbon*  --              gen_context(system_u:object_r:carbon_unit_file_t,s0)
+
+/var/lib/carbon(/.*)?	gen_context(system_u:object_r:carbon_var_lib_t,s0)
+
+/var/log/carbon(/.*)?	gen_context(system_u:object_r:carbon_log_t,s0)
+
+/var/run/carbon-(aggregator|cache)\.pid		gen_context(system_u:object_r:carbon_var_run_t,s0)
