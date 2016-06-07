@@ -22,6 +22,30 @@
       "revId": "43632098277b4c1971f0bff8725805e562c3b45e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ad67dfe7",
+        "filename": "apps/skyring/auth.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-06-07T07:46:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_7124305f",
+      "range": {
+        "startLine": 360,
+        "startChar": 1,
+        "endLine": 364,
+        "endChar": 25
+      },
+      "revId": "43632098277b4c1971f0bff8725805e562c3b45e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
