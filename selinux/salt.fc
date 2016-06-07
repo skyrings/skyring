@@ -1,3 +1,5 @@
+/etc/salt(/.*)?         gen_context(system_u:object_r:salt_conf_t,s0)
+
 /usr/bin/salt-master		--	gen_context(system_u:object_r:salt_exec_t,s0)
 /usr/bin/salt-minion		--  	gen_context(system_u:object_r:salt_exec_t,s0)
 
@@ -9,5 +11,7 @@
 /var/log/salt(/.*)?		gen_context(system_u:object_r:salt_log_t,s0)
 
 /var/run/salt(/.*)?		gen_context(system_u:object_r:salt_var_run_t,s0)
+
+/var/run/salt-master\.pid       gen_context(system_u:object_r:salt_var_run_t,s0)
 
 /srv/salt(/.*)?		gen_context(system_u:object_r:salt_data_t,s0)
