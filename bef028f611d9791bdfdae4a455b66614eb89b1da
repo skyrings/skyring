@@ -22,6 +22,30 @@
       "revId": "bef028f611d9791bdfdae4a455b66614eb89b1da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ea36ad01",
+        "filename": "event/handler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-06-07T05:18:38Z",
+      "side": 1,
+      "message": "Yes, I would be suing this patch later for disk identification by uuid and if node is actually rebooted, will try to sync the OSD data disk and journal disk details..",
+      "parentUuid": "baa041b7_2a525535",
+      "range": {
+        "startLine": 425,
+        "startChar": 3,
+        "endLine": 428,
+        "endChar": 2
+      },
+      "revId": "bef028f611d9791bdfdae4a455b66614eb89b1da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
