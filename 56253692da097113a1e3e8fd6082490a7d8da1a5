@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_0a1b1182",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-06-07T05:35:21Z",
+      "side": 1,
+      "message": "Why to add this to system summary?",
+      "range": {
+        "startLine": 1377,
+        "startChar": 29,
+        "endLine": 1377,
+        "endChar": 56
+      },
+      "revId": "56253692da097113a1e3e8fd6082490a7d8da1a5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
