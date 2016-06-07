@@ -81,7 +81,14 @@ esac
 
 grep -q "sslEnabled" /etc/skyring/skyring.conf || sed -i -e 's/"config".*{/"config": {\n\t"sslEnabled": true,/g' /etc/skyring/skyring.conf
 
-echo 'Define host_name' `hostname` | cat - /etc/httpd/conf.d/skyring-web.conf > temp && mv -f temp /etc/httpd/conf.d/skyring-web.conf
+read -p "Please enter the FQDN of server [`hostname`]:" hostname
+
+if [ -z $hostname ]
+then
+    hostname=`hostname`
+fi
+
+echo 'Define host_name' $hostname | cat - /etc/httpd/conf.d/skyring-web.conf > temp && mv -f temp /etc/httpd/conf.d/skyring-web.conf
 
 # Start the skyring server
 systemctl enable skyring
