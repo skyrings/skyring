@@ -14,10 +14,12 @@
 %global carbon_relabel_files() %{_bindir}/carbon-aggregator %{_bindir}/carbon-cache %{_bindir}/carbon-client %{_bindir}/carbon-relay %{_bindir}/validate-storage-schemas %{_prefix}/lib/systemd/system/carbon* /var/lib/carbon/.* /var/log/carbon/.* /var/run/carbon-aggregator.pid /var/run/carbon-cache.pid
 
 # Version of distribution SELinux policy package
-%if 0%{?fedora} >= 22
+%if 0%{?fedora} >= 25
+%global selinux_policyver 3.13.1-188
+%elif 0%{?fedora} >= 22
 %global selinux_policyver 3.13.1-158.18
-%else
-%global selinux_policyver 3.13.1-128
+%elif 0%{?rhel}
+%global selinux_policyver 3.13.1-60
 %endif
 
 %define pkg_name skyring
@@ -55,6 +57,9 @@ Requires: salt-master >= 2015.5.5
 Requires: pytz
 Requires: python-cpopen
 Requires: python-netaddr
+Requires: carbon-selinux
+Requires: rhscon-core-selinux
+Requires: salt-selinux
 %if ( 0%{?fedora} && 0%{?fedora} > 16 )
 Requires: mongodb-org
 Requires: mongodb-org-server
