@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_2a525535",
+        "filename": "event/handler.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-06-07T05:16:36Z",
+      "side": 1,
+      "message": "Yet to be implemented??",
+      "range": {
+        "startLine": 425,
+        "startChar": 3,
+        "endLine": 428,
+        "endChar": 2
+      },
+      "revId": "bef028f611d9791bdfdae4a455b66614eb89b1da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
