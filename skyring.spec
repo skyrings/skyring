@@ -11,14 +11,9 @@
 # Relabel files
 %global skyring_relabel_files() %{_bindir}/skyring %{_prefix}/lib/systemd/system/skyring.* /var/lib/skyring/.* /var/run/\.skyring-event
 %global salt_relabel_files() %{_bindir}/salt-master.* %{_bindir}/salt-minion.* %{_prefix}/lib/systemd/system/salt-master.* /var/cache/salt/.* /var/log/salt/.* /var/run/salt/* /srv/salt/.*
-%global carbon_relabel_files() %{_bindir}/carbon-aggregator %{_bindir}/carbon-cache %{_bindir}/carbon-client %{_bindir}/carbon-relay %{_bindir}/validate-storage-schemas %{_prefix}/lib/systemd/system/carbon* /var/lib/carbon/.* /var/log/carbon/.* /var/run/carbon-aggregator.pid /var/run/carbon-cache.pid
 
 # Version of distribution SELinux policy package
-%if 0%{?fedora} >= 22
-%global selinux_policyver 3.13.1-158.18
-%else
-%global selinux_policyver 3.13.1-128
-%endif
+%global selinux_policyver 3.13.1-128.6
 
 %define pkg_name skyring
 %define pkg_version 0.0.21
@@ -100,17 +95,6 @@ BuildRequires: selinux-policy selinux-policy-devel
 SELinux Policies for Salt
 
 
-%package -n carbon-selinux
-License: GPLv2
-Group: System Environment/Base
-Summary: SELinux Policies for Carbon
-BuildArch: noarch
-Requires(post): selinux-policy-base >= %{selinux_policyver}, selinux-policy-targeted >= %{selinux_policyver}, policycoreutils, policycoreutils-python libselinux-utils
-BuildRequires: selinux-policy selinux-policy-devel
-
-%description -n carbon-selinux
-SELinux Policies for Carbon
-
 %prep
 %setup -n %{pkg_name}-%{pkg_version}
 
@@ -169,12 +153,6 @@ install -p -m 644 selinux/salt.if \
 install -m 0644 selinux/salt.pp.bz2 \
 	%{buildroot}%{_datadir}/selinux/packages
 
-# carbon
-install -p -m 644 selinux/carbon.if \
-	%{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
-install -m 0644 selinux/carbon.pp.bz2 \
-	%{buildroot}%{_datadir}/selinux/packages
-
 %post
 ln -fs /usr/share/skyring/setup/skyring-setup.sh /usr/bin/skyring-setup
 /bin/systemctl enable skyring.service >/dev/null 2>&1 || :
@@ -195,20 +173,6 @@ if %{_sbindir}/selinuxenabled ; then
     %salt_relabel_files
 fi
 
-%post -n carbon-selinux
-%_format MODULE %{_datadir}/selinux/packages/carbon.pp.bz2
-%{_sbindir}/semodule -n -s %{selinuxtype} -i $MODULE
-if %{_sbindir}/selinuxenabled ; then
-    %{_sbindir}/load_policy
-    %carbon_relabel_files
-fi
-
-if 0%{?fedora} < 23 || 0%{?rhel} < 7.3 ; then
-semanage port -a -t mailbox_port_t -p tcp 2004 2> /dev/null
-semanage port -a -t xinuexpansion4_port_t -p tcp 2024 2> /dev/null
-semanage port -a -t xinuexpansion3_port_t -p tcp 2023 2> /dev/null
-fi
-
 %postun selinux
 if [ $1 -eq 0 ]; then
     %{_sbindir}/semodule -n -r %{modulenames} &> /dev/null || :
@@ -224,15 +188,6 @@ if [ $1 -eq 0 ]; then
     if %{_sbindir}/selinuxenabled ; then
 	%{_sbindir}/load_policy
 	%salt_relabel_files
-    fi
-fi
-
-%postun -n carbon-selinux
-if [ $1 -eq 0 ]; then
-    %{_sbindir}/semodule -n -r %{modulenames} &> /dev/null || :
-    if %{_sbindir}/selinuxenabled ; then
-	%{_sbindir}/load_policy
-	%carbon_relabel_files
     fi
 fi
 
@@ -279,11 +234,6 @@ rm -rf "$RPM_BUILD_ROOT"
 %defattr(-,root,root,0755)
 %attr(0644,root,root) %{_datadir}/selinux/packages/salt.pp.bz2
 %attr(0644,root,root) %{_datadir}/selinux/devel/include/%{moduletype}/salt.if
-
-%files -n carbon-selinux
-%defattr(-,root,root,0755)
-%attr(0644,root,root) %{_datadir}/selinux/packages/carbon.pp.bz2
-%attr(0644,root,root) %{_datadir}/selinux/devel/include/%{moduletype}/carbon.if
 
 %files
 %attr(0755, root, root) /usr/bin/skyring
