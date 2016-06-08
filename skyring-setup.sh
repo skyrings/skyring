@@ -41,6 +41,32 @@ db.createUser( { "user" : "admin", "pwd": "admin", "roles" : ["readWrite", "dbAd
 show users
 EOF
 
+# Configuring logrotation
+cat <<EOF >/etc/logrotate.d/skyring
+/var/log/skyring/skyring.log {
+    su root root
+    size=100M
+    rotate 10
+    missingok
+    compress
+    notifempty
+    create 0664 root root
+}
+EOF
+
+cat <<EOF >/etc/logrotate.d/skyring
+/var/log/skyring/bigfin.log {
+    su root root
+    size=100M
+    rotate 10
+    missingok
+    compress
+    notifempty
+    create 0664 root root
+}
+EOF
+
+
 # Start the skyring server
 systemctl enable skyringd
 systemctl start skyringd
