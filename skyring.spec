@@ -189,6 +189,9 @@ install -m 0644 selinux/carbon.pp.bz2 \
 
 %post
 /bin/systemctl enable skyring.service >/dev/null 2>&1 || :
+rndpwd=`openssl rand -base64 8`
+cmd="sed -i 's/.*password.*/ \"password\": \"${rndpwd}\"/g' /etc/skyring/skyring.conf"
+eval $cmd
 
 %post selinux
 %_format MODULE %{_datadir}/selinux/packages/skyring.pp.bz2
