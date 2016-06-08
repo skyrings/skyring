@@ -55,6 +55,4 @@ type Backend interface {
 	SyncModules(node string, ctxt string) (bool, error)
 	SetupSkynetService(node string, ctxt string) (bool, error)
 	GetFingerPrint(node string, ctxt string) (string, error)
-	GetSingleValuedMetricFromCollectd(nodes []string, metricName string, ctxt string) (result map[string]models.CollectdSingleValuedMetric, err error)
-	GetCpuMetricFromCollectd(nodes []string, ctxt string) (result map[string]models.CollectdCpuMetric, err error)
 }

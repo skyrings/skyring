@@ -88,9 +88,6 @@ install -Dm 0755 backend/salt/template/* $RPM_BUILD_ROOT/srv/salt/template
 install -d $RPM_BUILD_ROOT/%{python2_sitelib}/skyring
 install -D backend/salt/python/skyring/* $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/
 install -D -p -m 0644 misc/systemd/%{name}.service %{buildroot}%{_unitdir}/%{name}.service
-install -m 755 -d $RPM_BUILD_ROOT/srv/salt/_modules
-install -Dm 0644 salt_module/skyring_utils.py $RPM_BUILD_ROOT/srv/salt/_modules
-install -Dm 0644 salt_module/collectd.py $RPM_BUILD_ROOT/srv/salt/_modules
 gzip skyring.8
 install -Dm 0644 skyring.8.gz $RPM_BUILD_ROOT%{_mandir}/man8/skyring.8.gz
 chmod -x $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/__init__.py
@@ -139,7 +136,6 @@ rm -rf "$RPM_BUILD_ROOT"
 %{python2_sitelib}/skyring/*
 %{_var}/log/skyring
 /srv/salt/*
-/srv/salt/_modules/*
 %{_unitdir}/%{name}.service
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/httpd/conf.d/graphite-web.conf
 %config(noreplace) %{_sysconfdir}/skyring/authentication.conf

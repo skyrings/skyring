@@ -575,10 +575,6 @@ def UpdateMonitoringConfiguration(nodes, plugin_threshold_dict, ctxt=""):
     return failed_minions
 
 
-def GetSingleValuedMetricFromCollectd(nodes, resource_name, ctxt=""):
-    return local.cmd(nodes, "collectd.getSingleValuedMetricsFromCollectd", [resource_name], expr_form='list')
-
-
 def GetFingerPrint(node, ctxt=""):
     d = _get_keys(node)
     if d['unaccepted_nodes'].get(node):

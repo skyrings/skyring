@@ -303,16 +303,6 @@ func (a SaltNodeManager) UpdateMonitoringConfiguration(nodes []string, config []
 	return failed_nodes, err
 }
 
-func (a SaltNodeManager) GetSingleValuedMetricFromCollectd(nodes []string, metricName string, ctxt string) (map[string]models.CollectdSingleValuedMetric, error) {
-	result, err := salt_backend.GetSingleValuedMetricFromCollectd(nodes, metricName, ctxt)
-	return result, err
-}
-
-func (a SaltNodeManager) GetCpuMetricFromCollectd(nodes []string, ctxt string) (result map[string]models.CollectdCpuMetric, err error) {
-	result, err = salt_backend.GetCpuMetricFromCollectd(nodes, ctxt)
-	return result, err
-}
-
 func (a SaltNodeManager) EnableMonitoringPlugin(nodes []string, pluginName string, ctxt string) (map[string]string, error) {
 	failed_nodes, err := salt_backend.EnableMonitoringPlugin(nodes, pluginName, ctxt)
 	return failed_nodes, err
