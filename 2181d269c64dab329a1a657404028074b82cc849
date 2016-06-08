@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_47aea72e",
+        "filename": "skyring-pre.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1008515
+      },
+      "writtenOn": "2016-06-08T14:31:15Z",
+      "side": 1,
+      "message": "this does not open the skyring.conf file used in the other files!",
+      "revId": "2181d269c64dab329a1a657404028074b82cc849",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
