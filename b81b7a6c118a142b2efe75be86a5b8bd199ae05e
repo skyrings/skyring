@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_91274d62",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-06-08T04:29:41Z",
+      "side": 1,
+      "message": "Wouldn\u0027t this condition be satisfied in line 17 itself??",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 21
+      },
+      "revId": "b81b7a6c118a142b2efe75be86a5b8bd199ae05e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_b124915f",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-06-08T04:29:41Z",
+      "side": 1,
+      "message": "All three we need on rhscon server only? what is required on storage nodes ?",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 22
+      },
+      "revId": "b81b7a6c118a142b2efe75be86a5b8bd199ae05e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
