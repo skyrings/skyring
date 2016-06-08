@@ -53,6 +53,15 @@ systemctl start mongod
 info "Setting up mongodb...."
 sleep 10
 
+USER=`/bin/mongo -quiet skyring --eval 'db.getUsers()[0]["user"]'`
+PWD=`python -c 'import json;print json.loads(open("/etc/skyring/skyring.conf").read())["dbconfig"]["password"]'`
+if [ $? -ne 0 ] || [ "${USER}" != 'admin' ]; then
+    /bin/systemctl status mongod > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+	cmd="/bin/mongo skyring --eval 'db.createUser( { \"user\" : \"admin\", \"pwd\": \"$PWD\", \"roles\" : [\"readWrite\", \"dbAdmin\", \"userAdmin\"] })'"
+	eval $cmd
+    fi
+fi
 
 info "Setup graphite user"
 /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
@@ -88,7 +97,7 @@ info "You can start/stop/restart the server by executing the command"
 info "\tsystemctl start/stop/restart skyring"
 info "Skyring log directory: /var/log/skyring"
 info "Mongodb user name: admin"
-info "Mongodb password: admin"
+info "Mongodb password: $PWD"
 info "-------------------------------------------------------"
 
 info "Done!"
