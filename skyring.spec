@@ -124,6 +124,8 @@ rm -rf $RPM_BUILD_ROOT
 install -D skyring $RPM_BUILD_ROOT/usr/bin/skyring
 install -Dm 0644 conf/sample/graphite-web.conf.sample $RPM_BUILD_ROOT/etc/skyring/httpd/conf.d/graphite-web.conf
 install -Dm 0644 conf/sample/skyring-web.conf.sample $RPM_BUILD_ROOT/etc/httpd/conf.d/skyring-web.conf
+install -Dm 0644 conf/sample/carbon.conf.sample $RPM_BUILD_ROOT/etc/skyring/carbon/carbon.conf
+install -Dm 0644 conf/sample/storage-schemas.conf.sample $RPM_BUILD_ROOT/etc/skyring/carbon/storage-schemas.conf
 install -m 755 -d $RPM_BUILD_ROOT/usr/share/skyring/setup
 install -Dm 755 skyring-setup.sh $RPM_BUILD_ROOT/usr/share/skyring/setup/skyring-setup.sh
 install -Dm 0644 conf/sample/skyring_logrotate.conf.sample $RPM_BUILD_ROOT/etc/logrotate.d/skyring
@@ -240,6 +242,12 @@ fi
 if [ -e /etc/httpd/conf.d/graphite-web.conf.orig -a -h /etc/httpd/conf.d/graphite-web.conf -a ! -e "`readlink /etc/httpd/conf.d/graphite-web.conf`" ] ; then
  mv -f /etc/httpd/conf.d/graphite-web.conf.orig /etc/httpd/conf.d/graphite-web.conf
 fi
+if [ -e /etc/carbon/carbon.conf.orig -a -h /etc/carbon/carbon.conf -a ! -e "`readlink /etc/carbon/carbon.conf`" ] ; then
+ mv -f /etc/carbon/carbon.conf.orig /etc/carbon/carbon.conf
+fi
+if [ -e /etc/carbon/storage-schemas.conf.orig -a -h /etc/carbon/storage-schemas.conf -a ! -e "`readlink /etc/carbon/storage-schemas.conf`" ] ; then
+ mv -f /etc/carbon/storage-schemas.conf.orig /etc/carbon/storage-schemas.conf
+fi
 rm -f /etc/logrotate.d/skyring
 
 
@@ -250,6 +258,18 @@ if [ ! -h /etc/httpd/conf.d/graphite-web.conf -o ! "`readlink /etc/httpd/conf.d/
   fi
   ln -s /etc/skyring/httpd/conf.d/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
 fi
+if [ ! -h /etc/carbon/carbon.conf -o ! "`readlink /etc/carbon/carbon.conf`" = "/etc/skyring/carbon/carbon.conf" ] ; then
+  if [ -e /etc/carbon/carbon.conf ] ; then
+    mv -f /etc/carbon/carbon.conf /etc/carbon/carbon.conf.orig
+  fi
+  ln -s /etc/skyring/carbon/carbon.conf /etc/carbon/carbon.conf
+fi
+if [ ! -h /etc/carbon/storage-schemas.conf -o ! "`readlink /etc/carbon/storage-schemas.conf`" = "/etc/skyring/carbon/storage-schemas.conf" ] ; then
+  if [ -e /etc/carbon/storage-schemas.conf ] ; then
+    mv -f /etc/carbon/storage-schemas.conf /etc/carbon/storage-schemas.conf.orig
+  fi
+  ln -s /etc/skyring/carbon/storage-schemas.conf /etc/carbon/storage-schemas.conf
+fi
 
 %triggerun -- graphite-web
 if [ ! -h /etc/httpd/conf.d/graphite-web.conf -o ! "`readlink /etc/httpd/conf.d/graphite-web.conf`" = "/etc/skyring/httpd/conf.d/graphite-web.conf" ] ; then
@@ -258,6 +278,18 @@ if [ ! -h /etc/httpd/conf.d/graphite-web.conf -o ! "`readlink /etc/httpd/conf.d/
   fi
   ln -s /etc/skyring/httpd/conf.d/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
 fi
+if [ ! -h /etc/carbon/carbon.conf -o ! "`readlink /etc/carbon/carbon.conf`" = "/etc/skyring/carbon/carbon.conf" ] ; then
+  if [ -e /etc/carbon/carbon.conf ] ; then
+    mv -f /etc/carbon/carbon.conf /etc/carbon/carbon.conf.orig
+  fi
+  ln -s /etc/skyring/carbon/carbon.conf /etc/carbon/carbon.conf
+fi
+if [ ! -h /etc/carbon/storage-schemas.conf -o ! "`readlink /etc/carbon/storage-schemas.conf`" = "/etc/skyring/carbon/storage-schemas.conf" ] ; then
+  if [ -e /etc/carbon/storage-schemas.conf ] ; then
+    mv -f /etc/carbon/storage-schemas.conf /etc/carbon/storage-schemas.conf.orig
+  fi
+  ln -s /etc/skyring/carbon/storage-schemas.conf /etc/carbon/storage-schemas.conf
+fi
 
 %triggerpostun -- graphite-web
 if [ $2 -eq 0 ] ; then
@@ -265,6 +297,18 @@ if [ $2 -eq 0 ] ; then
 fi
 if [ -e /etc/httpd/conf.d/graphite-web.conf.rpmnew ] ; then
  mv /etc/httpd/conf.d/graphite-web.conf.rpmnew /etc/httpd/conf.d/graphite-web.conf.orig
+fi
+if [ $2 -eq 0 ] ; then
+ rm -f /etc/carbon/carbon.conf.rpmsave /etc/carbon/carbon.conf.orig
+fi
+if [ -e /etc/carbon/carbon.conf.rpmnew ] ; then
+ mv /etc/carbon/carbon.conf.rpmnew /etc/carbon/carbon.conf.orig
+fi
+if [ $2 -eq 0 ] ; then
+ rm -f /etc/carbon/storage-schemas.conf.rpmsave /etc/carbon/storage-schemas.conf.orig
+fi
+if [ -e /etc/carbon/storage-schemas.conf.rpmnew ] ; then
+ mv /etc/carbon/storage-schemas.conf.rpmnew /etc/carbon/storage-schemas.conf.orig
 fi
 
 %clean
@@ -295,6 +339,8 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_unitdir}/%{name}.service
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/httpd/conf.d/graphite-web.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/httpd/conf.d/skyring-web.conf
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/carbon/carbon.conf
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/carbon/storage-schemas.conf
 %config(noreplace) %{_sysconfdir}/skyring/authentication.conf
 %config(noreplace) %{_sysconfdir}/skyring/skyring.conf
 %config(noreplace) %{_sysconfdir}/salt/master.d/skyring.conf
