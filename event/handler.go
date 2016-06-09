@@ -279,6 +279,7 @@ func drive_add_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 								logger.Get().Error("%s-Failed to sync disk for host: %s Error: %v", ctxt, node.Hostname, err)
 								return
 							}
+							go skyring.ComputeSystemSummary(make(map[string]interface{}))
 							t.UpdateStatus("Success")
 							t.Done(models.TASK_STATUS_SUCCESS)
 
