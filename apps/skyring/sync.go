@@ -267,38 +267,6 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		return
 	}
 
-	/*
-		Get memory statistics
-	*/
-	nodesMemory, nodesMemoryError := GetCoreNodeManager().GetSingleValuedMetricFromCollectd(nodeNames, monitoring.MEMORY, ctxt)
-	if nodesMemoryError != nil {
-		logger.Get().Warning("Failed to sync memory utilizations.Error %v", nodesMemoryError)
-	}
-
-	/*
-		Get cpu user utilization
-	*/
-	nodesCPU, cpuErr := GetCoreNodeManager().GetCpuMetricFromCollectd(nodeNames, ctxt)
-	if cpuErr != nil {
-		logger.Get().Warning("Failed to sync cpu stats.Error %v", cpuErr)
-	}
-
-	/*
-		Get swap used
-	*/
-	nodesSwap, swapErr := GetCoreNodeManager().GetSingleValuedMetricFromCollectd(nodeNames, monitoring.SWAP, ctxt)
-	if swapErr != nil {
-		logger.Get().Warning("Failed to sync swap used.Error %v", swapErr)
-	}
-
-	/*
-		Get Network utilization
-	*/
-	nwUtilization, nwUtilizationErr := GetCoreNodeManager().GetSingleValuedMetricFromCollectd(nodeNames, monitoring.NETWORK, ctxt)
-	if nwUtilizationErr != nil {
-		logger.Get().Warning("Failed to sync network utilization.Error %v", nwUtilizationErr)
-	}
-
 	var err error
 
 	for _, node := range nodes {
@@ -330,109 +298,81 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 		UpdateMetricToTimeSeriesDb(ctxt, float64(storageTotal), time_stamp_str, fmt.Sprintf("%s%s.%s", table_name, monitoring.STORAGE_UTILIZATION, monitoring.TOTAL_SPACE))
 
 		/*
-			Fetch previous memory utilizations
+			Get memory statistics
 		*/
-		memoryPreviousUtilization := node.Utilizations["memoryusage"]
-		/*
-			Get memory usage percentage
-		*/
-		memory_usage_percent := memoryPreviousUtilization.PercentUsed
-		if nodesMemoryError == nil {
-			memory_usage_percent, err = ParseStatFromCollectd(nodesMemory[node.Hostname].PercentUsed)
-			if err != nil {
-				logger.Get().Warning("Failed to get memory usage percentage from node %v.err %v", node.Hostname, err)
-			}
-		}
+		resource_name := fmt.Sprintf("%s.%s", monitoring.MEMORY, monitoring.USAGE_PERCENTAGE)
+		count := 0
+		memory_usage_percent := FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
 
 		//Memory total
-		memory_total := float64(memoryPreviousUtilization.Total)
-		if nodesMemoryError == nil {
-			memory_total, err = ParseStatFromCollectd(nodesMemory[node.Hostname].Total)
-			if err != nil {
-				logger.Get().Warning("Failed to get total memory of node %v.err %v", node.Hostname, err)
-			}
+		var memory_total float64
+		resource_name, resourceNameError := GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": monitoring.AGGREGATION + monitoring.MEMORY})
+		if resourceNameError != nil {
+			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v .Err %v", ctxt, monitoring.AGGREGATION+monitoring.MEMORY, node.Hostname, resourceNameError)
+		} else {
+			memory_total = FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
 		}
 
 		//Memory used
-		memory_used := float64(memoryPreviousUtilization.Used)
-		if nodesMemoryError == nil {
-			memory_used, err = ParseStatFromCollectd(nodesMemory[node.Hostname].Used)
-			if err != nil {
-				logger.Get().Warning("Failed to get memory usage percentage from node %v.err %v", node.Hostname, err)
-			}
-		}
+		var memory_used float64
+		resource_name = fmt.Sprintf("%s.%s-%s", monitoring.MEMORY, monitoring.MEMORY, monitoring.USED)
+		memory_used = FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
 
 		/*
 			Get cpu user utilization
 		*/
+		var resource_name_error error
+		resource_name, resource_name_error = GetMonitoringManager().GetResourceName(map[string]interface{}{
+			"resource_name": monitoring.CPU_USER,
+		})
 		var cpu_user float64
-		cpu_user = node.Utilizations["cpupercentageusage"].PercentUsed
-
-		if cpuErr == nil {
-			cpu_user, err = ParseStatFromCollectd(nodesCPU[node.Hostname].PercentUsed)
-			if err != nil {
-				logger.Get().Warning("Failed to get cpu usage percentage from node %v.err %v", node.Hostname, err)
-			}
+		if resource_name_error == nil {
+			cpu_user = FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
+		} else {
+			logger.Get().Warning("%s - Failed to fetch cpu statistics from %v.Error %v", ctxt, node.Hostname, resource_name_error)
 		}
 
 		/*
-			Fetch previous swap utilizations
+			Get swap used
 		*/
-		var swapPreviousUtilization models.Utilization
-		swapPreviousUtilization = node.Utilizations["swapusage"]
+		var swap_used float64
+		resource_name = fmt.Sprintf("%s.%s-%s", monitoring.SWAP, monitoring.SWAP, monitoring.USED)
+		swap_used = FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
 
-		//Swap utilization
-		swap_used := float64(swapPreviousUtilization.Used)
-		if swapErr == nil {
-			swap_used, err = ParseStatFromCollectd(nodesSwap[node.Hostname].Used)
-			if err != nil {
-				logger.Get().Warning("Failed to get swap used from node %v.err %v", node.Hostname, err)
-			}
-		}
+		resource_name = fmt.Sprintf("%s.%s", monitoring.SWAP, monitoring.USAGE_PERCENTAGE)
+		swap_usage_percent := FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
 
-		swap_usage_percent := swapPreviousUtilization.PercentUsed
-		if swapErr == nil {
-			swap_usage_percent, err = ParseStatFromCollectd(nodesSwap[node.Hostname].PercentUsed)
-			if err != nil {
-				logger.Get().Warning("Failed to get swap usage percentage from node %v.err %v", node.Hostname, err)
-			}
-		}
-
-		//Swap total
-		swap_total := float64(swapPreviousUtilization.Total)
-		if swapErr == nil {
-			swap_total, err = ParseStatFromCollectd(nodesSwap[node.Hostname].Total)
-			if err != nil {
-				logger.Get().Warning("Failed to get total swap from node %v.err %v", node.Hostname, err)
-			}
+		var swap_total float64
+		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": monitoring.AGGREGATION + monitoring.SWAP})
+		if resourceNameError != nil {
+			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v .Err %v", ctxt, monitoring.AGGREGATION+monitoring.SWAP, node.Hostname, resourceNameError)
+		} else {
+			swap_total = FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
 		}
 
 		//Network used
-		var nwPreviousUtilization models.Utilization
-		nwPreviousUtilization = node.Utilizations["networkusage"]
-
-		nwUsed := float64(nwPreviousUtilization.Used)
-		if nwUtilizationErr == nil {
-			nwUsed, err = ParseStatFromCollectd(nwUtilization[node.Hostname].Used)
-			if err != nil {
-				logger.Get().Warning("Failed to get network bandwidth used of node %v.err %v", node.Hostname, err)
-			}
+		var nwUsed float64
+		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": monitoring.AVERAGE + monitoring.INTERFACE + monitoring.USED})
+		if resourceNameError != nil {
+			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v .Err %v", ctxt, monitoring.AVERAGE+monitoring.INTERFACE+monitoring.USED, node.Hostname, resourceNameError)
+		} else {
+			nwUsed = FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
 		}
 
-		nwUsagePercentage := float64(nwPreviousUtilization.PercentUsed)
-		if nwUtilizationErr == nil {
-			nwUsagePercentage, err = ParseStatFromCollectd(nwUtilization[node.Hostname].PercentUsed)
-			if err != nil {
-				logger.Get().Warning("Failed to get network bandwidth usage of node %v.err %v", node.Hostname, err)
-			}
+		var nwBandwidth float64
+		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": monitoring.AVERAGE + monitoring.INTERFACE + monitoring.TOTAL})
+		if resourceNameError != nil {
+			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v .Err %v", ctxt, monitoring.AVERAGE+monitoring.INTERFACE+monitoring.TOTAL, node.Hostname, resourceNameError)
+		} else {
+			nwBandwidth = FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
 		}
 
-		nwBandwidth := float64(nwPreviousUtilization.Total)
-		if nwUtilizationErr == nil {
-			nwBandwidth, err = ParseStatFromCollectd(nwUtilization[node.Hostname].Total)
-			if err != nil {
-				logger.Get().Warning("Failed to get network bandwidth of node %v.err %v", node.Hostname, err)
-			}
+		var nwPercentUsage float64
+		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": monitoring.AVERAGE + monitoring.INTERFACE + monitoring.PERCENT})
+		if resourceNameError != nil {
+			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v .Err %v", ctxt, monitoring.AVERAGE+monitoring.INTERFACE+monitoring.PERCENT, node.Hostname, resourceNameError)
+		} else {
+			nwPercentUsage = FetchStatFromGraphite(ctxt, node.Hostname, resource_name, &count)
 		}
 
 		coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
@@ -443,8 +383,8 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 				PercentUsed: memory_usage_percent,
 			},
 			"cpuusage": {
-				Used:        int64(0),
-				Total:       int64(0),
+				Used:        int64(cpu_user),
+				Total:       int64(100),
 				PercentUsed: cpu_user,
 			},
 			"storageusage": {
@@ -460,7 +400,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 			"networkusage": {
 				Used:        int64(nwUsed),
 				Total:       int64(nwBandwidth),
-				PercentUsed: nwUsagePercentage,
+				PercentUsed: nwPercentUsage,
 			},
 		}
 
@@ -472,7 +412,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 
 		// Aggregate disk read
 		resourcePrefix := monitoring.AGGREGATION + monitoring.DISK
-		resource_name, resourceNameError := GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.READ})
+		resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.READ})
 		if resourceNameError != nil {
 			logger.Get().Warning("%s - Failed to fetch resource name of %v for %v .Err %v", ctxt, resource_name, node.Hostname, resourceNameError)
 		} else {
