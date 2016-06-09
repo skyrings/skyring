@@ -1790,6 +1790,8 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 							}
+							// Recompute cluster and system summaries to reflect changes in summaries due to cluster expansion
+							go ComputeSystemSummary(make(map[string]interface{}))
 							t.UpdateStatus("Success")
 							t.Done(models.TASK_STATUS_SUCCESS)
 

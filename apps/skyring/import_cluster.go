@@ -250,6 +250,7 @@ func (a *App) ImportCluster(w http.ResponseWriter, r *http.Request) {
 									ctxt,
 									err)
 							}
+							go ComputeSystemSummary(make(map[string]interface{}))
 							t.UpdateStatus("Success")
 							t.Done(models.TASK_STATUS_SUCCESS)
 						} else { //if the task is failed????
