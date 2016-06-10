@@ -370,13 +370,16 @@ func drive_remove_handler(event models.AppEvent, ctxt string) (models.AppEvent, 
 
 func collectd_status_handler(event models.AppEvent, ctxt string) (models.AppEvent, error) {
 	// adding the details for event
+	var active bool
 	if strings.HasSuffix(event.Message, "inactive") {
+		active = false
 		event.Name = skyring.EventTypes["COLLECTD_STATE_CHANGED"]
 		event.Message = fmt.Sprintf("Collectd process stopped on Host: %s", event.NodeName)
 		event.Description = fmt.Sprintf("Collectd process is stopped on Host: %s. This might affect the monitoring functionality of skyring", event.NodeName)
 		event.EntityId = event.NodeId
 		event.Severity = models.ALARM_STATUS_MAJOR
 	} else if strings.HasSuffix(event.Message, "active") {
+		active = true
 		event.Name = skyring.EventTypes["COLLECTD_STATE_CHANGED"]
 		event.Message = fmt.Sprintf("Collectd process started on Host: %s", event.NodeName)
 		event.EntityId = event.NodeId
@@ -386,6 +389,11 @@ func collectd_status_handler(event models.AppEvent, ctxt string) (models.AppEven
 	}
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
+
+	if err := util.UpdateNodeServiceState(event.NodeId, "collectd", active, ctxt); err != nil {
+		logger.Get().Error("%s- Error updating service state for node: %s. Error:", ctxt, event.NodeId, event.NodeName)
+		return event, err
+	}
 
 	if err := update_alarm_count(event, ctxt); err != nil {
 		logger.Get().Error("%s-could not update alarm"+
@@ -411,6 +419,11 @@ func node_appeared_handler(event models.AppEvent, ctxt string) (models.AppEvent,
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
 
+	if err := util.UpdateNodeServiceState(event.NodeId, "salt-minion", true, ctxt); err != nil {
+		logger.Get().Error("%s- Error updating service state for node: %s. Error:", ctxt, event.NodeId, event.NodeName)
+		return event, err
+	}
+
 	if err := update_alarm_count(event, ctxt); err != nil {
 		logger.Get().Error("%s-could not update alarm"+
 			" count for event: %s", ctxt, event.EventId.String())
@@ -434,6 +447,11 @@ func node_lost_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 	event.Severity = models.ALARM_STATUS_MAJOR
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
+
+	if err := util.UpdateNodeServiceState(event.NodeId, "salt-minion", false, ctxt); err != nil {
+		logger.Get().Error("%s- Error updating service state for node: %s. Error:", ctxt, event.NodeId, event.NodeName)
+		return event, err
+	}
 
 	if err := update_alarm_count(event, ctxt); err != nil {
 		logger.Get().Error("%s-could not update alarm"+
