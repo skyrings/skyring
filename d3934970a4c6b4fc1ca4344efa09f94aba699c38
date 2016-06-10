@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_471c5dc1",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-06-10T06:53:56Z",
+      "side": 1,
+      "message": "I think we should not publish this URL to external world",
+      "range": {
+        "startLine": 108,
+        "startChar": 9,
+        "endLine": 108,
+        "endChar": 42
+      },
+      "revId": "d3934970a4c6b4fc1ca4344efa09f94aba699c38",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
