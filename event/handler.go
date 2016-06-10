@@ -372,12 +372,14 @@ func drive_remove_handler(event models.AppEvent, ctxt string) (models.AppEvent, 
 func collectd_status_handler(event models.AppEvent, ctxt string) (models.AppEvent, error) {
 	// adding the details for event
 	if strings.HasSuffix(event.Message, "inactive") {
+		util.AppendServiceToNode(bson.M{"nodeid": event.NodeId}, models.SkyringServices[0], models.STATUS_DOWN, ctxt)
 		event.Name = skyring.EventTypes["COLLECTD_STATE_CHANGED"]
 		event.Message = fmt.Sprintf("Collectd process stopped on Host: %s", event.NodeName)
 		event.Description = fmt.Sprintf("Collectd process is stopped on Host: %s. This might affect the monitoring functionality of skyring", event.NodeName)
 		event.EntityId = event.NodeId
 		event.Severity = models.ALARM_STATUS_MAJOR
 	} else if strings.HasSuffix(event.Message, "active") {
+		util.AppendServiceToNode(bson.M{"nodeid": event.NodeId}, models.SkyringServices[0], models.STATUS_UP, ctxt)
 		event.Name = skyring.EventTypes["COLLECTD_STATE_CHANGED"]
 		event.Message = fmt.Sprintf("Collectd process started on Host: %s", event.NodeName)
 		event.EntityId = event.NodeId
@@ -411,6 +413,7 @@ func node_appeared_handler(event models.AppEvent, ctxt string) (models.AppEvent,
 	event.Severity = models.ALARM_STATUS_CLEARED
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
+	util.AppendServiceToNode(bson.M{"nodeid": event.NodeId}, models.SkyringServices[1], models.STATUS_UP, ctxt)
 
 	if err := update_alarm_count(event, ctxt); err != nil {
 		logger.Get().Error("%s-could not update alarm"+
@@ -436,6 +439,8 @@ func node_lost_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 	event.NotificationEntity = models.NOTIFICATION_ENTITY_HOST
 	event.Notify = true
 
+	util.AppendServiceToNode(bson.M{"nodeid": event.NodeId}, models.SkyringServices[1], models.STATUS_DOWN, ctxt)
+
 	if err := update_alarm_count(event, ctxt); err != nil {
 		logger.Get().Error("%s-could not update alarm"+
 			" count for event: %s", ctxt, event.EventId.String())
@@ -446,6 +451,7 @@ func node_lost_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 }
 
 func handle_node_start_event(node string, ctxt string) error {
+	util.AppendServiceToNode(bson.M{"hostname": node}, models.SkyringServices[1], models.STATUS_UP, ctxt)
 	skyring.Initialize(node, ctxt)
 	return nil
 }
