@@ -20,6 +20,7 @@ import (
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"net/http"
+	"strings"
 )
 
 func (a *App) About(w http.ResponseWriter, r *http.Request) {
@@ -36,6 +37,12 @@ func (a *App) About(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error("%s-Error in retrieving System Capabilities detail. error: %v", ctxt, err)
 		return
 	}
+	storage_provider_details := make(map[string]string)
+	for key, val := range syscapabilities.StorageProviderDetails {
+		storage_provider_details[strings.Title(key)] = val
+		delete(syscapabilities.StorageProviderDetails, key)
+	}
+	syscapabilities.StorageProviderDetails = storage_provider_details
 	if err := json.NewEncoder(w).Encode(syscapabilities); err != nil {
 		logger.Get().Error("%s-Error encoding data: %v", ctxt, err)
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
