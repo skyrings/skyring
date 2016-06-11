@@ -750,6 +750,12 @@ func cleanupTasks() {
 
 func initializeAbout(ctxt string) {
 	if len(conf.SystemConfig.SysCapabilities.StorageProviderDetails) != 0 {
+		storage_provider_details := make(map[string]string)
+		for key, val := range conf.SystemConfig.SysCapabilities.StorageProviderDetails {
+			storage_provider_details[strings.Title(key)] = val
+			delete(conf.SystemConfig.SysCapabilities.StorageProviderDetails, key)
+		}
+		conf.SystemConfig.SysCapabilities.StorageProviderDetails = storage_provider_details
 		sessionCopy := db.GetDatastore().Copy()
 		defer sessionCopy.Close()
 		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SYSTEM_CAPABILITIES)
