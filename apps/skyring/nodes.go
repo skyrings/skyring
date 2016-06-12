@@ -30,7 +30,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"time"
 )
 
 var (
@@ -1514,27 +1513,6 @@ func UpdateStorageNodeToDB(hostname string, node_state models.NodeState, node_st
 		return err
 	}
 	return nil
-}
-
-func Check_status(hostname string, ctxt string) {
-	sessionCopy := db.GetDatastore().Copy()
-	defer sessionCopy.Close()
-	node := new(models.Node)
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	for i := 0; i < 20; i++ {
-		time.Sleep(30 * time.Second)
-		if err := collection.Find(bson.M{"hostname": hostname, "state": models.NODE_STATE_ACTIVE}).One(&node); err == nil {
-			return
-		}
-	}
-	if ok, err := GetCoreNodeManager().IsNodeUp(hostname, ctxt); !ok {
-		logger.Get().Error(fmt.Sprintf("%s-Error getting status of node: %s. error: %v", ctxt, hostname, err))
-		if err := collection.Update(bson.M{"hostname": hostname}, bson.M{"$set": bson.M{"state": models.NODE_STATE_FAILED}}); err != nil {
-			logger.Get().Critical("%s-Error Updating the node: %s. error: %v", ctxt, hostname, err)
-		}
-		return
-	}
-	Initialize(hostname, ctxt)
 }
 
 func getNodeNameFromId(uuid uuid.UUID) (string, error) {
