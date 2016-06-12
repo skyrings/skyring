@@ -398,6 +398,9 @@ func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *t
 			t.UpdateStatus("Unable to add the node:%s to DB. error: %v", hostname, err)
 			return err
 		}
+		for _, service := range models.SkyringServices {
+			util.AppendServiceToNode(bson.M{"hostname": hostname}, service, models.STATUS_UP, ctxt)
+		}
 	} else {
 		logger.Get().Critical("%s-Accepting the node: %s failed. error: %v", ctxt, hostname, err)
 		t.UpdateStatus("Accepting the node: %s failed. error: %v", hostname, err)
@@ -716,20 +719,17 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 			err)
 	}
 	var nodeSummary = map[string]interface{}{
-		"nodeid":        *node_id,
-		"hostname":      node.Hostname,
-		"clustername":   cluster.Name,
-		"clusterstatus": cluster.Status,
-		"uptime":        uptime,
-		"role":          node.Roles,
+		"nodeid":         *node_id,
+		"hostname":       node.Hostname,
+		"clustername":    cluster.Name,
+		"clusterstatus":  cluster.Status,
+		"uptime":         uptime,
+		"role":           node.Roles,
+		"servicedetails": node.ServiceStatusList,
 	}
 	nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS] = getSLUStatusWiseCount(node_id, ctxt)
 
 	nodeSummary[models.UTILIZATIONS] = node.Utilizations
-	var result models.RpcResponse
-	provider := a.getProviderFromClusterType(cluster.Type)
-	SluCount := nodeSummary[models.COLL_NAME_STORAGE_LOGICAL_UNITS].(map[string]int)
-	body, err := json.Marshal(map[string]interface{}{"hostname": node.Hostname, "totalslu": SluCount[models.TotalSLU], "noderoles": node.Roles})
 	if err != nil {
 		logger.Get().Error("%s-Unable to marshall the details of node %v for getting service count .error %v", ctxt, *node_id, err)
 		bytes, err := json.Marshal(nodeSummary)
@@ -743,46 +743,6 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusPartialContent)
 		w.Write(bytes)
 		return
-	}
-	if provider != nil {
-		err = provider.Client.Call(fmt.Sprintf("%s.%s",
-			provider.Name, node_post_functions["servicecount"]),
-			models.RpcRequest{RpcRequestVars: mux.Vars(r), RpcRequestData: body, RpcRequestContext: ctxt},
-			&result)
-		if err != nil || result.Status.StatusCode != http.StatusOK {
-			logger.Get().Error(
-				"%s-Error getting service count details for node: %v. error: %v",
-				ctxt,
-				*node_id,
-				err)
-			bytes, err := json.Marshal(nodeSummary)
-			if err != nil {
-				HttpResponse(
-					w,
-					http.StatusInternalServerError,
-					fmt.Sprintf("Error Unable to marshall the node summary details of node %v . error: %v", *node_id, err))
-				return
-			}
-			w.WriteHeader(http.StatusPartialContent)
-			w.Write(bytes)
-			return
-		}
-		ServiceDetails := make(map[string]interface{})
-		if err := json.Unmarshal(result.Data.Result, &ServiceDetails); err != nil {
-			logger.Get().Error("%s-Unable to unmarshal service count details for node : %v . error: %v", ctxt, *node_id, err)
-			bytes, err := json.Marshal(nodeSummary)
-			if err != nil {
-				HttpResponse(
-					w,
-					http.StatusInternalServerError,
-					fmt.Sprintf("Error Unable to marshall the node summary details of node %v . error: %v", *node_id, err))
-				return
-			}
-			w.WriteHeader(http.StatusPartialContent)
-			w.Write(bytes)
-			return
-		}
-		nodeSummary["servicedetails"] = ServiceDetails
 	}
 	json.NewEncoder(w).Encode(nodeSummary)
 }
