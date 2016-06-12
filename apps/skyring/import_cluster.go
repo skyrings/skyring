@@ -323,5 +323,6 @@ func checkAndAcceptNode(node string, ctxt string) (bool, error) {
 			}
 		}
 	}
+	go Check_status(node, ctxt)
 	return true, nil
 }
