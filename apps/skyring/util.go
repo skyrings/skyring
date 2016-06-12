@@ -416,6 +416,7 @@ func initializeStorageNode(node string, t *task.Task, ctxt string) error {
 				return err
 			}
 		}
+		util.AppendServiceToNode(bson.M{"hostname": node}, models.SkyringServices[0], models.STATUS_UP, ctxt)
 		if ok, err := GetCoreNodeManager().SyncModules(node, ctxt); !ok || err != nil {
 			logger.Get().Error("%s-Failed to sync modules on the node: %s. error: %v", ctxt, node, err)
 			t.UpdateStatus("Failed to sync modules")
