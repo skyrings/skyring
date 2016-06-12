@@ -398,6 +398,9 @@ func acceptNode(w http.ResponseWriter, hostname string, fingerprint string, t *t
 			t.UpdateStatus("Unable to add the node:%s to DB. error: %v", hostname, err)
 			return err
 		}
+		for _, service := range models.SkyringServices {
+			util.AppendServiceToNode(bson.M{"hostname": hostname}, service, models.STATUS_UP, ctxt)
+		}
 	} else {
 		logger.Get().Critical("%s-Accepting the node: %s failed. error: %v", ctxt, hostname, err)
 		t.UpdateStatus("Accepting the node: %s failed. error: %v", hostname, err)
