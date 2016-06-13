@@ -194,7 +194,6 @@ func (a Authorizer) AddUser(user models.User, password string) error {
 	// Validate username
 	_, err := a.userDao.User(user.Username)
 	if err == nil {
-		logger.Get().Error("Username: %s already exists", user.Username)
 		return mkerror("user already exists")
 	} else if err.Error() != ErrMissingUser.Error() {
 		if err != nil {
