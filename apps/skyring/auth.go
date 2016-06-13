@@ -42,7 +42,9 @@ func AddDefaultUser() error {
 	defaultUser := models.User{Username: DefaultUserName, Email: DefaultEmail, Role: DefaultRole}
 
 	if err := GetAuthProvider().AddUser(defaultUser, DefaultPassword); err != nil {
-		logger.Get().Error("Unable to create default User:%s", err)
+		if err.Error() != "user already exists" {
+			logger.Get().Error("Unable to create default User:%s", err)
+		}
 		return err
 	}
 
