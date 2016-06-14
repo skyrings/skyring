@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_384e0f97",
+        "filename": "event/handler.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-06-14T06:04:52Z",
+      "side": 1,
+      "message": "I think better it would be to use hostname if possible. Because you know initial stage as we saw as soon as host accept goes through this event occurs and then node id is still not in place and hence this addition was missed out.\n\nI am adding the initialization part for collectd from my end but I feel the fix here would be more appropriate as a failure in accept node could be due to any reason and assuming it to be the caused due to failure in starting collectd is incorrect and hence no appropriate place than here to fix that rather than intializing collectd in down service list if the accept fails or not intializing it at all might miss out collectd from service list in nodes until  you know the collectd state again changes and hence then triggering the event.",
+      "range": {
+        "startLine": 374,
+        "startChar": 35,
+        "endLine": 374,
+        "endChar": 56
+      },
+      "revId": "a55ee73ec6ee97153307bc4b97d7099d980b7c38",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
