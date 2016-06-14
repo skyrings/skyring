@@ -46,6 +46,30 @@
       "revId": "a55ee73ec6ee97153307bc4b97d7099d980b7c38",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_7bb5b12f",
+        "filename": "event/handler.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-06-14T07:15:37Z",
+      "side": 1,
+      "message": "We discuused this and the decision was that if the node intialization and precisely, the monitoring setup succeeds, we mark collectd in up services and if not we feel its ok to not have it in the services list as then, the node would be in failure state.",
+      "parentUuid": "baa041b7_384e0f97",
+      "range": {
+        "startLine": 374,
+        "startChar": 35,
+        "endLine": 374,
+        "endChar": 56
+      },
+      "revId": "a55ee73ec6ee97153307bc4b97d7099d980b7c38",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
