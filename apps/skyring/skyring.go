@@ -605,6 +605,7 @@ func (a *App) PostInitApplication(sysConfig conf.SkyringCollection) error {
 	initializeAbout(ctxt)
 	schedule_archive_activities(ctxt)
 	FailStillCreatingClusters(ctxt)
+	schedule_session_refresh(ctxt)
 	return nil
 }
 
@@ -912,3 +913,20 @@ func Check_status(hostname string, ctxt string) {
 	}
 	Initialize(hostname, ctxt)
 }
+
+func schedule_session_refresh(ctxt string) {
+	//Refresh Session
+	scheduler, err := schedule.NewScheduler()
+	if err != nil {
+		logger.Get().Error("%s-%v", ctxt, err.Error())
+	} else {
+		f := RefreshDBSession
+		m := make(map[string]interface{})
+		go scheduler.Schedule(time.Duration(24*time.Hour), f, m)
+	}
+}
+
+func RefreshDBSession(params map[string]interface{}) {
+	db.GetDatastore().Refresh()
+}
+
