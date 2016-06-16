@@ -6,7 +6,8 @@ Wants=mongod.service salt-master.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/skyring
+EnvironmentFile=/etc/sysconfig/skyring
+ExecStart=/usr/bin/skyring $OPTIONS
 KillMode=mixed
 Restart=on-failure
 RestartSec=10s

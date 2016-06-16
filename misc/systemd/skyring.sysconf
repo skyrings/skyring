@@ -1,0 +1,9 @@
+#
+# This file can be used to set additional environment variables for
+# the skyring process, or pass additional options to the skyring
+# executable.
+#
+# To pass additional options (for instance, --log-level ERROR) to the
+# skyring binary at startup, set OPTIONS here.
+#
+#OPTIONS=
