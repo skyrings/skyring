@@ -381,26 +381,31 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 				Used:        int64(memory_used),
 				Total:       int64(memory_total),
 				PercentUsed: memory_usage_percent,
+				UpdatedAt:   time.Now().String(),
 			},
 			"cpuusage": {
 				Used:        int64(cpu_user),
 				Total:       int64(100),
 				PercentUsed: cpu_user,
+				UpdatedAt:   time.Now().String(),
 			},
 			"storageusage": {
 				Used:        storageUsed,
 				Total:       storageTotal,
 				PercentUsed: storageUsagePercent,
+				UpdatedAt:   time.Now().String(),
 			},
 			"swapusage": {
 				Used:        int64(swap_used),
 				Total:       int64(swap_total),
 				PercentUsed: swap_usage_percent,
+				UpdatedAt:   time.Now().String(),
 			},
 			"networkusage": {
 				Used:        int64(nwUsed),
 				Total:       int64(nwBandwidth),
 				PercentUsed: nwPercentUsage,
+				UpdatedAt:   time.Now().String(),
 			},
 		}
 

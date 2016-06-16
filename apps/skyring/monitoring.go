@@ -440,6 +440,7 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 			Used:        int64(cluster_memory_used),
 			Total:       int64(cluster_memory_total),
 			PercentUsed: cluster_memory_percentage,
+			UpdatedAt:   time.Now().String(),
 		},
 		"cpupercentageusage": float64(cluster_cpu_user) / float64(len(nodes)),
 	}
@@ -1403,6 +1404,7 @@ func ComputeClusterSummary(cluster models.Cluster, ctxt string) {
 	cSummary.ClusterId = cluster.ClusterId
 	cSummary.Name = cluster.Name
 	cSummary.MonitoringPlugins = cluster.Monitoring.Plugins
+	cSummary.UpdatedAt = time.Now().String()
 
 	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_CLUSTER_SUMMARY)
 	if _, err := coll.Upsert(bson.M{"clusterid": cluster.ClusterId}, cSummary); err != nil {
@@ -1577,7 +1579,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 			if total != 0.0 {
 				percentUsed = float64(used*100) / float64(total)
 			}
-			net_storage_profile_utilization[profile] = map[string]interface{}{"utilization": models.Utilization{Used: used, Total: total, PercentUsed: percentUsed}}
+			net_storage_profile_utilization[profile] = map[string]interface{}{"utilization": models.Utilization{Used: used, Total: total, PercentUsed: percentUsed, UpdatedAt: time.Now().String()}}
 		}
 
 		/*
@@ -1630,7 +1632,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	if net_cluster_total != 0 {
 		percentSystemUsed = (float64(net_cluster_used*100) / float64(net_cluster_total))
 	}
-	system.Usage = models.Utilization{Used: net_cluster_used, Total: net_cluster_total, PercentUsed: percentSystemUsed}
+	system.Usage = models.Utilization{Used: net_cluster_used, Total: net_cluster_total, PercentUsed: percentSystemUsed, UpdatedAt: time.Now().String()}
 	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{fmt.Sprintf("%s%s.%s", table_name, monitoring.SYSTEM_UTILIZATION, monitoring.USED_SPACE): {time_stamp_str: strconv.FormatInt(system.Usage.Used, 10)}}, hostname, port); err != nil {
 		logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
 	}
@@ -1703,6 +1705,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 			Used:        int64(net_memory_used),
 			Total:       int64(net_memory_total),
 			PercentUsed: memory_percent,
+			UpdatedAt:   time.Now().String(),
 		},
 		"cpupercentageusage": cpuPercentUsed,
 	}
@@ -1712,6 +1715,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		logger.Get().Error("%s - Error fetching the provider specific details. Error %v", ctxt, otherDetailsFetchError)
 	}
 	system.ProviderMonitoringDetails = otherProvidersDetails
+	system.UpdatedAt = time.Now().String()
 
 	/*
 		Add Most used storages
