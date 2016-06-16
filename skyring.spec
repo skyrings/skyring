@@ -121,6 +121,7 @@ make pybuild
 
 %install
 rm -rf $RPM_BUILD_ROOT
+mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
 install -D skyring $RPM_BUILD_ROOT/usr/bin/skyring
 install -Dm 0644 conf/sample/graphite-web.conf.sample $RPM_BUILD_ROOT/etc/skyring/httpd/conf.d/graphite-web.conf
 install -Dm 0644 conf/sample/skyring-web.conf.sample $RPM_BUILD_ROOT/etc/httpd/conf.d/skyring-web.conf
@@ -145,7 +146,8 @@ install -Dm 0644 backend/salt/conf/collectd/* $RPM_BUILD_ROOT/srv/salt/collectd/
 install -Dm 0755 backend/salt/template/* $RPM_BUILD_ROOT/srv/salt/template
 install -d $RPM_BUILD_ROOT/%{python2_sitelib}/skyring
 install -D backend/salt/python/skyring/* $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/
-install -D -p -m 0644 misc/systemd/%{name}.service %{buildroot}%{_unitdir}/%{name}.service
+install -D -p -m 0644 misc/systemd/%{pkg_name}.service %{buildroot}%{_unitdir}/%{pkg_name}.service
+install -p -D -m 644 misc/systemd/%{pkg_name}.sysconf  %{buildroot}%{_sysconfdir}/sysconfig/%{pkg_name}
 install -m 755 -d $RPM_BUILD_ROOT/srv/salt/_modules
 install -Dm 0644 salt_module/skyring_utils.py $RPM_BUILD_ROOT/srv/salt/_modules
 install -Dm 0644 salt_module/collectd.py $RPM_BUILD_ROOT/srv/salt/_modules
@@ -336,7 +338,8 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_var}/log/skyring
 /srv/salt/*
 /srv/salt/_modules/*
-%{_unitdir}/%{name}.service
+%{_unitdir}/%{pkg_name}.service
+%config(noreplace) %{_sysconfdir}/sysconfig/%{pkg_name}
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/httpd/conf.d/graphite-web.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/httpd/conf.d/skyring-web.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/carbon/carbon.conf
