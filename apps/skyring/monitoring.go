@@ -1277,6 +1277,52 @@ func fetchThresholdEvents(selectCriteria bson.M, utilizationType string, ctxt st
 	return tEventsInDb, err
 }
 
+func (a *App) POST_ReSyncClusterSummary(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error Getting the context.Err %v", err))
+		return
+	}
+
+	vars := mux.Vars(r)
+	cluster_id_str := vars["cluster-id"]
+	cluster_id, err := uuid.Parse(cluster_id_str)
+	if err != nil {
+		logger.Get().Error("%s-Error parsing the cluster id: %s. error: %v", ctxt, cluster_id_str, err)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing the cluster id: %s", cluster_id_str))
+		return
+	}
+
+	cluster, err := GetCluster(cluster_id)
+	if err != nil {
+		if err == mgo.ErrNotFound {
+			HttpResponse(w, http.StatusNotFound, fmt.Sprintf("Error getting the cluster with id: %v. error: %v", *cluster_id, err))
+		} else {
+			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error getting the cluster with id: %v. error: %v", *cluster_id, err))
+		}
+		logger.Get().Error("%s-Error getting the cluster with id: %v. error: %v", ctxt, *cluster_id, err)
+		return
+
+	}
+
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for cluster summary resync: %v", t.ID)
+		ComputeClusterSummary(cluster, ctxt)
+		t.Done(models.TASK_STATUS_SUCCESS)
+	}
+	if taskId, err := a.GetTaskManager().Run(models.ENGINE_NAME, fmt.Sprintf("Sync Cluster %s sumary", cluster.Name), asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("%s-Unable to create task for syncing %s cluster summary. error: %v", ctxt, cluster.Name, err)
+		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for sync cluster summary")
+		return
+	} else {
+		logger.Get().Debug("%s-Task Created: %v for syncing %s cluster summary", ctxt, taskId.String(), cluster.Name)
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
+	}
+}
+
 func ComputeClusterSummary(cluster models.Cluster, ctxt string) {
 	cSummary := models.ClusterSummary{}
 
@@ -1409,6 +1455,30 @@ func ComputeClusterSummary(cluster models.Cluster, ctxt string) {
 	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_CLUSTER_SUMMARY)
 	if _, err := coll.Upsert(bson.M{"clusterid": cluster.ClusterId}, cSummary); err != nil {
 		logger.Get().Error("%s - Error persisting the cluster summary.Error %v", ctxt, err)
+	}
+}
+
+func (a *App) POST_ReSyncSystemSummary(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error Getting the context.Err %v", err))
+		return
+	}
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for system summary resync: %v", t.ID)
+		ComputeSystemSummary(make(map[string]interface{}))
+		t.Done(models.TASK_STATUS_SUCCESS)
+	}
+	if taskId, err := a.GetTaskManager().Run(models.ENGINE_NAME, fmt.Sprintf("Sync system sumary"), asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("%s-Unable to create task for syncing system summary. error: %v", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for sync system summary")
+		return
+	} else {
+		logger.Get().Debug("%s-Task Created: %v for syncing system summary", ctxt, taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 

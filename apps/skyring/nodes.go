@@ -30,6 +30,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
+	"time"
 )
 
 var (
@@ -656,6 +658,75 @@ func (a *App) GET_Node(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		json.NewEncoder(w).Encode(node)
+	}
+}
+
+func (a *App) POST_ReSyncNodesSummary(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error Getting the context.Err %v", err))
+		return
+	}
+
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for nodes summary resync: %v", t.ID)
+		SyncNodeUtilizations(map[string]interface{}{"ctxt": ctxt})
+		t.Done(models.TASK_STATUS_SUCCESS)
+	}
+	if taskId, err := a.GetTaskManager().Run(models.ENGINE_NAME, fmt.Sprintf("Sync nodes sumary"), asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("%s-Unable to create task for syncing nodes summary. error: %v", ctxt, err)
+		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for sync nodes summary")
+		return
+	} else {
+		logger.Get().Debug("%s-Task Created: %v for syncing nodes summary", ctxt, taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
+	}
+}
+
+func (a *App) POST_ReSyncNodeSummary(w http.ResponseWriter, r *http.Request) {
+	ctxt, err := GetContext(r)
+	if err != nil {
+		logger.Get().Error("Error Getting the context. error: %v", err)
+		HttpResponse(w, http.StatusInternalServerError, fmt.Sprintf("Error Getting the context.Err %v", err))
+		return
+	}
+
+	var node models.Node
+	vars := mux.Vars(r)
+	node_id_str := vars["node-id"]
+	node_id, err := uuid.Parse(node_id_str)
+	if err != nil {
+		logger.Get().Error("%s-Error parsing node id: %s", ctxt, node_id_str)
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error parsing node id: %s", node_id_str))
+		return
+	}
+
+	sessionCopy := db.GetDatastore().Copy()
+	defer sessionCopy.Close()
+
+	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+	if err := collection.Find(bson.M{"nodeid": *node_id}).One(&node); err != nil {
+		logger.Get().Error("%s-Error getting the node detail for %v. error: %v", ctxt, *node_id, err)
+	}
+
+	asyncTask := func(t *task.Task) {
+		t.UpdateStatus("Started the task for %v node summary resync: %v", t.ID)
+		time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
+		SyncNodeUtilization(ctxt, node, time_stamp_str)
+		t.Done(models.TASK_STATUS_SUCCESS)
+	}
+	if taskId, err := a.GetTaskManager().Run(models.ENGINE_NAME, fmt.Sprintf("Sync %v node sumary", node_id_str), asyncTask, nil, nil, nil); err != nil {
+		logger.Get().Error("%s-Unable to create task for syncing %v node summary. error: %v", ctxt, node_id_str, err)
+		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for sync node summary")
+		return
+	} else {
+		logger.Get().Debug("%s-Task Created: %v for syncing %v node summary", ctxt, node_id_str, taskId.String())
+		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
+		w.WriteHeader(http.StatusAccepted)
+		w.Write(bytes)
 	}
 }
 

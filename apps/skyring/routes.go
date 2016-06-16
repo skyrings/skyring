@@ -76,6 +76,20 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "POST_ReSyncNodesSummary",
+			Method:      "POST",
+			Pattern:     "nodes/summary/re_sync",
+			HandlerFunc: a.POST_ReSyncNodesSummary,
+			Version:     1,
+		},
+		{
+			Name:        "POST_ReSyncNodeSummary",
+			Method:      "POST",
+			Pattern:     "nodes/{node-id}/summary/re_sync",
+			HandlerFunc: a.POST_ReSyncNodeSummary,
+			Version:     1,
+		},
+		{
 			Name:        "DELETE_Node",
 			Method:      "DELETE",
 			Pattern:     "nodes/{node-id}",
@@ -153,10 +167,24 @@ func (a *App) LoadRoutes() {
 			Version:     1,
 		},
 		{
+			Name:        "POST_ReSyncSystemSummary",
+			Method:      "POST",
+			Pattern:     "system/summary/re_sync",
+			HandlerFunc: a.POST_ReSyncSystemSummary,
+			Version:     1,
+		},
+		{
 			Name:        "Get_ClusterSummary",
 			Method:      "GET",
 			Pattern:     "clusters/{cluster-id}/summary",
 			HandlerFunc: a.Get_ClusterSummary,
+			Version:     1,
+		},
+		{
+			Name:        "POST_ReSyncClusterSummary",
+			Method:      "POST",
+			Pattern:     "clusters/{cluster-id}/summary/re_sync",
+			HandlerFunc: a.POST_ReSyncClusterSummary,
 			Version:     1,
 		},
 		{
