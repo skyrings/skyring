@@ -226,6 +226,11 @@ def GetNodeDisk(node, ctxt=""):
                 ssdStat = isSSD(node, disk['KNAME'])
             else:
                 ssdStat = False
+            if disk["SIZE"] == "":
+                log.error(
+                    "%s-Skipping the disk: %s as size field is blank." %
+                    (ctxt, disk["NAME"]))
+                continue
             rv[node].append({"DevName": disk["KNAME"],
                               "FSType": disk["FSTYPE"],
                               "FSUUID": u,
