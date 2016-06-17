@@ -22,6 +22,30 @@
       "revId": "e9bdde2869968f48a9d662cafbf23b3dff4e2e12",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_1f544352",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-06-17T05:18:58Z",
+      "side": 1,
+      "message": "time.Now() returns time.Time.\nSince all this is struct, it becomes difficult to differentiate b/w them being set(as in https://play.golang.org/p/Ec-ZOcdfDd the default value is 0001-01-01 00:00:00 +0000 UTC) or not set yet.The user then will need to har-code the default value and compared but I think its much easier to use a string for the same purpose as UI would get a blank string(if the updates to db have not actually gone and hence they can decide data not available) in case of using string but instead if we use time.Time instead of string they will then need to check explicitly for the default time value. Anyway this updatedAt field is expected to be only one way set for the user to be able to differentiate b/w data available v/s not available and not used in the backend.So, I felt string solves the purpose @ hand.",
+      "parentUuid": "baa041b7_bc732515",
+      "range": {
+        "startLine": 443,
+        "startChar": 16,
+        "endLine": 443,
+        "endChar": 26
+      },
+      "revId": "e9bdde2869968f48a9d662cafbf23b3dff4e2e12",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
