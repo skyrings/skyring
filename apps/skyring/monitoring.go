@@ -256,18 +256,24 @@ func DeleteClusterSchedule(clusterId uuid.UUID) {
 }
 
 func FetchStatFromGraphite(ctxt string, hostname string, resourceName string, counter *int) (value float64) {
+	val, isSuccess := FetchStatFromGraphiteWithErrorIndicate(ctxt, hostname, resourceName)
+	if !isSuccess {
+		*counter = *counter - 1
+	}
+	return val
+}
+
+func FetchStatFromGraphiteWithErrorIndicate(ctxt string, hostname string, resourceName string) (value float64, isSuccess bool) {
 	stat, statFetchError := GetMonitoringManager().GetInstantValue(hostname, resourceName)
 	if statFetchError != nil {
-		*counter = *counter - 1
 		logger.Get().Warning("%s - Error %v", ctxt, statFetchError)
-		return 0.0
+		return 0.0, false
 	}
 	if math.IsNaN(stat) {
-		*counter = *counter - 1
-		logger.Get().Warning("%s - Error %v", ctxt, statFetchError)
-		return 0.0
+		logger.Get().Warning("%s - %v Stat of node %v is nan", ctxt, resourceName, hostname)
+		return 0.0, false
 	}
-	return stat
+	return stat, true
 }
 
 func FetchAggregatedStatsFromGraphite(ctxt string, hostname string, resourceName string, counter *int, exceptionList []string) (value float64) {
