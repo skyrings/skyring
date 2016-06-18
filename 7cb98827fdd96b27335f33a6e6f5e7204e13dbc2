@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_b6621c15",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-06-18T12:57:06Z",
+      "side": 1,
+      "message": "Do we really need to say this :)",
+      "range": {
+        "startLine": 259,
+        "startChar": 40,
+        "endLine": 259,
+        "endChar": 57
+      },
+      "revId": "7cb98827fdd96b27335f33a6e6f5e7204e13dbc2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
