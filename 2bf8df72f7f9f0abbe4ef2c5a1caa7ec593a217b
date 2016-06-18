@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_b6a0dca6",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-06-18T07:31:05Z",
+      "side": 1,
+      "message": "Remove  restart on failure as per https://bugzilla.redhat.com/show_bug.cgi?id\u003d1343494",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "2bf8df72f7f9f0abbe4ef2c5a1caa7ec593a217b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_56af5094",
+        "filename": "misc/systemd/skyring.service",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-06-18T07:31:05Z",
+      "side": 1,
+      "message": "As discussed add:\n\nLimitNOFILE\u003d64000",
+      "revId": "2bf8df72f7f9f0abbe4ef2c5a1caa7ec593a217b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_f6c78462",
+        "filename": "misc/systemd/skyring.sysconf",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-06-18T07:31:05Z",
+      "side": 1,
+      "message": "As discussed, need set the default loglevel as INFO",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 9
+      },
+      "revId": "2bf8df72f7f9f0abbe4ef2c5a1caa7ec593a217b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
