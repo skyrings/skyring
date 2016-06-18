@@ -22,6 +22,30 @@
       "revId": "7cb98827fdd96b27335f33a6e6f5e7204e13dbc2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_b1fea603",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-06-18T14:16:14Z",
+      "side": 1,
+      "message": "FetchStatFromGraphite : In aggregating functions the common steps involved are the following:\n\n1. Fetch stats from graphite.\n2. Handle errors if any.\n3. Corresponding to the error if any, reduce the  \n   corresponding count(to avoid a wrong averaging \n   denominator).\n4. Return the value fetched or 0 in case of error(anyway correspondingly, the counter is reduced in above step so, averaging should not be a problem still)\nSo, all these are done by this function.\n\n\nFetchStatFromGraphiteWithErrorIndicate : This function also handles the errors if any but, this will return the success/error indication boolean(true if success and false if failure) which is required to update the updated at field for individual(not aggregation) stats updation. this is in particular used in sync node utilizations",
+      "parentUuid": "baa041b7_b6621c15",
+      "range": {
+        "startLine": 259,
+        "startChar": 40,
+        "endLine": 259,
+        "endChar": 57
+      },
+      "revId": "7cb98827fdd96b27335f33a6e6f5e7204e13dbc2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
