@@ -32,6 +32,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -300,6 +301,31 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	taskCompletedCbk := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_TASKS)
+		var task models.AppTask
+		if err := coll.Find(bson.M{"id": t.ID}).One(&task); err != nil {
+			logger.Get().Error("%s-Error getting task: %v from DB. error: %v", ctxt, t.ID, err)
+			return
+		}
+		if task.Status == models.TASK_STATUS_FAILURE || task.Status == models.TASK_STATUS_TIMED_OUT {
+			cluster_name := strings.TrimPrefix(t.Name, "Create Cluster: ")
+			cluster_coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
+			if err := cluster_coll.Update(bson.M{"name": cluster_name},
+				bson.M{"$set": bson.M{"state": models.CLUSTER_STATE_FAILED,
+					"status": models.CLUSTER_STATUS_ERROR}}); err != nil {
+				if err != mgo.ErrNotFound {
+					logger.Get().Error("%s-Could not Update the state of cluster: %s.Error %v", ctxt, cluster_name, err)
+					return
+				}
+				return
+			}
+		}
+		return
+	}
+
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
@@ -549,7 +575,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if taskId, err := a.GetTaskManager().Run(models.ENGINE_NAME, fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, nil, nil, nil); err != nil {
+	if taskId, err := a.GetTaskManager().Run(models.ENGINE_NAME, fmt.Sprintf("Create Cluster: %s", request.Name), asyncTask, nil, taskCompletedCbk, nil); err != nil {
 		logger.Get().Error("%s-Unable to create task for creating cluster: %s. error: %v", ctxt, request.Name, err)
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for create cluster")
 		return
