@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_a3a40e08",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-06-22T13:00:21Z",
+      "side": 1,
+      "message": "We should set to UNKNOWN or ERROR?",
+      "range": {
+        "startLine": 318,
+        "startChar": 22,
+        "endLine": 318,
+        "endChar": 44
+      },
+      "revId": "c20c3cfd97d278835e1fe6683f8325fb60b8d998",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
