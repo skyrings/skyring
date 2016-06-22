@@ -198,8 +198,14 @@ def run():
         PushUnManagedNode(data)
     elif tag and fnmatch.fnmatch(tag, 'salt/job/*'):
         t = data.get('arg')
-        if len(t) == 2:
-            t = t[1]
+        if type(t) == type(list()):
+            if len(t) == 2:
+                if type(t[1]) == type(str()):
+                    t = t[1]
+                else:
+                    return {}
+            else:
+                return {}
         else:
             return {}
         if fnmatch.fnmatch(t, 'skyring/*'):
