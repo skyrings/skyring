@@ -438,6 +438,9 @@ func initializeStorageNode(node string, t *task.Task, ctxt string) error {
 			skyringutils.UpdateNodeStatus(ctxt, node, models.NODE_STATUS_UNKNOWN)
 			return err
 		}
+		if ok, err := GetCoreNodeManager().EnableNode(node, ctxt); !ok || err != nil {
+			logger.Get().Error("%s- Failed to enable the node. Error: %v", ctxt, err)
+		}
 		return nil
 	} else {
 		logger.Get().Critical("%s-Error getting the details for node: %s", ctxt, node)

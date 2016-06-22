@@ -66,7 +66,7 @@ info "Setup graphite user"
 
 chown apache:apache /var/lib/graphite-web/graphite.db
 service carbon-cache start && chkconfig carbon-cache on
-service httpd start && chkconfig httpd on
+service httpd start
 
 echo "Setup can configure apache to use SSL using a " \
      "certificate issued from the internal CA."
@@ -94,7 +94,7 @@ echo 'Define host_name' $hostname | cat - /etc/httpd/conf.d/skyring-web.conf > t
 systemctl enable skyring
 systemctl start skyring
 
-service httpd restart
+service httpd restart && chkconfig httpd on
 
 info "\n\n\n-------------------------------------------------------"
 info "Now the skyring setup is ready!"
