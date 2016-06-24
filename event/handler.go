@@ -93,11 +93,16 @@ func resource_threshold_crossed(event models.AppEvent, ctxt string) (models.AppE
 	if event.Tags["Plugin"] == "df" {
 		event.Tags["Plugin"] = fmt.Sprintf("%s MountPoint", event.Tags["PluginInstance"])
 	}
-	if event.Tags["Severity"] == "FAILURE" {
+	if event.Tags["Severity"] == "WARNING" {
 		event.Description = fmt.Sprintf("%s utilization on the node: %s has crossed the threshold value of %s%%. Current utilization: %s%%", event.Tags["Plugin"], event.NodeName, thresholdValue, currentValue)
 		event.Message = fmt.Sprintf("%s utilization crossed threshold on: %s", event.Tags["Plugin"], event.NodeName)
 		event.EntityId = event.NodeId
-		event.Severity = models.ALARM_STATUS_MAJOR
+		event.Severity = models.ALARM_STATUS_WARNING
+	} else if event.Tags["Severity"] == "FAILURE" {
+		event.Description = fmt.Sprintf("%s utilization on the node: %s has crossed the threshold value of %s%%. Current utilization: %s%%", event.Tags["Plugin"], event.NodeName, thresholdValue, currentValue)
+		event.Message = fmt.Sprintf("%s utilization crossed threshold on: %s", event.Tags["Plugin"], event.NodeName)
+		event.EntityId = event.NodeId
+		event.Severity = models.ALARM_STATUS_CRITICAL
 	} else if event.Tags["Severity"] == "OKAY" {
 		event.Description = fmt.Sprintf("%s utilization on the node: %s is back to normal. Threshold value: %s%%. Current utilization: %s%%", event.Tags["Plugin"], event.NodeName, thresholdValue, currentValue)
 		event.Message = fmt.Sprintf("%s utilization back to normal on: %s", event.Tags["Plugin"], event.NodeName)
