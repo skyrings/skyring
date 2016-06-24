@@ -27,6 +27,7 @@ systemd_unit_file(skyring_unit_file_t)
 type skyring_custom_port_t;
 corenet_port(skyring_custom_port_t)
 
+type collectd_t;
 ########################################
 #
 # skyring local policy
@@ -40,6 +41,10 @@ allow skyring_t self:netlink_route_socket nlmsg_write;
 
 allow skyring_t skyring_conf_t:dir manage_dir_perms;
 allow skyring_t skyring_conf_t:file manage_file_perms;
+
+#### Allow collectd setgid capability
+allow collectd_t self:capability { setuid setgid };
+####
 
 manage_dirs_pattern(skyring_t, skyring_log_t, skyring_log_t)
 manage_files_pattern(skyring_t, skyring_log_t, skyring_log_t)
