@@ -219,6 +219,7 @@ semanage port -a -t mailbox_port_t -p tcp 2004 2> /dev/null
 semanage port -a -t xinuexpansion4_port_t -p tcp 2024 2> /dev/null
 semanage port -a -t xinuexpansion3_port_t -p tcp 2023 2> /dev/null
 semanage port -a -t skyring_custom_port_t -p tcp 8181 2> /dev/null
+semanage boolean -m collectd_tcp_network_connect --on
 fi
 
 %postun selinux
