@@ -19,6 +19,26 @@ interface(`skyring_domtrans',`
 	corecmd_search_bin($1)
 	domtrans_pattern($1, skyring_exec_t, skyring_t)
 ')
+
+########################################
+## <summary>
+##	Execute TEMPLATE in the skyring domin.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`skyring_ps_process',`
+	gen_require(`
+		type skyring_t, skyring_unit_file_t;
+	')
+
+	ps_process_pattern($1,skyring_t)
+	allow $1 skyring_unit_file_t:service status;
+')
+
 ########################################
 ## <summary>
 ##	Read skyring's log files.
@@ -351,5 +371,22 @@ interface(`skyring_stub_carbon',`
 interface(`skyring_stub_httpd',`
 	gen_require(`
 		type httpd_t;
+	')
+')
+
+########################################
+## <summary>
+##	lvm stub interface.  No access allowed.
+## </summary>
+## <param name="domain" unused="true">
+##	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+#
+interface(`skyring_stub_lvm',`
+	gen_require(`
+		type lvm_t;
+		class dbus send_msg;
 	')
 ')

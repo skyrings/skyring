@@ -100,6 +100,24 @@ interface(`salt_manage_cache_dirs',`
 
 ########################################
 ## <summary>
+##	Create specified objects in generic
+##	cache directories with the salt cache file type.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+#
+interface(`salt_filetrans_cache',`
+	gen_require(`
+		type avahi_var_run_t;
+	')
+
+	files_pid_filetrans($1, salt_cache_t, { dir file lnk_file })
+')
+
+########################################
+## <summary>
 ##	Read salt's data files.
 ## </summary>
 ## <param name="domain">
@@ -310,5 +328,54 @@ interface(`salt_admin',`
 	optional_policy(`
 		systemd_passwd_agent_exec($1)
 		systemd_read_fifo_file_passwd_run($1)
+	')
+')
+
+########################################
+## <summary>
+##	collectd stub interface.  No access allowed.
+## </summary>
+## <param name="domain" unused="true">
+##	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+#
+interface(`salt_stub_collectd',`
+	gen_require(`
+		type collectd_t;
+	')
+')
+
+########################################
+## <summary>
+##	ceph_var_run_t stub interface.  No access allowed.
+## </summary>
+## <param name="domain" unused="true">
+##	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+#
+interface(`salt_stub_ceph_pid',`
+	gen_require(`
+		type ceph_var_run_t;
+	')
+')
+
+########################################
+## <summary>
+##	lvm stub interface.  No access allowed.
+## </summary>
+## <param name="domain" unused="true">
+##	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+#
+interface(`salt_stub_lvm',`
+	gen_require(`
+		type lvm_t;
+		class dbus send_msg;
 	')
 ')

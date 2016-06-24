@@ -104,6 +104,7 @@ optional_policy(`
 optional_policy(`
     salt_manage_cache_files(skyring_t)
     salt_manage_cache_dirs(skyring_t)
+	salt_filetrans_cache(skyring_t)
     salt_stream_connect(skyring_t)
     salt_read_data(skyring_t)
     salt_manage_conf(skyring_t)
@@ -132,4 +133,10 @@ optional_policy(`
 optional_policy(`
 	skyring_stub_httpd()
 	skyring_read_conf(httpd_t)
+	corenet_tcp_bind_amanda_port(httpd_t)
+')
+
+optional_policy(`
+	salt_stub_lvm()
+	allow skyring_t lvm_t:dbus send_msg;
 ')

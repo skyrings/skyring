@@ -15,3 +15,6 @@
 /var/run/salt-master\.pid       gen_context(system_u:object_r:salt_var_run_t,s0)
 
 /srv/salt(/.*)?		gen_context(system_u:object_r:salt_data_t,s0)
+
+#Added some labels which missing in rhel-7.2
+/usr/libexec/storaged/storaged          --  gen_context(system_u:object_r:lvm_exec_t,s0)
