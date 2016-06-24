@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_fac75062",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-06-24T04:48:47Z",
+      "side": 1,
+      "message": "Somehow I dont like this way of getting cluster detail. But lets keep for the time being and see in future if we can get some better way to get the entity on which the task is initiated..",
+      "range": {
+        "startLine": 314,
+        "startChar": 3,
+        "endLine": 314,
+        "endChar": 65
+      },
+      "revId": "311279db3319dbfb76d2afabb4b4808ed8a670ae",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
