@@ -312,3 +312,19 @@ interface(`salt_admin',`
 		systemd_read_fifo_file_passwd_run($1)
 	')
 ')
+
+########################################
+## <summary>
+##	collectd stub interface.  No access allowed.
+## </summary>
+## <param name="domain" unused="true">
+##	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+#
+interface(`salt_stub_collectd',`
+	gen_require(`
+		type collectd_t;
+	')
+')

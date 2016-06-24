@@ -114,3 +114,7 @@ optional_policy(`
 	dbus_system_bus_client(salt_t)
 ')
 
+optional_policy(`
+	salt_stub_collectd()
+	allow collectd_t self:capability setgid;
+')
