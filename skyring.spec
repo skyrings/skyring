@@ -60,7 +60,7 @@ Requires: pytz
 Requires: python-cpopen
 Requires: python-netaddr
 Requires: carbon-selinux
-Requires: rhscon-core-selinux
+Requires: %{name}-selinux
 Requires: salt-selinux
 %if ( 0%{?fedora} && 0%{?fedora} > 16 )
 Requires: mongodb-org
