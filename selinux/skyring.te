@@ -132,4 +132,5 @@ optional_policy(`
 optional_policy(`
 	skyring_stub_httpd()
 	skyring_read_conf(httpd_t)
+	corenet_tcp_bind_amanda_port(httpd_t)
 ')
