@@ -37,8 +37,6 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 info "Configure and setting up the system to use skyring"
-info "Disabling firewalld"
-systemctl stop firewalld && systemctl disable firewalld
 
 info "Starting services"
 # Enable and start the salt-master:
