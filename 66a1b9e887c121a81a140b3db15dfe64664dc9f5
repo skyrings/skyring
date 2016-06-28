@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_2edd7042",
+        "filename": "skyring-setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1008515
+      },
+      "writtenOn": "2016-06-28T07:56:24Z",
+      "side": 1,
+      "message": "can\u0027t we remove this message and the sleep if we are not setting up mongo any more?",
+      "revId": "66a1b9e887c121a81a140b3db15dfe64664dc9f5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
