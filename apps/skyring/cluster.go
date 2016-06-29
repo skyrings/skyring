@@ -651,6 +651,8 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asyncTask := func(t *task.Task) {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
 		for {
 			select {
 			case <-t.StopCh:
@@ -730,8 +732,6 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 
 				// Delete the participating nodes from DB
 				t.UpdateStatus("Deleting cluster nodes")
-				sessionCopy := db.GetDatastore().Copy()
-				defer sessionCopy.Close()
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
 				if changeInfo, err := collection.RemoveAll(bson.M{"clusterid": *uuid}); err != nil || changeInfo == nil {
 					util.FailTask(fmt.Sprintf("Error deleting cluster nodes for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
