@@ -193,7 +193,7 @@ def GetNodeDisk(node, ctxt=""):
         devlist = map(lambda line: dict(zip(keys, line.split(' '))),
                       lsblk_out.splitlines())
 
-        parents = set([d['PKNAME'] for d in devlist])
+        parents = set([d['PKNAME'] for d in devlist if d.has_key('PKNAME')])
 
         dev_info = {}
         for d in devlist:
