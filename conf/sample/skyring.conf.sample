@@ -2,7 +2,7 @@
     "config": {
         "host": "0.0.0.0",
         "sslCert": "/etc/pki/tls/skyring.crt",
-        "sslKey": "/etc/pki/tls/skyring.key",
+        "sslKey": "/etc/pki/tls/private/skyring.key",
         "supportedVersions": [
             1
         ]
