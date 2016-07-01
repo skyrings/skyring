@@ -25,8 +25,9 @@ function create_and_install_certificate {
         -subj "/CN=${hostname}" \
         -keyout skyring.key \
         -out skyring.crt || exit_on_error "Failed to create TLS certificate"
-    cp skyring.key /etc/pki/tls
     cp skyring.crt /etc/pki/tls
+    chmod 600 skyring.key
+    cp skyring.key /etc/pki/tls/private
     cd -
     \rm -rf ~/.skyring
 }

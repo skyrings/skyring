@@ -11,6 +11,6 @@ LoadModule ssl_module modules/mod_ssl.so
 <VirtualHost *:443>
             SSLEngine on
             SSLCertificateFile /etc/pki/tls/skyring.crt
-            SSLCertificateKeyFile /etc/pki/tls/skyring.key
+            SSLCertificateKeyFile /etc/pki/tls/private/skyring.key
             Redirect permanent /skyring https://${host_name}:10443/
 </VirtualHost>
