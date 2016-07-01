@@ -63,8 +63,8 @@ info "Setup graphite user"
 /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
 
 chown apache:apache /var/lib/graphite-web/graphite.db
-service carbon-cache start && chkconfig carbon-cache on
-service httpd start
+systemctl start carbon-cache && systemctl enable carbon-cache
+systemctl start httpd
 
 echo "Setup can configure apache to use SSL using a " \
      "certificate issued from the internal CA."
@@ -92,7 +92,7 @@ echo 'Define host_name' $hostname | cat - /etc/httpd/conf.d/skyring-web.conf > t
 systemctl enable skyring
 systemctl start skyring
 
-service httpd restart && chkconfig httpd on
+systemctl restart httpd && systemctl enable httpd
 
 info "\n\n\n-------------------------------------------------------"
 info "Now the skyring setup is ready!"
