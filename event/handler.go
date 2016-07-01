@@ -91,6 +91,7 @@ func resource_threshold_crossed(event models.AppEvent, ctxt string) (models.AppE
 		return event, thresholdValueErr
 	}
 	if event.Tags["Plugin"] == "df" {
+		event.Name = fmt.Sprintf("%s-%s", event.Name, event.Tags["PluginInstance"])
 		event.Tags["Plugin"] = fmt.Sprintf("%s MountPoint", event.Tags["PluginInstance"])
 	}
 	if event.Tags["Severity"] == "WARNING" {
