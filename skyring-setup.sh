@@ -16,11 +16,15 @@ function create_and_install_certificate {
     echo "Creating self-signed TLS certificate"
     mkdir -p ~/.skyring
     cd ~/.skyring
-    openssl genrsa -des3 -out skyring.key 1024 || exit_on_error "Failed to generate SSL key"
-    openssl req -new -key skyring.key -out skyring.csr || exit_on_error "Failed to create SSL certificate"
-    cp skyring.key skyring.key.org
-    openssl rsa -in skyring.key.org -out skyring.key || exit_on_error "Failed to create SSL certificate"
-    openssl x509 -req -days 365 -in skyring.csr -signkey skyring.key -out skyring.crt || exit_on_error "Failed to sign the SSL certificate"
+    openssl req \
+        -new \
+        -newkey rsa:4096 \
+        -days 3650 \
+        -nodes \
+        -x509 \
+        -subj "/CN=${hostname}" \
+        -keyout skyring.key \
+        -out skyring.crt || exit_on_error "Failed to create TLS certificate"
     cp skyring.key /etc/pki/tls
     cp skyring.crt /etc/pki/tls
     cd -
@@ -54,6 +58,13 @@ chown apache:apache /var/lib/graphite-web/graphite.db
 systemctl start carbon-cache && systemctl enable carbon-cache
 systemctl start httpd
 
+read -p "Please enter the FQDN of server [`hostname`]:" hostname
+
+if [ -z $hostname ]
+then
+    hostname=`hostname`
+fi
+
 echo "Skyring uses HTTPS to secure the web interface."
 read -p "Do you wish to generate and use a self-signed certificate? (Y/N): " yn
 case $yn in
@@ -65,13 +76,6 @@ case $yn in
 esac
 
 grep -q "sslEnabled" /etc/skyring/skyring.conf || sed -i -e 's/"config".*{/"config": {\n\t"sslEnabled": true,/g' /etc/skyring/skyring.conf
-
-read -p "Please enter the FQDN of server [`hostname`]:" hostname
-
-if [ -z $hostname ]
-then
-    hostname=`hostname`
-fi
 
 echo 'Define host_name' $hostname | cat - /etc/httpd/conf.d/skyring-web.conf > temp && mv -f temp /etc/httpd/conf.d/skyring-web.conf
 
