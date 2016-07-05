@@ -13,7 +13,7 @@ function exit_on_error {
 }
 
 function create_and_install_certificate {
-    echo "Creating CA certificate"
+    echo "Creating self-signed TLS certificate"
     mkdir -p ~/.skyring
     cd ~/.skyring
     openssl genrsa -des3 -out skyring.key 1024 || exit_on_error "Failed to generate SSL key"
@@ -54,9 +54,8 @@ chown apache:apache /var/lib/graphite-web/graphite.db
 systemctl start carbon-cache && systemctl enable carbon-cache
 systemctl start httpd
 
-echo "Setup can configure apache to use SSL using a " \
-     "certificate issued from the internal CA."
-read -p "Do you wish skyring-setup to configure that ? (Y/N): " yn
+echo "Skyring uses HTTPS to secure the web interface."
+read -p "Do you wish to generate and use a self-signed certificate? (Y/N): " yn
 case $yn in
 	[Yy]* )
 		create_and_install_certificate
