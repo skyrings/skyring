@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_7e5aea84",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-07-05T06:55:02Z",
+      "side": 1,
+      "message": "https://bugzilla.redhat.com/show_bug.cgi?id\u003d1351891",
+      "revId": "29197f5a4d3f3f9f28ce8049fbe8cd6baed01ea9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
