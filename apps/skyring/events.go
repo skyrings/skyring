@@ -19,6 +19,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
+	common_event "github.com/skyrings/skyring-common/event"
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/uuid"
@@ -292,5 +293,10 @@ func PatchEvent(w http.ResponseWriter, r *http.Request) {
 		logger.Get().Error(fmt.Sprintf("%s-Error updating record in DB for event: %v. error: %v", ctxt, event_id_str, err))
 		HttpResponse(w, http.StatusInternalServerError, err.Error())
 	}
+
+	clearedSeverity := event.Severity
+	event.Severity = models.ALARM_STATUS_CLEARED
+	common_event.UpdateAlarmCount(event, clearedSeverity, ctxt)
+
 	return
 }
