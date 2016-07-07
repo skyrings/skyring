@@ -365,15 +365,15 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 
 func AddDefaultProfiles() error {
 	//sas
-	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile("", models.StorageProfile{Name: models.DefaultProfile1, Priority: models.DefaultPriority, Default: true}); err != nil {
+	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile("", models.StorageProfile{Name: models.DefaultProfile1, Rule: models.DiskProfile{Type: models.SAS}, Priority: models.DefaultPriority, Default: true}); err != nil {
 		logger.Get().Error("Default Storage profile add failed: %v", err)
 	}
 	//ssd
-	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile("", models.StorageProfile{Name: models.DefaultProfile2, Priority: models.DefaultPriority, Default: true}); err != nil {
+	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile("", models.StorageProfile{Name: models.DefaultProfile2, Rule: models.DiskProfile{Type: models.SSD}, Priority: models.DefaultPriority, Default: true}); err != nil {
 		logger.Get().Error("Default Storage profile add failed: %v", err)
 	}
 	//general
-	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile("", models.StorageProfile{Name: models.DefaultProfile3, Priority: models.DefaultPriority, Default: true}); err != nil {
+	if err := GetDbProvider().StorageProfileInterface().SaveStorageProfile("", models.StorageProfile{Name: models.DefaultProfile3, Rule: models.DiskProfile{Type: models.NONE}, Priority: models.DefaultPriority, Default: true}); err != nil {
 		logger.Get().Error("Default Storage profile add failed: %v", err)
 	}
 	return nil
