@@ -89,6 +89,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 
 	// Check if node already added
 	// No need to check for error, as node would be nil in case of error and the same is checked
+	var node models.Node
 	if node, _ := node_exists("hostname", request.Hostname); node != nil {
 		logger.Get().Error("%s-Node:%s already added", ctxt, request.Hostname)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Node already added", ctxt)
@@ -169,6 +170,9 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 						logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
 					}
 				} else {
+					time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
+					go SyncNodeUtilization(ctxt, node, time_stamp_str)
+					go ComputeSystemSummary(make(map[string]interface{}))
 					t.UpdateStatus("Success")
 					t.Done(models.TASK_STATUS_SUCCESS)
 					if err := logAuditEvent(EventTypes["NODE_ADD_AND_ACCEPT"],
@@ -266,7 +270,8 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check unmanaged node is present in DB
-	if _, err := unaccepted_node_exists("hostname", hostname); err == mgo.ErrNotFound {
+	var node *models.Node
+	if node, err = unaccepted_node_exists("hostname", hostname); err == mgo.ErrNotFound {
 		logger.Get().Error("%s-Node:%s is not found", ctxt, hostname)
 		HttpResponse(w, http.StatusMethodNotAllowed, "Node not found", ctxt)
 		if err := logAuditEvent(EventTypes["NODE_ACCEPT"],
@@ -361,6 +366,11 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 						logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
 					}
 				} else {
+					time_stamp_str := strconv.FormatInt(time.Now().Unix(), 10)
+					go SyncNodeUtilization(ctxt, *node, time_stamp_str)
+
+					go ComputeSystemSummary(make(map[string]interface{}))
+
 					t.UpdateStatus("Success")
 					t.Done(models.TASK_STATUS_SUCCESS)
 					if err := logAuditEvent(EventTypes["NODE_ACCEPT"],
@@ -1033,6 +1043,7 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 			}
 			return
 		}
+		go ComputeSystemSummary(make(map[string]interface{}))
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
 		if err := logAuditEvent(EventTypes["NODE_DELETE"],
@@ -1186,6 +1197,7 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 		if len(failedNodes) > 0 {
 			t.UpdateStatus("Failed to remove the node id(s): %v", failedNodes)
 		}
+		go ComputeSystemSummary(make(map[string]interface{}))
 		t.UpdateStatus("Success")
 		t.Done(models.TASK_STATUS_SUCCESS)
 		if err := logAuditEvent(EventTypes["NODE_DELETE"],
