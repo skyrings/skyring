@@ -103,6 +103,7 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 				nil,
 				models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 				nil,
+				false,
 				ctxt); err != nil {
 				logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
 			}
@@ -122,6 +123,7 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
 		}
@@ -140,6 +142,7 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
 		}
@@ -157,6 +160,7 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
 		}
@@ -174,6 +178,7 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
 		}
@@ -192,6 +197,7 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
 		}
@@ -210,6 +216,7 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
 		}
@@ -221,6 +228,7 @@ func (a *App) AddMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add mail notifier event. Error: %v", ctxt, err)
 		}
@@ -247,6 +255,7 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
 		}
@@ -265,6 +274,7 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
 		}
@@ -282,6 +292,7 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
 		}
@@ -301,6 +312,7 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
 		}
@@ -321,6 +333,7 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
 		}
@@ -332,6 +345,7 @@ func (a *App) TestMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log test mail notifier event. Error: %v", ctxt, err)
 		}
@@ -357,6 +371,7 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
 		}
@@ -375,6 +390,7 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
 		}
@@ -393,6 +409,7 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
 		}
@@ -418,6 +435,7 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
 		}
@@ -435,6 +453,7 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
 		}
@@ -446,6 +465,7 @@ func (a *App) PatchMailNotifier(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_MAIL_NOTIFIER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update mail notifier event. Error: %v", ctxt, err)
 		}

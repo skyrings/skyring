@@ -69,6 +69,7 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
 		}
@@ -90,6 +91,7 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 			clid,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
 		}
@@ -105,6 +107,7 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 			clid,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
 		}
@@ -124,6 +127,7 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 			clid,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
 		}
@@ -144,6 +148,7 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 			clid,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
 		}
@@ -160,6 +165,7 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 			clid,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
 		}
@@ -174,6 +180,7 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 		clid,
 		models.NOTIFICATION_ENTITY_CLUSTER,
 		nil,
+		false,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
 	}
@@ -199,6 +206,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
 		}
@@ -214,6 +222,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
 		}
@@ -236,6 +245,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error(
 				"%s- Unable to log create cluster event. Error: %v",
@@ -256,6 +266,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
 		}
@@ -273,6 +284,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error(
 				"%s- Unable to log create cluster event. Error: %v",
@@ -348,6 +360,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
 					}
@@ -363,6 +376,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
 					}
@@ -385,6 +399,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error(
 							"%s- Unable to log create cluster event. Error: %v",
@@ -410,6 +425,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 								nil,
 								models.NOTIFICATION_ENTITY_CLUSTER,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
 							}
@@ -424,6 +440,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 							nil,
 							models.NOTIFICATION_ENTITY_CLUSTER,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
 						}
@@ -447,6 +464,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error(
 							"%s- Unable to log create cluster event. Error: %v",
@@ -466,6 +484,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
 					}
@@ -483,6 +502,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
 					}
@@ -503,6 +523,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 							nil,
 							models.NOTIFICATION_ENTITY_CLUSTER,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
 						}
@@ -541,6 +562,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 								&(cluster.ClusterId),
 								models.NOTIFICATION_ENTITY_CLUSTER,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error(
 									"%s- Unable to log create cluster event. Error: %v",
@@ -561,6 +583,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 								nil,
 								models.NOTIFICATION_ENTITY_CLUSTER,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log create cluster event. Error: %v", ctxt, err)
 							}
@@ -607,6 +630,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
 		}
@@ -628,6 +652,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 			uuid,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
 		}
@@ -643,6 +668,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 			uuid,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
 		}
@@ -670,6 +696,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 						uuid,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
 					}
@@ -685,6 +712,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 						uuid,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
 					}
@@ -707,6 +735,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 						uuid,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
 					}
@@ -724,6 +753,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 						uuid,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
 					}
@@ -744,6 +774,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 						uuid,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
 					}
@@ -762,6 +793,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 						uuid,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
 					}
@@ -775,6 +807,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 					uuid,
 					models.NOTIFICATION_ENTITY_CLUSTER,
 					&(t.ID),
+					true,
 					ctxt); err != nil {
 					logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
 				}
@@ -1084,6 +1117,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
 		}
@@ -1106,6 +1140,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
 		}
@@ -1125,6 +1160,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
 		}
@@ -1158,6 +1194,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
 					}
@@ -1174,6 +1211,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
 					}
@@ -1189,6 +1227,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
 					}
@@ -1211,6 +1250,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_CLUSTER,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
 						}
@@ -1233,6 +1273,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
 					}
@@ -1245,6 +1286,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 					cluster_id,
 					models.NOTIFICATION_ENTITY_CLUSTER,
 					&(t.ID),
+					false,
 					ctxt); err != nil {
 					logger.Get().Error("%s- Unable to log un-manage cluster event. Error: %v", ctxt, err)
 				}
@@ -1290,6 +1332,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 		}
@@ -1311,6 +1354,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 		}
@@ -1329,6 +1373,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 		}
@@ -1362,6 +1407,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 					}
@@ -1378,6 +1424,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 					}
@@ -1393,6 +1440,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 					}
@@ -1414,6 +1462,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_CLUSTER,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 						}
@@ -1436,6 +1485,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 					}
@@ -1450,6 +1500,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 					}
@@ -1462,6 +1513,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 					cluster_id,
 					models.NOTIFICATION_ENTITY_CLUSTER,
 					&(t.ID),
+					false,
 					ctxt); err != nil {
 					logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 				}
@@ -1507,6 +1559,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 		}
@@ -1528,6 +1581,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 		}
@@ -1546,6 +1600,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 		}
@@ -1565,6 +1620,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 		}
@@ -1580,6 +1636,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 		}
@@ -1597,6 +1654,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 		}
@@ -1614,6 +1672,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 		}
@@ -1643,6 +1702,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 					}
@@ -1658,6 +1718,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 					}
@@ -1676,6 +1737,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 					}
@@ -1698,6 +1760,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_CLUSTER,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 							}
@@ -1714,6 +1777,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_CLUSTER,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 						}
@@ -1738,6 +1802,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 					}
@@ -1754,6 +1819,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 					}
@@ -1771,6 +1837,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 					}
@@ -1791,6 +1858,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_CLUSTER,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 						}
@@ -1814,6 +1882,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_CLUSTER,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 							}
@@ -1834,6 +1903,7 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_CLUSTER,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 							}
@@ -2138,6 +2208,7 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
 		}
@@ -2159,6 +2230,7 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
 		}
@@ -2192,6 +2264,7 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
 					}
@@ -2214,6 +2287,7 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error(
 							"%s- Unable to log create cluster event. Error: %v",
@@ -2233,6 +2307,7 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
 					}
@@ -2252,6 +2327,7 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_CLUSTER,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
 					}
@@ -2272,6 +2348,7 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_CLUSTER,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
 						}
@@ -2286,6 +2363,7 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_CLUSTER,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
 							}
@@ -2305,6 +2383,7 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_CLUSTER,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
 							}

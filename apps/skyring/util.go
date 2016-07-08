@@ -303,6 +303,7 @@ func Initialize(node string, ctxt string) error {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log initialize node event. Error: %v", ctxt, err)
 		}
@@ -326,6 +327,7 @@ func Initialize(node string, ctxt string) error {
 						nil,
 						models.NOTIFICATION_ENTITY_HOST,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log initialize node event. Error: %v", ctxt, err)
 					}
@@ -345,6 +347,7 @@ func Initialize(node string, ctxt string) error {
 						nil,
 						models.NOTIFICATION_ENTITY_HOST,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log initialize node event. Error: %v", ctxt, err)
 					}
@@ -358,6 +361,7 @@ func Initialize(node string, ctxt string) error {
 						nil,
 						models.NOTIFICATION_ENTITY_HOST,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log initialize node event. Error: %v", ctxt, err)
 					}
@@ -382,6 +386,7 @@ func Initialize(node string, ctxt string) error {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log initialize node event. Error: %v", ctxt, err)
 		}
@@ -500,6 +505,7 @@ func logAuditEvent(
 	clusterId *uuid.UUID,
 	notificationEntity models.NotificationEntity,
 	taskId *uuid.UUID,
+	deletionAudit bool,
 	ctxt string) error {
 	var event models.AppEvent
 	eventId, err := uuid.New()
@@ -531,5 +537,12 @@ func logAuditEvent(
 		logger.Get().Error("%s- Error logging the event: %s. Error:%v", ctxt, event.Name, err)
 		return err
 	}
+
+	if deletionAudit {
+		if err := common_event.DismissAllEventsForEntity(event.EntityId, event, ctxt); err != nil {
+			logger.Get().Error("%s-Error while dismissing events for entity: %v. Error: %v", ctxt, event.EntityId, err)
+		}
+	}
+
 	return nil
 }

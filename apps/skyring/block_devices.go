@@ -58,6 +58,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -79,6 +80,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -97,6 +99,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -116,6 +119,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -131,6 +135,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -152,6 +157,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -172,6 +178,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -201,6 +208,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 					}
@@ -219,6 +227,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 					}
@@ -235,6 +244,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 						}
@@ -252,6 +262,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 						}
@@ -271,6 +282,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 							}
@@ -285,6 +297,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 									cluster_id,
 									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 									&(t.ID),
+									false,
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 								}
@@ -299,6 +312,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 									cluster_id,
 									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 									&(t.ID),
+									false,
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 								}
@@ -514,6 +528,7 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -536,6 +551,7 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -556,6 +572,7 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -586,6 +603,7 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
 					}
@@ -604,6 +622,7 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
 					}
@@ -622,6 +641,7 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
 						}
@@ -640,6 +660,7 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
 						}
@@ -661,6 +682,7 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
 							}
@@ -677,6 +699,7 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 									cluster_id,
 									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 									&(t.ID),
+									true,
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
 								}
@@ -694,6 +717,7 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 									cluster_id,
 									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 									&(t.ID),
+									false,
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
 								}
@@ -744,6 +768,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -768,6 +793,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -789,6 +815,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -812,6 +839,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -827,6 +855,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -848,6 +877,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 		}
@@ -880,6 +910,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 					}
@@ -899,6 +930,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 					}
@@ -917,6 +949,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 						}
@@ -934,6 +967,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 						}
@@ -955,6 +989,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 							}
@@ -971,6 +1006,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 									cluster_id,
 									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 									&(t.ID),
+									false,
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 								}
@@ -988,6 +1024,7 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 									cluster_id,
 									models.NOTIFICATION_ENTITY_BLOCK_DEVICE,
 									&(t.ID),
+									false,
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
 								}

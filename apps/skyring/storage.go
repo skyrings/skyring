@@ -62,6 +62,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 		}
@@ -83,6 +84,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 		}
@@ -101,6 +103,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 		}
@@ -120,6 +123,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 		}
@@ -135,6 +139,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 		}
@@ -157,6 +162,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 		}
@@ -178,6 +184,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 		}
@@ -203,6 +210,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 				cluster_id,
 				models.NOTIFICATION_ENTITY_STORAGE,
 				nil,
+				false,
 				ctxt); err != nil {
 				logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 			}
@@ -245,6 +253,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_STORAGE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 					}
@@ -264,6 +273,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_STORAGE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 					}
@@ -281,6 +291,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_STORAGE,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 						}
@@ -297,6 +308,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_STORAGE,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 						}
@@ -319,6 +331,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_STORAGE,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 							}
@@ -334,6 +347,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 									cluster_id,
 									models.NOTIFICATION_ENTITY_STORAGE,
 									&(t.ID),
+									false,
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 								}
@@ -352,6 +366,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 									cluster_id,
 									models.NOTIFICATION_ENTITY_STORAGE,
 									&(t.ID),
+									false,
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 								}
@@ -639,6 +654,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
 		}
@@ -660,6 +676,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
 		}
@@ -687,6 +704,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
 		}
@@ -706,6 +724,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
 		}
@@ -741,6 +760,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_STORAGE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
 					}
@@ -763,6 +783,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_STORAGE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
 					}
@@ -783,6 +804,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_STORAGE,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
 						}
@@ -802,6 +824,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_STORAGE,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
 						}
@@ -826,6 +849,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_STORAGE,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
 							}
@@ -841,6 +865,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 									cluster_id,
 									models.NOTIFICATION_ENTITY_STORAGE,
 									&(t.ID),
+									true,
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
 								}
@@ -859,6 +884,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 									cluster_id,
 									models.NOTIFICATION_ENTITY_STORAGE,
 									&(t.ID),
+									false,
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
 								}
@@ -914,6 +940,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 		}
@@ -944,6 +971,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 		}
@@ -975,6 +1003,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 		}
@@ -1002,6 +1031,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 		}
@@ -1027,6 +1057,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 			cluster_id,
 			models.NOTIFICATION_ENTITY_STORAGE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 		}
@@ -1067,6 +1098,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_STORAGE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 					}
@@ -1100,6 +1132,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_STORAGE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 					}
@@ -1121,6 +1154,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_STORAGE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 					}
@@ -1142,6 +1176,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 						cluster_id,
 						models.NOTIFICATION_ENTITY_STORAGE,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 					}
@@ -1168,6 +1203,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 							cluster_id,
 							models.NOTIFICATION_ENTITY_STORAGE,
 							&(t.ID),
+							false,
 							ctxt); err != nil {
 							logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 						}
@@ -1183,6 +1219,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_STORAGE,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 							}
@@ -1200,6 +1237,7 @@ func (a *App) PATCH_Storage(w http.ResponseWriter, r *http.Request) {
 								cluster_id,
 								models.NOTIFICATION_ENTITY_STORAGE,
 								&(t.ID),
+								false,
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log update storage event. Error: %v", ctxt, err)
 							}

@@ -81,6 +81,7 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_USER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -97,6 +98,7 @@ func (a *App) login(rw http.ResponseWriter, req *http.Request) {
 		nil,
 		models.NOTIFICATION_ENTITY_USER,
 		nil,
+		false,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
@@ -120,6 +122,7 @@ func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_USER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -135,6 +138,7 @@ func (a *App) logout(rw http.ResponseWriter, req *http.Request) {
 		nil,
 		models.NOTIFICATION_ENTITY_USER,
 		nil,
+		false,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
@@ -363,6 +367,7 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_USER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -378,6 +383,7 @@ func (a *App) addUsers(rw http.ResponseWriter, req *http.Request) {
 		nil,
 		models.NOTIFICATION_ENTITY_USER,
 		nil,
+		false,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
@@ -428,6 +434,7 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_USER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -458,6 +465,7 @@ func (a *App) modifyUsers(rw http.ResponseWriter, req *http.Request) {
 		nil,
 		models.NOTIFICATION_ENTITY_USER,
 		nil,
+		false,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
@@ -480,6 +488,7 @@ func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_USER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -498,6 +507,7 @@ func (a *App) deleteUser(rw http.ResponseWriter, req *http.Request) {
 		nil,
 		models.NOTIFICATION_ENTITY_USER,
 		nil,
+		false,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
@@ -626,6 +636,7 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_USER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 		}
@@ -642,6 +653,7 @@ func (a *App) configLdap(rw http.ResponseWriter, req *http.Request) {
 		nil,
 		models.NOTIFICATION_ENTITY_USER,
 		nil,
+		false,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log User event. Error: %v", ctxt, err)
 	}
