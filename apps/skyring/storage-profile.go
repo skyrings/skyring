@@ -43,6 +43,7 @@ func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
 		}
@@ -58,6 +59,7 @@ func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
 		}
@@ -75,6 +77,7 @@ func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
 		}
@@ -91,6 +94,7 @@ func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
 		}
@@ -108,6 +112,7 @@ func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
 		}
@@ -121,6 +126,7 @@ func (a *App) POST_StorageProfiles(w http.ResponseWriter, r *http.Request) {
 		nil,
 		models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 		nil,
+		false,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log create storage profile event. Error: %v", ctxt, err)
 	}
@@ -176,6 +182,7 @@ func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete storage profile event. Error: %v", ctxt, err)
 		}
@@ -194,6 +201,7 @@ func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete storage profile event. Error: %v", ctxt, err)
 		}
@@ -209,6 +217,7 @@ func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete storage profile event. Error: %v", ctxt, err)
 		}
@@ -222,6 +231,7 @@ func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
 		nil,
 		models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 		nil,
+		false,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log delete storage profile event. Error: %v", ctxt, err)
 	}
@@ -243,6 +253,7 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
 		}
@@ -261,6 +272,7 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
 		}
@@ -278,6 +290,7 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
 		}
@@ -295,6 +308,7 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
 		}
@@ -328,6 +342,7 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 				nil,
 				models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 				nil,
+				false,
 				ctxt); err != nil {
 				logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
 			}
@@ -342,6 +357,7 @@ func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
 		nil,
 		models.NOTIFICATION_ENTITY_STORAGE_PROFILE,
 		nil,
+		false,
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log update storage profile event. Error: %v", ctxt, err)
 	}

@@ -60,6 +60,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
 		}
@@ -75,6 +76,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
 		}
@@ -98,6 +100,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
 		}
@@ -116,6 +119,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
 		}
@@ -141,6 +145,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_HOST,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
 					}
@@ -159,6 +164,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_HOST,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
 					}
@@ -172,6 +178,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_HOST,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
 					}
@@ -198,6 +205,7 @@ func (a *App) POST_Nodes(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log add node event. Error: %v", ctxt, err)
 		}
@@ -233,6 +241,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
 		}
@@ -249,6 +258,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
 		}
@@ -267,6 +277,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
 		}
@@ -282,6 +293,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
 		}
@@ -299,6 +311,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
 		}
@@ -324,6 +337,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_HOST,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
 					}
@@ -342,6 +356,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_HOST,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
 					}
@@ -355,6 +370,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_HOST,
 						&(t.ID),
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
 					}
@@ -380,6 +396,7 @@ func (a *App) POST_AcceptUnamangedNode(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log accept node event. Error: %v", ctxt, err)
 		}
@@ -988,6 +1005,7 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 		}
@@ -1009,6 +1027,7 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 				nil,
 				models.NOTIFICATION_ENTITY_HOST,
 				&(t.ID),
+				false,
 				ctxt); err != nil {
 				logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 			}
@@ -1023,6 +1042,7 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			&(t.ID),
+			true,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 		}
@@ -1044,6 +1064,7 @@ func (a *App) DELETE_Node(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 		}
@@ -1078,6 +1099,7 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 		}
@@ -1093,6 +1115,7 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 		}
@@ -1117,6 +1140,7 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 					nil,
 					models.NOTIFICATION_ENTITY_HOST,
 					&(t.ID),
+					false,
 					ctxt); err != nil {
 					logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 				}
@@ -1134,10 +1158,23 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 					nil,
 					models.NOTIFICATION_ENTITY_HOST,
 					&(t.ID),
+					false,
 					ctxt); err != nil {
 					logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 				}
 				continue
+			} else {
+				if err := logAuditEvent(EventTypes["NODE_DELETE"],
+					fmt.Sprintf("Deleted node: %s successfully", nodeName),
+					fmt.Sprintf("Deleted node: %s successfully", nodeName),
+					node_id,
+					nil,
+					models.NOTIFICATION_ENTITY_HOST,
+					&(t.ID),
+					true,
+					ctxt); err != nil {
+					logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
+				}
 			}
 			if nodeNameList == "" {
 				nodeNameList += fmt.Sprintf("%s", nodeName)
@@ -1158,6 +1195,7 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			&(t.ID),
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 		}
@@ -1180,6 +1218,7 @@ func (a *App) DELETE_Nodes(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 		}
@@ -1297,6 +1336,7 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
 		}
@@ -1321,6 +1361,7 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
 		}
@@ -1348,6 +1389,7 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
 		}
@@ -1366,6 +1408,7 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
 		}
@@ -1384,6 +1427,7 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
 		}
@@ -1414,6 +1458,7 @@ func (a *App) PATCH_Disk(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log update disk event. Error: %v", ctxt, err)
 		}
@@ -1439,6 +1484,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log modify node event. Error: %v", ctxt, err)
 		}
@@ -1456,6 +1502,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log modify node event. Error: %v", ctxt, err)
 		}
@@ -1477,6 +1524,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_HOST,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log modify node event. Error: %v", ctxt, err)
 
@@ -1500,6 +1548,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 					nil,
 					models.NOTIFICATION_ENTITY_HOST,
 					nil,
+					false,
 					ctxt); err != nil {
 					logger.Get().Error("%s- Unable to log reinitialize node event. Error: %v", ctxt, err)
 				}
@@ -1517,6 +1566,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 					nil,
 					models.NOTIFICATION_ENTITY_HOST,
 					nil,
+					false,
 					ctxt); err != nil {
 					logger.Get().Error("%s- Unable to log reinitialize node event. Error: %v", ctxt, err)
 				}
@@ -1536,6 +1586,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 					nil,
 					models.NOTIFICATION_ENTITY_HOST,
 					nil,
+					false,
 					ctxt); err != nil {
 					logger.Get().Error("%s- Unable to log reinitialize node event. Error: %v", ctxt, err)
 				}
@@ -1559,6 +1610,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 					nil,
 					models.NOTIFICATION_ENTITY_HOST,
 					nil,
+					false,
 					ctxt); err != nil {
 					logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 				}
@@ -1576,6 +1628,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 					nil,
 					models.NOTIFICATION_ENTITY_HOST,
 					nil,
+					false,
 					ctxt); err != nil {
 					logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 				}
@@ -1594,6 +1647,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_HOST,
 						nil,
+						false,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log delete node event. Error: %v", ctxt, err)
 					}
@@ -1606,6 +1660,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 						nil,
 						models.NOTIFICATION_ENTITY_HOST,
 						nil,
+						true,
 						ctxt); err != nil {
 						logger.Get().Error("%s- Unable to log modify node event. Error: %v", ctxt, err)
 					}
@@ -1624,6 +1679,7 @@ func (a *App) POST_Actions(w http.ResponseWriter, r *http.Request) {
 				nil,
 				models.NOTIFICATION_ENTITY_HOST,
 				nil,
+				false,
 				ctxt); err != nil {
 				logger.Get().Error("%s- Unable to log modify node event. Error: %v", ctxt, err)
 			}

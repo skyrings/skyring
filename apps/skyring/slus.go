@@ -40,6 +40,7 @@ func (a *App) DiskHierarchy(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log get disk hierarchy event. Error: %v", ctxt, err)
 		}
@@ -56,6 +57,7 @@ func (a *App) DiskHierarchy(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log disk hierarhcy event. Error: %v", ctxt, err)
 		}
@@ -72,6 +74,7 @@ func (a *App) DiskHierarchy(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log disk hierarhcy event. Error: %v", ctxt, err)
 		}
@@ -95,6 +98,7 @@ func (a *App) DiskHierarchy(w http.ResponseWriter, r *http.Request) {
 			nil,
 			models.NOTIFICATION_ENTITY_CLUSTER,
 			nil,
+			false,
 			ctxt); err != nil {
 			logger.Get().Error("%s- Unable to log disk hierarhcy event. Error: %v", ctxt, err)
 		}
