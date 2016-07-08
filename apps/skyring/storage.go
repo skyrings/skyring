@@ -337,6 +337,7 @@ func (a *App) POST_Storages(w http.ResponseWriter, r *http.Request) {
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log create storage event. Error: %v", ctxt, err)
 								}
+								go ComputeSystemSummary(make(map[string]interface{}))
 								t.Done(models.TASK_STATUS_SUCCESS)
 							} else if providerTask.Status == models.TASK_STATUS_FAILURE {
 								t.UpdateStatus("Failed")

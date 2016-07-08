@@ -547,6 +547,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 									ctxt,
 									err)
 							}
+							go ComputeSystemSummary(make(map[string]interface{}))
 							t.UpdateStatus("Success")
 							t.Done(models.TASK_STATUS_SUCCESS)
 
@@ -2289,6 +2290,7 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
 							}
+							go ComputeSystemSummary(make(map[string]interface{}))
 							t.UpdateStatus("Success")
 							t.Done(models.TASK_STATUS_SUCCESS)
 
