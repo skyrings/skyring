@@ -510,7 +510,6 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 					}
 					if providerTask.Completed {
 						if providerTask.Status == models.TASK_STATUS_SUCCESS {
-							go ComputeSystemSummary(make(map[string]interface{}))
 							t.UpdateStatus("Updating the monitoring configuration")
 							if err := updateMonitoringPluginsForCluster(request, ctxt); err != nil {
 								logger.Get().Error("%s-Updating Monitoring configuration failed on cluster:%v.Error:%v", ctxt, request.Name, err)
@@ -547,6 +546,7 @@ func (a *App) POST_Clusters(w http.ResponseWriter, r *http.Request) {
 									ctxt,
 									err)
 							}
+							go ComputeSystemSummary(make(map[string]interface{}))
 							t.UpdateStatus("Success")
 							t.Done(models.TASK_STATUS_SUCCESS)
 
@@ -778,6 +778,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 					ctxt); err != nil {
 					logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
 				}
+				go ComputeSystemSummary(make(map[string]interface{}))
 				t.UpdateStatus("Success")
 				t.Done(models.TASK_STATUS_SUCCESS)
 				return
@@ -1817,8 +1818,6 @@ func (a *App) Expand_Cluster(w http.ResponseWriter, r *http.Request) {
 								ctxt); err != nil {
 								logger.Get().Error("%s- Unable to log expand cluster event. Error: %v", ctxt, err)
 							}
-							// Recompute cluster and system summaries to reflect changes in summaries due to cluster expansion
-							go ComputeSystemSummary(make(map[string]interface{}))
 							t.UpdateStatus("Success")
 							t.Done(models.TASK_STATUS_SUCCESS)
 
