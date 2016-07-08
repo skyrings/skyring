@@ -288,6 +288,7 @@ func (a *App) POST_BlockDevices(w http.ResponseWriter, r *http.Request) {
 									ctxt); err != nil {
 									logger.Get().Error("%s- Unable to log create block device for cluster event. Error: %v", ctxt, err)
 								}
+								go ComputeSystemSummary(make(map[string]interface{}))
 								t.UpdateStatus("Success")
 								t.Done(models.TASK_STATUS_SUCCESS)
 							} else if providerTask.Status == models.TASK_STATUS_FAILURE {

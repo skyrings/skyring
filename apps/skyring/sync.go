@@ -265,6 +265,7 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 	for _, node := range nodes {
 		go SyncNodeUtilization(ctxt, node, time_stamp_str)
 	}
+	go ComputeSystemSummary(make(map[string]interface{}))
 }
 
 func SyncNodeUtilization(ctxt string, node models.Node, time_stamp_str string) {
