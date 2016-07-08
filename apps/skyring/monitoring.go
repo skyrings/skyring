@@ -840,16 +840,17 @@ func forceUpdatePlugins(cluster models.Cluster, nodes []string, ctxt string) err
 	var nodesWithStaleMonitoringConfig = util.NewSetWithType(reflect.TypeOf(""))
 	nodesWithStaleMonitoringConfig.AddAll(util.GenerifyStringArr(cluster.Monitoring.StaleNodes))
 	nodesWithStaleMonitoringConfig.AddAll(util.GenerifyStringArr(nodes))
-	monState.Plugins = cluster.Monitoring.Plugins
-	plugin_names := make([]string, len(cluster.Monitoring.Plugins))
-	for index, plugin := range cluster.Monitoring.Plugins {
-		plugin_names[index] = plugin.Name
+	var plugin_names []string
+	for _, plugin := range cluster.Monitoring.Plugins {
+		if util.StringInSlice(plugin.Name, monitoring.SupportedMonitoringPlugins) {
+			plugin_names = append(plugin_names, plugin.Name)
+		}
 	}
 	if forUpdateErrors, forceUpdatePythonError := GetCoreNodeManager().EnforceMonitoring(
 		plugin_names,
 		nodes,
 		"",
-		cluster.Monitoring.Plugins,
+		monState.Plugins,
 		ctxt); len(forUpdateErrors) != 0 || forceUpdatePythonError != nil {
 		if forceUpdatePythonError != nil {
 			return fmt.Errorf("Failed to update monitoring configuration on nodes : %v of cluster: %v.Error: %v", nodes, cluster.Name, forceUpdatePythonError)
