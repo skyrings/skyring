@@ -225,6 +225,7 @@ func (a *App) DELETE_StorageProfile(w http.ResponseWriter, r *http.Request) {
 		ctxt); err != nil {
 		logger.Get().Error("%s- Unable to log delete storage profile event. Error: %v", ctxt, err)
 	}
+	go ComputeSystemSummary(make(map[string]interface{}))
 }
 
 func (a *App) PATCH_StorageProfile(w http.ResponseWriter, r *http.Request) {
