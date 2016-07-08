@@ -1335,18 +1335,10 @@ func ComputeClusterSummary(cluster models.Cluster, ctxt string) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
-	var stotrageUsage []models.StorageUsage
-	if err := coll.Find(bson.M{"clusterid": cluster.ClusterId}).Sort("-percentused").All(&stotrageUsage); err != nil {
+	if mostUsedStorages, err := util.GetTopStorageUsage(bson.M{"clusterid": cluster.ClusterId}); err != nil {
 		logger.Get().Error("%s - Failed to fetch most used storages from cluster %v.Err %v", ctxt, cluster.Name, err)
-	}
-	if len(stotrageUsage) > 5 {
-		cSummary.MostUsedStorages = stotrageUsage[:4]
 	} else {
-		cSummary.MostUsedStorages = stotrageUsage
-	}
-	if len(stotrageUsage) == 0 {
-		cSummary.MostUsedStorages = make([]models.StorageUsage, 0)
+		cSummary.MostUsedStorages = mostUsedStorages
 	}
 
 	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchClusterDetailsFromProvider(ctxt, cluster.ClusterId)
@@ -1355,30 +1347,13 @@ func ComputeClusterSummary(cluster models.Cluster, ctxt string) {
 	}
 	cSummary.ProviderMonitoringDetails = otherProvidersDetails
 
-	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
-	var slus []models.StorageLogicalUnit
-	if err := coll.Find(bson.M{"clusterid": cluster.ClusterId}).All(&slus); err != nil {
-		logger.Get().Error("%s - Failed to fetch storage logical units from cluster %v.Err %v", ctxt, cluster.Name, err)
+	sluStatusWiseCounts, err := util.ComputeSluStatusWiseCount(
+		bson.M{"clusterid": cluster.ClusterId},
+		bson.M{"utilizationtype": monitoring.SLU_UTILIZATION, "clusterid": cluster.ClusterId, "thresholdseverity": models.CRITICAL})
+	if err != nil {
+		logger.Get().Error("%s - Failed to fetch storage logical units status wise counts for cluster %v.Err %v", ctxt, cluster.Name, err)
 	}
-	slu_down_cnt := 0
-	slu_error_cnt := 0
-	selectCriteria := bson.M{
-		"utilizationtype": monitoring.SLU_UTILIZATION,
-		"clusterid":       cluster.ClusterId,
-	}
-	sluThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.SLU_UTILIZATION, ctxt)
-
-	sluCriticalAlertCount := 0
-	for _, slu := range slus {
-		sluCriticalAlertCount = sluCriticalAlertCount + slu.AlmCritCount
-		if slu.Status == models.SLU_STATUS_ERROR {
-			slu_error_cnt = slu_error_cnt + 1
-		}
-		if slu.State == models.SLU_STATE_DOWN {
-			slu_down_cnt = slu_down_cnt + 1
-		}
-	}
-	cSummary.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_error_cnt, models.STATUS_DOWN: slu_down_cnt, models.NEAR_FULL: len(sluThresholdEventsInDb), "criticalAlerts": sluCriticalAlertCount}
+	cSummary.SLUCount = sluStatusWiseCounts
 
 	unmanagedNodes, unmanagedNodesError := GetCoreNodeManager().GetUnmanagedNodes(ctxt)
 	if unmanagedNodesError != nil {
@@ -1407,58 +1382,30 @@ func ComputeClusterSummary(cluster models.Cluster, ctxt string) {
 	cSummary.ObjectCount = cluster.ObjectCount
 	cSummary.Utilizations = cluster.Utilizations
 
-	/*
-		1. Fetch storage profile critical threshold cross events for the cluster
-		2. Iterate over the storage profile to utilization map
-		3. For each profile find if thers's an entry in list fetched in 1
-			i. If there's an event, it means, the current profile is near full
-	*/
-	selectCriteria = bson.M{
-		"clusterid":       cluster.ClusterId,
-		"utilizationtype": monitoring.STORAGE_PROFILE_UTILIZATION,
-	}
-	spThresholdEvenstInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.STORAGE_PROFILE_UTILIZATION, ctxt)
-	cSummary.StorageProfileUsage = make(map[string]map[string]interface{})
-	for storageProfile, utilization := range cluster.StorageProfileUsage {
-		utilizationWithIsFullFlag := make(map[string]interface{})
-		utilizationWithIsFullFlag["IsFull"] = false
-		utilizationWithIsFullFlag["IsNearFull"] = false
-		for _, event := range spThresholdEvenstInDb {
-			utilizationWithIsFullFlag["IsFull"] = false
-			utilizationWithIsFullFlag["IsNearFull"] = false
-			if event.EntityName == storageProfile && event.ThresholdSeverity == models.CRITICAL {
-				utilizationWithIsFullFlag["IsFull"] = true
-				continue
-			}
-			if event.EntityName == storageProfile && event.ThresholdSeverity == models.WARNING {
-				utilizationWithIsFullFlag["IsNearFull"] = true
-			}
+	storageProfileUtilization := make(map[string]map[string]interface{})
+	pluginIndex := monitoring.GetPluginIndex(monitoring.STORAGE_PROFILE_UTILIZATION, cluster.Monitoring.Plugins)
+	if pluginIndex != -1 {
+		if storageProfileUtilization, err = util.ComputeStorageProfileUtilization(
+			bson.M{"clusterid": cluster.ClusterId},
+			cluster.Monitoring.Plugins[pluginIndex].Configs); err != nil {
+			logger.Get().Error("%s - Failed to fetch storage profile utilization of cluster %v.Error %v", ctxt, cluster.Name, err)
 		}
-		utilizationWithIsFullFlag["Utilization"] = utilization
-		cSummary.StorageProfileUsage[storageProfile] = utilizationWithIsFullFlag
 	}
+	cSummary.StorageProfileUsage = storageProfileUtilization
 
-	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
-	var storages models.Storages
-	if err := coll.Find(bson.M{"clusterid": cluster.ClusterId}).All(&storages); err != nil {
-		logger.Get().Error("%s - Error getting the storage list. error: %v", ctxt, err)
+	storageCount, err := util.GetStorageCount(bson.M{"clusterid": cluster.ClusterId})
+	if err != nil {
+		logger.Get().Error("%s - Failed to fetch storage status wise counts for cluster %v.Error %v", ctxt, cluster.Name, err)
 	}
-	storage_down_cnt := 0
-	storageCriticalAlertsCount := 0
-	for _, storage := range storages {
-		storageCriticalAlertsCount = storageCriticalAlertsCount + storage.AlmCritCount
-		if storage.Status == models.STORAGE_STATUS_ERROR {
-			storage_down_cnt = storage_down_cnt + 1
-		}
-	}
-	cSummary.StorageCount = map[string]int{models.TOTAL: len(storages), STORAGE_STATUS_DOWN: storage_down_cnt, "criticalAlerts": storageCriticalAlertsCount}
+	cSummary.StorageCount = storageCount
 
 	cSummary.ClusterId = cluster.ClusterId
+	cSummary.Type = cluster.Type
 	cSummary.Name = cluster.Name
 	cSummary.MonitoringPlugins = cluster.Monitoring.Plugins
 	cSummary.UpdatedAt = time.Now().String()
 
-	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_CLUSTER_SUMMARY)
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_CLUSTER_SUMMARY)
 	if _, err := coll.Upsert(bson.M{"clusterid": cluster.ClusterId}, cSummary); err != nil {
 		logger.Get().Error("%s - Error persisting the cluster summary.Error %v", ctxt, err)
 	}
@@ -1516,58 +1463,21 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
-	/*
-		Count the number of unmanaged nodes
-	*/
-	var unmanagedNodes models.Nodes
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	if unmanagedNodesError := coll.Find(bson.M{"state": models.NODE_STATE_UNACCEPTED}).All(&unmanagedNodes); err != nil {
-		if clusterFetchError != mgo.ErrNotFound {
-			logger.Get().Error("%s-Failed to fetch un-managed nodes. error: %v", ctxt, unmanagedNodesError)
-		}
+	if system.NodesCount, err = util.FetchNodeStatusWiseCounts(nil); err != nil {
+		logger.Get().Error("%s - Failed to fetch status wise node counts.Error %v", ctxt, err)
 	}
 
-	collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_LOGICAL_UNITS)
-	var slus []models.StorageLogicalUnit
-	if err := collection.Find(nil).All(&slus); err != nil {
+	sluStatusWiseCounts, err := util.ComputeSluStatusWiseCount(nil, bson.M{"utilizationtype": monitoring.SLU_UTILIZATION, "thresholdseverity": models.CRITICAL})
+	if err != nil {
 		logger.Get().Error("%s - Error getting the slus list. error: %v", ctxt, err)
 	}
+	system.SLUCount = sluStatusWiseCounts
 
-	slu_down_cnt := 0
-	slu_error_cnt := 0
-	sluCriticalAlertsCount := 0
-
-	for _, slu := range slus {
-		sluCriticalAlertsCount = sluCriticalAlertsCount + slu.AlmCritCount
-		if slu.Status == models.SLU_STATUS_ERROR {
-			slu_error_cnt = slu_error_cnt + 1
-		}
-		if slu.State == models.SLU_STATE_DOWN {
-			slu_down_cnt = slu_down_cnt + 1
-		}
+	storageCount, err := util.GetStorageCount(nil)
+	if err != nil {
+		logger.Get().Error("%s - Failed to fetch storage status wise counts.Error %v", ctxt, err)
 	}
-
-	selectCriteria := bson.M{
-		"utilizationtype":   monitoring.SLU_UTILIZATION,
-		"thresholdseverity": models.CRITICAL,
-	}
-	sluThresholdEventsInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.SLU_UTILIZATION, ctxt)
-	system.SLUCount = map[string]int{models.TOTAL: len(slus), models.SluStatuses[models.SLU_STATUS_ERROR]: slu_error_cnt, models.STATUS_DOWN: slu_down_cnt, models.NEAR_FULL: len(sluThresholdEventsInDb), "criticalAlerts": sluCriticalAlertsCount}
-
-	collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
-	var storages models.Storages
-	if err := collection.Find(nil).All(&storages); err != nil {
-		logger.Get().Error("%s - Error getting the storage list. error: %v", ctxt, err)
-	}
-	storage_down_cnt := 0
-	storageCriticalAlertsCount := 0
-	for _, storage := range storages {
-		storageCriticalAlertsCount = storageCriticalAlertsCount + storage.AlmCritCount
-		if storage.Status == models.STORAGE_STATUS_ERROR {
-			storage_down_cnt = storage_down_cnt + 1
-		}
-	}
-	system.StorageCount = map[string]int{models.TOTAL: len(storages), STORAGE_STATUS_DOWN: storage_down_cnt, "criticalAlerts": storageCriticalAlertsCount}
+	system.StorageCount = storageCount
 
 	var net_cluster_used int64
 	var net_cluster_total int64
@@ -1575,8 +1485,6 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	net_memory_used_count := len(clusters)
 	var net_memory_total float64
 	net_memory_total_count := len(clusters)
-	var total_nodes int
-	var clusters_in_error int
 	var cluster_cpu_user float64
 	cluster_cpu_user_count := len(clusters)
 	var latency float64
@@ -1589,74 +1497,16 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	netDiskReadCount := len(clusters)
 	var netDiskWrite float64
 	netDiskWriteCount := len(clusters)
-	net_storage_profile_utilization := make(map[string]map[string]interface{})
-	error_nodes := 0
-	var nearFullClusters int
-
-	selectCriteria = bson.M{
-		"utilizationtype":   monitoring.CLUSTER_UTILIZATION,
-		"thresholdseverity": models.CRITICAL,
-	}
-	clusterThresholdEvenstInDb, _ := fetchThresholdEvents(selectCriteria, monitoring.CLUSTER_UTILIZATION, ctxt)
-
-	clusterCriticalAlertCount := 0
-	nodeCriticalAlertCount := 0
 
 	for _, cluster := range clusters {
 
-		go ComputeClusterSummary(cluster, ctxt)
+		ComputeClusterSummary(cluster, ctxt)
 
-		clusterCriticalAlertCount = clusterCriticalAlertCount + cluster.AlmCritCount
-		for _, tEvent := range clusterThresholdEvenstInDb {
-			if uuid.Equal(tEvent.EntityId, cluster.ClusterId) {
-				nearFullClusters = nearFullClusters + 1
-			}
-		}
-		if cluster.Status == models.CLUSTER_STATUS_ERROR {
-			clusters_in_error = clusters_in_error + 1
-		}
-		nodesInCluster, clusterNodesFetchError := getClusterNodesById(&cluster.ClusterId)
-		if clusterNodesFetchError != nil {
-			logger.Get().Error("%s - %s", ctxt, fmt.Sprintf("Failed to fetch nodes of cluster.Err %v", cluster.Name))
-			continue
-		}
-
-		/*
-			Count the number of down nodes
-		*/
-		for _, node := range nodesInCluster {
-			nodeCriticalAlertCount = nodeCriticalAlertCount + node.AlmCritCount
-			if node.Status == models.NODE_STATUS_ERROR {
-				error_nodes = error_nodes + 1
-			}
-		}
-
-		/*
-			Count the total number of nodes
-		*/
-		total_nodes = total_nodes + len(nodesInCluster)
 		/*
 			Calculate net cluster utilization
 		*/
 		net_cluster_used = net_cluster_used + cluster.Usage.Used
 		net_cluster_total = net_cluster_total + cluster.Usage.Total
-
-		/*
-			Calculate net storage profile utilization
-		*/
-		for profile, profileUtilization := range cluster.StorageProfileUsage {
-			used := profileUtilization.Used
-			total := profileUtilization.Total
-			if utilization, ok := net_storage_profile_utilization[profile]["utilization"].(models.Utilization); ok {
-				used = used + utilization.Used
-				total = total + utilization.Total
-			}
-			var percentUsed float64
-			if total != 0.0 {
-				percentUsed = float64(used*100) / float64(total)
-			}
-			net_storage_profile_utilization[profile] = map[string]interface{}{"utilization": models.Utilization{Used: used, Total: total, PercentUsed: percentUsed, UpdatedAt: time.Now().String()}}
-		}
 
 		/*
 			Calculate Memory Used
@@ -1699,9 +1549,12 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		netIStatTx = netIStatTx + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &netIStatTxCount)
 
 	}
-	system.ClustersCount = map[string]int{models.TOTAL: len(clusters), models.ClusterStatuses[models.CLUSTER_STATUS_ERROR]: clusters_in_error, models.NEAR_FULL: nearFullClusters, "criticalAlerts": clusterCriticalAlertCount}
 
-	system.NodesCount = map[string]int{models.TOTAL: total_nodes, models.NodeStatuses[models.NODE_STATUS_ERROR]: error_nodes, models.NodeStates[models.NODE_STATE_UNACCEPTED]: len(unmanagedNodes), "criticalAlerts": nodeCriticalAlertCount}
+	clustersCount, err := util.ComputeClustersStatusWiseCounts()
+	if err != nil {
+		logger.Get().Error("%s - Error getting  status wise clusters count.Error %v", ctxt, err)
+	}
+	system.ClustersCount = clustersCount
 
 	// Update Cluster utilization to time series db
 	var percentSystemUsed float64
@@ -1719,98 +1572,68 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
 	}
 
-	netDiskRead = AverageAndUpdateDb(ctxt, netDiskRead, netDiskReadCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.READ)
-	netDiskWrite = AverageAndUpdateDb(ctxt, netDiskWrite, netDiskWriteCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
-	UpdateMetricToTimeSeriesDb(ctxt, netDiskRead+netDiskWrite, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
-
-	UpdateMetricToTimeSeriesDb(ctxt, net_memory_used, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
-	UpdateMetricToTimeSeriesDb(ctxt, net_memory_total, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.TOTAL_SPACE)
-	AverageAndUpdateDb(ctxt, cluster_cpu_user, cluster_cpu_user_count, time_stamp_str, table_name+monitoring.CPU_USER)
-	AverageAndUpdateDb(ctxt, latency, latencyCount, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
-
-	netIStatRx = AverageAndUpdateDb(ctxt, netIStatRx, netIStatRxCount, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.RX)
-	netIStatTx = AverageAndUpdateDb(ctxt, netIStatTx, netIStatTxCount, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.TX)
-	UpdateMetricToTimeSeriesDb(ctxt, netIStatRx+netIStatTx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
-
-	var memory_percent float64
-	if net_memory_total > 0.0 {
-		memory_percent = (net_memory_used * 100) / net_memory_total
-	}
-	memory_percent_table := table_name + monitoring.MEMORY + "-" + monitoring.USAGE_PERCENT
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: strconv.FormatFloat(memory_percent, 'E', -1, 64)}}, hostname, port); err != nil {
-		logger.Get().Warning("%s - Error pushing memory utilization.Err %v", ctxt, err)
-	}
-
 	systemthresholds := monitoring.GetSystemDefaultThresholdValues()
-
-	if len(net_storage_profile_utilization) != 0 {
-		var spNearFullThreshold float64
-		var spFullThreshold float64
-		spThresholdconfigs := systemthresholds[monitoring.STORAGE_PROFILE_UTILIZATION].Configs
-		for _, spThreshold := range spThresholdconfigs {
-			if spThreshold.Type == monitoring.CRITICAL {
-				spFullThreshold, _ = strconv.ParseFloat(spThreshold.Value, 64)
-			}
-			if spThreshold.Type == monitoring.WARNING {
-				spNearFullThreshold, _ = strconv.ParseFloat(spThreshold.Value, 64)
-			}
-		}
-		for sProfile, isNearFullUtilizationMap := range net_storage_profile_utilization {
-			net_storage_profile_utilization[sProfile]["isNearFull"] = false
-			net_storage_profile_utilization[sProfile]["isFull"] = false
-			if isNearFullUtilizationMap["utilization"] != nil {
-				if isNearFullUtilizationMap["utilization"].(models.Utilization).PercentUsed > spFullThreshold {
-					net_storage_profile_utilization[sProfile]["isFull"] = true
-					continue
-				}
-				if isNearFullUtilizationMap["utilization"].(models.Utilization).PercentUsed > spNearFullThreshold {
-					net_storage_profile_utilization[sProfile]["isNearFull"] = true
-				}
-			}
-		}
+	net_storage_profile_utilization, err := util.ComputeStorageProfileUtilization(nil, systemthresholds[monitoring.STORAGE_PROFILE_UTILIZATION].Configs)
+	if err != nil {
+		logger.Get().Error("%s - Failed to get storge profile utilization.Error %v", ctxt, err)
 	}
 	system.StorageProfileUsage = net_storage_profile_utilization
+
 	system.ProviderMonitoringDetails = make(map[string]map[string]interface{})
 	var cpuPercentUsed float64
 	if cluster_cpu_user_count > 0 {
 		cpuPercentUsed = float64(cluster_cpu_user) / float64(cluster_cpu_user_count)
 	}
 	system.MonitoringPlugins = systemthresholds
-	systemUtilizations := map[string]interface{}{
-		"memoryusage": models.Utilization{
-			Used:        int64(net_memory_used),
-			Total:       int64(net_memory_total),
-			PercentUsed: memory_percent,
-			UpdatedAt:   time.Now().String(),
-		},
-		"cpupercentageusage": cpuPercentUsed,
+	if len(clusters) > 0 {
+		otherProvidersDetails, otherDetailsFetchError := GetApp().FetchMonitoringDetailsFromProviders(ctxt)
+		if otherDetailsFetchError != nil {
+			logger.Get().Error("%s - Error fetching the provider specific details. Error %v", ctxt, otherDetailsFetchError)
+		}
+		system.ProviderMonitoringDetails = otherProvidersDetails
+		netDiskRead = AverageAndUpdateDb(ctxt, netDiskRead, netDiskReadCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.READ)
+		netDiskWrite = AverageAndUpdateDb(ctxt, netDiskWrite, netDiskWriteCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
+		UpdateMetricToTimeSeriesDb(ctxt, netDiskRead+netDiskWrite, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+
+		UpdateMetricToTimeSeriesDb(ctxt, net_memory_used, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
+		UpdateMetricToTimeSeriesDb(ctxt, net_memory_total, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.TOTAL_SPACE)
+		AverageAndUpdateDb(ctxt, cluster_cpu_user, cluster_cpu_user_count, time_stamp_str, table_name+monitoring.CPU_USER)
+		AverageAndUpdateDb(ctxt, latency, latencyCount, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
+
+		netIStatRx = AverageAndUpdateDb(ctxt, netIStatRx, netIStatRxCount, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.RX)
+		netIStatTx = AverageAndUpdateDb(ctxt, netIStatTx, netIStatTxCount, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.TX)
+		UpdateMetricToTimeSeriesDb(ctxt, netIStatRx+netIStatTx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
+
+		var memory_percent float64
+		if net_memory_total > 0.0 {
+			memory_percent = (net_memory_used * 100) / net_memory_total
+		}
+		memory_percent_table := table_name + monitoring.MEMORY + "-" + monitoring.USAGE_PERCENT
+		if err := GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: strconv.FormatFloat(memory_percent, 'E', -1, 64)}}, hostname, port); err != nil {
+			logger.Get().Warning("%s - Error pushing memory utilization.Err %v", ctxt, err)
+		}
+		systemUtilizations := map[string]interface{}{
+			"memoryusage": models.Utilization{
+				Used:        int64(net_memory_used),
+				Total:       int64(net_memory_total),
+				PercentUsed: memory_percent,
+				UpdatedAt:   time.Now().String(),
+			},
+			"cpupercentageusage": cpuPercentUsed,
+		}
+		system.Utilizations = systemUtilizations
 	}
-	system.Utilizations = systemUtilizations
-	otherProvidersDetails, otherDetailsFetchError := GetApp().FetchMonitoringDetailsFromProviders(ctxt)
-	if otherDetailsFetchError != nil {
-		logger.Get().Error("%s - Error fetching the provider specific details. Error %v", ctxt, otherDetailsFetchError)
-	}
-	system.ProviderMonitoringDetails = otherProvidersDetails
 	system.UpdatedAt = time.Now().String()
 
-	/*
-		Add Most used storages
-	*/
-	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE)
-	var stotrageUsage []models.StorageUsage
-	if err := coll.Find(nil).Sort("-percentused").All(&stotrageUsage); err != nil {
-		logger.Get().Error("%s - Failed to fetch most used storages.Err %v", ctxt, err)
+	mostUsedStorages, err := util.GetTopStorageUsage(nil)
+	if err != nil {
+		logger.Get().Error("%s - Failed to get most used storages.Error %v", ctxt, err)
 	}
-	if len(stotrageUsage) > 5 {
-		system.MostUsedStorages = stotrageUsage[:4]
-	} else {
-		system.MostUsedStorages = stotrageUsage
-	}
-
+	system.MostUsedStorages = mostUsedStorages
 	/*
 		Persist system into db
 	*/
-	coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SKYRING_UTILIZATION)
+	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_SKYRING_UTILIZATION)
 	if _, err := coll.Upsert(bson.M{"name": monitoring.SYSTEM}, system); err != nil {
 		logger.Get().Error("%s - Error persisting the system.Error %v", ctxt, err)
 	}
