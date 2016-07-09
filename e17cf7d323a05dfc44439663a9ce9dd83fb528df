@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_dc1b2c1b",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-07-09T10:52:52Z",
+      "side": 1,
+      "message": "In this case we need to run the monitoring schedules again right. Is that already taken care?",
+      "range": {
+        "startLine": 1277,
+        "startChar": 14,
+        "endLine": 1277,
+        "endChar": 28
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_fc20304b",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-07-09T10:52:52Z",
+      "side": 1,
+      "message": "why we are not doing in this case?",
+      "range": {
+        "startLine": 1494,
+        "startChar": 9,
+        "endLine": 1494,
+        "endChar": 36
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_5cd6fc27",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 2294,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-07-09T10:52:52Z",
+      "side": 1,
+      "message": "why is it required here in case of patch slu?",
+      "range": {
+        "startLine": 2294,
+        "startChar": 7,
+        "endLine": 2294,
+        "endChar": 21
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_1ce074f9",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-07-09T10:52:52Z",
+      "side": 1,
+      "message": "do we really need to do this here?",
+      "range": {
+        "startLine": 1433,
+        "startChar": 8,
+        "endLine": 1436,
+        "endChar": 22
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_3cdd7842",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1652,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-07-09T10:52:52Z",
+      "side": 1,
+      "message": "do we really need to do this here?",
+      "range": {
+        "startLine": 1649,
+        "startChar": 1,
+        "endLine": 1652,
+        "endChar": 54
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_7cbae0e2",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-07-09T10:52:52Z",
+      "side": 1,
+      "message": "I don\u0027t think this is required",
+      "range": {
+        "startLine": 228,
+        "startChar": 23,
+        "endLine": 228,
+        "endChar": 34
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_dcc9ec7a",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-07-09T10:52:52Z",
+      "side": 1,
+      "message": "I think we need to haave chain actions here:\nnode collection -\u003etriggers-\u003ecluster summary collection -\u003etriggers-\u003esystem summary collection",
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
