@@ -164,6 +164,7 @@ install -Dm 0644 skyring.8.gz $RPM_BUILD_ROOT%{_mandir}/man8/skyring.8.gz
 chmod -x $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/__init__.py
 chmod -x $RPM_BUILD_ROOT/%{python2_sitelib}/skyring/saltwrapper.py
 chmod +x $RPM_BUILD_ROOT/srv/salt/push_event.sls
+ln -fs %{_datarootdir}/skyring/setup/skyring-setup.sh $RPM_BUILD_ROOT%{_bindir}/skyring-setup
 
 # Install SELinux interfaces and policy modules
 install -d %{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
@@ -188,7 +189,6 @@ install -m 0644 selinux/carbon.pp.bz2 \
 	%{buildroot}%{_datadir}/selinux/packages
 
 %post
-ln -fs /usr/share/skyring/setup/skyring-setup.sh /usr/bin/skyring-setup
 /bin/systemctl enable skyring.service >/dev/null 2>&1 || :
 
 %post selinux
@@ -343,10 +343,10 @@ rm -rf "$RPM_BUILD_ROOT"
 %attr(0755, root, root) /usr/bin/skyring
 %attr(0755, root, root) /usr/bin/skyring-pre.sh
 %attr(0755, root, root) /usr/share/skyring/setup/skyring-setup.sh
+%attr(0755, root, root) %{_bindir}/skyring-setup
 %{python2_sitelib}/skyring/*
 %{_var}/log/skyring
 /srv/salt/*
-/srv/salt/_modules/*
 %{_unitdir}/%{pkg_name}.service
 %config(noreplace) %{_sysconfdir}/sysconfig/%{pkg_name}
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/httpd/conf.d/graphite-web.conf
