@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_049816bf",
+        "filename": "skyring.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1008469
+      },
+      "writtenOn": "2016-07-11T18:34:50Z",
+      "side": 0,
+      "message": "This change looks unrelated?",
+      "revId": "a213a7fb852700beb4a8cda2a9e873aba2de2609",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
