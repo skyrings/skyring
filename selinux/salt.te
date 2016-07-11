@@ -194,3 +194,6 @@ optional_policy(`
 	seutil_domtrans_setsebool(salt_t)
 	seutil_exec_setfiles(salt_t)
 ')
+optional_policy(`
+	unconfined_domain(salt_t)
+')
