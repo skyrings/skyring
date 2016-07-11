@@ -136,7 +136,7 @@ install -Dm 0644 conf/sample/carbon.conf.sample $RPM_BUILD_ROOT/etc/skyring/carb
 install -Dm 0644 conf/sample/storage-schemas.conf.sample $RPM_BUILD_ROOT/etc/skyring/carbon/storage-schemas.conf
 install -m 755 -d $RPM_BUILD_ROOT/usr/share/skyring/setup
 install -Dm 755 skyring-pre.sh $RPM_BUILD_ROOT/usr/bin/skyring-pre.sh
-install -Dm 755 skyring-setup.sh $RPM_BUILD_ROOT/usr/share/skyring/setup/skyring-setup.sh
+install -Dm 755 skyring-setup.sh $RPM_BUILD_ROOT%{_sbindir}/skyring-setup
 install -Dm 0644 conf/sample/skyring_logrotate.conf.sample $RPM_BUILD_ROOT/etc/logrotate.d/skyring
 install -Dm 0644 conf/sample/skyring.conf.sample $RPM_BUILD_ROOT/etc/skyring/skyring.conf
 install -Dm 0644 conf/sample/authentication.conf.sample $RPM_BUILD_ROOT/etc/skyring/authentication.conf
@@ -188,7 +188,6 @@ install -m 0644 selinux/carbon.pp.bz2 \
 	%{buildroot}%{_datadir}/selinux/packages
 
 %post
-ln -fs /usr/share/skyring/setup/skyring-setup.sh /usr/bin/skyring-setup
 /bin/systemctl enable skyring.service >/dev/null 2>&1 || :
 
 %post selinux
@@ -343,10 +342,10 @@ rm -rf "$RPM_BUILD_ROOT"
 %attr(0755, root, root) /usr/bin/skyring
 %attr(0755, root, root) /usr/bin/skyring-pre.sh
 %attr(0755, root, root) /usr/share/skyring/setup/skyring-setup.sh
+%attr(0755, root, root) %{_sbindir}/skyring-setup
 %{python2_sitelib}/skyring/*
 %{_var}/log/skyring
 /srv/salt/*
-/srv/salt/_modules/*
 %{_unitdir}/%{pkg_name}.service
 %config(noreplace) %{_sysconfdir}/sysconfig/%{pkg_name}
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/httpd/conf.d/graphite-web.conf
