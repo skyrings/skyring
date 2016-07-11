@@ -16,6 +16,24 @@
       "revId": "ee7a7ef12f33986fd0aff444af1d1e041e84d730",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_240b1a26",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-07-11T18:07:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_593727ff",
+      "revId": "ee7a7ef12f33986fd0aff444af1d1e041e84d730",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
