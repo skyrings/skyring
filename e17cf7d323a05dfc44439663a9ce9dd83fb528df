@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_f0fa90bc",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-07-11T05:58:40Z",
+      "side": 1,
+      "message": "Thats correct as cluster monitoring wouldnt have been happening during this period..",
+      "parentUuid": "baa041b7_dc1b2c1b",
+      "range": {
+        "startLine": 1277,
+        "startChar": 14,
+        "endLine": 1277,
+        "endChar": 28
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_fc20304b",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_b00088ac",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-07-11T05:58:40Z",
+      "side": 1,
+      "message": "Anmol, is it like osd addition event take care of explicit sync in this case. But still as Nishanth pointed out, due to mon node add also we might need to do explicit sync, so better we do here.",
+      "parentUuid": "baa041b7_fc20304b",
+      "range": {
+        "startLine": 1494,
+        "startChar": 9,
+        "endLine": 1494,
+        "endChar": 36
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_5cd6fc27",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2016-07-09T10:52:52Z",
       "side": 1,
       "message": "why is it required here in case of patch slu?",
+      "range": {
+        "startLine": 2294,
+        "startChar": 7,
+        "endLine": 2294,
+        "endChar": 21
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_3023585a",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 2294,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-07-11T05:58:40Z",
+      "side": 1,
+      "message": "Do we need full system summery sync or just SLUs sync would do?\nI feel for status etc it might be being done but yes full system summery re-calc, not sure if required here??",
+      "parentUuid": "baa041b7_5cd6fc27",
       "range": {
         "startLine": 2294,
         "startChar": 7,
@@ -151,6 +223,24 @@
       "writtenOn": "2016-07-09T10:52:52Z",
       "side": 1,
       "message": "I think we need to haave chain actions here:\nnode collection -\u003etriggers-\u003ecluster summary collection -\u003etriggers-\u003esystem summary collection",
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_10285432",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-07-11T05:58:40Z",
+      "side": 1,
+      "message": "I like this idea and there should be a proper trace logged for this to mention what actually happened ...",
+      "parentUuid": "baa041b7_dcc9ec7a",
       "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
