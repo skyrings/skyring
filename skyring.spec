@@ -346,7 +346,6 @@ rm -rf "$RPM_BUILD_ROOT"
 %{python2_sitelib}/skyring/*
 %{_var}/log/skyring
 /srv/salt/*
-/srv/salt/_modules/*
 %{_unitdir}/%{pkg_name}.service
 %config(noreplace) %{_sysconfdir}/sysconfig/%{pkg_name}
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/skyring/httpd/conf.d/graphite-web.conf
