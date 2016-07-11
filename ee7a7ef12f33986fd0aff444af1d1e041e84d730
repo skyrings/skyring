@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_593727ff",
+        "filename": "skyring.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1008469
+      },
+      "writtenOn": "2016-07-11T17:57:26Z",
+      "side": 1,
+      "message": "I think this should simply be \"install -Dm 0755 skyring-setup.sh $RPM_BUILD_ROOT%{_sbindir}/skyring-setup\", and then remove skyring-setup.sh from /usr/share.",
+      "revId": "ee7a7ef12f33986fd0aff444af1d1e041e84d730",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
