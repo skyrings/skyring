@@ -289,25 +289,40 @@ func SyncNodeUtilization(ctxt string, node models.Node, time_stamp_str string) {
 	if err := collection.Find(bson.M{"nodeid": node.NodeId}).All(&slus); err != nil {
 		if err != mgo.ErrNotFound {
 			logger.Get().Error("%s - Could not fetch slus of node %v.Error %v", ctxt, node.Hostname, err)
-			return
+		}
+	} else {
+		for _, slu := range slus {
+			if storageUsageTimeStamp != "" && slu.Usage.UpdatedAt == "" {
+				storageUsageTimeStamp = ""
+			}
+			storageTotal = storageTotal + slu.Usage.Total
+			storageUsed = storageUsed + slu.Usage.Used
+		}
+
+		var storageUsagePercent float64
+		if storageTotal != 0 {
+			storageUsagePercent = float64(storageUsed*100) / float64(storageTotal)
+		}
+		UpdateMetricToTimeSeriesDb(ctxt, storageUsagePercent, time_stamp_str, fmt.Sprintf("%s%s.%s", table_name, monitoring.STORAGE_UTILIZATION, monitoring.PERCENT_USED))
+		UpdateMetricToTimeSeriesDb(ctxt, float64(storageUsed), time_stamp_str, fmt.Sprintf("%s%s.%s", table_name, monitoring.STORAGE_UTILIZATION, monitoring.USED_SPACE))
+		UpdateMetricToTimeSeriesDb(ctxt, float64(storageTotal), time_stamp_str, fmt.Sprintf("%s%s.%s", table_name, monitoring.STORAGE_UTILIZATION, monitoring.TOTAL_SPACE))
+		var Node models.Node
+		Node.Utilizations = make(map[string]models.Utilization)
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		if err := coll.Find(bson.M{"nodeid": node.NodeId}).One(&Node); err == nil {
+			Node.Utilizations["storageusage"] = models.Utilization{
+				Used:        storageUsed,
+				Total:       storageTotal,
+				PercentUsed: storageUsagePercent,
+				UpdatedAt:   storageUsageTimeStamp,
+			}
+			if coll.Update(
+				bson.M{"nodeid": node.NodeId},
+				bson.M{"$set": bson.M{"utilizations": Node.Utilizations}}); err != nil {
+				logger.Get().Warning("%s - Failed to update slu utilizations of node %v to db.Error %v", ctxt, node.Hostname, err)
+			}
 		}
 	}
-	for _, slu := range slus {
-		if storageUsageTimeStamp != "" && slu.Usage.UpdatedAt == "" {
-			storageUsageTimeStamp = ""
-		}
-		storageTotal = storageTotal + slu.Usage.Total
-		storageUsed = storageUsed + slu.Usage.Used
-	}
-
-	var storageUsagePercent float64
-	if storageTotal != 0 {
-		storageUsagePercent = float64(storageUsed*100) / float64(storageTotal)
-	}
-	UpdateMetricToTimeSeriesDb(ctxt, storageUsagePercent, time_stamp_str, fmt.Sprintf("%s%s.%s", table_name, monitoring.STORAGE_UTILIZATION, monitoring.PERCENT_USED))
-	UpdateMetricToTimeSeriesDb(ctxt, float64(storageUsed), time_stamp_str, fmt.Sprintf("%s%s.%s", table_name, monitoring.STORAGE_UTILIZATION, monitoring.USED_SPACE))
-	UpdateMetricToTimeSeriesDb(ctxt, float64(storageTotal), time_stamp_str, fmt.Sprintf("%s%s.%s", table_name, monitoring.STORAGE_UTILIZATION, monitoring.TOTAL_SPACE))
-
 	/*
 		Get memory statistics
 	*/
@@ -345,6 +360,22 @@ func SyncNodeUtilization(ctxt string, node models.Node, time_stamp_str string) {
 	memoryFetchTimeStamp := prevUtilization.UpdatedAt
 	if mPerUsageFetchSuccess && memTotalFetchSuccess && memUsedSuccess {
 		memoryFetchTimeStamp = time.Now().String()
+		var Node models.Node
+		Node.Utilizations = make(map[string]models.Utilization)
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		if err := coll.Find(bson.M{"nodeid": node.NodeId}).One(&Node); err == nil {
+			Node.Utilizations["memoryusage"] = models.Utilization{
+				Used:        int64(memory_used),
+				Total:       int64(memory_total),
+				PercentUsed: memory_usage_percent,
+				UpdatedAt:   memoryFetchTimeStamp,
+			}
+			if coll.Update(
+				bson.M{"nodeid": node.NodeId},
+				bson.M{"$set": bson.M{"utilizations": Node.Utilizations}}); err != nil {
+				logger.Get().Warning("%s - Failed to update memory utilizations of node %v to db.Error %v", ctxt, node.Hostname, err)
+			}
+		}
 	}
 
 	/*
@@ -360,16 +391,25 @@ func SyncNodeUtilization(ctxt string, node models.Node, time_stamp_str string) {
 	var cpu_user float64
 	if resource_name_error == nil {
 		cpu_user, cpuUserFetchSuccess = FetchStatFromGraphiteWithErrorIndicate(ctxt, node.Hostname, resource_name)
-		if !cpuUserFetchSuccess {
-			cpu_user = prevUtilization.PercentUsed
-			cpuPercentUserFetchTimeStamp = prevUtilization.UpdatedAt
-		} else {
+		if cpuUserFetchSuccess {
 			cpuPercentUserFetchTimeStamp = time.Now().String()
+			var Node models.Node
+			Node.Utilizations = make(map[string]models.Utilization)
+			coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+			if err := coll.Find(bson.M{"nodeid": node.NodeId}).One(&Node); err == nil {
+				Node.Utilizations["cpuusage"] = models.Utilization{
+					Used:        int64(cpu_user),
+					Total:       int64(100),
+					PercentUsed: cpu_user,
+					UpdatedAt:   cpuPercentUserFetchTimeStamp,
+				}
+				if coll.Update(
+					bson.M{"nodeid": node.NodeId},
+					bson.M{"$set": bson.M{"utilizations": Node.Utilizations}}); err != nil {
+					logger.Get().Warning("%s - Failed to update cpu utilizations of node %v to db.Error %v", ctxt, node.Hostname, err)
+				}
+			}
 		}
-	} else {
-		cpu_user = prevUtilization.PercentUsed
-		cpuPercentUserFetchTimeStamp = prevUtilization.UpdatedAt
-		logger.Get().Warning("%s - Failed to fetch cpu statistics from %v.Error %v", ctxt, node.Hostname, resource_name_error)
 	}
 
 	/*
@@ -406,6 +446,22 @@ func SyncNodeUtilization(ctxt string, node models.Node, time_stamp_str string) {
 
 	if swapUsedFetchSuccess && swapUsagePerFetchSuccess && swapTotalFetchSuccess {
 		swapFetchTimeStamp = time.Now().String()
+		var Node models.Node
+		Node.Utilizations = make(map[string]models.Utilization)
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		if err := coll.Find(bson.M{"nodeid": node.NodeId}).One(&Node); err == nil {
+			Node.Utilizations["swapusage"] = models.Utilization{
+				Used:        int64(swap_used),
+				Total:       int64(swap_total),
+				PercentUsed: swap_usage_percent,
+				UpdatedAt:   swapFetchTimeStamp,
+			}
+			if coll.Update(
+				bson.M{"nodeid": node.NodeId},
+				bson.M{"$set": bson.M{"utilizations": Node.Utilizations}}); err != nil {
+				logger.Get().Warning("%s - Failed to update swap utilizations of node %v to db.Error %v", ctxt, node.Hostname, err)
+			}
+		}
 	}
 
 	//Network used
@@ -458,46 +514,23 @@ func SyncNodeUtilization(ctxt string, node models.Node, time_stamp_str string) {
 
 	if nwPercentSuccess && nwBandwidthSuccess && nwUsedFetchSuccess {
 		nwFetchTimeStamp = time.Now().String()
-	}
+		var Node models.Node
+		Node.Utilizations = make(map[string]models.Utilization)
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
+		if err := coll.Find(bson.M{"nodeid": node.NodeId}).One(&Node); err == nil {
+			Node.Utilizations["networkusage"] = models.Utilization{
+				Used:        int64(nwUsed),
+				Total:       int64(nwBandwidth),
+				PercentUsed: nwPercentUsage,
+				UpdatedAt:   nwFetchTimeStamp,
+			}
+			if coll.Update(
+				bson.M{"nodeid": node.NodeId},
+				bson.M{"$set": bson.M{"utilizations": Node.Utilizations}}); err != nil {
+				logger.Get().Warning("%s - Failed to update network utilizations of node %v to db.Error %v", ctxt, node.Hostname, err)
+			}
+		}
 
-	coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-	utilizations := map[string]models.Utilization{
-		"memoryusage": {
-			Used:        int64(memory_used),
-			Total:       int64(memory_total),
-			PercentUsed: memory_usage_percent,
-			UpdatedAt:   memoryFetchTimeStamp,
-		},
-		"cpuusage": {
-			Used:        int64(cpu_user),
-			Total:       int64(100),
-			PercentUsed: cpu_user,
-			UpdatedAt:   cpuPercentUserFetchTimeStamp,
-		},
-		"storageusage": {
-			Used:        storageUsed,
-			Total:       storageTotal,
-			PercentUsed: storageUsagePercent,
-			UpdatedAt:   storageUsageTimeStamp,
-		},
-		"swapusage": {
-			Used:        int64(swap_used),
-			Total:       int64(swap_total),
-			PercentUsed: swap_usage_percent,
-			UpdatedAt:   swapFetchTimeStamp,
-		},
-		"networkusage": {
-			Used:        int64(nwUsed),
-			Total:       int64(nwBandwidth),
-			PercentUsed: nwPercentUsage,
-			UpdatedAt:   nwFetchTimeStamp,
-		},
-	}
-
-	if coll.Update(
-		bson.M{"nodeid": node.NodeId},
-		bson.M{"$set": bson.M{"utilizations": utilizations}}); err != nil {
-		logger.Get().Warning("%s - Failed to update memory and cpu utilizations of node %v to db.Error %v", ctxt, node.Hostname, err)
 	}
 
 	// Aggregate disk read
