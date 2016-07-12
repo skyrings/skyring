@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_57c7eb97",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-07-12T13:38:23Z",
+      "side": 1,
+      "message": "Summary Calculation handled below in line 1823 and stats fetching is done in bigfin",
+      "parentUuid": "baa041b7_b00088ac",
+      "range": {
+        "startLine": 1494,
+        "startChar": 9,
+        "endLine": 1494,
+        "endChar": 36
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_5cd6fc27",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 3
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_fc3f1023",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 2294,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-07-12T13:38:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_5cd6fc27",
+      "range": {
+        "startLine": 2294,
+        "startChar": 7,
+        "endLine": 2294,
+        "endChar": 21
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_1ce074f9",
         "filename": "apps/skyring/nodes.go",
         "patchSetId": 3
@@ -154,6 +202,30 @@
       "writtenOn": "2016-07-09T10:52:52Z",
       "side": 1,
       "message": "do we really need to do this here?",
+      "range": {
+        "startLine": 1433,
+        "startChar": 8,
+        "endLine": 1436,
+        "endChar": 22
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_7c8f8023",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-07-12T13:38:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_1ce074f9",
       "range": {
         "startLine": 1433,
         "startChar": 8,
@@ -189,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_f7495f32",
+        "filename": "apps/skyring/nodes.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 1652,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-07-12T13:38:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_3cdd7842",
+      "range": {
+        "startLine": 1649,
+        "startChar": 1,
+        "endLine": 1652,
+        "endChar": 54
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_7cbae0e2",
         "filename": "apps/skyring/storage-profile.go",
         "patchSetId": 3
@@ -200,6 +296,30 @@
       "writtenOn": "2016-07-09T10:52:52Z",
       "side": 1,
       "message": "I don\u0027t think this is required",
+      "range": {
+        "startLine": 228,
+        "startChar": 23,
+        "endLine": 228,
+        "endChar": 34
+      },
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_bcad088a",
+        "filename": "apps/skyring/storage-profile.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-07-12T13:38:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_7cbae0e2",
       "range": {
         "startLine": 228,
         "startChar": 23,
@@ -240,6 +360,24 @@
       "writtenOn": "2016-07-11T05:58:40Z",
       "side": 1,
       "message": "I like this idea and there should be a proper trace logged for this to mention what actually happened ...",
+      "parentUuid": "baa041b7_dcc9ec7a",
+      "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_dc3a0c34",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-07-12T13:38:23Z",
+      "side": 1,
+      "message": "Yes it is like that with this patch.",
       "parentUuid": "baa041b7_dcc9ec7a",
       "revId": "e17cf7d323a05dfc44439663a9ce9dd83fb528df",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
