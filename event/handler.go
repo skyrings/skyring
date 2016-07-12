@@ -452,7 +452,10 @@ func node_lost_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 			" count for event: %s", ctxt, event.EventId.String())
 		return event, err
 	}
-
+	app := skyring.GetApp()
+	if err := app.RouteProviderEvents(ctxt, event); err != nil {
+		logger.Get().Error("%s-Event:%s could not be handled for node: %s. error: %v", ctxt, event.Name, event.NodeName, err)
+	}
 	return event, nil
 }
 
