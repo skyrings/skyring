@@ -131,7 +131,7 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
 install -D skyring $RPM_BUILD_ROOT/usr/bin/skyring
 install -Dm 0644 conf/sample/graphite-web.conf.sample $RPM_BUILD_ROOT/etc/skyring/httpd/conf.d/graphite-web.conf
-install -Dm 0644 conf/sample/skyring-web.conf.sample $RPM_BUILD_ROOT/etc/httpd/conf.d/skyring-web.conf
+install -DZm 0644 conf/sample/skyring-web.conf.sample $RPM_BUILD_ROOT/etc/httpd/conf.d/skyring-web.conf
 install -Dm 0644 conf/sample/carbon.conf.sample $RPM_BUILD_ROOT/etc/skyring/carbon/carbon.conf
 install -Dm 0644 conf/sample/storage-schemas.conf.sample $RPM_BUILD_ROOT/etc/skyring/carbon/storage-schemas.conf
 install -m 755 -d $RPM_BUILD_ROOT/usr/share/skyring/setup
