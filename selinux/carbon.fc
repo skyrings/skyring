@@ -11,3 +11,5 @@
 /var/log/carbon(/.*)?	gen_context(system_u:object_r:carbon_log_t,s0)
 
 /var/run/carbon-(aggregator|cache)\.pid		gen_context(system_u:object_r:carbon_var_run_t,s0)
+
+/var/log/graphite-web(/.*)?     gen_context(system_u:object_r:httpd_log_t,s0)

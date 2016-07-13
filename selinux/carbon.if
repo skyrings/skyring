@@ -38,3 +38,35 @@ interface(`carbon_exec',`
 	corecmd_search_bin($1)
 	can_exec($1, carbon_exec_t)
 ')
+
+########################################
+## <summary>
+##	http stub interface.  No access allowed.
+## </summary>
+## <param name="domain" unused="true">
+##	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+#
+interface(`carbon_stub_httpd',`
+	gen_require(`
+		type httpd_t;
+	')
+')
+
+########################################
+## <summary>
+##	lib_t stub interface.  No access allowed.
+## </summary>
+## <param name="domain" unused="true">
+##	<summary>
+##	Domain allowed access
+##	</summary>
+## </param>
+#
+interface(`carbon_stub_lib',`
+	gen_require(`
+		type lib_t;
+	')
+')
