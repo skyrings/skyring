@@ -198,7 +198,6 @@ func start() {
 	// Negroni
 	n := negroni.New(
 		negroni.NewRecovery(),
-		negroni.NewLogger(),
 		negroni.NewStatic(http.Dir(staticFileDir)),
 	)
 	//Add the logging context middleware
