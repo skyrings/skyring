@@ -137,7 +137,7 @@ install -Dm 0644 conf/sample/storage-schemas.conf.sample $RPM_BUILD_ROOT/etc/sky
 install -m 755 -d $RPM_BUILD_ROOT/usr/share/skyring/setup
 install -Dm 755 skyring-pre.sh $RPM_BUILD_ROOT/usr/bin/skyring-pre.sh
 install -Dm 755 skyring-setup.sh $RPM_BUILD_ROOT%{_sbindir}/skyring-setup
-install -Dm 0644 conf/sample/skyring_logrotate.conf.sample $RPM_BUILD_ROOT/etc/logrotate.d/skyring
+install -Dm 0644 conf/sample/skyring_logrotate.conf.sample $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 install -Dm 0644 conf/sample/skyring.conf.sample $RPM_BUILD_ROOT/etc/skyring/skyring.conf
 install -Dm 0644 conf/sample/authentication.conf.sample $RPM_BUILD_ROOT/etc/skyring/authentication.conf
 install -Dm 0644 conf/skyring_salt_master.conf $RPM_BUILD_ROOT/etc/salt/master.d/skyring.conf
@@ -259,7 +259,7 @@ fi
 if [ -e /etc/carbon/storage-schemas.conf.orig -a -h /etc/carbon/storage-schemas.conf -a ! -e "`readlink /etc/carbon/storage-schemas.conf`" ] ; then
  mv -f /etc/carbon/storage-schemas.conf.orig /etc/carbon/storage-schemas.conf
 fi
-rm -f /etc/logrotate.d/skyring
+rm -f /etc/logrotate.d/%{name}
 
 
 %triggerin -- graphite-web
@@ -358,7 +358,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %config(noreplace) %{_sysconfdir}/salt/master.d/skyring.conf
 %config(noreplace) %{_sysconfdir}/skyring/about.conf
 %config(noreplace) %{_sysconfdir}/skyring/skyring.evt
-%config(noreplace) %{_sysconfdir}/logrotate.d/skyring
+%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %doc README.md
 %{_mandir}/man8/skyring.8.gz
 
