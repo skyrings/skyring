@@ -137,6 +137,8 @@ optional_policy(`
 ')
 
 optional_policy(`
-	salt_stub_lvm()
+	skyring_stub_lvm()
 	allow skyring_t lvm_t:dbus send_msg;
 ')
+
+files_list_var(skyring_t)
