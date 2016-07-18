@@ -22,6 +22,30 @@
       "revId": "6e7953793050a71bd12f0be3b0109d082a1cb416",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_b8cdf432",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-07-18T10:18:26Z",
+      "side": 1,
+      "message": "Anmol, what would be deafult value coming from DB first time? a blank string?\nIf I understand correct, the data available means, all three fields valid data and that time you want it to be set as time.Now(). This seems fine to me. \nThis way next time on-wards DB as well would have valid time value and if new data points available we would that with current time.\n\nLooks fine to me..",
+      "parentUuid": "baa041b7_3d01d638",
+      "range": {
+        "startLine": 368,
+        "startChar": 6,
+        "endLine": 368,
+        "endChar": 27
+      },
+      "revId": "6e7953793050a71bd12f0be3b0109d082a1cb416",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
