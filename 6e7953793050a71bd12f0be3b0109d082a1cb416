@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_3d01d638",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-07-18T07:24:38Z",
+      "side": 1,
+      "message": "As we had discussed before, this seems to be a dead code. You can remove it. And there\u0027s an issue here that the updated at always remains empty as its never initialized to time.Now().String().\n\nSo, as part of this patch I think it would be nice if you fix it before we start depending on it somewhere.\n\nSo, ideally according to me, what you could do is, intialize storageUsageTimeStamp to value existing already(in db probably using something like node.Utilizations[\"storageusage\"].UpdatedAt) and then if utilizations of all osds from processing node are available, update it to time.Now().String().\n\nAnd finally as it is currently you\u0027ll use storageUsageTimeStamp to update the UpdatedAt field\n\n\n@Shubhendu, Is this ok?",
+      "range": {
+        "startLine": 368,
+        "startChar": 6,
+        "endLine": 368,
+        "endChar": 27
+      },
+      "revId": "6e7953793050a71bd12f0be3b0109d082a1cb416",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
