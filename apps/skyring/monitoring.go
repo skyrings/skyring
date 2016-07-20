@@ -15,6 +15,7 @@ package skyring
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/gorilla/mux"
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
@@ -27,6 +28,7 @@ import (
 	"github.com/skyrings/skyring-common/utils"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+
 	"io"
 	"io/ioutil"
 	"math"
@@ -430,10 +432,14 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 
 	disk_reads = AverageAndUpdateDb(ctxt, disk_reads, disk_reads_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.READ)
 	disk_writes = AverageAndUpdateDb(ctxt, disk_writes, disk_writes_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
-	UpdateMetricToTimeSeriesDb(ctxt, disk_reads+disk_writes, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+	if disk_reads_count > 0 && disk_writes_count > 0 {
+		UpdateMetricToTimeSeriesDb(ctxt, disk_reads+disk_writes, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+	}
 
-	UpdateMetricToTimeSeriesDb(ctxt, cluster_memory_used, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
-	UpdateMetricToTimeSeriesDb(ctxt, cluster_memory_total, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.TOTAL_SPACE)
+	if cluster_memory_total > 0 {
+		UpdateMetricToTimeSeriesDb(ctxt, cluster_memory_used, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
+		UpdateMetricToTimeSeriesDb(ctxt, cluster_memory_total, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.TOTAL_SPACE)
+	}
 	AverageAndUpdateDb(ctxt, cluster_cpu_user, len(nodes), time_stamp_str, table_name+monitoring.CPU_USER)
 	AverageAndUpdateDb(ctxt, latency, latency_count, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
 
@@ -463,17 +469,20 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 
 	cluster_interface_rx = AverageAndUpdateDb(ctxt, cluster_interface_rx, cluster_interface_rx_count, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.RX)
 	cluster_interface_tx = AverageAndUpdateDb(ctxt, cluster_interface_tx, cluster_interface_tx_count, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.TX)
-	UpdateMetricToTimeSeriesDb(ctxt, cluster_interface_rx+cluster_interface_tx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
-
-	if cluster_memory_total != 0.0 {
-		net_memory_usage_percentage = (cluster_memory_used * 100) / cluster_memory_total
+	if cluster_interface_rx_count > 0 && cluster_interface_tx_count > 0 {
+		UpdateMetricToTimeSeriesDb(ctxt, cluster_interface_rx+cluster_interface_tx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
 	}
+
 	hostname := conf.SystemConfig.TimeSeriesDBConfig.Hostname
 	port := conf.SystemConfig.TimeSeriesDBConfig.DataPushPort
-	memory_percent_table := table_name + monitoring.MEMORY + "-" + monitoring.USAGE_PERCENT
-	if err = GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: strconv.FormatFloat(net_memory_usage_percentage, 'E', -1, 64)}}, hostname, port); err != nil {
-		logger.Get().Warning("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
+	if cluster_memory_total != 0.0 {
+		net_memory_usage_percentage = (cluster_memory_used * 100) / cluster_memory_total
+		memory_percent_table := table_name + monitoring.MEMORY + "-" + monitoring.USAGE_PERCENT
+		if err = GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: strconv.FormatFloat(net_memory_usage_percentage, 'E', -1, 64)}}, hostname, port); err != nil {
+			logger.Get().Warning("%s - Error pushing cluster memory utilization.Err %v", ctxt, err)
+		}
 	}
+
 	return
 }
 
@@ -1562,14 +1571,16 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		percentSystemUsed = (float64(net_cluster_used*100) / float64(net_cluster_total))
 	}
 	system.Usage = models.Utilization{Used: net_cluster_used, Total: net_cluster_total, PercentUsed: percentSystemUsed, UpdatedAt: time.Now().String()}
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{fmt.Sprintf("%s%s.%s", table_name, monitoring.SYSTEM_UTILIZATION, monitoring.USED_SPACE): {time_stamp_str: strconv.FormatInt(system.Usage.Used, 10)}}, hostname, port); err != nil {
-		logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
-	}
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{fmt.Sprintf("%s%s.%s", table_name, monitoring.SYSTEM_UTILIZATION, monitoring.TOTAL_SPACE): {time_stamp_str: strconv.FormatInt(system.Usage.Total, 10)}}, hostname, port); err != nil {
-		logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
-	}
-	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{fmt.Sprintf("%s%s.%s", table_name, monitoring.SYSTEM_UTILIZATION, monitoring.PERCENT_USED): {time_stamp_str: strconv.FormatFloat(percentSystemUsed, 'E', -1, 64)}}, hostname, port); err != nil {
-		logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
+	if net_cluster_total != 0 {
+		if err := GetMonitoringManager().PushToDb(map[string]map[string]string{fmt.Sprintf("%s%s.%s", table_name, monitoring.SYSTEM_UTILIZATION, monitoring.USED_SPACE): {time_stamp_str: strconv.FormatInt(system.Usage.Used, 10)}}, hostname, port); err != nil {
+			logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
+		}
+		if err := GetMonitoringManager().PushToDb(map[string]map[string]string{fmt.Sprintf("%s%s.%s", table_name, monitoring.SYSTEM_UTILIZATION, monitoring.TOTAL_SPACE): {time_stamp_str: strconv.FormatInt(system.Usage.Total, 10)}}, hostname, port); err != nil {
+			logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
+		}
+		if err := GetMonitoringManager().PushToDb(map[string]map[string]string{fmt.Sprintf("%s%s.%s", table_name, monitoring.SYSTEM_UTILIZATION, monitoring.PERCENT_USED): {time_stamp_str: strconv.FormatFloat(percentSystemUsed, 'E', -1, 64)}}, hostname, port); err != nil {
+			logger.Get().Warning("%s - Error pushing cluster utilization.Err %v", ctxt, err)
+		}
 	}
 
 	systemthresholds := monitoring.GetSystemDefaultThresholdValues()
@@ -1593,25 +1604,33 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		system.ProviderMonitoringDetails = otherProvidersDetails
 		netDiskRead = AverageAndUpdateDb(ctxt, netDiskRead, netDiskReadCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.READ)
 		netDiskWrite = AverageAndUpdateDb(ctxt, netDiskWrite, netDiskWriteCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
-		UpdateMetricToTimeSeriesDb(ctxt, netDiskRead+netDiskWrite, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+		if netDiskReadCount > 0 && netDiskWriteCount > 0 {
+			UpdateMetricToTimeSeriesDb(ctxt, netDiskRead+netDiskWrite, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+		}
 
-		UpdateMetricToTimeSeriesDb(ctxt, net_memory_used, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
-		UpdateMetricToTimeSeriesDb(ctxt, net_memory_total, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.TOTAL_SPACE)
+		if net_memory_total > 0.0 {
+			UpdateMetricToTimeSeriesDb(ctxt, net_memory_used, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
+			UpdateMetricToTimeSeriesDb(ctxt, net_memory_total, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.TOTAL_SPACE)
+		}
+
 		AverageAndUpdateDb(ctxt, cluster_cpu_user, cluster_cpu_user_count, time_stamp_str, table_name+monitoring.CPU_USER)
 		AverageAndUpdateDb(ctxt, latency, latencyCount, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
 
 		netIStatRx = AverageAndUpdateDb(ctxt, netIStatRx, netIStatRxCount, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.RX)
 		netIStatTx = AverageAndUpdateDb(ctxt, netIStatTx, netIStatTxCount, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.TX)
-		UpdateMetricToTimeSeriesDb(ctxt, netIStatRx+netIStatTx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
+		if netIStatRxCount > 0 && netIStatTxCount > 0 {
+			UpdateMetricToTimeSeriesDb(ctxt, netIStatRx+netIStatTx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
+		}
 
 		var memory_percent float64
 		if net_memory_total > 0.0 {
 			memory_percent = (net_memory_used * 100) / net_memory_total
+			memory_percent_table := table_name + monitoring.MEMORY + "-" + monitoring.USAGE_PERCENT
+			if err := GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: strconv.FormatFloat(memory_percent, 'E', -1, 64)}}, hostname, port); err != nil {
+				logger.Get().Warning("%s - Error pushing memory utilization.Err %v", ctxt, err)
+			}
 		}
-		memory_percent_table := table_name + monitoring.MEMORY + "-" + monitoring.USAGE_PERCENT
-		if err := GetMonitoringManager().PushToDb(map[string]map[string]string{memory_percent_table: {time_stamp_str: strconv.FormatFloat(memory_percent, 'E', -1, 64)}}, hostname, port); err != nil {
-			logger.Get().Warning("%s - Error pushing memory utilization.Err %v", ctxt, err)
-		}
+
 		systemUtilizations := map[string]interface{}{
 			"memoryusage": models.Utilization{
 				Used:        int64(net_memory_used),
