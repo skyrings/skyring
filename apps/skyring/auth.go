@@ -47,7 +47,7 @@ func AddDefaultUser() error {
 		}
 		return err
 	}
-
+	logger.Get().Info("Default user created sucessfully")
 	return nil
 }
 
