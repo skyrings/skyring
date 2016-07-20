@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_a65f0e40",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-07-20T09:52:15Z",
+      "side": 1,
+      "message": "The counts are reflective of how many counts were fetched successfully. They are passed by reference and are hence updated appropriately based on success or failure to reflect the success count.",
+      "parentUuid": "baa041b7_464842b3",
+      "range": {
+        "startLine": 435,
+        "startChar": 1,
+        "endLine": 435,
+        "endChar": 49
+      },
+      "revId": "a3d39c5fd65884a1c8fd85fea75fda7ca4c00c08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_26c89e21",
         "filename": "apps/skyring/monitoring.go",
         "patchSetId": 1
@@ -59,6 +83,30 @@
       "writtenOn": "2016-07-20T09:33:28Z",
       "side": 1,
       "message": "same here",
+      "range": {
+        "startLine": 472,
+        "startChar": 1,
+        "endLine": 472,
+        "endChar": 67
+      },
+      "revId": "a3d39c5fd65884a1c8fd85fea75fda7ca4c00c08",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_6655861c",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-07-20T09:52:15Z",
+      "side": 1,
+      "message": "same as above",
+      "parentUuid": "baa041b7_26c89e21",
       "range": {
         "startLine": 472,
         "startChar": 1,
