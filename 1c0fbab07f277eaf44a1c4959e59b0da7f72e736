@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_3ba43749",
+        "filename": "apps/skyring/sync.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-07-20T05:38:38Z",
+      "side": 1,
+      "message": "Before every update to db, please check if count as in disk_writes_count in this case is more than 0 before calling UpdateMetricToTimeSeriesDb so that we can evade the issue of 0s being inserted into graphite if there\u0027s actually no data available",
+      "range": {
+        "startLine": 327,
+        "startChar": 1,
+        "endLine": 327,
+        "endChar": 27
+      },
+      "revId": "1c0fbab07f277eaf44a1c4959e59b0da7f72e736",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
