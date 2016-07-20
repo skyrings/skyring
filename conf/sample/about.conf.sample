@@ -1,6 +1,6 @@
 {
     "productname": "Skyring",
-    "productversion": "0.0.18",
+    "productversion": "0.0.35",
     "dbsoftware": "Mongo DB",
     "dbsoftwareversion": "2.6.11",
     "monitoringsoftware": "Graphite",
