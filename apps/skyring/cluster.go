@@ -799,7 +799,6 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 					}
 					return
 				}
-				DeleteClusterSchedule(*uuid)
 				if err := logAuditEvent(EventTypes["CLUSTER_FORGOT"],
 					fmt.Sprintf("Forgot cluster: %s", clusterName),
 					fmt.Sprintf("Forgot cluster: %s", clusterName),
@@ -1236,6 +1235,9 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 				}
 				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
 
+				t.UpdateStatus("Disabling monitoring on the cluster")
+				DeleteClusterSchedule(*cluster_id)
+
 				for _, node := range nodes {
 					t.UpdateStatus("Disabling node: %s", node.Hostname)
 					ok, err := GetCoreNodeManager().DisableNode(node.Hostname, ctxt)
@@ -1506,6 +1508,12 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 						logger.Get().Error("%s- Unable to log manage cluster event. Error: %v", ctxt, err)
 					}
 					return
+				}
+				cluster, clusterFetchError := GetCluster(cluster_id)
+				if clusterFetchError != nil {
+					logger.Get().Error("%s - Unable to fetch the cluster with name %s", ctxt, clusterName)
+				} else {
+					ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
 				}
 				if err := logAuditEvent(EventTypes["CLUSTER_MANAGE"],
 					fmt.Sprintf("Managed back cluster: %s", clusterName),
