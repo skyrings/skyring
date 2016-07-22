@@ -926,7 +926,7 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 	defer sessionCopy.Close()
 
 	params := r.URL.Query()
-	cluster_status_str := params.Get("status")
+	cluster_status := r.URL.Query()["status"]
 	alarmStatus := r.URL.Query()["alarmstatus"]
 
 	var filter bson.M = make(map[string]interface{})
@@ -956,17 +956,22 @@ func (a *App) GET_Clusters(w http.ResponseWriter, r *http.Request) {
 
 	nearFull := params.Get("near_full")
 
-	if cluster_status_str != "" {
-		switch cluster_status_str {
-		case "ok":
-			filter["status"] = models.CLUSTER_STATUS_OK
-		case "warning":
-			filter["status"] = models.CLUSTER_STATUS_WARN
-		case "error":
-			filter["status"] = models.CLUSTER_STATUS_ERROR
-		default:
-			HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid status %s for cluster", cluster_status_str))
-			return
+	if len(cluster_status) != 0 {
+		var arr []interface{}
+		for _, status := range cluster_status {
+			if status == "" {
+				continue
+			}
+			if s, ok := ClusterStatus[status]; !ok {
+				logger.Get().Error("%s-Un-supported query param: %v", ctxt, cluster_status)
+				HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Un-supported query param: %s", cluster_status))
+				return
+			} else {
+				arr = append(arr, bson.M{"status": s})
+			}
+		}
+		if len(arr) != 0 {
+			filter["$or"] = arr
 		}
 	}
 
