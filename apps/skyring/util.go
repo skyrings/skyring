@@ -48,6 +48,13 @@ var Event_severity = map[string]models.AlarmStatus{
 	"cleared":       models.ALARM_STATUS_CLEARED,
 }
 
+var ClusterStatus = map[string]models.AlarmStatus{
+	"ok":      models.CLUSTER_STATUS_OK,
+	"warning": models.CLUSTER_STATUS_WARN,
+	"error":   models.CLUSTER_STATUS_ERROR,
+	"unknown": models.CLUSTER_STATUS_UNKNOWN,
+}
+
 func lockNode(ctxt string, nodeId uuid.UUID, hostname string, operation string) (*lock.AppLock, error) {
 	//lock the node
 	locks := make(map[uuid.UUID]string)
