@@ -6,3 +6,4 @@ if [ $? -ne 0 ] || [ "${USER}" != 'admin' ]; then
 	/bin/mongo skyring --eval 'db.createUser( { "user" : "admin", "pwd": "admin", "roles" : ["readWrite", "dbAdmin", "userAdmin"] })'
     fi
 fi
+sed -i -e 's/^#.*auth = true/auth = true/g' /etc/mongodb.conf
