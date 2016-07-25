@@ -1,27 +1,35 @@
-{% set default_settings = {
-'config': '/etc/collectd.conf',
-        'pkg': 'collectd',
-        'plugindirconfig': '/etc/collectd.d',
-        'service': 'collectd',
-        'TypesDB': ['/usr/share/collectd/types.db'],
-        'moduledirconfig': '/usr/lib64/collectd/',
-        'user': 'root',
-        'group': 'root',
-'collectd': {
-        'pkg': 'collectd',
-        'plugindirconfig': '/etc/collectd.d',
-        'service': 'collectd',
-        'TypesDB': ['/usr/share/collectd/types.db'],
-        'moduledirconfig': '/usr/lib64/collectd/',
-        'user': 'root',
-        'group': 'root',
+
+{% set os_map = salt['grains.filter_by']({
+    'Debian': {
+        'config': '/etc/collectd/collectd.conf',
+        'javalib': '/usr/lib/collectd/java.so',
+        'pkg': 'collectd-core',
+        'moduledirconfig': '/usr/lib/collectd/',
+        'socketgroup': 'skyring-user',
+    },
+    'RedHat': {
         'config': '/etc/collectd.conf',
+        'pkg': 'collectd',
+        'moduledirconfig': '/usr/lib64/collectd/',
+        'socketgroup': 'wheel',
+    },
+}, merge=salt['pillar.get']('collectd:lookup')) %}
+
+{% set default_settings = {
+'collectd': {
         'Hostname': salt['grains.get']('fqdn'),
         'Interval': 10,
         'Timeout': 2,
         'ReadThreads': 5,
-        'FQDNLookup': 'false'
+        'FQDNLookup': 'false',
+        'plugindirconfig': '/etc/collectd.d',
+        'TypesDB': ['/usr/share/collectd/types.db'],
+        'service': 'collectd',
+        'user': 'root',
+        'group': 'root',
 }
 }%}
+{# Merge os_map into settings dictionary #}
+{% do default_settings.collectd.update(os_map) %}
 {# Update settings defaults from pillar data #}
 {% set collectd_settings = salt['pillar.get']('collectd', default=default_settings.collectd, merge=True) %}
