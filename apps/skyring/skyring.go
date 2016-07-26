@@ -64,7 +64,7 @@ const (
 	DefaultMaxAge                 = 86400 * 7
 	DEFAULT_API_PREFIX            = "/api"
 	LoggingCtxt        ContextKey = 0
-	Timeout                       = 10
+	Timeout                       = 30
 )
 
 var (
@@ -681,7 +681,9 @@ func check_task_status(params map[string]interface{}) {
 func check_TaskLastUpdate(task models.AppTask) bool {
 	var defaultTime time.Time
 	lastUpdated := task.LastUpdated
-	if lastUpdated == defaultTime && len(task.StatusList) != 0 {
+	if lastUpdated == defaultTime && len(task.StatusList) == 0 {
+		return false
+	} else if lastUpdated == defaultTime && len(task.StatusList) != 0 {
 		lastUpdated = task.StatusList[len(task.StatusList)-1].Timestamp
 	}
 	duration := int(time.Since(lastUpdated).Minutes())
