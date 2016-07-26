@@ -173,7 +173,7 @@ func drive_add_handler(event models.AppEvent, ctxt string) (models.AppEvent, err
 			cluster_node.Devices = append(cluster_node.Devices, models.ClusterNodeDevice{Name: disk.DevName, FSType: "xfs"})
 			event.EntityId = disk.DiskId
 			event.Tags["DevName"] = disk.DevName
-			event.Tags["size"] = strconv.FormatUint(disk.Size, 10)
+			event.Tags["size"] = strconv.FormatFloat(disk.Size, 'E', -1, 64)
 			event.Tags["Type"] = disk.Type
 		}
 	}
@@ -359,7 +359,7 @@ func drive_remove_handler(event models.AppEvent, ctxt string) (models.AppEvent, 
 		if !exists && !disk.Used {
 			event.EntityId = disk.DiskId
 			event.Tags["DevName"] = disk.DevName
-			event.Tags["DriveSize"] = strconv.FormatUint(disk.Size, 10)
+			event.Tags["DriveSize"] = strconv.FormatFloat(disk.Size, 'E', -1, 64)
 			event.Tags["Type"] = disk.Type
 
 		}
