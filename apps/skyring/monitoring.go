@@ -307,7 +307,7 @@ func UpdateMetricToTimeSeriesDb(ctxt string, mValue float64, time_stamp_str stri
 	hostname := conf.SystemConfig.TimeSeriesDBConfig.Hostname
 	port := conf.SystemConfig.TimeSeriesDBConfig.DataPushPort
 	if err := GetMonitoringManager().PushToDb(map[string]map[string]string{tableName: {time_stamp_str: strconv.FormatFloat(mValue, 'E', -1, 64)}}, hostname, port); err != nil {
-		logger.Get().Warning("%s - Error pushing %s statistics.Err %v", ctxt, tableName, err)
+		logger.Get().Warning("%s - Error pushing %v statistics to %s.Err %v", ctxt, mValue, tableName, err)
 	}
 }
 
@@ -489,7 +489,7 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 func ParseStatFromCollectd(mValue string) (float64, error) {
 	value, valueErr := strconv.ParseFloat(mValue, 64)
 	if valueErr != nil {
-		return 0.0, fmt.Errorf("%v", mValue)
+		return 0.0, fmt.Errorf("Failed to parse stat %s.Error %v", mValue, valueErr)
 	}
 	return value, nil
 }
@@ -1535,7 +1535,11 @@ func ComputeSystemSummary(p map[string]interface{}) {
 			Calculate cpu user utilization
 		*/
 		resource_name = monitoring.CPU_USER
-		cluster_cpu_user = cluster_cpu_user + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &cluster_cpu_user_count)
+		if cpuPercentageUsage, ok := cluster.Utilizations["cpupercentageusage"]; ok {
+			cluster_cpu_user = cluster_cpu_user + cpuPercentageUsage.(float64)
+		} else {
+			cluster_cpu_user_count = cluster_cpu_user_count - 1
+		}
 
 		/*
 			Calculate Latency
