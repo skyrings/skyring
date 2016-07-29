@@ -25,7 +25,7 @@
 %endif
 
 %define pkg_name skyring
-%define pkg_version 0.0.38
+%define pkg_version 1.0.0
 %define pkg_release 1
 
 Name: %{pkg_name}
