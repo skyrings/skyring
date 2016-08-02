@@ -24,9 +24,6 @@ files_pid_file(skyring_var_run_t)
 type skyring_unit_file_t;
 systemd_unit_file(skyring_unit_file_t)
 
-type skyring_custom_port_t;
-corenet_port(skyring_custom_port_t)
-
 ########################################
 #
 # skyring local policy
@@ -77,8 +74,6 @@ corenet_tcp_bind_pki_kra_port(skyring_t)
 corenet_tcp_connect_salt_port(skyring_t)
 corenet_tcp_connect_ssh_port(skyring_t)
 corenet_tcp_connect_xen_port(skyring_t)
-
-allow skyring_t skyring_custom_port_t:tcp_socket name_connect;
 
 dev_read_sysfs(skyring_t)
 dev_read_kmsg(skyring_t)

@@ -56,6 +56,7 @@ info "Setup graphite user"
 /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
 
 chown apache:apache /var/lib/graphite-web/graphite.db
+semanage fcontext -a -t carbon_var_lib_t "/var/lib/carbon(/.*)?"
 systemctl start carbon-cache && systemctl enable carbon-cache
 systemctl start httpd
 
@@ -80,6 +81,7 @@ grep -q "sslEnabled" /etc/skyring/skyring.conf || sed -i -e 's/"config".*{/"conf
 
 echo 'Define host_name' $hostname | cat - /etc/httpd/conf.d/skyring-web.conf > temp && mv -f temp /etc/httpd/conf.d/skyring-web.conf
 restorecon -Rv /etc/httpd
+restorecon -Rv /var
 
 # Start the skyring server
 systemctl enable skyring
