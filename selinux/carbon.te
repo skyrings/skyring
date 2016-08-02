@@ -30,6 +30,9 @@ corenet_port(xinuexpansion3_port_t)
 type xinuexpansion4_port_t;
 corenet_port(xinuexpansion4_port_t)
 
+type xinuexpansion5_port_t;
+corenet_port(xinuexpansion5_port_t)
+
 permissive carbon_t;
 
 ########################################
@@ -62,10 +65,10 @@ corecmd_exec_shell(carbon_t)
 
 corenet_tcp_bind_afs_pt_port(carbon_t)
 corenet_tcp_bind_lmtp_port(carbon_t)
-
 allow carbon_t mailbox_port_t:tcp_socket name_bind;
 allow carbon_t mailbox_port_t:tcp_socket name_connect;
 allow carbon_t xinuexpansion3_port_t:tcp_socket name_bind;
+allow carbon_t xinuexpansion4_port_t:tcp_socket name_bind;
 allow carbon_t xinuexpansion4_port_t:tcp_socket name_bind;
 
 corenet_tcp_bind_generic_node(carbon_t)
@@ -83,3 +86,16 @@ optional_policy(`
 	carbon_stub_lib()
 	dontaudit carbon_t lib_t:dir add_name;
 ')
+
+require {
+	type lib_t;
+	type carbon_t;
+	class dir { remove_name write };
+	class file { write rename create };
+}
+
+# We have to enhance this part later. There is a carbon bug here
+# Carbon creates a temporary file in /usr/lib dir and remove it on flow
+# Until its fixed in carbon we can allow this
+allow carbon_t lib_t:dir { remove_name write };
+allow carbon_t lib_t:file { write rename create };
