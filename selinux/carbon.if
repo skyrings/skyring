@@ -57,6 +57,82 @@ interface(`carbon_stub_httpd',`
 
 ########################################
 ## <summary>
+##	Search carbon lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`carbon_search_lib',`
+	gen_require(`
+		type carbon_var_lib_t;
+	')
+
+	allow $1 carbon_var_lib_t:dir search_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	Read carbon lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`carbon_read_lib_files',`
+	gen_require(`
+		type carbon_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	read_files_pattern($1, carbon_var_lib_t, carbon_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage carbon lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`carbon_manage_lib_files',`
+	gen_require(`
+		type carbon_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_files_pattern($1, carbon_var_lib_t, carbon_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage carbon lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`carbon_manage_lib_dirs',`
+	gen_require(`
+		type carbon_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_dirs_pattern($1, carbon_var_lib_t, carbon_var_lib_t)
+')
+
+########################################
+## <summary>
 ##	lib_t stub interface.  No access allowed.
 ## </summary>
 ## <param name="domain" unused="true">

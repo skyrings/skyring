@@ -343,7 +343,10 @@ interface(`salt_admin',`
 #
 interface(`salt_stub_collectd',`
 	gen_require(`
+		type dmidecode_t;
+		type dmesg_t;
 		type collectd_t;
+		class fifo_file  { read write };
 	')
 ')
 
