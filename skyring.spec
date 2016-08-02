@@ -204,7 +204,7 @@ semanage port -a -t xinuexpansion3_port_t -p tcp 2023 2> /dev/null
 semanage port -a -t skyring_custom_port_t -p tcp 8181 2> /dev/null
 semanage boolean -m collectd_tcp_network_connect --on
 setsebool -P httpd_can_network_connect on
-semanage port -a -p tcp -t afs_pt_port_t 7002
+semanage port -a -p tcp -t afs_pt_port_t 7002 2> /dev/null || :
 
 %post -n salt-selinux
 %_format MODULE %{_datadir}/selinux/packages/salt.pp.bz2
