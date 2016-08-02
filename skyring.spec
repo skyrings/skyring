@@ -59,9 +59,6 @@ Requires: salt-master >= 2015.5.5
 Requires: pytz
 Requires: python-cpopen
 Requires: python-netaddr
-Requires: carbon-selinux
-Requires: %{name}-selinux
-Requires: salt-selinux
 %if ( 0%{?fedora} && 0%{?fedora} > 16 )
 Requires: mongodb-org
 Requires: mongodb-org-server
@@ -74,6 +71,9 @@ Requires: python-carbon
 Requires: python-whisper
 Requires: ceph-installer
 Requires: mod_ssl
+Requires: carbon-selinux
+Requires: %{name}-selinux
+Requires: salt-selinux
 
 %description
 SKYRING is a modern, extensible web-based storage management platform

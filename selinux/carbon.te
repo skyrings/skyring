@@ -30,8 +30,6 @@ corenet_port(xinuexpansion3_port_t)
 type xinuexpansion4_port_t;
 corenet_port(xinuexpansion4_port_t)
 
-permissive carbon_t;
-
 ########################################
 #
 # carbon local policy
