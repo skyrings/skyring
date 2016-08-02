@@ -1342,7 +1342,9 @@ func (a *App) POST_ReSyncClusterSummary(w http.ResponseWriter, r *http.Request) 
 
 func ComputeClusterSummary(cluster models.Cluster, ctxt string) {
 	cSummary := models.ClusterSummary{}
-
+	if cluster.State == models.CLUSTER_STATE_UNMANAGED {
+		return
+	}
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
 
@@ -1473,18 +1475,23 @@ func ComputeSystemSummary(p map[string]interface{}) {
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
-
-	if system.NodesCount, err = util.FetchNodeStatusWiseCounts(nil); err != nil {
+	var unManagedClustersId []uuid.UUID
+	for _, cluster := range clusters {
+		if cluster.State == models.CLUSTER_STATE_UNMANAGED {
+			unManagedClustersId = append(unManagedClustersId, cluster.ClusterId)
+		}
+	}
+	if system.NodesCount, err = util.FetchNodeStatusWiseCounts(bson.M{"clusterid": bson.M{"$nin": unManagedClustersId}}); err != nil {
 		logger.Get().Error("%s - Failed to fetch status wise node counts.Error %v", ctxt, err)
 	}
 
-	sluStatusWiseCounts, err := util.ComputeSluStatusWiseCount(nil, bson.M{"utilizationtype": monitoring.SLU_UTILIZATION, "thresholdseverity": models.CRITICAL})
+	sluStatusWiseCounts, err := util.ComputeSluStatusWiseCount(bson.M{"clusterid": bson.M{"$nin": unManagedClustersId}}, bson.M{"utilizationtype": monitoring.SLU_UTILIZATION, "thresholdseverity": models.CRITICAL})
 	if err != nil {
 		logger.Get().Error("%s - Error getting the slus list. error: %v", ctxt, err)
 	}
 	system.SLUCount = sluStatusWiseCounts
 
-	storageCount, err := util.GetStorageCount(nil)
+	storageCount, err := util.GetStorageCount(bson.M{"clusterid": bson.M{"$nin": unManagedClustersId}})
 	if err != nil {
 		logger.Get().Error("%s - Failed to fetch storage status wise counts.Error %v", ctxt, err)
 	}
@@ -1510,55 +1517,56 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	netDiskWriteCount := len(clusters)
 
 	for _, cluster := range clusters {
+		if cluster.State != models.CLUSTER_STATE_UNMANAGED {
 
-		ComputeClusterSummary(cluster, ctxt)
+			ComputeClusterSummary(cluster, ctxt)
 
-		/*
-			Calculate net cluster utilization
-		*/
-		net_cluster_used = net_cluster_used + cluster.Usage.Used
-		net_cluster_total = net_cluster_total + cluster.Usage.Total
+			/*
+				Calculate net cluster utilization
+			*/
+			net_cluster_used = net_cluster_used + cluster.Usage.Used
+			net_cluster_total = net_cluster_total + cluster.Usage.Total
 
-		/*
-			Calculate Memory Used
-		*/
-		resource_name := monitoring.MEMORY + "-" + monitoring.USED_SPACE
-		net_memory_used = net_memory_used + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &net_memory_used_count)
+			/*
+				Calculate Memory Used
+			*/
+			resource_name := monitoring.MEMORY + "-" + monitoring.USED_SPACE
+			net_memory_used = net_memory_used + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &net_memory_used_count)
 
-		/*
-			Calculate Free Memory
-		*/
-		resource_name = monitoring.MEMORY + "-" + monitoring.TOTAL_SPACE
-		net_memory_total = net_memory_total + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &net_memory_total_count)
+			/*
+				Calculate Free Memory
+			*/
+			resource_name = monitoring.MEMORY + "-" + monitoring.TOTAL_SPACE
+			net_memory_total = net_memory_total + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &net_memory_total_count)
 
-		/*
-			Calculate cpu user utilization
-		*/
-		resource_name = monitoring.CPU_USER
-		cluster_cpu_user = cluster_cpu_user + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &cluster_cpu_user_count)
+			/*
+				Calculate cpu user utilization
+			*/
+			resource_name = monitoring.CPU_USER
+			cluster_cpu_user = cluster_cpu_user + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &cluster_cpu_user_count)
 
-		/*
-			Calculate Latency
-		*/
-		resource_name = monitoring.NETWORK_LATENCY
-		latency = latency + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &latencyCount)
+			/*
+				Calculate Latency
+			*/
+			resource_name = monitoring.NETWORK_LATENCY
+			latency = latency + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &latencyCount)
 
-		// Aggregate disk read
-		resource_name = monitoring.DISK + "-" + monitoring.READ
-		netDiskRead = netDiskRead + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &netDiskReadCount)
+			// Aggregate disk read
+			resource_name = monitoring.DISK + "-" + monitoring.READ
+			netDiskRead = netDiskRead + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &netDiskReadCount)
 
-		// Aggregate disk write
-		resource_name = monitoring.DISK + "-" + monitoring.WRITE
-		netDiskWrite = netDiskWrite + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &netDiskWriteCount)
+			// Aggregate disk write
+			resource_name = monitoring.DISK + "-" + monitoring.WRITE
+			netDiskWrite = netDiskWrite + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &netDiskWriteCount)
 
-		// Aggregate interface rx
-		resource_name = monitoring.INTERFACE + "-" + monitoring.RX
-		netIStatRx = netIStatRx + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &netIStatRxCount)
+			// Aggregate interface rx
+			resource_name = monitoring.INTERFACE + "-" + monitoring.RX
+			netIStatRx = netIStatRx + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &netIStatRxCount)
 
-		// Aggregate interface tx
-		resource_name = monitoring.INTERFACE + "-" + monitoring.TX
-		netIStatTx = netIStatTx + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &netIStatTxCount)
-
+			// Aggregate interface tx
+			resource_name = monitoring.INTERFACE + "-" + monitoring.TX
+			netIStatTx = netIStatTx + FetchStatFromGraphite(ctxt, cluster.Name, resource_name, &netIStatTxCount)
+		}
 	}
 
 	clustersCount, err := util.ComputeClustersStatusWiseCounts()
@@ -1586,7 +1594,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	}
 
 	systemthresholds := monitoring.GetSystemDefaultThresholdValues()
-	net_storage_profile_utilization, err := util.ComputeStorageProfileUtilization(nil, systemthresholds[monitoring.STORAGE_PROFILE_UTILIZATION].Configs)
+	net_storage_profile_utilization, err := util.ComputeStorageProfileUtilization(bson.M{"clusterid": bson.M{"$nin": unManagedClustersId}}, systemthresholds[monitoring.STORAGE_PROFILE_UTILIZATION].Configs)
 	if err != nil {
 		logger.Get().Error("%s - Failed to get storge profile utilization.Error %v", ctxt, err)
 	}
@@ -1609,7 +1617,6 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		if netDiskReadCount > 0 && netDiskWriteCount > 0 {
 			UpdateMetricToTimeSeriesDb(ctxt, netDiskRead+netDiskWrite, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
 		}
-
 		if net_memory_total > 0.0 {
 			UpdateMetricToTimeSeriesDb(ctxt, net_memory_used, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
 			UpdateMetricToTimeSeriesDb(ctxt, net_memory_total, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.TOTAL_SPACE)
@@ -1646,7 +1653,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	}
 	system.UpdatedAt = time.Now().String()
 
-	mostUsedStorages, err := util.GetTopStorageUsage(nil)
+	mostUsedStorages, err := util.GetTopStorageUsage(bson.M{"clusterid": bson.M{"$nin": unManagedClustersId}})
 	if err != nil {
 		logger.Get().Error("%s - Failed to get most used storages.Error %v", ctxt, err)
 	}
