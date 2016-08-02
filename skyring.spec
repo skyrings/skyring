@@ -10,7 +10,7 @@
 %global _format() export %1=""; for x in %{modulenames}; do %1+=%2; %1+=" "; done;
 # Relabel files
 %global skyring_relabel_files() %{_sbindir}/restorecon -R %{_bindir}/skyring %{_prefix}/lib/systemd/system/skyring.* /var/lib/skyring/.* /var/run/\.skyring-event /etc/skyring/ /var/log/skyring /etc/httpd &> /dev/null || :
-%global salt_relabel_files() %{_sbindir}/restorecon -R %{_bindir}/salt* /etc/salt /var/cache/salt /var/log/salt /var/run/salt /srv/salt /usr/lib/systemd/system/salt* /usr/lib/systemd/system/salt-master /usr/bin/salt-minion /usr/bin/salt-master &> /dev/null || :
+%global salt_relabel_files() %{_sbindir}/restorecon -R %{_bindir}/salt* /etc/salt /var /var/cache/salt /var/log/salt /var/run/salt /srv/salt /usr/lib/systemd/system/salt* /usr/lib/systemd/system/salt-master /usr/bin/salt-minion /usr/bin/salt-master &> /dev/null || :
 %global carbon_relabel_files() %{_sbindir}/restorecon -R %{_bindir}/carbon-aggregator %{_bindir}/carbon-cache %{_bindir}/carbon-client %{_bindir}/carbon-relay %{_bindir}/validate-storage-schemas %{_prefix}/lib/systemd/system/carbon* /var/lib/carbon/ /var/log/carbon/ /var/run/carbon-aggregator.pid /var/run/carbon-cache.pid &> /dev/null || :
 
 # Version of distribution SELinux policy package
@@ -59,9 +59,6 @@ Requires: salt-master >= 2015.5.5
 Requires: pytz
 Requires: python-cpopen
 Requires: python-netaddr
-Requires: carbon-selinux
-Requires: %{name}-selinux
-Requires: salt-selinux
 %if ( 0%{?fedora} && 0%{?fedora} > 16 )
 Requires: mongodb-org
 Requires: mongodb-org-server
@@ -74,6 +71,9 @@ Requires: python-carbon
 Requires: python-whisper
 Requires: ceph-installer
 Requires: mod_ssl
+Requires: carbon-selinux
+Requires: %{name}-selinux
+Requires: salt-selinux
 
 %description
 SKYRING is a modern, extensible web-based storage management platform
