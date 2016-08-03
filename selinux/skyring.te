@@ -78,7 +78,7 @@ corenet_tcp_connect_salt_port(skyring_t)
 corenet_tcp_connect_ssh_port(skyring_t)
 corenet_tcp_connect_xen_port(skyring_t)
 
-allow skyring_t skyring_custom_port_t:tcp_socket name_connect;
+allow skyring_t unreserved_port_t:tcp_socket name_connect;
 
 dev_read_sysfs(skyring_t)
 dev_read_kmsg(skyring_t)
