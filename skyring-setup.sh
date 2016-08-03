@@ -56,6 +56,10 @@ info "Setup graphite user"
 /usr/lib/python2.7/site-packages/graphite/manage.py syncdb
 
 chown apache:apache /var/lib/graphite-web/graphite.db
+mkdir /usr/lib/carbon
+chown carbon:carbon /usr/lib/carbon
+semanage fcontext -a -t carbon_var_lib_t "/usr/lib/carbon(/.*)?"
+restorecon -Rv /usr/lib/carbon
 systemctl start carbon-cache && systemctl enable carbon-cache
 systemctl start httpd
 
