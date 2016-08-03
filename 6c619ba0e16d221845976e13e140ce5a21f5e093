@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_0f59fffc",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-08-03T11:38:13Z",
+      "side": 1,
+      "message": "Isn\u0027t this a duplicate of the one at line 1348 to 1350",
+      "range": {
+        "startLine": 1344,
+        "startChar": 1,
+        "endLine": 1346,
+        "endChar": 2
+      },
+      "revId": "6c619ba0e16d221845976e13e140ce5a21f5e093",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
