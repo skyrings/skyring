@@ -16,6 +16,24 @@
       "revId": "2181d269c64dab329a1a657404028074b82cc849",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_50979f39",
+        "filename": "skyring-pre.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-08-04T17:18:26Z",
+      "side": 1,
+      "message": "I feel its done by mistake with test file. Will correct and update the patchset.",
+      "parentUuid": "baa041b7_47aea72e",
+      "revId": "2181d269c64dab329a1a657404028074b82cc849",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
