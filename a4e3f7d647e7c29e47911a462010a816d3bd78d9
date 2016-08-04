@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_3af4fcee",
+        "filename": "selinux/carbon.te",
+        "patchSetId": 7
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1008459
+      },
+      "writtenOn": "2016-08-04T09:34:32Z",
+      "side": 1,
+      "message": "There is a bug. Probably, there should be rule: allow carbon_t xinuexpansion5_port_t:tcp_socket name_bind;",
+      "revId": "a4e3f7d647e7c29e47911a462010a816d3bd78d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
