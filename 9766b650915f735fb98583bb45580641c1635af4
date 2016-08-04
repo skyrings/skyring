@@ -16,6 +16,24 @@
       "revId": "9766b650915f735fb98583bb45580641c1635af4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_1a4ed83a",
+        "filename": "selinux/skyring.te",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-08-04T09:47:26Z",
+      "side": 0,
+      "message": "Port 8181 is not used now by skyring.\nAlso ken request us to remove this port https://review.gerrithub.io/286220 to fix an AVC. In fact it fixes an AVC after we remove this.",
+      "parentUuid": "baa041b7_fada1477",
+      "revId": "9766b650915f735fb98583bb45580641c1635af4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
