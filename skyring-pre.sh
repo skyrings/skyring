@@ -8,4 +8,3 @@ if [ $? -ne 0 ] || [ "${USER}" != 'admin' ]; then
 	eval $cmd
     fi
 fi
-sed -i -e 's/#auth = true/auth = true/g' /etc/mongodb.conf
