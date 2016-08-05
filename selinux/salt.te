@@ -36,6 +36,8 @@ files_type(salt_tmp_t)
 type collectd_conf_t;
 files_config_file(collectd_conf_t)
 
+permissive salt_t;
+
 ########################################
 #
 # salt local policy
