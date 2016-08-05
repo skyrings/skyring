@@ -49,6 +49,12 @@ systemctl enable salt-master
 systemctl start salt-master
 
 # Enable and start MongoDB
+oldpwd=`awk '/password/{print $NF}' /etc/skyring/skyring.conf`
+if [ "${oldpwd}" == '"admin"' ]; then
+    rndpwd=`openssl rand -base64 8`
+    cmd="sed -i -e 's/.*password.*/ \"password\": \"${rndpwd}\"/g' /etc/skyring/skyring.conf"
+    eval $cmd
+fi
 systemctl enable mongod
 systemctl start mongod
 
