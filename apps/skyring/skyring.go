@@ -13,6 +13,7 @@ limitations under the License.
 package skyring
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -145,13 +146,15 @@ func (a *App) StartProviders(configDir string, binDir string) error {
 			}
 
 			confStr, _ := json.Marshal(conf.SystemConfig)
+			enConfStr := make([]byte, base64.StdEncoding.EncodedLen(len(confStr)))
+			base64.StdEncoding.Encode(enConfStr, []byte(confStr))
 			eventTypesStr, _ := json.Marshal(EventTypes)
 			providerConfStr, _ := json.Marshal(config)
 			client, err := pie.StartProviderCodec(
 				jsonrpc.NewClientCodec,
 				os.Stderr,
 				config.Provider.ProviderBinary,
-				string(confStr),
+				string(enConfStr),
 				string(eventTypesStr),
 				string(providerConfStr))
 			if err != nil {
