@@ -24,6 +24,8 @@ files_pid_file(skyring_var_run_t)
 type skyring_unit_file_t;
 systemd_unit_file(skyring_unit_file_t)
 
+permissive skyring_t;
+
 ########################################
 #
 # skyring local policy
