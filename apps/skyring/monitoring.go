@@ -28,16 +28,21 @@ import (
 	"github.com/skyrings/skyring-common/utils"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-
 	"io"
 	"io/ioutil"
 	"math"
 	"net/http"
+	"os"
+	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
+)
+
+const (
+	WHISPER_DIRECTORY = "/var/lib/carbon/whisper/collectd/"
 )
 
 func getEntityName(entity_type string, entity_id uuid.UUID, parentId *uuid.UUID) (string, error) {
@@ -1668,4 +1673,44 @@ func ComputeSystemSummary(p map[string]interface{}) {
 	if _, err := coll.Upsert(bson.M{"name": monitoring.SYSTEM}, system); err != nil {
 		logger.Get().Error("%s - Error persisting the system.Error %v", ctxt, err)
 	}
+}
+
+func DisableClusterMonitoring(ctxt string, cluster_id uuid.UUID, forgot bool) error {
+	if forgot {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_CLUSTER_SUMMARY)
+		if err := coll.Remove(bson.M{"clusterid": cluster_id}); err != nil {
+			return err
+		}
+		coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_THRESHOLD_BREACHES)
+		if err := coll.Remove(bson.M{"clusterid": cluster_id}); err != nil {
+			if err != mgo.ErrNotFound {
+				return err
+			}
+		}
+	}
+	DeleteClusterSchedule(cluster_id)
+	go ComputeSystemSummary(make(map[string]interface{}))
+	return nil
+}
+
+func EnableClusterMonitoring(cluster_id uuid.UUID, monitoring_interval int) {
+	ScheduleCluster(cluster_id, monitoring_interval)
+	go ComputeSystemSummary(make(map[string]interface{}))
+}
+
+func RemoveTimeSeriesFiles(ctxt string, clusterName string, cnodes []models.Node) error {
+	//Removing nodes graphite whisper files
+	for _, node := range cnodes {
+		hostname := strings.Replace(node.Hostname, ".", "_", -1)
+		if err := os.RemoveAll(filepath.Join(WHISPER_DIRECTORY, hostname)); err != nil && !os.IsNotExist(err) {
+			return err
+		}
+	}
+	//Removing cluster graphite whisper files
+	if err := os.RemoveAll(filepath.Join(WHISPER_DIRECTORY, clusterName)); err != nil && !os.IsNotExist(err) {
+		return err
+	}
+	return nil
 }
