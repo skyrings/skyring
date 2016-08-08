@@ -1663,3 +1663,22 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		logger.Get().Error("%s - Error persisting the system.Error %v", ctxt, err)
 	}
 }
+
+func DisableClusterSummary(ctxt string, cluster_id uuid.UUID, forgot_flag bool) error {
+	if forgot_flag {
+		sessionCopy := db.GetDatastore().Copy()
+		defer sessionCopy.Close()
+		coll := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_CLUSTER_SUMMARY)
+		if err := coll.Remove(bson.M{"clusterid": cluster_id}); err != nil {
+			return err
+		}
+		coll = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_THRESHOLD_BREACHES)
+		if err := coll.Remove(bson.M{"clusterid": cluster_id}); err != nil {
+			if err != mgo.ErrNotFound {
+				return err
+			}
+		}
+	}
+	ComputeSystemSummary(make(map[string]interface{}))
+	return nil
+}

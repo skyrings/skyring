@@ -781,6 +781,24 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 
+				// Delete the cluster summary and threshold breaches from DB
+				t.UpdateStatus("removing cluster summary and threshold breaches")
+				if err := DisableClusterSummary(ctxt, *uuid, true); err != nil {
+					util.FailTask(fmt.Sprintf("Error removing cluster summary and threshold breaches: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logAuditEvent(EventTypes["CLUSTER_FORGOT"],
+						fmt.Sprintf("Failed to forget cluster: %s", clusterName),
+						fmt.Sprintf("Failed to forget cluster: %s Error: %v", clusterName, err),
+						uuid,
+						uuid,
+						models.NOTIFICATION_ENTITY_CLUSTER,
+						&(t.ID),
+						false,
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+					}
+					return
+				}
+
 				// Delete the cluster from DB
 				t.UpdateStatus("removing the cluster")
 				collection = sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_CLUSTERS)
@@ -799,6 +817,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 					}
 					return
 				}
+
 				if err := logAuditEvent(EventTypes["CLUSTER_FORGOT"],
 					fmt.Sprintf("Forgot cluster: %s", clusterName),
 					fmt.Sprintf("Forgot cluster: %s", clusterName),
@@ -1315,6 +1334,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusInternalServerError, "Task creation failed for cluster unmanage")
 		return
 	} else {
+		DisableClusterSummary(ctxt, *cluster_id, false)
 		logger.Get().Debug("%s-Task Created: %v to unmanage cluster: %v", ctxt, taskId, *cluster_id)
 		bytes, _ := json.Marshal(models.AsyncResponse{TaskId: taskId})
 		w.WriteHeader(http.StatusAccepted)
