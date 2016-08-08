@@ -29,7 +29,8 @@
         "port": 10080,
         "collection_name": "collectd",
         "managername": "GraphiteManager",
-        "dataPushPort": 2003
+        "dataPushPort": 2003,
+	"graphite_data_root": "/var/lib/carbon/whisper/collectd/"
     },
     "authentication": {
         "providerName": "localauthprovider",
@@ -42,3 +43,4 @@
         "clustersSyncInterval": 86400
     }
 }
+
