@@ -31,6 +31,8 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"time"
@@ -48,6 +50,10 @@ var (
 		"ceph":    "block",
 		"gluster": "file",
 	}
+)
+
+const (
+	graphite_whisper_dir = "/var/lib/carbon/whisper/collectd/"
 )
 
 func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
@@ -723,8 +729,44 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 				// TODO: Remove the performance monitoring details for the cluster
 				// TODO: Remove the collectd, salt etc configurations from the nodes
 
+				// Delete the cluster summary and threshold breaches from DB
+				t.UpdateStatus("Removing monitoring information of the cluster")
+				if err := DisableClusterMonitoring(ctxt, *uuid, true); err != nil && err != mgo.ErrNotFound {
+					util.FailTask(fmt.Sprintf("Error removing cluster summary and threshold breaches: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logAuditEvent(EventTypes["CLUSTER_FORGOT"],
+						fmt.Sprintf("Failed to forget cluster: %s", clusterName),
+						fmt.Sprintf("Failed to forget cluster: %s Error: %v", clusterName, err),
+						uuid,
+						uuid,
+						models.NOTIFICATION_ENTITY_CLUSTER,
+						&(t.ID),
+						false,
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+					}
+					return
+				}
+
+				//Remove the graphite whisper files
+				t.UpdateStatus("Removing time series data of the cluster")
+				if err := RemoveTimeSeriesFiles(ctxt, clusterName, cnodes); err != nil {
+					util.FailTask(fmt.Sprintf("Error removing time series data of the cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
+					if err := logAuditEvent(EventTypes["CLUSTER_FORGOT"],
+						fmt.Sprintf("Failed to forget cluster: %s", clusterName),
+						fmt.Sprintf("Failed to forget cluster: %s Error: %v", clusterName, err),
+						uuid,
+						uuid,
+						models.NOTIFICATION_ENTITY_CLUSTER,
+						&(t.ID),
+						false,
+						ctxt); err != nil {
+						logger.Get().Error("%s- Unable to log forget cluster event. Error: %v", ctxt, err)
+					}
+					return
+				}
+
 				// Ignore the cluster nodes
-				if ok, err := ignoreClusterNodes(ctxt, *uuid); err != nil || !ok {
+				if ok, err := ignoreClusterNodes(ctxt, *uuid); (err != nil && err != mgo.ErrNotFound) || !ok {
 					util.FailTask(fmt.Sprintf("Error ignoring nodes for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
 					if err := logAuditEvent(EventTypes["CLUSTER_FORGOT"],
 						fmt.Sprintf("Failed to forget cluster: %s", clusterName),
@@ -744,7 +786,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 
 				// Remove storage entities for cluster
 				t.UpdateStatus("Removing storage entities for cluster")
-				if err := removeStorageEntities(*uuid); err != nil {
+				if err := removeStorageEntities(*uuid); err != nil && err != mgo.ErrNotFound {
 					util.FailTask(fmt.Sprintf("Error removing storage entities for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
 					if err := logAuditEvent(EventTypes["CLUSTER_FORGOT"],
 						fmt.Sprintf("Failed to forget cluster: %s", clusterName),
@@ -763,7 +805,7 @@ func (a *App) Forget_Cluster(w http.ResponseWriter, r *http.Request) {
 				// Delete the participating nodes from DB
 				t.UpdateStatus("Deleting cluster nodes")
 				collection := sessionCopy.DB(conf.SystemConfig.DBConfig.Database).C(models.COLL_NAME_STORAGE_NODES)
-				if changeInfo, err := collection.RemoveAll(bson.M{"clusterid": *uuid}); err != nil || changeInfo == nil {
+				if changeInfo, err := collection.RemoveAll(bson.M{"clusterid": *uuid}); (err != nil && err != mgo.ErrNotFound) || changeInfo == nil {
 					util.FailTask(fmt.Sprintf("Error deleting cluster nodes for cluster: %v", *uuid), fmt.Errorf("%s-%v", ctxt, err), t)
 					if err := logAuditEvent(EventTypes["CLUSTER_FORGOT"],
 						fmt.Sprintf("Failed to forget cluster: %s", clusterName),
@@ -1241,7 +1283,7 @@ func (a *App) Unmanage_Cluster(w http.ResponseWriter, r *http.Request) {
 				defer a.GetLockManager().ReleaseLock(ctxt, *appLock)
 
 				t.UpdateStatus("Disabling monitoring on the cluster")
-				DeleteClusterSchedule(*cluster_id)
+				DisableClusterMonitoring(ctxt, *cluster_id, false)
 
 				for _, node := range nodes {
 					t.UpdateStatus("Disabling node: %s", node.Hostname)
@@ -1518,7 +1560,7 @@ func (a *App) Manage_Cluster(w http.ResponseWriter, r *http.Request) {
 				if clusterFetchError != nil {
 					logger.Get().Error("%s - Unable to fetch the cluster with name %s", ctxt, clusterName)
 				} else {
-					ScheduleCluster(cluster.ClusterId, cluster.MonitoringInterval)
+					EnableClusterMonitoring(cluster.ClusterId, cluster.MonitoringInterval)
 				}
 				if err := logAuditEvent(EventTypes["CLUSTER_MANAGE"],
 					fmt.Sprintf("Managed back cluster: %s", clusterName),
@@ -2778,4 +2820,19 @@ func (a *App) GET_Slus(w http.ResponseWriter, r *http.Request) {
 	} else {
 		json.NewEncoder(w).Encode(slus)
 	}
+}
+
+func RemoveTimeSeriesFiles(ctxt string, clusterName string, cnodes []models.Node) error {
+	//Removing nodes graphite whisper files
+	for _, node := range cnodes {
+		hostname := strings.Replace(node.Hostname, ".", "_", -1)
+		if err := os.RemoveAll(filepath.Join(graphite_whisper_dir, hostname)); err != nil && !os.IsNotExist(err) {
+			return err
+		}
+	}
+	//Removing cluster graphite whisper files
+	if err := os.RemoveAll(filepath.Join(graphite_whisper_dir, clusterName)); err != nil && !os.IsNotExist(err) {
+		return err
+	}
+	return nil
 }
