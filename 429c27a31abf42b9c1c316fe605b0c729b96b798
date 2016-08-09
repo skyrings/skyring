@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_4efc98b4",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-08-09T06:41:05Z",
+      "side": 1,
+      "message": "Probably we can utilize GetClusters from skyring-common-\u003eutils-\u003emonitoring.go here and get only managed clusters by passing condition similar to \"state\":bson.M{\"$nin\":[]string{models.Unmanaged...}}",
+      "range": {
+        "startLine": 1468,
+        "startChar": 1,
+        "endLine": 1468,
+        "endChar": 45
+      },
+      "revId": "429c27a31abf42b9c1c316fe605b0c729b96b798",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_2e2ef442",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-08-09T06:41:05Z",
+      "side": 1,
+      "message": "With above comment this might not be required",
+      "range": {
+        "startLine": 1520,
+        "startChar": 2,
+        "endLine": 1521,
+        "endChar": 39
+      },
+      "revId": "429c27a31abf42b9c1c316fe605b0c729b96b798",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
