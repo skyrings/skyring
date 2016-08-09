@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_c4abe786",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-08-09T14:06:53Z",
+      "side": 1,
+      "message": "If it return managed cluster only then count of node which is not a part of cluster is omitted. Not in un managed cluster gives both nodes which is part of managed clusters and node which is not a part of cluster",
+      "parentUuid": "baa041b7_4efc98b4",
+      "range": {
+        "startLine": 1468,
+        "startChar": 1,
+        "endLine": 1468,
+        "endChar": 45
+      },
+      "revId": "429c27a31abf42b9c1c316fe605b0c729b96b798",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_2e2ef442",
         "filename": "apps/skyring/monitoring.go",
         "patchSetId": 4
