@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_ae6a04b1",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-08-09T05:59:19Z",
+      "side": 1,
+      "message": "I feel it is better to rephrase this as \"Removing monitoring information of the cluster\"",
+      "range": {
+        "startLine": 785,
+        "startChar": 20,
+        "endLine": 785,
+        "endChar": 67
+      },
+      "revId": "69807778c90ce2eb7df3eec6a55570ebe7e9e0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_4e89386e",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-08-09T05:59:19Z",
+      "side": 1,
+      "message": "I think failing at this stage would leave us in a state that the user probably can never again forget the cluster. Because any attempt after this would probably fail in the db operation before this.I think since its just a db delete operation, we should probably do either of these or a suitable combination of these:\n\n1. Simply log the failure and continue unless its a critical operation failed for ex: deleting cluster itself or the nodes of cluster from db failed.\n\n2. Ignore/only log/handle as appropriate(but not fail the task) if the error is mgo.ErrorNotFound atleast for some of these.",
+      "range": {
+        "startLine": 787,
+        "startChar": 5,
+        "endLine": 787,
+        "endChar": 134
+      },
+      "revId": "69807778c90ce2eb7df3eec6a55570ebe7e9e0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_cecae89f",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-08-09T05:59:19Z",
+      "side": 1,
+      "message": "I think you can call this DisableClusterMonitoring and also add call to delete cluster monitoring schedule if the boolean is false(i.e, unmanage cluster case)",
+      "range": {
+        "startLine": 1673,
+        "startChar": 5,
+        "endLine": 1673,
+        "endChar": 26
+      },
+      "revId": "69807778c90ce2eb7df3eec6a55570ebe7e9e0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_aec68497",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-08-09T05:59:19Z",
+      "side": 1,
+      "message": "I think the better name for this flag might be just forget",
+      "range": {
+        "startLine": 1673,
+        "startChar": 62,
+        "endLine": 1673,
+        "endChar": 73
+      },
+      "revId": "69807778c90ce2eb7df3eec6a55570ebe7e9e0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_6ee51c36",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 1688,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-08-09T05:59:19Z",
+      "side": 1,
+      "message": "This is a very expensive operation make it a go routine call",
+      "range": {
+        "startLine": 1688,
+        "startChar": 1,
+        "endLine": 1688,
+        "endChar": 51
+      },
+      "revId": "69807778c90ce2eb7df3eec6a55570ebe7e9e0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
