@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_c1b079de",
+        "filename": "apps/skyring/cluster.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-08-09T12:52:53Z",
+      "side": 1,
+      "message": "i will change it",
+      "parentUuid": "baa041b7_ae6a04b1",
+      "range": {
+        "startLine": 785,
+        "startChar": 20,
+        "endLine": 785,
+        "endChar": 67
+      },
+      "revId": "69807778c90ce2eb7df3eec6a55570ebe7e9e0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_4e89386e",
         "filename": "apps/skyring/cluster.go",
         "patchSetId": 2
