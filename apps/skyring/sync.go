@@ -271,8 +271,6 @@ func SyncNodeUtilizations(params map[string]interface{}) {
 func SyncNodeUtilization(ctxt string, node models.Node, time_stamp_str string) {
 	var disk_writes float64
 	var disk_reads float64
-	var interface_rx float64
-	var interface_tx float64
 
 	table_name := fmt.Sprintf("%s.%s.", conf.SystemConfig.TimeSeriesDBConfig.CollectionName, strings.Replace(node.Hostname, ".", "_", -1))
 	if node.Utilizations == nil {
@@ -327,27 +325,6 @@ func SyncNodeUtilization(ctxt string, node models.Node, time_stamp_str string) {
 	}
 	if disk_writes_count != 0 && disk_reads_count != 0 {
 		UpdateMetricToTimeSeriesDb(ctxt, disk_reads+disk_writes, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
-	}
-	// Aggregate interface rx
-	interface_rx_count := 1
-	resourcePrefix = monitoring.AGGREGATION + monitoring.INTERFACE + monitoring.OCTETS
-	resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.RX})
-	if resourceNameError != nil {
-		logger.Get().Warning("%s - Failed to fetch resource name of %v for %v.Err %v", ctxt, resourcePrefix+monitoring.RX, node.Hostname, resourceNameError)
-	} else {
-		interface_rx = FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &interface_rx_count, []string{monitoring.LOOP_BACK_INTERFACE})
-	}
-
-	// Aggregate interface tx
-	interface_tx_count := 1
-	resource_name, resourceNameError = GetMonitoringManager().GetResourceName(map[string]interface{}{"resource_name": resourcePrefix + monitoring.TX})
-	if resourceNameError != nil {
-		logger.Get().Warning("%s - Failed to fetch resource name of %v for %v.Err %v", ctxt, resource_name, node.Hostname, resourceNameError)
-	} else {
-		interface_tx = FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &interface_tx_count, []string{monitoring.LOOP_BACK_INTERFACE})
-	}
-	if interface_rx_count != 0 && interface_tx_count != 0 {
-		UpdateMetricToTimeSeriesDb(ctxt, interface_rx+interface_tx, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
 	}
 }
 
@@ -556,6 +533,8 @@ func network_utilization(ctxt string, node *models.Node, time_stamp_str string) 
 			UpdatedAt:   nwFetchTimeStamp,
 		}
 	}
+	table_name := fmt.Sprintf("%s.%s.", conf.SystemConfig.TimeSeriesDBConfig.CollectionName, strings.Replace(node.Hostname, ".", "_", -1))
+	UpdateMetricToTimeSeriesDb(ctxt, nwUsed, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.INTERFACE, monitoring.RX, monitoring.TX))
 }
 
 func update_utilizations(nodeid uuid.UUID, utilizations map[string]models.Utilization) error {
