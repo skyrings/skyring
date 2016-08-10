@@ -540,6 +540,43 @@ func (a *App) DELETE_BlockDevice(w http.ResponseWriter, r *http.Request) {
 		clusterName = cluster_id_str
 	}
 
+	ok, err := ClusterUnmanaged(*cluster_id)
+	if err != nil {
+		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+			fmt.Sprintf("Failed to delete block device for cluster: %s", clusterName),
+			fmt.Sprintf("Failed to delete block device for cluster: %s. Error: %v", clusterName, err),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			false,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete block device for cluster event. Error: %v", ctxt, err)
+		}
+		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error checking managed state of cluster: %v", *cluster_id))
+		return
+	}
+	if ok {
+		logger.Get().Error("%s-Cluster: %v is in un-managed state", ctxt, *cluster_id)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_REMOVED"],
+			fmt.Sprintf("Failed to delete block device for cluster: %v", clusterName),
+			fmt.Sprintf(
+				"Failed to delete block device for cluster: %s. Error: %v",
+				clusterName,
+				fmt.Errorf("Cluster is un-managed")),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			false,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete block device for cluster event: %v", ctxt, err)
+		}
+		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %v is in un-managed state", *cluster_id))
+		return
+	}
+
 	blockdevice_id_str := vars["blockdevice-id"]
 	blockdevice_id, err := uuid.Parse(blockdevice_id_str)
 	if err != nil {
@@ -779,7 +816,42 @@ func (a *App) PATCH_ResizeBlockDevice(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		clusterName = cluster_id_str
 	}
-
+	ok, err := ClusterUnmanaged(*cluster_id)
+	if err != nil {
+		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+			fmt.Sprintf("Failed to resize block device for cluster: %s", clusterName),
+			fmt.Sprintf("Failed to resize block device for cluster: %s. Error: %v", clusterName, err),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			false,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log resize block device for cluster event. Error: %v", ctxt, err)
+		}
+		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error checking managed state of cluster: %v", *cluster_id))
+		return
+	}
+	if ok {
+		logger.Get().Error("%s-Cluster: %v is in un-managed state", ctxt, *cluster_id)
+		if err := logAuditEvent(EventTypes["BLOCK_DEVICVE_RESIZE"],
+			fmt.Sprintf("Failed to resize block device for cluster: %v", clusterName),
+			fmt.Sprintf(
+				"Failed to resize block device for cluster: %s. Error: %v",
+				clusterName,
+				fmt.Errorf("Cluster is un-managed")),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			false,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log resize block device for cluster event: %v", ctxt, err)
+		}
+		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %v is in un-managed state", *cluster_id))
+		return
+	}
 	blockdevice_id_str := vars["blockdevice-id"]
 	blockdevice_id, err := uuid.Parse(blockdevice_id_str)
 	if err != nil {

@@ -665,6 +665,7 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		clusterName = cluster_id_str
 	}
+
 	storage_id_str := vars["storage-id"]
 	storage_id, err := uuid.Parse(storage_id_str)
 	if err != nil {
@@ -687,7 +688,39 @@ func (a *App) DEL_Storage(w http.ResponseWriter, r *http.Request) {
 	if storageName == "" || err != nil {
 		storageName = storage_id_str
 	}
-
+	ok, err := ClusterUnmanaged(*cluster_id)
+	if err != nil {
+		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
+		if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+			fmt.Sprintf("Failed to delete storage:%v for cluster: %v", storage_id_str, clusterName),
+			fmt.Sprintf("Failed to delete storage:%v for cluster: %s. Error: %v", storage_id_str, clusterName, err),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			false,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+		}
+		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Error checking managed state of cluster: %v", *cluster_id))
+		return
+	}
+	if ok {
+		logger.Get().Error("%s-Cluster: %v is in un-managed state", ctxt, *cluster_id)
+		if err := logAuditEvent(EventTypes["STORAGE_DELETED"],
+			fmt.Sprintf("Failed to delete storage:%v for cluster: %v", storage_id_str, clusterName),
+			fmt.Sprintf("Failed to delete storage:%v for cluster: %s. Error: %v", storage_id_str, clusterName, err),
+			nil,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_STORAGE,
+			nil,
+			false,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log delete storage event. Error: %v", ctxt, err)
+		}
+		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %v is in un-managed state", *cluster_id))
+		return
+	}
 	// Check if block devices are backed by this storage
 	// If so dont allow deletion and ask to delete block devices first
 	sessionCopy := db.GetDatastore().Copy()

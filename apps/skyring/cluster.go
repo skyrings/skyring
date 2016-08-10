@@ -156,6 +156,23 @@ func (a *App) PATCH_Clusters(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if cluster.State == models.CLUSTER_STATE_UNMANAGED {
+		logger.Get().Error("%s-Cluster: %s is in unmanaged state", ctxt, cluster_id)
+		if err := logAuditEvent(EventTypes["CLUSTER_UPDATED"],
+			fmt.Sprintf("Failed to update cluster: %s", clusterName),
+			fmt.Sprintf("Failed to update cluster: %s Error: %v", clusterName, err),
+			clid,
+			clid,
+			models.NOTIFICATION_ENTITY_CLUSTER,
+			nil,
+			false,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update cluster event. Error: %v", ctxt, err)
+		}
+		HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster: %s is in unmanaged state", cluster_id))
+		return
+	}
+
 	if err := collection.Update(bson.M{"clusterid": *clid}, bson.M{"$set": bson.M{"autoexpand": !disableautoexpand}}); err != nil {
 		logger.Get().Error("%s-Failed updating cluster. Error:%v", ctxt, err)
 		if err := logAuditEvent(EventTypes["CLUSTER_UPDATED"],
@@ -2249,7 +2266,42 @@ func (a *App) PATCH_ClusterSlu(w http.ResponseWriter, r *http.Request) {
 		HttpResponse(w, http.StatusBadRequest, err.Error(), ctxt)
 		return
 	}
-
+	if ok, err := ClusterUnmanaged(*cluster_id); err != nil {
+		logger.Get().Error("%s-Error checking managed state of cluster: %v. error: %v", ctxt, *cluster_id, err)
+		if err := logAuditEvent(EventTypes["CLUSTER_UPDATE_SLU"],
+			fmt.Sprintf("Failed to update slu: %s of cluster: %s", slu_id_str, clusterName),
+			fmt.Sprintf("Failed to update slu: %s of cluster: %s Error: %v", slu_id_str, clusterName, err),
+			cluster_id,
+			cluster_id,
+			models.NOTIFICATION_ENTITY_CLUSTER,
+			nil,
+			false,
+			ctxt); err != nil {
+			logger.Get().Error("%s- Unable to log update slu of cluster event. Error: %v", ctxt, err)
+		}
+		HttpResponse(w, http.StatusBadRequest, fmt.Sprintf("Error checking managed state of cluster: %v. error: %v", *cluster_id, err))
+		return
+	} else {
+		if ok {
+			logger.Get().Error("%s-Cluster %s is in unmanaged state", ctxt, cluster_id_str)
+			if err := logAuditEvent(EventTypes["CLUSTER_UPDATE_SLU"],
+				fmt.Sprintf("Failed to update slu: %s of cluster: %s", slu_id_str, clusterName),
+				fmt.Sprintf(
+					"Failed to update slu: %s. Error: %v",
+					clusterName,
+					fmt.Errorf("Cluster is un-managed")),
+				nil,
+				cluster_id,
+				models.NOTIFICATION_ENTITY_STORAGE,
+				nil,
+				false,
+				ctxt); err != nil {
+				logger.Get().Error("%s- Unable to log update slu of cluster event: %v", ctxt, err)
+			}
+			HttpResponse(w, http.StatusMethodNotAllowed, fmt.Sprintf("Cluster %s is in unmanaged state", cluster_id_str))
+			return
+		}
+	}
 	var result models.RpcResponse
 	var providerTaskId *uuid.UUID
 	asyncTask := func(t *task.Task) {
