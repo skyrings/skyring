@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_5a6fae5f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-08-10T04:44:29Z",
+      "side": 1,
+      "message": "The only thing we should be aware here that, during each re-start of skyring server this piece of code gets executed. Hope that is fine as DB also would get re-started and should not cause any issue. Other changes like auth \u003d true and creation of user admin would not have any effect as already done.\n\n+1 from me.",
+      "revId": "fbd5423174f10e5af072f8f5c4b9221bf81fcd19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
