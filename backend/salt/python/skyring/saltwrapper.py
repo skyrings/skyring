@@ -199,6 +199,8 @@ def GetNodeDisk(node, ctxt=""):
         for d in devlist:
             in_use = True
 
+            if d['TYPE'] not in ['disk', 'part']:
+                continue
             if d['TYPE'] == 'disk':
                 if d['KNAME'] in parents:
                     # skip it
