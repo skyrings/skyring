@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_c5e51aa4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-08-12T05:52:52Z",
+      "side": 1,
+      "message": "Wrong info. It should not show root at least.",
+      "range": {
+        "startLine": 11,
+        "startChar": 15,
+        "endLine": 11,
+        "endChar": 60
+      },
+      "revId": "6ce8616f62c5ff1ac8aa3331c7bdb5f144948f72",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
