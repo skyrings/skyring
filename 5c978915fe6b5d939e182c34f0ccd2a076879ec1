@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "baa041b7_142444b0",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 12
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-08-17T13:47:16Z",
+      "side": 1,
+      "message": "strings.Replace(clusterName, \".\", \"_\", -1)",
+      "range": {
+        "startLine": 1708,
+        "startChar": 93,
+        "endLine": 1708,
+        "endChar": 104
+      },
+      "revId": "5c978915fe6b5d939e182c34f0ccd2a076879ec1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_e907cdc7",
         "filename": "conf/sample/skyring.conf.sample",
         "patchSetId": 12
