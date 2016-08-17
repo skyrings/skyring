@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_e6601aa7",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-08-17T05:10:55Z",
+      "side": 1,
+      "message": "I am not sure this would be same on all the platforms. Ideally we should take this from conf file and use.",
+      "range": {
+        "startLine": 45,
+        "startChar": 22,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "cec70a1a310583b1951fed53030c763bb34f9650",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
