@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_e907cdc7",
+        "filename": "conf/sample/skyring.conf.sample",
+        "patchSetId": 12
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-08-17T10:51:06Z",
+      "side": 1,
+      "message": "For this we should add an entry in data model as well? where is that change ?",
+      "range": {
+        "startLine": 33,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 20
+      },
+      "revId": "5c978915fe6b5d939e182c34f0ccd2a076879ec1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
