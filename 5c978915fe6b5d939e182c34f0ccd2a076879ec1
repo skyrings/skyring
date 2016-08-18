@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_afa1c548",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 12
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1007367
+      },
+      "writtenOn": "2016-08-18T06:33:55Z",
+      "side": 1,
+      "message": "i will move the RemoveTimeSeriesFiles to skyring-common",
+      "parentUuid": "baa041b7_2f1b75cc",
+      "range": {
+        "startLine": 1708,
+        "startChar": 11,
+        "endLine": 1708,
+        "endChar": 106
+      },
+      "revId": "5c978915fe6b5d939e182c34f0ccd2a076879ec1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_e907cdc7",
         "filename": "conf/sample/skyring.conf.sample",
         "patchSetId": 12
