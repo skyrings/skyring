@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_2f1b75cc",
+        "filename": "apps/skyring/monitoring.go",
+        "patchSetId": 12
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1006318
+      },
+      "writtenOn": "2016-08-18T04:21:44Z",
+      "side": 1,
+      "message": "We have providerised the monitoring time-series part as in it is very flexible to switch from graphite to influxdb or any other such thing as and when need arises.Accordingly you can see in skyring-common-\u003emonitoring the following:\ntree monitoring\nmonitoring\n├── default_configs.go\n├── graphitemanager\n│   └── graphite_manager.go\n├── influxdbmanager\n│   └── influxdb_manager.go\n├── interfaces.go\n├── monitoring_manager.go\n├── plugin.go\n└── plugin_utils.go\n\nSo, I would like the core logic of RemoveTimeSeriesFiles which is specific to graphite to move to graphite_manager.go.\nTo do this, you can add a function RemoveTimeSeriesFiles/RemoveTimeSeriesData in monitoring_manager.go in skyring-common and then implement the same in graphite-manager.go and a dummy implementation in influxdb_manager.go(dummy for time being). And in this function here(skyring-\u003eapps-\u003eskyring-\u003emonitoring.go, RemoveTimeSeriesFiles function),you can do something like GetMonitoringManager().RemoveTimeSeriesData(...).\nFor more reference you could check https://review.gerrithub.io/#/c/258875/",
+      "range": {
+        "startLine": 1708,
+        "startChar": 11,
+        "endLine": 1708,
+        "endChar": 106
+      },
+      "revId": "5c978915fe6b5d939e182c34f0ccd2a076879ec1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_e907cdc7",
         "filename": "conf/sample/skyring.conf.sample",
         "patchSetId": 12
