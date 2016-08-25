@@ -440,7 +440,7 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 		UpdateMetricToTimeSeriesDb(ctxt, cluster_memory_used, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.USED_SPACE)
 		UpdateMetricToTimeSeriesDb(ctxt, cluster_memory_total, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.TOTAL_SPACE)
 	}
-	AverageAndUpdateDb(ctxt, cluster_cpu_user, len(nodes), time_stamp_str, table_name+monitoring.CPU_USER)
+	AverageAndUpdateDb(ctxt, cluster_cpu_user, len(nodes), time_stamp_str, fmt.Sprintf("%s%s-%s", table_name, monitoring.CPU_USER, monitoring.CPU_SYSTEM))
 	AverageAndUpdateDb(ctxt, latency, latency_count, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
 
 	var cluster_memory_percentage float64
@@ -1619,7 +1619,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 			UpdateMetricToTimeSeriesDb(ctxt, net_memory_total, time_stamp_str, table_name+monitoring.MEMORY+"-"+monitoring.TOTAL_SPACE)
 		}
 
-		AverageAndUpdateDb(ctxt, cluster_cpu_user, cluster_cpu_user_count, time_stamp_str, table_name+monitoring.CPU_USER)
+		AverageAndUpdateDb(ctxt, cluster_cpu_user, cluster_cpu_user_count, time_stamp_str, fmt.Sprintf("%s%s-%s", table_name, monitoring.CPU_USER, monitoring.CPU_SYSTEM))
 		AverageAndUpdateDb(ctxt, latency, latencyCount, time_stamp_str, table_name+monitoring.NETWORK_LATENCY)
 
 		netIStatRx = AverageAndUpdateDb(ctxt, netIStatRx, netIStatRxCount, time_stamp_str, table_name+monitoring.INTERFACE+"-"+monitoring.RX)
