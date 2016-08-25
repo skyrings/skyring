@@ -437,23 +437,38 @@ func memory_utilization(ctxt string, node *models.Node, time_stamp_str string) {
 }
 
 func cpu_utilization(ctxt string, node *models.Node, time_stamp_str string) {
+	var err error
+	var cpu_user float64
+	var cpu_system float64
+	table_name := fmt.Sprintf("%s.%s.", conf.SystemConfig.TimeSeriesDBConfig.CollectionName, strings.Replace(node.Hostname, ".", "_", -1))
 	cpuPercentUserFetchTimeStamp := time.Now().String()
-	cpuUserFetchSuccess := true
-	resource_name, resource_name_error := GetMonitoringManager().GetResourceName(map[string]interface{}{
+	cpuUserResourceName, resource_name_error := GetMonitoringManager().GetResourceName(map[string]interface{}{
 		"resource_name": monitoring.CPU_USER,
 	})
-	var cpu_user float64
-	if resource_name_error == nil {
-		cpu_user, cpuUserFetchSuccess = FetchStatFromGraphiteWithErrorIndicate(ctxt, node.Hostname, resource_name)
-		if cpuUserFetchSuccess {
-			cpuPercentUserFetchTimeStamp = time.Now().String()
-			node.Utilizations["cpuusage"] = models.Utilization{
-				Used:        int64(cpu_user),
-				Total:       int64(100),
-				PercentUsed: cpu_user,
-				UpdatedAt:   cpuPercentUserFetchTimeStamp,
-			}
+	if resource_name_error != nil {
+		err = fmt.Errorf("%s", resource_name_error.Error())
+	} else {
+		cpu_user, _ = FetchStatFromGraphiteWithErrorIndicate(ctxt, node.Hostname, cpuUserResourceName)
+	}
+
+	cpuSystemResourceName, resource_name_error := GetMonitoringManager().GetResourceName(map[string]interface{}{
+		"resource_name": monitoring.CPU_SYSTEM,
+	})
+	if resource_name_error != nil {
+		err = fmt.Errorf("%s.%s", err, resource_name_error.Error())
+	} else {
+		cpu_system, _ = FetchStatFromGraphiteWithErrorIndicate(ctxt, node.Hostname, cpuSystemResourceName)
+	}
+
+	if err == nil {
+		cpuPercentUserFetchTimeStamp = time.Now().String()
+		node.Utilizations["cpuusage"] = models.Utilization{
+			Used:        int64(cpu_user + cpu_system),
+			Total:       int64(100),
+			PercentUsed: int64(cpu_user + cpu_system),
+			UpdatedAt:   cpuPercentUserFetchTimeStamp,
 		}
+		UpdateMetricToTimeSeriesDb(ctxt, cpu_user+cpu_system, time_stamp_str, fmt.Sprintf("%s%s-%s", table_name, monitoring.CPU_USER, monitoring.CPU_SYSTEM))
 	}
 }
 
