@@ -163,6 +163,7 @@ optional_policy(`
 	allow collectd_t collectd_conf_t:file manage_file_perms;
 	allow collectd_t collectd_conf_t:dir manage_dir_perms;
 	allow collectd_t self:capability { setuid chown sys_resource audit_write };
+	allow collectd_t self:unix_stream_socket { connectto };
 	allow dmidecode_t collectd_t:fifo_file { getattr open read };
 	allow dmesg_t collectd_t:fifo_file { getattr open read };
 ')
