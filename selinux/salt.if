@@ -347,6 +347,7 @@ interface(`salt_stub_collectd',`
 		type dmesg_t;
 		type collectd_t;
 		class fifo_file  { read write };
+		class unix_stream_socket { connectto };
 	')
 ')
 
