@@ -433,7 +433,7 @@ func (a *App) MonitorCluster(params map[string]interface{}) {
 	disk_reads = AverageAndUpdateDb(ctxt, disk_reads, disk_reads_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.READ)
 	disk_writes = AverageAndUpdateDb(ctxt, disk_writes, disk_writes_count, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
 	if disk_reads_count > 0 && disk_writes_count > 0 {
-		UpdateMetricToTimeSeriesDb(ctxt, disk_reads+disk_writes, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+		UpdateMetricToTimeSeriesDb(ctxt, math.Floor(disk_reads+disk_writes+0.5), time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
 	}
 
 	if cluster_memory_total > 0 {
@@ -1611,7 +1611,7 @@ func ComputeSystemSummary(p map[string]interface{}) {
 		netDiskRead = AverageAndUpdateDb(ctxt, netDiskRead, netDiskReadCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.READ)
 		netDiskWrite = AverageAndUpdateDb(ctxt, netDiskWrite, netDiskWriteCount, time_stamp_str, table_name+monitoring.DISK+"-"+monitoring.WRITE)
 		if netDiskReadCount > 0 && netDiskWriteCount > 0 {
-			UpdateMetricToTimeSeriesDb(ctxt, netDiskRead+netDiskWrite, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+			UpdateMetricToTimeSeriesDb(ctxt, math.Floor(netDiskRead+netDiskWrite+0.5), time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
 		}
 
 		if net_memory_total > 0.0 {

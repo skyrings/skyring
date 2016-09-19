@@ -22,6 +22,7 @@ import (
 	"github.com/skyrings/skyring-common/tools/uuid"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -326,7 +327,7 @@ func SyncNodeUtilization(ctxt string, node models.Node, time_stamp_str string) {
 		disk_writes = FetchAggregatedStatsFromGraphite(ctxt, node.Hostname, resource_name, &disk_writes_count, []string{})
 	}
 	if disk_writes_count != 0 && disk_reads_count != 0 {
-		UpdateMetricToTimeSeriesDb(ctxt, disk_reads+disk_writes, time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
+		UpdateMetricToTimeSeriesDb(ctxt, math.Floor(disk_reads+disk_writes+0.5), time_stamp_str, fmt.Sprintf("%s%s-%s_%s", table_name, monitoring.DISK, monitoring.READ, monitoring.WRITE))
 	}
 	// Aggregate interface rx
 	interface_rx_count := 1
