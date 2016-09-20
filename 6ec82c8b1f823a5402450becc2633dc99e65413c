@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_0076d73d",
+        "filename": "selinux/salt.if",
+        "patchSetId": 1
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1008459
+      },
+      "writtenOn": "2016-09-20T10:08:58Z",
+      "side": 1,
+      "message": "This is not needed.",
+      "range": {
+        "startLine": 350,
+        "startChar": 0,
+        "endLine": 350,
+        "endChar": 41
+      },
+      "revId": "6ec82c8b1f823a5402450becc2633dc99e65413c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_6084830a",
+        "filename": "selinux/salt.te",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1008459
+      },
+      "writtenOn": "2016-09-20T10:08:58Z",
+      "side": 1,
+      "message": "you can use \"self\" here if source and target context is same.",
+      "range": {
+        "startLine": 166,
+        "startChar": 18,
+        "endLine": 166,
+        "endChar": 28
+      },
+      "revId": "6ec82c8b1f823a5402450becc2633dc99e65413c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
