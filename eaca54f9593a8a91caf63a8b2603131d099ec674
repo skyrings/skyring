@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_646362b2",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-09-26T08:22:16Z",
+      "side": 1,
+      "message": "InitializeApplication() is called before StartProviders() from main.go",
+      "parentUuid": "baa041b7_643c8293",
+      "range": {
+        "startLine": 576,
+        "startChar": 11,
+        "endLine": 576,
+        "endChar": 27
+      },
+      "revId": "eaca54f9593a8a91caf63a8b2603131d099ec674",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_24cb1aa6",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-09-26T08:04:29Z",
       "side": 1,
       "message": "Is this like every skyring restart, file is overwritten with a new key? And why do we need 600? even if root was to edit, it is anyway rewritten on restart and user modified key would probably never be picked up. I think we could either give 400 permission. Or if we choose to allow user to have a key(most likely not), we should probably generate it once probably during skyring-setup only and use every other time.Please correct me if I am wrong.",
+      "range": {
+        "startLine": 965,
+        "startChar": 1,
+        "endLine": 965,
+        "endChar": 84
+      },
+      "revId": "eaca54f9593a8a91caf63a8b2603131d099ec674",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_640a42d4",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-09-26T08:22:16Z",
+      "side": 1,
+      "message": "Correct. The key file gets created fresh everytime and still read permission is required because bigfin would read the same key to decrypt the data. That\u0027s the reason the permissions is 600 and not 400.\nUser should not decide the keys and skyring randomly creates a key to encrypt data. Its good to randomly create key everytime as personally I feel its safe because event if somebody somehow cracks the key once, if server is restarted, the old key is of no use :)",
+      "parentUuid": "baa041b7_24cb1aa6",
       "range": {
         "startLine": 965,
         "startChar": 1,
