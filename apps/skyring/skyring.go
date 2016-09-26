@@ -28,6 +28,7 @@ import (
 	"github.com/skyrings/skyring-common/models"
 	"github.com/skyrings/skyring-common/monitoring"
 	"github.com/skyrings/skyring-common/provisioner"
+	"github.com/skyrings/skyring-common/tools/crypto"
 	"github.com/skyrings/skyring-common/tools/lock"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/schedule"
@@ -38,6 +39,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"net/rpc"
 	"net/rpc/jsonrpc"
@@ -92,6 +94,10 @@ func NewApp(configDir string, binDir string) *App {
 }
 
 func (a *App) StartProviders(configDir string, binDir string) error {
+	key, err := ioutil.ReadFile(models.SKYRING_ENC_KEY_FILE)
+	if err != nil {
+		panic(fmt.Sprintf("Unable to read enc key file. err: %v", err))
+	}
 
 	providerBinaryPath := path.Join(binDir, conf.ProviderBinaryDir)
 
@@ -146,15 +152,21 @@ func (a *App) StartProviders(configDir string, binDir string) error {
 			}
 
 			confStr, _ := json.Marshal(conf.SystemConfig)
-			enConfStr := make([]byte, base64.StdEncoding.EncodedLen(len(confStr)))
-			base64.StdEncoding.Encode(enConfStr, []byte(confStr))
+			enConfStr, err := crypto.Encrypt(key, []byte(confStr))
+			if err != nil {
+				logger.Get().Error("Error encrypting the configurations. err: %v", err)
+				continue
+			}
+			enConfStr1 := make([]byte, base64.StdEncoding.EncodedLen(len(enConfStr)))
+			base64.StdEncoding.Encode(enConfStr1, []byte(enConfStr))
+
 			eventTypesStr, _ := json.Marshal(EventTypes)
 			providerConfStr, _ := json.Marshal(config)
 			client, err := pie.StartProviderCodec(
 				jsonrpc.NewClientCodec,
 				os.Stderr,
 				config.Provider.ProviderBinary,
-				string(enConfStr),
+				string(enConfStr1),
 				string(eventTypesStr),
 				string(providerConfStr))
 			if err != nil {
@@ -560,6 +572,12 @@ func (a *App) InitializeApplication(sysConfig conf.SkyringCollection, configDir 
 		os.Exit(1)
 	}
 
+	// Initialize keys
+	if err := createEncKeys(); err != nil {
+		logger.Get().Error("Unable to create encryption details")
+		return err
+	}
+
 	return nil
 }
 
@@ -934,4 +952,18 @@ func schedule_session_refresh(ctxt string) {
 
 func RefreshDBSession(params map[string]interface{}) {
 	db.GetDatastore().Refresh()
+}
+
+func createEncKeys() error {
+	rand.Seed(time.Now().UTC().UnixNano())
+	const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+	result := make([]byte, 32)
+	for count := 0; count < 32; count++ {
+		result[count] = chars[rand.Intn(len(chars))]
+	}
+	logger.Get().Error("Enc: %s", string(result))
+	if err := ioutil.WriteFile(models.SKYRING_ENC_KEY_FILE, result, 0600); err != nil {
+		return err
+	}
+	return nil
 }
