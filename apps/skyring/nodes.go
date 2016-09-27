@@ -20,6 +20,7 @@ import (
 	"github.com/skyrings/skyring-common/conf"
 	"github.com/skyrings/skyring-common/db"
 	"github.com/skyrings/skyring-common/models"
+	"github.com/skyrings/skyring-common/monitoring"
 	"github.com/skyrings/skyring-common/tools/logger"
 	"github.com/skyrings/skyring-common/tools/task"
 	"github.com/skyrings/skyring-common/tools/uuid"
@@ -843,7 +844,15 @@ func (a *App) GET_NodeSummary(w http.ResponseWriter, r *http.Request) {
 }
 
 func getSLUStatusWiseCount(node_id *uuid.UUID, ctxt string) map[string]int {
-	sluDetails := map[string]int{models.TotalSLU: 0, models.DownSLU: 0, models.ErrorSLU: 0, models.WarningSLU: 0}
+	sluDetails := map[string]int{
+		models.TOTAL:                                  0,
+		models.SluStatuses[models.SLU_STATUS_UNKNOWN]: 0,
+		models.SluStatuses[models.SLU_STATUS_WARN]:    0,
+		models.SluStatuses[models.SLU_STATUS_ERROR]:   0,
+		models.SluStatuses[models.SLU_STATUS_OK]:      0,
+		models.NEAR_FULL:                              0,
+		models.CriticalAlerts:                         0,
+	}
 
 	sessionCopy := db.GetDatastore().Copy()
 	defer sessionCopy.Close()
@@ -858,20 +867,31 @@ func getSLUStatusWiseCount(node_id *uuid.UUID, ctxt string) map[string]int {
 			err)
 		return sluDetails
 	}
-	sluCriticalAlertsCount := 0
-	for _, slu := range slus {
-		sluCriticalAlertsCount = sluCriticalAlertsCount + slu.AlmCritCount
-		switch {
-		case slu.State == models.SLU_STATE_DOWN:
-			sluDetails[models.DownSLU]++
-		case slu.Status == models.SLU_STATUS_ERROR:
-			sluDetails[models.ErrorSLU]++
-		case slu.Status == models.SLU_STATUS_WARN:
-			sluDetails[models.WarningSLU]++
-		}
+	if len(slus) == 0 {
+		return sluDetails
 	}
-	sluDetails["criticalAlerts"] = sluCriticalAlertsCount
-	sluDetails[models.TotalSLU] = len(slus)
+
+	clusterId := slus[0].ClusterId
+	var sluIds []uuid.UUID
+
+	for _, slu := range slus {
+		sluIds = append(sluIds, slu.SluId)
+	}
+	if sluDetails, sluDetailsErr := util.ComputeSluStatusWiseCount(bson.M{"nodeid": *node_id},
+		bson.M{
+			"utilizationtype":   monitoring.SLU_UTILIZATION,
+			"clusterid":         clusterId,
+			"thresholdseverity": models.CRITICAL,
+			"entityid":          bson.M{"$in": sluIds},
+		}); sluDetailsErr != nil {
+		logger.Get().Error(
+			"%s-Error fetching slu counts for node: %v. error: %v",
+			ctxt,
+			node_id,
+			err)
+		return sluDetails
+	}
+
 	return sluDetails
 }
 
