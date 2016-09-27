@@ -48,6 +48,10 @@ info "Starting services"
 systemctl enable salt-master
 systemctl start salt-master
 
+rndpwd=`< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c8`
+cmd="sed -i -e 's/.*password.*/ \"password\": \"${rndpwd}\"/g' /etc/skyring/skyring.conf"
+eval $cmd
+
 # Enable and start MongoDB
 systemctl enable mongod
 systemctl start mongod
