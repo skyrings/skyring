@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_2270a071",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006044
+      },
+      "writtenOn": "2016-09-28T17:42:49Z",
+      "side": 1,
+      "message": "I remember https://review.gerrithub.io/#/c/286696/ was kind of tested and working. Now looks like lot of changes with respect to that patch. why is it so?",
+      "revId": "45a6c19f5aed03fdc47a4b0ee6ef2c525ae8b120",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
