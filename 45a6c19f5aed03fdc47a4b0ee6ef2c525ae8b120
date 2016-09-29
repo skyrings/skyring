@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_c55e9ee8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-09-29T06:55:19Z",
+      "side": 1,
+      "message": "Yes, I have tested and verified https://review.gerrithub.io/#/c/286696/ also. Its working fine. that is why i did not update the patch. However that patch has few limitation like, 1) it will not create a random password always go with \"admin\", \"admin\" 2) skyring-pre will be usefull only on first installation time (means after that skyring-pre will return simply because it can not check anything without password). However if we have shortage of time, we can go with that path because that resolves the current issue.\n\nThis patch is an enhancement patch. Does the following things\n1) Create random password and update on service restart\n2) Update the password and work without any issue if there is any password change.",
+      "parentUuid": "baa041b7_2270a071",
+      "revId": "45a6c19f5aed03fdc47a4b0ee6ef2c525ae8b120",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_25666aed",
         "filename": "skyring-pre.sh",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2016-09-29T03:16:58Z",
       "side": 1,
       "message": "Looks like its temporary disabling of auth mode as down its being enabled back again. If so mention the same in comment.",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 10,
+        "endChar": 60
+      },
+      "revId": "45a6c19f5aed03fdc47a4b0ee6ef2c525ae8b120",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_a5639ab0",
+        "filename": "skyring-pre.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006269
+      },
+      "writtenOn": "2016-09-29T06:55:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_25666aed",
       "range": {
         "startLine": 10,
         "startChar": 1,
