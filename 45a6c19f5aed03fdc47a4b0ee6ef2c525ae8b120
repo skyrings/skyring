@@ -16,6 +16,29 @@
       "revId": "45a6c19f5aed03fdc47a4b0ee6ef2c525ae8b120",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_25666aed",
+        "filename": "skyring-pre.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-09-29T03:16:58Z",
+      "side": 1,
+      "message": "Looks like its temporary disabling of auth mode as down its being enabled back again. If so mention the same in comment.",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 10,
+        "endChar": 60
+      },
+      "revId": "45a6c19f5aed03fdc47a4b0ee6ef2c525ae8b120",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
