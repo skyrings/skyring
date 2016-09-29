@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_a5795a95",
+        "filename": "apps/skyring/skyring.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1006049
+      },
+      "writtenOn": "2016-09-29T03:08:05Z",
+      "side": 1,
+      "message": "Good catch. I feel we should panic at this stage as down the line provider will not start properly. What you suggest?",
+      "parentUuid": "baa041b7_0200fca9",
+      "range": {
+        "startLine": 98,
+        "startChar": 1,
+        "endLine": 100,
+        "endChar": 2
+      },
+      "revId": "eaca54f9593a8a91caf63a8b2603131d099ec674",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_643c8293",
         "filename": "apps/skyring/skyring.go",
         "patchSetId": 1
