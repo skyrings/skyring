@@ -961,7 +961,6 @@ func createEncKeys() error {
 	for count := 0; count < 32; count++ {
 		result[count] = chars[rand.Intn(len(chars))]
 	}
-	logger.Get().Error("Enc: %s", string(result))
 	if err := ioutil.WriteFile(models.SKYRING_ENC_KEY_FILE, result, 0600); err != nil {
 		return err
 	}
